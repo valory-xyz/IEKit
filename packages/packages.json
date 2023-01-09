@@ -1,0 +1,25 @@
+{
+    "dev": {
+        "skill/valory/score_read_abci/0.1.0": "bafybeiarnlb53pvkqo3s5uxnn2wk74gkujkhtmrrlbw3cvxzredzugtona"
+    },
+    "third_party": {
+        "protocol/open_aea/signing/1.0.0": "bafybeiambqptflge33eemdhis2whik67hjplfnqwieoa6wblzlaf7vuo44",
+        "protocol/valory/abci/0.1.0": "bafybeiaw3tzlg3rkvnn5fcufblktmfwngmxugn4yo7pyjp76zz6aqtqcay",
+        "protocol/valory/contract_api/1.0.0": "bafybeiaxbrvgtbdrh4lslskuxyp4awyr4whcx3nqq5yrr6vimzsxg5dy64",
+        "protocol/valory/http/1.0.0": "bafybeigzqo2zaakcjtzzsm6dh4x73v72xg6ctk6muyp5uq5ueb7y34fbxy",
+        "protocol/valory/ledger_api/1.0.0": "bafybeih7rhi5zvfvwakx5ifgxsz2cfipeecsh7bm3gnudjxtvhrygpcftq",
+        "protocol/valory/acn/1.1.0": "bafybeifontek6tvaecatoauiule3j3id6xoktpjubvuqi3h2jkzqg7zh7a",
+        "protocol/valory/tendermint/0.1.0": "bafybeihcnjhovvyyfbkuw5sjyfx2lfd4soeocfqzxz54g67333m6nk5gxq",
+        "skill/valory/abstract_abci/0.1.0": "bafybeibqgoxd25itxyuauou6xybiwu3nxkhqwxklggvdwcg42b7expnflq",
+        "skill/valory/reset_pause_abci/0.1.0": "bafybeibq5tl6xf4g22ojzzeglylbanu5nxfsf6s6g7uf3yubogpv3acc4q",
+        "skill/valory/registration_abci/0.1.0": "bafybeibvuyylbaxqits6eskh5i3wrtyglr4l7gmahvcaqevphv7haj5mbi",
+        "skill/valory/abstract_round_abci/0.1.0": "bafybeih7sibc3evofk3fnmfijavyp6hhkku7fg4l336qysqwlnhvjhsvlm",
+        "contract/valory/service_registry/0.1.0": "bafybeigs4cvpzyubnyw4cblgzqgkvrkrbpzsexxppcufxvssltxyx3ahua",
+        "connection/valory/abci/0.1.0": "bafybeihgmvw7m7eyexwbqx4kkg5o4shqvmpnreizv743n5bmes3jdz6jr4",
+        "connection/valory/http_client/0.23.0": "bafybeihz3tubwado7j3wlivndzzuj3c6fdsp4ra5r3nqixn3ufawzo3wii",
+        "connection/valory/ledger/0.19.0": "bafybeiadc25se7dgnn4mufztwpzdono4xsfs45qknzdqyi3gckn6ccuv44",
+        "connection/valory/p2p_libp2p_client/0.1.0": "bafybeidkk33xbga54szmitk6uwsi3ef56hbbdbuasltqtiyki34hgfpnxa",
+        "contract/valory/gnosis_safe/0.1.0": "bafybeich2izgpdvzzoodlmomvmob6yxadji6h7sp65dl4hz6vus7ra7jjm",
+        "contract/valory/gnosis_safe_proxy_factory/0.1.0": "bafybeicrf44ub2kauwxan3zfbdmeqb2ae7xhftwucevr7q42bwho5oqcoa"
+    }
+}

@@ -1,0 +1,18 @@
+[MASTER]
+ignore-patterns=.*_pb2.py
+ignore-paths=^packages/valory/.*$
+
+[MESSAGES CONTROL]
+disable=C0103,R0801,C0301,C0204,C0209,W1203,C0302,R1735,R0913,R0901,R0904,R1729,R0912,W0511,E0611
+
+[DESIGN]
+# min-public-methods=1
+max-public-methods=55
+# max-returns=10
+# max-bool-expr=7
+max-args=6
+# max-locals=31
+# max-statements=80
+max-parents=10
+max-branches=34
+max-attributes=8

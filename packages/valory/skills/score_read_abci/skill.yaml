@@ -1,0 +1,130 @@
+name: score_read_abci
+author: valory
+version: 0.1.0
+type: skill
+description: A skill that reads mentions from the Twitter API and assigns scores to
+  the users.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeiaihgox5qvdfcwwo7xj3f5brxtexkpmu6zuppcqcadygadz2xjgua
+  behaviours.py: bafybeibmxp6tc6ojhlncvbrjbfjdas2ur674trdwye7xqawie45pc4zqxm
+  dialogues.py: bafybeihzb65chutzt4j2kqo5lfzddwbsrnefmnp2gco2z3nrwknpry2s64
+  fsm_specification.yaml: bafybeihm5dawctcdsl3qhmgwx2lgxr6wahxf35dkcrwsmhkivr3f7yvjoi
+  handlers.py: bafybeibx6spjkdoko37b6opwhhvmftsdi32hfpmlk73nkmujz3wwi6jn5m
+  models.py: bafybeibvllar6l2u24szrwxph3uduzkqtpv5he3ym4ip7bng3pcjije4zq
+  payloads.py: bafybeihm4kweigdse3cirupbeurwmbcyt4ebtbl6kck7ychtzukmf2sati
+  rounds.py: bafybeifpyurkrnltvk5z6cm2lezrnx55t2lahw6rqc6fndp22rcvsnow2m
+  tests/__init__.py: bafybeic6evwhxdwtdjvz7xv3dqqhdhd7uxyr55xhymeiqfe4ga7mfdptxm
+  tests/test_behaviours.py: bafybeihbfqn5jsjnd7uhgezlu5l2psfogmfjveo7ehbvbwbadqclswepmi
+  tests/test_dialogues.py: bafybeifv7y36ovc3fjujnd54rwzaww4hfic2gcx7dekwolupehz6ols4gu
+  tests/test_handlers.py: bafybeieeu6eus66ix5bnsvvpoi77aq7mtdvxmst2bqg4l5njagqjs3rxky
+  tests/test_models.py: bafybeihbva4ymmss4dqmoxj5cnrihxlqkjyffl2tnt5vyufj4x3rmpkvvq
+  tests/test_payloads.py: bafybeif2mietwlovnxvjxg52nwyhcsrki53zggphfwglfx3axanc25qkyi
+  tests/test_rounds.py: bafybeids6gk3w3op3avc3r22mg7a4jzfveov2tntttlkkz7cnbkg5seboi
+fingerprint_ignore_patterns: []
+connections: []
+contracts: []
+protocols: []
+skills:
+- valory/abstract_round_abci:0.1.0:bafybeih7sibc3evofk3fnmfijavyp6hhkku7fg4l336qysqwlnhvjhsvlm
+behaviours:
+  main:
+    args: {}
+    class_name: ScoreReadRoundBehaviour
+handlers:
+  abci:
+    args: {}
+    class_name: ABCIRoundHandler
+  contract_api:
+    args: {}
+    class_name: ContractApiHandler
+  http:
+    args: {}
+    class_name: HttpHandler
+  ledger_api:
+    args: {}
+    class_name: LedgerApiHandler
+  signing:
+    args: {}
+    class_name: SigningHandler
+  tendermint:
+    args: {}
+    class_name: TendermintHandler
+models:
+  abci_dialogues:
+    args: {}
+    class_name: AbciDialogues
+  benchmark_tool:
+    args:
+      log_dir: /logs
+    class_name: BenchmarkTool
+  contract_api_dialogues:
+    args: {}
+    class_name: ContractApiDialogues
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+  ledger_api_dialogues:
+    args: {}
+    class_name: LedgerApiDialogues
+  params:
+    args:
+      cleanup_history_depth: 1
+      cleanup_history_depth_current: null
+      consensus:
+        max_participants: 1
+      drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
+      finalize_timeout: 60.0
+      genesis_config:
+        chain_id: chain-c4daS1
+        consensus_params:
+          block:
+            max_bytes: '22020096'
+            max_gas: '-1'
+            time_iota_ms: '1000'
+          evidence:
+            max_age_duration: '172800000000000'
+            max_age_num_blocks: '100000'
+            max_bytes: '1048576'
+          validator:
+            pub_key_types:
+            - ed25519
+          version: {}
+        genesis_time: '2022-05-20T16:00:21.735122717Z'
+        voting_power: '10'
+      history_check_timeout: 1205
+      keeper_allowed_retries: 3
+      keeper_timeout: 30.0
+      max_healthcheck: 120
+      observation_interval: 10
+      on_chain_service_id: null
+      reset_tendermint_after: 2
+      retry_attempts: 400
+      retry_timeout: 3
+      round_timeout_seconds: 30.0
+      service_id: score_read
+      service_registry_address: null
+      setup: {}
+      sleep_time: 1
+      tendermint_check_sleep_delay: 3
+      tendermint_com_url: http://localhost:8080
+      tendermint_max_retries: 5
+      tendermint_url: http://localhost:26657
+      twitter_bearer_token: null
+      validate_timeout: 1205
+    class_name: Params
+  requests:
+    args: {}
+    class_name: Requests
+  signing_dialogues:
+    args: {}
+    class_name: SigningDialogues
+  state:
+    args: {}
+    class_name: SharedState
+  tendermint_dialogues:
+    args: {}
+    class_name: TendermintDialogues
+dependencies: {}
+is_abstract: false

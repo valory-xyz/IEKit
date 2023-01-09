@@ -1,0 +1,23 @@
+alphabet_in:
+- DONE
+- NO_MAJORITY
+- ROUND_TIMEOUT
+- API_ERROR
+default_start_state: TwitterObservationRound
+final_states:
+- FinishedScoringRound
+label: packages.valory.skills.score_read_abci.rounds.ScoreReadAbciApp
+start_states:
+- TwitterObservationRound
+states:
+- TwitterObservationRound
+- ScoringRound
+- FinishedScoringRound
+transition_func:
+    (TwitterObservationRound, DONE): ScoringRound
+    (TwitterObservationRound, NO_MAJORITY): TwitterObservationRound
+    (TwitterObservationRound, API_ERROR): TwitterObservationRound
+    (TwitterObservationRound, ROUND_TIMEOUT): TwitterObservationRound
+    (ScoringRound, DONE): FinishedScoringRound
+    (ScoringRound, NO_MAJORITY): ScoringRound
+    (ScoringRound, ROUND_TIMEOUT): ScoringRound
