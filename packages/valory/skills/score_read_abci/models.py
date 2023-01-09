@@ -45,7 +45,11 @@ class Params(BaseParams):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the parameters object."""
-        self.twitter_bearer_token = self._ensure("twitter_bearer_token", kwargs)
+        self.twitter_api_base = self._ensure("twitter_api_base", kwargs)
+        self.twitter_api_bearer_token = kwargs.pop("twitter_api_bearer_token", None)
+        self.twitter_api_endpoint = self._ensure("twitter_api_endpoint", kwargs)
+        self.twitter_api_args = self._ensure("twitter_api_args", kwargs)
+        self.twitter_mention_points = self._ensure("twitter_mention_points", kwargs)
         super().__init__(*args, **kwargs)
 
 

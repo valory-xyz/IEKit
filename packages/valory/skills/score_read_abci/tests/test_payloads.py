@@ -24,7 +24,7 @@ from typing import Hashable, Type
 
 import pytest
 
-from packages.CI.skills.score_read_abci.payloads import (
+from packages.valory.skills.score_read_abci.payloads import (
     BaseScoreReadPayload,
     ScoringPayload,
     TransactionType,
@@ -36,19 +36,34 @@ from packages.CI.skills.score_read_abci.payloads import (
 class PayloadTestCase:
     """PayloadTestCase"""
 
-    name: str
     payload_cls: Type[BaseScoreReadPayload]
     content: Hashable
     transaction_type: TransactionType
 
 
-# TODO: provide test cases
-@pytest.mark.parametrize("test_case", [])
+@pytest.mark.parametrize(
+    "test_case",
+    [
+        PayloadTestCase(
+            payload_cls=TwitterObservationPayload,
+            content="payload_test_content",
+            transaction_type=TransactionType.TWITTER_OBSERVATION,
+        ),
+        PayloadTestCase(
+            payload_cls=ScoringPayload,
+            content="payload_test_content",
+            transaction_type=TransactionType.SCORING,
+        ),
+    ],
+)
 def test_payloads(test_case: PayloadTestCase) -> None:
     """Tests for ScoreReadAbciApp payloads"""
 
-    payload = test_case.payload_cls(sender="sender", content=test_case.content)
+    payload = test_case.payload_cls(
+        sender="sender",
+        content=test_case.content,
+    )
     assert payload.sender == "sender"
-    assert getattr(payload, f"{payload.transaction_type}") == test_case.content
+    assert payload.content == test_case.content
     assert payload.transaction_type == test_case.transaction_type
     assert payload.from_json(payload.json) == payload

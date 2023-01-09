@@ -8,20 +8,20 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaihgox5qvdfcwwo7xj3f5brxtexkpmu6zuppcqcadygadz2xjgua
-  behaviours.py: bafybeibmxp6tc6ojhlncvbrjbfjdas2ur674trdwye7xqawie45pc4zqxm
+  behaviours.py: bafybeibdshagkpa4xvcvugp3f6qjw4fr4xrcuxgdzfaezyoog4xpfspdjy
   dialogues.py: bafybeihzb65chutzt4j2kqo5lfzddwbsrnefmnp2gco2z3nrwknpry2s64
   fsm_specification.yaml: bafybeihm5dawctcdsl3qhmgwx2lgxr6wahxf35dkcrwsmhkivr3f7yvjoi
   handlers.py: bafybeibx6spjkdoko37b6opwhhvmftsdi32hfpmlk73nkmujz3wwi6jn5m
-  models.py: bafybeibvllar6l2u24szrwxph3uduzkqtpv5he3ym4ip7bng3pcjije4zq
-  payloads.py: bafybeihm4kweigdse3cirupbeurwmbcyt4ebtbl6kck7ychtzukmf2sati
-  rounds.py: bafybeifpyurkrnltvk5z6cm2lezrnx55t2lahw6rqc6fndp22rcvsnow2m
-  tests/__init__.py: bafybeic6evwhxdwtdjvz7xv3dqqhdhd7uxyr55xhymeiqfe4ga7mfdptxm
-  tests/test_behaviours.py: bafybeihbfqn5jsjnd7uhgezlu5l2psfogmfjveo7ehbvbwbadqclswepmi
-  tests/test_dialogues.py: bafybeifv7y36ovc3fjujnd54rwzaww4hfic2gcx7dekwolupehz6ols4gu
-  tests/test_handlers.py: bafybeieeu6eus66ix5bnsvvpoi77aq7mtdvxmst2bqg4l5njagqjs3rxky
-  tests/test_models.py: bafybeihbva4ymmss4dqmoxj5cnrihxlqkjyffl2tnt5vyufj4x3rmpkvvq
-  tests/test_payloads.py: bafybeif2mietwlovnxvjxg52nwyhcsrki53zggphfwglfx3axanc25qkyi
-  tests/test_rounds.py: bafybeids6gk3w3op3avc3r22mg7a4jzfveov2tntttlkkz7cnbkg5seboi
+  models.py: bafybeidughbjm5hwqiga63mbkgfnsann5f3fnoubeypvnyvmp4bl2bqf3i
+  payloads.py: bafybeia65dhqw5lpmw7mpfm7bhag2nipa3uf4fh2xmfccbqlewr4t47dnm
+  rounds.py: bafybeiddowzen6q6jub5wfwqtqteoeuwyjdyxmubrvufuxro22c7kmfxky
+  tests/__init__.py: bafybeigz2mhcrhytwp5swse6tqwlidybjfhsuvp5ilegmhthfaitzvv4pa
+  tests/test_behaviours.py: bafybeiekyz6en252joa4jweaari3estapykcq64l73gt727obqg4p4aagq
+  tests/test_dialogues.py: bafybeicgx3uspr6lh54364nmklbakjzmj5vjqgaoafr2xmel66nv7xrcii
+  tests/test_handlers.py: bafybeihhxn6uawckdodoank5jgqnhk2cb7js24re3vl2wduh2rvuntyflu
+  tests/test_models.py: bafybeibbb5mnltyr2w6afwaghd24ie5m7izgrcifv7yqa75z4jc6tl7j5m
+  tests/test_payloads.py: bafybeic7axzeuacvtwy6zcojme2odmtyfaicgnllm3uepjvgynajsfyulu
+  tests/test_rounds.py: bafybeih3eq2nqpewk6td3dyqk562e7s3q46z3lzdwlkc7lpni4nkafszgu
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
@@ -111,7 +111,11 @@ models:
       tendermint_com_url: http://localhost:8080
       tendermint_max_retries: 5
       tendermint_url: http://localhost:26657
-      twitter_bearer_token: null
+      twitter_api_base: https://api.twitter.com/
+      twitter_api_bearer_token: null
+      twitter_api_endpoint: 2/users/1450081635559428107/mentions?
+      twitter_api_args: tweet.fields=author_id&user.fields=name&max_results=100&since_id=0
+      twitter_mention_points: 200
       validate_timeout: 1205
     class_name: Params
   requests:

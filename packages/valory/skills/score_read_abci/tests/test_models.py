@@ -19,8 +19,8 @@
 
 """Test the models.py module of the ScoreRead."""
 
-from packages.CI.skills.score_read_abci.models import SharedState
 from packages.valory.skills.abstract_round_abci.test_tools.base import DummyContext
+from packages.valory.skills.score_read_abci.models import SharedState
 
 
 class TestSharedState:

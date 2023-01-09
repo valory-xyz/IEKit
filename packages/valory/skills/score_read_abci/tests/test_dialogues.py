@@ -19,7 +19,7 @@
 
 """Test the dialogues.py module of the ScoreRead."""
 
-import packages.CI.skills.score_read_abci.dialogues  # noqa
+import packages.valory.skills.score_read_abci.dialogues  # noqa
 
 
 def test_import() -> None:

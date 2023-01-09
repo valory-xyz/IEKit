@@ -16,3 +16,5 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""This module contains the tests for the score_read_abci skill."""

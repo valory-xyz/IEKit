@@ -21,7 +21,7 @@
 
 from abc import ABC
 from enum import Enum
-from typing import Any, Dict, Hashable, Optional
+from typing import Any, Dict, Hashable
 
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 

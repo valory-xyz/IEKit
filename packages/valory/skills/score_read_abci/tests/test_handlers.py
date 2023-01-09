@@ -19,7 +19,7 @@
 
 """Test the handlers.py module of the ScoreRead."""
 
-import packages.CI.skills.score_read_abci.handlers  # noqa
+import packages.valory.skills.score_read_abci.handlers  # noqa
 
 
 def test_import() -> None:

@@ -68,6 +68,11 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the user scores."""
         return cast(dict, self.db.get("user_to_scores", {}))
 
+    @property
+    def latest_tweet_id(self) -> str:
+        """Get the latest tracked tweet id."""
+        return cast(str, self.db.get("latest_tweet_id", 0))
+
 
 class ScoreReadAbstractRound(AbstractRound[Event, TransactionType], ABC):
     """Abstract round for the APY estimation skill."""
@@ -122,7 +127,14 @@ class ScoringRound(ScoreReadAbstractRound, CollectSameUntilThresholdRound):
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
-                **{get_name(SynchronizedData.user_to_scores): payload}
+                **{
+                    get_name(SynchronizedData.user_to_scores): payload[
+                        "user_to_scores"
+                    ],
+                    get_name(SynchronizedData.latest_tweet_id): payload[
+                        "latest_tweet_id"
+                    ],
+                }
             )
             return synchronized_data, Event.DONE
         if not self.is_majority_possible(
@@ -146,6 +158,7 @@ class ScoreReadAbciApp(AbciApp[Event]):
             Event.DONE: ScoringRound,
             Event.NO_MAJORITY: TwitterObservationRound,
             Event.ROUND_TIMEOUT: TwitterObservationRound,
+            Event.API_ERROR: TwitterObservationRound,
         },
         ScoringRound: {
             Event.DONE: FinishedScoringRound,
@@ -156,14 +169,13 @@ class ScoreReadAbciApp(AbciApp[Event]):
     }
     final_states: Set[AppState] = {FinishedScoringRound}
     event_to_timeout: EventToTimeout = {}
-    cross_period_persisted_keys: List[str] = [
-        "user_to_scores",
-    ]
+    cross_period_persisted_keys: List[str] = ["user_to_scores", "latest_tweet_id"]
     db_pre_conditions: Dict[AppState, List[str]] = {
         TwitterObservationRound: [],
     }
     db_post_conditions: Dict[AppState, List[str]] = {
         FinishedScoringRound: [
             get_name(SynchronizedData.user_to_scores),
+            get_name(SynchronizedData.latest_tweet_id),
         ],
     }
