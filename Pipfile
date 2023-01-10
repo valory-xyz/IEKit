@@ -1,0 +1,34 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+# we don't specify dependencies for the library here for intallation as per: https://pipenv-fork.readthedocs.io/en/latest/advanced.html#pipfile-vs-setuppy
+# aea/autonomy package dependencies are specified in their respective configuration yaml files and as dev dependencies below
+
+[dev-packages]
+# we fix exact versions as it's sufficient to have at least one set of compatible dependencies for development
+aiohttp = "==3.7.4.post0"
+asn1crypto = "==1.5.1"
+certifi = "==2021.10.8"
+grpcio = "==1.43.0"
+jsonschema = "==3.2.0"
+hypothesis = "==6.21.6"
+py-ecc = "==5.2.0"
+py-eth-sig-utils = "==0.4.0"
+pytz = "==2022.2.1"
+pytest = "==7.0.0"
+pytest-asyncio = "==0.18.0"
+pytest-cov = "==3.0.0"
+pytest-randomly = "==3.11.0"
+open-aea = "==1.26.0"
+open-aea-ledger-ethereum = "==1.26.0"
+open-aea-ledger-cosmos = "==1.26.0"
+open-aea-cli-ipfs = "==1.26.0"
+open-aea-test-autonomy = "==0.6.0"
+open-autonomy = {version = "==0.6.0", extras = [ "all"]}
+tomte = {version = "==0.1.5", extras = ["tox", "tests"]}
+
+[requires]
+python_version = "3.10"

@@ -1,0 +1,23 @@
+alphabet_in:
+- API_ERROR
+- DONE
+- NO_MAJORITY
+- ROUND_TIMEOUT
+default_start_state: TwitterObservationRound
+final_states:
+- FinishedScoringRound
+label: ScoreReadAbciApp
+start_states:
+- TwitterObservationRound
+states:
+- FinishedScoringRound
+- ScoringRound
+- TwitterObservationRound
+transition_func:
+    (ScoringRound, DONE): FinishedScoringRound
+    (ScoringRound, NO_MAJORITY): ScoringRound
+    (ScoringRound, ROUND_TIMEOUT): ScoringRound
+    (TwitterObservationRound, API_ERROR): TwitterObservationRound
+    (TwitterObservationRound, DONE): ScoringRound
+    (TwitterObservationRound, NO_MAJORITY): TwitterObservationRound
+    (TwitterObservationRound, ROUND_TIMEOUT): TwitterObservationRound

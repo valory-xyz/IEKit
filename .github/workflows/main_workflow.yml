@@ -1,0 +1,312 @@
+name: main_workflow
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+
+jobs:
+  lock_check:
+    continue-on-error: False
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        python-version: [ "3.10" ]
+
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          pip install pipenv
+      - name: Pipenv install requirements
+        run: |
+          pipenv install --dev --skip-lock
+      - name: Pipenv lock
+        run: |
+          pipenv lock
+
+  copyright_and_doc_check:
+    continue-on-error: False
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ "3.10" ]
+
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          sudo apt-get update --fix-missing
+          sudo apt-get autoremove
+          sudo apt-get autoclean
+          pip install tomte[tox]==0.1.5
+          pip install --upgrade setuptools==60.10.0
+      - name: Check copyright
+        run: tox -e check-copyright
+
+  linter_checks:
+    continue-on-error: False
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ "3.10.6" ]
+
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          sudo apt-get update --fix-missing
+          sudo apt-get autoremove
+          sudo apt-get autoclean
+          pip install tomte[tox]==0.1.5
+          pip install --upgrade setuptools==60.10.0
+          # install Protobuf compiler
+          wget https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-linux-x86_64.zip
+          unzip protoc-3.11.4-linux-x86_64.zip -d protoc
+          sudo mv protoc/bin/protoc /usr/local/bin/protoc
+          # install IPFS
+          sudo apt-get install -y wget
+          wget -O ./go-ipfs.tar.gz https://dist.ipfs.io/go-ipfs/v0.6.0/go-ipfs_v0.6.0_linux-amd64.tar.gz
+          tar xvfz go-ipfs.tar.gz
+          sudo mv go-ipfs/ipfs /usr/local/bin/ipfs
+          ipfs init
+      - name: Security checks
+        run: |
+          tox -e bandit
+          tox -e safety
+      - name: Check packages
+        run: tox -e check-packages
+      - name: Check FSM Spec
+        run: tox -e check-abciapp-specs
+      - name: Check hash
+        run: tox -e check-hash
+      - name: Code style check
+        run: |
+          tox -e black-check
+          tox -e isort-check
+          tox -e flake8
+          tox -e darglint
+      - name: Static type check
+        run: tox -e mypy
+      - name: Pylint
+        run: tox -e pylint
+
+  scan:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v3
+        with:
+          go-version: "1.17.7"
+      - run: |
+          wget https://github.com/zricethezav/gitleaks/releases/download/v8.10.1/gitleaks_8.10.1_linux_x64.tar.gz && \
+          tar -xzf gitleaks_8.10.1_linux_x64.tar.gz && \
+          sudo install gitleaks /usr/bin && \
+          gitleaks detect --report-format json --report-path leak_report
+
+  test:
+    continue-on-error: True
+    needs:
+      - lock_check
+      - copyright_and_doc_check
+      - linter_checks
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        python-version: [ "3.7", "3.8", "3.9", "3.10" ]
+
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          submodules: recursive
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/setup-go@v3
+        with:
+          go-version: "1.17.7"
+      - if: matrix.os == 'ubuntu-latest'
+        name: Install dependencies (ubuntu-latest)
+        run: |
+          sudo apt-get update --fix-missing
+          sudo apt-get autoremove
+          sudo apt-get autoclean
+          pip install tomte[tox]==0.1.5
+          pip install --upgrade setuptools==60.10.0
+
+          # install Protobuf compiler
+          wget https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-linux-x86_64.zip
+          unzip protoc-3.11.4-linux-x86_64.zip -d protoc
+          sudo mv protoc/bin/protoc /usr/local/bin/protoc
+
+          # install IPFS
+          sudo apt-get install -y wget
+          wget -O ./go-ipfs.tar.gz https://dist.ipfs.io/go-ipfs/v0.6.0/go-ipfs_v0.6.0_linux-amd64.tar.gz
+          tar xvfz go-ipfs.tar.gz
+          sudo mv go-ipfs/ipfs /usr/local/bin/ipfs
+          ipfs init
+
+          # install Tendermint
+          wget -O tendermint.tar.gz https://github.com/tendermint/tendermint/releases/download/v0.34.19/tendermint_0.34.19_linux_amd64.tar.gz
+          tar -xf tendermint.tar.gz
+          sudo mv tendermint /usr/local/bin/tendermint
+
+          # pull node image needed for the integration tests
+          docker pull node:16.7.0
+          docker pull trufflesuite/ganache:beta
+          docker pull valory/autonomous-fund-contracts:latest
+
+      - if: matrix.os == 'ubuntu-latest'
+        name: Unit tests (ubuntu-latest)
+        run: |
+          tox -e py${{ matrix.python-version }}-linux -- -m 'not e2e'
+
+      - if: matrix.os == 'macos-latest'
+        name: Install dependencies (macos-latest)
+        run: |
+          pip install tomte[tox]==0.1.5
+          brew install gcc
+          # brew install protobuf
+          # brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/72457f0166d5619a83f508f2345b22d0617b5021/Formula/protobuf.rb
+          wget https://github.com/protocolbuffers/protobuf/releases/download/v3.19.4/protoc-3.19.4-osx-x86_64.zip
+          unzip protoc-3.19.4-osx-x86_64.zip -d protoc
+          sudo mv protoc/bin/protoc /usr/local/bin/protoc
+          brew tap yoheimuta/protolint
+          brew install protolint
+
+          # install ipfs
+          curl -O https://dist.ipfs.io/go-ipfs/v0.6.0/go-ipfs_v0.6.0_darwin-amd64.tar.gz
+          tar -xvzf go-ipfs_v0.6.0_darwin-amd64.tar.gz
+          cd go-ipfs
+          sudo ./install.sh
+          cd ..
+          rm -rf go-ipfs
+          ipfs init
+
+      - if: matrix.os == 'macos-latest'
+        name: Skills unit tests macos-latest
+        run: |
+          tox -e py${{ matrix.python-version }}-darwin -- -m 'not e2e'
+
+      - if: matrix.os == 'windows-latest'
+        name: Install dependencies (windows-latest)
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+        run: |
+          python -m pip install -U pip
+          echo "::add-path::C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x64"
+          choco install wget -y
+          choco install protoc --version 3.19.4
+          choco install mingw -y
+          choco install make -y
+          # to check make was installed
+          make --version
+          pip install tomte[tox]==0.1.5
+          # wget https://github.com/protocolbuffers/protobuf/releases/download/v3.19.4/protoc-3.19.4-win64.zip
+          # unzip protoc-3.19.4-win64.zip -d protoc
+          # sudo mv protoc/bin/protoc /usr/local/bin/protoc
+
+          python scripts\update_symlinks_cross_platform.py
+
+          # install ipfs
+          curl https://dist.ipfs.io/go-ipfs/v0.6.0/go-ipfs_v0.6.0_windows-amd64.zip -o go-ipfs_v0.6.0.zip
+          Expand-Archive -Path go-ipfs_v0.6.0.zip -DestinationPath ~\Apps\
+          cp ~\Apps\go-ipfs\ipfs.exe C:\Users\runneradmin\go\bin\
+          ipfs init
+
+      - if: matrix.os == 'windows-latest'
+        name: Skills unit tests windows-latest
+        run: |
+          tox -e py${{ matrix.python-version }}-win -- -m 'not e2e'
+
+      - if: matrix.os == 'ubuntu-latest'
+        name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+  e2e-tests:
+    continue-on-error: True
+    needs:
+      - test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ "3.10" ]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          submodules: recursive
+          python-version: ${{ matrix.python-version }}
+      - if: matrix.os == 'ubuntu-latest'
+        name: Install dependencies (ubuntu-latest)
+        run: |
+          sudo apt-get update --fix-missing
+          sudo apt-get autoremove
+          sudo apt-get autoclean
+          pip install tomte[tox]==0.1.5
+          pip install --upgrade setuptools==60.10.0
+
+          # install Protobuf compiler
+          wget https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-linux-x86_64.zip
+          unzip protoc-3.11.4-linux-x86_64.zip -d protoc
+          sudo mv protoc/bin/protoc /usr/local/bin/protoc
+
+          # install IPFS
+          sudo apt-get install -y wget
+          wget -O ./go-ipfs.tar.gz https://dist.ipfs.io/go-ipfs/v0.6.0/go-ipfs_v0.6.0_linux-amd64.tar.gz
+          tar xvfz go-ipfs.tar.gz
+          sudo mv go-ipfs/ipfs /usr/local/bin/ipfs
+          ipfs init
+
+          # install Tendermint
+          wget -O tendermint.tar.gz https://github.com/tendermint/tendermint/releases/download/v0.34.19/tendermint_0.34.19_linux_amd64.tar.gz
+          tar -xf tendermint.tar.gz
+          sudo mv tendermint /usr/local/bin/tendermint
+
+          # pull node image needed for the integration tests
+          docker pull node:16.7.0
+
+          docker pull valory/autonomous-fund-contracts:latest
+
+      - name: e2e tests
+        run: |
+          tox -e e2e-py${{ matrix.python-version }}-linux
