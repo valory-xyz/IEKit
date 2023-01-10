@@ -168,7 +168,9 @@ class ScoreReadAbciApp(AbciApp[Event]):
         FinishedScoringRound: {},
     }
     final_states: Set[AppState] = {FinishedScoringRound}
-    event_to_timeout: EventToTimeout = {}
+    event_to_timeout: EventToTimeout = {
+        Event.ROUND_TIMEOUT: 30.0,
+    }
     cross_period_persisted_keys: List[str] = ["user_to_scores", "latest_tweet_id"]
     db_pre_conditions: Dict[AppState, List[str]] = {
         TwitterObservationRound: [],
