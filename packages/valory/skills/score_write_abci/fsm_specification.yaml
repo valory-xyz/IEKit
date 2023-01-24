@@ -1,0 +1,34 @@
+alphabet_in:
+- API_ERROR
+- DONE
+- NO_MAJORITY
+- ROUND_TIMEOUT
+default_start_state: RandomnessRound
+final_states:
+- FinishedVerificationRound
+label: ScoreWriteAbciApp
+start_states:
+- RandomnessRound
+states:
+- FinishedVerificationRound
+- RandomnessRound
+- SelectKeeperRound
+- VerificationRound
+- CeramicWriteRound
+transition_func:
+    (RandomnessRound, DONE): SelectKeeperRound
+    (RandomnessRound, NO_MAJORITY): RandomnessRound
+    (RandomnessRound, ROUND_TIMEOUT): RandomnessRound
+    (SelectKeeperRound, DONE): CeramicWriteRound
+    (SelectKeeperRound, INCORRECT_SERIALIZATION): RandomnessRound
+    (SelectKeeperRound, NO_MAJORITY): RandomnessRound
+    (SelectKeeperRound, ROUND_TIMEOUT): RandomnessRound
+    (VerificationRound, DONE): FinishedVerificationRound
+    (VerificationRound, NO_MAJORITY): RandomnessRound
+    (VerificationRound, ROUND_TIMEOUT): RandomnessRound
+    (CeramicWriteRound, API_ERROR): CeramicWriteRound
+    (CeramicWriteRound, DONE): VerificationRound
+    (CeramicWriteRound, NO_MAJORITY): RandomnessRound
+    (CeramicWriteRound, ROUND_TIMEOUT): RandomnessRound
+
+
