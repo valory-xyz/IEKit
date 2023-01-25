@@ -19,7 +19,6 @@
 
 """This package contains the rounds of ScoreWriteAbciApp."""
 
-import json
 from abc import ABC
 from enum import Enum
 from typing import Dict, List, Optional, Set, Tuple, cast, Deque
@@ -121,6 +120,7 @@ class ScoreWriteAbstractRound(AbstractRound[Event, TransactionType], ABC):
 class RandomnessRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound):
     """A round for generating randomness"""
 
+    allowed_tx_type = RandomnessPayload.transaction_type
     payload_class = RandomnessPayload
     payload_attribute = "randomness"
     synchronized_data_class = SynchronizedData
@@ -227,11 +227,13 @@ class ScoreWriteAbciApp(AbciApp[Event]):
             Event.DONE: VerificationRound,
             Event.NO_MAJORITY: RandomnessRound,
             Event.ROUND_TIMEOUT: RandomnessRound,
+            Event.API_ERROR: RandomnessRound,
         },
         VerificationRound: {
             Event.DONE: FinishedVerificationRound,
             Event.NO_MAJORITY: RandomnessRound,
             Event.ROUND_TIMEOUT: RandomnessRound,
+            Event.API_ERROR: RandomnessRound,
         },
         FinishedVerificationRound: {},
     }

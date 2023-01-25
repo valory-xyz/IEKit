@@ -23,10 +23,11 @@ transition_func:
     (SelectKeeperRound, INCORRECT_SERIALIZATION): RandomnessRound
     (SelectKeeperRound, NO_MAJORITY): RandomnessRound
     (SelectKeeperRound, ROUND_TIMEOUT): RandomnessRound
+    (VerificationRound, API_ERROR): RandomnessRound
     (VerificationRound, DONE): FinishedVerificationRound
     (VerificationRound, NO_MAJORITY): RandomnessRound
     (VerificationRound, ROUND_TIMEOUT): RandomnessRound
-    (CeramicWriteRound, API_ERROR): CeramicWriteRound
+    (CeramicWriteRound, API_ERROR): RandomnessRound
     (CeramicWriteRound, DONE): VerificationRound
     (CeramicWriteRound, NO_MAJORITY): RandomnessRound
     (CeramicWriteRound, ROUND_TIMEOUT): RandomnessRound

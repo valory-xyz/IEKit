@@ -21,7 +21,7 @@
 
 from typing import Any
 
-from packages.valory.skills.abstract_round_abci.models import BaseParams
+from packages.valory.skills.abstract_round_abci.models import BaseParams, ApiSpecs
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
 )
@@ -46,11 +46,15 @@ class Params(BaseParams):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the parameters object."""
         self.ceramic_api_base = self._ensure("ceramic_api_base", kwargs)
-        self.ceramic_api_endpoint = self._ensure("ceramic_api_endpoint", kwargs)
+        self.ceramic_api_commit_endpoint = self._ensure("ceramic_api_commit_endpoint", kwargs)
+        self.ceramic_api_read_endpoint = self._ensure("ceramic_api_read_endpoint", kwargs)
         self.ceramic_stream_id = self._ensure("ceramic_stream_id", kwargs)
         self.ceramic_did_seed = kwargs.pop("ceramic_did_seed", None)
         super().__init__(*args, **kwargs)
 
+
+class RandomnessApi(ApiSpecs):
+    """A model that wraps ApiSpecs for randomness api specifications."""
 
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool

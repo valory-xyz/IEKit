@@ -20,8 +20,7 @@
 """This package contains round behaviours of ScoreWriteAbciApp."""
 
 import json
-from collections import OrderedDict
-from typing import Dict, Generator, Set, Type, cast
+from typing import Generator, Set, Type, cast, Deque
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
@@ -32,18 +31,21 @@ from packages.valory.skills.score_write_abci.models import Params
 from packages.valory.skills.score_write_abci.rounds import (
     ScoreWriteAbciApp,
     SynchronizedData,
-    CeramicWritePayload,
     CeramicWriteRound,
-    RandomnessPayload,
     RandomnessRound,
-    KeeperSelectionPayload,
-    KeeperSelectionRound,
-    VerificationPayload,
+    SelectKeeperRound,
     VerificationRound,
 )
 from packages.valory.skills.abstract_round_abci.common import (
     RandomnessBehaviour,
     SelectKeeperBehaviour,
+)
+from collections import deque
+from packages.valory.skills.score_write_abci.payloads import (
+    RandomnessPayload,
+    SelectKeeperPayload,
+    CeramicWritePayload,
+    VerificationPayload,
 )
 
 
@@ -60,20 +62,19 @@ class ScoreWriteBaseBehaviour(BaseBehaviour):
         """Return the params."""
         return cast(Params, super().params)
 
-class RandomnessTransactionSubmissionBehaviour(RandomnessBehaviour):
+class RandomnessBehaviour(RandomnessBehaviour):
     """Retrieve randomness."""
 
-    matching_round = RandomnessTransactionSubmissionRound
+    matching_round = RandomnessRound
     payload_class = RandomnessPayload
 
 
-
-class SelectKeeperTransactionSubmissionBehaviourA(
+class SelectKeeperCeramicBehaviour(
     SelectKeeperBehaviour, ScoreWriteBaseBehaviour
 ):
     """Select the keeper agent."""
 
-    matching_round = SelectKeeperTransactionSubmissionRoundA
+    matching_round = SelectKeeperRound
     payload_class = SelectKeeperPayload
 
     def async_act(self) -> Generator:
@@ -81,7 +82,7 @@ class SelectKeeperTransactionSubmissionBehaviourA(
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             keepers = deque((self._select_keeper(),))
-            payload = self.payload_class(
+            payload = SelectKeeperPayload(
                 self.context.agent_address, self.serialized_keepers(keepers, 1)
             )
 
@@ -89,6 +90,18 @@ class SelectKeeperTransactionSubmissionBehaviourA(
             yield from self.send_a2a_transaction(payload)
             yield from self.wait_until_round_end()
 
+        self.set_done()
+
+    @staticmethod
+    def serialized_keepers(keepers: Deque[str], keeper_retries: int) -> str:
+        """Get the keepers serialized."""
+        if len(keepers) == 0:
+            return ""  # pragma: no cover
+        keepers_ = "".join(keepers)
+        keeper_retries_ = keeper_retries.to_bytes(32, "big").hex()
+        concatenated = keeper_retries_ + keepers_
+
+        return concatenated
 
 
 class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
@@ -102,10 +115,10 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             success = yield from self._write_ceramic_data()
             if success:
-                self.context.logger.info(f"Wrote scores to ceramic stream with id: {stream_id}")
+                self.context.logger.info(f"Wrote scores to ceramic stream with id: {self.params.ceramic_stream_id}")
                 payload_content = CeramicWriteRound.SUCCCESS_PAYLOAD
             else:
-                self.context.logger.info(f"An error happened while wroting scores to ceramic stream with id: {stream_id}")
+                self.context.logger.info(f"An error happened while wroting scores to ceramic stream with id: {self.params.ceramic_stream_id}")
                 payload_content = CeramicWriteRound.ERROR_PAYLOAD
 
             sender = self.context.agent_address
@@ -121,7 +134,7 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
         """Write the scores to the Ceramic stream"""
 
         api_base = self.params.ceramic_api_base
-        api_endpoint = self.params.ceramic_api_write_endpoint
+        api_endpoint = self.params.ceramic_api_commit_endpoint
         url = api_base + api_endpoint.replace("{stream_id}", self.params.ceramic_stream_id)
 
         self.context.logger.info(f"Writing scores to Ceramic API [{url}]")
@@ -129,7 +142,7 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
             method="GET",
             url=url,
             content=json.dumps(
-                self.params.user_to_scores
+                self.synchronized_data.user_to_scores
             ).encode(),
         )
 
@@ -144,7 +157,7 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
 class VerificationBehaviour(ScoreWriteBaseBehaviour):
     """VerificationBehaviour"""
 
-    matching_round: Type[AbstractRound] = CeramicWriteRound
+    matching_round: Type[AbstractRound] = VerificationRound
 
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
@@ -159,7 +172,7 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
                 payload_content = CeramicWriteRound.ERROR_PAYLOAD
 
             sender = self.context.agent_address
-            payload = CeramicWritePayload(sender=sender, content=payload_content)
+            payload = VerificationPayload(sender=sender, content=payload_content)
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(payload)
@@ -171,7 +184,7 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
         """Write the scores to the Ceramic stream"""
 
         api_base = self.params.ceramic_api_base
-        api_endpoint = self.params.ceramic_api_write_endpoint
+        api_endpoint = self.params.ceramic_api_read_endpoint
         url = api_base + api_endpoint.replace("{stream_id}", self.params.ceramic_stream_id)
 
         self.context.logger.info(f"Writing scores to Ceramic API [{url}]")
@@ -186,8 +199,8 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
             self.context.logger.info(f"API error {response.status_code}: {api_data}")
             return False
 
-        if api_data["<TODO>"] != self.params.user_to_scores:
-            self.context.logger.info(f"Verification failed: data does not match. Expected: {self.params.user_to_scores}, Got: {api_data['<TODO>']}")
+        if api_data["<TODO>"] != self.synchronized_data.user_to_scores:
+            self.context.logger.info(f"Verification failed: data does not match. Expected: {self.synchronized_data.user_to_scores}, Got: {api_data['<TODO>']}")
             return False
 
         return True
@@ -196,9 +209,11 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
 class ScoreWriteRoundBehaviour(AbstractRoundBehaviour):
     """ScoreWriteRoundBehaviour"""
 
-    initial_behaviour_cls = TwitterObservationBehaviour
+    initial_behaviour_cls = RandomnessBehaviour
     abci_app_cls = ScoreWriteAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
-        ScoringBehaviour,
-        TwitterObservationBehaviour,
+        RandomnessBehaviour,
+        SelectKeeperCeramicBehaviour,
+        CeramicWriteBehaviour,
+        VerificationBehaviour,
     ]

@@ -7,14 +7,15 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifrmnxnnnpitgpdr7i2bjtunda3mckriobf6bvdjo6zbajokj4hyq
-  behaviours.py: bafybeicpmnj733yhq5bo2bnffttjnt2ts6fqv6apzizsrly3totuwwwwaa
+  behaviours.py: bafybeierg4qjhcvdcu6upuqiu5i6n2bw3rdqke3c2qpb5xwomjpj74cali
   dialogues.py: bafybeih2d4h2vaqn76s7npubkejevbwd4fwa6ytsoowntgpqk4d2wpyllu
-  fsm_specification.yaml: bafybeif5yjm36gbo2gt734c4nmjaf726bd4qofcyje3qlqtyeolidvel2a
+  fsm_specification.yaml: bafybeic4qcj3b57wy4r6ytfoiwkb45nla6e6nb5ohrb2jjyt5jbhzk5oxm
   handlers.py: bafybeiax2wjff4ps3kmbsc2ysihu62ja7xk36gbznjoyagtjhe6fa7ctei
-  models.py: bafybeiaxhx72idvvs3ri2p3dtmxtg2scvikoqiqulabrmigy57tocd4toq
+  models.py: bafybeidiy5hozqxzvbu5erfxekhdfvr4p7rlxf4ustnqhslgxc3ill36wu
   payloads.py: bafybeidho4rk5xpwqrsji52bokmtq5fd3jy6cj2yygxgubnbqkeiqxrrei
-  rounds.py: bafybeicnomylkzzztm3vtivgpg7ngl74b5dt3jifee3zeuc7svnmirhhs4
+  rounds.py: bafybeicvgbeop3ymk2ubfbf75hhgqqqpagndnbwhop3llgj3wtgrcaqcci
   tests/__init__.py: bafybeiht2sfiedgsx6vk2dott2fdu6rqekt324nf7afbsk3unshcf74fgi
+  tests/test_behaviours.py: bafybeiat4hcpadn77lbevxh6s765trqumrxoklkyttwo4zhhlu3k3berg4
   tests/test_dialogues.py: bafybeifoltm3tyb6prv7mmqoh7uoap6kvmiextyl6k33whjigfxkgsdup4
   tests/test_handlers.py: bafybeibz75vof3xdzgikipztbyza6ahg2ajq277nrtim2mvzxol37lgn4q
   tests/test_models.py: bafybeiebtxif37wrac7744vo6pmpbq63adghq6ybtdh6nbw7yvccgbdsdq
@@ -69,9 +70,10 @@ models:
   params:
     args:
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
-      ceramic_api_endpoint: api/v0/commits/{stream_id}
+      ceramic_api_commit_endpoint: api/v0/commits/{stream_id}
+      ceramic_api_read_endpoint: api/v0/commits/{stream_id}
       ceramic_did_seed: null
-      ceramic_stream_id: null
+      ceramic_stream_id: dummy_stream_id
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       consensus:
@@ -115,6 +117,17 @@ models:
       tendermint_url: http://localhost:26657
       validate_timeout: 1205
     class_name: Params
+  randomness_api:
+    args:
+      api_id: cloudflare
+      headers: []
+      method: GET
+      parameters: []
+      response_key: null
+      response_type: dict
+      retries: 5
+      url: https://drand.cloudflare.com/public/latest
+    class_name: RandomnessApi
   requests:
     args: {}
     class_name: Requests
