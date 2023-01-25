@@ -232,9 +232,9 @@ class ScoreWriteAbciApp(AbciApp[Event]):
         },
         CeramicWriteRound: {
             Event.DONE: VerificationRound,
-            Event.NO_MAJORITY: RandomnessRound,
             Event.ROUND_TIMEOUT: RandomnessRound,
             Event.API_ERROR: RandomnessRound,
+            Event.DID_NOT_SEND: RandomnessRound,
         },
         VerificationRound: {
             Event.DONE: FinishedVerificationRound,
