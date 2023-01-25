@@ -43,19 +43,30 @@ class PayloadTestCase:
     transaction_type: TransactionType
 
 
+def test_randomness_payload() -> None:
+    """Test `RandomnessPayload`."""
+
+    payload = RandomnessPayload(sender="sender", round_id=1, randomness="test")
+
+    assert payload.round_id == 1
+    assert payload.randomness == "test"
+    assert payload.data == {"round_id": 1, "randomness": "test"}
+    assert payload.transaction_type == TransactionType.RANDOMNESS
+
+
+def test_select_keeper_payload() -> None:
+    """Test `SelectKeeperPayload`."""
+
+    payload = SelectKeeperPayload(sender="sender", keepers="test")
+
+    assert payload.keepers == "test"
+    assert payload.data == {"keepers": "test"}
+    assert payload.transaction_type == TransactionType.SELECT_KEEPER
+
+
 @pytest.mark.parametrize(
     "test_case",
     [
-        PayloadTestCase(
-            payload_cls=RandomnessPayload,
-            content="payload_test_content",
-            transaction_type=TransactionType.RANDOMNESS,
-        ),
-        PayloadTestCase(
-            payload_cls=SelectKeeperPayload,
-            content="payload_test_content",
-            transaction_type=TransactionType.SELECT_KEEPER,
-        ),
         PayloadTestCase(
             payload_cls=CeramicWritePayload,
             content="payload_test_content",

@@ -76,7 +76,7 @@ common-checks-1:
 
 .PHONY: test
 test:
-	pytest -rfE packages/valory/skills/score_read_abci --cov-report=html --cov=packages.valory.skills.score_read_abci --cov-report=xml --cov-report=term --cov-report=term-missing --cov-config=.coveragerc
+	pytest -rfE packages/valory/skills/score_read_abci -rfE packages/valory/skills/score_write_abci --cov-report=html --cov=packages.valory.skills.score_read_abci --cov=packages.valory.skills.score_write_abci --cov-report=xml --cov-report=term --cov-report=term-missing --cov-config=.coveragerc
 	find . -name ".coverage*" -not -name ".coveragerc" -exec rm -fr "{}" \;
 
 v := $(shell pip -V | grep virtualenvs)

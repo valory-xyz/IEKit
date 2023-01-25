@@ -1,7 +1,7 @@
 {
     "dev": {
         "skill/valory/score_read_abci/0.1.0": "bafybeidgnnyowjvtnueoukqbkoqs3p4elwtuknqvatgrt44hzkizg5nm4a",
-        "skill/valory/score_write_abci/0.1.0": "bafybeibkmdo7q4lwuu36737xqg7x6ambpmbagk72pd72zhdmrmjanlsvoq"
+        "skill/valory/score_write_abci/0.1.0": "bafybeidrrvirwcel52rxrduuva37ljoxsaihjhrjdmo6blg4l2v2m3ak64"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeiambqptflge33eemdhis2whik67hjplfnqwieoa6wblzlaf7vuo44",

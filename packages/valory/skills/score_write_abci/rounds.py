@@ -42,7 +42,11 @@ from packages.valory.skills.score_write_abci.payloads import (
     CeramicWritePayload,
     VerificationPayload
 )
+from collections import deque
+import textwrap
 
+ADDRESS_LENGTH = 42
+RETRIES_LENGTH = 64
 
 class Event(Enum):
     """ScoreWriteAbciApp Events"""
@@ -129,6 +133,7 @@ class RandomnessRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound):
 class SelectKeeperRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound):
     """A round in which a keeper is selected for transaction submission"""
 
+    allowed_tx_type = SelectKeeperPayload.transaction_type
     payload_class = SelectKeeperPayload
     payload_attribute = "keepers"
     synchronized_data_class = SynchronizedData
@@ -166,7 +171,7 @@ class CeramicWriteRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound)
         if self.threshold_reached:
             if self.most_voted_payload == self.ERROR_PAYLOAD:
                 return self.synchronized_data, Event.API_ERROR
-            return synchronized_data, Event.DONE
+            return self.synchronized_data, Event.DONE
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
         ):
@@ -189,7 +194,7 @@ class VerificationRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound)
         if self.threshold_reached:
             if self.most_voted_payload == self.ERROR_PAYLOAD:
                 return self.synchronized_data, Event.API_ERROR
-            return synchronized_data, Event.DONE
+            return self.synchronized_data, Event.DONE
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
         ):
