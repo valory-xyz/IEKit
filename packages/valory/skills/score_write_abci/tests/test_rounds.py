@@ -32,6 +32,7 @@ from typing import (
     Optional,
     Type,
     cast,
+    Deque,
     Union,
 )
 
@@ -41,6 +42,7 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
     BaseCollectSameUntilThresholdRoundTest,
     CollectSameUntilThresholdRound,
+    BaseOnlyKeeperSendsRoundTest,
 )
 from packages.valory.skills.score_write_abci.payloads import (
     BaseScoreWritePayload,
@@ -57,6 +59,7 @@ from packages.valory.skills.score_write_abci.rounds import (
     CeramicWriteRound,
     VerificationRound,
 )
+from collections import deque
 
 
 @dataclass
@@ -181,54 +184,6 @@ class TestSelectKeeperRound(BaseScoreWriteRoundTest):
         self.run_test(test_case)
 
 
-class TestCeramicWriteRound(BaseScoreWriteRoundTest):
-    """Tests for CeramicWriteRound."""
-
-    round_class = CeramicWriteRound
-
-    @pytest.mark.parametrize(
-        "test_case",
-        (
-            RoundTestCase(
-                name="Happy path",
-                initial_data={},
-                payloads=get_payloads(
-                    payload_cls=CeramicWritePayload,
-                    data=get_dummy_ceramic_write_payload_serialized(),
-                ),
-                final_data={
-                    "most_voted_api_data": json.loads(
-                        get_dummy_ceramic_write_payload_serialized()
-                    ),
-                },
-                event=Event.DONE,
-                most_voted_payload=get_dummy_ceramic_write_payload_serialized(),
-                synchronized_data_attr_checks=[],
-            ),
-            RoundTestCase(
-                name="Incorrectly serialized",
-                initial_data={},
-                payloads=get_payloads(
-                    payload_cls=CeramicWritePayload,
-                    data=get_dummy_ceramic_write_payload_serialized(
-                        api_error=True
-                    ),
-                ),
-                final_data={},
-                event=Event.API_ERROR,
-                most_voted_payload=get_dummy_ceramic_write_payload_serialized(
-                    api_error=True
-                ),
-                synchronized_data_attr_checks=[],
-            ),
-        ),
-    )
-    def test_run(self, test_case: RoundTestCase) -> None:
-        """Run tests."""
-        self.run_test(test_case)
-
-
-
 class TestVerificationRound(BaseScoreWriteRoundTest):
     """Tests for VerificationRound."""
 
@@ -274,3 +229,72 @@ class TestVerificationRound(BaseScoreWriteRoundTest):
     def test_run(self, test_case: RoundTestCase) -> None:
         """Run tests."""
         self.run_test(test_case)
+
+
+def get_keepers(keepers: Deque[str], retries: int = 1) -> str:
+    """Get dummy keepers."""
+    return retries.to_bytes(32, "big").hex() + "".join(keepers)
+
+
+class TestCeramicWriteRound(BaseOnlyKeeperSendsRoundTest):
+    """Test CeramicWriteRound."""
+
+    _synchronized_data_class = SynchronizedData
+    _event_class = Event
+    _round_class = CeramicWriteRound
+
+    @pytest.mark.parametrize(
+        "payload_str, exit_event",
+        (
+            (
+                CeramicWriteRound.ERROR_PAYLOAD,
+                Event.API_ERROR,
+            ),
+            (
+                CeramicWriteRound.SUCCCESS_PAYLOAD,
+                Event.DONE,
+            ),
+        ),
+    )
+    def test_round(
+        self,
+        payload_str: str,
+        exit_event: Event,
+    ) -> None:
+        """Runs tests."""
+        keeper_retries = 2
+        blacklisted_keepers = ""
+        self.participants = frozenset([f"agent_{i}" + "-" * 35 for i in range(4)])
+        keepers = deque(("agent_1" + "-" * 35, "agent_3" + "-" * 35))
+        self.synchronized_data = cast(
+            SynchronizedData,
+            self.synchronized_data.update(
+                participants=frozenset([f"agent_{i}" + "-" * 35 for i in range(4)]),
+                keepers=get_keepers(keepers, keeper_retries),
+                blacklisted_keepers=blacklisted_keepers,
+            ),
+        )
+
+        sender = keepers[0]
+
+        test_round = self._round_class(
+            synchronized_data=self.synchronized_data,
+            consensus_params=self.consensus_params,
+        )
+
+        self._complete_run(
+            self._test_round(
+                test_round=test_round,
+                keeper_payloads=CeramicWritePayload(
+                    sender=sender,
+                    content=payload_str,
+                ),
+                synchronized_data_update_fn=lambda _synchronized_data, _: _synchronized_data.update(
+                    blacklisted_keepers=blacklisted_keepers,
+                    keepers=get_keepers(keepers, keeper_retries),
+                    keeper_retries=keeper_retries,
+                ),
+                synchronized_data_attr_checks=[],
+                exit_event=exit_event,
+            )
+        )

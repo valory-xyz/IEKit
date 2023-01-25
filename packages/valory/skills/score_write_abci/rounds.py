@@ -33,6 +33,7 @@ from packages.valory.skills.abstract_round_abci.base import (
     DegenerateRound,
     EventToTimeout,
     TransactionType,
+    OnlyKeeperSendsRound,
     get_name,
 )
 from packages.valory.skills.score_write_abci.payloads import (
@@ -55,6 +56,7 @@ class Event(Enum):
     ROUND_TIMEOUT = "round_timeout"
     API_ERROR = "api_error"
     INCORRECT_SERIALIZATION = "incorrect_serialization"
+    DID_NOT_SEND = "did_not_send"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -78,13 +80,7 @@ class SynchronizedData(BaseSynchronizedData):
                 keepers_unparsed[RETRIES_LENGTH:], ADDRESS_LENGTH
             )
             return deque(keepers_parsed)
-        return deque()
-
-    @property
-    def keepers_threshold_exceeded(self) -> bool:
-        """Check if the number of selected keepers has exceeded the allowed limit."""
-        malicious_threshold = self.nb_participants // 3
-        return len(self.keepers) > malicious_threshold
+        return deque()  # pragma: nocover
 
     @property
     def most_voted_keeper_address(self) -> str:
@@ -95,17 +91,6 @@ class SynchronizedData(BaseSynchronizedData):
     def is_keeper_set(self) -> bool:
         """Check whether keeper is set."""
         return bool(self.db.get("keepers", False))
-
-    @property
-    def keeper_retries(self) -> int:
-        """Get the number of times the current keeper has retried."""
-        if self.is_keeper_set:
-            keepers_unparsed = cast(str, self.db.get_strict("keepers"))
-            keeper_retries = int.from_bytes(
-                bytes.fromhex(keepers_unparsed[:RETRIES_LENGTH]), "big"
-            )
-            return keeper_retries
-        return 0
 
 
 class ScoreWriteAbstractRound(AbstractRound[Event, TransactionType], ABC):
@@ -156,7 +141,7 @@ class SelectKeeperRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound)
         return super().end_block()
 
 
-class CeramicWriteRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound):
+class CeramicWriteRound(ScoreWriteAbstractRound, OnlyKeeperSendsRound):
     """CeramicWriteRound"""
 
     allowed_tx_type = CeramicWritePayload.transaction_type
@@ -166,17 +151,39 @@ class CeramicWriteRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound)
     ERROR_PAYLOAD = "{}"
     SUCCCESS_PAYLOAD = '{"success": true}'
 
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
+    def end_block(
+        self,
+    ) -> Optional[
+        Tuple[BaseSynchronizedData, Enum]
+    ]:  # pylint: disable=too-many-return-statements
         """Process the end of the block."""
-        if self.threshold_reached:
-            if self.most_voted_payload == self.ERROR_PAYLOAD:
-                return self.synchronized_data, Event.API_ERROR
-            return self.synchronized_data, Event.DONE
-        if not self.is_majority_possible(
-            self.collection, self.synchronized_data.nb_participants
-        ):
-            return self.synchronized_data, Event.NO_MAJORITY
-        return None
+        if not self.has_keeper_sent_payload:
+            return None
+
+        if self.keeper_payload is None:  # pragma: no cover
+            return self.synchronized_data, Event.DID_NOT_SEND
+
+        if self.keeper_payload == self.ERROR_PAYLOAD:
+            return self.synchronized_data, Event.API_ERROR
+
+        # synchronized_data = cast(
+        #     SynchronizedData,
+        #     self.synchronized_data.update(
+        #         synchronized_data_class=self.synchronized_data_class,
+        #         **{
+        #             get_name(SynchronizedData.keepers): self.keeper_payload[
+        #                 "serialized_keepers"
+        #             ],
+        #             get_name(SynchronizedData.blacklisted_keepers): self.keeper_payload[
+        #                 "blacklisted_keepers"
+        #             ],
+        #         },
+        #     ),
+        # )
+
+
+        return self.synchronized_data, Event.DONE
+
 
 
 class VerificationRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound):
