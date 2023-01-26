@@ -76,7 +76,7 @@ common-checks-1:
 
 .PHONY: test
 test:
-	pytest -rfE packages/valory/skills/score_read_abci --cov-report=html --cov=packages.valory.skills.score_read_abci --cov-report=xml --cov-report=term --cov-report=term-missing --cov-config=.coveragerc
+	pytest -rfE packages/valory/skills/score_read_abci -rfE packages/valory/skills/score_write_abci --cov-report=html --cov=packages.valory.skills.score_read_abci --cov=packages.valory.skills.score_write_abci --cov-report=xml --cov-report=term --cov-report=term-missing --cov-config=.coveragerc
 	find . -name ".coverage*" -not -name ".coveragerc" -exec rm -fr "{}" \;
 
 v := $(shell pip -V | grep virtualenvs)
@@ -103,3 +103,19 @@ new_env: clean
 .PHONY: fix-abci-app-specs
 fix-abci-app-specs:
 	export PYTHONPATH=${PYTHONPATH}:${PWD} && autonomy analyse fsm-specs --update --app-class ScoreReadAbciApp --package packages/valory/skills/score_read_abci/ || (echo "Failed to check score_read_abci abci consistency" && exit 1)
+
+.PHONY: all-linters
+all-linters:
+	gitleaks detect --report-format json --report-path leak_report
+	tox -e check-copyright
+	tox -e bandit
+	tox -e safety
+	tox -e check-packages
+	tox -e check-abciapp-specs
+	tox -e check-hash
+	tox -e black-check
+	tox -e isort-check
+	tox -e flake8
+	tox -e darglint
+	tox -e pylint
+	tox -e mypy
