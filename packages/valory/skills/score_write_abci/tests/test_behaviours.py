@@ -139,7 +139,7 @@ class BaseSelectKeeperBehaviourTest(BaseScoreWriteTest):
                         most_voted_randomness=[
                             "56cbde9e9bbcbdcaf92f183c678eaa5288581f06b1c9c7f884ce911776727688"
                         ],
-                        most_voted_keeper_address=["most_voted_keeper_address"],
+                        most_voted_keeper_address=["a_1"],
                     ),
                 )
             ),

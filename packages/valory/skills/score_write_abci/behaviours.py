@@ -80,8 +80,7 @@ class SelectKeeperCeramicBehaviour(
         """Do the action."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            keeper_address = self.synchronized_data.most_voted_keeper_address
-
+            keeper_address = self._select_keeper()
             self.context.logger.info(f"Selected a new keeper: {keeper_address}.")
             payload = SelectKeeperPayload(self.context.agent_address, keeper_address)
 
