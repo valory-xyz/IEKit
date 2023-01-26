@@ -37,6 +37,7 @@ from typing import (
 )
 
 import pytest
+from unittest import mock
 
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
@@ -58,25 +59,16 @@ from packages.valory.skills.score_write_abci.rounds import (
     SelectKeeperRound,
     CeramicWriteRound,
     VerificationRound,
+    RandomnessRound,
 )
 from collections import deque
-
-
-@dataclass
-class RoundTestCase:
-    """RoundTestCase"""
-
-    name: str
-    initial_data: Dict[str, Hashable]
-    payloads: Mapping[str, Union[BaseTxPayload, SelectKeeperPayload]]
-    final_data: Dict[str, Any]
-    event: Event
-    most_voted_payload: Any
-    synchronized_data_attr_checks: List[Callable] = field(default_factory=list)
-
+from packages.valory.skills.abstract_round_abci.base import (
+    AbciAppDB,
+    AbstractRound,
+    ConsensusParams,
+)
 
 MAX_PARTICIPANTS: int = 4
-
 
 def get_participants() -> FrozenSet[str]:
     """Participants"""
@@ -93,19 +85,161 @@ def get_payloads(
         for participant in get_participants()
     }
 
+# -----------------------------------------------------------------------
+# Randomness and select keeper tests are ported from Hello World abci app
+# -----------------------------------------------------------------------
+
+RANDOMNESS: str = "d1c29dce46f979f9748210d24bce4eae8be91272f5ca1a6aea2832d3dd676f51"
+
+
+class BaseRoundTestClass:
+    """Base test class for Rounds."""
+
+    synchronized_data: SynchronizedData
+    consensus_params: ConsensusParams
+    participants: FrozenSet[str]
+
+    @classmethod
+    def setup(
+        cls,
+    ) -> None:
+        """Setup the test class."""
+
+        cls.participants = get_participants()
+        cls.synchronized_data = SynchronizedData(
+            AbciAppDB(
+                setup_data=dict(
+                    participants=[cls.participants], all_participants=[cls.participants]
+                ),
+            )
+        )
+        cls.consensus_params = ConsensusParams(max_participants=MAX_PARTICIPANTS)
+
+    def _test_no_majority_event(self, round_obj: AbstractRound) -> None:
+        """Test the NO_MAJORITY event."""
+        with mock.patch.object(round_obj, "is_majority_possible", return_value=False):
+            result = round_obj.end_block()
+            assert result is not None
+            synchronized_data, event = result
+            assert event == Event.NO_MAJORITY
+
+class TestCollectRandomnessRound(BaseRoundTestClass):
+    """Tests for CollectRandomnessRound."""
+
+    def test_run(
+        self,
+    ) -> None:
+        """Run tests."""
+
+        test_round = RandomnessRound(
+            synchronized_data=self.synchronized_data,
+            consensus_params=self.consensus_params,
+        )
+        first_payload, *payloads = [
+            RandomnessPayload(
+                sender=participant, randomness=RANDOMNESS, round_id=0
+            )
+            for participant in self.participants
+        ]
+
+        test_round.process_payload(first_payload)
+        assert test_round.collection[first_payload.sender] == first_payload
+        assert test_round.end_block() is None
+
+        self._test_no_majority_event(test_round)
+
+        for payload in payloads:
+            test_round.process_payload(payload)
+
+        actual_next_behaviour = self.synchronized_data.update(
+            participant_to_randomness=test_round.collection,
+            most_voted_randomness=test_round.most_voted_payload,
+        )
+
+        res = test_round.end_block()
+        assert res is not None
+        synchronized_data, event = res
+        assert all(
+            [
+                key
+                in cast(SynchronizedData, synchronized_data).participant_to_randomness
+                for key in cast(
+                    SynchronizedData, actual_next_behaviour
+                ).participant_to_randomness
+            ]
+        )
+        assert event == Event.DONE
+
+
+class TestSelectKeeperRound(BaseRoundTestClass):
+    """Tests for SelectKeeperRound."""
+
+    def test_run(
+        self,
+    ) -> None:
+        """Run tests."""
+
+        test_round = SelectKeeperRound(
+            synchronized_data=self.synchronized_data,
+            consensus_params=self.consensus_params,
+        )
+
+        first_payload, *payloads = [
+            SelectKeeperPayload(sender=participant, keeper="keeper")
+            for participant in self.participants
+        ]
+
+        test_round.process_payload(first_payload)
+        assert test_round.collection[first_payload.sender] == first_payload
+        assert test_round.end_block() is None
+
+        self._test_no_majority_event(test_round)
+
+        for payload in payloads:
+            test_round.process_payload(payload)
+
+        actual_next_behaviour = self.synchronized_data.update(
+            participant_to_selection=test_round.collection,
+            most_voted_keeper_address=test_round.most_voted_payload,
+        )
+
+        res = test_round.end_block()
+        assert res is not None
+        synchronized_data, event = res
+        assert all(
+            [
+                key
+                in cast(SynchronizedData, synchronized_data).participant_to_selection
+                for key in cast(
+                    SynchronizedData, actual_next_behaviour
+                ).participant_to_selection
+            ]
+        )
+        assert event == Event.DONE
+
+
+# -----------------------------------------------------------------------------------------------
+# Ceramic write and verification tests were specifically implemented for the score write abci app
+# -----------------------------------------------------------------------------------------------
+
+@dataclass
+class RoundTestCase:
+    """RoundTestCase"""
+
+    name: str
+    initial_data: Dict[str, Hashable]
+    payloads: Mapping[str, Union[BaseTxPayload, SelectKeeperPayload]]
+    final_data: Dict[str, Any]
+    event: Event
+    most_voted_payload: Any
+    synchronized_data_attr_checks: List[Callable] = field(default_factory=list)
+
 
 def get_dummy_ceramic_write_payload_serialized(api_error: bool = False) -> str:
     """Dummy twitter observation payload"""
     if api_error:
         return "{}"
     return '{"success": true}'
-
-
-def get_dummy_select_keeper_payload(error: bool = False) -> str:
-    """Dummy twitter observation payload"""
-    if error:
-        return ""
-    return int(1).to_bytes(32, "big").hex() + "new_keeper" + "-" * 32
 
 
 class BaseScoreWriteRoundTest(BaseCollectSameUntilThresholdRoundTest):
@@ -139,49 +273,65 @@ class BaseScoreWriteRoundTest(BaseCollectSameUntilThresholdRoundTest):
             )
         )
 
-class TestSelectKeeperRound(BaseScoreWriteRoundTest):
-    """Tests for SelectKeeperRound."""
+class TestCeramicWriteRound(BaseOnlyKeeperSendsRoundTest):
+    """Test CeramicWriteRound."""
 
-    round_class = SelectKeeperRound
+    _synchronized_data_class = SynchronizedData
+    _event_class = Event
+    _round_class = CeramicWriteRound
 
     @pytest.mark.parametrize(
-        "test_case",
+        "payload_str, exit_event",
         (
-            RoundTestCase(
-                name="Happy path",
-                initial_data={},
-                payloads=get_payloads(
-                    payload_cls=SelectKeeperPayload,
-                    data=get_dummy_select_keeper_payload(),
-                ),
-                final_data={
-                    "most_voted_api_data": get_dummy_select_keeper_payload()
-                },
-                event=Event.DONE,
-                most_voted_payload=get_dummy_select_keeper_payload(),
-                synchronized_data_attr_checks=[],
+            (
+                CeramicWriteRound.ERROR_PAYLOAD,
+                Event.API_ERROR,
             ),
-            RoundTestCase(
-                name="API error",
-                initial_data={},
-                payloads=get_payloads(
-                    payload_cls=SelectKeeperPayload,
-                    data=get_dummy_select_keeper_payload(
-                        error=True
-                    ),
-                ),
-                final_data={},
-                event=Event.INCORRECT_SERIALIZATION,
-                most_voted_payload=get_dummy_select_keeper_payload(
-                    error=True
-                ),
-                synchronized_data_attr_checks=[],
+            (
+                CeramicWriteRound.SUCCCESS_PAYLOAD,
+                Event.DONE,
             ),
         ),
     )
-    def test_run(self, test_case: RoundTestCase) -> None:
-        """Run tests."""
-        self.run_test(test_case)
+    def test_round(
+        self,
+        payload_str: str,
+        exit_event: Event,
+    ) -> None:
+        """Runs tests."""
+
+        sender = "agent_0-----------------------------------"
+
+        self.participants = frozenset([f"agent_{i}" + "-" * 35 for i in range(4)])
+        self.synchronized_data = cast(
+            SynchronizedData,
+            self.synchronized_data.update(
+                participants=frozenset([f"agent_{i}" + "-" * 35 for i in range(4)]),
+                keeper=sender,
+                most_voted_keeper_address=sender,
+            ),
+        )
+
+        test_round = self._round_class(
+            synchronized_data=self.synchronized_data,
+            consensus_params=self.consensus_params,
+        )
+
+        self._complete_run(
+            self._test_round(
+                test_round=test_round,
+                keeper_payloads=CeramicWritePayload(
+                    sender=sender,
+                    content=payload_str,
+                ),
+                synchronized_data_update_fn=lambda _synchronized_data, _: _synchronized_data.update(
+                    keeper=sender,
+                ),
+                synchronized_data_attr_checks=[],
+                exit_event=exit_event,
+            )
+        )
+
 
 
 class TestVerificationRound(BaseScoreWriteRoundTest):
@@ -229,72 +379,3 @@ class TestVerificationRound(BaseScoreWriteRoundTest):
     def test_run(self, test_case: RoundTestCase) -> None:
         """Run tests."""
         self.run_test(test_case)
-
-
-def get_keepers(keepers: Deque[str], retries: int = 1) -> str:
-    """Get dummy keepers."""
-    return retries.to_bytes(32, "big").hex() + "".join(keepers)
-
-
-class TestCeramicWriteRound(BaseOnlyKeeperSendsRoundTest):
-    """Test CeramicWriteRound."""
-
-    _synchronized_data_class = SynchronizedData
-    _event_class = Event
-    _round_class = CeramicWriteRound
-
-    @pytest.mark.parametrize(
-        "payload_str, exit_event",
-        (
-            (
-                CeramicWriteRound.ERROR_PAYLOAD,
-                Event.API_ERROR,
-            ),
-            (
-                CeramicWriteRound.SUCCCESS_PAYLOAD,
-                Event.DONE,
-            ),
-        ),
-    )
-    def test_round(
-        self,
-        payload_str: str,
-        exit_event: Event,
-    ) -> None:
-        """Runs tests."""
-        keeper_retries = 2
-        blacklisted_keepers = ""
-        self.participants = frozenset([f"agent_{i}" + "-" * 35 for i in range(4)])
-        keepers = deque(("agent_1" + "-" * 35, "agent_3" + "-" * 35))
-        self.synchronized_data = cast(
-            SynchronizedData,
-            self.synchronized_data.update(
-                participants=frozenset([f"agent_{i}" + "-" * 35 for i in range(4)]),
-                keepers=get_keepers(keepers, keeper_retries),
-                blacklisted_keepers=blacklisted_keepers,
-            ),
-        )
-
-        sender = keepers[0]
-
-        test_round = self._round_class(
-            synchronized_data=self.synchronized_data,
-            consensus_params=self.consensus_params,
-        )
-
-        self._complete_run(
-            self._test_round(
-                test_round=test_round,
-                keeper_payloads=CeramicWritePayload(
-                    sender=sender,
-                    content=payload_str,
-                ),
-                synchronized_data_update_fn=lambda _synchronized_data, _: _synchronized_data.update(
-                    blacklisted_keepers=blacklisted_keepers,
-                    keepers=get_keepers(keepers, keeper_retries),
-                    keeper_retries=keeper_retries,
-                ),
-                synchronized_data_attr_checks=[],
-                exit_event=exit_event,
-            )
-        )

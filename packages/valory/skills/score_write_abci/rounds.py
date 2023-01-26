@@ -21,7 +21,7 @@
 
 from abc import ABC
 from enum import Enum
-from typing import Dict, List, Optional, Set, Tuple, cast, Deque
+from typing import Dict, List, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
@@ -42,8 +42,6 @@ from packages.valory.skills.score_write_abci.payloads import (
     CeramicWritePayload,
     VerificationPayload
 )
-from collections import deque
-import textwrap
 
 ADDRESS_LENGTH = 42
 RETRIES_LENGTH = 64
@@ -55,7 +53,6 @@ class Event(Enum):
     NO_MAJORITY = "no_majority"
     ROUND_TIMEOUT = "round_timeout"
     API_ERROR = "api_error"
-    INCORRECT_SERIALIZATION = "incorrect_serialization"
     DID_NOT_SEND = "did_not_send"
 
 
@@ -71,27 +68,6 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the user scores."""
         return cast(dict, self.db.get("user_to_scores", {}))
 
-    @property
-    def keepers(self) -> Deque[str]:
-        """Get the current cycle's keepers who have tried to submit a transaction."""
-        if self.is_keeper_set:
-            keepers_unparsed = cast(str, self.db.get_strict("keepers"))
-            keepers_parsed = textwrap.wrap(
-                keepers_unparsed[RETRIES_LENGTH:], ADDRESS_LENGTH
-            )
-            return deque(keepers_parsed)
-        return deque()  # pragma: nocover
-
-    @property
-    def most_voted_keeper_address(self) -> str:
-        """Get the first in priority keeper to try to re-submit a transaction."""
-        return self.keepers[0]
-
-    @property  # TODO: overrides base property, investigate
-    def is_keeper_set(self) -> bool:
-        """Check whether keeper is set."""
-        return bool(self.db.get("keepers", False))
-
 
 class ScoreWriteAbstractRound(AbstractRound[Event, TransactionType], ABC):
     """Abstract round for the score_read skill."""
@@ -106,8 +82,7 @@ class RandomnessRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound):
     """A round for generating randomness"""
 
     allowed_tx_type = RandomnessPayload.transaction_type
-    payload_class = RandomnessPayload
-    payload_attribute = "randomness"
+    payload_attribute = get_name(RandomnessPayload.randomness)
     synchronized_data_class = SynchronizedData
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
@@ -119,26 +94,13 @@ class SelectKeeperRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound)
     """A round in which a keeper is selected for transaction submission"""
 
     allowed_tx_type = SelectKeeperPayload.transaction_type
-    payload_class = SelectKeeperPayload
-    payload_attribute = "keepers"
+    payload_attribute = get_name(SelectKeeperPayload.keeper)
     synchronized_data_class = SynchronizedData
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
     collection_key = get_name(SynchronizedData.participant_to_selection)
-    selection_key = get_name(SynchronizedData.keepers)
+    selection_key = get_name(SynchronizedData.most_voted_keeper_address)
 
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
-        """Process the end of the block."""
-
-        if self.threshold_reached and self.most_voted_payload is not None:
-            if (
-                len(self.most_voted_payload) < RETRIES_LENGTH + ADDRESS_LENGTH
-                or (len(self.most_voted_payload) - RETRIES_LENGTH) % ADDRESS_LENGTH != 0
-            ):
-                # if we cannot parse the keepers' payload, then the developer has serialized it incorrectly.
-                return self.synchronized_data, Event.INCORRECT_SERIALIZATION
-
-        return super().end_block()
 
 
 class CeramicWriteRound(ScoreWriteAbstractRound, OnlyKeeperSendsRound):
@@ -228,7 +190,6 @@ class ScoreWriteAbciApp(AbciApp[Event]):
             Event.DONE: CeramicWriteRound,
             Event.NO_MAJORITY: RandomnessRound,
             Event.ROUND_TIMEOUT: RandomnessRound,
-            Event.INCORRECT_SERIALIZATION: RandomnessRound,
         },
         CeramicWriteRound: {
             Event.DONE: VerificationRound,

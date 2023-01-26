@@ -22,7 +22,7 @@
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Optional, Type
+from typing import Any, Dict, Optional, Type, cast
 
 import pytest
 
@@ -50,32 +50,13 @@ from packages.valory.skills.abstract_round_abci.test_tools.common import (
     BaseRandomnessBehaviourTest,
     BaseSelectKeeperBehaviourTest,
 )
+from packages.valory.skills.abstract_round_abci.behaviour_utils import BaseBehaviour
 
 PACKAGE_DIR = Path(__file__).parent.parent
 
 DUMMY_USER_TO_SCORES = {"dummy_user": "dummy_score"}
 
 CERAMIC_API_COMMIT_URL = "https://ceramic-clay.3boxlabs.com/api/v0/commits/dummy_stream_id"
-
-class TestRandomnessBehaviour(BaseRandomnessBehaviourTest):
-    """Test randomness in operation."""
-
-    path_to_skill = PACKAGE_DIR
-
-    randomness_behaviour_class = RandomnessBehaviour
-    next_behaviour_class = SelectKeeperCeramicBehaviour
-    done_event = Event.DONE
-
-
-class TestSelectKeeperBehaviour(BaseSelectKeeperBehaviourTest):
-    """Test SelectKeeperBehaviour."""
-
-    path_to_skill = PACKAGE_DIR
-
-    select_keeper_behaviour_class = SelectKeeperCeramicBehaviour
-    next_behaviour_class = CeramicWriteBehaviour
-    done_event = Event.DONE
-    _synchronized_data = SynchronizedData
 
 
 @dataclass
@@ -113,11 +94,12 @@ class BaseScoreWriteTest(FSMBehaviourBaseCase):
             == self.behaviour_class.auto_behaviour_id()
         )
 
-    def complete(self, event: Event) -> None:
+    def complete(self, event: Event, sends: bool=True) -> None:
         """Complete test"""
 
         self.behaviour.act_wrapper()
-        self.mock_a2a_transaction()
+        if sends:
+            self.mock_a2a_transaction()
         self._test_done_flag_set()
         self.end_round(done_event=event)
         assert (
@@ -126,7 +108,67 @@ class BaseScoreWriteTest(FSMBehaviourBaseCase):
         )
 
 
-class TestCeramicWriteBehaviour(BaseScoreWriteTest):
+class TestRandomnessBehaviour(BaseRandomnessBehaviourTest):
+    """Test randomness in operation."""
+
+    path_to_skill = PACKAGE_DIR
+
+    randomness_behaviour_class = RandomnessBehaviour
+    next_behaviour_class = SelectKeeperCeramicBehaviour
+    done_event = Event.DONE
+
+
+class BaseSelectKeeperBehaviourTest(BaseScoreWriteTest):
+    """Test SelectKeeperBehaviour."""
+
+    select_keeper_behaviour_class: Type[BaseBehaviour]
+    next_behaviour_class: Type[BaseBehaviour]
+
+    def test_select_keeper(
+        self,
+    ) -> None:
+        """Test select keeper agent."""
+        participants = frozenset({self.skill.skill_context.agent_address, "a_1", "a_2"})
+        self.fast_forward_to_behaviour(
+            behaviour=self.behaviour,
+            behaviour_id=self.select_keeper_behaviour_class.auto_behaviour_id(),
+            synchronized_data=SynchronizedData(
+                AbciAppDB(
+                    setup_data=dict(
+                        participants=[participants],
+                        most_voted_randomness=[
+                            "56cbde9e9bbcbdcaf92f183c678eaa5288581f06b1c9c7f884ce911776727688"
+                        ],
+                        most_voted_keeper_address=["most_voted_keeper_address"],
+                    ),
+                )
+            ),
+        )
+        assert (
+            cast(
+                BaseBehaviour,
+                cast(BaseBehaviour, self.behaviour.current_behaviour),
+            ).behaviour_id
+            == self.select_keeper_behaviour_class.auto_behaviour_id()
+        )
+        self.behaviour.act_wrapper()
+        self.mock_a2a_transaction()
+        self._test_done_flag_set()
+        self.end_round(done_event=Event.DONE)
+        behaviour = cast(
+            BaseBehaviour, self.behaviour.current_behaviour
+        )
+        assert behaviour.behaviour_id == self.next_behaviour_class.auto_behaviour_id()
+
+
+class TestSelectKeeperBehaviour(BaseSelectKeeperBehaviourTest):
+    """Test SelectKeeperBehaviour."""
+
+    select_keeper_behaviour_class = SelectKeeperCeramicBehaviour
+    next_behaviour_class = CeramicWriteBehaviour
+
+
+class TestCeramicWriteBehaviourSender(BaseScoreWriteTest):
     """Tests CeramicWriteBehaviour"""
 
     behaviour_class = CeramicWriteBehaviour
@@ -138,7 +180,7 @@ class TestCeramicWriteBehaviour(BaseScoreWriteTest):
             (
                 BehaviourTestCase(
                     "Happy path",
-                    initial_data=dict(),
+                    initial_data=dict(most_voted_keeper_address="test_agent_address"),
                     event=Event.DONE,
                 ),
                 {
@@ -171,6 +213,28 @@ class TestCeramicWriteBehaviour(BaseScoreWriteTest):
         self.complete(test_case.event)
 
 
+class TestCeramicWriteBehaviourNonSender(BaseScoreWriteTest):
+    """Tests CeramicWriteBehaviour"""
+
+    behaviour_class = CeramicWriteBehaviour
+    next_behaviour_class = VerificationBehaviour
+
+    @pytest.mark.parametrize(
+        "test_case",
+        [
+            BehaviourTestCase(
+                "Happy path",
+                initial_data=dict(most_voted_keeper_address="not_my_address"),
+                event=Event.DONE,
+            ),
+        ],
+    )
+    def test_run(self, test_case: BehaviourTestCase) -> None:
+        """Run tests."""
+        self.fast_forward(test_case.initial_data)
+        self.complete(event=test_case.event, sends=False)
+
+
 class TestCeramicWriteBehaviourApiError(BaseScoreWriteTest):
     """Tests CeramicWriteBehaviour"""
 
@@ -183,7 +247,7 @@ class TestCeramicWriteBehaviourApiError(BaseScoreWriteTest):
             (
                 BehaviourTestCase(
                     "API error",
-                    initial_data=dict(),
+                    initial_data=dict(most_voted_keeper_address="test_agent_address"),
                     event=Event.API_ERROR,
                 ),
                 {

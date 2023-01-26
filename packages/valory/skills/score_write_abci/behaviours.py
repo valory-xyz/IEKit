@@ -20,7 +20,7 @@
 """This package contains round behaviours of ScoreWriteAbciApp."""
 
 import json
-from typing import Generator, Set, Type, cast, Deque
+from typing import Generator, Set, Type, cast
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
@@ -40,13 +40,13 @@ from packages.valory.skills.abstract_round_abci.common import (
     RandomnessBehaviour,
     SelectKeeperBehaviour,
 )
-from collections import deque
 from packages.valory.skills.score_write_abci.payloads import (
     RandomnessPayload,
     SelectKeeperPayload,
     CeramicWritePayload,
     VerificationPayload,
 )
+import random
 
 
 class ScoreWriteBaseBehaviour(BaseBehaviour):
@@ -81,10 +81,14 @@ class SelectKeeperCeramicBehaviour(
         """Do the action."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            keepers = deque((self._select_keeper(),))
-            payload = SelectKeeperPayload(
-                self.context.agent_address, self.serialized_keepers(keepers, 1)
-            )
+            participants = sorted(self.synchronized_data.participants)
+            random.seed(self.synchronized_data.most_voted_randomness, 2)  # nosec
+            index = random.randint(0, len(participants) - 1)  # nosec
+
+            keeper_address = participants[index]
+
+            self.context.logger.info(f"Selected a new keeper: {keeper_address}.")
+            payload = SelectKeeperPayload(self.context.agent_address, keeper_address)
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(payload)
@@ -92,25 +96,37 @@ class SelectKeeperCeramicBehaviour(
 
         self.set_done()
 
-    @staticmethod
-    def serialized_keepers(keepers: Deque[str], keeper_retries: int) -> str:
-        """Get the keepers serialized."""
-        if len(keepers) == 0:
-            return ""  # pragma: no cover
-        keepers_ = "".join(keepers)
-        keeper_retries_ = keeper_retries.to_bytes(32, "big").hex()
-        concatenated = keeper_retries_ + keepers_
-
-        return concatenated
-
 
 class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
     """CeramicWriteBehaviour"""
 
     matching_round: Type[AbstractRound] = CeramicWriteRound
 
-    def async_act(self) -> Generator:
-        """Do the act, supporting asynchronous execution."""
+    def _i_am_not_sending(self) -> bool:
+        """Indicates if the current agent is the sender or not."""
+        return (
+            self.context.agent_address
+            != self.synchronized_data.most_voted_keeper_address
+        )
+
+    def async_act(self) -> Generator[None, None, None]:
+        """Do the action"""
+        if self._i_am_not_sending():
+            yield from self._not_sender_act()
+        else:
+            yield from self._sender_act()
+
+    def _not_sender_act(self) -> Generator:
+        """Do the non-sender action."""
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            self.context.logger.info(
+                f"Waiting for the keeper to do its keeping: {self.synchronized_data.most_voted_keeper_address}"
+            )
+            yield from self.wait_until_round_end()
+        self.set_done()
+
+    def _sender_act(self) -> Generator:
+        """Do the sender action"""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             success = yield from self._write_ceramic_data()

@@ -101,7 +101,7 @@ class SelectKeeperPayload(BaseTxPayload):
 
     transaction_type = TransactionType.SELECT_KEEPER
 
-    def __init__(self, sender: str, keepers: str, **kwargs: Any) -> None:
+    def __init__(self, sender: str, keeper: str, **kwargs: Any) -> None:
         """Initialize a 'select_keeper' transaction payload.
 
         :param sender: the sender (Ethereum) address
@@ -109,17 +109,17 @@ class SelectKeeperPayload(BaseTxPayload):
         :param kwargs: the keyword arguments
         """
         super().__init__(sender, **kwargs)
-        self._keepers = keepers
+        self._keeper = keeper
 
     @property
-    def keepers(self) -> str:
+    def keeper(self) -> str:
         """Get the keeper."""
-        return self._keepers
+        return self._keeper
 
     @property
     def data(self) -> Dict[str, str]:
         """Get the data."""
-        return dict(keepers=self.keepers)
+        return dict(keepers=self.keeper)
 
 
 class CeramicWritePayload(BaseScoreWritePayload):

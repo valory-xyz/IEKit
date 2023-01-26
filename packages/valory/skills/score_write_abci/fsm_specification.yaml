@@ -2,7 +2,6 @@ alphabet_in:
 - API_ERROR
 - DID_NOT_SEND
 - DONE
-- INCORRECT_SERIALIZATION
 - NO_MAJORITY
 - ROUND_TIMEOUT
 default_start_state: RandomnessRound
@@ -26,7 +25,6 @@ transition_func:
     (RandomnessRound, NO_MAJORITY): RandomnessRound
     (RandomnessRound, ROUND_TIMEOUT): RandomnessRound
     (SelectKeeperRound, DONE): CeramicWriteRound
-    (SelectKeeperRound, INCORRECT_SERIALIZATION): RandomnessRound
     (SelectKeeperRound, NO_MAJORITY): RandomnessRound
     (SelectKeeperRound, ROUND_TIMEOUT): RandomnessRound
     (VerificationRound, API_ERROR): RandomnessRound
