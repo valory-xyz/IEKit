@@ -76,20 +76,6 @@ class SelectKeeperCeramicBehaviour(
     matching_round = SelectKeeperRound
     payload_class = SelectKeeperPayload
 
-    def async_act(self) -> Generator:
-        """Do the action."""
-
-        with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            keeper_address = self._select_keeper()
-            self.context.logger.info(f"Selected a new keeper: {keeper_address}.")
-            payload = SelectKeeperPayload(self.context.agent_address, keeper_address)
-
-        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
-            yield from self.send_a2a_transaction(payload)
-            yield from self.wait_until_round_end()
-
-        self.set_done()
-
 
 class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
     """CeramicWriteBehaviour"""
