@@ -46,7 +46,6 @@ from packages.valory.skills.score_write_abci.payloads import (
     CeramicWritePayload,
     VerificationPayload,
 )
-import random
 
 
 class ScoreWriteBaseBehaviour(BaseBehaviour):
@@ -81,11 +80,7 @@ class SelectKeeperCeramicBehaviour(
         """Do the action."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            participants = sorted(self.synchronized_data.participants)
-            random.seed(self.synchronized_data.most_voted_randomness, 2)  # nosec
-            index = random.randint(0, len(participants) - 1)  # nosec
-
-            keeper_address = participants[index]
+            keeper_address = self.synchronized_data.most_voted_keeper_address
 
             self.context.logger.info(f"Selected a new keeper: {keeper_address}.")
             payload = SelectKeeperPayload(self.context.agent_address, keeper_address)
