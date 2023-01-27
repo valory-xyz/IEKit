@@ -127,7 +127,7 @@ def build_data_from_commits(commits):
     for commit in commits:
         # Skip anchor commits
         if "linkedBlock" not in commit["value"].keys():
-            continue
+            continue  # pragma: no cover
 
         linked_block = commit["value"]["linkedBlock"]
 

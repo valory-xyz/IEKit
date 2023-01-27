@@ -19,7 +19,6 @@
 
 """This package contains the tests for rounds of ScoreRead."""
 
-import json
 from dataclasses import dataclass, field
 from typing import (
     Any,
@@ -238,8 +237,8 @@ class RoundTestCase:
 def get_dummy_ceramic_write_payload_serialized(api_error: bool = False) -> str:
     """Dummy twitter observation payload"""
     if api_error:
-        return "{}"
-    return '{"success": true}'
+        return "error"
+    return "success"
 
 
 class BaseScoreWriteRoundTest(BaseCollectSameUntilThresholdRoundTest):
@@ -350,9 +349,7 @@ class TestVerificationRound(BaseScoreWriteRoundTest):
                     data=get_dummy_ceramic_write_payload_serialized(),
                 ),
                 final_data={
-                    "most_voted_api_data": json.loads(
-                        get_dummy_ceramic_write_payload_serialized()
-                    ),
+                    "most_voted_api_data": get_dummy_ceramic_write_payload_serialized(),
                 },
                 event=Event.DONE,
                 most_voted_payload=get_dummy_ceramic_write_payload_serialized(),

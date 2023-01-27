@@ -111,8 +111,8 @@ class CeramicWriteRound(ScoreWriteAbstractRound, OnlyKeeperSendsRound):
     payload_attribute: str = get_name(CeramicWritePayload.content)
     synchronized_data_class = SynchronizedData
 
-    ERROR_PAYLOAD = "{}"
-    SUCCCESS_PAYLOAD = '{"success": true}'
+    ERROR_PAYLOAD = "error"
+    SUCCCESS_PAYLOAD = "success"
 
     def end_block(
         self,
@@ -139,8 +139,8 @@ class VerificationRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound)
     payload_attribute: str = get_name(VerificationPayload.content)
     synchronized_data_class = SynchronizedData
 
-    ERROR_PAYLOAD = "{}"
-    SUCCCESS_PAYLOAD = '{"success": true}'
+    ERROR_PAYLOAD = "error"
+    SUCCCESS_PAYLOAD = "success"
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""

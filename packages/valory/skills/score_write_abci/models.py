@@ -53,6 +53,7 @@ class Params(BaseParams):
             "ceramic_api_read_endpoint", kwargs
         )
         self.ceramic_stream_id = self._ensure("ceramic_stream_id", kwargs)
+        self.ceramic_did_str = kwargs.pop("ceramic_did_str", None)
         self.ceramic_did_seed = kwargs.pop("ceramic_did_seed", None)
         super().__init__(*args, **kwargs)
 

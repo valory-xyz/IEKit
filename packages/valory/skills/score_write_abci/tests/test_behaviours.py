@@ -54,11 +54,105 @@ from packages.valory.skills.score_write_abci.rounds import (
 
 PACKAGE_DIR = Path(__file__).parent.parent
 
-DUMMY_USER_TO_SCORES = {"dummy_user": "dummy_score"}
+DUMMY_USER_TO_SCORES = {"hello": "world"}
 
-CERAMIC_API_COMMIT_URL = (
+CERAMIC_API_STREAM_URL = (
     "https://ceramic-clay.3boxlabs.com/api/v0/commits/dummy_stream_id"
 )
+
+DUMMY_API_RESPONSE_READ = {
+    "streamId": "kjzl6cwe1jw1484iasm05ja0awfjl0gnnwxw2kyugu5s7xtx3j1ffep8iob3r63",
+    "docId": "kjzl6cwe1jw1484iasm05ja0awfjl0gnnwxw2kyugu5s7xtx3j1ffep8iob3r63",
+    "commits": [
+        {
+            "cid": "bagcqceraojqhyoedmb5qnx7jkdm77rxb7h5kukalrav733m5bw6jn3p6c5fq",
+            "value": {
+                "jws": {
+                    "payload": "AXESIBhJmbbXniM1EOHntTa5lBfFeQRJRfC0_kYtaw-pOBOB",
+                    "signatures": [
+                        {
+                            "signature": "hRW6iqTVNNjbwuNBQpYSi_xtjBBdJKNEq6rgFe0uJL6soh7PyMbGfwx8QmUe_S-HvmDLGkzEhXFElE9biNc7Dg",
+                            "protected": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29uM05lY2Q2TmtreWZvR29IeGlkMnpuR2M1OUxVM0s3bXViYVJjRmJMZkxYI3o2TWtvbjNOZWNkNk5ra3lmb0dvSHhpZDJ6bkdjNTlMVTNLN211YmFSY0ZiTGZMWCJ9",
+                        }
+                    ],
+                    "link": "bafyreiayjgm3nv46em2rbyphwu3ltfaxyv4qiskf6c2p4rrnnmh2soatqe",
+                },
+                "linkedBlock": "omRkYXRhoWVvdGhlcmRkYXRhZmhlYWRlcqJmdW5pcXVlcEh4bEdQemhNZUlZTzl3QzJrY29udHJvbGxlcnOBeDhkaWQ6a2V5Ono2TWtvbjNOZWNkNk5ra3lmb0dvSHhpZDJ6bkdjNTlMVTNLN211YmFSY0ZiTGZMWA",
+            },
+        },
+        {
+            "cid": "bagcqcerask25is7ihbbypevitb24xiq5tt5ywzzt7o2nlngi267i3vcveuwa",
+            "value": {
+                "jws": {
+                    "payload": "AXESIHLsnaWdJAiRKdyyxLXbU_8Slj8Tz_1nsW8yS-gGhIT9",
+                    "signatures": [
+                        {
+                            "signature": "3PY9f9MbvETZk4MncscttLk99cV-zPXKdwvlKIc7XtzeC5QxzAy1Jl4Ya8geJNIgMdC7ctBXBV7i-94IhMHHAA",
+                            "protected": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29uM05lY2Q2TmtreWZvR29IeGlkMnpuR2M1OUxVM0s3bXViYVJjRmJMZkxYI3o2TWtvbjNOZWNkNk5ra3lmb0dvSHhpZDJ6bkdjNTlMVTNLN211YmFSY0ZiTGZMWCJ9",
+                        }
+                    ],
+                    "link": "bafyreids5so2lhjebcistxfsys25wu77ckld6e6p7vt3c3zsjpuanbee7u",
+                },
+                "linkedBlock": "pGJpZNgqWCYAAYUBEiByYHw4g2B7Bt/pUNn/xuH5+qooC4gr/e2dDbyW7f4XS2RkYXRhgqJib3BmcmVtb3ZlZHBhdGhmL290aGVyo2JvcGNhZGRkcGF0aGQvZm9vZXZhbHVlY2JhemRwcmV22CpYJgABhQESIHJgfDiDYHsG3+lQ2f/G4fn6qigLiCv97Z0NvJbt/hdLZmhlYWRlcqA",
+            },
+        },
+        {
+            "cid": "bagcqceraggsggxj3ecdbbw3ltcg4uihayh7s7ax2f6nsxsqzapkrvwhs2p6q",
+            "value": {
+                "jws": {
+                    "payload": "AXESIEgtRA4e3z0hf1VhcjpJvzePVULRCZnvem1pbpj1akLn",
+                    "signatures": [
+                        {
+                            "signature": "FkbSk5zfwoD0AhdXOnej1-vY3qlTiakBmdNYrY-pPXFp49J_PMUGiwfr4LSR9UT4GJ-6OduXXv8WtnTqJVRgBw",
+                            "protected": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29uM05lY2Q2TmtreWZvR29IeGlkMnpuR2M1OUxVM0s3bXViYVJjRmJMZkxYI3o2TWtvbjNOZWNkNk5ra3lmb0dvSHhpZDJ6bkdjNTlMVTNLN211YmFSY0ZiTGZMWCJ9",
+                        }
+                    ],
+                    "link": "bafyreicifvca4hw7huqx6vlboi5etpzxr5kufuijthxxu3ljn2mpk2sc44",
+                },
+                "linkedBlock": "pGJpZNgqWCYAAYUBEiByYHw4g2B7Bt/pUNn/xuH5+qooC4gr/e2dDbyW7f4XS2RkYXRhgaNib3BncmVwbGFjZWRwYXRoZC9mb29ldmFsdWVkYmF6MmRwcmV22CpYJgABhQESIJK11EvoOEOHkqiYdcuiHZz7i2cz+7TVtMjXvo3UVSUsZmhlYWRlcqA",
+            },
+        },
+        {
+            "cid": "bagcqcerailso2sw7yxu5ytb4kmemhj5lyn737r5ztx65vpliowt2d3utnaja",
+            "value": {
+                "jws": {
+                    "payload": "AXESID0CjbtNzDDHpDR_hdE_AT8Jm6nF6Yt5J5n27YNdzlfh",
+                    "signatures": [
+                        {
+                            "signature": "zgVaoiiluocxnJ663PBKMUAEiL-SxHKtxkLLCfy0C7kFrF_zIPIKV_0Fp3BsoOpOD0KfzqHmG617HgJzyy7CBA",
+                            "protected": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29uM05lY2Q2TmtreWZvR29IeGlkMnpuR2M1OUxVM0s3bXViYVJjRmJMZkxYI3o2TWtvbjNOZWNkNk5ra3lmb0dvSHhpZDJ6bkdjNTlMVTNLN211YmFSY0ZiTGZMWCJ9",
+                        }
+                    ],
+                    "link": "bafyreib5akg3wtomgdd2ind7qxit6aj7bgn2trpjrn4spgpw5wbv3tsx4e",
+                },
+                "linkedBlock": "pGJpZNgqWCYAAYUBEiByYHw4g2B7Bt/pUNn/xuH5+qooC4gr/e2dDbyW7f4XS2RkYXRhgqJib3BmcmVtb3ZlZHBhdGhkL2Zvb6Nib3BjYWRkZHBhdGhmL2hlbGxvZXZhbHVlZXdvcmxkZHByZXbYKlgmAAGFARIgMaRjXTsghhDba5iNyiDgwf8vgvovmyvKGQPVGtjy0/1maGVhZGVyoA",
+            },
+        },
+    ],
+}
+
+DUMMY_API_RESPONSE_READ_WRONG = {
+    "streamId": "kjzl6cwe1jw149mrryi64a6z96jafmfct26pelvznv5fknp11ahytreojv2r6wa",
+    "docId": "kjzl6cwe1jw149mrryi64a6z96jafmfct26pelvznv5fknp11ahytreojv2r6wa",
+    "commits": [
+        {
+            "cid": "bagcqcerasckqtaxlcrzx6hvcqyzajhtlblugxqe2cytqf45l4pxflftlfp7a",
+            "value": {
+                "jws": {
+                    "payload": "AXESIOBKJsyU_MDPJJKhKuDQokziMyCFUoqNyyoNNinDDg0F",
+                    "signatures": [
+                        {
+                            "signature": "1RKVcKnR88Ufw75gifwpQYSJLApsldYvLXCehtY58v9BCf1Q8s-hPIPmg3dBjqZjZ1YKnTqlksxNltM-3QamBw",
+                            "protected": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29uM05lY2Q2TmtreWZvR29IeGlkMnpuR2M1OUxVM0s3bXViYVJjRmJMZkxYI3o2TWtvbjNOZWNkNk5ra3lmb0dvSHhpZDJ6bkdjNTlMVTNLN211YmFSY0ZiTGZMWCJ9",
+                        }
+                    ],
+                    "link": "bafyreihajitmzfh4ydhsjevbflqnbism4izsbbksrkg4wkqngyu4gdqnau",
+                },
+                "linkedBlock": "omRkYXRhoWVvdGhlcmRkYXRhZmhlYWRlcqJmdW5pcXVlcEdxY0VGeC95WmhYVFJQbnNrY29udHJvbGxlcnOBeDhkaWQ6a2V5Ono2TWtvbjNOZWNkNk5ra3lmb0dvSHhpZDJ6bkdjNTlMVTNLN211YmFSY0ZiTGZMWA",
+            },
+        }
+    ],
+}
 
 
 @dataclass
@@ -81,6 +175,16 @@ class BaseScoreWriteTest(FSMBehaviourBaseCase):
     next_behaviour_class: Type[ScoreWriteBaseBehaviour]
     synchronized_data: SynchronizedData
     done_event = Event.DONE
+
+    @classmethod
+    def setup_class(cls, **kwargs: Any) -> None:
+        """Set up the test class."""
+        super().setup_class(
+            param_overrides={
+                "ceramic_did_str": "did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX",
+                "ceramic_did_seed": "0101010101010101010101010101010101010101010101010101010101010101",
+            }
+        )
 
     def fast_forward(self, data: Optional[Dict[str, Any]] = None) -> None:
         """Fast-forward on initialization"""
@@ -184,10 +288,18 @@ class TestCeramicWriteBehaviourSender(BaseScoreWriteTest):
                     event=Event.DONE,
                 ),
                 {
-                    "body": json.dumps(
-                        {},
-                    ),
-                    "status_code": 200,
+                    "read_data": {
+                        "body": json.dumps(
+                            DUMMY_API_RESPONSE_READ,
+                        ),
+                        "status": 200,
+                    },
+                    "write_data": {
+                        "body": json.dumps(
+                            {},
+                        ),
+                        "status": 200,
+                    },
                 },
             ),
         ],
@@ -196,20 +308,39 @@ class TestCeramicWriteBehaviourSender(BaseScoreWriteTest):
         """Run tests."""
         self.fast_forward(test_case.initial_data)
         self.behaviour.act_wrapper()
+
+        # Read data call
         self.mock_http_request(
             request_kwargs=dict(
                 method="GET",
                 headers="",
                 version="",
-                url=CERAMIC_API_COMMIT_URL,
+                url=CERAMIC_API_STREAM_URL,
             ),
             response_kwargs=dict(
                 version="",
-                status_code=kwargs.get("status_code"),
+                status_code=kwargs.get("read_data")["status"],
                 status_text="",
-                body=kwargs.get("body").encode(),
+                body=kwargs.get("read_data")["body"].encode(),
             ),
         )
+
+        # Write data call
+        self.mock_http_request(
+            request_kwargs=dict(
+                method="GET",
+                headers="",
+                version="",
+                url=CERAMIC_API_STREAM_URL,
+            ),
+            response_kwargs=dict(
+                version="",
+                status_code=kwargs.get("write_data")["status"],
+                status_text="",
+                body=kwargs.get("write_data")["body"].encode(),
+            ),
+        )
+
         self.complete(test_case.event)
 
 
@@ -246,15 +377,38 @@ class TestCeramicWriteBehaviourApiError(BaseScoreWriteTest):
         [
             (
                 BehaviourTestCase(
-                    "API error",
+                    "API read error",
                     initial_data=dict(most_voted_keeper_address="test_agent_address"),
                     event=Event.API_ERROR,
                 ),
                 {
-                    "body": json.dumps(
-                        {},
-                    ),
-                    "status_code": 404,
+                    "read_data": {
+                        "body": json.dumps(
+                            DUMMY_API_RESPONSE_READ,
+                        ),
+                        "status": 404,
+                    },
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "API write error",
+                    initial_data=dict(most_voted_keeper_address="test_agent_address"),
+                    event=Event.API_ERROR,
+                ),
+                {
+                    "read_data": {
+                        "body": json.dumps(
+                            DUMMY_API_RESPONSE_READ,
+                        ),
+                        "status": 200,
+                    },
+                    "write_data": {
+                        "body": json.dumps(
+                            {},
+                        ),
+                        "status": 404,
+                    },
                 },
             ),
         ],
@@ -263,20 +417,40 @@ class TestCeramicWriteBehaviourApiError(BaseScoreWriteTest):
         """Run tests."""
         self.fast_forward(test_case.initial_data)
         self.behaviour.act_wrapper()
+
+        # Read data call
         self.mock_http_request(
             request_kwargs=dict(
                 method="GET",
                 headers="",
                 version="",
-                url=CERAMIC_API_COMMIT_URL,
+                url=CERAMIC_API_STREAM_URL,
             ),
             response_kwargs=dict(
                 version="",
-                status_code=kwargs.get("status_code"),
+                status_code=kwargs.get("read_data")["status"],
                 status_text="",
-                body=kwargs.get("body").encode(),
+                body=kwargs.get("read_data")["body"].encode(),
             ),
         )
+
+        # Write data call (only if read was succesful)
+        if kwargs.get("read_data")["status"] == 200:
+            self.mock_http_request(
+                request_kwargs=dict(
+                    method="GET",
+                    headers="",
+                    version="",
+                    url=CERAMIC_API_STREAM_URL,
+                ),
+                response_kwargs=dict(
+                    version="",
+                    status_code=kwargs.get("write_data")["status"],
+                    status_text="",
+                    body=kwargs.get("write_data")["body"].encode(),
+                ),
+            )
+
         self.complete(test_case.event)
 
 
@@ -299,7 +473,7 @@ class TestVerificationBehaviour(BaseScoreWriteTest):
                 ),
                 {
                     "body": json.dumps(
-                        {"<TODO>": DUMMY_USER_TO_SCORES},
+                        DUMMY_API_RESPONSE_READ,
                     ),
                     "status_code": 200,
                 },
@@ -315,7 +489,7 @@ class TestVerificationBehaviour(BaseScoreWriteTest):
                 method="GET",
                 headers="",
                 version="",
-                url=CERAMIC_API_COMMIT_URL,
+                url=CERAMIC_API_STREAM_URL,
             ),
             response_kwargs=dict(
                 version="",
@@ -357,7 +531,7 @@ class TestVerificationBehaviourApiError(BaseScoreWriteTest):
                 ),
                 {
                     "body": json.dumps(
-                        {"<TODO>": {}},
+                        DUMMY_API_RESPONSE_READ_WRONG,
                     ),
                     "status_code": 200,
                 },
@@ -373,7 +547,7 @@ class TestVerificationBehaviourApiError(BaseScoreWriteTest):
                 method="GET",
                 headers="",
                 version="",
-                url=CERAMIC_API_COMMIT_URL,
+                url=CERAMIC_API_STREAM_URL,
             ),
             response_kwargs=dict(
                 version="",

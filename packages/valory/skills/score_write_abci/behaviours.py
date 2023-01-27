@@ -65,6 +65,43 @@ class ScoreWriteBaseBehaviour(BaseBehaviour):
         """Return the params."""
         return cast(Params, super().params)
 
+    def _get_stream_data(self) -> Generator[None, None, Optional[dict]]:
+        """Get the current data from a Ceramic stream"""
+
+        api_base = self.params.ceramic_api_base
+        api_endpoint = self.params.ceramic_api_read_endpoint
+        url = api_base + api_endpoint.replace(
+            "{stream_id}", self.params.ceramic_stream_id
+        )
+
+        self.context.logger.info(f"Reading data from Ceramic API [{url}]")
+        response = yield from self.get_http_response(
+            method="GET",
+            url=url,
+            content=json.dumps(self.synchronized_data.user_to_scores).encode(),
+        )
+
+        api_data = json.loads(response.body)
+
+        if response.status_code != 200:
+            self.context.logger.info(
+                f"API error while reading the stream: {response.status_code}: '{api_data}'"
+            )
+            return None
+
+        # Extract first and last commit info
+        genesis_cid_str = api_data["commits"][0]["cid"]
+        previous_cid_str = api_data["commits"][-1]["cid"]
+
+        # Rebuild the current data
+        data = build_data_from_commits(api_data["commits"])
+
+        return {
+            "genesis_cid_str": genesis_cid_str,
+            "previous_cid_str": previous_cid_str,
+            "data": data,
+        }
+
 
 class RandomnessBehaviour(RandomnessBehaviour):
     """Retrieve randomness."""
@@ -144,9 +181,9 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
 
         # Prepare the commit payload
         commit_payload = build_commit_payload(
-            self.params.did,
-            self.params.did_seed,
-            self.params.stream_id,
+            self.params.ceramic_did_str,
+            self.params.ceramic_did_seed,
+            self.params.ceramic_stream_id,
             data,
             self.synchronized_data.user_to_scores,
         )
@@ -175,43 +212,6 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
         self.context.logger.info("Updated the stream correctly")
         return True
 
-    def _get_stream_data(self) -> Generator[None, None, Optional[dict]]:
-        """Get the current data from a Ceramic stream"""
-
-        api_base = self.params.ceramic_api_base
-        api_endpoint = self.params.ceramic_api_read_endpoint
-        url = api_base + api_endpoint.replace(
-            "{stream_id}", self.params.ceramic_stream_id
-        )
-
-        self.context.logger.info(f"Reading data from Ceramic API [{url}]")
-        response = yield from self.get_http_response(
-            method="GET",
-            url=url,
-            content=json.dumps(self.synchronized_data.user_to_scores).encode(),
-        )
-
-        api_data = json.loads(response.body)
-
-        if response.status_code != 200:
-            self.context.logger.info(
-                f"API error while reading the stream: {response.status_code}: '{api_data}'"
-            )
-            return None
-
-        # Extract first and last commit info
-        genesis_cid_str = api_data["commits"][0]["cid"]
-        previous_cid_str = api_data["commits"][-1]["cid"]
-
-        # Rebuild the current data
-        data = build_data_from_commits(api_data["commits"])
-
-        return {
-            "genesis_cid_str": genesis_cid_str,
-            "previous_cid_str": previous_cid_str,
-            "data": data,
-        }
-
 
 class VerificationBehaviour(ScoreWriteBaseBehaviour):
     """VerificationBehaviour"""
@@ -222,13 +222,19 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            success = yield from self._verify_ceramic_data()
-            if success:
-                self.context.logger.info("Data verification successful")
-                payload_content = CeramicWriteRound.SUCCCESS_PAYLOAD
-            else:
+
+            # Get the current data
+            data = yield from self._get_stream_data()
+
+            # Verify if the retrieved data matches local user_to_scores
+            if not data or json.dumps(data["data"], sort_keys=True) != json.dumps(
+                self.synchronized_data.user_to_scores, sort_keys=True
+            ):
                 self.context.logger.info("An error happened while verifying data")
                 payload_content = CeramicWriteRound.ERROR_PAYLOAD
+            else:
+                self.context.logger.info("Data verification successful")
+                payload_content = CeramicWriteRound.SUCCCESS_PAYLOAD
 
             sender = self.context.agent_address
             payload = VerificationPayload(sender=sender, content=payload_content)
@@ -238,35 +244,6 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
             yield from self.wait_until_round_end()
 
         self.set_done()
-
-    def _verify_ceramic_data(self) -> Generator[None, None, bool]:
-        """Write the scores to the Ceramic stream"""
-
-        api_base = self.params.ceramic_api_base
-        api_endpoint = self.params.ceramic_api_read_endpoint
-        url = api_base + api_endpoint.replace(
-            "{stream_id}", self.params.ceramic_stream_id
-        )
-
-        self.context.logger.info(f"Writing scores to Ceramic API [{url}]")
-        response = yield from self.get_http_response(
-            method="GET",
-            url=url,
-        )
-
-        api_data = json.loads(response.body)
-
-        if response.status_code != 200:
-            self.context.logger.info(f"API error {response.status_code}: {api_data}")
-            return False
-
-        if api_data["<TODO>"] != self.synchronized_data.user_to_scores:
-            self.context.logger.info(
-                f"Verification failed: data does not match. Expected: {self.synchronized_data.user_to_scores}, Got: {api_data['<TODO>']}"
-            )
-            return False
-
-        return True
 
 
 class ScoreWriteRoundBehaviour(AbstractRoundBehaviour):
