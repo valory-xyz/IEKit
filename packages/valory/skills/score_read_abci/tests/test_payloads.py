@@ -61,5 +61,4 @@ def test_payloads(test_case: PayloadTestCase) -> None:
     )
     assert payload.sender == "sender"
     assert payload.content == test_case.content
-    assert payload.transaction_type == test_case.transaction_type
     assert payload.from_json(payload.json) == payload

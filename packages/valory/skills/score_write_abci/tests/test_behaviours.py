@@ -459,7 +459,7 @@ class TestVerificationBehaviour(BaseScoreWriteTest):
 
     behaviour_class = VerificationBehaviour
     next_behaviour_class = make_degenerate_behaviour(  # type: ignore
-        FinishedVerificationRound.auto_round_id()
+        FinishedVerificationRound
     )
 
     @pytest.mark.parametrize(

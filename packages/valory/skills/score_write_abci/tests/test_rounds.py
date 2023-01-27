@@ -29,7 +29,6 @@ from typing import (
     List,
     Mapping,
     Optional,
-    Type,
     Union,
     cast,
 )
@@ -49,7 +48,6 @@ from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
     CollectSameUntilThresholdRound,
 )
 from packages.valory.skills.score_write_abci.payloads import (
-    BaseScoreWritePayload,
     CeramicWritePayload,
     RandomnessPayload,
     SelectKeeperPayload,
@@ -74,7 +72,7 @@ def get_participants() -> FrozenSet[str]:
 
 
 def get_payloads(
-    payload_cls: Union[Type[BaseScoreWritePayload], Type[SelectKeeperPayload]],
+    payload_cls: BaseTxPayload,
     data: Optional[str],
 ) -> Mapping[str, BaseTxPayload]:
     """Get payloads."""
@@ -244,7 +242,6 @@ def get_dummy_ceramic_write_payload_serialized(api_error: bool = False) -> str:
 class BaseScoreWriteRoundTest(BaseCollectSameUntilThresholdRoundTest):
     """Base test class for ScoreWrite rounds."""
 
-    round_class: Type[AbstractRound]
     synchronized_data: SynchronizedData
     _synchronized_data_class = SynchronizedData
     _event_class = Event

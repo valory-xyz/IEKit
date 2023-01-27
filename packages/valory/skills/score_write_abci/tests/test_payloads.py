@@ -49,7 +49,6 @@ def test_randomness_payload() -> None:
     assert payload.round_id == 1
     assert payload.randomness == "test"
     assert payload.data == {"round_id": 1, "randomness": "test"}
-    assert payload.transaction_type == TransactionType.RANDOMNESS
 
 
 def test_select_keeper_payload() -> None:
@@ -58,8 +57,7 @@ def test_select_keeper_payload() -> None:
     payload = SelectKeeperPayload(sender="sender", keeper="test")
 
     assert payload.keeper == "test"
-    assert payload.data == {"keepers": "test"}
-    assert payload.transaction_type == TransactionType.SELECT_KEEPER
+    assert payload.data == {"keeper": "test"}
 
 
 @pytest.mark.parametrize(
@@ -68,12 +66,10 @@ def test_select_keeper_payload() -> None:
         PayloadTestCase(
             payload_cls=CeramicWritePayload,
             content="payload_test_content",
-            transaction_type=TransactionType.CERAMIC_WRITE,
         ),
         PayloadTestCase(
             payload_cls=VerificationPayload,
             content="payload_test_content",
-            transaction_type=TransactionType.VERIFICATION,
         ),
     ],
 )
@@ -86,5 +82,4 @@ def test_payloads(test_case: PayloadTestCase) -> None:
     )
     assert payload.sender == "sender"
     assert payload.content == test_case.content
-    assert payload.transaction_type == test_case.transaction_type
     assert payload.from_json(payload.json) == payload

@@ -211,7 +211,7 @@ class TestScoringBehaviour(BaseSwaapTest):
 
     behaviour_class = ScoringBehaviour
     next_behaviour_class = make_degenerate_behaviour(  # type: ignore
-        FinishedScoringRound.auto_round_id()
+        FinishedScoringRound
     )
 
     @pytest.mark.parametrize(

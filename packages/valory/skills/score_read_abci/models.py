@@ -52,7 +52,7 @@ class Params(BaseParams):
         self.twitter_api_endpoint = self._ensure("twitter_api_endpoint", kwargs, str)
         self.twitter_api_args = self._ensure("twitter_api_args", kwargs, str)
         self.twitter_mention_points = self._ensure(
-            "twitter_mention_points", kwargs, str
+            "twitter_mention_points", kwargs, int
         )
         super().__init__(*args, **kwargs)
 

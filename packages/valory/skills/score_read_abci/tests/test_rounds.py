@@ -30,7 +30,6 @@ from typing import (
     List,
     Mapping,
     Optional,
-    Type,
     cast,
 )
 
@@ -42,12 +41,10 @@ from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
     CollectSameUntilThresholdRound,
 )
 from packages.valory.skills.score_read_abci.payloads import (
-    BaseScoreReadPayload,
     ScoringPayload,
     TwitterObservationPayload,
 )
 from packages.valory.skills.score_read_abci.rounds import (
-    AbstractRound,
     Event,
     ScoringRound,
     SynchronizedData,
@@ -80,7 +77,7 @@ def get_participants() -> FrozenSet[str]:
 
 
 def get_payloads(
-    payload_cls: Type[BaseScoreReadPayload],
+    payload_cls: BaseTxPayload,
     data: Optional[str],
 ) -> Mapping[str, BaseTxPayload]:
     """Get payloads."""
@@ -111,7 +108,6 @@ def get_dummy_scoring_payload_serialized() -> str:
 class BaseScoreReadRoundTest(BaseCollectSameUntilThresholdRoundTest):
     """Base test class for ScoreRead rounds."""
 
-    round_class: Type[AbstractRound]
     synchronized_data: SynchronizedData
     _synchronized_data_class = SynchronizedData
     _event_class = Event
