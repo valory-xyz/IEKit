@@ -37,10 +37,6 @@ class SharedState(BaseSharedState):
 
     abci_app_cls = ScoreWriteAbciApp
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the state."""
-        super().__init__(*args, **kwargs)
-
 
 class Params(BaseParams):
     """Parameters."""
@@ -55,8 +51,8 @@ class Params(BaseParams):
             "ceramic_api_read_endpoint", kwargs, str
         )
         self.ceramic_stream_id = self._ensure("ceramic_stream_id", kwargs, str)
-        self.ceramic_did_str = kwargs.pop("ceramic_did_str", None)
-        self.ceramic_did_seed = kwargs.pop("ceramic_did_seed", None)
+        self.ceramic_did_str = self._ensure("ceramic_did_str", kwargs, str)
+        self.ceramic_did_seed = self._ensure("ceramic_did_seed", kwargs, str)
         super().__init__(*args, **kwargs)
 
 

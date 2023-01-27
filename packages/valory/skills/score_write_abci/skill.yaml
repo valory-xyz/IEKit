@@ -13,7 +13,7 @@ fingerprint:
   dialogues.py: bafybeih2d4h2vaqn76s7npubkejevbwd4fwa6ytsoowntgpqk4d2wpyllu
   fsm_specification.yaml: bafybeifba3e2dxgtorocbv2volzezzlmqsp7gai3nja6ss27fpritmoj64
   handlers.py: bafybeiax2wjff4ps3kmbsc2ysihu62ja7xk36gbznjoyagtjhe6fa7ctei
-  models.py: bafybeiac6mp2uj6docpdolkwrolmzlhhdkwcd7dgeqioz4l4nucefmbqzq
+  models.py: bafybeielhhkmqg6k5ammnkcqvubmz5u7ikn7ydhbd3qcqaryao3kgqehfy
   payloads.py: bafybeica7u6tovrclaveb7djmtmpctg7wn2psmldjwdbl2ju6fuc4u5pdu
   rounds.py: bafybeibq7dh47rqqei6n56lnwrc4nrt2hytpz2qjmecryf35dat3se2yoi
   tests/__init__.py: bafybeiht2sfiedgsx6vk2dott2fdu6rqekt324nf7afbsk3unshcf74fgi
@@ -74,8 +74,8 @@ models:
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
       ceramic_api_commit_endpoint: api/v0/commits/{stream_id}
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
-      ceramic_did_seed: null
-      ceramic_did_str: null
+      ceramic_did_seed: <default_did_seed>
+      ceramic_did_str: <default_did_str>
       ceramic_stream_id: dummy_stream_id
       cleanup_history_depth: 1
       cleanup_history_depth_current: null

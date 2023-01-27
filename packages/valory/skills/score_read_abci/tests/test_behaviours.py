@@ -147,7 +147,7 @@ class TestTwitterObservationBehaviour(BaseSwaapTest):
         self.mock_http_request(
             request_kwargs=dict(
                 method="GET",
-                headers="Authorization: Bearer None\r\n",
+                headers="Authorization: Bearer <default_bearer_token>\r\n",
                 version="",
                 url=TWITTER_API_URL,
             ),
@@ -192,7 +192,7 @@ class TestBinanceObservationBehaviourAPIError(BaseSwaapTest):
         self.mock_http_request(  # we will fail during the first call
             request_kwargs=dict(
                 method="GET",
-                headers="Authorization: Bearer None\r\n",
+                headers="Authorization: Bearer <default_bearer_token>\r\n",
                 version="",
                 url=TWITTER_API_URL,
             ),

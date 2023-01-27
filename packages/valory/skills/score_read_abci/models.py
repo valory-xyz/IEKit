@@ -37,10 +37,6 @@ class SharedState(BaseSharedState):
 
     abci_app_cls = ScoreReadAbciApp
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the state."""
-        super().__init__(*args, **kwargs)
-
 
 class Params(BaseParams):
     """Parameters."""
@@ -48,7 +44,9 @@ class Params(BaseParams):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the parameters object."""
         self.twitter_api_base = self._ensure("twitter_api_base", kwargs, str)
-        self.twitter_api_bearer_token = kwargs.pop("twitter_api_bearer_token", None)
+        self.twitter_api_bearer_token = self._ensure(
+            "twitter_api_bearer_token", kwargs, str
+        )
         self.twitter_api_endpoint = self._ensure("twitter_api_endpoint", kwargs, str)
         self.twitter_api_args = self._ensure("twitter_api_args", kwargs, str)
         self.twitter_mention_points = self._ensure(
