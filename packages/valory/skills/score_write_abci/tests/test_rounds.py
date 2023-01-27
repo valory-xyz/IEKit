@@ -31,44 +31,43 @@ from typing import (
     Mapping,
     Optional,
     Type,
-    cast,
-    Deque,
     Union,
+    cast,
 )
-
-import pytest
 from unittest import mock
 
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
-from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
-    BaseCollectSameUntilThresholdRoundTest,
-    CollectSameUntilThresholdRound,
-    BaseOnlyKeeperSendsRoundTest,
-)
-from packages.valory.skills.score_write_abci.payloads import (
-    BaseScoreWritePayload,
-    RandomnessPayload,
-    SelectKeeperPayload,
-    CeramicWritePayload,
-    VerificationPayload
-)
-from packages.valory.skills.score_write_abci.rounds import (
-    AbstractRound,
-    Event,
-    SynchronizedData,
-    SelectKeeperRound,
-    CeramicWriteRound,
-    VerificationRound,
-    RandomnessRound,
-)
-from collections import deque
+import pytest
+
 from packages.valory.skills.abstract_round_abci.base import (
     AbciAppDB,
     AbstractRound,
+    BaseTxPayload,
     ConsensusParams,
 )
+from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
+    BaseCollectSameUntilThresholdRoundTest,
+    BaseOnlyKeeperSendsRoundTest,
+    CollectSameUntilThresholdRound,
+)
+from packages.valory.skills.score_write_abci.payloads import (
+    BaseScoreWritePayload,
+    CeramicWritePayload,
+    RandomnessPayload,
+    SelectKeeperPayload,
+    VerificationPayload,
+)
+from packages.valory.skills.score_write_abci.rounds import (
+    CeramicWriteRound,
+    Event,
+    RandomnessRound,
+    SelectKeeperRound,
+    SynchronizedData,
+    VerificationRound,
+)
+
 
 MAX_PARTICIPANTS: int = 4
+
 
 def get_participants() -> FrozenSet[str]:
     """Participants"""
@@ -84,6 +83,7 @@ def get_payloads(
         participant: payload_cls(participant, data)
         for participant in get_participants()
     }
+
 
 # -----------------------------------------------------------------------
 # Randomness and select keeper tests are ported from Hello World abci app
@@ -123,6 +123,7 @@ class BaseRoundTestClass:
             synchronized_data, event = result
             assert event == Event.NO_MAJORITY
 
+
 class TestCollectRandomnessRound(BaseRoundTestClass):
     """Tests for CollectRandomnessRound."""
 
@@ -136,9 +137,7 @@ class TestCollectRandomnessRound(BaseRoundTestClass):
             consensus_params=self.consensus_params,
         )
         first_payload, *payloads = [
-            RandomnessPayload(
-                sender=participant, randomness=RANDOMNESS, round_id=0
-            )
+            RandomnessPayload(sender=participant, randomness=RANDOMNESS, round_id=0)
             for participant in self.participants
         ]
 
@@ -222,6 +221,7 @@ class TestSelectKeeperRound(BaseRoundTestClass):
 # Ceramic write and verification tests were specifically implemented for the score write abci app
 # -----------------------------------------------------------------------------------------------
 
+
 @dataclass
 class RoundTestCase:
     """RoundTestCase"""
@@ -272,6 +272,7 @@ class BaseScoreWriteRoundTest(BaseCollectSameUntilThresholdRoundTest):
                 exit_event=test_case.event,
             )
         )
+
 
 class TestCeramicWriteRound(BaseOnlyKeeperSendsRoundTest):
     """Test CeramicWriteRound."""
@@ -333,7 +334,6 @@ class TestCeramicWriteRound(BaseOnlyKeeperSendsRoundTest):
         )
 
 
-
 class TestVerificationRound(BaseScoreWriteRoundTest):
     """Tests for VerificationRound."""
 
@@ -363,9 +363,7 @@ class TestVerificationRound(BaseScoreWriteRoundTest):
                 initial_data={},
                 payloads=get_payloads(
                     payload_cls=VerificationPayload,
-                    data=get_dummy_ceramic_write_payload_serialized(
-                        api_error=True
-                    ),
+                    data=get_dummy_ceramic_write_payload_serialized(api_error=True),
                 ),
                 final_data={},
                 event=Event.API_ERROR,

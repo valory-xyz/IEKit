@@ -32,19 +32,21 @@ from packages.valory.skills.abstract_round_abci.base import (
     CollectSameUntilThresholdRound,
     DegenerateRound,
     EventToTimeout,
-    TransactionType,
     OnlyKeeperSendsRound,
+    TransactionType,
     get_name,
 )
 from packages.valory.skills.score_write_abci.payloads import (
+    CeramicWritePayload,
     RandomnessPayload,
     SelectKeeperPayload,
-    CeramicWritePayload,
-    VerificationPayload
+    VerificationPayload,
 )
+
 
 ADDRESS_LENGTH = 42
 RETRIES_LENGTH = 64
+
 
 class Event(Enum):
     """ScoreWriteAbciApp Events"""
@@ -102,7 +104,6 @@ class SelectKeeperRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound)
     selection_key = get_name(SynchronizedData.most_voted_keeper_address)
 
 
-
 class CeramicWriteRound(ScoreWriteAbstractRound, OnlyKeeperSendsRound):
     """CeramicWriteRound"""
 
@@ -128,24 +129,7 @@ class CeramicWriteRound(ScoreWriteAbstractRound, OnlyKeeperSendsRound):
         if self.keeper_payload == self.ERROR_PAYLOAD:
             return self.synchronized_data, Event.API_ERROR
 
-        # synchronized_data = cast(
-        #     SynchronizedData,
-        #     self.synchronized_data.update(
-        #         synchronized_data_class=self.synchronized_data_class,
-        #         **{
-        #             get_name(SynchronizedData.keepers): self.keeper_payload[
-        #                 "serialized_keepers"
-        #             ],
-        #             get_name(SynchronizedData.blacklisted_keepers): self.keeper_payload[
-        #                 "blacklisted_keepers"
-        #             ],
-        #         },
-        #     ),
-        # )
-
-
         return self.synchronized_data, Event.DONE
-
 
 
 class VerificationRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound):

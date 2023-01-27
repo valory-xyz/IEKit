@@ -26,11 +26,11 @@ import pytest
 
 from packages.valory.skills.score_write_abci.payloads import (
     BaseScoreWritePayload,
-    TransactionType,
+    CeramicWritePayload,
     RandomnessPayload,
     SelectKeeperPayload,
-    CeramicWritePayload,
-    VerificationPayload
+    TransactionType,
+    VerificationPayload,
 )
 
 

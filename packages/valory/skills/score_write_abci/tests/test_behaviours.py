@@ -27,18 +27,22 @@ from typing import Any, Dict, Optional, Type, cast
 import pytest
 
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
+from packages.valory.skills.abstract_round_abci.behaviour_utils import BaseBehaviour
 from packages.valory.skills.abstract_round_abci.behaviours import (
     make_degenerate_behaviour,
 )
 from packages.valory.skills.abstract_round_abci.test_tools.base import (
     FSMBehaviourBaseCase,
 )
+from packages.valory.skills.abstract_round_abci.test_tools.common import (
+    BaseRandomnessBehaviourTest,
+)
 from packages.valory.skills.score_write_abci.behaviours import (
+    CeramicWriteBehaviour,
+    RandomnessBehaviour,
     ScoreWriteBaseBehaviour,
     ScoreWriteRoundBehaviour,
-    RandomnessBehaviour,
     SelectKeeperCeramicBehaviour,
-    CeramicWriteBehaviour,
     VerificationBehaviour,
 )
 from packages.valory.skills.score_write_abci.rounds import (
@@ -46,17 +50,15 @@ from packages.valory.skills.score_write_abci.rounds import (
     FinishedVerificationRound,
     SynchronizedData,
 )
-from packages.valory.skills.abstract_round_abci.test_tools.common import (
-    BaseRandomnessBehaviourTest,
-    BaseSelectKeeperBehaviourTest,
-)
-from packages.valory.skills.abstract_round_abci.behaviour_utils import BaseBehaviour
+
 
 PACKAGE_DIR = Path(__file__).parent.parent
 
 DUMMY_USER_TO_SCORES = {"dummy_user": "dummy_score"}
 
-CERAMIC_API_COMMIT_URL = "https://ceramic-clay.3boxlabs.com/api/v0/commits/dummy_stream_id"
+CERAMIC_API_COMMIT_URL = (
+    "https://ceramic-clay.3boxlabs.com/api/v0/commits/dummy_stream_id"
+)
 
 
 @dataclass
@@ -94,7 +96,7 @@ class BaseScoreWriteTest(FSMBehaviourBaseCase):
             == self.behaviour_class.auto_behaviour_id()
         )
 
-    def complete(self, event: Event, sends: bool=True) -> None:
+    def complete(self, event: Event, sends: bool = True) -> None:
         """Complete test"""
 
         self.behaviour.act_wrapper()
@@ -118,7 +120,7 @@ class TestRandomnessBehaviour(BaseRandomnessBehaviourTest):
     done_event = Event.DONE
 
 
-class BaseSelectKeeperBehaviourTest(BaseScoreWriteTest):
+class BaseSelectKeeperCeramicBehaviourTest(BaseScoreWriteTest):
     """Test SelectKeeperBehaviour."""
 
     select_keeper_behaviour_class: Type[BaseBehaviour]
@@ -155,13 +157,11 @@ class BaseSelectKeeperBehaviourTest(BaseScoreWriteTest):
         self.mock_a2a_transaction()
         self._test_done_flag_set()
         self.end_round(done_event=Event.DONE)
-        behaviour = cast(
-            BaseBehaviour, self.behaviour.current_behaviour
-        )
+        behaviour = cast(BaseBehaviour, self.behaviour.current_behaviour)
         assert behaviour.behaviour_id == self.next_behaviour_class.auto_behaviour_id()
 
 
-class TestSelectKeeperBehaviour(BaseSelectKeeperBehaviourTest):
+class TestSelectKeeperCeramicBehaviour(BaseSelectKeeperCeramicBehaviourTest):
     """Test SelectKeeperBehaviour."""
 
     select_keeper_behaviour_class = SelectKeeperCeramicBehaviour
