@@ -21,9 +21,10 @@
 
 from dataclasses import dataclass
 from typing import Hashable
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
+
 import pytest
 
+from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 from packages.valory.skills.score_write_abci.payloads import (
     CeramicWritePayload,
     RandomnessPayload,

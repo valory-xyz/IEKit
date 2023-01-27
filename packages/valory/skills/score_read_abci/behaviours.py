@@ -20,9 +20,10 @@
 """This package contains round behaviours of ScoreReadAbciApp."""
 
 import json
+from abc import ABC
 from collections import OrderedDict
 from typing import Dict, Generator, Set, Type, cast
-from abc import ABC
+
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,

@@ -74,7 +74,7 @@ class SynchronizedData(BaseSynchronizedData):
 class TwitterObservationRound(CollectSameUntilThresholdRound):
     """TwitterObservationRound"""
 
-    payload_class= TwitterObservationPayload
+    payload_class = TwitterObservationPayload
     payload_attribute = "content"
     synchronized_data_class = SynchronizedData
 
@@ -103,7 +103,7 @@ class TwitterObservationRound(CollectSameUntilThresholdRound):
 class ScoringRound(CollectSameUntilThresholdRound):
     """ScoringRound"""
 
-    payload_class= ScoringPayload
+    payload_class = ScoringPayload
     payload_attribute = "content"
     synchronized_data_class = SynchronizedData
 

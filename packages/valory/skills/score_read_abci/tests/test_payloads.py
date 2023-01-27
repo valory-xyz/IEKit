@@ -21,10 +21,10 @@
 
 from dataclasses import dataclass
 from typing import Hashable
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 import pytest
 
+from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 from packages.valory.skills.score_read_abci.payloads import (
     ScoringPayload,
     TwitterObservationPayload,
