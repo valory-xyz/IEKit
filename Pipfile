@@ -27,12 +27,12 @@ pytest = "==7.0.0"
 pytest-asyncio = "==0.18.0"
 pytest-cov = "==3.0.0"
 pytest-randomly = "==3.11.0"
-open-aea = "==1.26.0"
-open-aea-ledger-ethereum = "==1.26.0"
-open-aea-ledger-cosmos = "==1.26.0"
-open-aea-cli-ipfs = "==1.26.0"
-open-aea-test-autonomy = "==0.6.0"
-open-autonomy = {version = "==0.6.0", extras = [ "all"]}
+open-aea = "==1.28.0.post1"
+open-aea-ledger-ethereum = "==1.28.0.post1"
+open-aea-ledger-cosmos = "==1.28.0.post1"
+open-aea-cli-ipfs = "==1.28.0.post1"
+open-aea-test-autonomy = "==0.8.0"
+open-autonomy = {version = "==0.8.0", extras = [ "all"]}
 tomte = {version = "==0.1.5", extras = ["tox", "tests"]}
 
 [requires]

@@ -35,9 +35,11 @@ from packages.valory.skills.score_write_abci.rounds import ScoreWriteAbciApp
 class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
 
+    abci_app_cls = ScoreWriteAbciApp
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the state."""
-        super().__init__(*args, abci_app_cls=ScoreWriteAbciApp, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class Params(BaseParams):
@@ -45,14 +47,14 @@ class Params(BaseParams):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the parameters object."""
-        self.ceramic_api_base = self._ensure("ceramic_api_base", kwargs)
+        self.ceramic_api_base = self._ensure("ceramic_api_base", kwargs, str)
         self.ceramic_api_commit_endpoint = self._ensure(
-            "ceramic_api_commit_endpoint", kwargs
+            "ceramic_api_commit_endpoint", kwargs, str
         )
         self.ceramic_api_read_endpoint = self._ensure(
-            "ceramic_api_read_endpoint", kwargs
+            "ceramic_api_read_endpoint", kwargs, str
         )
-        self.ceramic_stream_id = self._ensure("ceramic_stream_id", kwargs)
+        self.ceramic_stream_id = self._ensure("ceramic_stream_id", kwargs, str)
         self.ceramic_did_str = kwargs.pop("ceramic_did_str", None)
         self.ceramic_did_seed = kwargs.pop("ceramic_did_seed", None)
         super().__init__(*args, **kwargs)

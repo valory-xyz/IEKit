@@ -19,50 +19,19 @@
 
 """This module contains the transaction payloads of the ScoreReadAbciApp."""
 
-from abc import ABC
-from enum import Enum
-from typing import Any, Dict, Hashable
-
+from dataclasses import dataclass
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 
-class TransactionType(Enum):
-    """Enumeration of transaction types."""
-
-    SCORING = "scoring"
-    TWITTER_OBSERVATION = "twitter_observation"
-
-    def __str__(self) -> str:
-        """Get the string value of the transaction type."""
-        return self.value
-
-
-class BaseScoreReadPayload(BaseTxPayload, ABC):
-    """Base payload for ScoreReadAbciApp."""
-
-    def __init__(self, sender: str, content: Hashable, **kwargs: Any) -> None:
-        """Initialize a transaction payload."""
-        super().__init__(sender, **kwargs)
-        self._content = content
-
-    @property
-    def content(self) -> Hashable:
-        """Get the content."""
-        return self._content
-
-    @property
-    def data(self) -> Dict[str, Hashable]:
-        """Get the data."""
-        return dict(content=self.content)
-
-
-class TwitterObservationPayload(BaseScoreReadPayload):
+@dataclass(frozen=True)
+class TwitterObservationPayload(BaseTxPayload):
     """Represent a transaction payload for the TwitterObservationRound."""
 
-    transaction_type = TransactionType.TWITTER_OBSERVATION
+    content: str
 
 
-class ScoringPayload(BaseScoreReadPayload):
+@dataclass(frozen=True)
+class ScoringPayload(BaseTxPayload):
     """Represent a transaction payload for the ScoringRound."""
 
-    transaction_type = TransactionType.SCORING
+    content: str

@@ -42,7 +42,7 @@ from typing import Dict, Iterator, Optional, Tuple, cast
 
 CURRENT_YEAR = datetime.now().year
 GIT_PATH = shutil.which("git")
-START_YEARS = (2021, 2022, 2023)
+START_YEARS = tuple(range(2021, 2023))
 SHEBANG = "#!/usr/bin/env python3"
 HEADER_REGEX = re.compile(
     r"""(#!/usr/bin/env python3
@@ -312,6 +312,7 @@ def main() -> None:
         lambda x: x not in exclude_files,
         itertools.chain(
             Path("packages", "valory", "skills", "score_read_abci").glob("**/*.py"),
+            Path("packages", "valory", "skills", "score_write_abci").glob("**/*.py"),
             Path("tests").glob("**/*.py"),
             Path("scripts").glob("**/*.py"),
         ),

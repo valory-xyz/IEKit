@@ -22,7 +22,7 @@
 import json
 from collections import OrderedDict
 from typing import Dict, Generator, Set, Type, cast
-
+from abc import ABC
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
@@ -39,7 +39,7 @@ from packages.valory.skills.score_read_abci.rounds import (
 )
 
 
-class ScoreReadBaseBehaviour(BaseBehaviour):
+class ScoreReadBaseBehaviour(BaseBehaviour, ABC):
     """Base behaviour for the common apps' skill."""
 
     @property

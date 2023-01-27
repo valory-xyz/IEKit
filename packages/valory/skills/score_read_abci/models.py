@@ -35,9 +35,11 @@ from packages.valory.skills.score_read_abci.rounds import ScoreReadAbciApp
 class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
 
+    abci_app_cls = ScoreReadAbciApp
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the state."""
-        super().__init__(*args, abci_app_cls=ScoreReadAbciApp, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class Params(BaseParams):
@@ -45,11 +47,11 @@ class Params(BaseParams):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the parameters object."""
-        self.twitter_api_base = self._ensure("twitter_api_base", kwargs)
+        self.twitter_api_base = self._ensure("twitter_api_base", kwargs, str)
         self.twitter_api_bearer_token = kwargs.pop("twitter_api_bearer_token", None)
-        self.twitter_api_endpoint = self._ensure("twitter_api_endpoint", kwargs)
-        self.twitter_api_args = self._ensure("twitter_api_args", kwargs)
-        self.twitter_mention_points = self._ensure("twitter_mention_points", kwargs)
+        self.twitter_api_endpoint = self._ensure("twitter_api_endpoint", kwargs, str)
+        self.twitter_api_args = self._ensure("twitter_api_args", kwargs, str)
+        self.twitter_mention_points = self._ensure("twitter_mention_points", kwargs, str)
         super().__init__(*args, **kwargs)
 
 

@@ -96,9 +96,12 @@ models:
       history_check_timeout: 1205
       keeper_allowed_retries: 3
       keeper_timeout: 30.0
+      max_attempts: 10
       max_healthcheck: 120
       observation_interval: 10
       on_chain_service_id: null
+      request_retry_delay: 1.0
+      request_timeout: 10.0
       reset_tendermint_after: 2
       retry_attempts: 400
       retry_timeout: 3
@@ -106,11 +109,14 @@ models:
       service_id: score_read
       service_registry_address: null
       setup: {}
+      share_tm_config_on_startup: false
       sleep_time: 1
       tendermint_check_sleep_delay: 3
       tendermint_com_url: http://localhost:8080
       tendermint_max_retries: 5
+      tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
+      tx_timeout: 10.0
       twitter_api_base: https://api.twitter.com/
       twitter_api_bearer_token: null
       twitter_api_endpoint: 2/users/1450081635559428107/mentions?

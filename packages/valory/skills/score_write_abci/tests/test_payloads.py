@@ -20,16 +20,14 @@
 """This package contains payload tests for the ScoreWriteAbciApp."""
 
 from dataclasses import dataclass
-from typing import Hashable, Type
-
+from typing import Hashable
+from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 import pytest
 
 from packages.valory.skills.score_write_abci.payloads import (
-    BaseScoreWritePayload,
     CeramicWritePayload,
     RandomnessPayload,
     SelectKeeperPayload,
-    TransactionType,
     VerificationPayload,
 )
 
@@ -38,9 +36,8 @@ from packages.valory.skills.score_write_abci.payloads import (
 class PayloadTestCase:
     """PayloadTestCase"""
 
-    payload_cls: Type[BaseScoreWritePayload]
+    payload_cls: BaseTxPayload
     content: Hashable
-    transaction_type: TransactionType
 
 
 def test_randomness_payload() -> None:
