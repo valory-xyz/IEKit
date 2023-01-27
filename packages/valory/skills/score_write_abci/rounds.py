@@ -19,21 +19,18 @@
 
 """This package contains the rounds of ScoreWriteAbciApp."""
 
-from abc import ABC
 from enum import Enum
 from typing import Dict, List, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    AbstractRound,
     AppState,
     BaseSynchronizedData,
     CollectSameUntilThresholdRound,
     DegenerateRound,
     EventToTimeout,
     OnlyKeeperSendsRound,
-    TransactionType,
     get_name,
 )
 from packages.valory.skills.score_write_abci.payloads import (
@@ -71,20 +68,11 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(dict, self.db.get("user_to_scores", {}))
 
 
-class ScoreWriteAbstractRound(AbstractRound[Event, TransactionType], ABC):
-    """Abstract round for the score_read skill."""
-
-    @property
-    def synchronized_data(self) -> SynchronizedData:
-        """Return the synchronized data."""
-        return cast(SynchronizedData, super().synchronized_data)
-
-
-class RandomnessRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound):
+class RandomnessRound(CollectSameUntilThresholdRound):
     """A round for generating randomness"""
 
-    allowed_tx_type = RandomnessPayload.transaction_type
-    payload_attribute = get_name(RandomnessPayload.randomness)
+    payload_class = RandomnessPayload
+    payload_attribute = "randomness"
     synchronized_data_class = SynchronizedData
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
@@ -92,11 +80,11 @@ class RandomnessRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound):
     selection_key = get_name(SynchronizedData.most_voted_randomness)
 
 
-class SelectKeeperRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound):
+class SelectKeeperRound(CollectSameUntilThresholdRound):
     """A round in which a keeper is selected for transaction submission"""
 
-    allowed_tx_type = SelectKeeperPayload.transaction_type
-    payload_attribute = get_name(SelectKeeperPayload.keeper)
+    payload_class = SelectKeeperPayload
+    payload_attribute = "keeper"
     synchronized_data_class = SynchronizedData
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
@@ -104,11 +92,11 @@ class SelectKeeperRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound)
     selection_key = get_name(SynchronizedData.most_voted_keeper_address)
 
 
-class CeramicWriteRound(ScoreWriteAbstractRound, OnlyKeeperSendsRound):
+class CeramicWriteRound(OnlyKeeperSendsRound):
     """CeramicWriteRound"""
 
-    allowed_tx_type = CeramicWritePayload.transaction_type
-    payload_attribute: str = get_name(CeramicWritePayload.content)
+    payload_class = CeramicWritePayload
+    payload_attribute = "content"
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = "error"
@@ -132,11 +120,11 @@ class CeramicWriteRound(ScoreWriteAbstractRound, OnlyKeeperSendsRound):
         return self.synchronized_data, Event.DONE
 
 
-class VerificationRound(ScoreWriteAbstractRound, CollectSameUntilThresholdRound):
+class VerificationRound(CollectSameUntilThresholdRound):
     """VerificationRound"""
 
-    allowed_tx_type = VerificationPayload.transaction_type
-    payload_attribute: str = get_name(VerificationPayload.content)
+    payload_class = VerificationPayload
+    payload_attribute = "content"
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = "error"

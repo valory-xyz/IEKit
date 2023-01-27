@@ -20,20 +20,17 @@
 """This package contains the rounds of ScoreReadAbciApp."""
 
 import json
-from abc import ABC
 from enum import Enum
 from typing import Dict, List, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    AbstractRound,
     AppState,
     BaseSynchronizedData,
     CollectSameUntilThresholdRound,
     DegenerateRound,
     EventToTimeout,
-    TransactionType,
     get_name,
 )
 from packages.valory.skills.score_read_abci.payloads import (
@@ -74,20 +71,11 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(str, self.db.get("latest_tweet_id", 0))
 
 
-class ScoreReadAbstractRound(AbstractRound[Event, TransactionType], ABC):
-    """Abstract round for the APY estimation skill."""
-
-    @property
-    def synchronized_data(self) -> SynchronizedData:
-        """Return the synchronized data."""
-        return cast(SynchronizedData, super().synchronized_data)
-
-
-class TwitterObservationRound(ScoreReadAbstractRound, CollectSameUntilThresholdRound):
+class TwitterObservationRound(CollectSameUntilThresholdRound):
     """TwitterObservationRound"""
 
-    allowed_tx_type = TwitterObservationPayload.transaction_type
-    payload_attribute: str = get_name(TwitterObservationPayload.content)
+    payload_class = TwitterObservationPayload
+    payload_attribute = "content"
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = "{}"
@@ -112,11 +100,11 @@ class TwitterObservationRound(ScoreReadAbstractRound, CollectSameUntilThresholdR
         return None
 
 
-class ScoringRound(ScoreReadAbstractRound, CollectSameUntilThresholdRound):
+class ScoringRound(CollectSameUntilThresholdRound):
     """ScoringRound"""
 
-    allowed_tx_type = ScoringPayload.transaction_type
-    payload_attribute: str = get_name(ScoringPayload.content)
+    payload_class = ScoringPayload
+    payload_attribute = "content"
     synchronized_data_class = SynchronizedData
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:

@@ -20,6 +20,7 @@
 """This package contains round behaviours of ScoreWriteAbciApp."""
 
 import json
+from abc import ABC
 from typing import Generator, Optional, Set, Type, cast
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
@@ -52,7 +53,7 @@ from packages.valory.skills.score_write_abci.rounds import (
 )
 
 
-class ScoreWriteBaseBehaviour(BaseBehaviour):
+class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
     """Base behaviour for the common apps' skill."""
 
     @property
