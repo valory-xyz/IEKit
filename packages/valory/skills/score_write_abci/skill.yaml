@@ -146,6 +146,8 @@ models:
 dependencies:
   dag-cbor:
     version: ==0.2.2
+  cryptography:
+    version: ==39.0.0
   jsonpatch:
     version: ==1.32
   jwcrypto:
