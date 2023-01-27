@@ -131,4 +131,4 @@ models:
     args: {}
     class_name: TendermintDialogues
 dependencies: {}
-is_abstract: false
+is_abstract: true

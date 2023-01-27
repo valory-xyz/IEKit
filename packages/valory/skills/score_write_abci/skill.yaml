@@ -142,5 +142,13 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
-dependencies: {}
-is_abstract: false
+dependencies:
+  dag-cbor:
+    version: ==0.2.2
+  jsonpatch:
+    version: ==1.32
+  jwcrypto:
+    version: ==1.4.2
+  multiformats:
+    version: ==0.1.4.post3
+is_abstract: true
