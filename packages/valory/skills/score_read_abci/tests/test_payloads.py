@@ -20,14 +20,13 @@
 """This package contains payload tests for the ScoreReadAbciApp."""
 
 from dataclasses import dataclass
-from typing import Hashable, Type
+from typing import Hashable
 
 import pytest
 
+from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 from packages.valory.skills.score_read_abci.payloads import (
-    BaseScoreReadPayload,
     ScoringPayload,
-    TransactionType,
     TwitterObservationPayload,
 )
 
@@ -36,9 +35,8 @@ from packages.valory.skills.score_read_abci.payloads import (
 class PayloadTestCase:
     """PayloadTestCase"""
 
-    payload_cls: Type[BaseScoreReadPayload]
+    payload_cls: BaseTxPayload
     content: Hashable
-    transaction_type: TransactionType
 
 
 @pytest.mark.parametrize(
@@ -47,12 +45,10 @@ class PayloadTestCase:
         PayloadTestCase(
             payload_cls=TwitterObservationPayload,
             content="payload_test_content",
-            transaction_type=TransactionType.TWITTER_OBSERVATION,
         ),
         PayloadTestCase(
             payload_cls=ScoringPayload,
             content="payload_test_content",
-            transaction_type=TransactionType.SCORING,
         ),
     ],
 )
@@ -65,5 +61,4 @@ def test_payloads(test_case: PayloadTestCase) -> None:
     )
     assert payload.sender == "sender"
     assert payload.content == test_case.content
-    assert payload.transaction_type == test_case.transaction_type
     assert payload.from_json(payload.json) == payload

@@ -20,35 +20,40 @@
 """This package contains round behaviours of ScoreWriteAbciApp."""
 
 import json
-from typing import Generator, Set, Type, cast
+from abc import ABC
+from typing import Generator, Optional, Set, Type, cast
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-from packages.valory.skills.score_write_abci.models import Params
-from packages.valory.skills.score_write_abci.rounds import (
-    ScoreWriteAbciApp,
-    SynchronizedData,
-    CeramicWriteRound,
-    RandomnessRound,
-    SelectKeeperRound,
-    VerificationRound,
-)
 from packages.valory.skills.abstract_round_abci.common import (
     RandomnessBehaviour,
     SelectKeeperBehaviour,
 )
+from packages.valory.skills.score_write_abci.ceramic.payloads import (
+    build_commit_payload,
+    build_data_from_commits,
+)
+from packages.valory.skills.score_write_abci.models import Params
 from packages.valory.skills.score_write_abci.payloads import (
+    CeramicWritePayload,
     RandomnessPayload,
     SelectKeeperPayload,
-    CeramicWritePayload,
     VerificationPayload,
+)
+from packages.valory.skills.score_write_abci.rounds import (
+    CeramicWriteRound,
+    RandomnessRound,
+    ScoreWriteAbciApp,
+    SelectKeeperRound,
+    SynchronizedData,
+    VerificationRound,
 )
 
 
-class ScoreWriteBaseBehaviour(BaseBehaviour):
+class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
     """Base behaviour for the common apps' skill."""
 
     @property
@@ -61,6 +66,44 @@ class ScoreWriteBaseBehaviour(BaseBehaviour):
         """Return the params."""
         return cast(Params, super().params)
 
+    def _get_stream_data(self) -> Generator[None, None, Optional[dict]]:
+        """Get the current data from a Ceramic stream"""
+
+        api_base = self.params.ceramic_api_base
+        api_endpoint = self.params.ceramic_api_read_endpoint
+        url = api_base + api_endpoint.replace(
+            "{stream_id}", self.params.ceramic_stream_id
+        )
+
+        self.context.logger.info(f"Reading data from Ceramic API [{url}]")
+        response = yield from self.get_http_response(
+            method="GET",
+            url=url,
+            content=json.dumps(self.synchronized_data.user_to_scores).encode(),
+        )
+
+        api_data = json.loads(response.body)
+
+        if response.status_code != 200:
+            self.context.logger.info(
+                f"API error while reading the stream: {response.status_code}: '{api_data}'"
+            )
+            return None
+
+        # Extract first and last commit info
+        genesis_cid_str = api_data["commits"][0]["cid"]
+        previous_cid_str = api_data["commits"][-1]["cid"]
+
+        # Rebuild the current data
+        data = build_data_from_commits(api_data["commits"])
+
+        return {
+            "genesis_cid_str": genesis_cid_str,
+            "previous_cid_str": previous_cid_str,
+            "data": data,
+        }
+
+
 class RandomnessBehaviour(RandomnessBehaviour):
     """Retrieve randomness."""
 
@@ -68,9 +111,7 @@ class RandomnessBehaviour(RandomnessBehaviour):
     payload_class = RandomnessPayload
 
 
-class SelectKeeperCeramicBehaviour(
-    SelectKeeperBehaviour, ScoreWriteBaseBehaviour
-):
+class SelectKeeperCeramicBehaviour(SelectKeeperBehaviour, ScoreWriteBaseBehaviour):
     """Select the keeper agent."""
 
     matching_round = SelectKeeperRound
@@ -111,10 +152,14 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             success = yield from self._write_ceramic_data()
             if success:
-                self.context.logger.info(f"Wrote scores to ceramic stream with id: {self.params.ceramic_stream_id}")
+                self.context.logger.info(
+                    f"Wrote scores to ceramic stream with id: {self.params.ceramic_stream_id}"
+                )
                 payload_content = CeramicWriteRound.SUCCCESS_PAYLOAD
             else:
-                self.context.logger.info(f"An error happened while wroting scores to ceramic stream with id: {self.params.ceramic_stream_id}")
+                self.context.logger.info(
+                    f"An error happened while wroting scores to ceramic stream with id: {self.params.ceramic_stream_id}"
+                )
                 payload_content = CeramicWriteRound.ERROR_PAYLOAD
 
             sender = self.context.agent_address
@@ -129,24 +174,43 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
     def _write_ceramic_data(self) -> Generator[None, None, bool]:
         """Write the scores to the Ceramic stream"""
 
+        # Get the stream status
+        data = yield from self._get_stream_data()
+
+        if not data:
+            return False
+
+        # Prepare the commit payload
+        commit_payload = build_commit_payload(
+            self.params.ceramic_did_str,
+            self.params.ceramic_did_seed,
+            self.params.ceramic_stream_id,
+            data,
+            self.synchronized_data.user_to_scores,
+        )
+
+        # Send the payload
         api_base = self.params.ceramic_api_base
         api_endpoint = self.params.ceramic_api_commit_endpoint
-        url = api_base + api_endpoint.replace("{stream_id}", self.params.ceramic_stream_id)
+        url = api_base + api_endpoint.replace(
+            "{stream_id}", self.params.ceramic_stream_id
+        )
 
         self.context.logger.info(f"Writing scores to Ceramic API [{url}]")
         response = yield from self.get_http_response(
             method="GET",
             url=url,
-            content=json.dumps(
-                self.synchronized_data.user_to_scores
-            ).encode(),
+            content=json.dumps(commit_payload).encode(),
         )
 
         if response.status_code != 200:
             api_data = json.loads(response.body)
-            self.context.logger.info(f"API error {response.status_code}: {api_data}")
+            self.context.logger.error(
+                f"API error while updating the stream: {response.status_code}: {api_data}"
+            )
             return False
 
+        self.context.logger.info("Updated the stream correctly")
         return True
 
 
@@ -159,13 +223,19 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            success = yield from self._verify_ceramic_data()
-            if success:
-                self.context.logger.info("Data verification successful")
-                payload_content = CeramicWriteRound.SUCCCESS_PAYLOAD
-            else:
+
+            # Get the current data
+            data = yield from self._get_stream_data()
+
+            # Verify if the retrieved data matches local user_to_scores
+            if not data or json.dumps(data["data"], sort_keys=True) != json.dumps(
+                self.synchronized_data.user_to_scores, sort_keys=True
+            ):
                 self.context.logger.info("An error happened while verifying data")
                 payload_content = CeramicWriteRound.ERROR_PAYLOAD
+            else:
+                self.context.logger.info("Data verification successful")
+                payload_content = CeramicWriteRound.SUCCCESS_PAYLOAD
 
             sender = self.context.agent_address
             payload = VerificationPayload(sender=sender, content=payload_content)
@@ -175,31 +245,6 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
             yield from self.wait_until_round_end()
 
         self.set_done()
-
-    def _verify_ceramic_data(self) -> Generator[None, None, bool]:
-        """Write the scores to the Ceramic stream"""
-
-        api_base = self.params.ceramic_api_base
-        api_endpoint = self.params.ceramic_api_read_endpoint
-        url = api_base + api_endpoint.replace("{stream_id}", self.params.ceramic_stream_id)
-
-        self.context.logger.info(f"Writing scores to Ceramic API [{url}]")
-        response = yield from self.get_http_response(
-            method="GET",
-            url=url,
-        )
-
-        api_data = json.loads(response.body)
-
-        if response.status_code != 200:
-            self.context.logger.info(f"API error {response.status_code}: {api_data}")
-            return False
-
-        if api_data["<TODO>"] != self.synchronized_data.user_to_scores:
-            self.context.logger.info(f"Verification failed: data does not match. Expected: {self.synchronized_data.user_to_scores}, Got: {api_data['<TODO>']}")
-            return False
-
-        return True
 
 
 class ScoreWriteRoundBehaviour(AbstractRoundBehaviour):

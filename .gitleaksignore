@@ -1,2 +1,3 @@
 6788a510e5fc5396ce53fc281126ddeaa3371dde:packages/valory/skills/score_read_abci/skill.yaml:generic-api-key:77
 ab6d04ff17be9841760c859443b3ad6379ff191c:packages/valory/skills/score_write_abci/skill.yaml:generic-api-key:74
+055a6fb70412fbd82bddeb4a994a6a28802c2aa9:packages/valory/skills/score_write_abci/tests/test_behaviours.py:generic-api-key:184

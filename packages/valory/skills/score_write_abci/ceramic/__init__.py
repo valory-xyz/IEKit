@@ -17,22 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the ScoreReadAbciApp."""
-
-from dataclasses import dataclass
-
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
-
-
-@dataclass(frozen=True)
-class TwitterObservationPayload(BaseTxPayload):
-    """Represent a transaction payload for the TwitterObservationRound."""
-
-    content: str
-
-
-@dataclass(frozen=True)
-class ScoringPayload(BaseTxPayload):
-    """Represent a transaction payload for the ScoringRound."""
-
-    content: str
+"""This module contains code to prepare ceramic payloads."""

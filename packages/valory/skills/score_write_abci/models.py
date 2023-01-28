@@ -21,7 +21,7 @@
 
 from typing import Any
 
-from packages.valory.skills.abstract_round_abci.models import BaseParams, ApiSpecs
+from packages.valory.skills.abstract_round_abci.models import ApiSpecs, BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
 )
@@ -35,9 +35,7 @@ from packages.valory.skills.score_write_abci.rounds import ScoreWriteAbciApp
 class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the state."""
-        super().__init__(*args, abci_app_cls=ScoreWriteAbciApp, **kwargs)
+    abci_app_cls = ScoreWriteAbciApp
 
 
 class Params(BaseParams):
@@ -45,16 +43,22 @@ class Params(BaseParams):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the parameters object."""
-        self.ceramic_api_base = self._ensure("ceramic_api_base", kwargs)
-        self.ceramic_api_commit_endpoint = self._ensure("ceramic_api_commit_endpoint", kwargs)
-        self.ceramic_api_read_endpoint = self._ensure("ceramic_api_read_endpoint", kwargs)
-        self.ceramic_stream_id = self._ensure("ceramic_stream_id", kwargs)
-        self.ceramic_did_seed = kwargs.pop("ceramic_did_seed", None)
+        self.ceramic_api_base = self._ensure("ceramic_api_base", kwargs, str)
+        self.ceramic_api_commit_endpoint = self._ensure(
+            "ceramic_api_commit_endpoint", kwargs, str
+        )
+        self.ceramic_api_read_endpoint = self._ensure(
+            "ceramic_api_read_endpoint", kwargs, str
+        )
+        self.ceramic_stream_id = self._ensure("ceramic_stream_id", kwargs, str)
+        self.ceramic_did_str = self._ensure("ceramic_did_str", kwargs, str)
+        self.ceramic_did_seed = self._ensure("ceramic_did_seed", kwargs, str)
         super().__init__(*args, **kwargs)
 
 
 class RandomnessApi(ApiSpecs):
     """A model that wraps ApiSpecs for randomness api specifications."""
+
 
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
