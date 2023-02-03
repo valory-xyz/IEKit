@@ -1,0 +1,152 @@
+name: dynamic_nft_abci
+author: valory
+version: 0.1.0
+type: skill
+description: This skill implements the dynamic NFT feature.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeiav5443ke4ldxssxhmpcwxxq7ekax3piggfnywq72fvn4fezzgqxq
+  behaviours.py: bafybeicpubeb6krfladix4rvbxsxfuwpdwllwhycw3c2eczfgis2yu4iti
+  dialogues.py: bafybeifepvv22c44se22l6dn6j7cfnwepqafmiuj5243u3bzbln3p2rgoe
+  fsm_specification.yaml: bafybeieu56rqmiqh47xdchcxhrbmj2n5mgdiod76yriyuyc3pfeovtvwqi
+  handlers.py: bafybeigpvibzp6ghxmdacgfqnir422cqhng36afxejekrjgha5knqbmsne
+  models.py: bafybeiduxf4tjeegub3o4xf4lo3yuh4cp3bgbpxvbobb4vsslmrildrwqe
+  payloads.py: bafybeid4xcpguklsgd72joo47laocly6luboelcerx27jsa53uthz2vn2y
+  rounds.py: bafybeieavdkqagkzayhhcr46yr6g76knbft6ibjko3zs266hktw2jcy5zq
+  tests/__init__.py: bafybeia2xqlacp44lylwlkf7f7ci6m3yshppv3vusgcdjpj4bbcbnuhvla
+  tests/test_behaviours.py: bafybeiguu6cbqedfo5ilyt3tvxa3rpr5n4zflc6jwgjk2dfjwqqgmpddlu
+  tests/test_dialogues.py: bafybeibfzhpyz2kdokjkz76oxz4sc6nw26dw5pgx5fwvloyfyl2inixwdi
+  tests/test_handlers.py: bafybeihes6ie3vlwudn5ncjxgt2luxjdzp73sax2przjh3nasson5w4d2q
+  tests/test_models.py: bafybeidqf7caad3zke6xzefmfoufce6bfn5bqgbiy4racghm5w67yddrea
+  tests/test_payloads.py: bafybeiezax2xthzhzhxtwsi2ns5avf5yohsdtamrwh6ge7fia6odr2j5bm
+  tests/test_rounds.py: bafybeigaavikipnfqf2oq6d7cn7huxdsify5mwf2bmiwlnaaypd37mbjzi
+  tools.py: bafybeicmi3wfowhm3uqljny2x2yhbvu6htxuzkejzv2sdtoiauygfn36t4
+fingerprint_ignore_patterns: []
+connections:
+- fetchai/http_server:0.22.0:bafybeic7p2e2ey44k6yv3dzznepekggceqc6mxb55e4xovcjnr3qym5ncu
+contracts:
+- valory/dynamic_contribution:0.1.0:bafybeigrhhytf5lqnu7xy7faz7cghzpye6dnvq2zhkqeydrrnpmtkpudyi
+protocols:
+- valory/contract_api:1.0.0:bafybeif32nchkgn6yet7e5gt4auhf7lsahxnj4t36kxbw55p3gi7qpeuxq
+- valory/http:1.0.0:bafybeifru3qs6udfzprax7jxktbsuzn7immfvi3scgfspifq3zdxwkgvnm
+skills:
+- valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
+behaviours:
+  main:
+    args: {}
+    class_name: DynamicNFTRoundBehaviour
+handlers:
+  abci:
+    args: {}
+    class_name: ABCIRoundHandler
+  contract_api:
+    args: {}
+    class_name: ContractApiHandler
+  http:
+    args: {}
+    class_name: HttpHandler
+  ipfs:
+    args: {}
+    class_name: IpfsHandler
+  ledger_api:
+    args: {}
+    class_name: LedgerApiHandler
+  signing:
+    args: {}
+    class_name: SigningHandler
+  tendermint:
+    args: {}
+    class_name: TendermintHandler
+models:
+  abci_dialogues:
+    args: {}
+    class_name: AbciDialogues
+  benchmark_tool:
+    args:
+      log_dir: /logs
+    class_name: BenchmarkTool
+  contract_api_dialogues:
+    args: {}
+    class_name: ContractApiDialogues
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+  ipfs_dialogues:
+    args: {}
+    class_name: IpfsDialogues
+  ledger_api_dialogues:
+    args: {}
+    class_name: LedgerApiDialogues
+  params:
+    args:
+      cleanup_history_depth: 1
+      cleanup_history_depth_current: null
+      consensus:
+        max_participants: 1
+      drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
+      dynamic_contribution_contract_address: '0x5FbDB2315678afecb367f032d93F642f64180aa3'
+      earliest_block_to_monitor: 8053690
+      genesis_config:
+        genesis_time: '2022-09-26T00:00:00.000000000Z'
+        chain_id: chain-c4daS1
+        consensus_params:
+          block:
+            max_bytes: '22020096'
+            max_gas: '-1'
+            time_iota_ms: '1000'
+          evidence:
+            max_age_num_blocks: '100000'
+            max_age_duration: '172800000000000'
+            max_bytes: '1048576'
+          validator:
+            pub_key_types:
+            - ed25519
+          version: {}
+        voting_power: '10'
+      keeper_timeout: 30.0
+      max_attempts: 10
+      max_healthcheck: 120
+      observation_interval: 10
+      on_chain_service_id: null
+      points_to_image_hashes: '{"0": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm",
+        "100": "bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q", "50000":
+        "bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4", "100000": "bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy",
+        "150000": "bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
+      request_retry_delay: 1.0
+      request_timeout: 10.0
+      reset_tendermint_after: 2
+      retry_attempts: 400
+      retry_timeout: 3
+      round_timeout_seconds: 30.0
+      service_id: contribution_service
+      service_registry_address: null
+      setup: {}
+      share_tm_config_on_startup: false
+      sleep_time: 1
+      tendermint_check_sleep_delay: 3
+      tendermint_com_url: http://localhost:8080
+      tendermint_max_retries: 5
+      tendermint_p2p_url: localhost:26656
+      tendermint_url: http://localhost:26657
+      token_uri_base: https://pfp.staging.autonolas.tech/
+      tx_timeout: 10.0
+    class_name: Params
+  requests:
+    args: {}
+    class_name: Requests
+  signing_dialogues:
+    args: {}
+    class_name: SigningDialogues
+  state:
+    args: {}
+    class_name: SharedState
+  tendermint_dialogues:
+    args: {}
+    class_name: TendermintDialogues
+dependencies:
+  Pillow:
+    version: ==9.2.0
+  jsonschema:
+    version: ==3.2.0
+is_abstract: true

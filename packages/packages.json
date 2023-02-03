@@ -1,7 +1,10 @@
 {
     "dev": {
+        "contract/valory/dynamic_contribution/0.1.0": "bafybeigrhhytf5lqnu7xy7faz7cghzpye6dnvq2zhkqeydrrnpmtkpudyi",
+        "skill/valory/dynamic_nft_abci/0.1.0": "bafybeieuq5ng2ywef5avona5qsfydbs46paektbvqnyx557nuli3375vpu",
         "skill/valory/score_read_abci/0.1.0": "bafybeieyvu4ezod6dhxpyj3jh2la2inpwsjnychmsg735kz6cjfz6aysta",
-        "skill/valory/score_write_abci/0.1.0": "bafybeibtxjdwjxccclfeyereq7ihe2uj5vc4vmhcnf627leli4nmag2z4q"
+        "skill/valory/score_write_abci/0.1.0": "bafybeibtxjdwjxccclfeyereq7ihe2uj5vc4vmhcnf627leli4nmag2z4q",
+        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeighs4jbeb4hvsjgxx6eg2gbbu5ddug54pw55a3bescf5v5aukhdum"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeiclsbgrviyxbmi2vex5ze3dhr7ywohrqedebx26jozayxvroqtegq",
@@ -21,6 +24,7 @@
         "connection/valory/http_client/0.23.0": "bafybeigggahci7hq6tr3tyueatgkvgn73y4b3av2vk7vtr7jkeuwsqcteq",
         "connection/valory/ipfs/0.1.0": "bafybeihtvkn5uv3ibumme7zzmrxx7iehc6lnjhil726h2jidpdzzjnd5ay",
         "connection/valory/ledger/0.19.0": "bafybeicpxyoxez7lperltamvikxu6vzk2lhqakbivce4nzywyzoqbxoogm",
-        "connection/valory/p2p_libp2p_client/0.1.0": "bafybeiayoofxmj6z3pasn2akqj3udgq2ta2ar6mv6zoehstul2btvv3gqa"
+        "connection/valory/p2p_libp2p_client/0.1.0": "bafybeiayoofxmj6z3pasn2akqj3udgq2ta2ar6mv6zoehstul2btvv3gqa",
+        "connection/fetchai/http_server/0.22.0": "bafybeic7p2e2ey44k6yv3dzznepekggceqc6mxb55e4xovcjnr3qym5ncu"
     }
 }
