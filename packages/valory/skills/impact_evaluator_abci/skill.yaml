@@ -1,0 +1,158 @@
+name: impact_evaluator_abci
+author: valory
+version: 0.1.0
+type: skill
+description: The chained abci for the impact_evaluator skill.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeia4476g4pg7hqaovwdtj25jvyrjrkobqtyusut4x6vxkflcbbos6y
+  behaviours.py: bafybeiaqw65372wicegfs2m7dykzlgndunyc6rb5zxlxr7qdmhl4bvo7qa
+  composition.py: bafybeigijg444seh6zhrwm2b2gzs35jfb42qisqhoi4sobfp6yksgnbn24
+  dialogues.py: bafybeif7uhfjkcz3ryhti6gafqxhvciw4ec5bdshxvq3355tun5ydkzrna
+  fsm_specification.yaml: bafybeieywo3aqx2p4npeh6tmgvdmq5v4domp2jhylihv6wd7be46f2mjie
+  handlers.py: bafybeibd4zsbelbqgzf5u45rjbsec7t6egzwvluofwrq7f6gjmvbbivhgy
+  models.py: bafybeiafr6qxbhv4mzecqme3b4qbreei7ttrz67opoxmcjwnrcrmbwsghq
+  tests/__init__.py: bafybeicukkp7ajzvqtmpedzwo23azuorvy5qtftadsxbwmv5zhk2tktjc4
+  tests/test_behaviours.py: bafybeifcwemh2fd2ysn3dx5vpmmr6vxgv5xo73f3tj3zqu6mlw63iul4da
+  tests/test_dialogues.py: bafybeigac5y4hysp7lqdhz5zwbwntadr55mmmefvdxkz6dhi6gcosfvdgy
+  tests/test_handlers.py: bafybeibk337l5p2hfgr4mcwecd55tfatzxkfdiia7qh7wy7jb6vqg64blm
+  tests/test_models.py: bafybeigqy2ofyk7ni2r6anbvojy6zy554caloiktnsd7sbldfvjjdd2wki
+fingerprint_ignore_patterns: []
+connections: []
+contracts: []
+protocols: []
+skills:
+- valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
+- valory/score_read_abci:0.1.0:bafybeieyvu4ezod6dhxpyj3jh2la2inpwsjnychmsg735kz6cjfz6aysta
+- valory/score_write_abci:0.1.0:bafybeibtxjdwjxccclfeyereq7ihe2uj5vc4vmhcnf627leli4nmag2z4q
+- valory/dynamic_nft_abci:0.1.0:bafybeieuq5ng2ywef5avona5qsfydbs46paektbvqnyx557nuli3375vpu
+- valory/registration_abci:0.1.0:bafybeihai2otcmnb2w7k64bnwf5qagfexg5gqow74xhj3wynikgdxre3ka
+- valory/reset_pause_abci:0.1.0:bafybeifs6zpg5nbvuapmxafzo6fdhoz5ebpiujetvk243apo3iwl2rn45i
+behaviours:
+  main:
+    args: {}
+    class_name: ImpactEvaluatorConsensusBehaviour
+handlers:
+  abci:
+    args: {}
+    class_name: ABCIRoundHandler
+  contract_api:
+    args: {}
+    class_name: ContractApiHandler
+  http:
+    args: {}
+    class_name: HttpHandler
+  ipfs:
+    args: {}
+    class_name: IpfsHandler
+  ledger_api:
+    args: {}
+    class_name: LedgerApiHandler
+  signing:
+    args: {}
+    class_name: SigningHandler
+  tendermint:
+    args: {}
+    class_name: TendermintHandler
+models:
+  abci_dialogues:
+    args: {}
+    class_name: AbciDialogues
+  benchmark_tool:
+    args:
+      log_dir: /logs
+    class_name: BenchmarkTool
+  contract_api_dialogues:
+    args: {}
+    class_name: ContractApiDialogues
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+  ipfs_dialogues:
+    args: {}
+    class_name: IpfsDialogues
+  ledger_api_dialogues:
+    args: {}
+    class_name: LedgerApiDialogues
+  params:
+    args:
+      basic_image_cid: bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm
+      cleanup_history_depth: 1
+      cleanup_history_depth_current: null
+      consensus:
+        max_participants: 1
+      drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
+      dynamic_contribution_contract_address: '0x5FbDB2315678afecb367f032d93F642f64180aa3'
+      earliest_block_to_monitor: 8053690
+      genesis_config:
+        genesis_time: '2022-09-26T00:00:00.000000000Z'
+        chain_id: chain-c4daS1
+        consensus_params:
+          block:
+            max_bytes: '22020096'
+            max_gas: '-1'
+            time_iota_ms: '1000'
+          evidence:
+            max_age_num_blocks: '100000'
+            max_age_duration: '172800000000000'
+            max_bytes: '1048576'
+          validator:
+            pub_key_types:
+            - ed25519
+          version: {}
+        voting_power: '10'
+      keeper_timeout: 30.0
+      leaderboard_api_key: null
+      leaderboard_base_endpoint: https://sheets.googleapis.com/v4/spreadsheets
+      leaderboard_layers_range: Layers!B1:Z3
+      leaderboard_points_range: Ranking!B2:C302
+      leaderboard_sheet_id: 1m7jUYBoK4bFF0F2ZRnT60wUCAMWGMJ_ZfALsLfW5Dxc
+      max_attempts: 10
+      max_healthcheck: 120
+      observation_interval: 10
+      on_chain_service_id: null
+      request_retry_delay: 1.0
+      request_timeout: 10.0
+      reset_tendermint_after: 2
+      retry_attempts: 400
+      retry_timeout: 3
+      round_timeout_seconds: 30.0
+      service_id: impact_evaluator
+      service_registry_address: null
+      setup:
+        all_participants:
+        - - '0x976EA74026E726554dB657fA54763abd0C3a0aa9'
+          - '0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65'
+          - '0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc'
+          - '0x14dC79964da2C08b23698B3D3cc7Ca32193d9955'
+        safe_contract_address:
+        - '0x0000000000000000000000000000000000000000'
+      share_tm_config_on_startup: false
+      sleep_time: 1
+      tendermint_check_sleep_delay: 3
+      tendermint_com_url: http://localhost:8080
+      tendermint_max_retries: 5
+      tendermint_p2p_url: localhost:26656
+      tendermint_url: http://localhost:26657
+      token_uri_base: https://pfp.staging.autonolas.tech/
+      tx_timeout: 10.0
+      whitelist_api_key: null
+      whitelist_endpoint: http://localhost
+    class_name: Params
+  requests:
+    args: {}
+    class_name: Requests
+  signing_dialogues:
+    args: {}
+    class_name: SigningDialogues
+  state:
+    args: {}
+    class_name: SharedState
+  tendermint_dialogues:
+    args: {}
+    class_name: TendermintDialogues
+dependencies:
+  open-aea-cli-ipfs:
+    version: <2.0.0,>=1.27.0
+is_abstract: false

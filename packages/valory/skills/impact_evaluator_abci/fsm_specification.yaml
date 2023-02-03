@@ -1,0 +1,48 @@
+alphabet_in:
+- API_ERROR
+- CONTRACT_ERROR
+- DONE
+- IMAGE_ERROR
+- NO_MAJORITY
+- RESET_AND_PAUSE_TIMEOUT
+- ROUND_TIMEOUT
+default_start_state: RegistrationStartupRound
+final_states: []
+label: ImpactEvaluatorSkillAbciApp
+start_states:
+- RegistrationRound
+- RegistrationStartupRound
+states:
+- DBUpdateRound
+- ImageCodeCalculationRound
+- ImageGenerationRound
+- LeaderboardObservationRound
+- NewTokensRound
+- RegistrationRound
+- RegistrationStartupRound
+- ResetAndPauseRound
+transition_func:
+    (DBUpdateRound, DONE): ResetAndPauseRound
+    (DBUpdateRound, NO_MAJORITY): LeaderboardObservationRound
+    (DBUpdateRound, ROUND_TIMEOUT): LeaderboardObservationRound
+    (ImageCodeCalculationRound, DONE): ImageGenerationRound
+    (ImageCodeCalculationRound, NO_MAJORITY): LeaderboardObservationRound
+    (ImageCodeCalculationRound, ROUND_TIMEOUT): LeaderboardObservationRound
+    (ImageGenerationRound, DONE): DBUpdateRound
+    (ImageGenerationRound, IMAGE_ERROR): LeaderboardObservationRound
+    (ImageGenerationRound, NO_MAJORITY): LeaderboardObservationRound
+    (ImageGenerationRound, ROUND_TIMEOUT): LeaderboardObservationRound
+    (LeaderboardObservationRound, API_ERROR): LeaderboardObservationRound
+    (LeaderboardObservationRound, DONE): ImageCodeCalculationRound
+    (LeaderboardObservationRound, NO_MAJORITY): LeaderboardObservationRound
+    (LeaderboardObservationRound, ROUND_TIMEOUT): LeaderboardObservationRound
+    (NewTokensRound, CONTRACT_ERROR): NewTokensRound
+    (NewTokensRound, DONE): LeaderboardObservationRound
+    (NewTokensRound, NO_MAJORITY): NewTokensRound
+    (NewTokensRound, ROUND_TIMEOUT): NewTokensRound
+    (RegistrationRound, DONE): NewTokensRound
+    (RegistrationRound, NO_MAJORITY): RegistrationRound
+    (RegistrationStartupRound, DONE): NewTokensRound
+    (ResetAndPauseRound, DONE): NewTokensRound
+    (ResetAndPauseRound, NO_MAJORITY): RegistrationRound
+    (ResetAndPauseRound, RESET_AND_PAUSE_TIMEOUT): RegistrationRound
