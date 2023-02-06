@@ -21,7 +21,6 @@ fingerprint:
   tests/test_models.py: bafybeidqf7caad3zke6xzefmfoufce6bfn5bqgbiy4racghm5w67yddrea
   tests/test_payloads.py: bafybeiezax2xthzhzhxtwsi2ns5avf5yohsdtamrwh6ge7fia6odr2j5bm
   tests/test_rounds.py: bafybeigaavikipnfqf2oq6d7cn7huxdsify5mwf2bmiwlnaaypd37mbjzi
-  tools.py: bafybeicmi3wfowhm3uqljny2x2yhbvu6htxuzkejzv2sdtoiauygfn36t4
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeic7p2e2ey44k6yv3dzznepekggceqc6mxb55e4xovcjnr3qym5ncu
