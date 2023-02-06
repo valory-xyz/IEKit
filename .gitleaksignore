@@ -1,4 +1,5 @@
 6788a510e5fc5396ce53fc281126ddeaa3371dde:packages/valory/skills/score_read_abci/skill.yaml:generic-api-key:77
 ab6d04ff17be9841760c859443b3ad6379ff191c:packages/valory/skills/score_write_abci/skill.yaml:generic-api-key:74
+c03ff9f401b34ba48df45f8390658d018ea2a74d:packages/valory/skills/impact_evaluator_abci/skill.yaml:generic-api-key:85
+8a1cc3dda3f8dc4cfce07f6e781f097ae050dfb5:packages/valory/skills/dynamic_nft_abci/skill.yaml:generic-api-key:87
 055a6fb70412fbd82bddeb4a994a6a28802c2aa9:packages/valory/skills/score_write_abci/tests/test_behaviours.py:generic-api-key:184
-packages/valory/skills/dynamic_nft_abci/skill.yaml:generic-api-key:87
