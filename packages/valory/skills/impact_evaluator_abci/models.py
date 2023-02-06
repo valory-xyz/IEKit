@@ -19,8 +19,6 @@
 
 """This module contains the shared state for the abci skill of ImpactEvaluatorSkillAbciApp."""
 
-from typing import Any
-
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
 )
@@ -57,10 +55,6 @@ class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
 
     abci_app_cls = ImpactEvaluatorSkillAbciApp
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the state."""
-        super().__init__(*args, abci_app_cls=ImpactEvaluatorSkillAbciApp, **kwargs)
 
     def setup(self) -> None:
         """Set up."""

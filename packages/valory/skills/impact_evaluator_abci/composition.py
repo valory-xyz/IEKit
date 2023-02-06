@@ -35,7 +35,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     RegistrationAbci.FinishedRegistrationRound: ScoreReadAbciAbci.TwitterObservationRound,
     ScoreReadAbciAbci.FinishedScoringRound: ScoreWriteAbciAbci.RandomnessRound,
     ScoreWriteAbciAbci.FinishedVerificationRound: DynamicNFTAbci.NewTokensRound,
-    DynamicNFTAbci.FinishedDBUpdateRound: ResetAndPauseAbci.ResetAndPauseRound,
+    DynamicNFTAbci.FinishedNewTokensRound: ResetAndPauseAbci.ResetAndPauseRound,
     ResetAndPauseAbci.FinishedResetAndPauseRound: DynamicNFTAbci.NewTokensRound,
     ResetAndPauseAbci.FinishedResetAndPauseErrorRound: RegistrationAbci.RegistrationRound,
 }
@@ -43,8 +43,8 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
 ImpactEvaluatorSkillAbciApp = chain(
     (
         RegistrationAbci.AgentRegistrationAbciApp,
-        ScoreReadAbciAbci.DynamicNFTAbciApp,
-        ScoreWriteAbciAbci.DynamicNFTAbciApp,
+        ScoreReadAbciAbci.ScoreReadAbciApp,
+        ScoreWriteAbciAbci.ScoreWriteAbciApp,
         DynamicNFTAbci.DynamicNFTAbciApp,
         ResetAndPauseAbci.ResetPauseAbciApp,
     ),

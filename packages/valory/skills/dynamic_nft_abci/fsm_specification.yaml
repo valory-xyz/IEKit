@@ -1,39 +1,19 @@
 alphabet_in:
-- API_ERROR
 - CONTRACT_ERROR
 - DONE
-- IMAGE_ERROR
 - NO_MAJORITY
 - ROUND_TIMEOUT
 default_start_state: NewTokensRound
 final_states:
-- FinishedDBUpdateRound
+- FinishedNewTokensRound
 label: DynamicNFTAbciApp
 start_states:
 - NewTokensRound
 states:
-- DBUpdateRound
-- FinishedDBUpdateRound
-- ImageCodeCalculationRound
-- ImageGenerationRound
-- LeaderboardObservationRound
+- FinishedNewTokensRound
 - NewTokensRound
 transition_func:
-    (DBUpdateRound, DONE): FinishedDBUpdateRound
-    (DBUpdateRound, NO_MAJORITY): LeaderboardObservationRound
-    (DBUpdateRound, ROUND_TIMEOUT): LeaderboardObservationRound
-    (ImageCodeCalculationRound, DONE): ImageGenerationRound
-    (ImageCodeCalculationRound, NO_MAJORITY): LeaderboardObservationRound
-    (ImageCodeCalculationRound, ROUND_TIMEOUT): LeaderboardObservationRound
-    (ImageGenerationRound, DONE): DBUpdateRound
-    (ImageGenerationRound, IMAGE_ERROR): LeaderboardObservationRound
-    (ImageGenerationRound, NO_MAJORITY): LeaderboardObservationRound
-    (ImageGenerationRound, ROUND_TIMEOUT): LeaderboardObservationRound
-    (LeaderboardObservationRound, API_ERROR): LeaderboardObservationRound
-    (LeaderboardObservationRound, DONE): ImageCodeCalculationRound
-    (LeaderboardObservationRound, NO_MAJORITY): LeaderboardObservationRound
-    (LeaderboardObservationRound, ROUND_TIMEOUT): LeaderboardObservationRound
     (NewTokensRound, CONTRACT_ERROR): NewTokensRound
-    (NewTokensRound, DONE): LeaderboardObservationRound
+    (NewTokensRound, DONE): FinishedNewTokensRound
     (NewTokensRound, NO_MAJORITY): NewTokensRound
     (NewTokensRound, ROUND_TIMEOUT): NewTokensRound

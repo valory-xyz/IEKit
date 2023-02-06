@@ -8,13 +8,13 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeia4476g4pg7hqaovwdtj25jvyrjrkobqtyusut4x6vxkflcbbos6y
   behaviours.py: bafybeiaqw65372wicegfs2m7dykzlgndunyc6rb5zxlxr7qdmhl4bvo7qa
-  composition.py: bafybeigijg444seh6zhrwm2b2gzs35jfb42qisqhoi4sobfp6yksgnbn24
+  composition.py: bafybeiawmbq7lo25ig77whbblnvytoxm2svaenwi3b4eskk2oeodcqldh4
   dialogues.py: bafybeif7uhfjkcz3ryhti6gafqxhvciw4ec5bdshxvq3355tun5ydkzrna
-  fsm_specification.yaml: bafybeieywo3aqx2p4npeh6tmgvdmq5v4domp2jhylihv6wd7be46f2mjie
+  fsm_specification.yaml: bafybeigvnq5hr4bb2t2wb5hnetpwfdt4t5enzan53fto2avkncxhkadvmq
   handlers.py: bafybeibd4zsbelbqgzf5u45rjbsec7t6egzwvluofwrq7f6gjmvbbivhgy
-  models.py: bafybeiafr6qxbhv4mzecqme3b4qbreei7ttrz67opoxmcjwnrcrmbwsghq
+  models.py: bafybeigvbtvxupfr5ma2ja7byuua4dyh7d36f63b3we6fgnfkhwg2eaiga
   tests/__init__.py: bafybeicukkp7ajzvqtmpedzwo23azuorvy5qtftadsxbwmv5zhk2tktjc4
-  tests/test_behaviours.py: bafybeifcwemh2fd2ysn3dx5vpmmr6vxgv5xo73f3tj3zqu6mlw63iul4da
+  tests/test_behaviours.py: bafybeib4hqd7l7fdsfvrkee7onl47adz6fqhdtjzll6efwo7uznjwf7lvu
   tests/test_dialogues.py: bafybeigac5y4hysp7lqdhz5zwbwntadr55mmmefvdxkz6dhi6gcosfvdgy
   tests/test_handlers.py: bafybeibk337l5p2hfgr4mcwecd55tfatzxkfdiia7qh7wy7jb6vqg64blm
   tests/test_models.py: bafybeigqy2ofyk7ni2r6anbvojy6zy554caloiktnsd7sbldfvjjdd2wki
@@ -26,7 +26,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
 - valory/score_read_abci:0.1.0:bafybeieyvu4ezod6dhxpyj3jh2la2inpwsjnychmsg735kz6cjfz6aysta
 - valory/score_write_abci:0.1.0:bafybeibtxjdwjxccclfeyereq7ihe2uj5vc4vmhcnf627leli4nmag2z4q
-- valory/dynamic_nft_abci:0.1.0:bafybeieuq5ng2ywef5avona5qsfydbs46paektbvqnyx557nuli3375vpu
+- valory/dynamic_nft_abci:0.1.0:bafybeihwjeektru6e63xh2jveqgxed4iveknacyvbkblvt5q2fu7zdck4u
 - valory/registration_abci:0.1.0:bafybeihai2otcmnb2w7k64bnwf5qagfexg5gqow74xhj3wynikgdxre3ka
 - valory/reset_pause_abci:0.1.0:bafybeifs6zpg5nbvuapmxafzo6fdhoz5ebpiujetvk243apo3iwl2rn45i
 behaviours:
@@ -103,11 +103,6 @@ models:
           version: {}
         voting_power: '10'
       keeper_timeout: 30.0
-      leaderboard_api_key: null
-      leaderboard_base_endpoint: https://sheets.googleapis.com/v4/spreadsheets
-      leaderboard_layers_range: Layers!B1:Z3
-      leaderboard_points_range: Ranking!B2:C302
-      leaderboard_sheet_id: 1m7jUYBoK4bFF0F2ZRnT60wUCAMWGMJ_ZfALsLfW5Dxc
       max_attempts: 10
       max_healthcheck: 120
       observation_interval: 10
@@ -121,11 +116,7 @@ models:
       service_id: impact_evaluator
       service_registry_address: null
       setup:
-        all_participants:
-        - - '0x976EA74026E726554dB657fA54763abd0C3a0aa9'
-          - '0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65'
-          - '0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc'
-          - '0x14dC79964da2C08b23698B3D3cc7Ca32193d9955'
+        all_participants: []
         safe_contract_address:
         - '0x0000000000000000000000000000000000000000'
       share_tm_config_on_startup: false

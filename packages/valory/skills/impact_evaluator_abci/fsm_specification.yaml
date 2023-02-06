@@ -1,8 +1,8 @@
 alphabet_in:
 - API_ERROR
 - CONTRACT_ERROR
+- DID_NOT_SEND
 - DONE
-- IMAGE_ERROR
 - NO_MAJORITY
 - RESET_AND_PAUSE_TIMEOUT
 - ROUND_TIMEOUT
@@ -13,36 +13,45 @@ start_states:
 - RegistrationRound
 - RegistrationStartupRound
 states:
-- DBUpdateRound
-- ImageCodeCalculationRound
-- ImageGenerationRound
-- LeaderboardObservationRound
+- CeramicWriteRound
 - NewTokensRound
+- RandomnessRound
 - RegistrationRound
 - RegistrationStartupRound
 - ResetAndPauseRound
+- ScoringRound
+- SelectKeeperRound
+- TwitterObservationRound
+- VerificationRound
 transition_func:
-    (DBUpdateRound, DONE): ResetAndPauseRound
-    (DBUpdateRound, NO_MAJORITY): LeaderboardObservationRound
-    (DBUpdateRound, ROUND_TIMEOUT): LeaderboardObservationRound
-    (ImageCodeCalculationRound, DONE): ImageGenerationRound
-    (ImageCodeCalculationRound, NO_MAJORITY): LeaderboardObservationRound
-    (ImageCodeCalculationRound, ROUND_TIMEOUT): LeaderboardObservationRound
-    (ImageGenerationRound, DONE): DBUpdateRound
-    (ImageGenerationRound, IMAGE_ERROR): LeaderboardObservationRound
-    (ImageGenerationRound, NO_MAJORITY): LeaderboardObservationRound
-    (ImageGenerationRound, ROUND_TIMEOUT): LeaderboardObservationRound
-    (LeaderboardObservationRound, API_ERROR): LeaderboardObservationRound
-    (LeaderboardObservationRound, DONE): ImageCodeCalculationRound
-    (LeaderboardObservationRound, NO_MAJORITY): LeaderboardObservationRound
-    (LeaderboardObservationRound, ROUND_TIMEOUT): LeaderboardObservationRound
+    (CeramicWriteRound, API_ERROR): RandomnessRound
+    (CeramicWriteRound, DID_NOT_SEND): RandomnessRound
+    (CeramicWriteRound, DONE): VerificationRound
+    (CeramicWriteRound, ROUND_TIMEOUT): RandomnessRound
     (NewTokensRound, CONTRACT_ERROR): NewTokensRound
-    (NewTokensRound, DONE): LeaderboardObservationRound
+    (NewTokensRound, DONE): ResetAndPauseRound
     (NewTokensRound, NO_MAJORITY): NewTokensRound
     (NewTokensRound, ROUND_TIMEOUT): NewTokensRound
-    (RegistrationRound, DONE): NewTokensRound
+    (RandomnessRound, DONE): SelectKeeperRound
+    (RandomnessRound, NO_MAJORITY): RandomnessRound
+    (RandomnessRound, ROUND_TIMEOUT): RandomnessRound
+    (RegistrationRound, DONE): TwitterObservationRound
     (RegistrationRound, NO_MAJORITY): RegistrationRound
-    (RegistrationStartupRound, DONE): NewTokensRound
+    (RegistrationStartupRound, DONE): TwitterObservationRound
     (ResetAndPauseRound, DONE): NewTokensRound
     (ResetAndPauseRound, NO_MAJORITY): RegistrationRound
     (ResetAndPauseRound, RESET_AND_PAUSE_TIMEOUT): RegistrationRound
+    (ScoringRound, DONE): RandomnessRound
+    (ScoringRound, NO_MAJORITY): ScoringRound
+    (ScoringRound, ROUND_TIMEOUT): ScoringRound
+    (SelectKeeperRound, DONE): CeramicWriteRound
+    (SelectKeeperRound, NO_MAJORITY): RandomnessRound
+    (SelectKeeperRound, ROUND_TIMEOUT): RandomnessRound
+    (TwitterObservationRound, API_ERROR): TwitterObservationRound
+    (TwitterObservationRound, DONE): ScoringRound
+    (TwitterObservationRound, NO_MAJORITY): TwitterObservationRound
+    (TwitterObservationRound, ROUND_TIMEOUT): TwitterObservationRound
+    (VerificationRound, API_ERROR): RandomnessRound
+    (VerificationRound, DONE): NewTokensRound
+    (VerificationRound, NO_MAJORITY): RandomnessRound
+    (VerificationRound, ROUND_TIMEOUT): RandomnessRound

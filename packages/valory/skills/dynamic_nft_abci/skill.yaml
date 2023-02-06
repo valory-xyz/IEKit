@@ -7,9 +7,9 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiav5443ke4ldxssxhmpcwxxq7ekax3piggfnywq72fvn4fezzgqxq
-  behaviours.py: bafybeicpubeb6krfladix4rvbxsxfuwpdwllwhycw3c2eczfgis2yu4iti
+  behaviours.py: bafybeidrmgjhtysuukejybxyergeol63236lbujc5udysx5nhzwnwgqnzq
   dialogues.py: bafybeifepvv22c44se22l6dn6j7cfnwepqafmiuj5243u3bzbln3p2rgoe
-  fsm_specification.yaml: bafybeieu56rqmiqh47xdchcxhrbmj2n5mgdiod76yriyuyc3pfeovtvwqi
+  fsm_specification.yaml: bafybeihm464d5ol3qumlyb7kb2uhnhki5hsldgjrzkkk4adwmqbxedbw54
   handlers.py: bafybeigpvibzp6ghxmdacgfqnir422cqhng36afxejekrjgha5knqbmsne
   models.py: bafybeiduxf4tjeegub3o4xf4lo3yuh4cp3bgbpxvbobb4vsslmrildrwqe
   payloads.py: bafybeid4xcpguklsgd72joo47laocly6luboelcerx27jsa53uthz2vn2y
@@ -144,9 +144,5 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
-dependencies:
-  Pillow:
-    version: ==9.2.0
-  jsonschema:
-    version: ==3.2.0
+dependencies: {}
 is_abstract: true
