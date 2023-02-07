@@ -39,7 +39,7 @@ from packages.valory.skills.dynamic_nft_abci.rounds import (
 
 
 DUMMY_TOKEN_TO_DATA = {
-    "new_token_to_data": {
+    "token_to_data": {
         "1": {
             "address": "0x54EfA9b1865FFE8c528fb375A7A606149598932A",
             "points": DEFAULT_POINTS,
@@ -156,7 +156,7 @@ class TestNewTokensRound(BaseDynamicNFTRoundTestClass):
                 final_data={
                     "token_to_data": json.loads(
                         get_dummy_new_tokens_payload_serialized()
-                    )["new_token_to_data"],
+                    )["token_to_data"],
                 },
                 event=Event.DONE,
                 most_voted_payload=get_dummy_new_tokens_payload_serialized(),

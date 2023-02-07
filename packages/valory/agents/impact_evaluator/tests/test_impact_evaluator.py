@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2022 Valory AG
+#   Copyright 2023 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -42,60 +42,70 @@ from aea_test_autonomy.fixture_helpers import tendermint  # noqa: F401
 from aea_test_autonomy.fixture_helpers import tendermint_port  # noqa: F401
 from aea_test_autonomy.fixture_helpers import ipfs_daemon  # noqa: F401
 from aea_test_autonomy.fixture_helpers import ipfs_domain  # noqa: F401
-from packages.valory.agents.contribution.tests.helpers.fixtures import (  # noqa: F401
-    UseHardHatContributionBaseTest,
-    UseMockGoogleSheetsApiBaseTest,
+from packages.valory.agents.impact_evaluator.tests.helpers.fixtures import (  # noqa: F401
+    UseHardHatImpactEvaluatorBaseTest,
+    UseMockTwitterApiBaseTest,
 )
-from packages.valory.agents.contribution.tests.helpers.docker import (
+from packages.valory.agents.impact_evaluator.tests.helpers.docker import (
     DEFAULT_JSON_SERVER_ADDR as _DEFAULT_JSON_SERVER_ADDR,
 )
-from packages.valory.agents.contribution.tests.helpers.docker import (
+from packages.valory.agents.impact_evaluator.tests.helpers.docker import (
     DEFAULT_JSON_SERVER_PORT as _DEFAULT_JSON_SERVER_PORT,
 )
 from packages.valory.skills.registration_abci.rounds import RegistrationStartupRound
 from packages.valory.skills.reset_pause_abci.rounds import ResetAndPauseRound
 from packages.valory.skills.dynamic_nft_abci.rounds import (
     NewTokensRound,
-    LeaderboardObservationRound,
-    ImageCodeCalculationRound,
-    ImageGenerationRound,
-    DBUpdateRound,
+)
+from packages.valory.skills.score_read_abci.rounds import (
+    TwitterObservationRound,
+    ScoringRound
+)
+from packages.valory.skills.score_write_abci.rounds import (
+    RandomnessRound,
+    SelectKeeperRound,
+    CeramicWriteRound,
+    VerificationRound,
 )
 
 
 HAPPY_PATH: Tuple[RoundChecks, ...] = (
     RoundChecks(RegistrationStartupRound.auto_round_id()),
+    RoundChecks(TwitterObservationRound.auto_round_id(), n_periods=2),
+    RoundChecks(ScoringRound.auto_round_id(), n_periods=2),
+    RoundChecks(RandomnessRound.auto_round_id(), n_periods=2),
+    RoundChecks(SelectKeeperRound.auto_round_id(), n_periods=2),
+    RoundChecks(CeramicWriteRound.auto_round_id(), n_periods=2),
+    RoundChecks(VerificationRound.auto_round_id(), n_periods=2),
     RoundChecks(NewTokensRound.auto_round_id(), n_periods=2),
-    RoundChecks(LeaderboardObservationRound.auto_round_id(), n_periods=2),
-    RoundChecks(ImageCodeCalculationRound.auto_round_id(), n_periods=2),
-    RoundChecks(ImageGenerationRound.auto_round_id(), n_periods=2),
-    RoundChecks(DBUpdateRound.auto_round_id(), n_periods=2),
     RoundChecks(ResetAndPauseRound.auto_round_id(), n_periods=2),
 )
 
 # strict check log messages of the happy path
 STRICT_CHECK_STRINGS = (
-    "Got the new token list:",
-    "Calculated token updates:",
-    "Generated the following new images:",
-    "Updating database tables",
+    "Retrieving mentions from Twitter API",
+    "Calculated score data:",
+    "Wrote scores to ceramic stream with id:",
+    "Data verification successful",
+    "Got the new token data:",
     "Period end",
 )
 PACKAGES_DIR = Path(__file__).parent.parent.parent.parent.parent
 
 
-MOCK_API_ADDRESS = _DEFAULT_JSON_SERVER_ADDR
-MOCK_API_PORT = _DEFAULT_JSON_SERVER_PORT
-MOCK_WHITELIST_ADDRESS = _DEFAULT_JSON_SERVER_ADDR
-MOCK_IPFS_ADDRESS = _DEFAULT_JSON_SERVER_ADDR
+MOCK_TWITTER_API_ADDRESS = _DEFAULT_JSON_SERVER_ADDR
+MOCK_TWITTER_API_PORT = _DEFAULT_JSON_SERVER_PORT
+
+MOCK_CERAMIC_API_ADDRESS = _DEFAULT_JSON_SERVER_ADDR
+MOCK_CERAMIC_API_PORT = _DEFAULT_JSON_SERVER_PORT
 
 
 @pytest.mark.usefixtures("ipfs_daemon")
-class BaseTestEnd2EndContributionNormalExecution(BaseTestEnd2EndExecution):
-    """Base class for the contribution service e2e tests."""
+class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
+    """Base class for the impact evaluator service e2e tests."""
 
-    agent_package = "valory/contribution:0.1.0"
-    skill_package = "valory/contribution_abci:0.1.0"
+    agent_package = "valory/impact_evaluator:0.1.0"
+    skill_package = "valory/impact_evaluator_abci:0.1.0"
     wait_to_finish = 180
     strict_check_strings = STRICT_CHECK_STRINGS
     happy_path = HAPPY_PATH
@@ -105,24 +115,16 @@ class BaseTestEnd2EndContributionNormalExecution(BaseTestEnd2EndExecution):
 
     extra_configs = [
         {
-            "dotted_path": f"{__param_args_prefix}.leaderboard_base_endpoint",
-            "value": f"{MOCK_API_ADDRESS}:{MOCK_API_PORT}",
+            "dotted_path": f"{__param_args_prefix}.twitter_api_base",
+            "value": f"{MOCK_TWITTER_API_ADDRESS}:{MOCK_TWITTER_API_PORT}",
         },
         {
-            "dotted_path": f"{__param_args_prefix}.leaderboard_sheet_id",
-            "value": "mock_sheet_id",
+            "dotted_path": f"{__param_args_prefix}.twitter_api_args",
+            "value": "",
         },
         {
-            "dotted_path": f"{__param_args_prefix}.ipfs_domain_name",
-            "value": "/dns/localhost/tcp/5001/http",
-        },
-        {
-            "dotted_path": f"{__param_args_prefix}.whitelist_endpoint",
-            "value": f"{MOCK_WHITELIST_ADDRESS}:{MOCK_API_PORT}/mock_whitelist",
-        },
-        {
-            "dotted_path": f"{__param_args_prefix}.ipfs_gateway_base_url",
-            "value": f"{MOCK_IPFS_ADDRESS}:{MOCK_API_PORT}/mock_ipfs/",
+            "dotted_path": f"{__param_args_prefix}.ceramic_api_base",
+            "value": f"{MOCK_CERAMIC_API_ADDRESS}:{MOCK_CERAMIC_API_PORT}",
         },
     ]
 
@@ -142,29 +144,29 @@ class BaseTestEnd2EndContributionNormalExecution(BaseTestEnd2EndExecution):
 
 @pytest.mark.e2e
 @pytest.mark.parametrize("nb_nodes", (1,))
-class TestEnd2EndContributionSingleAgent(
-    BaseTestEnd2EndContributionNormalExecution,
-    UseMockGoogleSheetsApiBaseTest,
-    UseHardHatContributionBaseTest,
+class TestEnd2EndImpactEvaluatorSingleAgent(
+    BaseTestEnd2EndImpactEvaluatorNormalExecution,
+    UseMockTwitterApiBaseTest,
+    UseHardHatImpactEvaluatorBaseTest,
 ):
-    """Test the contribution skill with only one agent."""
+    """Test the impact evaluator skill with only one agent."""
 
 
 @pytest.mark.e2e
 @pytest.mark.parametrize("nb_nodes", (2,))
-class TestEnd2EndContributionTwoAgents(
-    BaseTestEnd2EndContributionNormalExecution,
-    UseMockGoogleSheetsApiBaseTest,
-    UseHardHatContributionBaseTest,
+class TestEnd2EndImpactEvaluatorTwoAgents(
+    BaseTestEnd2EndImpactEvaluatorNormalExecution,
+    UseMockTwitterApiBaseTest,
+    UseHardHatImpactEvaluatorBaseTest,
 ):
-    """Test the contribution skill with two agents."""
+    """Test the impact evaluator skill with two agents."""
 
 
 @pytest.mark.e2e
 @pytest.mark.parametrize("nb_nodes", (4,))
-class TestEnd2EndContributionFourAgents(
-    BaseTestEnd2EndContributionNormalExecution,
-    UseMockGoogleSheetsApiBaseTest,
-    UseHardHatContributionBaseTest,
+class TestEnd2EndImpactEvaluatorFourAgents(
+    BaseTestEnd2EndImpactEvaluatorNormalExecution,
+    UseMockTwitterApiBaseTest,
+    UseHardHatImpactEvaluatorBaseTest,
 ):
-    """Test the contribution skill with four agents."""
+    """Test the impact evaluator skill with four agents."""

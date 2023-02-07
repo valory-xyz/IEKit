@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2022 Valory AG
+#   Copyright 2023 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Defines constant used in the AutonomousFund docker image."""
+"""Defines constant used in the ImpactEvaluator docker image."""
 
-# the network is configured with these accounts, every account has 100ETH
+# the network is configured with these accounts
 ACCOUNTS = [
     (
         "0xFFcf8FDEE72ac11b5c542428B35EEF5769C409f0",

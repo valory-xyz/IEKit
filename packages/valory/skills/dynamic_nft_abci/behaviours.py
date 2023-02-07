@@ -44,6 +44,8 @@ from packages.valory.skills.dynamic_nft_abci.rounds import (
 NULL_ADDRESS = "0x0000000000000000000000000000000000000000"
 DEFAULT_POINTS = 0
 
+ADDRESS_TO_TWITTER_IDS = {"0x7b22C1db9EB9014c0d62D18a587dA79D75465f04": "315490172"}
+
 
 class DynamicNFTBaseBehaviour(BaseBehaviour, ABC):
     """Base behaviour for the common apps' skill."""
@@ -75,18 +77,30 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
             if token_id_to_address == NewTokensRound.ERROR_PAYLOAD:
                 payload_data = json.dumps(NewTokensRound.ERROR_PAYLOAD, sort_keys=True)
             else:
-                old_tokens = set(self.synchronized_data.token_to_data.keys())
+                old_token_to_data = self.synchronized_data.token_to_data
 
-                # Add new tokens only
+                # New tokens that have been minted and are currently tracked
                 new_token_to_data = {
                     token_id: {
                         "address": address,
                         "points": DEFAULT_POINTS,
                     }
                     for token_id, address in token_id_to_address.items()
-                    if token_id not in old_tokens
+                    if token_id not in old_token_to_data
+                    and address in ADDRESS_TO_TWITTER_IDS
                 }
-                self.context.logger.info(f"Got the new token list: {new_token_to_data}")
+
+                # Add new points
+                token_to_data = {
+                    **old_token_to_data,
+                    **new_token_to_data,
+                }
+
+                for address, points in self.synchronized_data.user_to_scores.items():
+                    if address in token_to_data:
+                        token_to_data[address] = token_to_data[address] + points
+
+                self.context.logger.info(f"Got the new token data: {token_to_data}")
 
                 last_update_time = cast(
                     SharedState, self.context.state
@@ -94,7 +108,7 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
 
                 payload_data = json.dumps(
                     {
-                        "new_token_to_data": new_token_to_data,
+                        "token_to_data": token_to_data,
                         "last_update_time": last_update_time,
                     },
                     sort_keys=True,

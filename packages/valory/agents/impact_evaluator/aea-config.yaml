@@ -8,11 +8,11 @@ fingerprint:
   __init__.py: bafybeialhcja5fhf2ahyx5no2aajvnfhh4tj7ihhx65qpoohc4n5wfr76q
   tests/__init__.py: bafybeicmv3jjcqcdnmubfmrgdgeyic3nkm77z4mutsyuo34hpddwupofre
   tests/helpers/__init__.py: bafybeiauwuw4a4wxqacqqkkk52ktps2qedadhypvh3ex7uqs7qaqrpygmy
-  tests/helpers/constants.py: bafybeid6yo6ihwcp56fwjiikl7ktyek64r4pxbsp345oc3xsq7duruog44
-  tests/helpers/data/json_server/data.json: bafybeidxxrnko3lmzgcces5nfkkotinqa5mv343fuhezkb6tdbjv4cgsoy
-  tests/helpers/docker.py: bafybeihjh65uysuk3pp2bn3c4l2ish6tp2ay64w5tsetsx53hqnthgntwa
-  tests/helpers/fixtures.py: bafybeibbzank7chfncg6ifb4r3lvnttahixu2cq7cs6nnglbeolwlbrsvm
-  tests/test_impact_evaluator.py: bafybeifg7ybrxhtzwcppchbbstjtemporg4xsicvub4dzogqxoiaohymui
+  tests/helpers/constants.py: bafybeibbokz7gzdlubnjwxrmh4tqckc7j75hfy3ae6l5a63mrbd4hp6l7u
+  tests/helpers/data/json_server/data.json: bafybeifnbmgsqu5cxnhpg3fnwoo65ulra5cwzrgezcxl2c6bjt7j23wjxa
+  tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
+  tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
+  tests/test_impact_evaluator.py: bafybeidodp3cwn3l3iu4j4wj6f6gzvkclxc3vgfxppohepgaiu3vilijky
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeic7p2e2ey44k6yv3dzznepekggceqc6mxb55e4xovcjnr3qym5ncu
@@ -29,10 +29,10 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeic5b7cgxmele2ccbeon3d6kbxajtjihds2qn2r3pfouvw7t2cxgvm
 - valory/abstract_round_abci:0.1.0:bafybeiczoszdnbiq5rp7zzko6c473rrk7qjpvj7xxskf2szrrolcyp6dvi
-- valory/impact_evaluator_abci:0.1.0:bafybeiafpqfta3he3kftcky2soki52c6hhpnkw6jug7kh345ychqurr5pq
-- valory/score_read_abci:0.1.0:bafybeidov6tmqx6dzusqe2vs6wxnwmbzndiwugrfc4ojc63t44ecsuavki
-- valory/score_write_abci:0.1.0:bafybeigo3et6rrlponplj727whwjpsinq3jrjmquhyvg5yuhx2xxe5ppau
-- valory/dynamic_nft_abci:0.1.0:bafybeihhmnolusiscf2jqcvipsyrarw7hfn5p443w6otxuuq435plxzysq
+- valory/impact_evaluator_abci:0.1.0:bafybeiegdrervktdrlcarpixvdzdq7kgj2u7dlutf7gh3chcvzw3u2tskq
+- valory/score_read_abci:0.1.0:bafybeiabsq5xwl4tmfguolisbhaoetj4oeqq2muqlsozxxifrzrpfswb6i
+- valory/score_write_abci:0.1.0:bafybeicmcxguizoocqljlaec64o4hh2jny7j7vsz2qqpl33w7wyslnkrqu
+- valory/dynamic_nft_abci:0.1.0:bafybeideq5d5wihmmylvaujufverfwbaxdrxiopnkz4emg56tukbebhcaq
 - valory/registration_abci:0.1.0:bafybeiamkjd2qpkhljojobg74oe7aezhvdbdehgbdb7lwqqhr2rmzkuvim
 - valory/reset_pause_abci:0.1.0:bafybeic5r5fyjwnocytn75hr4io7fvka2bspzjtwacswcob6jy6jgzk2yu
 default_ledger: ethereum

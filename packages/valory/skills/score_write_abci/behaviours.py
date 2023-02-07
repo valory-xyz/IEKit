@@ -198,7 +198,7 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
 
         self.context.logger.info(f"Writing scores to Ceramic API [{url}]")
         response = yield from self.get_http_response(
-            method="GET",
+            method="POST",
             url=url,
             content=json.dumps(commit_payload).encode(),
         )

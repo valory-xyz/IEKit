@@ -328,7 +328,7 @@ class TestCeramicWriteBehaviourSender(BaseScoreWriteTest):
         # Write data call
         self.mock_http_request(
             request_kwargs=dict(
-                method="GET",
+                method="POST",
                 headers="",
                 version="",
                 url=CERAMIC_API_STREAM_URL,
@@ -438,7 +438,7 @@ class TestCeramicWriteBehaviourApiError(BaseScoreWriteTest):
         if kwargs.get("read_data")["status"] == 200:
             self.mock_http_request(
                 request_kwargs=dict(
-                    method="GET",
+                    method="POST",
                     headers="",
                     version="",
                     url=CERAMIC_API_STREAM_URL,

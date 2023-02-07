@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2022 Valory AG
+#   Copyright 2023 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 # ------------------------------------------------------------------------------
 # pylint: disable=import-error
 
-"""Autonomous Fund Contracts Docker image."""
+"""Impact Evaluator Contracts Docker image."""
 import logging
 import time
 from pathlib import Path
@@ -30,8 +30,8 @@ from aea.exceptions import enforce
 from aea_test_autonomy.docker.base import DockerImage
 from docker.models.containers import Container
 
-from packages.valory.agents.contribution import PACKAGE_DIR
-from packages.valory.agents.contribution.tests.helpers.constants import (
+from packages.valory.agents.impact_evaluator import PACKAGE_DIR
+from packages.valory.agents.impact_evaluator.tests.helpers.constants import (
     DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS,
 )
 
@@ -40,7 +40,7 @@ DEFAULT_HARDHAT_ADDR = "http://127.0.0.1"
 DEFAULT_HARDHAT_PORT = 8545
 
 
-class ContributionNetworkDockerImage(DockerImage):
+class ImpactEvaluatorNetworkDockerImage(DockerImage):
     """Spawn a local network with the Autonolas registries, Gnosis Safe, dynamic contribution contract and some NFTs minted."""
 
     _CONTAINER_PORT = DEFAULT_HARDHAT_PORT
@@ -131,8 +131,8 @@ DEFAULT_JSON_DATA_DIR = (
 )
 
 
-class MockGoogleSheetsApi(DockerImage):
-    """Spawn a JSON server to for mocking the Google Sheets API."""
+class MockTwitterApi(DockerImage):
+    """Spawn a JSON server to for mocking the Twitter API."""
 
     def __init__(
         self,
