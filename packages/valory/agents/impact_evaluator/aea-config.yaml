@@ -1,0 +1,174 @@
+agent_name: impact_evaluator
+author: valory
+version: 0.1.0
+license: Apache-2.0
+description: The impact evaluator agent.
+aea_version: '>=1.19.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeialhcja5fhf2ahyx5no2aajvnfhh4tj7ihhx65qpoohc4n5wfr76q
+  tests/__init__.py: bafybeicmv3jjcqcdnmubfmrgdgeyic3nkm77z4mutsyuo34hpddwupofre
+  tests/helpers/__init__.py: bafybeiauwuw4a4wxqacqqkkk52ktps2qedadhypvh3ex7uqs7qaqrpygmy
+  tests/helpers/constants.py: bafybeid6yo6ihwcp56fwjiikl7ktyek64r4pxbsp345oc3xsq7duruog44
+  tests/helpers/data/json_server/data.json: bafybeidxxrnko3lmzgcces5nfkkotinqa5mv343fuhezkb6tdbjv4cgsoy
+  tests/helpers/docker.py: bafybeihjh65uysuk3pp2bn3c4l2ish6tp2ay64w5tsetsx53hqnthgntwa
+  tests/helpers/fixtures.py: bafybeibbzank7chfncg6ifb4r3lvnttahixu2cq7cs6nnglbeolwlbrsvm
+  tests/test_impact_evaluator.py: bafybeifg7ybrxhtzwcppchbbstjtemporg4xsicvub4dzogqxoiaohymui
+fingerprint_ignore_patterns: []
+connections:
+- fetchai/http_server:0.22.0:bafybeic7p2e2ey44k6yv3dzznepekggceqc6mxb55e4xovcjnr3qym5ncu
+- valory/abci:0.1.0:bafybeicsr2hl3x7wdjk67egstohh3eocnr3nx3kiixvzbajm4wqc66tone
+- valory/http_client:0.23.0:bafybeigggahci7hq6tr3tyueatgkvgn73y4b3av2vk7vtr7jkeuwsqcteq
+- valory/ledger:0.19.0:bafybeicpxyoxez7lperltamvikxu6vzk2lhqakbivce4nzywyzoqbxoogm
+- valory/p2p_libp2p_client:0.1.0:bafybeiayoofxmj6z3pasn2akqj3udgq2ta2ar6mv6zoehstul2btvv3gqa
+contracts:
+- valory/dynamic_contribution:0.1.0:bafybeiewycrrihjevhuoqmkctkmgljklxe467jad6rpsk55xflrri5c35a
+protocols:
+- open_aea/signing:1.0.0:bafybeiclsbgrviyxbmi2vex5ze3dhr7ywohrqedebx26jozayxvroqtegq
+- valory/contract_api:1.0.0:bafybeif32nchkgn6yet7e5gt4auhf7lsahxnj4t36kxbw55p3gi7qpeuxq
+- valory/http:1.0.0:bafybeifru3qs6udfzprax7jxktbsuzn7immfvi3scgfspifq3zdxwkgvnm
+skills:
+- valory/abstract_abci:0.1.0:bafybeic5b7cgxmele2ccbeon3d6kbxajtjihds2qn2r3pfouvw7t2cxgvm
+- valory/abstract_round_abci:0.1.0:bafybeiczoszdnbiq5rp7zzko6c473rrk7qjpvj7xxskf2szrrolcyp6dvi
+- valory/impact_evaluator_abci:0.1.0:bafybeiafpqfta3he3kftcky2soki52c6hhpnkw6jug7kh345ychqurr5pq
+- valory/score_read_abci:0.1.0:bafybeidov6tmqx6dzusqe2vs6wxnwmbzndiwugrfc4ojc63t44ecsuavki
+- valory/score_write_abci:0.1.0:bafybeigo3et6rrlponplj727whwjpsinq3jrjmquhyvg5yuhx2xxe5ppau
+- valory/dynamic_nft_abci:0.1.0:bafybeihhmnolusiscf2jqcvipsyrarw7hfn5p443w6otxuuq435plxzysq
+- valory/registration_abci:0.1.0:bafybeiamkjd2qpkhljojobg74oe7aezhvdbdehgbdb7lwqqhr2rmzkuvim
+- valory/reset_pause_abci:0.1.0:bafybeic5r5fyjwnocytn75hr4io7fvka2bspzjtwacswcob6jy6jgzk2yu
+default_ledger: ethereum
+required_ledgers:
+- ethereum
+default_routing: {}
+connection_private_key_paths: {}
+private_key_paths: {}
+logging_config:
+  version: 1
+  disable_existing_loggers: false
+  formatters:
+    standard:
+      format: '[%(asctime)s] [%(levelname)s] %(message)s'
+  handlers:
+    logfile:
+      class: logging.FileHandler
+      formatter: standard
+      filename: ${LOG_FILE:str:log.txt}
+      level: INFO
+    console:
+      class: logging.StreamHandler
+      formatter: standard
+      stream: ext://sys.stdout
+  loggers:
+    aea:
+      handlers:
+      - logfile
+      - console
+      propagate: false
+skill_exception_policy: stop_and_exit
+dependencies:
+  open-aea-ledger-ethereum:
+    version: ==1.28.0.post1
+default_connection: null
+---
+public_id: valory/abci:0.1.0
+type: connection
+config:
+  target_skill_id: valory/contribution_abci:0.1.0
+  host: ${ABCI_HOST:str:localhost}
+  port: ${ABCI_PORT:int:26658}
+  use_tendermint: ${ABCI_USE_TENDERMINT:bool:false}
+---
+public_id: valory/ledger:0.19.0
+type: connection
+config:
+  ledger_apis:
+    ethereum:
+      address: ${CONNECTION_LEDGER_CONFIG_LEDGER_APIS_ETHEREUM_ADDRESS:str:http://localhost:8545}
+      chain_id: ${CONNECTION_LEDGER_CONFIG_LEDGER_APIS_ETHEREUM_CHAIN_ID:int:31337}
+      poa_chain: ${CONNECTION_LEDGER_CONFIG_LEDGER_APIS_ETHEREUM_POA_CHAIN:bool:false}
+      default_gas_price_strategy: ${CONNECTION_LEDGER_CONFIG_LEDGER_APIS_ETHEREUM_DEFAULT_GAS_PRICE_STRATEGY:str:eip1559}
+---
+public_id: valory/p2p_libp2p_client:0.1.0
+type: connection
+config:
+  nodes:
+  - uri: ${str:acn.staging.autonolas.tech:9005}
+    public_key: ${str:02d3a830c9d6ea1ae91936951430dee11f4662f33118b02190693be835359a9d77}
+cert_requests:
+- identifier: acn
+  ledger_id: ethereum
+  message_format: '{public_key}'
+  not_after: '2023-01-01'
+  not_before: '2022-01-01'
+  public_key: ${str:02d3a830c9d6ea1ae91936951430dee11f4662f33118b02190693be835359a9d77}
+  save_path: .certs/acn_cosmos_11000.txt
+is_abstract: true
+---
+public_id: valory/impact_evaluator_abci:0.1.0
+type: skill
+models:
+  params:
+    args:
+      ceramic_api_base: ${CEAMIC_API_BASE:str:"https://ceramic-clay.3boxlabs.com/"}
+      ceramic_api_commit_endpoint: ${CEAMIC_API_COMMIT_ENDPOINT:str:"api/v0/commits/{stream_id}"}
+      ceramic_api_read_endpoint: ${CEAMIC_API_READ_ENDPOINT:str:"api/v0/commits/{stream_id}"}
+      ceramic_did_seed: ${CEAMIC_DID_SEED:str:"<default_did_seed>"}
+      ceramic_did_str: ${CEAMIC_DID_STR:str:"<default_did_str>"}
+      ceramic_stream_id: ${CEAMIC_STREAM_ID:str:"<default_stream_id>"}
+      cleanup_history_depth: 1
+      cleanup_history_depth_current: null
+      consensus:
+        max_participants: ${MAX_PARTICIPANTS:int:1}
+      drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
+      earliest_block_to_monitor: ${int:8053690}
+      genesis_config:
+        genesis_time: '2022-09-26T00:00:00.000000000Z'
+        chain_id: chain-c4daS1
+        consensus_params:
+          block:
+            max_bytes: '22020096'
+            max_gas: '-1'
+            time_iota_ms: '1000'
+          evidence:
+            max_age_num_blocks: '100000'
+            max_age_duration: '172800000000000'
+            max_bytes: '1048576'
+          validator:
+            pub_key_types:
+            - ed25519
+          version: {}
+        voting_power: '10'
+      keeper_timeout: 30.0
+      max_healthcheck: 120
+      observation_interval: ${int:300}
+      on_chain_service_id: null
+      reset_tendermint_after: 2
+      retry_attempts: 400
+      retry_timeout: 3
+      round_timeout_seconds: 30.0
+      service_id: impact_evaluator
+      service_registry_address: null
+      setup:
+        all_participants: ${list:[]}
+        safe_contract_address: ${list:[]}
+      share_tm_config_on_startup: ${bool:false}
+      sleep_time: 1
+      dynamic_contribution_contract_address: ${str:"0x5FbDB2315678afecb367f032d93F642f64180aa3"}
+      tendermint_check_sleep_delay: 3
+      tendermint_com_url: ${TENDERMINT_COM_URL:str:"http://localhost:8080"}
+      tendermint_max_retries: 5
+      tendermint_url: ${TENDERMINT_URL:str:"http://localhost:26657"}
+      token_uri_base: ${TOKEN_URI_BASE:str:"https://pfp.staging.autonolas.tech/"}
+      whitelist_api_key: null
+      whitelist_endpoint: http://localhost
+      points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:null}
+      twitter_api_base: ${TWITTER_API_BASE:str:"https://api.twitter.com/"}
+      twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
+      twitter_api_endpoint: ${TWITTER_API_ENDPOINT:str:"2/users/1450081635559428107/mentions?"}
+      twitter_api_args: ${TWITTER_API_ARGS:str:"tweet.fields=author_id&user.fields=name&max_results=100&since_id=0"}
+      twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
+---
+public_id: fetchai/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
+type: connection
+config:
+  host: 0.0.0.0
+  target_skill_id: valory/contribution_abci:0.1.0

@@ -6,13 +6,13 @@ description: The chained abci for the impact_evaluator skill.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeia4476g4pg7hqaovwdtj25jvyrjrkobqtyusut4x6vxkflcbbos6y
-  behaviours.py: bafybeiaqw65372wicegfs2m7dykzlgndunyc6rb5zxlxr7qdmhl4bvo7qa
-  composition.py: bafybeiawmbq7lo25ig77whbblnvytoxm2svaenwi3b4eskk2oeodcqldh4
-  dialogues.py: bafybeif7uhfjkcz3ryhti6gafqxhvciw4ec5bdshxvq3355tun5ydkzrna
+  __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
+  behaviours.py: bafybeiauwwtjzjyceeiew3qkzppyakxcojzzfgha3reo6k7tyvuqo7tolu
+  composition.py: bafybeidap7wb3sckkowiqmfzle56t4is3vy5udjldddib77adzfjjm3r4i
+  dialogues.py: bafybeigpwuzku3we7axmxeamg7vn656maww6emuztau5pg3ebsoquyfdqm
   fsm_specification.yaml: bafybeigvnq5hr4bb2t2wb5hnetpwfdt4t5enzan53fto2avkncxhkadvmq
-  handlers.py: bafybeibd4zsbelbqgzf5u45rjbsec7t6egzwvluofwrq7f6gjmvbbivhgy
-  models.py: bafybeigvbtvxupfr5ma2ja7byuua4dyh7d36f63b3we6fgnfkhwg2eaiga
+  handlers.py: bafybeiaqgaev2nfhuihhuxxxxtuiggin5zcpwn7ik7lok2n6ywi6dqy2ta
+  models.py: bafybeicp72ttjpxlasvql25asiynsz57gggn6droddo4qesxxgwlasbs3u
   tests/__init__.py: bafybeicukkp7ajzvqtmpedzwo23azuorvy5qtftadsxbwmv5zhk2tktjc4
   tests/test_behaviours.py: bafybeib4hqd7l7fdsfvrkee7onl47adz6fqhdtjzll6efwo7uznjwf7lvu
   tests/test_dialogues.py: bafybeigac5y4hysp7lqdhz5zwbwntadr55mmmefvdxkz6dhi6gcosfvdgy
@@ -23,12 +23,12 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
-- valory/score_read_abci:0.1.0:bafybeieyvu4ezod6dhxpyj3jh2la2inpwsjnychmsg735kz6cjfz6aysta
-- valory/score_write_abci:0.1.0:bafybeibtxjdwjxccclfeyereq7ihe2uj5vc4vmhcnf627leli4nmag2z4q
-- valory/dynamic_nft_abci:0.1.0:bafybeigalu3s4ighqnairirucyrzswboce3avuwkzfgey2u6uzmqurnd64
-- valory/registration_abci:0.1.0:bafybeihai2otcmnb2w7k64bnwf5qagfexg5gqow74xhj3wynikgdxre3ka
-- valory/reset_pause_abci:0.1.0:bafybeifs6zpg5nbvuapmxafzo6fdhoz5ebpiujetvk243apo3iwl2rn45i
+- valory/abstract_round_abci:0.1.0:bafybeiczoszdnbiq5rp7zzko6c473rrk7qjpvj7xxskf2szrrolcyp6dvi
+- valory/score_read_abci:0.1.0:bafybeidov6tmqx6dzusqe2vs6wxnwmbzndiwugrfc4ojc63t44ecsuavki
+- valory/score_write_abci:0.1.0:bafybeigo3et6rrlponplj727whwjpsinq3jrjmquhyvg5yuhx2xxe5ppau
+- valory/dynamic_nft_abci:0.1.0:bafybeihhmnolusiscf2jqcvipsyrarw7hfn5p443w6otxuuq435plxzysq
+- valory/registration_abci:0.1.0:bafybeiamkjd2qpkhljojobg74oe7aezhvdbdehgbdb7lwqqhr2rmzkuvim
+- valory/reset_pause_abci:0.1.0:bafybeic5r5fyjwnocytn75hr4io7fvka2bspzjtwacswcob6jy6jgzk2yu
 behaviours:
   main:
     args: {}
@@ -77,7 +77,12 @@ models:
     class_name: LedgerApiDialogues
   params:
     args:
-      basic_image_cid: bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm
+      ceramic_api_base: https://ceramic-clay.3boxlabs.com/
+      ceramic_api_commit_endpoint: api/v0/commits/{stream_id}
+      ceramic_api_read_endpoint: api/v0/commits/{stream_id}
+      ceramic_did_seed: <default_did_seed>
+      ceramic_did_str: <default_did_str>
+      ceramic_stream_id: dummy_stream_id
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       consensus:
@@ -107,6 +112,10 @@ models:
       max_healthcheck: 120
       observation_interval: 10
       on_chain_service_id: null
+      points_to_image_hashes: '{"0": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm",
+        "100": "bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q", "50000":
+        "bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4", "100000": "bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy",
+        "150000": "bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
       request_retry_delay: 1.0
       request_timeout: 10.0
       reset_tendermint_after: 2
@@ -127,6 +136,11 @@ models:
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
       token_uri_base: https://pfp.staging.autonolas.tech/
+      twitter_api_base: https://api.twitter.com/
+      twitter_api_bearer_token: <default_bearer_token>
+      twitter_api_endpoint: 2/users/1450081635559428107/mentions?
+      twitter_api_args: tweet.fields=author_id&user.fields=name&max_results=100&since_id=0
+      twitter_mention_points: 200
       tx_timeout: 10.0
       whitelist_api_key: null
       whitelist_endpoint: http://localhost

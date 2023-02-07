@@ -6,31 +6,31 @@ description: This skill implements the dynamic NFT feature.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeiav5443ke4ldxssxhmpcwxxq7ekax3piggfnywq72fvn4fezzgqxq
-  behaviours.py: bafybeidrmgjhtysuukejybxyergeol63236lbujc5udysx5nhzwnwgqnzq
-  dialogues.py: bafybeifepvv22c44se22l6dn6j7cfnwepqafmiuj5243u3bzbln3p2rgoe
+  __init__.py: bafybeiasfbratsbsxyji2k2xeft3jdqaajwqskjsvbjsqht4mrew6wb2km
+  behaviours.py: bafybeia375nxuphe7hjqujth5xsosxt6fhjy7fdc6pvdpd5iezrcnhmk5e
+  dialogues.py: bafybeiabtq2to7x6bbbnxzrvupz5rky4b6k73y2lw5dmclb6xx74nuzxe4
   fsm_specification.yaml: bafybeihm464d5ol3qumlyb7kb2uhnhki5hsldgjrzkkk4adwmqbxedbw54
-  handlers.py: bafybeigpvibzp6ghxmdacgfqnir422cqhng36afxejekrjgha5knqbmsne
-  models.py: bafybeiduxf4tjeegub3o4xf4lo3yuh4cp3bgbpxvbobb4vsslmrildrwqe
-  payloads.py: bafybeid4xcpguklsgd72joo47laocly6luboelcerx27jsa53uthz2vn2y
-  rounds.py: bafybeieavdkqagkzayhhcr46yr6g76knbft6ibjko3zs266hktw2jcy5zq
+  handlers.py: bafybeic37qss5lcch4fmdcnwnl32yt5ohs2luiyf46sfzwfo5tdtg6oipm
+  models.py: bafybeianeimox27xwxbm5yq6go3ygf3oa2cbuv6h4y64oyjo3m2ua23sxq
+  payloads.py: bafybeia5tm23kb7ho33cgsupvhkywjuv4q3zeaon4mbaerjgdvhlyht4xm
+  rounds.py: bafybeicgrq6pcteifpy4wg4dmarsspt2was5e7nqw5w5boc2p2vgk7quva
   tests/__init__.py: bafybeia2xqlacp44lylwlkf7f7ci6m3yshppv3vusgcdjpj4bbcbnuhvla
-  tests/test_behaviours.py: bafybeiguu6cbqedfo5ilyt3tvxa3rpr5n4zflc6jwgjk2dfjwqqgmpddlu
+  tests/test_behaviours.py: bafybeiakcd76bu4uvny42aa5jq7qofuhewrm7kk74lg7hyq2uxa6mpreyq
   tests/test_dialogues.py: bafybeibfzhpyz2kdokjkz76oxz4sc6nw26dw5pgx5fwvloyfyl2inixwdi
   tests/test_handlers.py: bafybeihes6ie3vlwudn5ncjxgt2luxjdzp73sax2przjh3nasson5w4d2q
   tests/test_models.py: bafybeidqf7caad3zke6xzefmfoufce6bfn5bqgbiy4racghm5w67yddrea
-  tests/test_payloads.py: bafybeiezax2xthzhzhxtwsi2ns5avf5yohsdtamrwh6ge7fia6odr2j5bm
+  tests/test_payloads.py: bafybeihdgzd3swzl534hdkf3tn7dt2gs2yd3soyozsoqiflsptrmhnwqye
   tests/test_rounds.py: bafybeigaavikipnfqf2oq6d7cn7huxdsify5mwf2bmiwlnaaypd37mbjzi
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeic7p2e2ey44k6yv3dzznepekggceqc6mxb55e4xovcjnr3qym5ncu
 contracts:
-- valory/dynamic_contribution:0.1.0:bafybeigrhhytf5lqnu7xy7faz7cghzpye6dnvq2zhkqeydrrnpmtkpudyi
+- valory/dynamic_contribution:0.1.0:bafybeiewycrrihjevhuoqmkctkmgljklxe467jad6rpsk55xflrri5c35a
 protocols:
 - valory/contract_api:1.0.0:bafybeif32nchkgn6yet7e5gt4auhf7lsahxnj4t36kxbw55p3gi7qpeuxq
 - valory/http:1.0.0:bafybeifru3qs6udfzprax7jxktbsuzn7immfvi3scgfspifq3zdxwkgvnm
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
+- valory/abstract_round_abci:0.1.0:bafybeiczoszdnbiq5rp7zzko6c473rrk7qjpvj7xxskf2szrrolcyp6dvi
 behaviours:
   main:
     args: {}

@@ -1,0 +1,80 @@
+{
+  "/mock_sheet_id/values:batchGet": {
+    "get": {
+      "spreadsheetId":"1m7jUYBoK4bFF0F2ZRnT60wUCAMWGMJ_ZfALsLfW5Dxc",
+      "valueRanges":[
+         {
+            "range":"Ranking!B2:C302",
+            "majorDimension":"ROWS",
+            "values":[
+               [
+                  "0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
+                  "1500"
+               ],
+               [
+                  "0x2546BcD3c84621e976D8185a91A922aE77ECEc30",
+                  "900"
+               ],
+               [
+                  "0x71bE63f3384f5fb98995898A86B02Fb2426c5788",
+                  "575"
+               ],
+               [
+                  "0xBcd4042DE499D14e55001CcbB24a551F3b954096",
+                  "100"
+               ],
+               [
+                  "0xFABB0ac9d68B0B445fB7357272Ff202C5651694a",
+                  "3500"
+               ],
+               [
+                  "0xa0Ee7A142d267C1f36714E4a8F75612F20a79720",
+                  "12"
+               ],
+               [
+                  "0xbDA5747bFD65F08deb54cb465eB87D40e51B197E",
+                  "590"
+               ],
+               [
+                  "0xcd3B766CCDd6AE721141F452C550Ca635964ce71",
+                  "1250"
+               ],
+               [
+                  "0xdD2FD4581271e230360230F9337D5c0430Bf44C0",
+                  "480"
+               ],
+               [
+                  "0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097",
+                  "300"
+               ]
+            ]
+         },
+         {
+            "range":"Layers!B1:Z3",
+            "majorDimension":"ROWS",
+            "values":[
+               [
+                  "0:bafybeif4dtvtnqjss4dhmwenxzhbyao6reqoxx5imlzxgxeh4bajnz444u"
+               ],
+               [
+                  "0:bafybeicy22hgzs7kwuw7wswht2q3gmv4daxyoga2mvr5f644lgzfconpn4",
+                  "100:bafybeibhfdzlez66uyeofhz3z4sq6an64i6b2cvadvzahb5iygqyq4gscu"
+               ],
+               [
+                  "0:bafybeicy22hgzs7kwuw7wswht2q3gmv4daxyoga2mvr5f644lgzfconpn4",
+                  "49900:bafybeih67y7g5qstirprambfsqd7dbunyyjlktpfqpukabp4fkrt4ziuba",
+                  "99900:bafybeibiyqmsjgp7ofqktthkgi6up77w4mzrgyzii2mtiodic6h7v2h6de",
+                  "149900:bafybeiheikuwkkwaygtssfkumzhursxh6a76546spakmr6wwrw6v3heb2a"
+               ]
+            ]
+         }
+      ]
+   }
+  },
+  "/mock_whitelist": {
+    "post": {}
+  },
+  "/mock_ipfs/": {
+   "get": {}
+ }
+}
