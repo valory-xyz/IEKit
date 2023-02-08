@@ -29,7 +29,7 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeidwizzka3qjotu35zzstoqunp3hjhkx6oojqnlwqsvd3qnjjpmusq
 - valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
-- valory/impact_evaluator_abci:0.1.0:bafybeidp3bs2qxrivlylvudeo3e7byscgpbcsv6qcenaxce2p4sxvhhthu
+- valory/impact_evaluator_abci:0.1.0:bafybeihzow5jvnm6m7pgdm36gt7c7s2de4gayojmie56kkcugfq44czl4y
 - valory/score_read_abci:0.1.0:bafybeigceotwdnybffv73vj7yg3zzzfcx5polxrbx24t4demuvmhykan4i
 - valory/score_write_abci:0.1.0:bafybeihaukubgqcb6lbtmuvekv7snmno7okpr6piskyzpsh3knzt43xryi
 - valory/dynamic_nft_abci:0.1.0:bafybeic7gwymmk2yae2xteiilhot7vbnmqol2p6b7a3t7tzwcajgfp4dzi
@@ -149,7 +149,7 @@ models:
       service_registry_address: null
       setup:
         all_participants: ${list:[]}
-        safe_contract_address: ${list:[]}
+        safe_contract_address: ${list:["0x0000000000000000000000000000000000000000"]}
       share_tm_config_on_startup: ${bool:false}
       sleep_time: 1
       dynamic_contribution_contract_address: ${str:0x5FbDB2315678afecb367f032d93F642f64180aa3}

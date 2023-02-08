@@ -36,7 +36,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     ScoreReadAbciAbci.FinishedScoringRound: ScoreWriteAbciAbci.RandomnessRound,
     ScoreWriteAbciAbci.FinishedVerificationRound: DynamicNFTAbci.NewTokensRound,
     DynamicNFTAbci.FinishedNewTokensRound: ResetAndPauseAbci.ResetAndPauseRound,
-    ResetAndPauseAbci.FinishedResetAndPauseRound: DynamicNFTAbci.NewTokensRound,
+    ResetAndPauseAbci.FinishedResetAndPauseRound: ScoreReadAbciAbci.TwitterObservationRound,
     ResetAndPauseAbci.FinishedResetAndPauseErrorRound: RegistrationAbci.RegistrationRound,
 }
 
