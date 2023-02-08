@@ -11,7 +11,10 @@
          {
             "author_id": "315490172"
          }
-      ]
+      ],
+      "meta": {
+         "newest_id": 0
+      }
     }
   },
   "api/v0/commits/dummy_stream_id": {

@@ -116,7 +116,7 @@ class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
     extra_configs = [
         {
             "dotted_path": f"{__param_args_prefix}.twitter_api_base",
-            "value": f"{MOCK_TWITTER_API_ADDRESS}:{MOCK_TWITTER_API_PORT}",
+            "value": f"{MOCK_TWITTER_API_ADDRESS}:{MOCK_TWITTER_API_PORT}/",
         },
         {
             "dotted_path": f"{__param_args_prefix}.twitter_api_args",
@@ -124,7 +124,7 @@ class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
         },
         {
             "dotted_path": f"{__param_args_prefix}.ceramic_api_base",
-            "value": f"{MOCK_CERAMIC_API_ADDRESS}:{MOCK_CERAMIC_API_PORT}",
+            "value": f"{MOCK_CERAMIC_API_ADDRESS}:{MOCK_CERAMIC_API_PORT}/",
         },
         {
             "dotted_path": f"{__param_args_prefix}.points_to_image_hashes",

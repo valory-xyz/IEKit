@@ -39,6 +39,9 @@ from packages.valory.skills.score_read_abci.rounds import Event as ScoreReadEven
 from packages.valory.skills.score_write_abci.models import (
     Params as ScoreWriteAbciParams,
 )
+from packages.valory.skills.score_write_abci.models import (
+    RandomnessApi as ScoreWriteRandomnessApi,
+)
 from packages.valory.skills.score_write_abci.rounds import Event as ScoreWriteEvent
 
 
@@ -47,6 +50,7 @@ ScoreWriteParams = ScoreWriteAbciParams
 DynamicNFTParams = DynamicNFTAbciParams
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
+RandomnessApi = ScoreWriteRandomnessApi
 
 MARGIN = 5
 

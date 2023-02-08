@@ -12,7 +12,7 @@ fingerprint:
   dialogues.py: bafybeigpwuzku3we7axmxeamg7vn656maww6emuztau5pg3ebsoquyfdqm
   fsm_specification.yaml: bafybeigvnq5hr4bb2t2wb5hnetpwfdt4t5enzan53fto2avkncxhkadvmq
   handlers.py: bafybeiaqgaev2nfhuihhuxxxxtuiggin5zcpwn7ik7lok2n6ywi6dqy2ta
-  models.py: bafybeifosqfvkzrr6wsridjkbdk5nx2x3gbczrmlzqih3ha2drgkm6crmi
+  models.py: bafybeihkrw4sfkr64sa2zghv5wupywwv24ouax4u5glw3yzqgcif2whcye
   tests/__init__.py: bafybeicukkp7ajzvqtmpedzwo23azuorvy5qtftadsxbwmv5zhk2tktjc4
   tests/test_behaviours.py: bafybeib4hqd7l7fdsfvrkee7onl47adz6fqhdtjzll6efwo7uznjwf7lvu
   tests/test_dialogues.py: bafybeigac5y4hysp7lqdhz5zwbwntadr55mmmefvdxkz6dhi6gcosfvdgy
@@ -145,6 +145,17 @@ models:
       whitelist_api_key: null
       whitelist_endpoint: http://localhost
     class_name: Params
+  randomness_api:
+    args:
+      api_id: cloudflare
+      headers: []
+      method: GET
+      parameters: []
+      response_key: null
+      response_type: dict
+      retries: 5
+      url: https://drand.cloudflare.com/public/latest
+    class_name: RandomnessApi
   requests:
     args: {}
     class_name: Requests
