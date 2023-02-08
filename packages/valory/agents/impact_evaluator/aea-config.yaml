@@ -12,7 +12,7 @@ fingerprint:
   tests/helpers/data/json_server/data.json: bafybeifnbmgsqu5cxnhpg3fnwoo65ulra5cwzrgezcxl2c6bjt7j23wjxa
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
-  tests/test_impact_evaluator.py: bafybeidodp3cwn3l3iu4j4wj6f6gzvkclxc3vgfxppohepgaiu3vilijky
+  tests/test_impact_evaluator.py: bafybeicoy3rzkij6rqhng5i34wa26poj4h5xz4tgl6drr6w2t3g3gvyiqi
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeic7p2e2ey44k6yv3dzznepekggceqc6mxb55e4xovcjnr3qym5ncu
@@ -29,7 +29,7 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeidwizzka3qjotu35zzstoqunp3hjhkx6oojqnlwqsvd3qnjjpmusq
 - valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
-- valory/impact_evaluator_abci:0.1.0:bafybeig6viitlmhbko5k6kojroo3mtch3tikqxzzyhmxeiydaq76ijukai
+- valory/impact_evaluator_abci:0.1.0:bafybeia5rjipn6ssufgofjohdbwcdhis4rd4godg2rt5mem2ae7eqwypw4
 - valory/score_read_abci:0.1.0:bafybeigceotwdnybffv73vj7yg3zzzfcx5polxrbx24t4demuvmhykan4i
 - valory/score_write_abci:0.1.0:bafybeieomly4dpr5j6p6krenhwo44qawjdlep7u5qju3qosly4pymgdlei
 - valory/dynamic_nft_abci:0.1.0:bafybeic7gwymmk2yae2xteiilhot7vbnmqol2p6b7a3t7tzwcajgfp4dzi

@@ -126,6 +126,10 @@ class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
             "dotted_path": f"{__param_args_prefix}.ceramic_api_base",
             "value": f"{MOCK_CERAMIC_API_ADDRESS}:{MOCK_CERAMIC_API_PORT}",
         },
+        {
+            "dotted_path": f"{__param_args_prefix}.points_to_image_hashes",
+            "value": '{"0": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm", "100": "bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q", "50000": "bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4", "100000": "bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy", "150000": "bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}',
+        },
     ]
 
     http_server_port_config = {

@@ -76,5 +76,5 @@ class SharedState(BaseSharedState):
         ] = (self.context.params.observation_interval + MARGIN)
 
 
-class Params(DynamicNFTParams):
+class Params(ScoreReadParams, ScoreWriteParams, DynamicNFTParams):
     """A model to represent params for multiple abci apps."""
