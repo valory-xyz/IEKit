@@ -57,7 +57,7 @@ PACKAGE_DIR = Path(__file__).parent.parent
 DUMMY_USER_TO_SCORES = {"hello": "world"}
 
 CERAMIC_API_STREAM_URL = (
-    "https://ceramic-clay.3boxlabs.com/api/v0/commits/dummy_stream_id"
+    "https://ceramic-clay.3boxlabs.com/api/v0/commits/default_stream_id"
 )
 
 DUMMY_API_RESPONSE_READ = {

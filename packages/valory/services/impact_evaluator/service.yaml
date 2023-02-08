@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibk5iyiobvfgd6w3z75amk7muou3kqqq5rj3mze6rnzlmzpaiwtii
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeifddab4hmpgrox5ghtbpsez6glmmci2g3kny4a2xkhjominyjdzou
+agent: valory/impact_evaluator:0.1.0:bafybeibbatloko5ndx4y4of44a4vttpwddf5rrlo2e5lu3oglz6ket5ryy
 number_of_agents: 4
 ---
 public_id: valory/impact_evaluator_abci:0.1.0
@@ -17,23 +17,23 @@ models:
   params:
     args:
       broadcast_to_server: false
-      ceramic_api_base: ${CEAMIC_API_BASE:str:"https://ceramic-clay.3boxlabs.com/"}
-      ceramic_api_commit_endpoint: ${CEAMIC_API_COMMIT_ENDPOINT:str:"api/v0/commits/{stream_id}"}
-      ceramic_api_read_endpoint: ${CEAMIC_API_READ_ENDPOINT:str:"api/v0/commits/{stream_id}"}
-      ceramic_did_seed: ${CEAMIC_DID_SEED:str:"<default_did_seed>"}
-      ceramic_did_str: ${CEAMIC_DID_STR:str:"<default_did_str>"}
-      ceramic_stream_id: ${CEAMIC_STREAM_ID:str:"<default_stream_id>"}
-      dynamic_contribution_contract_address: ${DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS:str:"0x5FbDB2315678afecb367f032d93F642f64180aa3"}
+      ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
+      ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:"api/v0/commits/{stream_id}"}
+      ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:"api/v0/commits/{stream_id}"}
+      ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
+      ceramic_did_str: ${CERAMIC_DID_STR:str:"did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX"}
+      ceramic_stream_id: ${CERAMIC_STREAM_ID:str:default_stream_id}
+      dynamic_contribution_contract_address: ${DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS:str:0x5FbDB2315678afecb367f032d93F642f64180aa3}
       earliest_block_to_monitor: ${EARLIEST_BLOCK_TO_MONITOR:int:8053690}
       history_end: null
       observation_interval: ${OBSERVATION_INTERVAL:int:300}
       points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:null}
       share_tm_config_on_startup: ${USE_ACN:bool:false}
-      token_uri_base: ${TOKEN_URI_BASE:str:"https://pfp.staging.autonolas.tech/"}
-      twitter_api_base: ${TWITTER_API_BASE:str:"https://api.twitter.com/"}
+      token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
+      twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
       twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
-      twitter_api_endpoint: ${TWITTER_API_ENDPOINT:str:"2/users/1450081635559428107/mentions?"}
-      twitter_api_args: ${TWITTER_API_ARGS:str:"tweet.fields=author_id&user.fields=name&max_results=100&since_id=0"}
+      twitter_api_endpoint: ${TWITTER_API_ENDPOINT:str:2/users/1450081635559428107/mentions?}
+      twitter_api_args: ${TWITTER_API_ARGS:str:tweet.fields=author_id&user.fields=name&max_results=100&since_id=0}
       twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
       consensus:
         max_participants: 4

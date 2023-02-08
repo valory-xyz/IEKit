@@ -17,8 +17,29 @@
       }
     }
   },
-  "api/v0/commits/dummy_stream_id": {
-   "get": {},
+  "/api/v0/commits/default_stream_id": {
+   "get": {
+      "streamId":"kjzl6cwe1jw1470d85wqefuhy1afsg2rjifp518yo5pdqbdsv6uaojidjlyw6oz",
+      "docId":"kjzl6cwe1jw1470d85wqefuhy1afsg2rjifp518yo5pdqbdsv6uaojidjlyw6oz",
+      "commits":[
+         {
+            "cid":"bagcqceraiwr4ljcm2s3eyowfyxlcnu2ee72eyd3sofbnmunwjat5ui7df7rq",
+            "value":{
+               "jws":{
+                  "payload":"AXESINF3WAw1WTmREsBWcg2zx_4SX8ogGnb4YTvK3h5hLe2w",
+                  "signatures":[
+                     {
+                        "signature":"YjxldpSu4An92EgYkEd7yInnkNG4Ydh30pLxUjEedjoWIdW7aJbZ6A1OxTcCDrQO7113TGGqmnbjaH6ODtgUDA",
+                        "protected":"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29uM05lY2Q2TmtreWZvR29IeGlkMnpuR2M1OUxVM0s3bXViYVJjRmJMZkxYI3o2TWtvbjNOZWNkNk5ra3lmb0dvSHhpZDJ6bkdjNTlMVTNLN211YmFSY0ZiTGZMWCJ9"
+                     }
+                  ],
+                  "link":"bafyreigro5maynkzhgirfqcwoig3hr76cjp4uia2o34gco6k3ypgclpnwa"
+               },
+               "linkedBlock":"omRkYXRhoWkzMTU0OTAxNzIZAlhmaGVhZGVyomZ1bmlxdWVwRmk3Z0crODY3UkZ3bXNFbmtjb250cm9sbGVyc4F4OGRpZDprZXk6ejZNa29uM05lY2Q2TmtreWZvR29IeGlkMnpuR2M1OUxVM0s3bXViYVJjRmJMZkxY"
+            }
+         }
+      ]
+   },
    "post": {}
   }
 }

@@ -9,7 +9,7 @@ fingerprint:
   tests/__init__.py: bafybeicmv3jjcqcdnmubfmrgdgeyic3nkm77z4mutsyuo34hpddwupofre
   tests/helpers/__init__.py: bafybeiauwuw4a4wxqacqqkkk52ktps2qedadhypvh3ex7uqs7qaqrpygmy
   tests/helpers/constants.py: bafybeibbokz7gzdlubnjwxrmh4tqckc7j75hfy3ae6l5a63mrbd4hp6l7u
-  tests/helpers/data/json_server/data.json: bafybeieonjr6nzl4uvmsjr7pverq4lnpiytj2lya46n6v2bdgueqeg7sji
+  tests/helpers/data/json_server/data.json: bafybeibpep45ajwjh7qhgw7t6r3qbcxp7iz2kfcut4fhzjagqnmguoob54
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
   tests/test_impact_evaluator.py: bafybeig3h7ncvjcctjh5ohnz64doz7xkdk3nbf5p5ftdoar6xdi2jdvpqu
@@ -29,9 +29,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeidwizzka3qjotu35zzstoqunp3hjhkx6oojqnlwqsvd3qnjjpmusq
 - valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
-- valory/impact_evaluator_abci:0.1.0:bafybeidt3okyotj3xhg4cvoj5xpt75ueswtkx2laek5iuharuymzpc5ity
+- valory/impact_evaluator_abci:0.1.0:bafybeidp3bs2qxrivlylvudeo3e7byscgpbcsv6qcenaxce2p4sxvhhthu
 - valory/score_read_abci:0.1.0:bafybeigceotwdnybffv73vj7yg3zzzfcx5polxrbx24t4demuvmhykan4i
-- valory/score_write_abci:0.1.0:bafybeieomly4dpr5j6p6krenhwo44qawjdlep7u5qju3qosly4pymgdlei
+- valory/score_write_abci:0.1.0:bafybeihaukubgqcb6lbtmuvekv7snmno7okpr6piskyzpsh3knzt43xryi
 - valory/dynamic_nft_abci:0.1.0:bafybeic7gwymmk2yae2xteiilhot7vbnmqol2p6b7a3t7tzwcajgfp4dzi
 - valory/registration_abci:0.1.0:bafybeihai2otcmnb2w7k64bnwf5qagfexg5gqow74xhj3wynikgdxre3ka
 - valory/reset_pause_abci:0.1.0:bafybeifs6zpg5nbvuapmxafzo6fdhoz5ebpiujetvk243apo3iwl2rn45i
@@ -108,12 +108,12 @@ type: skill
 models:
   params:
     args:
-      ceramic_api_base: ${CEAMIC_API_BASE:str:"https://ceramic-clay.3boxlabs.com/"}
-      ceramic_api_commit_endpoint: ${CEAMIC_API_COMMIT_ENDPOINT:str:"api/v0/commits/{stream_id}"}
-      ceramic_api_read_endpoint: ${CEAMIC_API_READ_ENDPOINT:str:"api/v0/commits/{stream_id}"}
-      ceramic_did_seed: ${CEAMIC_DID_SEED:str:"<default_did_seed>"}
-      ceramic_did_str: ${CEAMIC_DID_STR:str:"<default_did_str>"}
-      ceramic_stream_id: ${CEAMIC_STREAM_ID:str:"<default_stream_id>"}
+      ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
+      ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits/{stream_id}}
+      ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
+      ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
+      ceramic_did_str: ${CERAMIC_DID_STR:str:"did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX"}
+      ceramic_stream_id: ${CERAMIC_STREAM_ID:str:default_stream_id}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       consensus:

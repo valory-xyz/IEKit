@@ -25,7 +25,7 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
 - valory/score_read_abci:0.1.0:bafybeigceotwdnybffv73vj7yg3zzzfcx5polxrbx24t4demuvmhykan4i
-- valory/score_write_abci:0.1.0:bafybeieomly4dpr5j6p6krenhwo44qawjdlep7u5qju3qosly4pymgdlei
+- valory/score_write_abci:0.1.0:bafybeihaukubgqcb6lbtmuvekv7snmno7okpr6piskyzpsh3knzt43xryi
 - valory/dynamic_nft_abci:0.1.0:bafybeic7gwymmk2yae2xteiilhot7vbnmqol2p6b7a3t7tzwcajgfp4dzi
 - valory/registration_abci:0.1.0:bafybeihai2otcmnb2w7k64bnwf5qagfexg5gqow74xhj3wynikgdxre3ka
 - valory/reset_pause_abci:0.1.0:bafybeifs6zpg5nbvuapmxafzo6fdhoz5ebpiujetvk243apo3iwl2rn45i
@@ -80,9 +80,9 @@ models:
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
       ceramic_api_commit_endpoint: api/v0/commits/{stream_id}
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
-      ceramic_did_seed: <default_did_seed>
-      ceramic_did_str: <default_did_str>
-      ceramic_stream_id: dummy_stream_id
+      ceramic_did_seed: '0101010101010101010101010101010101010101010101010101010101010101'
+      ceramic_did_str: did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX
+      ceramic_stream_id: default_stream_id
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       consensus:
