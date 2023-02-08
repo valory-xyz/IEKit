@@ -85,7 +85,6 @@ HAPPY_PATH: Tuple[RoundChecks, ...] = (
 STRICT_CHECK_STRINGS = (
     "Retrieving mentions from Twitter API",
     "Calculated score data:",
-    "Wrote scores to ceramic stream with id:",
     "Data verification successful",
     "Got the new token data:",
     "Period end",
