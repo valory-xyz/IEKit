@@ -243,7 +243,7 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
                 self.synchronized_data.user_to_scores, sort_keys=True
             ):
                 self.context.logger.info(
-                    f"An error happened while verifying data.\nExpected data:\n{self.synchronized_data.user_to_scores}. Actual data:\n{data['data']}"
+                    f"An error happened while verifying data.\nExpected data:\n{self.synchronized_data.user_to_scores}. Actual data:\n{data}"
                 )
                 payload_content = CeramicWriteRound.ERROR_PAYLOAD
             else:
