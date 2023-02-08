@@ -72,7 +72,7 @@ default_connection: null
 public_id: valory/abci:0.1.0
 type: connection
 config:
-  target_skill_id: valory/contribution_abci:0.1.0
+  target_skill_id: valory/impact_evaluator_abci:0.1.0
   host: ${ABCI_HOST:str:localhost}
   port: ${ABCI_PORT:int:26658}
   use_tendermint: ${ABCI_USE_TENDERMINT:bool:false}
@@ -171,4 +171,4 @@ public_id: fetchai/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfez
 type: connection
 config:
   host: 0.0.0.0
-  target_skill_id: valory/contribution_abci:0.1.0
+  target_skill_id: valory/impact_evaluator_abci:0.1.0

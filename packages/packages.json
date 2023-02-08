@@ -1,8 +1,8 @@
 {
     "dev": {
-        "agent/valory/impact_evaluator/0.1.0": "bafybeic4o7ypmnrcmvrc6nzdrco3b5haphorvdpib3a5vqr2y3pugd3hjm",
+        "agent/valory/impact_evaluator/0.1.0": "bafybeighewnluqwhrjfehyt4m7b2jicunbbmq3wrvp6rn3wbgcleh7zj6m",
         "contract/valory/dynamic_contribution/0.1.0": "bafybeiewycrrihjevhuoqmkctkmgljklxe467jad6rpsk55xflrri5c35a",
-        "service/valory/impact_evaluator/0.1.0": "bafybeibgz5m6vnyenzq2z6kb6qtso6bzcnzkitstcrg2zwxjwdjutxswia",
+        "service/valory/impact_evaluator/0.1.0": "bafybeigsmfojwljeevqbj7wnkguy7gy63xojgj25r3kaw54amohiqjnqim",
         "skill/valory/dynamic_nft_abci/0.1.0": "bafybeic7gwymmk2yae2xteiilhot7vbnmqol2p6b7a3t7tzwcajgfp4dzi",
         "skill/valory/score_read_abci/0.1.0": "bafybeigceotwdnybffv73vj7yg3zzzfcx5polxrbx24t4demuvmhykan4i",
         "skill/valory/score_write_abci/0.1.0": "bafybeieomly4dpr5j6p6krenhwo44qawjdlep7u5qju3qosly4pymgdlei",
