@@ -23,12 +23,12 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiczoszdnbiq5rp7zzko6c473rrk7qjpvj7xxskf2szrrolcyp6dvi
-- valory/score_read_abci:0.1.0:bafybeiabsq5xwl4tmfguolisbhaoetj4oeqq2muqlsozxxifrzrpfswb6i
-- valory/score_write_abci:0.1.0:bafybeicmcxguizoocqljlaec64o4hh2jny7j7vsz2qqpl33w7wyslnkrqu
-- valory/dynamic_nft_abci:0.1.0:bafybeideq5d5wihmmylvaujufverfwbaxdrxiopnkz4emg56tukbebhcaq
-- valory/registration_abci:0.1.0:bafybeiamkjd2qpkhljojobg74oe7aezhvdbdehgbdb7lwqqhr2rmzkuvim
-- valory/reset_pause_abci:0.1.0:bafybeic5r5fyjwnocytn75hr4io7fvka2bspzjtwacswcob6jy6jgzk2yu
+- valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
+- valory/score_read_abci:0.1.0:bafybeigceotwdnybffv73vj7yg3zzzfcx5polxrbx24t4demuvmhykan4i
+- valory/score_write_abci:0.1.0:bafybeieomly4dpr5j6p6krenhwo44qawjdlep7u5qju3qosly4pymgdlei
+- valory/dynamic_nft_abci:0.1.0:bafybeic7gwymmk2yae2xteiilhot7vbnmqol2p6b7a3t7tzwcajgfp4dzi
+- valory/registration_abci:0.1.0:bafybeihai2otcmnb2w7k64bnwf5qagfexg5gqow74xhj3wynikgdxre3ka
+- valory/reset_pause_abci:0.1.0:bafybeifs6zpg5nbvuapmxafzo6fdhoz5ebpiujetvk243apo3iwl2rn45i
 behaviours:
   main:
     args: {}
