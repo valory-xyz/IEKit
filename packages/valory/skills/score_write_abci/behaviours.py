@@ -279,7 +279,7 @@ class WalletReadBehaviour(ScoreWriteBaseBehaviour):
 
             if not data:
                 self.context.logger.info(
-                    f"An error happened while getting wallet data from the stream"
+                    "An error happened while getting wallet data from the stream"
                 )
                 payload_content = WalletReadRound.ERROR_PAYLOAD
             else:

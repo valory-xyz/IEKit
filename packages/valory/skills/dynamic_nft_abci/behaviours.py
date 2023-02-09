@@ -44,8 +44,6 @@ from packages.valory.skills.dynamic_nft_abci.rounds import (
 NULL_ADDRESS = "0x0000000000000000000000000000000000000000"
 DEFAULT_POINTS = 0
 
-# ADDRESS_TO_TWITTER_IDS = {"0x7b22C1db9EB9014c0d62D18a587dA79D75465f04": "315490172"}
-
 
 class DynamicNFTBaseBehaviour(BaseBehaviour, ABC):
     """Base behaviour for the common apps' skill."""
