@@ -16,6 +16,7 @@ states:
 - RandomnessRound
 - SelectKeeperRound
 - VerificationRound
+- WalletReadRound
 transition_func:
     (CeramicWriteRound, API_ERROR): RandomnessRound
     (CeramicWriteRound, DID_NOT_SEND): RandomnessRound
@@ -28,6 +29,10 @@ transition_func:
     (SelectKeeperRound, NO_MAJORITY): RandomnessRound
     (SelectKeeperRound, ROUND_TIMEOUT): RandomnessRound
     (VerificationRound, API_ERROR): RandomnessRound
-    (VerificationRound, DONE): FinishedWalletReadRound
+    (VerificationRound, DONE): WalletReadRound
     (VerificationRound, NO_MAJORITY): RandomnessRound
     (VerificationRound, ROUND_TIMEOUT): RandomnessRound
+    (WalletReadRound, API_ERROR): RandomnessRound
+    (WalletReadRound, DONE): FinishedWalletReadRound
+    (WalletReadRound, NO_MAJORITY): RandomnessRound
+    (WalletReadRound, ROUND_TIMEOUT): RandomnessRound
