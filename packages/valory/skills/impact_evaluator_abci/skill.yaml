@@ -1,38 +1,38 @@
-name: score_write_abci
+name: impact_evaluator_abci
 author: valory
 version: 0.1.0
 type: skill
-description: A skill that writes user scores to a Ceramic stream.
+description: The chained abci for the impact_evaluator skill.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeifrmnxnnnpitgpdr7i2bjtunda3mckriobf6bvdjo6zbajokj4hyq
-  behaviours.py: bafybeiei3nvt2bve3hjt7sh2bsncafb2zv3dika3de54cqmrv2fikv2rby
-  ceramic/__init__.py: bafybeias4e3s6p5qtx6mmmcwkcd6kvbdnudy7sxai7d2suk75aazzdzdie
-  ceramic/payloads.py: bafybeiglg2e7fvuxrpmpcygzfg2b2exzqhp7vn2ajozjunpka2f6ikch2a
-  dialogues.py: bafybeih2d4h2vaqn76s7npubkejevbwd4fwa6ytsoowntgpqk4d2wpyllu
-  fsm_specification.yaml: bafybeifba3e2dxgtorocbv2volzezzlmqsp7gai3nja6ss27fpritmoj64
-  handlers.py: bafybeiax2wjff4ps3kmbsc2ysihu62ja7xk36gbznjoyagtjhe6fa7ctei
-  models.py: bafybeielhhkmqg6k5ammnkcqvubmz5u7ikn7ydhbd3qcqaryao3kgqehfy
-  payloads.py: bafybeica7u6tovrclaveb7djmtmpctg7wn2psmldjwdbl2ju6fuc4u5pdu
-  rounds.py: bafybeibq7dh47rqqei6n56lnwrc4nrt2hytpz2qjmecryf35dat3se2yoi
-  tests/__init__.py: bafybeiht2sfiedgsx6vk2dott2fdu6rqekt324nf7afbsk3unshcf74fgi
-  tests/test_behaviours.py: bafybeiaws76f2q7wmqtplztcv2vd75i3fjpe3d24cewrgjnubaan2l7xce
-  tests/test_dialogues.py: bafybeifoltm3tyb6prv7mmqoh7uoap6kvmiextyl6k33whjigfxkgsdup4
-  tests/test_handlers.py: bafybeibz75vof3xdzgikipztbyza6ahg2ajq277nrtim2mvzxol37lgn4q
-  tests/test_models.py: bafybeiebtxif37wrac7744vo6pmpbq63adghq6ybtdh6nbw7yvccgbdsdq
-  tests/test_payloads.py: bafybeiekbrsc6ux36ohjnpd4lbfepmkpx2iv3wmaqtafnmr5rinvqhqnma
-  tests/test_rounds.py: bafybeib7y5yaiotdpjtrbvov5n3i4mcvxjklq62n62buk6lrtmeglrogu4
+  __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
+  behaviours.py: bafybeiauwwtjzjyceeiew3qkzppyakxcojzzfgha3reo6k7tyvuqo7tolu
+  composition.py: bafybeibr7tlejcwz5evvxr6xc7hzqegnefk5ixy365nlzq3lxgykh55cee
+  dialogues.py: bafybeigpwuzku3we7axmxeamg7vn656maww6emuztau5pg3ebsoquyfdqm
+  fsm_specification.yaml: bafybeihjtszugdepq5gjvgn4myax6krmvi4oomurq67snzjeo4poshlalq
+  handlers.py: bafybeiaqgaev2nfhuihhuxxxxtuiggin5zcpwn7ik7lok2n6ywi6dqy2ta
+  models.py: bafybeihkrw4sfkr64sa2zghv5wupywwv24ouax4u5glw3yzqgcif2whcye
+  tests/__init__.py: bafybeicukkp7ajzvqtmpedzwo23azuorvy5qtftadsxbwmv5zhk2tktjc4
+  tests/test_behaviours.py: bafybeib4hqd7l7fdsfvrkee7onl47adz6fqhdtjzll6efwo7uznjwf7lvu
+  tests/test_dialogues.py: bafybeigac5y4hysp7lqdhz5zwbwntadr55mmmefvdxkz6dhi6gcosfvdgy
+  tests/test_handlers.py: bafybeibk337l5p2hfgr4mcwecd55tfatzxkfdiia7qh7wy7jb6vqg64blm
+  tests/test_models.py: bafybeigqy2ofyk7ni2r6anbvojy6zy554caloiktnsd7sbldfvjjdd2wki
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
+- valory/score_read_abci:0.1.0:bafybeigceotwdnybffv73vj7yg3zzzfcx5polxrbx24t4demuvmhykan4i
+- valory/score_write_abci:0.1.0:bafybeigyqjipket4u7ddvoddq2alpujeqv6fujousja65tp6k3kslfhry4
+- valory/dynamic_nft_abci:0.1.0:bafybeic7gwymmk2yae2xteiilhot7vbnmqol2p6b7a3t7tzwcajgfp4dzi
+- valory/registration_abci:0.1.0:bafybeihai2otcmnb2w7k64bnwf5qagfexg5gqow74xhj3wynikgdxre3ka
+- valory/reset_pause_abci:0.1.0:bafybeifs6zpg5nbvuapmxafzo6fdhoz5ebpiujetvk243apo3iwl2rn45i
 behaviours:
   main:
     args: {}
-    class_name: ScoreWriteRoundBehaviour
+    class_name: ImpactEvaluatorConsensusBehaviour
 handlers:
   abci:
     args: {}
@@ -43,6 +43,9 @@ handlers:
   http:
     args: {}
     class_name: HttpHandler
+  ipfs:
+    args: {}
+    class_name: IpfsHandler
   ledger_api:
     args: {}
     class_name: LedgerApiHandler
@@ -66,6 +69,9 @@ models:
   http_dialogues:
     args: {}
     class_name: HttpDialogues
+  ipfs_dialogues:
+    args: {}
+    class_name: IpfsDialogues
   ledger_api_dialogues:
     args: {}
     class_name: LedgerApiDialogues
@@ -82,8 +88,10 @@ models:
       consensus:
         max_participants: 1
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
-      finalize_timeout: 60.0
+      dynamic_contribution_contract_address: '0x5FbDB2315678afecb367f032d93F642f64180aa3'
+      earliest_block_to_monitor: 8053690
       genesis_config:
+        genesis_time: '2022-09-26T00:00:00.000000000Z'
         chain_id: chain-c4daS1
         consensus_params:
           block:
@@ -91,31 +99,35 @@ models:
             max_gas: '-1'
             time_iota_ms: '1000'
           evidence:
-            max_age_duration: '172800000000000'
             max_age_num_blocks: '100000'
+            max_age_duration: '172800000000000'
             max_bytes: '1048576'
           validator:
             pub_key_types:
             - ed25519
           version: {}
-        genesis_time: '2022-05-20T16:00:21.735122717Z'
         voting_power: '10'
-      history_check_timeout: 1205
-      keeper_allowed_retries: 3
       keeper_timeout: 30.0
       max_attempts: 10
       max_healthcheck: 120
       observation_interval: 10
       on_chain_service_id: null
+      points_to_image_hashes: '{"0": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm",
+        "100": "bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q", "50000":
+        "bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4", "100000": "bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy",
+        "150000": "bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
       request_retry_delay: 1.0
       request_timeout: 10.0
       reset_tendermint_after: 2
       retry_attempts: 400
       retry_timeout: 3
       round_timeout_seconds: 30.0
-      service_id: score_read
+      service_id: impact_evaluator
       service_registry_address: null
-      setup: {}
+      setup:
+        all_participants: []
+        safe_contract_address:
+        - '0x0000000000000000000000000000000000000000'
       share_tm_config_on_startup: false
       sleep_time: 1
       tendermint_check_sleep_delay: 3
@@ -123,8 +135,15 @@ models:
       tendermint_max_retries: 5
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
+      token_uri_base: https://pfp.staging.autonolas.tech/
+      twitter_api_base: https://api.twitter.com/
+      twitter_api_bearer_token: <default_bearer_token>
+      twitter_api_endpoint: 2/users/1450081635559428107/mentions?
+      twitter_api_args: tweet.fields=author_id&user.fields=name&max_results=100&since_id=0
+      twitter_mention_points: 200
       tx_timeout: 10.0
-      validate_timeout: 1205
+      whitelist_api_key: null
+      whitelist_endpoint: http://localhost
     class_name: Params
   randomness_api:
     args:
@@ -150,14 +169,6 @@ models:
     args: {}
     class_name: TendermintDialogues
 dependencies:
-  Authlib:
-    version: ==1.2.0
-  dag-cbor:
-    version: ==0.2.2
-  cryptography:
-    version: ==39.0.0
-  jsonpatch:
-    version: ==1.32
-  multiformats:
-    version: ==0.1.4.post3
-is_abstract: true
+  open-aea-cli-ipfs:
+    version: <2.0.0,>=1.27.0
+is_abstract: false

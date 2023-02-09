@@ -1,37 +1,40 @@
-name: score_read_abci
+name: dynamic_nft_abci
 author: valory
 version: 0.1.0
 type: skill
-description: A skill that reads mentions from the Twitter API and assigns scores to
-  the users.
+description: This skill implements the dynamic NFT feature.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeiaihgox5qvdfcwwo7xj3f5brxtexkpmu6zuppcqcadygadz2xjgua
-  behaviours.py: bafybeigcq2dede7tb35cyx6s4bghrqj7avqmavm4ayassvb6tl3knhz5oe
-  dialogues.py: bafybeihzb65chutzt4j2kqo5lfzddwbsrnefmnp2gco2z3nrwknpry2s64
-  fsm_specification.yaml: bafybeibna2fcbi64vekws364kaw4vcrkamdjrl6vvscp3cvpb3keqmorce
-  handlers.py: bafybeibx6spjkdoko37b6opwhhvmftsdi32hfpmlk73nkmujz3wwi6jn5m
-  models.py: bafybeie3vfd6hgtve6ehxyc2m4ekufxntbkpxm36grlqkoaxaqyc3he6im
-  payloads.py: bafybeiblmc4a6b74xf5wnnshu255xbmbixgrqhkhy3zwlspf6odlcck74u
-  rounds.py: bafybeifmasttcn734hpo5hssx3oqgr2kqajyproh2xxukgset6kpbxc3e4
-  tests/__init__.py: bafybeigz2mhcrhytwp5swse6tqwlidybjfhsuvp5ilegmhthfaitzvv4pa
-  tests/test_behaviours.py: bafybeid2qsgh5tth6ic6ikrspadjs7cjuamqrtaf3w5lg776m7cp7dyixy
-  tests/test_dialogues.py: bafybeicgx3uspr6lh54364nmklbakjzmj5vjqgaoafr2xmel66nv7xrcii
-  tests/test_handlers.py: bafybeihhxn6uawckdodoank5jgqnhk2cb7js24re3vl2wduh2rvuntyflu
-  tests/test_models.py: bafybeibbb5mnltyr2w6afwaghd24ie5m7izgrcifv7yqa75z4jc6tl7j5m
-  tests/test_payloads.py: bafybeidjdrcjzi7rhzdg7rjkinmjv74pvodgj3zmnfu6sy6zffymnkzqey
-  tests/test_rounds.py: bafybeidrcvb57f6b7cf62r5ktm2jjd3sxlawqy6f7rux7tsehngdy75csa
+  __init__.py: bafybeiasfbratsbsxyji2k2xeft3jdqaajwqskjsvbjsqht4mrew6wb2km
+  behaviours.py: bafybeibt62ng3rr5ohx3x7hj7glraco54q5ewsxcgx2pwla5my5yxuxici
+  dialogues.py: bafybeiabtq2to7x6bbbnxzrvupz5rky4b6k73y2lw5dmclb6xx74nuzxe4
+  fsm_specification.yaml: bafybeihm464d5ol3qumlyb7kb2uhnhki5hsldgjrzkkk4adwmqbxedbw54
+  handlers.py: bafybeic37qss5lcch4fmdcnwnl32yt5ohs2luiyf46sfzwfo5tdtg6oipm
+  models.py: bafybeianeimox27xwxbm5yq6go3ygf3oa2cbuv6h4y64oyjo3m2ua23sxq
+  payloads.py: bafybeia5tm23kb7ho33cgsupvhkywjuv4q3zeaon4mbaerjgdvhlyht4xm
+  rounds.py: bafybeigrghqip56plabllcsso6jdk5rbmenlf33w6vun3y3dvgt3l3s2xa
+  tests/__init__.py: bafybeia2xqlacp44lylwlkf7f7ci6m3yshppv3vusgcdjpj4bbcbnuhvla
+  tests/test_behaviours.py: bafybeiakcd76bu4uvny42aa5jq7qofuhewrm7kk74lg7hyq2uxa6mpreyq
+  tests/test_dialogues.py: bafybeibfzhpyz2kdokjkz76oxz4sc6nw26dw5pgx5fwvloyfyl2inixwdi
+  tests/test_handlers.py: bafybeihes6ie3vlwudn5ncjxgt2luxjdzp73sax2przjh3nasson5w4d2q
+  tests/test_models.py: bafybeidqf7caad3zke6xzefmfoufce6bfn5bqgbiy4racghm5w67yddrea
+  tests/test_payloads.py: bafybeihdgzd3swzl534hdkf3tn7dt2gs2yd3soyozsoqiflsptrmhnwqye
+  tests/test_rounds.py: bafybeidlg2h6lycc5ob53fvd74gjhya2dep2spby4z5cunamn75bsbphcy
 fingerprint_ignore_patterns: []
-connections: []
-contracts: []
-protocols: []
+connections:
+- fetchai/http_server:0.22.0:bafybeic7p2e2ey44k6yv3dzznepekggceqc6mxb55e4xovcjnr3qym5ncu
+contracts:
+- valory/dynamic_contribution:0.1.0:bafybeiewycrrihjevhuoqmkctkmgljklxe467jad6rpsk55xflrri5c35a
+protocols:
+- valory/contract_api:1.0.0:bafybeif32nchkgn6yet7e5gt4auhf7lsahxnj4t36kxbw55p3gi7qpeuxq
+- valory/http:1.0.0:bafybeifru3qs6udfzprax7jxktbsuzn7immfvi3scgfspifq3zdxwkgvnm
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
 behaviours:
   main:
     args: {}
-    class_name: ScoreReadRoundBehaviour
+    class_name: DynamicNFTRoundBehaviour
 handlers:
   abci:
     args: {}
@@ -42,6 +45,9 @@ handlers:
   http:
     args: {}
     class_name: HttpHandler
+  ipfs:
+    args: {}
+    class_name: IpfsHandler
   ledger_api:
     args: {}
     class_name: LedgerApiHandler
@@ -65,6 +71,9 @@ models:
   http_dialogues:
     args: {}
     class_name: HttpDialogues
+  ipfs_dialogues:
+    args: {}
+    class_name: IpfsDialogues
   ledger_api_dialogues:
     args: {}
     class_name: LedgerApiDialogues
@@ -75,8 +84,10 @@ models:
       consensus:
         max_participants: 1
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
-      finalize_timeout: 60.0
+      dynamic_contribution_contract_address: '0x5FbDB2315678afecb367f032d93F642f64180aa3'
+      earliest_block_to_monitor: 8053690
       genesis_config:
+        genesis_time: '2022-09-26T00:00:00.000000000Z'
         chain_id: chain-c4daS1
         consensus_params:
           block:
@@ -84,29 +95,30 @@ models:
             max_gas: '-1'
             time_iota_ms: '1000'
           evidence:
-            max_age_duration: '172800000000000'
             max_age_num_blocks: '100000'
+            max_age_duration: '172800000000000'
             max_bytes: '1048576'
           validator:
             pub_key_types:
             - ed25519
           version: {}
-        genesis_time: '2022-05-20T16:00:21.735122717Z'
         voting_power: '10'
-      history_check_timeout: 1205
-      keeper_allowed_retries: 3
       keeper_timeout: 30.0
       max_attempts: 10
       max_healthcheck: 120
       observation_interval: 10
       on_chain_service_id: null
+      points_to_image_hashes: '{"0": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm",
+        "100": "bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q", "50000":
+        "bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4", "100000": "bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy",
+        "150000": "bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
       request_retry_delay: 1.0
       request_timeout: 10.0
       reset_tendermint_after: 2
       retry_attempts: 400
       retry_timeout: 3
       round_timeout_seconds: 30.0
-      service_id: score_read
+      service_id: contribution_service
       service_registry_address: null
       setup: {}
       share_tm_config_on_startup: false
@@ -116,13 +128,8 @@ models:
       tendermint_max_retries: 5
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
+      token_uri_base: https://pfp.staging.autonolas.tech/
       tx_timeout: 10.0
-      twitter_api_base: https://api.twitter.com/
-      twitter_api_bearer_token: <default_bearer_token>
-      twitter_api_endpoint: 2/users/1450081635559428107/mentions?
-      twitter_api_args: tweet.fields=author_id&user.fields=name&max_results=100&since_id=0
-      twitter_mention_points: 200
-      validate_timeout: 1205
     class_name: Params
   requests:
     args: {}

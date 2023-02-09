@@ -76,7 +76,7 @@ common-checks-1:
 
 .PHONY: test
 test:
-	pytest -rfE packages/valory/skills/score_read_abci -rfE packages/valory/skills/score_write_abci --cov-report=html --cov=packages.valory.skills.score_read_abci --cov=packages.valory.skills.score_write_abci --cov-report=xml --cov-report=term --cov-report=term-missing --cov-config=.coveragerc
+	pytest -rfE packages/valory/skills/score_read_abci -rfE packages/valory/skills/score_write_abci -rfE packages/valory/skills/impact_evaluator_abci -rfE packages/valory/skills/dynamic_nft_abci --cov-report=html --cov=packages.valory.skills.score_read_abci --cov=packages.valory.skills.score_write_abci --cov=packages.valory.skills.dynamic_nft_abci --cov=packages.valory.skills.impact_evaluator_abci --cov-report=xml --cov-report=term --cov-report=term-missing --cov-config=.coveragerc
 	find . -name ".coverage*" -not -name ".coveragerc" -exec rm -fr "{}" \;
 
 v := $(shell pip -V | grep virtualenvs)
@@ -102,7 +102,11 @@ new_env: clean
 
 .PHONY: fix-abci-app-specs
 fix-abci-app-specs:
-	export PYTHONPATH=${PYTHONPATH}:${PWD} && autonomy analyse fsm-specs --update --app-class ScoreReadAbciApp --package packages/valory/skills/score_read_abci/ || (echo "Failed to check score_read_abci abci consistency" && exit 1)
+	export PYTHONPATH=${PYTHONPATH}:${PWD}
+	autonomy analyse fsm-specs --update --app-class ScoreReadAbciApp --package packages/valory/skills/score_read_abci/ || (echo "Failed to check score_read_abci abci consistency" && exit 1)
+	autonomy analyse fsm-specs --update --app-class ScoreWriteAbciApp --package packages/valory/skills/score_write_abci/ || (echo "Failed to check score_write_abci abci consistency" && exit 1)
+	autonomy analyse fsm-specs --update --app-class DynamicNFTAbciApp --package packages/valory/skills/dynamic_nft_abci_abci/ || (echo "Failed to check dynamic_nft_abci_abci abci consistency" && exit 1)
+	autonomy analyse fsm-specs --update --app-class ImpactEvaluatorAbciApp --package packages/valory/skills/impact_evaluator_abci/ || (echo "Failed to check impact_evaluator_abci abci consistency" && exit 1)
 
 .PHONY: all-linters
 all-linters:

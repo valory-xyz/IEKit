@@ -131,8 +131,12 @@ class ScoringBehaviour(ScoreReadBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
+            score_data = self._assign_scores()
+
+            self.context.logger.info(f"Calculated score data: {score_data}")
+
             payload_data = json.dumps(
-                self._assign_scores(),
+                score_data,
                 sort_keys=True,
             )
 

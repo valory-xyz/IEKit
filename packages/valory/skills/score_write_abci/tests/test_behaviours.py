@@ -57,7 +57,7 @@ PACKAGE_DIR = Path(__file__).parent.parent
 DUMMY_USER_TO_SCORES = {"hello": "world"}
 
 CERAMIC_API_STREAM_URL = (
-    "https://ceramic-clay.3boxlabs.com/api/v0/commits/dummy_stream_id"
+    "https://ceramic-clay.3boxlabs.com/api/v0/commits/default_stream_id"
 )
 
 DUMMY_API_RESPONSE_READ = {
@@ -328,7 +328,7 @@ class TestCeramicWriteBehaviourSender(BaseScoreWriteTest):
         # Write data call
         self.mock_http_request(
             request_kwargs=dict(
-                method="GET",
+                method="POST",
                 headers="",
                 version="",
                 url=CERAMIC_API_STREAM_URL,
@@ -438,7 +438,7 @@ class TestCeramicWriteBehaviourApiError(BaseScoreWriteTest):
         if kwargs.get("read_data")["status"] == 200:
             self.mock_http_request(
                 request_kwargs=dict(
-                    method="GET",
+                    method="POST",
                     headers="",
                     version="",
                     url=CERAMIC_API_STREAM_URL,

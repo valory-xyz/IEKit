@@ -1,0 +1,68 @@
+name: impact_evaluator
+author: valory
+version: 0.1.0
+description: A service that tracks mentions on Twitter, assigns scores to them and
+  updates community member' NFTs autonomously.
+aea_version: '>=1.0.0, <2.0.0'
+license: Apache-2.0
+fingerprint:
+  README.md: bafybeibk5iyiobvfgd6w3z75amk7muou3kqqq5rj3mze6rnzlmzpaiwtii
+fingerprint_ignore_patterns: []
+agent: valory/impact_evaluator:0.1.0:bafybeibwxte6i5gp3zqwcfd7y2rsuvxmpvyez6gdkh2grezfxel4jqeh4m
+number_of_agents: 4
+---
+public_id: valory/impact_evaluator_abci:0.1.0
+type: skill
+models:
+  params:
+    args:
+      broadcast_to_server: false
+      ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
+      ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:"api/v0/commits/{stream_id}"}
+      ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:"api/v0/commits/{stream_id}"}
+      ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
+      ceramic_did_str: ${CERAMIC_DID_STR:str:"did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX"}
+      ceramic_stream_id: ${CERAMIC_STREAM_ID:str:default_stream_id}
+      dynamic_contribution_contract_address: ${DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS:str:0x5FbDB2315678afecb367f032d93F642f64180aa3}
+      earliest_block_to_monitor: ${EARLIEST_BLOCK_TO_MONITOR:int:8053690}
+      history_end: null
+      observation_interval: ${OBSERVATION_INTERVAL:int:300}
+      points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:null}
+      share_tm_config_on_startup: ${USE_ACN:bool:false}
+      token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
+      twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
+      twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
+      twitter_api_endpoint: ${TWITTER_API_ENDPOINT:str:2/users/1450081635559428107/mentions?}
+      twitter_api_args: ${TWITTER_API_ARGS:str:tweet.fields=author_id&user.fields=name&max_results=100&since_id=0}
+      twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
+      consensus:
+        max_participants: 4
+      setup:
+        all_participants: ${ALL_PARTICIPANTS:list:[]}
+        safe_contract_address:
+        - '0x0000000000000000000000000000000000000000'
+---
+public_id: valory/ledger:0.19.0
+type: connection
+config:
+  ledger_apis:
+    ethereum:
+      address: ${ETHEREUM_LEDGER_RPC:str:http://host.docker.internal:8545}
+      chain_id: ${ETHEREUM_LEDGER_CHAIN_ID:int:31337}
+      poa_chain: ${ETHEREUM_LEDGER_IS_POA_CHAIN:bool:false}
+      default_gas_price_strategy: ${ETHEREUM_LEDGER_PRICING:str:eip1559}
+---
+public_id: valory/p2p_libp2p_client:0.1.0
+type: connection
+config:
+  nodes:
+  - uri: ${ACN_URI:str:acn.staging.autonolas.tech:9005}
+    public_key: ${ACN_NODE_PUBLIC_KEY:str:02d3a830c9d6ea1ae91936951430dee11f4662f33118b02190693be835359a9d77}
+cert_requests:
+- identifier: acn
+  ledger_id: ethereum
+  message_format: '{public_key}'
+  not_after: '2023-01-01'
+  not_before: '2022-01-01'
+  public_key: ${ACN_NODE_PUBLIC_KEY:str:02d3a830c9d6ea1ae91936951430dee11f4662f33118b02190693be835359a9d77}
+  save_path: .certs/acn_cosmos_11000.txt
