@@ -34,7 +34,7 @@ from packages.valory.skills.abstract_round_abci.abci_app_chain import (
 abci_app_transition_mapping: AbciAppTransitionMapping = {
     RegistrationAbci.FinishedRegistrationRound: ScoreReadAbciAbci.TwitterObservationRound,
     ScoreReadAbciAbci.FinishedScoringRound: ScoreWriteAbciAbci.RandomnessRound,
-    ScoreWriteAbciAbci.FinishedVerificationRound: DynamicNFTAbci.NewTokensRound,
+    ScoreWriteAbciAbci.FinishedWalletReadRound: DynamicNFTAbci.NewTokensRound,
     DynamicNFTAbci.FinishedNewTokensRound: ResetAndPauseAbci.ResetAndPauseRound,
     ResetAndPauseAbci.FinishedResetAndPauseRound: ScoreReadAbciAbci.TwitterObservationRound,
     ResetAndPauseAbci.FinishedResetAndPauseErrorRound: RegistrationAbci.RegistrationRound,

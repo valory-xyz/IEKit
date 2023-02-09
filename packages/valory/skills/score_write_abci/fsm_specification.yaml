@@ -6,13 +6,13 @@ alphabet_in:
 - ROUND_TIMEOUT
 default_start_state: RandomnessRound
 final_states:
-- FinishedVerificationRound
+- FinishedWalletReadRound
 label: ScoreWriteAbciApp
 start_states:
 - RandomnessRound
 states:
 - CeramicWriteRound
-- FinishedVerificationRound
+- FinishedWalletReadRound
 - RandomnessRound
 - SelectKeeperRound
 - VerificationRound
@@ -28,6 +28,6 @@ transition_func:
     (SelectKeeperRound, NO_MAJORITY): RandomnessRound
     (SelectKeeperRound, ROUND_TIMEOUT): RandomnessRound
     (VerificationRound, API_ERROR): RandomnessRound
-    (VerificationRound, DONE): FinishedVerificationRound
+    (VerificationRound, DONE): FinishedWalletReadRound
     (VerificationRound, NO_MAJORITY): RandomnessRound
     (VerificationRound, ROUND_TIMEOUT): RandomnessRound

@@ -86,6 +86,7 @@ STRICT_CHECK_STRINGS = (
     "Retrieving mentions from Twitter API",
     "Calculated score data:",
     "Data verification successful",
+    "Retrieved wallet data from Ceramic:",
     "Got the new token data:",
     "Period end",
 )
