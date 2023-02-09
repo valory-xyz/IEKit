@@ -80,45 +80,80 @@ class TwitterObservationBehaviour(ScoreReadBaseBehaviour):
 
         api_base = self.params.twitter_api_base
         api_endpoint = self.params.twitter_api_endpoint
-        api_args = self.params.twitter_api_args
-        url = api_base + api_endpoint + api_args
+        next_tweet_id = (
+            self.synchronized_data.latest_tweet_id + 1
+            if self.synchronized_data.latest_tweet_id != 0
+            else 0
+        )
+        api_args = self.params.twitter_api_args.replace(
+            "{since_id}", str(next_tweet_id)
+        )
+        api_url = api_base + api_endpoint + api_args
         headers = [
             OrderedDict(Authorization=f"Bearer {self.params.twitter_api_bearer_token}")
         ]
 
-        self.context.logger.info(f"Retrieving mentions from Twitter API [{url}]")
-        response = yield from self.get_http_response(
-            method="GET", url=url, headers=headers
-        )
+        self.context.logger.info(f"Retrieving mentions from Twitter API [{api_url}]")
 
-        if response.status_code != 200:
-            self.context.logger.error(
-                f"Error retrieving mentions from Twitter [{response.status_code}]"
+        mentions = []
+        next_token = None
+        latest_tweet_id = None
+
+        # Pagination loop
+        while True:
+
+            url = api_url
+
+            # Add the pagination token if it exists
+            if next_token:
+                url += f"&pagination_token={next_token}"
+
+            # Make the request
+            response = yield from self.get_http_response(
+                method="GET", url=url, headers=headers
             )
-            return TwitterObservationRound.ERROR_PAYLOAD
 
-        api_data = json.loads(response.body)
+            # Check response status
+            if response.status_code != 200:
+                self.context.logger.error(
+                    f"Error retrieving mentions from Twitter [{response.status_code}]"
+                )
+                return TwitterObservationRound.ERROR_PAYLOAD
+
+            api_data = json.loads(response.body)
+
+            mentions += api_data["data"]
+            latest_tweet_id = api_data["meta"]["newest_id"]
+
+            if "next_token" in api_data["meta"]:
+                next_token = api_data["meta"]["next_token"]
+                continue
+
+            break
+
+        user_to_mentions = self._count_mentions(mentions)
 
         return json.dumps(
-            self._count_mentions(api_data),
+            {
+                "user_to_mentions": user_to_mentions,
+                "latest_tweet_id": latest_tweet_id,
+            },
             sort_keys=True,
         )
 
-    def _count_mentions(self, api_data: Dict) -> Dict:
+    def _count_mentions(self, mentions: Dict) -> Dict:
         """Process Twitter API data"""
 
         user_to_mentions: Dict[str, int] = {}
-        for tweet in api_data["data"]:
+
+        for tweet in mentions:
             author = tweet["author_id"]
             if author not in user_to_mentions:
                 user_to_mentions[author] = 1
             else:
                 user_to_mentions[author] = user_to_mentions[author] + 1
 
-        return {
-            "user_to_mentions": user_to_mentions,
-            "latest_tweet_id": api_data["meta"]["newest_id"],
-        }
+        return user_to_mentions
 
 
 class ScoringBehaviour(ScoreReadBaseBehaviour):

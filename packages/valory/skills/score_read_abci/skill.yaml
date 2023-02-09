@@ -8,20 +8,20 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaihgox5qvdfcwwo7xj3f5brxtexkpmu6zuppcqcadygadz2xjgua
-  behaviours.py: bafybeigcq2dede7tb35cyx6s4bghrqj7avqmavm4ayassvb6tl3knhz5oe
+  behaviours.py: bafybeibamjrhvce5n6yihi4b26m22mbgqjdpj3objyknxuqz7ltoejolme
   dialogues.py: bafybeihzb65chutzt4j2kqo5lfzddwbsrnefmnp2gco2z3nrwknpry2s64
   fsm_specification.yaml: bafybeibna2fcbi64vekws364kaw4vcrkamdjrl6vvscp3cvpb3keqmorce
   handlers.py: bafybeibx6spjkdoko37b6opwhhvmftsdi32hfpmlk73nkmujz3wwi6jn5m
   models.py: bafybeie3vfd6hgtve6ehxyc2m4ekufxntbkpxm36grlqkoaxaqyc3he6im
   payloads.py: bafybeiblmc4a6b74xf5wnnshu255xbmbixgrqhkhy3zwlspf6odlcck74u
-  rounds.py: bafybeifmasttcn734hpo5hssx3oqgr2kqajyproh2xxukgset6kpbxc3e4
+  rounds.py: bafybeibbobwzyzq7bo6nvef4g2e3bk6kki7beat5dvdlluodfca3bgrnqy
   tests/__init__.py: bafybeigz2mhcrhytwp5swse6tqwlidybjfhsuvp5ilegmhthfaitzvv4pa
-  tests/test_behaviours.py: bafybeid2qsgh5tth6ic6ikrspadjs7cjuamqrtaf3w5lg776m7cp7dyixy
+  tests/test_behaviours.py: bafybeig6rlgw7kf65kypzbybbotx7hvqp3hifo5ypzbj4e5hcztiu26pke
   tests/test_dialogues.py: bafybeicgx3uspr6lh54364nmklbakjzmj5vjqgaoafr2xmel66nv7xrcii
   tests/test_handlers.py: bafybeihhxn6uawckdodoank5jgqnhk2cb7js24re3vl2wduh2rvuntyflu
   tests/test_models.py: bafybeibbb5mnltyr2w6afwaghd24ie5m7izgrcifv7yqa75z4jc6tl7j5m
   tests/test_payloads.py: bafybeidjdrcjzi7rhzdg7rjkinmjv74pvodgj3zmnfu6sy6zffymnkzqey
-  tests/test_rounds.py: bafybeidrcvb57f6b7cf62r5ktm2jjd3sxlawqy6f7rux7tsehngdy75csa
+  tests/test_rounds.py: bafybeiehp6rr2ckbpqz2ouqf63w6yajilwpswehedldnywcfwk36lfobh4
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
@@ -120,7 +120,7 @@ models:
       twitter_api_base: https://api.twitter.com/
       twitter_api_bearer_token: <default_bearer_token>
       twitter_api_endpoint: 2/users/1450081635559428107/mentions?
-      twitter_api_args: tweet.fields=author_id&user.fields=name&max_results=100&since_id=0
+      twitter_api_args: tweet.fields=author_id&user.fields=name&max_results=100&since_id={since_id}
       twitter_mention_points: 200
       validate_timeout: 1205
     class_name: Params

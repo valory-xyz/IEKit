@@ -161,7 +161,7 @@ class TestTwitterObservationBehaviour(BaseSwaapTest):
         self.complete(test_case.event)
 
 
-class TestBinanceObservationBehaviourAPIError(BaseSwaapTest):
+class TestTwitterObservationBehaviourAPIError(BaseSwaapTest):
     """Tests BinanceObservationBehaviour"""
 
     behaviour_class = TwitterObservationBehaviour

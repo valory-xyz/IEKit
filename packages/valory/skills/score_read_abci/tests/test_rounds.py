@@ -50,9 +50,6 @@ from packages.valory.skills.score_read_abci.rounds import (
     SynchronizedData,
     TwitterObservationRound,
 )
-from packages.valory.skills.score_read_abci.tests.test_behaviours import (
-    DUMMY_API_RESPONSE,
-)
 
 
 @dataclass
@@ -92,7 +89,10 @@ def get_dummy_twitter_observation_payload_serialized(api_error: bool = False) ->
     if api_error:
         return json.dumps({})
     return json.dumps(
-        {"api_data": DUMMY_API_RESPONSE},
+        {
+            "user_to_mentions": {"user_a": 1, "user_b": 2},
+            "latest_tweet_id": "dummy_latest_tweet_id",
+        },
         sort_keys=True,
     )
 
@@ -155,6 +155,7 @@ class TestTwitterObservationRound(BaseScoreReadRoundTest):
                     "most_voted_api_data": json.loads(
                         get_dummy_twitter_observation_payload_serialized()
                     ),
+                    "latest_tweet_id": "dummy_latest_tweet_id",
                 },
                 event=Event.DONE,
                 most_voted_payload=get_dummy_twitter_observation_payload_serialized(),

@@ -24,7 +24,7 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
-- valory/score_read_abci:0.1.0:bafybeigceotwdnybffv73vj7yg3zzzfcx5polxrbx24t4demuvmhykan4i
+- valory/score_read_abci:0.1.0:bafybeifowittxtpbnlpafyjya37dt7a3fejbwasfnxhmcwxlso6znww5lm
 - valory/score_write_abci:0.1.0:bafybeigyqjipket4u7ddvoddq2alpujeqv6fujousja65tp6k3kslfhry4
 - valory/dynamic_nft_abci:0.1.0:bafybeic7gwymmk2yae2xteiilhot7vbnmqol2p6b7a3t7tzwcajgfp4dzi
 - valory/registration_abci:0.1.0:bafybeihai2otcmnb2w7k64bnwf5qagfexg5gqow74xhj3wynikgdxre3ka
@@ -139,7 +139,7 @@ models:
       twitter_api_base: https://api.twitter.com/
       twitter_api_bearer_token: <default_bearer_token>
       twitter_api_endpoint: 2/users/1450081635559428107/mentions?
-      twitter_api_args: tweet.fields=author_id&user.fields=name&max_results=100&since_id=0
+      twitter_api_args: tweet.fields=author_id&user.fields=name&max_results=100&since_id={since_id}
       twitter_mention_points: 200
       tx_timeout: 10.0
       whitelist_api_key: null
