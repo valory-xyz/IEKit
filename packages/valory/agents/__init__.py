@@ -17,15 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the DynamicNFTAbciApp."""
-
-from dataclasses import dataclass
-
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
-
-
-@dataclass(frozen=True)
-class NewTokensPayload(BaseTxPayload):
-    """Represent a transaction payload for the NewTokensRound."""
-
-    content: str
+"""Agents authored by 'valory'."""

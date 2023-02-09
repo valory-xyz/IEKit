@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2022-2023 Valory AG
+#   Copyright 2023 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -59,6 +59,11 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(dict, self.db.get("token_to_data", {}))
 
     @property
+    def user_to_scores(self) -> dict:
+        """Get the user scores."""
+        return cast(dict, self.db.get("user_to_scores", {}))
+
+    @property
     def last_update_time(self) -> float:
         """Get the last update time."""
         return cast(float, self.db.get("last_update_time", None))
@@ -81,14 +86,8 @@ class NewTokensRound(CollectSameUntilThresholdRound):
             if payload == NewTokensRound.ERROR_PAYLOAD:
                 return self.synchronized_data, Event.CONTRACT_ERROR
 
-            new_token_to_data = payload["new_token_to_data"]
+            token_to_data = payload["token_to_data"]
             last_update_time = payload["last_update_time"]
-
-            # Add the new tokens to the token table
-            token_to_data = {
-                **new_token_to_data,
-                **self.synchronized_data.token_to_data,
-            }
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,

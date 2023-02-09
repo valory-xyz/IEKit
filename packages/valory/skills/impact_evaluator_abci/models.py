@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2022-2023 Valory AG
+#   Copyright 2023 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -39,6 +39,9 @@ from packages.valory.skills.score_read_abci.rounds import Event as ScoreReadEven
 from packages.valory.skills.score_write_abci.models import (
     Params as ScoreWriteAbciParams,
 )
+from packages.valory.skills.score_write_abci.models import (
+    RandomnessApi as ScoreWriteRandomnessApi,
+)
 from packages.valory.skills.score_write_abci.rounds import Event as ScoreWriteEvent
 
 
@@ -47,6 +50,7 @@ ScoreWriteParams = ScoreWriteAbciParams
 DynamicNFTParams = DynamicNFTAbciParams
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
+RandomnessApi = ScoreWriteRandomnessApi
 
 MARGIN = 5
 
@@ -76,5 +80,5 @@ class SharedState(BaseSharedState):
         ] = (self.context.params.observation_interval + MARGIN)
 
 
-class Params(DynamicNFTParams):
+class Params(ScoreReadParams, ScoreWriteParams, DynamicNFTParams):
     """A model to represent params for multiple abci apps."""

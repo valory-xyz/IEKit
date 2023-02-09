@@ -82,11 +82,17 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
             content=json.dumps(self.synchronized_data.user_to_scores).encode(),
         )
 
-        api_data = json.loads(response.body)
-
         if response.status_code != 200:
             self.context.logger.info(
-                f"API error while reading the stream: {response.status_code}: '{api_data}'"
+                f"API error while reading the stream: {response.status_code}: '{response.body}'"
+            )
+            return None
+
+        try:
+            api_data = json.loads(response.body)
+        except json.JSONDecodeError:
+            self.context.logger.info(
+                f"API error while loading the response json. Response body: '{response.body}'"
             )
             return None
 
@@ -95,7 +101,12 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
         previous_cid_str = api_data["commits"][-1]["cid"]
 
         # Rebuild the current data
+        self.context.logger.info(
+            f"Bulding stream data from commits:\n'{api_data['commits']}'"
+        )
         data = build_data_from_commits(api_data["commits"])
+
+        self.context.logger.info(f"Got data from Ceramic API: {data}")
 
         return {
             "genesis_cid_str": genesis_cid_str,
@@ -198,7 +209,7 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
 
         self.context.logger.info(f"Writing scores to Ceramic API [{url}]")
         response = yield from self.get_http_response(
-            method="GET",
+            method="POST",
             url=url,
             content=json.dumps(commit_payload).encode(),
         )
@@ -231,7 +242,9 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
             if not data or json.dumps(data["data"], sort_keys=True) != json.dumps(
                 self.synchronized_data.user_to_scores, sort_keys=True
             ):
-                self.context.logger.info("An error happened while verifying data")
+                self.context.logger.info(
+                    f"An error happened while verifying data.\nExpected data:\n{self.synchronized_data.user_to_scores}. Actual data:\n{data}"
+                )
                 payload_content = CeramicWriteRound.ERROR_PAYLOAD
             else:
                 self.context.logger.info("Data verification successful")

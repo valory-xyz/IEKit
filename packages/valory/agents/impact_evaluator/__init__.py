@@ -17,15 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the DynamicNFTAbciApp."""
-
-from dataclasses import dataclass
-
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
+"""Package for valory/impact_evaluator agent."""
+from pathlib import Path
 
 
-@dataclass(frozen=True)
-class NewTokensPayload(BaseTxPayload):
-    """Represent a transaction payload for the NewTokensRound."""
-
-    content: str
+PACKAGE_DIR = Path(__file__).parent
