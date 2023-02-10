@@ -99,8 +99,12 @@ class TwitterObservationBehaviour(ScoreReadBaseBehaviour):
         next_token = None
         latest_tweet_id = None
 
-        # Pagination loop
-        while True:
+        # Pagination loop: we read a max of <twitter_max_pages> pages each period
+        # Each page contains 100 tweets. The default value for twitter_max_pages is 10
+        for i in range(self.params.twitter_max_pages):
+
+            if i >= self.params.twitter_max_pages:
+                break
 
             url = api_url
 
