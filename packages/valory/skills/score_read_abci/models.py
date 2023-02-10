@@ -52,6 +52,7 @@ class Params(BaseParams):
         self.twitter_mention_points = self._ensure(
             "twitter_mention_points", kwargs, int
         )
+        self.twitter_max_pages = self._ensure("twitter_max_pages", kwargs, int)
         super().__init__(*args, **kwargs)
 
 

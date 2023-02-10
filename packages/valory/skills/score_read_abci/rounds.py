@@ -66,9 +66,9 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(dict, self.db.get("user_to_scores", {}))
 
     @property
-    def latest_tweet_id(self) -> str:
+    def latest_tweet_id(self) -> int:
         """Get the latest tracked tweet id."""
-        return cast(str, self.db.get("latest_tweet_id", 0))
+        return cast(int, self.db.get("latest_tweet_id", 0))
 
 
 class TwitterObservationRound(CollectSameUntilThresholdRound):
@@ -90,7 +90,12 @@ class TwitterObservationRound(CollectSameUntilThresholdRound):
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
-                **{get_name(SynchronizedData.most_voted_api_data): payload}
+                **{
+                    get_name(SynchronizedData.most_voted_api_data): payload,
+                    get_name(SynchronizedData.latest_tweet_id): payload[
+                        "latest_tweet_id"
+                    ],
+                }
             )
             return synchronized_data, Event.DONE
         if not self.is_majority_possible(

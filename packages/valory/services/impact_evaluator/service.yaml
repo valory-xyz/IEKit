@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibk5iyiobvfgd6w3z75amk7muou3kqqq5rj3mze6rnzlmzpaiwtii
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeibwxte6i5gp3zqwcfd7y2rsuvxmpvyez6gdkh2grezfxel4jqeh4m
+agent: valory/impact_evaluator:0.1.0:bafybeictggxudngumhkmcwh7s76hb5v6nzm72r7zyzelpjhsdltk3hzmby
 number_of_agents: 4
 ---
 public_id: valory/impact_evaluator_abci:0.1.0
@@ -33,7 +33,7 @@ models:
       twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
       twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
       twitter_api_endpoint: ${TWITTER_API_ENDPOINT:str:2/users/1450081635559428107/mentions?}
-      twitter_api_args: ${TWITTER_API_ARGS:str:tweet.fields=author_id&user.fields=name&max_results=100&since_id=0}
+      twitter_api_args: ${TWITTER_API_ARGS:str:tweet.fields=author_id&user.fields=name&max_results=100&since_id={since_id}}
       twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
       consensus:
         max_participants: 4
