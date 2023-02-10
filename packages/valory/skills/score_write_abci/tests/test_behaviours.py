@@ -44,10 +44,11 @@ from packages.valory.skills.score_write_abci.behaviours import (
     ScoreWriteRoundBehaviour,
     SelectKeeperCeramicBehaviour,
     VerificationBehaviour,
+    WalletReadBehaviour,
 )
 from packages.valory.skills.score_write_abci.rounds import (
     Event,
-    FinishedVerificationRound,
+    FinishedWalletReadRound,
     SynchronizedData,
 )
 
@@ -55,6 +56,8 @@ from packages.valory.skills.score_write_abci.rounds import (
 PACKAGE_DIR = Path(__file__).parent.parent
 
 DUMMY_USER_TO_SCORES = {"hello": "world"}
+
+DUMMY_WALLET_TO_USERS = {"wallet_a": "user_a", "wallet_b": "user_b"}
 
 CERAMIC_API_STREAM_URL = (
     "https://ceramic-clay.3boxlabs.com/api/v0/commits/default_stream_id"
@@ -458,9 +461,7 @@ class TestVerificationBehaviour(BaseScoreWriteTest):
     """Tests CeramicWriteBehaviour"""
 
     behaviour_class = VerificationBehaviour
-    next_behaviour_class = make_degenerate_behaviour(  # type: ignore
-        FinishedVerificationRound
-    )
+    next_behaviour_class = WalletReadBehaviour
 
     @pytest.mark.parametrize(
         "test_case, kwargs",
@@ -527,6 +528,111 @@ class TestVerificationBehaviourApiError(BaseScoreWriteTest):
                 BehaviourTestCase(
                     "Api wrong data",
                     initial_data=dict(user_to_scores=DUMMY_USER_TO_SCORES),
+                    event=Event.API_ERROR,
+                ),
+                {
+                    "body": json.dumps(
+                        DUMMY_API_RESPONSE_READ_WRONG,
+                    ),
+                    "status_code": 200,
+                },
+            ),
+        ],
+    )
+    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
+        """Run tests."""
+        self.fast_forward(test_case.initial_data)
+        self.behaviour.act_wrapper()
+        self.mock_http_request(
+            request_kwargs=dict(
+                method="GET",
+                headers="",
+                version="",
+                url=CERAMIC_API_STREAM_URL,
+            ),
+            response_kwargs=dict(
+                version="",
+                status_code=kwargs.get("status_code"),
+                status_text="",
+                body=kwargs.get("body").encode(),
+            ),
+        )
+        self.complete(test_case.event)
+
+
+class TestWalletReadBehaviour(BaseScoreWriteTest):
+    """Tests WalletReadBehaviour"""
+
+    behaviour_class = WalletReadBehaviour
+    next_behaviour_class = make_degenerate_behaviour(  # type: ignore
+        FinishedWalletReadRound
+    )
+
+    @pytest.mark.parametrize(
+        "test_case, kwargs",
+        [
+            (
+                BehaviourTestCase(
+                    "Happy path",
+                    initial_data=dict(user_to_scores=DUMMY_USER_TO_SCORES),
+                    event=Event.DONE,
+                ),
+                {
+                    "body": json.dumps(
+                        DUMMY_API_RESPONSE_READ,
+                    ),
+                    "status_code": 200,
+                },
+            ),
+        ],
+    )
+    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
+        """Run tests."""
+        self.fast_forward(test_case.initial_data)
+        self.behaviour.act_wrapper()
+        self.mock_http_request(
+            request_kwargs=dict(
+                method="GET",
+                headers="",
+                version="",
+                url=CERAMIC_API_STREAM_URL,
+            ),
+            response_kwargs=dict(
+                version="",
+                status_code=kwargs.get("status_code"),
+                status_text="",
+                body=kwargs.get("body").encode(),
+            ),
+        )
+        self.complete(test_case.event)
+
+
+class TestWalletReadBehaviourApiError(BaseScoreWriteTest):
+    """Tests WalletReadBehaviour"""
+
+    behaviour_class = WalletReadBehaviour
+    next_behaviour_class = RandomnessBehaviour
+
+    @pytest.mark.parametrize(
+        "test_case, kwargs",
+        [
+            (
+                BehaviourTestCase(
+                    "Api Error",
+                    initial_data=dict(),
+                    event=Event.API_ERROR,
+                ),
+                {
+                    "body": json.dumps(
+                        {},
+                    ),
+                    "status_code": 404,
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "Api wrong data",
+                    initial_data=dict(),
                     event=Event.API_ERROR,
                 ),
                 {

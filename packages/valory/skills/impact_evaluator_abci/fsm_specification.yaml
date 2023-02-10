@@ -23,6 +23,7 @@ states:
 - SelectKeeperRound
 - TwitterObservationRound
 - VerificationRound
+- WalletReadRound
 transition_func:
     (CeramicWriteRound, API_ERROR): RandomnessRound
     (CeramicWriteRound, DID_NOT_SEND): RandomnessRound
@@ -52,6 +53,10 @@ transition_func:
     (TwitterObservationRound, NO_MAJORITY): TwitterObservationRound
     (TwitterObservationRound, ROUND_TIMEOUT): TwitterObservationRound
     (VerificationRound, API_ERROR): RandomnessRound
-    (VerificationRound, DONE): NewTokensRound
+    (VerificationRound, DONE): WalletReadRound
     (VerificationRound, NO_MAJORITY): RandomnessRound
     (VerificationRound, ROUND_TIMEOUT): RandomnessRound
+    (WalletReadRound, API_ERROR): RandomnessRound
+    (WalletReadRound, DONE): NewTokensRound
+    (WalletReadRound, NO_MAJORITY): RandomnessRound
+    (WalletReadRound, ROUND_TIMEOUT): RandomnessRound

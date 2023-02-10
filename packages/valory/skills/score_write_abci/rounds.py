@@ -19,6 +19,7 @@
 
 """This package contains the rounds of ScoreWriteAbciApp."""
 
+import json
 from enum import Enum
 from typing import Dict, List, Optional, Set, Tuple, cast
 
@@ -38,6 +39,7 @@ from packages.valory.skills.score_write_abci.payloads import (
     RandomnessPayload,
     SelectKeeperPayload,
     VerificationPayload,
+    WalletReadPayload,
 )
 
 
@@ -66,6 +68,11 @@ class SynchronizedData(BaseSynchronizedData):
     def user_to_scores(self) -> dict:
         """Get the user scores."""
         return cast(dict, self.db.get("user_to_scores", {}))
+
+    @property
+    def wallet_to_users(self) -> dict:
+        """Get the wallet to twitter user mapping."""
+        return cast(dict, self.db.get("wallet_to_users", {}))
 
 
 class RandomnessRound(CollectSameUntilThresholdRound):
@@ -143,8 +150,42 @@ class VerificationRound(CollectSameUntilThresholdRound):
         return None
 
 
-class FinishedVerificationRound(DegenerateRound):
-    """FinishedVerificationRound"""
+class WalletReadRound(CollectSameUntilThresholdRound):
+    """WalletReadRound"""
+
+    payload_class = WalletReadPayload
+    payload_attribute = "content"
+    synchronized_data_class = SynchronizedData
+
+    ERROR_PAYLOAD = "error"
+    SUCCCESS_PAYLOAD = "success"
+
+    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
+        """Process the end of the block."""
+        if self.threshold_reached:
+            if self.most_voted_payload == self.ERROR_PAYLOAD:
+                return self.synchronized_data, Event.API_ERROR
+
+            payload = json.loads(self.most_voted_payload)
+
+            synchronized_data = self.synchronized_data.update(
+                synchronized_data_class=SynchronizedData,
+                **{
+                    get_name(SynchronizedData.wallet_to_users): payload,
+                }
+            )
+
+            return synchronized_data, Event.DONE
+
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
+        return None
+
+
+class FinishedWalletReadRound(DegenerateRound):
+    """FinishedWalletReadRound"""
 
 
 class ScoreWriteAbciApp(AbciApp[Event]):
@@ -170,14 +211,20 @@ class ScoreWriteAbciApp(AbciApp[Event]):
             Event.DID_NOT_SEND: RandomnessRound,
         },
         VerificationRound: {
-            Event.DONE: FinishedVerificationRound,
+            Event.DONE: WalletReadRound,
             Event.NO_MAJORITY: RandomnessRound,
             Event.ROUND_TIMEOUT: RandomnessRound,
             Event.API_ERROR: RandomnessRound,
         },
-        FinishedVerificationRound: {},
+        WalletReadRound: {
+            Event.DONE: FinishedWalletReadRound,
+            Event.NO_MAJORITY: RandomnessRound,
+            Event.ROUND_TIMEOUT: RandomnessRound,
+            Event.API_ERROR: RandomnessRound,
+        },
+        FinishedWalletReadRound: {},
     }
-    final_states: Set[AppState] = {FinishedVerificationRound}
+    final_states: Set[AppState] = {FinishedWalletReadRound}
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
@@ -186,5 +233,5 @@ class ScoreWriteAbciApp(AbciApp[Event]):
         RandomnessRound: [],
     }
     db_post_conditions: Dict[AppState, List[str]] = {
-        FinishedVerificationRound: [],
+        FinishedWalletReadRound: [],
     }

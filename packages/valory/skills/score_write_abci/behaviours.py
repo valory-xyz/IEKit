@@ -42,6 +42,7 @@ from packages.valory.skills.score_write_abci.payloads import (
     RandomnessPayload,
     SelectKeeperPayload,
     VerificationPayload,
+    WalletReadPayload,
 )
 from packages.valory.skills.score_write_abci.rounds import (
     CeramicWriteRound,
@@ -50,6 +51,7 @@ from packages.valory.skills.score_write_abci.rounds import (
     SelectKeeperRound,
     SynchronizedData,
     VerificationRound,
+    WalletReadRound,
 )
 
 
@@ -66,14 +68,16 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
         """Return the params."""
         return cast(Params, super().params)
 
-    def _get_stream_data(self) -> Generator[None, None, Optional[dict]]:
+    def _get_stream_data(
+        self, stream_id: Optional[str] = None
+    ) -> Generator[None, None, Optional[dict]]:
         """Get the current data from a Ceramic stream"""
+
+        stream_id = stream_id or self.params.scores_stream_id
 
         api_base = self.params.ceramic_api_base
         api_endpoint = self.params.ceramic_api_read_endpoint
-        url = api_base + api_endpoint.replace(
-            "{stream_id}", self.params.ceramic_stream_id
-        )
+        url = api_base + api_endpoint.replace("{stream_id}", stream_id)
 
         self.context.logger.info(f"Reading data from Ceramic API [{url}]")
         response = yield from self.get_http_response(
@@ -164,12 +168,12 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
             success = yield from self._write_ceramic_data()
             if success:
                 self.context.logger.info(
-                    f"Wrote scores to ceramic stream with id: {self.params.ceramic_stream_id}"
+                    f"Wrote scores to ceramic stream with id: {self.params.scores_stream_id}"
                 )
                 payload_content = CeramicWriteRound.SUCCCESS_PAYLOAD
             else:
                 self.context.logger.info(
-                    f"An error happened while wroting scores to ceramic stream with id: {self.params.ceramic_stream_id}"
+                    f"An error happened while wroting scores to ceramic stream with id: {self.params.scores_stream_id}"
                 )
                 payload_content = CeramicWriteRound.ERROR_PAYLOAD
 
@@ -195,7 +199,7 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
         commit_payload = build_commit_payload(
             self.params.ceramic_did_str,
             self.params.ceramic_did_seed,
-            self.params.ceramic_stream_id,
+            self.params.scores_stream_id,
             data,
             self.synchronized_data.user_to_scores,
         )
@@ -204,7 +208,7 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
         api_base = self.params.ceramic_api_base
         api_endpoint = self.params.ceramic_api_commit_endpoint
         url = api_base + api_endpoint.replace(
-            "{stream_id}", self.params.ceramic_stream_id
+            "{stream_id}", self.params.scores_stream_id
         )
 
         self.context.logger.info(f"Writing scores to Ceramic API [{url}]")
@@ -260,6 +264,38 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
         self.set_done()
 
 
+class WalletReadBehaviour(ScoreWriteBaseBehaviour):
+    """WalletReadBehaviour"""
+
+    matching_round: Type[AbstractRound] = WalletReadRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+
+            # Get the current data
+            data = yield from self._get_stream_data(self.params.wallets_stream_id)
+
+            if not data:
+                self.context.logger.info(
+                    "An error happened while getting wallet data from the stream"
+                )
+                payload_content = WalletReadRound.ERROR_PAYLOAD
+            else:
+                self.context.logger.info(f"Retrieved wallet data from Ceramic: {data}")
+                payload_content = json.dumps(data)
+
+            sender = self.context.agent_address
+            payload = WalletReadPayload(sender=sender, content=payload_content)
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
+
+
 class ScoreWriteRoundBehaviour(AbstractRoundBehaviour):
     """ScoreWriteRoundBehaviour"""
 
@@ -270,4 +306,5 @@ class ScoreWriteRoundBehaviour(AbstractRoundBehaviour):
         SelectKeeperCeramicBehaviour,
         CeramicWriteBehaviour,
         VerificationBehaviour,
+        WalletReadBehaviour,
     ]

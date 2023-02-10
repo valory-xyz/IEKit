@@ -44,8 +44,6 @@ from packages.valory.skills.dynamic_nft_abci.rounds import (
 NULL_ADDRESS = "0x0000000000000000000000000000000000000000"
 DEFAULT_POINTS = 0
 
-ADDRESS_TO_TWITTER_IDS = {"0x7b22C1db9EB9014c0d62D18a587dA79D75465f04": "315490172"}
-
 
 class DynamicNFTBaseBehaviour(BaseBehaviour, ABC):
     """Base behaviour for the common apps' skill."""
@@ -87,7 +85,7 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
                     }
                     for token_id, address in token_id_to_address.items()
                     if token_id not in old_token_to_data
-                    and address in ADDRESS_TO_TWITTER_IDS
+                    and address in self.synchronized_data.wallet_to_users
                 }
 
                 # Add new points

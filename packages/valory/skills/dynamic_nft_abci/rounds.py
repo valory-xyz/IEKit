@@ -68,6 +68,11 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the last update time."""
         return cast(float, self.db.get("last_update_time", None))
 
+    @property
+    def wallet_to_users(self) -> dict:
+        """Get the wallet to twitter user mapping."""
+        return cast(dict, self.db.get("wallet_to_users", {}))
+
 
 class NewTokensRound(CollectSameUntilThresholdRound):
     """NewTokensRound"""

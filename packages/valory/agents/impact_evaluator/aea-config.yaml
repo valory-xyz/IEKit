@@ -12,7 +12,7 @@ fingerprint:
   tests/helpers/data/json_server/data.json: bafybeibpep45ajwjh7qhgw7t6r3qbcxp7iz2kfcut4fhzjagqnmguoob54
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
-  tests/test_impact_evaluator.py: bafybeibwid3htetqvsvo6r47e7kfs6rlshkdvy4jdh5axnb6zqadirit3i
+  tests/test_impact_evaluator.py: bafybeifvdi6zenb4ud42i3gzys4y2yjrghbvjh7v3iidoxzml7jbe64m3y
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeic7p2e2ey44k6yv3dzznepekggceqc6mxb55e4xovcjnr3qym5ncu
@@ -29,10 +29,10 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeidwizzka3qjotu35zzstoqunp3hjhkx6oojqnlwqsvd3qnjjpmusq
 - valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
-- valory/impact_evaluator_abci:0.1.0:bafybeib23jdolnm5zbk3syhkzewral2iihfszh3owkniebxgw7kxyhbaw4
+- valory/impact_evaluator_abci:0.1.0:bafybeiakftmp33h6555aizwsq7hf3mjkur4imf4w23c62ctnkre6njy33y
 - valory/score_read_abci:0.1.0:bafybeicrefnfqzinq54oddwymcypnrzafjesogizc6oubj7usprab55f4a
-- valory/score_write_abci:0.1.0:bafybeigyqjipket4u7ddvoddq2alpujeqv6fujousja65tp6k3kslfhry4
-- valory/dynamic_nft_abci:0.1.0:bafybeic7gwymmk2yae2xteiilhot7vbnmqol2p6b7a3t7tzwcajgfp4dzi
+- valory/score_write_abci:0.1.0:bafybeigdhdwthoj2kenaevqrvcwxwlecbyyl2ycolcaknxvyppp74d2vza
+- valory/dynamic_nft_abci:0.1.0:bafybeiehej547iiiijk7brax2mq6li4szvtpwtpj2oji5p4d63c5vvj4nu
 - valory/registration_abci:0.1.0:bafybeihai2otcmnb2w7k64bnwf5qagfexg5gqow74xhj3wynikgdxre3ka
 - valory/reset_pause_abci:0.1.0:bafybeifs6zpg5nbvuapmxafzo6fdhoz5ebpiujetvk243apo3iwl2rn45i
 default_ledger: ethereum
@@ -108,12 +108,13 @@ type: skill
 models:
   params:
     args:
-      ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
-      ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits/{stream_id}}
-      ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
-      ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-      ceramic_did_str: ${CERAMIC_DID_STR:str:"did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX"}
-      ceramic_stream_id: ${CERAMIC_STREAM_ID:str:default_stream_id}
+      ceramic_api_base: ${str:https://ceramic-clay.3boxlabs.com/}
+      ceramic_api_commit_endpoint: ${str:api/v0/commits/{stream_id}}
+      ceramic_api_read_endpoint: ${str:api/v0/commits/{stream_id}}
+      ceramic_did_seed: ${str:0101010101010101010101010101010101010101010101010101010101010101}
+      ceramic_did_str: ${str:did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
+      scores_stream_id: ${str:default_stream_id}
+      wallets_stream_id: ${str:default_stream_id}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       consensus:
@@ -157,15 +158,15 @@ models:
       tendermint_com_url: ${TENDERMINT_COM_URL:str:http://localhost:8080}
       tendermint_max_retries: 5
       tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
-      token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
+      token_uri_base: ${str:https://pfp.staging.autonolas.tech/}
       whitelist_api_key: null
       whitelist_endpoint: http://localhost
-      points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:null}
-      twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
-      twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:<default_bearer_token>}
-      twitter_api_endpoint: ${TWITTER_API_ENDPOINT:str:2/users/1450081635559428107/mentions?}
-      twitter_api_args: ${TWITTER_API_ARGS:str:tweet.fields=author_id&user.fields=name&max_results=100&since_id={since_id}}
-      twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
+      points_to_image_hashes: ${str:null}
+      twitter_api_base: ${str:https://api.twitter.com/}
+      twitter_api_bearer_token: ${str:<default_bearer_token>}
+      twitter_api_endpoint: ${str:2/users/1450081635559428107/mentions?}
+      twitter_api_args: ${tweet.fields=author_id&user.fields=name&max_results=100&since_id={since_id}}
+      twitter_mention_points: ${int:200}
       twitter_max_pages: 10
 ---
 public_id: fetchai/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq

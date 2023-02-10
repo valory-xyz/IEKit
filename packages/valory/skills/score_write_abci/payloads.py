@@ -51,3 +51,10 @@ class VerificationPayload(BaseTxPayload):
     """Represent a transaction payload for the VerificationRound."""
 
     content: str
+
+
+@dataclass(frozen=True)
+class WalletReadPayload(BaseTxPayload):
+    """Represent a transaction payload for the WalletReadRound."""
+
+    content: str

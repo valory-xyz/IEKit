@@ -19,6 +19,7 @@
 
 """This package contains the tests for rounds of ScoreRead."""
 
+import json
 from dataclasses import dataclass, field
 from typing import (
     Any,
@@ -52,6 +53,7 @@ from packages.valory.skills.score_write_abci.payloads import (
     RandomnessPayload,
     SelectKeeperPayload,
     VerificationPayload,
+    WalletReadPayload,
 )
 from packages.valory.skills.score_write_abci.rounds import (
     CeramicWriteRound,
@@ -60,6 +62,7 @@ from packages.valory.skills.score_write_abci.rounds import (
     SelectKeeperRound,
     SynchronizedData,
     VerificationRound,
+    WalletReadRound,
 )
 
 
@@ -239,6 +242,13 @@ def get_dummy_ceramic_write_payload_serialized(api_error: bool = False) -> str:
     return "success"
 
 
+def get_dummy_wallet_read_payload_serialized(api_error: bool = False) -> str:
+    """Dummy twitter observation payload"""
+    if api_error:
+        return "error"
+    return json.dumps({"wallet_a": "user_a", "wallet_b": "user_b"}, sort_keys=True)
+
+
 class BaseScoreWriteRoundTest(BaseCollectSameUntilThresholdRoundTest):
     """Base test class for ScoreWrite rounds."""
 
@@ -362,6 +372,49 @@ class TestVerificationRound(BaseScoreWriteRoundTest):
                 final_data={},
                 event=Event.API_ERROR,
                 most_voted_payload=get_dummy_ceramic_write_payload_serialized(
+                    api_error=True
+                ),
+                synchronized_data_attr_checks=[],
+            ),
+        ),
+    )
+    def test_run(self, test_case: RoundTestCase) -> None:
+        """Run tests."""
+        self.run_test(test_case)
+
+
+class TestWalletReadRound(BaseScoreWriteRoundTest):
+    """Tests for WalletReadRound."""
+
+    round_class = WalletReadRound
+
+    @pytest.mark.parametrize(
+        "test_case",
+        (
+            RoundTestCase(
+                name="Happy path",
+                initial_data={},
+                payloads=get_payloads(
+                    payload_cls=WalletReadPayload,
+                    data=get_dummy_wallet_read_payload_serialized(),
+                ),
+                final_data={
+                    "wallet_to_users": get_dummy_wallet_read_payload_serialized(),
+                },
+                event=Event.DONE,
+                most_voted_payload=get_dummy_wallet_read_payload_serialized(),
+                synchronized_data_attr_checks=[],
+            ),
+            RoundTestCase(
+                name="API error",
+                initial_data={},
+                payloads=get_payloads(
+                    payload_cls=WalletReadPayload,
+                    data=get_dummy_wallet_read_payload_serialized(api_error=True),
+                ),
+                final_data={},
+                event=Event.API_ERROR,
+                most_voted_payload=get_dummy_wallet_read_payload_serialized(
                     api_error=True
                 ),
                 synchronized_data_attr_checks=[],

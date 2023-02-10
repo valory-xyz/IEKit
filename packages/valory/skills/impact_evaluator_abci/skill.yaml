@@ -8,9 +8,9 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
   behaviours.py: bafybeiauwwtjzjyceeiew3qkzppyakxcojzzfgha3reo6k7tyvuqo7tolu
-  composition.py: bafybeibr7tlejcwz5evvxr6xc7hzqegnefk5ixy365nlzq3lxgykh55cee
+  composition.py: bafybeiclmpfeenkiiobk67hsoefae5ns2tdxpljiwehiiyrxzmxqm7xxai
   dialogues.py: bafybeigpwuzku3we7axmxeamg7vn656maww6emuztau5pg3ebsoquyfdqm
-  fsm_specification.yaml: bafybeihjtszugdepq5gjvgn4myax6krmvi4oomurq67snzjeo4poshlalq
+  fsm_specification.yaml: bafybeibgj2v2lkxmw6jqx6mun2cspvihaottwqvw5ho2nlv5gkefofj4w4
   handlers.py: bafybeiaqgaev2nfhuihhuxxxxtuiggin5zcpwn7ik7lok2n6ywi6dqy2ta
   models.py: bafybeihkrw4sfkr64sa2zghv5wupywwv24ouax4u5glw3yzqgcif2whcye
   tests/__init__.py: bafybeicukkp7ajzvqtmpedzwo23azuorvy5qtftadsxbwmv5zhk2tktjc4
@@ -25,8 +25,8 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
 - valory/score_read_abci:0.1.0:bafybeicrefnfqzinq54oddwymcypnrzafjesogizc6oubj7usprab55f4a
-- valory/score_write_abci:0.1.0:bafybeigyqjipket4u7ddvoddq2alpujeqv6fujousja65tp6k3kslfhry4
-- valory/dynamic_nft_abci:0.1.0:bafybeic7gwymmk2yae2xteiilhot7vbnmqol2p6b7a3t7tzwcajgfp4dzi
+- valory/score_write_abci:0.1.0:bafybeigdhdwthoj2kenaevqrvcwxwlecbyyl2ycolcaknxvyppp74d2vza
+- valory/dynamic_nft_abci:0.1.0:bafybeiehej547iiiijk7brax2mq6li4szvtpwtpj2oji5p4d63c5vvj4nu
 - valory/registration_abci:0.1.0:bafybeihai2otcmnb2w7k64bnwf5qagfexg5gqow74xhj3wynikgdxre3ka
 - valory/reset_pause_abci:0.1.0:bafybeifs6zpg5nbvuapmxafzo6fdhoz5ebpiujetvk243apo3iwl2rn45i
 behaviours:
@@ -82,7 +82,8 @@ models:
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
       ceramic_did_seed: '0101010101010101010101010101010101010101010101010101010101010101'
       ceramic_did_str: did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX
-      ceramic_stream_id: default_stream_id
+      scores_stream_id: default_stream_id
+      wallets_stream_id: default_stream_id
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       consensus:
