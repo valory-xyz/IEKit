@@ -29,7 +29,7 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeidwizzka3qjotu35zzstoqunp3hjhkx6oojqnlwqsvd3qnjjpmusq
 - valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
-- valory/impact_evaluator_abci:0.1.0:bafybeiaqi5u5vj3e5rqgdl43yxv36qikjkcpm5yomqs5rahgpm5ccfifvm
+- valory/impact_evaluator_abci:0.1.0:bafybeib23jdolnm5zbk3syhkzewral2iihfszh3owkniebxgw7kxyhbaw4
 - valory/score_read_abci:0.1.0:bafybeicrefnfqzinq54oddwymcypnrzafjesogizc6oubj7usprab55f4a
 - valory/score_write_abci:0.1.0:bafybeigyqjipket4u7ddvoddq2alpujeqv6fujousja65tp6k3kslfhry4
 - valory/dynamic_nft_abci:0.1.0:bafybeic7gwymmk2yae2xteiilhot7vbnmqol2p6b7a3t7tzwcajgfp4dzi
@@ -166,6 +166,7 @@ models:
       twitter_api_endpoint: ${TWITTER_API_ENDPOINT:str:2/users/1450081635559428107/mentions?}
       twitter_api_args: ${TWITTER_API_ARGS:str:tweet.fields=author_id&user.fields=name&max_results=100&since_id={since_id}}
       twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
+      twitter_max_pages: 10
 ---
 public_id: fetchai/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
 type: connection

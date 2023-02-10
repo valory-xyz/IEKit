@@ -141,6 +141,7 @@ models:
       twitter_api_endpoint: 2/users/1450081635559428107/mentions?
       twitter_api_args: tweet.fields=author_id&user.fields=name&max_results=100&since_id={since_id}
       twitter_mention_points: 200
+      twitter_max_pages: 10
       tx_timeout: 10.0
       whitelist_api_key: null
       whitelist_endpoint: http://localhost
