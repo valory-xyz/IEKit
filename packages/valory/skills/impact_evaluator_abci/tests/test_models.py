@@ -18,9 +18,23 @@
 # ------------------------------------------------------------------------------
 
 """Test the models.py module of the contribution skill."""
+from unittest import mock
+from unittest.mock import MagicMock
+
+import pytest
 
 from packages.valory.skills.abstract_round_abci.test_tools.base import DummyContext
+from packages.valory.skills.dynamic_nft_abci.rounds import Event
+from packages.valory.skills.impact_evaluator_abci.composition import (
+    ImpactEvaluatorSkillAbciApp,
+)
 from packages.valory.skills.impact_evaluator_abci.models import SharedState
+
+
+@pytest.fixture
+def shared_state() -> SharedState:
+    """Initialize a test shared state."""
+    return SharedState(name="", skill_context=mock.MagicMock())
 
 
 class TestSharedState:  # pylint: disable=too-few-public-methods
@@ -31,3 +45,16 @@ class TestSharedState:  # pylint: disable=too-few-public-methods
     ) -> None:
         """Test initialization."""
         SharedState(name="", skill_context=DummyContext())
+
+    def test_setup(
+        self,
+        shared_state: SharedState,
+    ) -> None:
+        """Test setup."""
+        shared_state.context.params.setup_params = {"test": []}
+        shared_state.context.params.consensus_params = MagicMock()
+        shared_state.setup()
+        assert (
+            ImpactEvaluatorSkillAbciApp.event_to_timeout[Event.ROUND_TIMEOUT]
+            == shared_state.context.params.round_timeout_seconds
+        )

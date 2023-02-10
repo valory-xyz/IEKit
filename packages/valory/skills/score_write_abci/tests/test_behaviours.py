@@ -157,6 +157,8 @@ DUMMY_API_RESPONSE_READ_WRONG = {
     ],
 }
 
+DUMMY_API_RESPONSE_READ_WRONG_JSON = "-"
+
 
 @dataclass
 class BehaviourTestCase:
@@ -305,6 +307,19 @@ class TestCeramicWriteBehaviourSender(BaseScoreWriteTest):
                     },
                 },
             ),
+            (
+                BehaviourTestCase(
+                    "Json decode error",
+                    initial_data=dict(most_voted_keeper_address="test_agent_address"),
+                    event=Event.DONE,
+                ),
+                {
+                    "read_data": {
+                        "body": DUMMY_API_RESPONSE_READ_WRONG_JSON,
+                        "status": 200,
+                    },
+                },
+            ),
         ],
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
@@ -329,20 +344,21 @@ class TestCeramicWriteBehaviourSender(BaseScoreWriteTest):
         )
 
         # Write data call
-        self.mock_http_request(
-            request_kwargs=dict(
-                method="POST",
-                headers="",
-                version="",
-                url=CERAMIC_API_STREAM_URL,
-            ),
-            response_kwargs=dict(
-                version="",
-                status_code=kwargs.get("write_data")["status"],
-                status_text="",
-                body=kwargs.get("write_data")["body"].encode(),
-            ),
-        )
+        if "write_data" in kwargs:
+            self.mock_http_request(
+                request_kwargs=dict(
+                    method="POST",
+                    headers="",
+                    version="",
+                    url=CERAMIC_API_STREAM_URL,
+                ),
+                response_kwargs=dict(
+                    version="",
+                    status_code=kwargs.get("write_data")["status"],
+                    status_text="",
+                    body=kwargs.get("write_data")["body"].encode(),
+                ),
+            )
 
         self.complete(test_case.event)
 

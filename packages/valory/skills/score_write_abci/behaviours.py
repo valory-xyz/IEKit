@@ -87,15 +87,15 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
         )
 
         if response.status_code != 200:
-            self.context.logger.info(
+            self.context.logger.error(
                 f"API error while reading the stream: {response.status_code}: '{response.body}'"
             )
             return None
 
         try:
             api_data = json.loads(response.body)
-        except json.JSONDecodeError:
-            self.context.logger.info(
+        except json.decoder.JSONDecodeError:
+            self.context.logger.error(
                 f"API error while loading the response json. Response body: '{response.body}'"
             )
             return None

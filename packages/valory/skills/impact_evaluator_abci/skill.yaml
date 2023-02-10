@@ -17,16 +17,16 @@ fingerprint:
   tests/test_behaviours.py: bafybeib4hqd7l7fdsfvrkee7onl47adz6fqhdtjzll6efwo7uznjwf7lvu
   tests/test_dialogues.py: bafybeigac5y4hysp7lqdhz5zwbwntadr55mmmefvdxkz6dhi6gcosfvdgy
   tests/test_handlers.py: bafybeibk337l5p2hfgr4mcwecd55tfatzxkfdiia7qh7wy7jb6vqg64blm
-  tests/test_models.py: bafybeigqy2ofyk7ni2r6anbvojy6zy554caloiktnsd7sbldfvjjdd2wki
+  tests/test_models.py: bafybeibkmungqazso33ph7eiu4otsde6revqbbfejxjkswrlf22x7uwc3a
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
-- valory/score_read_abci:0.1.0:bafybeicrefnfqzinq54oddwymcypnrzafjesogizc6oubj7usprab55f4a
-- valory/score_write_abci:0.1.0:bafybeif7bz7qnwzbrtdtmix73tmahvbx4qwzpafgzp2b2k5f7audzyhpna
-- valory/dynamic_nft_abci:0.1.0:bafybeiehej547iiiijk7brax2mq6li4szvtpwtpj2oji5p4d63c5vvj4nu
+- valory/score_read_abci:0.1.0:bafybeibzodhywvzkux3fekbh7bcep4i6go4x2qv4phxdcn4nlscxwp5gh4
+- valory/score_write_abci:0.1.0:bafybeidgobdaxnz25j3krlgawcbugytm6auojb7bx6p6p34pdoilsela2i
+- valory/dynamic_nft_abci:0.1.0:bafybeiee44wyusyor6hb42pm3u4thzwqwas57d5chilrgqkertblepuhpu
 - valory/registration_abci:0.1.0:bafybeihai2otcmnb2w7k64bnwf5qagfexg5gqow74xhj3wynikgdxre3ka
 - valory/reset_pause_abci:0.1.0:bafybeifs6zpg5nbvuapmxafzo6fdhoz5ebpiujetvk243apo3iwl2rn45i
 behaviours:

@@ -88,15 +88,26 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
                     and address in self.synchronized_data.wallet_to_users
                 }
 
-                # Add new points
                 token_to_data = {
                     **old_token_to_data,
                     **new_token_to_data,
                 }
 
-                for address, points in self.synchronized_data.user_to_scores.items():
-                    if address in token_to_data:
-                        token_to_data[address] = token_to_data[address] + points
+                address_to_token_ids = {
+                    data["address"]: token_id
+                    for token_id, data in self.synchronized_data.token_to_data.items()
+                }
+                users_to_address = {
+                    user: address
+                    for address, user in self.synchronized_data.wallet_to_users.items()
+                }
+
+                # Add new points
+                for user, points in self.synchronized_data.user_to_scores.items():
+                    address = users_to_address[user]
+                    if address in address_to_token_ids:
+                        # TODO: with the current implementation, only mentions made after minting are taken into account
+                        token_to_data[address_to_token_ids[address]]["points"] += points
 
                 self.context.logger.info(f"Got the new token data: {token_to_data}")
 
