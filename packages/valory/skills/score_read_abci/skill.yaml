@@ -8,11 +8,11 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaihgox5qvdfcwwo7xj3f5brxtexkpmu6zuppcqcadygadz2xjgua
-  behaviours.py: bafybeibamjrhvce5n6yihi4b26m22mbgqjdpj3objyknxuqz7ltoejolme
+  behaviours.py: bafybeiagfe7nzglilptwl7tknqjg3jt5qdywv35nlqq3wzf4epkm7sr7uq
   dialogues.py: bafybeihzb65chutzt4j2kqo5lfzddwbsrnefmnp2gco2z3nrwknpry2s64
   fsm_specification.yaml: bafybeibna2fcbi64vekws364kaw4vcrkamdjrl6vvscp3cvpb3keqmorce
   handlers.py: bafybeibx6spjkdoko37b6opwhhvmftsdi32hfpmlk73nkmujz3wwi6jn5m
-  models.py: bafybeie3vfd6hgtve6ehxyc2m4ekufxntbkpxm36grlqkoaxaqyc3he6im
+  models.py: bafybeifu4e5kbbhowgyw3vkqrovjuwt4xb6au5lfncknixt2j6ok7vu5qi
   payloads.py: bafybeiblmc4a6b74xf5wnnshu255xbmbixgrqhkhy3zwlspf6odlcck74u
   rounds.py: bafybeibbobwzyzq7bo6nvef4g2e3bk6kki7beat5dvdlluodfca3bgrnqy
   tests/__init__.py: bafybeigz2mhcrhytwp5swse6tqwlidybjfhsuvp5ilegmhthfaitzvv4pa
@@ -122,6 +122,7 @@ models:
       twitter_api_endpoint: 2/users/1450081635559428107/mentions?
       twitter_api_args: tweet.fields=author_id&user.fields=name&max_results=100&since_id={since_id}
       twitter_mention_points: 200
+      twitter_max_pages: 10
       validate_timeout: 1205
     class_name: Params
   requests:
