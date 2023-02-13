@@ -17,7 +17,7 @@
       }
     }
   },
-  "/api/v0/commits/default_stream_id": {
+  "/api/v0/commits/user_to_points_stream_id": {
    "get": {
       "streamId":"kjzl6cwe1jw1470d85wqefuhy1afsg2rjifp518yo5pdqbdsv6uaojidjlyw6oz",
       "docId":"kjzl6cwe1jw1470d85wqefuhy1afsg2rjifp518yo5pdqbdsv6uaojidjlyw6oz",
@@ -41,5 +41,29 @@
       ]
    },
    "post": {}
+  },
+  "/api/v0/commits/wallet_to_users_stream_id": {
+   "get": {
+      "streamId":"kjzl6cwe1jw146urv2zumvmlpbhqbyqb0now5iku4fnv1iaj3let15kimyv8j8r",
+      "docId":"kjzl6cwe1jw146urv2zumvmlpbhqbyqb0now5iku4fnv1iaj3let15kimyv8j8r",
+      "commits":[
+         {
+            "cid":"bagcqcerah5t6k74ey7af6dbxovvfu7b6tof745dj72sriufrsebigwwohjvq",
+            "value":{
+               "jws":{
+                  "payload":"AXESICMSbH_RoIXdVdxmgVNMRHuPpZSeRP7SV6aAHlgSeGf6",
+                  "signatures":[
+                     {
+                        "signature":"XmbgAaFD_F4PwLV7-n076lxbqdT-mkTGBpye9EvCB_MOOtiWdEHjvKD0EE_BCLcvxtDKeE35nTJJuF7EmtMiCw",
+                        "protected":"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29uM05lY2Q2TmtreWZvR29IeGlkMnpuR2M1OUxVM0s3bXViYVJjRmJMZkxYI3o2TWtvbjNOZWNkNk5ra3lmb0dvSHhpZDJ6bkdjNTlMVTNLN211YmFSY0ZiTGZMWCJ9"
+                     }
+                  ],
+                  "link":"bafyreibdcjwh7unaqxovlxdgqfjuyrd3r6szjhse73jfpjuadzmbe6dh7i"
+               },
+               "linkedBlock":"omRkYXRhoXgqMHg3YjIyYzFkYjllYjkwMTRjMGQ2MmQxOGE1ODdkYTc5ZDc1NDY1ZjA0aTMxNTQ5MDE3MmZoZWFkZXKiZnVuaXF1ZXB5SU5peTUrN2VmbWpTS3lOa2NvbnRyb2xsZXJzgXg4ZGlkOmtleTp6Nk1rb24zTmVjZDZOa2t5Zm9Hb0h4aWQyem5HYzU5TFUzSzdtdWJhUmNGYkxmTFg"
+            }
+         }
+      ]
+   }
   }
 }

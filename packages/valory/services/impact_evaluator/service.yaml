@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibk5iyiobvfgd6w3z75amk7muou3kqqq5rj3mze6rnzlmzpaiwtii
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeicjd3tlg2dwtorlhe6i2enxlcap6jndawgrdz73ovdxzgyp7insze
+agent: valory/impact_evaluator:0.1.0:bafybeiemuwvjkd3oou4bqeu7lfimzgigbnptg5cryllb7zl4gucete62yu
 number_of_agents: 4
 ---
 public_id: valory/impact_evaluator_abci:0.1.0
@@ -22,8 +22,8 @@ models:
       ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:"api/v0/commits/{stream_id}"}
       ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
       ceramic_did_str: ${CERAMIC_DID_STR:str:"did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX"}
-      scores_stream_id: ${SCORES_STREAM_ID:str:default_stream_id}
-      wallets_stream_id: ${WALLETS_STREAM_ID:str:default_stream_id}
+      scores_stream_id: ${SCORES_STREAM_ID:str:user_to_points_stream_id}
+      wallets_stream_id: ${WALLETS_STREAM_ID:str:wallet_to_users_stream_id}
       dynamic_contribution_contract_address: ${DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS:str:0x5FbDB2315678afecb367f032d93F642f64180aa3}
       earliest_block_to_monitor: ${EARLIEST_BLOCK_TO_MONITOR:int:8053690}
       history_end: null

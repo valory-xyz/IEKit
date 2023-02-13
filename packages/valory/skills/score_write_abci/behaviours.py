@@ -283,8 +283,10 @@ class WalletReadBehaviour(ScoreWriteBaseBehaviour):
                 )
                 payload_content = WalletReadRound.ERROR_PAYLOAD
             else:
-                self.context.logger.info(f"Retrieved wallet data from Ceramic: {data}")
-                payload_content = json.dumps(data)
+                self.context.logger.info(
+                    f"Retrieved wallet data from Ceramic: {data['data']}"
+                )
+                payload_content = json.dumps(data["data"])
 
             sender = self.context.agent_address
             payload = WalletReadPayload(sender=sender, content=payload_content)

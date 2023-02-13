@@ -13,11 +13,11 @@ fingerprint:
   fsm_specification.yaml: bafybeibgj2v2lkxmw6jqx6mun2cspvihaottwqvw5ho2nlv5gkefofj4w4
   handlers.py: bafybeiaqgaev2nfhuihhuxxxxtuiggin5zcpwn7ik7lok2n6ywi6dqy2ta
   models.py: bafybeihkrw4sfkr64sa2zghv5wupywwv24ouax4u5glw3yzqgcif2whcye
-  tests/__init__.py: bafybeicukkp7ajzvqtmpedzwo23azuorvy5qtftadsxbwmv5zhk2tktjc4
-  tests/test_behaviours.py: bafybeib4hqd7l7fdsfvrkee7onl47adz6fqhdtjzll6efwo7uznjwf7lvu
-  tests/test_dialogues.py: bafybeigac5y4hysp7lqdhz5zwbwntadr55mmmefvdxkz6dhi6gcosfvdgy
-  tests/test_handlers.py: bafybeibk337l5p2hfgr4mcwecd55tfatzxkfdiia7qh7wy7jb6vqg64blm
-  tests/test_models.py: bafybeibkmungqazso33ph7eiu4otsde6revqbbfejxjkswrlf22x7uwc3a
+  tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
+  tests/test_behaviours.py: bafybeifkazsevd6vsfaapulouxepez3rl24y3rxgja5zhmj7s323zdjlmq
+  tests/test_dialogues.py: bafybeieaos2byphju6i6xvytppqqcuqqvnpilnflsy73l3wqazzjttbg7m
+  tests/test_handlers.py: bafybeiacfkjcxqw73vk36wmilpq2wmejwyfy4sycosgswgzpq35tfvr2ia
+  tests/test_models.py: bafybeih4q5wxltsgu45zzfawtahgzsvpy2iohuveapsnfok2wjvcojki7y
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
@@ -25,7 +25,7 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
 - valory/score_read_abci:0.1.0:bafybeibzodhywvzkux3fekbh7bcep4i6go4x2qv4phxdcn4nlscxwp5gh4
-- valory/score_write_abci:0.1.0:bafybeidgobdaxnz25j3krlgawcbugytm6auojb7bx6p6p34pdoilsela2i
+- valory/score_write_abci:0.1.0:bafybeidkjwy2xzfw7wrkqu4elfpbsfrozsfvba3utssl2f3vvopkgqg5wu
 - valory/dynamic_nft_abci:0.1.0:bafybeiee44wyusyor6hb42pm3u4thzwqwas57d5chilrgqkertblepuhpu
 - valory/registration_abci:0.1.0:bafybeihai2otcmnb2w7k64bnwf5qagfexg5gqow74xhj3wynikgdxre3ka
 - valory/reset_pause_abci:0.1.0:bafybeifs6zpg5nbvuapmxafzo6fdhoz5ebpiujetvk243apo3iwl2rn45i
@@ -82,8 +82,8 @@ models:
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
       ceramic_did_seed: '0101010101010101010101010101010101010101010101010101010101010101'
       ceramic_did_str: did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX
-      scores_stream_id: default_stream_id
-      wallets_stream_id: default_stream_id
+      scores_stream_id: user_to_points_stream_id
+      wallets_stream_id: wallet_to_users_stream_id
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       consensus:
