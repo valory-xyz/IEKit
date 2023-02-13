@@ -58,6 +58,21 @@ DUMMY_API_RESPONSE = {
     "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
 }
 
+DUMMY_API_RESPONSE_MULTIPAGE = {
+    "data": [
+        {"author_id": "1286010187325812739", "text": "dummy_text"},
+        {"author_id": "1286010187325812739", "text": "dummy_text"},
+        {"author_id": "1286010187325812738", "text": "dummy_text"},
+        {"author_id": "1286010187325812737", "text": "dummy_text"},
+    ],
+    "meta": {
+        "result_count": 4,
+        "newest_id": "1",
+        "oldest_id": "0",
+        "next_token": "dummy_next_token",
+    },
+}
+
 DUMMY_MOST_VOTED_API_DATA = {
     "user_to_mentions": {
         "1286010187325812739": 2,
@@ -132,9 +147,34 @@ class TestTwitterObservationBehaviour(BaseSwaapTest):
                     event=Event.DONE,
                 ),
                 {
-                    "body": json.dumps(
-                        DUMMY_API_RESPONSE,
-                    ),
+                    "urls": [TWITTER_API_URL],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_API_RESPONSE,
+                        )
+                    ],
+                    "status_code": 200,
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "Happy path, multi-page",
+                    initial_data=dict(),
+                    event=Event.DONE,
+                ),
+                {
+                    "urls": [
+                        TWITTER_API_URL,
+                        TWITTER_API_URL + "&pagination_token=dummy_next_token",
+                    ],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_API_RESPONSE_MULTIPAGE,
+                        ),
+                        json.dumps(
+                            DUMMY_API_RESPONSE,
+                        ),
+                    ],
                     "status_code": 200,
                 },
             ),
@@ -144,20 +184,21 @@ class TestTwitterObservationBehaviour(BaseSwaapTest):
         """Run tests."""
         self.fast_forward(test_case.initial_data)
         self.behaviour.act_wrapper()
-        self.mock_http_request(
-            request_kwargs=dict(
-                method="GET",
-                headers="Authorization: Bearer <default_bearer_token>\r\n",
-                version="",
-                url=TWITTER_API_URL,
-            ),
-            response_kwargs=dict(
-                version="",
-                status_code=kwargs.get("status_code"),
-                status_text="",
-                body=kwargs.get("body").encode(),
-            ),
-        )
+        for i in range(len(kwargs.get("urls"))):
+            self.mock_http_request(
+                request_kwargs=dict(
+                    method="GET",
+                    headers="Authorization: Bearer <default_bearer_token>\r\n",
+                    version="",
+                    url=kwargs.get("urls")[i],
+                ),
+                response_kwargs=dict(
+                    version="",
+                    status_code=kwargs.get("status_code"),
+                    status_text="",
+                    body=kwargs.get("bodies")[i].encode(),
+                ),
+            )
         self.complete(test_case.event)
 
 

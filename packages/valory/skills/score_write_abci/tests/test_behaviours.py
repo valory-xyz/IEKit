@@ -59,8 +59,11 @@ DUMMY_USER_TO_SCORES = {"hello": "world"}
 
 DUMMY_WALLET_TO_USERS = {"wallet_a": "user_a", "wallet_b": "user_b"}
 
-CERAMIC_API_STREAM_URL = (
-    "https://ceramic-clay.3boxlabs.com/api/v0/commits/default_stream_id"
+CERAMIC_API_STREAM_URL_POINTS = (
+    "https://ceramic-clay.3boxlabs.com/api/v0/commits/user_to_points_stream_id"
+)
+CERAMIC_API_STREAM_URL_WALLETS = (
+    "https://ceramic-clay.3boxlabs.com/api/v0/commits/wallet_to_users_stream_id"
 )
 
 DUMMY_API_RESPONSE_READ = {
@@ -156,6 +159,8 @@ DUMMY_API_RESPONSE_READ_WRONG = {
         }
     ],
 }
+
+DUMMY_API_RESPONSE_READ_WRONG_JSON = "-"
 
 
 @dataclass
@@ -305,6 +310,19 @@ class TestCeramicWriteBehaviourSender(BaseScoreWriteTest):
                     },
                 },
             ),
+            (
+                BehaviourTestCase(
+                    "Json decode error",
+                    initial_data=dict(most_voted_keeper_address="test_agent_address"),
+                    event=Event.DONE,
+                ),
+                {
+                    "read_data": {
+                        "body": DUMMY_API_RESPONSE_READ_WRONG_JSON,
+                        "status": 200,
+                    },
+                },
+            ),
         ],
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
@@ -318,7 +336,7 @@ class TestCeramicWriteBehaviourSender(BaseScoreWriteTest):
                 method="GET",
                 headers="",
                 version="",
-                url=CERAMIC_API_STREAM_URL,
+                url=CERAMIC_API_STREAM_URL_POINTS,
             ),
             response_kwargs=dict(
                 version="",
@@ -329,20 +347,21 @@ class TestCeramicWriteBehaviourSender(BaseScoreWriteTest):
         )
 
         # Write data call
-        self.mock_http_request(
-            request_kwargs=dict(
-                method="POST",
-                headers="",
-                version="",
-                url=CERAMIC_API_STREAM_URL,
-            ),
-            response_kwargs=dict(
-                version="",
-                status_code=kwargs.get("write_data")["status"],
-                status_text="",
-                body=kwargs.get("write_data")["body"].encode(),
-            ),
-        )
+        if "write_data" in kwargs:
+            self.mock_http_request(
+                request_kwargs=dict(
+                    method="POST",
+                    headers="",
+                    version="",
+                    url=CERAMIC_API_STREAM_URL_POINTS,
+                ),
+                response_kwargs=dict(
+                    version="",
+                    status_code=kwargs.get("write_data")["status"],
+                    status_text="",
+                    body=kwargs.get("write_data")["body"].encode(),
+                ),
+            )
 
         self.complete(test_case.event)
 
@@ -427,7 +446,7 @@ class TestCeramicWriteBehaviourApiError(BaseScoreWriteTest):
                 method="GET",
                 headers="",
                 version="",
-                url=CERAMIC_API_STREAM_URL,
+                url=CERAMIC_API_STREAM_URL_POINTS,
             ),
             response_kwargs=dict(
                 version="",
@@ -444,7 +463,7 @@ class TestCeramicWriteBehaviourApiError(BaseScoreWriteTest):
                     method="POST",
                     headers="",
                     version="",
-                    url=CERAMIC_API_STREAM_URL,
+                    url=CERAMIC_API_STREAM_URL_POINTS,
                 ),
                 response_kwargs=dict(
                     version="",
@@ -490,7 +509,7 @@ class TestVerificationBehaviour(BaseScoreWriteTest):
                 method="GET",
                 headers="",
                 version="",
-                url=CERAMIC_API_STREAM_URL,
+                url=CERAMIC_API_STREAM_URL_POINTS,
             ),
             response_kwargs=dict(
                 version="",
@@ -548,7 +567,7 @@ class TestVerificationBehaviourApiError(BaseScoreWriteTest):
                 method="GET",
                 headers="",
                 version="",
-                url=CERAMIC_API_STREAM_URL,
+                url=CERAMIC_API_STREAM_URL_POINTS,
             ),
             response_kwargs=dict(
                 version="",
@@ -595,7 +614,7 @@ class TestWalletReadBehaviour(BaseScoreWriteTest):
                 method="GET",
                 headers="",
                 version="",
-                url=CERAMIC_API_STREAM_URL,
+                url=CERAMIC_API_STREAM_URL_WALLETS,
             ),
             response_kwargs=dict(
                 version="",
@@ -653,7 +672,7 @@ class TestWalletReadBehaviourApiError(BaseScoreWriteTest):
                 method="GET",
                 headers="",
                 version="",
-                url=CERAMIC_API_STREAM_URL,
+                url=CERAMIC_API_STREAM_URL_WALLETS,
             ),
             response_kwargs=dict(
                 version="",

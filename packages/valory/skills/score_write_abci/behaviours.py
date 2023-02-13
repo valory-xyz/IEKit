@@ -87,15 +87,15 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
         )
 
         if response.status_code != 200:
-            self.context.logger.info(
+            self.context.logger.error(
                 f"API error while reading the stream: {response.status_code}: '{response.body}'"
             )
             return None
 
         try:
             api_data = json.loads(response.body)
-        except json.JSONDecodeError:
-            self.context.logger.info(
+        except json.decoder.JSONDecodeError:
+            self.context.logger.error(
                 f"API error while loading the response json. Response body: '{response.body}'"
             )
             return None
@@ -283,8 +283,10 @@ class WalletReadBehaviour(ScoreWriteBaseBehaviour):
                 )
                 payload_content = WalletReadRound.ERROR_PAYLOAD
             else:
-                self.context.logger.info(f"Retrieved wallet data from Ceramic: {data}")
-                payload_content = json.dumps(data)
+                self.context.logger.info(
+                    f"Retrieved wallet data from Ceramic: {data['data']}"
+                )
+                payload_content = json.dumps(data["data"])
 
             sender = self.context.agent_address
             payload = WalletReadPayload(sender=sender, content=payload_content)

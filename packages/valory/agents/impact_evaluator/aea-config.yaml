@@ -9,7 +9,7 @@ fingerprint:
   tests/__init__.py: bafybeicmv3jjcqcdnmubfmrgdgeyic3nkm77z4mutsyuo34hpddwupofre
   tests/helpers/__init__.py: bafybeiauwuw4a4wxqacqqkkk52ktps2qedadhypvh3ex7uqs7qaqrpygmy
   tests/helpers/constants.py: bafybeibbokz7gzdlubnjwxrmh4tqckc7j75hfy3ae6l5a63mrbd4hp6l7u
-  tests/helpers/data/json_server/data.json: bafybeibpep45ajwjh7qhgw7t6r3qbcxp7iz2kfcut4fhzjagqnmguoob54
+  tests/helpers/data/json_server/data.json: bafybeihnay4pxrgzylh6b7b23ihyatoa5lswfs2zleq7gsv7uhqm7jlqr4
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
   tests/test_impact_evaluator.py: bafybeifvdi6zenb4ud42i3gzys4y2yjrghbvjh7v3iidoxzml7jbe64m3y
@@ -29,10 +29,10 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeidwizzka3qjotu35zzstoqunp3hjhkx6oojqnlwqsvd3qnjjpmusq
 - valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
-- valory/impact_evaluator_abci:0.1.0:bafybeiakftmp33h6555aizwsq7hf3mjkur4imf4w23c62ctnkre6njy33y
-- valory/score_read_abci:0.1.0:bafybeicrefnfqzinq54oddwymcypnrzafjesogizc6oubj7usprab55f4a
-- valory/score_write_abci:0.1.0:bafybeigdhdwthoj2kenaevqrvcwxwlecbyyl2ycolcaknxvyppp74d2vza
-- valory/dynamic_nft_abci:0.1.0:bafybeiehej547iiiijk7brax2mq6li4szvtpwtpj2oji5p4d63c5vvj4nu
+- valory/impact_evaluator_abci:0.1.0:bafybeifizrdogswr635zwoprl2za6762gvvkd4p2qfstdeimp236hh3ize
+- valory/score_read_abci:0.1.0:bafybeibzodhywvzkux3fekbh7bcep4i6go4x2qv4phxdcn4nlscxwp5gh4
+- valory/score_write_abci:0.1.0:bafybeidkjwy2xzfw7wrkqu4elfpbsfrozsfvba3utssl2f3vvopkgqg5wu
+- valory/dynamic_nft_abci:0.1.0:bafybeiee44wyusyor6hb42pm3u4thzwqwas57d5chilrgqkertblepuhpu
 - valory/registration_abci:0.1.0:bafybeihai2otcmnb2w7k64bnwf5qagfexg5gqow74xhj3wynikgdxre3ka
 - valory/reset_pause_abci:0.1.0:bafybeifs6zpg5nbvuapmxafzo6fdhoz5ebpiujetvk243apo3iwl2rn45i
 default_ledger: ethereum
@@ -113,8 +113,8 @@ models:
       ceramic_api_read_endpoint: ${str:api/v0/commits/{stream_id}}
       ceramic_did_seed: ${str:0101010101010101010101010101010101010101010101010101010101010101}
       ceramic_did_str: ${str:did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
-      scores_stream_id: ${str:default_stream_id}
-      wallets_stream_id: ${str:default_stream_id}
+      scores_stream_id: ${str:user_to_points_stream_id}
+      wallets_stream_id: ${str:wallet_to_users_stream_id}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       consensus:

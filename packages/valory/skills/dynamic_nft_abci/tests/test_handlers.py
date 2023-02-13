@@ -51,7 +51,7 @@ HTTP_SERVER_SENDER = str(HTTP_SERVER_PUBLIC_ID.without_hash())
 TOKEN_URI_BASE = "https://pfp.staging.autonolas.tech/"  # nosec
 
 
-def get_dummy_metadata(token_id, image_hash):
+def get_dummy_metadata(token_id, image_hash, points=10):
     """Get the dummy token metadata"""
     return {
         "title": "Autonolas Contribute Badges",
@@ -59,7 +59,7 @@ def get_dummy_metadata(token_id, image_hash):
         "description": "This NFT recognizes the contributions made by the holder to the Autonolas Community.",
         "image": f"ipfs://{image_hash}",
         "attributes": [
-            {"trait_type": "Score", "value": 10},
+            {"trait_type": "Score", "value": points},
             {
                 "trait_type": "Level",
                 "value": "Idle",
@@ -191,6 +191,29 @@ class TestHttpHandler(BaseSkillTestCase):
                 response_body=json.dumps(
                     get_dummy_metadata(
                         0, "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm"
+                    )
+                ).encode("utf-8"),
+                method="get",
+                n_outbox_msgs=1,
+            ),
+            HandlerTestCase(
+                name="id in token table, no threshold match",
+                request_url=f"{TOKEN_URI_BASE}0",
+                token_to_data={
+                    "0": {
+                        "image_hash": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm",
+                        "points": -10,
+                    }
+                },
+                request_body=b"some_body/",
+                response_status_code=OK_CODE,
+                response_status_text="Success",
+                response_headers="Content-Type: application/json\nsome_headers",
+                response_body=json.dumps(
+                    get_dummy_metadata(
+                        0,
+                        "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm",
+                        -10,
                     )
                 ).encode("utf-8"),
                 method="get",

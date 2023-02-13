@@ -399,11 +399,15 @@ class TestWalletReadRound(BaseScoreWriteRoundTest):
                     data=get_dummy_wallet_read_payload_serialized(),
                 ),
                 final_data={
-                    "wallet_to_users": get_dummy_wallet_read_payload_serialized(),
+                    "wallet_to_users": json.loads(
+                        get_dummy_wallet_read_payload_serialized()
+                    ),
                 },
                 event=Event.DONE,
                 most_voted_payload=get_dummy_wallet_read_payload_serialized(),
-                synchronized_data_attr_checks=[],
+                synchronized_data_attr_checks=[
+                    lambda _synchronized_data: _synchronized_data.wallet_to_users
+                ],
             ),
             RoundTestCase(
                 name="API error",
