@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibk5iyiobvfgd6w3z75amk7muou3kqqq5rj3mze6rnzlmzpaiwtii
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeiggiduenulha33yty4psng6lqhnyk7u34b2ssk6yvzine3k262iqu
+agent: valory/impact_evaluator:0.1.0:bafybeie6i5cjtrxssiekyrlcbtp43g5mrrfnzja3yejesqd7udfef6bjpa
 number_of_agents: 4
 ---
 public_id: valory/impact_evaluator_abci:0.1.0
@@ -18,10 +18,10 @@ models:
     args:
       broadcast_to_server: false
       ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
-      ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:"api/v0/commits/{stream_id}"}
-      ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:"api/v0/commits/{stream_id}"}
+      ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits/{stream_id}}
+      ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
       ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-      ceramic_did_str: ${CERAMIC_DID_STR:str:"did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX"}
+      ceramic_did_str: ${CERAMIC_DID_STR:str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
       scores_stream_id: ${SCORES_STREAM_ID:str:user_to_points_stream_id}
       wallets_stream_id: ${WALLETS_STREAM_ID:str:wallet_to_users_stream_id}
       dynamic_contribution_contract_address: ${DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS:str:0x5FbDB2315678afecb367f032d93F642f64180aa3}

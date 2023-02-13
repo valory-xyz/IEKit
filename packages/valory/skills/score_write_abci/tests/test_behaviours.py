@@ -189,7 +189,7 @@ class BaseScoreWriteTest(FSMBehaviourBaseCase):
         """Set up the test class."""
         super().setup_class(
             param_overrides={
-                "ceramic_did_str": "did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX",
+                "ceramic_did_str": "z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX",
                 "ceramic_did_seed": "0101010101010101010101010101010101010101010101010101010101010101",
             }
         )

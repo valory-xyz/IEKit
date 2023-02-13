@@ -211,7 +211,7 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
             "{stream_id}", self.params.scores_stream_id
         )
 
-        self.context.logger.info(f"Writing scores to Ceramic API [{url}]")
+        self.context.logger.info(f"Writing scores to Ceramic API [{url}]:\n{commit_payload}")
         response = yield from self.get_http_response(
             method="POST",
             url=url,
@@ -219,9 +219,8 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
         )
 
         if response.status_code != 200:
-            api_data = json.loads(response.body)
             self.context.logger.error(
-                f"API error while updating the stream: {response.status_code}: {api_data}"
+                f"API error while updating the stream: {response.status_code}: {response.body}"
             )
             return False
 
