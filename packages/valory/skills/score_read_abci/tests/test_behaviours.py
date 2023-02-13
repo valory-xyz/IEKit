@@ -58,6 +58,10 @@ DUMMY_API_RESPONSE = {
     "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
 }
 
+DUMMY_API_RESPONSE_MISSING_DATA = {
+    "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
+}
+
 DUMMY_API_RESPONSE_MULTIPAGE = {
     "data": [
         {"author_id": "1286010187325812739", "text": "dummy_text"},
@@ -213,7 +217,7 @@ class TestTwitterObservationBehaviourAPIError(BaseSwaapTest):
         [
             (
                 BehaviourTestCase(
-                    "API error",
+                    "API error: 200",
                     initial_data=dict(),
                     event=Event.API_ERROR,
                 ),
@@ -222,6 +226,19 @@ class TestTwitterObservationBehaviourAPIError(BaseSwaapTest):
                         DUMMY_API_RESPONSE,
                     ),
                     "status_code": 404,
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "API error: missing data",
+                    initial_data=dict(),
+                    event=Event.API_ERROR,
+                ),
+                {
+                    "body": json.dumps(
+                        DUMMY_API_RESPONSE_MISSING_DATA,
+                    ),
+                    "status_code": 200,
                 },
             ),
         ],

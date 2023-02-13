@@ -123,6 +123,16 @@ class TwitterObservationBehaviour(ScoreReadBaseBehaviour):
 
             api_data = json.loads(response.body)
 
+            if (
+                "data" not in api_data
+                or "meta" not in api_data
+                or "newest_id" not in api_data["meta"]
+            ):
+                self.context.logger.error(
+                    f"Twitter API response does not contain some of the required fields ('data', 'meta', 'meta/newest_id'): {api_data}"
+                )
+                return TwitterObservationRound.ERROR_PAYLOAD
+
             mentions += api_data["data"]
             latest_tweet_id = api_data["meta"]["newest_id"]
 
