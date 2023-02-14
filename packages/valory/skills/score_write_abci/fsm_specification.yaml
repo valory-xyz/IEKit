@@ -27,6 +27,7 @@ transition_func:
     (RandomnessRound, DONE): SelectKeeperRound
     (RandomnessRound, NO_MAJORITY): RandomnessRound
     (RandomnessRound, ROUND_TIMEOUT): RandomnessRound
+    (ScoreAddRound, API_ERROR): ScoreAddRound
     (ScoreAddRound, DONE): RandomnessRound
     (ScoreAddRound, NO_CHANGES): WalletReadRound
     (ScoreAddRound, NO_MAJORITY): ScoreAddRound

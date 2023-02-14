@@ -3,6 +3,7 @@ alphabet_in:
 - CONTRACT_ERROR
 - DID_NOT_SEND
 - DONE
+- NO_CHANGES
 - NO_MAJORITY
 - RESET_AND_PAUSE_TIMEOUT
 - ROUND_TIMEOUT
@@ -19,6 +20,7 @@ states:
 - RegistrationRound
 - RegistrationStartupRound
 - ResetAndPauseRound
+- ScoreAddRound
 - ScoringRound
 - SelectKeeperRound
 - TwitterObservationRound
@@ -42,7 +44,12 @@ transition_func:
     (ResetAndPauseRound, DONE): TwitterObservationRound
     (ResetAndPauseRound, NO_MAJORITY): RegistrationRound
     (ResetAndPauseRound, RESET_AND_PAUSE_TIMEOUT): RegistrationRound
-    (ScoringRound, DONE): RandomnessRound
+    (ScoreAddRound, API_ERROR): ScoreAddRound
+    (ScoreAddRound, DONE): RandomnessRound
+    (ScoreAddRound, NO_CHANGES): WalletReadRound
+    (ScoreAddRound, NO_MAJORITY): ScoreAddRound
+    (ScoreAddRound, ROUND_TIMEOUT): ScoreAddRound
+    (ScoringRound, DONE): ScoreAddRound
     (ScoringRound, NO_MAJORITY): ScoringRound
     (ScoringRound, ROUND_TIMEOUT): ScoringRound
     (SelectKeeperRound, DONE): CeramicWriteRound
