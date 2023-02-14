@@ -102,12 +102,23 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
                     for address, user in self.synchronized_data.wallet_to_users.items()
                 }
 
-                # Add new points
-                for user, points in self.synchronized_data.user_to_scores.items():
+                # Update points in token_to_data with the updated points
+                for user, points in self.synchronized_data.user_to_total_points.items():
+                    # No wallet linked to Twitter user
+                    if user not in users_to_address:
+                        self.context.logger.info(
+                            f"Twitter user {user} has not linked a wallet yet. Skipping..."
+                        )
+                        continue
                     address = users_to_address[user]
-                    if address in address_to_token_ids:
-                        # TODO: with the current implementation, only mentions made after minting are taken into account
-                        token_to_data[address_to_token_ids[address]]["points"] += points
+                    # Not minted
+                    if address not in address_to_token_ids:
+                        self.context.logger.info(
+                            f"Twitter user {user} has not minted a token yet. Skipping..."
+                        )
+                        continue
+                    token_id = address_to_token_ids[address]
+                    token_to_data[token_id]["points"] = points
 
                 self.context.logger.info(f"Got the new token data: {token_to_data}")
 

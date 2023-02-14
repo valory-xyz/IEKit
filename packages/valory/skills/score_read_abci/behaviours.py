@@ -198,7 +198,7 @@ class ScoringBehaviour(ScoreReadBaseBehaviour):
     def _assign_scores(self) -> Dict:
         """Assign scores to users"""
 
-        user_to_scores = {
+        user_to_new_points = {
             user: score * self.params.twitter_mention_points
             for user, score in self.synchronized_data.most_voted_api_data[
                 "user_to_mentions"
@@ -206,7 +206,7 @@ class ScoringBehaviour(ScoreReadBaseBehaviour):
         }
 
         return {
-            "user_to_scores": user_to_scores,
+            "user_to_new_points": user_to_new_points,
             "latest_tweet_id": self.synchronized_data.most_voted_api_data[
                 "latest_tweet_id"
             ],

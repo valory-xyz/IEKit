@@ -22,7 +22,7 @@
 import json
 from abc import ABC
 from collections import OrderedDict
-from typing import Generator, Optional, Set, Type, cast
+from typing import Dict, Generator, Optional, Set, Type, cast
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
@@ -48,6 +48,7 @@ from packages.valory.skills.score_write_abci.payloads import (
 from packages.valory.skills.score_write_abci.rounds import (
     CeramicWriteRound,
     RandomnessRound,
+    ScoreAddRound,
     ScoreWriteAbciApp,
     SelectKeeperRound,
     SynchronizedData,
@@ -69,12 +70,8 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
         """Return the params."""
         return cast(Params, super().params)
 
-    def _get_stream_data(
-        self, stream_id: Optional[str] = None
-    ) -> Generator[None, None, Optional[dict]]:
+    def _get_stream_data(self, stream_id: str) -> Generator[None, None, Optional[dict]]:
         """Get the current data from a Ceramic stream"""
-
-        stream_id = stream_id or self.params.scores_stream_id
 
         api_base = self.params.ceramic_api_base
         api_endpoint = self.params.ceramic_api_read_endpoint
@@ -118,6 +115,67 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
             "previous_cid_str": previous_cid_str,
             "data": data,
         }
+
+
+class ScoreAddBehaviour(ScoreWriteBaseBehaviour):
+    """ScoreAddBehaviour"""
+
+    matching_round: Type[AbstractRound] = VerificationRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+
+            user_to_total_points = self._add_points()
+
+            if user_to_total_points is None:
+                payload_content = ScoreAddRound.ERROR_PAYLOAD
+            elif user_to_total_points == {}:
+                payload_content = ScoreAddRound.NO_CHANGES_PAYLOAD
+            else:
+                payload_content = json.dumps(user_to_total_points, sort_keys=True)
+
+            sender = self.context.agent_address
+            payload = VerificationPayload(sender=sender, content=payload_content)
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
+
+    def _add_points(self) -> Optional[Dict]:
+        """Add the old and new points for each user"""
+
+        # Get the new points
+        user_to_new_points = self.synchronized_data.user_to_new_points
+
+        if not user_to_new_points:
+            return {}
+
+        # Get the old scores
+        data = yield from self._get_stream_data(self.params.scores_stream_id)
+
+        if not data:
+            self.context.logger.error(
+                "An error happened while retrieving the old scores from Ceramic"
+            )
+            return None
+
+        user_to_old_points = data["data"]
+
+        # Add the points
+        user_to_total_points = user_to_old_points
+        for user, new_points in user_to_new_points.items():
+            if user not in user_to_old_points:
+                user_to_total_points[user] = new_points
+            else:
+                user_to_total_points[user] += new_points
+
+        self.context.logger.info(f"Calculated new total points: {user_to_total_points}")
+
+        return user_to_total_points
 
 
 class RandomnessBehaviour(RandomnessBehaviour):
@@ -190,8 +248,8 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
     def _write_ceramic_data(self) -> Generator[None, None, bool]:
         """Write the scores to the Ceramic stream"""
 
-        # Get the stream status
-        data = yield from self._get_stream_data()
+        # Get the current stream data
+        data = yield from self._get_stream_data(self.params.scores_stream_id)
 
         if not data:
             return False
@@ -202,7 +260,7 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
             self.params.ceramic_did_seed,
             self.params.scores_stream_id,
             data,
-            self.synchronized_data.user_to_scores,
+            self.synchronized_data.user_to_total_points,
         )
 
         # Send the payload
@@ -245,14 +303,14 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
             # Get the current data
-            data = yield from self._get_stream_data()
+            data = yield from self._get_stream_data(self.params.scores_stream_id)
 
-            # Verify if the retrieved data matches local user_to_scores
+            # Verify if the retrieved data matches local user_to_total_points
             if not data or json.dumps(data["data"], sort_keys=True) != json.dumps(
-                self.synchronized_data.user_to_scores, sort_keys=True
+                self.synchronized_data.user_to_total_points, sort_keys=True
             ):
                 self.context.logger.info(
-                    f"An error happened while verifying data.\nExpected data:\n{self.synchronized_data.user_to_scores}. Actual data:\n{data}"
+                    f"An error happened while verifying data.\nExpected data:\n{self.synchronized_data.user_to_total_points}. Actual data:\n{data}"
                 )
                 payload_content = CeramicWriteRound.ERROR_PAYLOAD
             else:

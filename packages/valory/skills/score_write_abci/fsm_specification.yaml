@@ -2,18 +2,20 @@ alphabet_in:
 - API_ERROR
 - DID_NOT_SEND
 - DONE
+- NO_CHANGES
 - NO_MAJORITY
 - ROUND_TIMEOUT
-default_start_state: RandomnessRound
+default_start_state: ScoreAddRound
 final_states:
 - FinishedWalletReadRound
 label: ScoreWriteAbciApp
 start_states:
-- RandomnessRound
+- ScoreAddRound
 states:
 - CeramicWriteRound
 - FinishedWalletReadRound
 - RandomnessRound
+- ScoreAddRound
 - SelectKeeperRound
 - VerificationRound
 - WalletReadRound
@@ -25,6 +27,10 @@ transition_func:
     (RandomnessRound, DONE): SelectKeeperRound
     (RandomnessRound, NO_MAJORITY): RandomnessRound
     (RandomnessRound, ROUND_TIMEOUT): RandomnessRound
+    (ScoreAddRound, DONE): RandomnessRound
+    (ScoreAddRound, NO_CHANGES): WalletReadRound
+    (ScoreAddRound, NO_MAJORITY): ScoreAddRound
+    (ScoreAddRound, ROUND_TIMEOUT): ScoreAddRound
     (SelectKeeperRound, DONE): CeramicWriteRound
     (SelectKeeperRound, NO_MAJORITY): RandomnessRound
     (SelectKeeperRound, ROUND_TIMEOUT): RandomnessRound

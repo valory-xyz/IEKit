@@ -59,9 +59,9 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(dict, self.db.get("token_to_data", {}))
 
     @property
-    def user_to_scores(self) -> dict:
+    def user_to_total_points(self) -> dict:
         """Get the user scores."""
-        return cast(dict, self.db.get("user_to_scores", {}))
+        return cast(dict, self.db.get("user_to_total_points", {}))
 
     @property
     def last_update_time(self) -> float:

@@ -29,10 +29,10 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeidwizzka3qjotu35zzstoqunp3hjhkx6oojqnlwqsvd3qnjjpmusq
 - valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
-- valory/impact_evaluator_abci:0.1.0:bafybeifsunlcagyljkfvbjp2nhiwn6txb3gocjetn36nv36vot5ac2h4qq
-- valory/score_read_abci:0.1.0:bafybeifvqkbzbg7dxrxoxzx7xwcumeifoltcg6xwwhj6fe2cbkjytajhli
-- valory/score_write_abci:0.1.0:bafybeiavnikfyowiw4dvnmggpjnusygi6uqsqrjqt3fa3cjskggvhl4t64
-- valory/dynamic_nft_abci:0.1.0:bafybeiee44wyusyor6hb42pm3u4thzwqwas57d5chilrgqkertblepuhpu
+- valory/impact_evaluator_abci:0.1.0:bafybeiele4cw3stoi7pqxtchto7ywqlsc3k5zsdczzfpc2atrguqrsyc3q
+- valory/score_read_abci:0.1.0:bafybeicyycrbt3e4gprjxabziojjfbyyyek5dkb4mir3mz2w6vrbxwvkia
+- valory/score_write_abci:0.1.0:bafybeigbzrsb444vkbvgfgifzhexrvsoympqbn6j2aivhdoqizziazugxe
+- valory/dynamic_nft_abci:0.1.0:bafybeidiwzelw75ob7e5cfhgy4sucq4l7xbrsj5humxtqidl54aoner5gq
 - valory/registration_abci:0.1.0:bafybeihai2otcmnb2w7k64bnwf5qagfexg5gqow74xhj3wynikgdxre3ka
 - valory/reset_pause_abci:0.1.0:bafybeifs6zpg5nbvuapmxafzo6fdhoz5ebpiujetvk243apo3iwl2rn45i
 default_ledger: ethereum

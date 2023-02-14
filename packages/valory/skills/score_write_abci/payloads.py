@@ -25,6 +25,13 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 
 @dataclass(frozen=True)
+class ScoreAddPayload(BaseTxPayload):
+    """Represent a transaction payload for the ScoreAddRound."""
+
+    content: str
+
+
+@dataclass(frozen=True)
 class RandomnessPayload(BaseTxPayload):
     """Represent a transaction payload of type 'randomness'."""
 
