@@ -33,7 +33,7 @@ from packages.valory.skills.abstract_round_abci.abci_app_chain import (
 # more information here: https://docs.autonolas.network/fsm_app_introduction/#composition-of-fsm-apps
 abci_app_transition_mapping: AbciAppTransitionMapping = {
     RegistrationAbci.FinishedRegistrationRound: ScoreReadAbciAbci.TwitterObservationRound,
-    ScoreReadAbciAbci.FinishedScoringRound: ScoreWriteAbciAbci.RandomnessRound,
+    ScoreReadAbciAbci.FinishedScoringRound: ScoreWriteAbciAbci.ScoreAddRound,
     ScoreWriteAbciAbci.FinishedWalletReadRound: DynamicNFTAbci.NewTokensRound,
     DynamicNFTAbci.FinishedNewTokensRound: ResetAndPauseAbci.ResetAndPauseRound,
     ResetAndPauseAbci.FinishedResetAndPauseRound: ScoreReadAbciAbci.TwitterObservationRound,

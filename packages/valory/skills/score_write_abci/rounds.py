@@ -69,7 +69,7 @@ class SynchronizedData(BaseSynchronizedData):
     @property
     def user_to_new_points(self) -> dict:
         """Get the new points for each user."""
-        return cast(dict, self.db.get("user_to_new_points", {}))
+        return cast(dict, self.db.get("user_to_new_points", {}))  # pragma: no cover
 
     @property
     def user_to_total_points(self) -> dict:
@@ -253,6 +253,7 @@ class ScoreWriteAbciApp(AbciApp[Event]):
             Event.NO_CHANGES: WalletReadRound,
             Event.NO_MAJORITY: ScoreAddRound,
             Event.ROUND_TIMEOUT: ScoreAddRound,
+            Event.API_ERROR: ScoreAddRound,
         },
         RandomnessRound: {
             Event.DONE: SelectKeeperRound,

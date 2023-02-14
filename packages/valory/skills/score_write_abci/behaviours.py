@@ -81,7 +81,6 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
         response = yield from self.get_http_response(
             method="GET",
             url=url,
-            content=json.dumps(self.synchronized_data.user_to_scores).encode(),
         )
 
         if response.status_code != 200:
@@ -120,14 +119,14 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
 class ScoreAddBehaviour(ScoreWriteBaseBehaviour):
     """ScoreAddBehaviour"""
 
-    matching_round: Type[AbstractRound] = VerificationRound
+    matching_round: Type[AbstractRound] = ScoreAddRound
 
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
-            user_to_total_points = self._add_points()
+            user_to_total_points = yield from self._add_points()
 
             if user_to_total_points is None:
                 payload_content = ScoreAddRound.ERROR_PAYLOAD
@@ -145,13 +144,14 @@ class ScoreAddBehaviour(ScoreWriteBaseBehaviour):
 
         self.set_done()
 
-    def _add_points(self) -> Optional[Dict]:
+    def _add_points(self) -> Generator[None, None, Optional[Dict]]:
         """Add the old and new points for each user"""
 
         # Get the new points
         user_to_new_points = self.synchronized_data.user_to_new_points
 
         if not user_to_new_points:
+            self.context.logger.info("There are no new points to add")
             return {}
 
         # Get the old scores
@@ -269,7 +269,7 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
         url = api_base + api_endpoint
 
         self.context.logger.info(
-            f"Writing new scores to Ceramic API [{url}]:\nScores: {self.synchronized_data.user_to_scores}\nPayload: {commit_payload}"
+            f"Writing new scores to Ceramic API [{url}]:\nScores: {self.synchronized_data.user_to_total_points}\nPayload: {commit_payload}"
         )
         response = yield from self.get_http_response(
             method="POST",
@@ -306,9 +306,11 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
             data = yield from self._get_stream_data(self.params.scores_stream_id)
 
             # Verify if the retrieved data matches local user_to_total_points
-            if not data or json.dumps(data["data"], sort_keys=True) != json.dumps(
+            expected_data = json.dumps(
                 self.synchronized_data.user_to_total_points, sort_keys=True
-            ):
+            )
+
+            if not data or json.dumps(data["data"], sort_keys=True) != expected_data:
                 self.context.logger.info(
                     f"An error happened while verifying data.\nExpected data:\n{self.synchronized_data.user_to_total_points}. Actual data:\n{data}"
                 )
@@ -364,9 +366,10 @@ class WalletReadBehaviour(ScoreWriteBaseBehaviour):
 class ScoreWriteRoundBehaviour(AbstractRoundBehaviour):
     """ScoreWriteRoundBehaviour"""
 
-    initial_behaviour_cls = RandomnessBehaviour
+    initial_behaviour_cls = ScoreAddBehaviour
     abci_app_cls = ScoreWriteAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
+        ScoreAddBehaviour,
         RandomnessBehaviour,
         SelectKeeperCeramicBehaviour,
         CeramicWriteBehaviour,
