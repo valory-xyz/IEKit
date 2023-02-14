@@ -1,12 +1,12 @@
 {
     "dev": {
-        "agent/valory/impact_evaluator/0.1.0": "bafybeiedsyzpssurkxvwyl3qkefmm4btdxz6fpeh2xs7w7d4wdyfkucvh4",
+        "agent/valory/impact_evaluator/0.1.0": "bafybeicpxzuzmrpplcbpdcb2p3gcwf34jegsuo2mc2b2u5atzxy2bzz2zm",
         "contract/valory/dynamic_contribution/0.1.0": "bafybeiewycrrihjevhuoqmkctkmgljklxe467jad6rpsk55xflrri5c35a",
-        "service/valory/impact_evaluator/0.1.0": "bafybeigs3l2q4pbsz6s4pyjsjfye44axed2jiish2yccrrfpb2jjrfskce",
+        "service/valory/impact_evaluator/0.1.0": "bafybeiau4p3xs646wassew4gm26rguwwdttrigv2kr6jpdwwkcw4vpa6i4",
         "skill/valory/dynamic_nft_abci/0.1.0": "bafybeidpynpsqi73qtzqcrer5x37raw2efpaqkuqes7sy3vgflsfh4o5ru",
         "skill/valory/score_read_abci/0.1.0": "bafybeigv5gplfng6nyg7csmmz2ue5k4xdxvxdhhgzwiiarmt4gg6ollp6a",
-        "skill/valory/score_write_abci/0.1.0": "bafybeibmh26j6bopcsjyjyo4zdybquaz5yzxyp4gtz3gt7tdqj6efklawu",
-        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeifrbxiydorr6pzwhoh25dkv6broaxngthwx6xvmf3syystuyp44o4"
+        "skill/valory/score_write_abci/0.1.0": "bafybeibmvxbixnudiotje2uf7fdwdjrbwgm5jwyz5zfdxobmfi4a4vygme",
+        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeiedtu6aabq4c5nypxy5rzlse7p6mvukdq4cxuqjbbqmr6dut34puq"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeiclsbgrviyxbmi2vex5ze3dhr7ywohrqedebx26jozayxvroqtegq",

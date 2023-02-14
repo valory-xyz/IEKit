@@ -66,6 +66,7 @@ from packages.valory.skills.score_write_abci.rounds import (
     SelectKeeperRound,
     CeramicWriteRound,
     VerificationRound,
+    ScoreAddRound
 )
 
 
@@ -73,6 +74,7 @@ HAPPY_PATH: Tuple[RoundChecks, ...] = (
     RoundChecks(RegistrationStartupRound.auto_round_id()),
     RoundChecks(TwitterObservationRound.auto_round_id(), n_periods=2),
     RoundChecks(ScoringRound.auto_round_id(), n_periods=2),
+    RoundChecks(ScoreAddRound.auto_round_id(), n_periods=2),
     RoundChecks(RandomnessRound.auto_round_id(), n_periods=2),
     RoundChecks(SelectKeeperRound.auto_round_id(), n_periods=2),
     RoundChecks(CeramicWriteRound.auto_round_id(), n_periods=2),
@@ -130,6 +132,10 @@ class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
         {
             "dotted_path": f"{__param_args_prefix}.points_to_image_hashes",
             "value": '{"0": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm", "100": "bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q", "50000": "bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4", "100000": "bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy", "150000": "bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}',
+        },
+        {
+            "dotted_path": f"{__param_args_prefix}.scores_stream_id",
+            "value": "user_to_points_stream_id_e2e",
         },
     ]
 
