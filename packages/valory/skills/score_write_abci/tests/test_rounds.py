@@ -51,6 +51,7 @@ from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
 from packages.valory.skills.score_write_abci.payloads import (
     CeramicWritePayload,
     RandomnessPayload,
+    ScoreAddPayload,
     SelectKeeperPayload,
     VerificationPayload,
     WalletReadPayload,
@@ -59,6 +60,7 @@ from packages.valory.skills.score_write_abci.rounds import (
     CeramicWriteRound,
     Event,
     RandomnessRound,
+    ScoreAddRound,
     SelectKeeperRound,
     SynchronizedData,
     VerificationRound,
@@ -236,17 +238,28 @@ class RoundTestCase:
 
 
 def get_dummy_ceramic_write_payload_serialized(api_error: bool = False) -> str:
-    """Dummy twitter observation payload"""
+    """Dummy ceramic write payload"""
     if api_error:
         return "error"
     return "success"
 
 
 def get_dummy_wallet_read_payload_serialized(api_error: bool = False) -> str:
-    """Dummy twitter observation payload"""
+    """Dummy wallet read payload"""
     if api_error:
         return "error"
     return json.dumps({"wallet_a": "user_a", "wallet_b": "user_b"}, sort_keys=True)
+
+
+def get_dummy_score_add_payload_serialized(
+    api_error: bool = False, no_changes: bool = False
+) -> str:
+    """Dummy score add payload"""
+    if api_error:
+        return "error"
+    if no_changes:
+        return "no_changes"
+    return json.dumps({"user_a": 10, "user_b": 20}, sort_keys=True)
 
 
 class BaseScoreWriteRoundTest(BaseCollectSameUntilThresholdRoundTest):
@@ -278,6 +291,63 @@ class BaseScoreWriteRoundTest(BaseCollectSameUntilThresholdRoundTest):
                 exit_event=test_case.event,
             )
         )
+
+
+class TestScoreAddRound(BaseScoreWriteRoundTest):
+    """Tests for ScoreAddRound."""
+
+    round_class = ScoreAddRound
+
+    @pytest.mark.parametrize(
+        "test_case",
+        (
+            RoundTestCase(
+                name="Happy path",
+                initial_data={},
+                payloads=get_payloads(
+                    payload_cls=ScoreAddPayload,
+                    data=get_dummy_score_add_payload_serialized(),
+                ),
+                final_data={
+                    "most_voted_api_data": get_dummy_score_add_payload_serialized(),
+                },
+                event=Event.DONE,
+                most_voted_payload=get_dummy_score_add_payload_serialized(),
+                synchronized_data_attr_checks=[],
+            ),
+            RoundTestCase(
+                name="API error",
+                initial_data={},
+                payloads=get_payloads(
+                    payload_cls=VerificationPayload,
+                    data=get_dummy_score_add_payload_serialized(api_error=True),
+                ),
+                final_data={},
+                event=Event.API_ERROR,
+                most_voted_payload=get_dummy_score_add_payload_serialized(
+                    api_error=True
+                ),
+                synchronized_data_attr_checks=[],
+            ),
+            RoundTestCase(
+                name="No changes",
+                initial_data={},
+                payloads=get_payloads(
+                    payload_cls=VerificationPayload,
+                    data=get_dummy_score_add_payload_serialized(no_changes=True),
+                ),
+                final_data={},
+                event=Event.NO_CHANGES,
+                most_voted_payload=get_dummy_score_add_payload_serialized(
+                    no_changes=True
+                ),
+                synchronized_data_attr_checks=[],
+            ),
+        ),
+    )
+    def test_run(self, test_case: RoundTestCase) -> None:
+        """Run tests."""
+        self.run_test(test_case)
 
 
 class TestCeramicWriteRound(BaseOnlyKeeperSendsRoundTest):

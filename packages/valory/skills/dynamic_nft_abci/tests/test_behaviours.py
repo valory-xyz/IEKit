@@ -180,9 +180,21 @@ class TestNewTokensBehaviour(BaseDynamicNFTTest):
                 BehaviourTestCase(
                     "Happy path",
                     initial_data=dict(
-                        token_to_data={"0": {"address": "dummy_address", "points": 0}},
-                        user_to_scores={"dummy_user": 10},
-                        wallet_to_users={"dummy_address": "dummy_user"},
+                        token_to_data={
+                            "0": {"address": "dummy_address_0", "points": 0},
+                            "1": {"address": "dummy_address_1", "points": 0},
+                            "2": {"address": "dummy_address_2", "points": 0},
+                        },
+                        user_to_total_points={
+                            "dummy_user_0": 10,
+                            "dummy_user_1": 20,
+                            "dummy_user_8": 10,
+                        },
+                        wallet_to_users={
+                            "dummy_address": "dummy_user",
+                            "dummy_address_0": "dummy_user_0",
+                            "dummy_address_8": "dummy_user_8",
+                        },
                     ),
                     event=Event.DONE,
                 ),

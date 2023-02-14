@@ -101,7 +101,7 @@ def get_dummy_twitter_observation_payload_serialized(api_error: bool = False) ->
 def get_dummy_scoring_payload_serialized() -> str:
     """Dummy scoring payload"""
     return json.dumps(
-        {"user_to_scores": {"1": 200, "2": 300, "3": 500}, "latest_tweet_id": "1"},
+        {"user_to_new_points": {"1": 200, "2": 300, "3": 500}, "latest_tweet_id": "1"},
         sort_keys=True,
     )
 
@@ -204,13 +204,13 @@ class TestScoringRound(BaseScoreReadRoundTest):
                     data=get_dummy_scoring_payload_serialized(),
                 ),
                 final_data={
-                    "user_to_scores": {"1": 200, "2": 300, "3": 500},
+                    "user_to_new_points": {"1": 200, "2": 300, "3": 500},
                     "latest_tweet_id": "1",
                 },
                 event=Event.DONE,
                 most_voted_payload=get_dummy_scoring_payload_serialized(),
                 synchronized_data_attr_checks=[
-                    lambda _synchronized_data: _synchronized_data.user_to_scores,
+                    lambda _synchronized_data: _synchronized_data.user_to_new_points,
                     lambda _synchronized_data: _synchronized_data.latest_tweet_id,
                 ],
             ),

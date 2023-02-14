@@ -9,10 +9,10 @@ fingerprint:
   tests/__init__.py: bafybeicmv3jjcqcdnmubfmrgdgeyic3nkm77z4mutsyuo34hpddwupofre
   tests/helpers/__init__.py: bafybeiauwuw4a4wxqacqqkkk52ktps2qedadhypvh3ex7uqs7qaqrpygmy
   tests/helpers/constants.py: bafybeibbokz7gzdlubnjwxrmh4tqckc7j75hfy3ae6l5a63mrbd4hp6l7u
-  tests/helpers/data/json_server/data.json: bafybeihnay4pxrgzylh6b7b23ihyatoa5lswfs2zleq7gsv7uhqm7jlqr4
+  tests/helpers/data/json_server/data.json: bafybeicn4kcveaawctmhxs2wbxhztteqrs5ak3m7vgyceot5shahvvvoxu
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
-  tests/test_impact_evaluator.py: bafybeifvdi6zenb4ud42i3gzys4y2yjrghbvjh7v3iidoxzml7jbe64m3y
+  tests/test_impact_evaluator.py: bafybeif7rdginbmc2ssx4sq7ijkg3nvgipbazccpktbzw6kwk2ifpfry6m
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeic7p2e2ey44k6yv3dzznepekggceqc6mxb55e4xovcjnr3qym5ncu
@@ -29,10 +29,10 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeidwizzka3qjotu35zzstoqunp3hjhkx6oojqnlwqsvd3qnjjpmusq
 - valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
-- valory/impact_evaluator_abci:0.1.0:bafybeife2gbub2lm3e6lfj7m6w744hkl7plsuhw46qcfwevjz2y2kmbh74
-- valory/score_read_abci:0.1.0:bafybeicqqag3crjljtzjz65uywg6zy6px26pns57pklfswylrb773wayny
-- valory/score_write_abci:0.1.0:bafybeidkjwy2xzfw7wrkqu4elfpbsfrozsfvba3utssl2f3vvopkgqg5wu
-- valory/dynamic_nft_abci:0.1.0:bafybeiee44wyusyor6hb42pm3u4thzwqwas57d5chilrgqkertblepuhpu
+- valory/impact_evaluator_abci:0.1.0:bafybeigqq3a6ouzhgplf4uzekweicq5d6ymi4em47hhhpfhpqr5pbpb2ge
+- valory/score_read_abci:0.1.0:bafybeigv5gplfng6nyg7csmmz2ue5k4xdxvxdhhgzwiiarmt4gg6ollp6a
+- valory/score_write_abci:0.1.0:bafybeieruedtnaos5hq2ahvgchf2f6fkdhkrv6kmrfszgl2q3mne7kk6ra
+- valory/dynamic_nft_abci:0.1.0:bafybeidpynpsqi73qtzqcrer5x37raw2efpaqkuqes7sy3vgflsfh4o5ru
 - valory/registration_abci:0.1.0:bafybeihai2otcmnb2w7k64bnwf5qagfexg5gqow74xhj3wynikgdxre3ka
 - valory/reset_pause_abci:0.1.0:bafybeifs6zpg5nbvuapmxafzo6fdhoz5ebpiujetvk243apo3iwl2rn45i
 default_ledger: ethereum
@@ -109,10 +109,10 @@ models:
   params:
     args:
       ceramic_api_base: ${str:https://ceramic-clay.3boxlabs.com/}
-      ceramic_api_commit_endpoint: ${str:api/v0/commits/{stream_id}}
+      ceramic_api_commit_endpoint: ${str:api/v0/commits}
       ceramic_api_read_endpoint: ${str:api/v0/commits/{stream_id}}
       ceramic_did_seed: ${str:0101010101010101010101010101010101010101010101010101010101010101}
-      ceramic_did_str: ${str:did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
+      ceramic_did_str: ${str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
       scores_stream_id: ${str:user_to_points_stream_id}
       wallets_stream_id: ${str:wallet_to_users_stream_id}
       cleanup_history_depth: 1
@@ -165,7 +165,7 @@ models:
       twitter_api_base: ${str:https://api.twitter.com/}
       twitter_api_bearer_token: ${str:<default_bearer_token>}
       twitter_api_endpoint: ${str:2/users/1450081635559428107/mentions?}
-      twitter_api_args: ${tweet.fields=author_id&user.fields=name&max_results=100&since_id={since_id}}
+      twitter_api_args: ${str:tweet.fields=author_id&user.fields=name&max_results=100&since_id={since_id}}
       twitter_mention_points: ${int:200}
       twitter_max_pages: 10
 ---

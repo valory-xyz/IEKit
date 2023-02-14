@@ -28,6 +28,7 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 from packages.valory.skills.score_write_abci.payloads import (
     CeramicWritePayload,
     RandomnessPayload,
+    ScoreAddPayload,
     SelectKeeperPayload,
     VerificationPayload,
     WalletReadPayload,
@@ -64,6 +65,10 @@ def test_select_keeper_payload() -> None:
 @pytest.mark.parametrize(
     "test_case",
     [
+        PayloadTestCase(
+            payload_cls=ScoreAddPayload,
+            content="payload_test_content",
+        ),
         PayloadTestCase(
             payload_cls=CeramicWritePayload,
             content="payload_test_content",

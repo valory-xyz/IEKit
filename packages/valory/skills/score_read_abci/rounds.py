@@ -61,9 +61,9 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(Dict, self.db.get_strict("most_voted_api_data"))
 
     @property
-    def user_to_scores(self) -> dict:
-        """Get the user scores."""
-        return cast(dict, self.db.get("user_to_scores", {}))
+    def user_to_new_points(self) -> dict:
+        """Get the user new points."""
+        return cast(dict, self.db.get("user_to_new_points", {}))
 
     @property
     def latest_tweet_id(self) -> int:
@@ -92,9 +92,6 @@ class TwitterObservationRound(CollectSameUntilThresholdRound):
                 synchronized_data_class=SynchronizedData,
                 **{
                     get_name(SynchronizedData.most_voted_api_data): payload,
-                    get_name(SynchronizedData.latest_tweet_id): payload[
-                        "latest_tweet_id"
-                    ],
                 }
             )
             return synchronized_data, Event.DONE
@@ -121,8 +118,8 @@ class ScoringRound(CollectSameUntilThresholdRound):
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    get_name(SynchronizedData.user_to_scores): payload[
-                        "user_to_scores"
+                    get_name(SynchronizedData.user_to_new_points): payload[
+                        "user_to_new_points"
                     ],
                     get_name(SynchronizedData.latest_tweet_id): payload[
                         "latest_tweet_id"
@@ -164,13 +161,13 @@ class ScoreReadAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: List[str] = ["user_to_scores", "latest_tweet_id"]
+    cross_period_persisted_keys: List[str] = ["latest_tweet_id"]
     db_pre_conditions: Dict[AppState, List[str]] = {
         TwitterObservationRound: [],
     }
     db_post_conditions: Dict[AppState, List[str]] = {
         FinishedScoringRound: [
-            get_name(SynchronizedData.user_to_scores),
+            get_name(SynchronizedData.user_to_new_points),
             get_name(SynchronizedData.latest_tweet_id),
         ],
     }

@@ -7,22 +7,22 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifrmnxnnnpitgpdr7i2bjtunda3mckriobf6bvdjo6zbajokj4hyq
-  behaviours.py: bafybeidvxs3r7n3bgbcedniwtyjwsjxilo5w6c2xeg4sisjfcs5uye7ugy
+  behaviours.py: bafybeiax6xt7lgptgd6ivyc5ifhbv7jkadklgonbsiqtoj46kpv5hl367m
   ceramic/__init__.py: bafybeias4e3s6p5qtx6mmmcwkcd6kvbdnudy7sxai7d2suk75aazzdzdie
   ceramic/payloads.py: bafybeiglg2e7fvuxrpmpcygzfg2b2exzqhp7vn2ajozjunpka2f6ikch2a
   dialogues.py: bafybeih2d4h2vaqn76s7npubkejevbwd4fwa6ytsoowntgpqk4d2wpyllu
-  fsm_specification.yaml: bafybeieumwbt4rpg3y7d43r6ke32iknch24iybcz32n43g53mx2hjll6ey
+  fsm_specification.yaml: bafybeifmdeitam4t7wmv7gioceacyf3aivgscfpvnws2tfuqgczhgf6pxe
   handlers.py: bafybeiax2wjff4ps3kmbsc2ysihu62ja7xk36gbznjoyagtjhe6fa7ctei
-  models.py: bafybeidhb6rehrhhdcnlk2syi4pdplzx46dlbh3jkf4v6saxzu3tu7mcuu
-  payloads.py: bafybeidrjsrxmypjsd7f5tbct64ukhs3mlryksoet36yid4pkwaco2g6xe
-  rounds.py: bafybeicy7wpoli5nll2hu73haybl7d3ln2ucgljmmujaysal4ejhp2sc6i
+  models.py: bafybeih7hu552itb7dahxirlm4q52mymbttc33mm4cvargdoqkiblt7cqm
+  payloads.py: bafybeiaip5obksz3uylbxdg42tu6eqhr2oeojqqhlkkdeq25drb5s6tdy4
+  rounds.py: bafybeihbnirhc6vgqcluzqcicsnexjsizdipx4acjyn533s2z6juuoxs3i
   tests/__init__.py: bafybeiht2sfiedgsx6vk2dott2fdu6rqekt324nf7afbsk3unshcf74fgi
-  tests/test_behaviours.py: bafybeibd3nh2q2e5aazi77iw2jilusokjuprhp7ms5ferg437fq4vyjswi
+  tests/test_behaviours.py: bafybeiegnhb37fsal2yeimc7fznwoatb3tzcjyadvtriaxxid7pvjweuka
   tests/test_dialogues.py: bafybeifoltm3tyb6prv7mmqoh7uoap6kvmiextyl6k33whjigfxkgsdup4
   tests/test_handlers.py: bafybeibz75vof3xdzgikipztbyza6ahg2ajq277nrtim2mvzxol37lgn4q
   tests/test_models.py: bafybeiebtxif37wrac7744vo6pmpbq63adghq6ybtdh6nbw7yvccgbdsdq
-  tests/test_payloads.py: bafybeicjwsaw4mp27wmqkkrxezloijqvv6ckcz6e6kkoadimiwn355djda
-  tests/test_rounds.py: bafybeidunoovy65zroavgfkytvs2ccgflcwrncdsdlajrlzrmokj6x2mme
+  tests/test_payloads.py: bafybeiearrtyhzchc4tmgdhvl4spsqo64cwrfp66373auhfyiqa7f3i2e4
+  tests/test_rounds.py: bafybeihdwmnq3silwrk4nnczdtq44gg53lk5zrj3ta7w4hyzwuyislkala
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
@@ -72,10 +72,10 @@ models:
   params:
     args:
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
-      ceramic_api_commit_endpoint: api/v0/commits/{stream_id}
+      ceramic_api_commit_endpoint: api/v0/commits
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
       ceramic_did_seed: '0101010101010101010101010101010101010101010101010101010101010101'
-      ceramic_did_str: did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX
+      ceramic_did_str: z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX
       scores_stream_id: user_to_points_stream_id
       wallets_stream_id: wallet_to_users_stream_id
       cleanup_history_depth: 1

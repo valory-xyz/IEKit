@@ -37,6 +37,7 @@ from packages.valory.skills.abstract_round_abci.base import (
 from packages.valory.skills.score_write_abci.payloads import (
     CeramicWritePayload,
     RandomnessPayload,
+    ScoreAddPayload,
     SelectKeeperPayload,
     VerificationPayload,
     WalletReadPayload,
@@ -55,6 +56,7 @@ class Event(Enum):
     ROUND_TIMEOUT = "round_timeout"
     API_ERROR = "api_error"
     DID_NOT_SEND = "did_not_send"
+    NO_CHANGES = "no_changes"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -65,14 +67,56 @@ class SynchronizedData(BaseSynchronizedData):
     """
 
     @property
-    def user_to_scores(self) -> dict:
-        """Get the user scores."""
-        return cast(dict, self.db.get("user_to_scores", {}))
+    def user_to_new_points(self) -> dict:
+        """Get the new points for each user."""
+        return cast(dict, self.db.get("user_to_new_points", {}))  # pragma: no cover
+
+    @property
+    def user_to_total_points(self) -> dict:
+        """Get the new total scores."""
+        return cast(dict, self.db.get("user_to_total_points", {}))
 
     @property
     def wallet_to_users(self) -> dict:
         """Get the wallet to twitter user mapping."""
         return cast(dict, self.db.get("wallet_to_users", {}))
+
+
+class ScoreAddRound(CollectSameUntilThresholdRound):
+    """ScoreAddRound"""
+
+    payload_class = ScoreAddPayload
+    payload_attribute = "content"
+    synchronized_data_class = SynchronizedData
+
+    ERROR_PAYLOAD = "error"
+    NO_CHANGES_PAYLOAD = "no_changes"
+
+    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
+        """Process the end of the block."""
+        if self.threshold_reached:
+            if self.most_voted_payload == self.ERROR_PAYLOAD:
+                return self.synchronized_data, Event.API_ERROR
+
+            if self.most_voted_payload == self.NO_CHANGES_PAYLOAD:
+                return self.synchronized_data, Event.NO_CHANGES
+
+            payload = json.loads(self.most_voted_payload)
+
+            synchronized_data = self.synchronized_data.update(
+                synchronized_data_class=SynchronizedData,
+                **{
+                    get_name(SynchronizedData.user_to_total_points): payload,
+                }
+            )
+
+            return synchronized_data, Event.DONE
+
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
+        return None
 
 
 class RandomnessRound(CollectSameUntilThresholdRound):
@@ -146,7 +190,17 @@ class VerificationRound(CollectSameUntilThresholdRound):
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
         ):
-            return self.synchronized_data, Event.NO_MAJORITY
+
+            synchronized_data = self.synchronized_data.update(
+                synchronized_data_class=SynchronizedData,
+                **{
+                    get_name(
+                        SynchronizedData.user_to_new_points
+                    ): {},  # Remove points that have been succesfully written to Ceramic
+                }
+            )
+
+            return synchronized_data, Event.NO_MAJORITY
         return None
 
 
@@ -191,9 +245,16 @@ class FinishedWalletReadRound(DegenerateRound):
 class ScoreWriteAbciApp(AbciApp[Event]):
     """ScoreWriteAbciApp"""
 
-    initial_round_cls: AppState = RandomnessRound
-    initial_states: Set[AppState] = {RandomnessRound}
+    initial_round_cls: AppState = ScoreAddRound
+    initial_states: Set[AppState] = {ScoreAddRound}
     transition_function: AbciAppTransitionFunction = {
+        ScoreAddRound: {
+            Event.DONE: RandomnessRound,
+            Event.NO_CHANGES: WalletReadRound,
+            Event.NO_MAJORITY: ScoreAddRound,
+            Event.ROUND_TIMEOUT: ScoreAddRound,
+            Event.API_ERROR: ScoreAddRound,
+        },
         RandomnessRound: {
             Event.DONE: SelectKeeperRound,
             Event.NO_MAJORITY: RandomnessRound,
@@ -228,9 +289,9 @@ class ScoreWriteAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: List[str] = ["user_to_scores", "latest_tweet_id"]
+    cross_period_persisted_keys: List[str] = ["latest_tweet_id"]
     db_pre_conditions: Dict[AppState, List[str]] = {
-        RandomnessRound: [],
+        ScoreAddRound: [],
     }
     db_post_conditions: Dict[AppState, List[str]] = {
         FinishedWalletReadRound: [],
