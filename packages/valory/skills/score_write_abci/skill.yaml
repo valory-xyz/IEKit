@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifrmnxnnnpitgpdr7i2bjtunda3mckriobf6bvdjo6zbajokj4hyq
-  behaviours.py: bafybeiev6stkvoktgcaq3wwdoq4odtpgplmlrzzufalcfomfowq3zufmvm
+  behaviours.py: bafybeibosf6n4o4bszdbvoxwrsxvqo7x4d2yvk5jzw4ro62zghzhgy66cy
   ceramic/__init__.py: bafybeias4e3s6p5qtx6mmmcwkcd6kvbdnudy7sxai7d2suk75aazzdzdie
   ceramic/payloads.py: bafybeiglg2e7fvuxrpmpcygzfg2b2exzqhp7vn2ajozjunpka2f6ikch2a
   dialogues.py: bafybeih2d4h2vaqn76s7npubkejevbwd4fwa6ytsoowntgpqk4d2wpyllu
@@ -72,7 +72,7 @@ models:
   params:
     args:
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
-      ceramic_api_commit_endpoint: api/v0/commits/{stream_id}
+      ceramic_api_commit_endpoint: api/v0/commits
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
       ceramic_did_seed: '0101010101010101010101010101010101010101010101010101010101010101'
       ceramic_did_str: z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX

@@ -21,6 +21,7 @@
 
 import json
 from abc import ABC
+from collections import OrderedDict
 from typing import Generator, Optional, Set, Type, cast
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
@@ -207,15 +208,20 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
         # Send the payload
         api_base = self.params.ceramic_api_base
         api_endpoint = self.params.ceramic_api_commit_endpoint
-        url = api_base + api_endpoint.replace(
-            "{stream_id}", self.params.scores_stream_id
-        )
+        url = api_base + api_endpoint
 
-        self.context.logger.info(f"Writing scores to Ceramic API [{url}]:\n{commit_payload}")
+        self.context.logger.info(
+            f"Writing new scores to Ceramic API [{url}]:\nScores: {self.synchronized_data.user_to_scores}\nPayload: {commit_payload}"
+        )
         response = yield from self.get_http_response(
             method="POST",
             url=url,
             content=json.dumps(commit_payload).encode(),
+            headers=[
+                OrderedDict(
+                    {"Content-Type": "application/json", "Accept": "application/json"}
+                )
+            ],
         )
 
         if response.status_code != 200:

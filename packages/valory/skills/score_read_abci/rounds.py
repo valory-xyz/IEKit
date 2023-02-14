@@ -92,9 +92,6 @@ class TwitterObservationRound(CollectSameUntilThresholdRound):
                 synchronized_data_class=SynchronizedData,
                 **{
                     get_name(SynchronizedData.most_voted_api_data): payload,
-                    get_name(SynchronizedData.latest_tweet_id): payload[
-                        "latest_tweet_id"
-                    ],
                 }
             )
             return synchronized_data, Event.DONE
