@@ -368,7 +368,7 @@ class WalletReadBehaviour(ScoreWriteBaseBehaviour):
                     for address, user in wallet_to_users.items()
                 }
 
-                payload_content = json.dumps(checksum_wallet_to_users)
+                payload_content = json.dumps(checksum_wallet_to_users, sort_keys=True)
 
             sender = self.context.agent_address
             payload = WalletReadPayload(sender=sender, content=payload_content)

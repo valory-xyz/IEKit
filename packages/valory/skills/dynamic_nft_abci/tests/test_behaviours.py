@@ -211,7 +211,7 @@ class TestNewTokensBehaviour(BaseDynamicNFTTest):
         """Run tests."""
         time_in_future = datetime.datetime.now() + datetime.timedelta(hours=10)
         state = cast(SharedState, self._skill.skill_context.state)
-        state.round_sequence.abci_app.update_time(time_in_future)
+        state.round_sequence._last_round_transition_timestamp = time_in_future
         self.fast_forward(test_case.initial_data)
         self.behaviour.act_wrapper()
         self._mock_dynamic_contribution_contract_request(
