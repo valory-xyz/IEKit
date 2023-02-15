@@ -110,7 +110,7 @@ class DynamicContributionContract(Contract):
         # Avoid parsing too many blocks at a time. This might take too long and
         # the connection could time out.
         MAX_BLOCKS = 300000
-        to_block = ledger_api.eth.getBlockNumber() if to_block == "latest" else to_block
+        to_block = ledger_api.api.eth.get_block_number() if to_block == "latest" else to_block
         ranges = list(range(from_block, to_block, MAX_BLOCKS)) + [to_block]
 
         entries = []
