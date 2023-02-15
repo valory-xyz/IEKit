@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiasfbratsbsxyji2k2xeft3jdqaajwqskjsvbjsqht4mrew6wb2km
-  behaviours.py: bafybeidzbmrky6ffjvpap44nfw3xwaqdtn7h5jbsmydz27eqctbb3tqx7u
+  behaviours.py: bafybeibcc6mqkosrikfpxaimrscqcbcr44row2bqs2ytohi3c2p4fb4esq
   dialogues.py: bafybeiabtq2to7x6bbbnxzrvupz5rky4b6k73y2lw5dmclb6xx74nuzxe4
   fsm_specification.yaml: bafybeihm464d5ol3qumlyb7kb2uhnhki5hsldgjrzkkk4adwmqbxedbw54
   handlers.py: bafybeic37qss5lcch4fmdcnwnl32yt5ohs2luiyf46sfzwfo5tdtg6oipm
@@ -25,7 +25,7 @@ fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeic7p2e2ey44k6yv3dzznepekggceqc6mxb55e4xovcjnr3qym5ncu
 contracts:
-- valory/dynamic_contribution:0.1.0:bafybeiewycrrihjevhuoqmkctkmgljklxe467jad6rpsk55xflrri5c35a
+- valory/dynamic_contribution:0.1.0:bafybeialedea2j2pq6okfhxy5kh26tz3ggwq7liyhgfwsgavapgdkmi3du
 protocols:
 - valory/contract_api:1.0.0:bafybeif32nchkgn6yet7e5gt4auhf7lsahxnj4t36kxbw55p3gi7qpeuxq
 - valory/http:1.0.0:bafybeifru3qs6udfzprax7jxktbsuzn7immfvi3scgfspifq3zdxwkgvnm
