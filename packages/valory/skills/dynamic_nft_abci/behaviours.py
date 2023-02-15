@@ -127,12 +127,12 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
 
                 last_update_time = cast(
                     SharedState, self.context.state
-                ).round_sequence.abci_app.last_timestamp.timestamp()
+                ).round_sequence.last_round_transition_timestamp.timestamp()
 
                 payload_data = json.dumps(
                     {
                         "token_to_data": token_to_data,
-                        "last_update_time": last_update_time,
+                        "last_update_time": int(last_update_time),
                     },
                     sort_keys=True,
                 )
