@@ -95,7 +95,7 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
 
                 address_to_token_ids = {
                     data["address"]: token_id
-                    for token_id, data in self.synchronized_data.token_to_data.items()
+                    for token_id, data in token_to_data.items()
                 }
                 users_to_address = {
                     user: address
@@ -119,6 +119,9 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
                         continue
                     token_id = address_to_token_ids[address]
                     token_to_data[token_id]["points"] = points
+                    self.context.logger.info(
+                        f"Twitter user {user} minted token {token_id} and has {points} points"
+                    )
 
                 self.context.logger.info(f"Got the new token data: {token_to_data}")
 
