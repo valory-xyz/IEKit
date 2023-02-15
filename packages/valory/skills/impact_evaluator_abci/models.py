@@ -53,6 +53,7 @@ BenchmarkTool = BaseBenchmarkTool
 RandomnessApi = ScoreWriteRandomnessApi
 
 MARGIN = 5
+MULTIPLIER = 2
 
 
 class SharedState(BaseSharedState):
@@ -69,9 +70,9 @@ class SharedState(BaseSharedState):
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             ScoreWriteEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds
-        ImpactEvaluatorSkillAbciApp.event_to_timeout[
-            DynamicNFTEvent.ROUND_TIMEOUT
-        ] = self.context.params.round_timeout_seconds
+        ImpactEvaluatorSkillAbciApp.event_to_timeout[DynamicNFTEvent.ROUND_TIMEOUT] = (
+            self.context.params.round_timeout_seconds * MULTIPLIER
+        )
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             ResetPauseEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds
