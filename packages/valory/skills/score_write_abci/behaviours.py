@@ -24,6 +24,8 @@ from abc import ABC
 from collections import OrderedDict
 from typing import Dict, Generator, Optional, Set, Type, cast
 
+from web3 import Web3
+
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
@@ -358,7 +360,15 @@ class WalletReadBehaviour(ScoreWriteBaseBehaviour):
                 self.context.logger.info(
                     f"Retrieved wallet data from Ceramic: {data['data']}"
                 )
-                payload_content = json.dumps(data["data"])
+
+                # Checksum addresses
+                wallet_to_users = data["data"]
+                checksum_wallet_to_users = {
+                    Web3.toChecksumAddress(address): user
+                    for address, user in wallet_to_users.items()
+                }
+
+                payload_content = json.dumps(checksum_wallet_to_users)
 
             sender = self.context.agent_address
             payload = WalletReadPayload(sender=sender, content=payload_content)

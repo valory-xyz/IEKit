@@ -77,7 +77,7 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
             else:
                 old_token_to_data = self.synchronized_data.token_to_data
 
-                # New tokens that have been minted and are currently tracked
+                # Get the new tokens that have been minted and which have a linked Twitter user
                 new_token_to_data = {
                     token_id: {
                         "address": address,
