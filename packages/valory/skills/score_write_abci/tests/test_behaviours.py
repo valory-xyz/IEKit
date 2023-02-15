@@ -112,10 +112,10 @@ DUMMY_API_RESPONSE_READ_POINTS = {
 }
 
 # This response contains the data:
-# {
-#     "0x0000000000000000000000000000000000000000": user_a,
-#     "0x0000000000000000000000000000000000000001": user_b
-# }
+# {  # noqa: E800
+#     "0x0000000000000000000000000000000000000000": user_a,  # noqa: E800
+#     "0x0000000000000000000000000000000000000001": user_b   # noqa: E800
+# }  # noqa: E800
 DUMMY_API_RESPONSE_READ_WALLETS = {
     "streamId": "kjzl6cwe1jw14bep29zqigcmhh9jwcbg3j10ffhnida4xsaqkvencc0k9bitlkz",
     "docId": "kjzl6cwe1jw14bep29zqigcmhh9jwcbg3j10ffhnida4xsaqkvencc0k9bitlkz",
