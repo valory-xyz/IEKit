@@ -58,7 +58,10 @@ PACKAGE_DIR = Path(__file__).parent.parent
 
 DUMMY_USER_TO_SCORES = {"user_a": 10, "user_b": 10}
 
-DUMMY_WALLET_TO_USERS = {"wallet_a": "user_a", "wallet_b": "user_b"}
+DUMMY_WALLET_TO_USERS = {
+    "0x0000000000000000000000000000000000000000": "user_a",
+    "0x0000000000000000000000000000000000000001": "user_b",
+}
 
 CERAMIC_API_STREAM_URL_POINTS_READ = (
     "https://ceramic-clay.3boxlabs.com/api/v0/commits/user_to_points_stream_id"
@@ -69,7 +72,7 @@ CERAMIC_API_STREAM_URL_WALLETS_READ = (
 )
 
 # This response contains the data: {"user_a": 10, "user_b": 10}
-DUMMY_API_RESPONSE_READ = {
+DUMMY_API_RESPONSE_READ_POINTS = {
     "streamId": "kjzl6cwe1jw146rixydjkxxy4ne992nmkmyc9puerxkvzq89u4nj8fqla55pvxa",
     "docId": "kjzl6cwe1jw146rixydjkxxy4ne992nmkmyc9puerxkvzq89u4nj8fqla55pvxa",
     "commits": [
@@ -103,6 +106,50 @@ DUMMY_API_RESPONSE_READ = {
                     "link": "bafyreihman4lnoypuv7edq6kepupjp7fyyk6lfros7ml7s5ehbbj2je5kq",
                 },
                 "linkedBlock": "pGJpZNgqWCYAAYUBEiA7yUMwKt5UNVeYFQuIx3OF5o88GiDc0w77fXy/XD+m3mRkYXRhgaNib3BjYWRkZHBhdGhnL3VzZXJfYmV2YWx1ZQpkcHJldtgqWCYAAYUBEiA7yUMwKt5UNVeYFQuIx3OF5o88GiDc0w77fXy/XD+m3mZoZWFkZXKg",
+            },
+        },
+    ],
+}
+
+# This response contains the data:
+# {  # noqa: E800
+#     "0x0000000000000000000000000000000000000000": user_a,  # noqa: E800
+#     "0x0000000000000000000000000000000000000001": user_b   # noqa: E800
+# }  # noqa: E800
+DUMMY_API_RESPONSE_READ_WALLETS = {
+    "streamId": "kjzl6cwe1jw14bep29zqigcmhh9jwcbg3j10ffhnida4xsaqkvencc0k9bitlkz",
+    "docId": "kjzl6cwe1jw14bep29zqigcmhh9jwcbg3j10ffhnida4xsaqkvencc0k9bitlkz",
+    "commits": [
+        {
+            "cid": "bagcqcera6ympx5s6uci2leszj4cjplw5yu55lqvdj34e5whnipae6bwmacbq",
+            "value": {
+                "jws": {
+                    "payload": "AXESIGuaNXE87FyvF7ydREXtV4-J8YnM5uDKB6dnexWl_pTd",
+                    "signatures": [
+                        {
+                            "signature": "6r-_OxWf5ylmKidxz_A2uDNv3bDN2tul2Ly6a7J2nT4h_O6tAYoLi1I1xpXti1Vp3Y_RG3tnlGQ_IMZy7Sj4AA",
+                            "protected": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29uM05lY2Q2TmtreWZvR29IeGlkMnpuR2M1OUxVM0s3bXViYVJjRmJMZkxYI3o2TWtvbjNOZWNkNk5ra3lmb0dvSHhpZDJ6bkdjNTlMVTNLN211YmFSY0ZiTGZMWCJ9",
+                        }
+                    ],
+                    "link": "bafyreidlti2xcphmlsxrppe5irc62v4prhyytthg4dfapj3hpmk2l7uu3u",
+                },
+                "linkedBlock": "omRkYXRhoWVoZWxsb2V3b3JsZGZoZWFkZXKiZnVuaXF1ZXBuM1k3WnhqcWttNjVZSGxBa2NvbnRyb2xsZXJzgXg4ZGlkOmtleTp6Nk1rb24zTmVjZDZOa2t5Zm9Hb0h4aWQyem5HYzU5TFUzSzdtdWJhUmNGYkxmTFg",
+            },
+        },
+        {
+            "cid": "bagcqcerab526kjv3qyk5tcfjhtxx2dhwf775fis2gg4ylkvboqa5fhsqlnza",
+            "value": {
+                "jws": {
+                    "payload": "AXESIJWL5YG2mWZoxixlOO9PP-S2gbsRT3dHhi-C2p8MkT7Z",
+                    "signatures": [
+                        {
+                            "signature": "MM5IQrutSU_rvl0grfp3P-x9EnCH_q08mhJA1UzgbHAujKxfURgJ62mLMK_F95J8Da6DtKxfZ60wPJG5XkSvDA",
+                            "protected": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29uM05lY2Q2TmtreWZvR29IeGlkMnpuR2M1OUxVM0s3bXViYVJjRmJMZkxYI3o2TWtvbjNOZWNkNk5ra3lmb0dvSHhpZDJ6bkdjNTlMVTNLN211YmFSY0ZiTGZMWCJ9",
+                        }
+                    ],
+                    "link": "bafyreievrpsydnuzmzummldfhdxu6p7ew2a3wekpo5dyml4c3kpqzej63e",
+                },
+                "linkedBlock": "pGJpZNgqWCYAAYUBEiD2GPv2XqCRpZJZTwSXrt3FO9XCo074TtjtQ8BPBswAg2RkYXRhg6Jib3BmcmVtb3ZlZHBhdGhmL2hlbGxvo2JvcGNhZGRkcGF0aHgrLzB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMGV2YWx1ZWZ1c2VyX2GjYm9wY2FkZGRwYXRoeCsvMHgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxZXZhbHVlZnVzZXJfYmRwcmV22CpYJgABhQESIPYY+/ZeoJGlkllPBJeu3cU71cKjTvhO2O1DwE8GzACDZmhlYWRlcqA",
             },
         },
     ],
@@ -213,7 +260,7 @@ class TestScoreAddBehaviour(BaseScoreWriteTest):
                 {
                     "read_data": {
                         "body": json.dumps(
-                            DUMMY_API_RESPONSE_READ,
+                            DUMMY_API_RESPONSE_READ_POINTS,
                         ),
                         "status": 200,
                         "headers": "",
@@ -264,7 +311,7 @@ class TestScoreAddErrorBehaviour(BaseScoreWriteTest):
                 {
                     "read_data": {
                         "body": json.dumps(
-                            DUMMY_API_RESPONSE_READ,
+                            DUMMY_API_RESPONSE_READ_POINTS,
                         ),
                         "status": 404,
                         "headers": "",
@@ -399,7 +446,7 @@ class TestCeramicWriteBehaviourSender(BaseScoreWriteTest):
                 {
                     "read_data": {
                         "body": json.dumps(
-                            DUMMY_API_RESPONSE_READ,
+                            DUMMY_API_RESPONSE_READ_POINTS,
                         ),
                         "status": 200,
                         "headers": "",
@@ -510,7 +557,7 @@ class TestCeramicWriteBehaviourApiError(BaseScoreWriteTest):
                 {
                     "read_data": {
                         "body": json.dumps(
-                            DUMMY_API_RESPONSE_READ,
+                            DUMMY_API_RESPONSE_READ_POINTS,
                         ),
                         "status": 404,
                         "headers": "",
@@ -526,7 +573,7 @@ class TestCeramicWriteBehaviourApiError(BaseScoreWriteTest):
                 {
                     "read_data": {
                         "body": json.dumps(
-                            DUMMY_API_RESPONSE_READ,
+                            DUMMY_API_RESPONSE_READ_POINTS,
                         ),
                         "status": 200,
                         "headers": "",
@@ -600,7 +647,7 @@ class TestVerificationBehaviour(BaseScoreWriteTest):
                 ),
                 {
                     "body": json.dumps(
-                        DUMMY_API_RESPONSE_READ,
+                        DUMMY_API_RESPONSE_READ_POINTS,
                     ),
                     "status_code": 200,
                 },
@@ -705,7 +752,7 @@ class TestWalletReadBehaviour(BaseScoreWriteTest):
                 ),
                 {
                     "body": json.dumps(
-                        DUMMY_API_RESPONSE_READ,
+                        DUMMY_API_RESPONSE_READ_WALLETS,
                     ),
                     "status_code": 200,
                 },
@@ -753,19 +800,6 @@ class TestWalletReadBehaviourApiError(BaseScoreWriteTest):
                         {},
                     ),
                     "status_code": 404,
-                },
-            ),
-            (
-                BehaviourTestCase(
-                    "Api wrong data",
-                    initial_data=dict(),
-                    event=Event.API_ERROR,
-                ),
-                {
-                    "body": json.dumps(
-                        DUMMY_API_RESPONSE_READ_WRONG,
-                    ),
-                    "status_code": 200,
                 },
             ),
         ],

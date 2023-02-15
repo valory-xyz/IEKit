@@ -31,6 +31,9 @@ from packages.valory.skills.impact_evaluator_abci.composition import (
 from packages.valory.skills.impact_evaluator_abci.models import SharedState
 
 
+MULTIPLIER = 2
+
+
 @pytest.fixture
 def shared_state() -> SharedState:
     """Initialize a test shared state."""
@@ -56,5 +59,5 @@ class TestSharedState:  # pylint: disable=too-few-public-methods
         shared_state.setup()
         assert (
             ImpactEvaluatorSkillAbciApp.event_to_timeout[Event.ROUND_TIMEOUT]
-            == shared_state.context.params.round_timeout_seconds
+            == shared_state.context.params.round_timeout_seconds * MULTIPLIER
         )

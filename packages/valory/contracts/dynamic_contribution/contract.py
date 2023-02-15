@@ -106,11 +106,23 @@ class DynamicContributionContract(Contract):
         """
         ledger_api = cast(EthereumApi, ledger_api)
         factory_contract = cls.get_instance(ledger_api, contract_address)
-        entries = factory_contract.events.Transfer.createFilter(
-            fromBlock=from_block,
-            toBlock=to_block,
-            argument_filters={"from": from_address},
-        ).get_all_entries()  # limited to 10k entries for now: https://github.com/valory-xyz/contribution-service/issues/13
+
+        # Avoid parsing too many blocks at a time. This might take too long and
+        # the connection could time out.
+        MAX_BLOCKS = 300000
+        to_block = ledger_api.api.eth.get_block_number() if to_block == "latest" else to_block
+        ranges = list(range(from_block, to_block, MAX_BLOCKS)) + [to_block]
+
+        entries = []
+        for i in range(len(ranges) - 1):
+            from_block = ranges[i]
+            to_block = ranges[i+1]
+            entries += factory_contract.events.Transfer.createFilter(
+                fromBlock=from_block,  # exclusive
+                toBlock=to_block,      # inclusive
+                argument_filters={"from": from_address},
+            ).get_all_entries()  # limited to 10k entries for now: https://github.com/valory-xyz/contribution-service/issues/13
+
 
         token_id_to_member = {
             str(entry["args"]["id"]): entry["args"]["to"] for entry in entries

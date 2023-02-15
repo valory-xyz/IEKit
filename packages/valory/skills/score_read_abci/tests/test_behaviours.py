@@ -58,9 +58,21 @@ DUMMY_API_RESPONSE = {
     "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
 }
 
+DUMMY_API_RESPONSE_END = {
+    "data": [
+        {"author_id": "1286010187325812739", "text": "dummy_text"},
+        {"author_id": "1286010187325812739", "text": "dummy_text"},
+        {"author_id": "1286010187325812738", "text": "dummy_text"},
+        {"author_id": "1286010187325812737", "text": "dummy_text"},
+    ],
+    "meta": {"result_count": 0},
+}
+
 DUMMY_API_RESPONSE_MISSING_DATA = {
     "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
 }
+
+DUMMY_API_RESPONSE_MISSING_META = {}
 
 DUMMY_API_RESPONSE_MULTIPAGE = {
     "data": [
@@ -182,6 +194,22 @@ class TestTwitterObservationBehaviour(BaseSwaapTest):
                     "status_code": 200,
                 },
             ),
+            (
+                BehaviourTestCase(
+                    "Happy path, result_count=0",
+                    initial_data=dict(),
+                    event=Event.DONE,
+                ),
+                {
+                    "urls": [TWITTER_API_URL],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_API_RESPONSE_END,
+                        )
+                    ],
+                    "status_code": 200,
+                },
+            ),
         ],
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
@@ -237,6 +265,19 @@ class TestTwitterObservationBehaviourAPIError(BaseSwaapTest):
                 {
                     "body": json.dumps(
                         DUMMY_API_RESPONSE_MISSING_DATA,
+                    ),
+                    "status_code": 200,
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "API error: missing meta",
+                    initial_data=dict(),
+                    event=Event.API_ERROR,
+                ),
+                {
+                    "body": json.dumps(
+                        DUMMY_API_RESPONSE_MISSING_META,
                     ),
                     "status_code": 200,
                 },

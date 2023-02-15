@@ -77,7 +77,7 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
             else:
                 old_token_to_data = self.synchronized_data.token_to_data
 
-                # New tokens that have been minted and are currently tracked
+                # Get the new tokens that have been minted and which have a linked Twitter user
                 new_token_to_data = {
                     token_id: {
                         "address": address,
@@ -95,7 +95,7 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
 
                 address_to_token_ids = {
                     data["address"]: token_id
-                    for token_id, data in self.synchronized_data.token_to_data.items()
+                    for token_id, data in token_to_data.items()
                 }
                 users_to_address = {
                     user: address
@@ -119,17 +119,20 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
                         continue
                     token_id = address_to_token_ids[address]
                     token_to_data[token_id]["points"] = points
+                    self.context.logger.info(
+                        f"Twitter user {user} minted token {token_id} and has {points} points"
+                    )
 
                 self.context.logger.info(f"Got the new token data: {token_to_data}")
 
                 last_update_time = cast(
                     SharedState, self.context.state
-                ).round_sequence.abci_app.last_timestamp.timestamp()
+                ).round_sequence.last_round_transition_timestamp.timestamp()
 
                 payload_data = json.dumps(
                     {
                         "token_to_data": token_to_data,
-                        "last_update_time": last_update_time,
+                        "last_update_time": int(last_update_time),
                     },
                     sort_keys=True,
                 )

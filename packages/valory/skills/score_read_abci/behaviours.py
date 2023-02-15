@@ -81,8 +81,8 @@ class TwitterObservationBehaviour(ScoreReadBaseBehaviour):
         api_base = self.params.twitter_api_base
         api_endpoint = self.params.twitter_api_endpoint
         next_tweet_id = (
-            self.synchronized_data.latest_tweet_id + 1
-            if self.synchronized_data.latest_tweet_id != 0
+            int(self.synchronized_data.latest_tweet_id) + 1
+            if int(self.synchronized_data.latest_tweet_id) != 0
             else 0
         )
         api_args = self.params.twitter_api_args.replace(
@@ -123,13 +123,24 @@ class TwitterObservationBehaviour(ScoreReadBaseBehaviour):
 
             api_data = json.loads(response.body)
 
-            if (
-                "data" not in api_data
-                or "meta" not in api_data
-                or "newest_id" not in api_data["meta"]
-            ):
+            # Check the meta field
+            if "meta" not in api_data:
                 self.context.logger.error(
-                    f"Twitter API response does not contain some of the required fields ('data', 'meta', 'meta/newest_id'): {api_data}"
+                    f"Twitter API response does not contain the required 'meta' field: {api_data}"
+                )
+                return TwitterObservationRound.ERROR_PAYLOAD
+
+            # Check if there are no more results
+            if (
+                "result_count" in api_data["meta"]
+                and int(api_data["meta"]["result_count"]) == 0
+            ):
+                break
+
+            # Check that the data exists
+            if "data" not in api_data or "newest_id" not in api_data["meta"]:
+                self.context.logger.error(
+                    f"Twitter API response does not contain the required 'meta' field: {api_data}"
                 )
                 return TwitterObservationRound.ERROR_PAYLOAD
 
@@ -147,7 +158,7 @@ class TwitterObservationBehaviour(ScoreReadBaseBehaviour):
         return json.dumps(
             {
                 "user_to_mentions": user_to_mentions,
-                "latest_tweet_id": latest_tweet_id,
+                "latest_tweet_id": latest_tweet_id or next_tweet_id,
             },
             sort_keys=True,
         )
