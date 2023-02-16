@@ -289,7 +289,7 @@ class ScoreWriteAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: List[str] = ["latest_tweet_id"]
+    cross_period_persisted_keys: List[str] = ["latest_tweet_id", "user_to_total_points"]
     db_pre_conditions: Dict[AppState, List[str]] = {
         ScoreAddRound: [],
     }

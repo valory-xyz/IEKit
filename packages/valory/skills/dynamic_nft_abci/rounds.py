@@ -153,4 +153,5 @@ class DynamicNFTAbciApp(AbciApp[Event]):
         "token_to_data",
         "last_update_time",
         "last_parsed_block",
+        "user_to_total_points",
     ]
