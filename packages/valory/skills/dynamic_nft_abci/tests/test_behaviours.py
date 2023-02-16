@@ -200,7 +200,8 @@ class TestNewTokensBehaviour(BaseDynamicNFTTest):
                 ),
                 {
                     "mock_response_data": dict(
-                        token_id_to_member=DUMMY_TOKEN_ID_TO_MEMBER
+                        token_id_to_member=DUMMY_TOKEN_ID_TO_MEMBER,
+                        last_block=100,
                     ),
                     "mock_response_performative": ContractApiMessage.Performative.STATE,
                 },
