@@ -99,9 +99,14 @@ def build_data_from_commits(commits):
         linked_block = commit["value"]["linkedBlock"]
 
         decoded_block = decode_linked_block(linked_block)
-        patches.append(decoded_block["data"])
+        if "data" in decoded_block:
+            patches.append(decoded_block["data"])
+        else:
+            patches.append({})
 
     # Apply the patches sequentially
+    if not patches:
+        return {}
     content = patches[0]
     for patch in patches[1:]:
         content = jsonpatch.apply_patch(content, patch)
