@@ -88,7 +88,6 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
                     }
                     for token_id, address in token_id_to_address.items()
                     if token_id not in old_token_to_data
-                    and address in self.synchronized_data.wallet_to_users
                 }
 
                 token_to_data = {
@@ -104,6 +103,10 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
                     user: address
                     for address, user in self.synchronized_data.wallet_to_users.items()
                 }
+
+                self.context.logger.info(
+                    f"Updating badge points. User to total points: {self.synchronized_data.user_to_total_points}"
+                )
 
                 # Update points in token_to_data with the updated points
                 for user, points in self.synchronized_data.user_to_total_points.items():
@@ -138,7 +141,6 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
                         "last_update_time": int(last_update_time),
                         "last_parsed_block": last_parsed_block,
                     },
-                    sort_keys=True,
                 )
 
                 self.context.logger.info(f"Payload data={payload_data}")
