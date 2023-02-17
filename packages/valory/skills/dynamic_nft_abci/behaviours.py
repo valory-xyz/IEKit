@@ -21,7 +21,7 @@
 
 import json
 from abc import ABC
-from typing import Generator, Set, Type, cast
+from typing import Generator, Optional, Set, Tuple, Type, cast
 
 from packages.valory.contracts.dynamic_contribution.contract import (
     DynamicContributionContract,
@@ -70,7 +70,10 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
             self.behaviour_id,
         ).local():
 
-            token_id_to_address = yield from self.get_token_id_to_member()
+            (
+                token_id_to_address,
+                last_parsed_block,
+            ) = yield from self.get_token_id_to_member()
 
             if token_id_to_address == NewTokensRound.ERROR_PAYLOAD:
                 payload_data = json.dumps(NewTokensRound.ERROR_PAYLOAD, sort_keys=True)
@@ -133,6 +136,7 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
                     {
                         "token_to_data": token_to_data,
                         "last_update_time": int(last_update_time),
+                        "last_parsed_block": last_parsed_block,
                     },
                     sort_keys=True,
                 )
@@ -148,10 +152,16 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
 
         self.set_done()
 
-    def get_token_id_to_member(self) -> Generator[None, None, dict]:
+    def get_token_id_to_member(
+        self,
+    ) -> Generator[None, None, Tuple[dict, Optional[int]]]:
         """Get token id to member data."""
+        from_block = (
+            self.synchronized_data.last_parsed_block
+            or self.params.earliest_block_to_monitor
+        )
         self.context.logger.info(
-            f"Retrieving Transfer events later than block {self.params.earliest_block_to_monitor}"
+            f"Retrieving Transfer events later than block {from_block}"
             f" for contract at {self.params.dynamic_contribution_contract_address}"
         )
         contract_api_msg = yield from self.get_contract_api_response(
@@ -160,14 +170,17 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
             contract_id=str(DynamicContributionContract.contract_id),
             contract_callable="get_all_erc721_transfers",
             from_address=NULL_ADDRESS,
-            from_block=self.params.earliest_block_to_monitor,
+            from_block=from_block,
         )
         if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
             self.context.logger.info("Error retrieving the token_id to member data")
-            return NewTokensRound.ERROR_PAYLOAD
+            return NewTokensRound.ERROR_PAYLOAD, from_block
         data = cast(dict, contract_api_msg.state.body["token_id_to_member"])
-        self.context.logger.info(f"Got token_id to member data: {data}")
-        return data
+        last_block = cast(int, contract_api_msg.state.body["last_block"])
+        self.context.logger.info(
+            f"Got token_id to member data up to block {last_block}: {data}"
+        )
+        return data, last_block
 
 
 class DynamicNFTRoundBehaviour(AbstractRoundBehaviour):

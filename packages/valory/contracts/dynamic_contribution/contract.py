@@ -128,4 +128,7 @@ class DynamicContributionContract(Contract):
             str(entry["args"]["id"]): entry["args"]["to"] for entry in entries
         }
 
-        return dict(token_id_to_member=token_id_to_member)
+        return dict(
+            token_id_to_member=token_id_to_member,
+            last_block=int(to_block),
+        )

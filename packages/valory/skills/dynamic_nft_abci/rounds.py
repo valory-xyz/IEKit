@@ -73,6 +73,11 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the wallet to twitter user mapping."""
         return cast(dict, self.db.get("wallet_to_users", {}))
 
+    @property
+    def last_parsed_block(self) -> int:
+        """Get the last parsed block."""
+        return cast(int, self.db.get("last_parsed_block", None))
+
 
 class NewTokensRound(CollectSameUntilThresholdRound):
     """NewTokensRound"""
@@ -93,12 +98,14 @@ class NewTokensRound(CollectSameUntilThresholdRound):
 
             token_to_data = payload["token_to_data"]
             last_update_time = payload["last_update_time"]
+            last_parsed_block = payload["last_parsed_block"]
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
                     get_name(SynchronizedData.token_to_data): token_to_data,
                     get_name(SynchronizedData.last_update_time): last_update_time,
+                    get_name(SynchronizedData.last_parsed_block): last_parsed_block,
                 }
             )
             return synchronized_data, Event.DONE
@@ -145,4 +152,5 @@ class DynamicNFTAbciApp(AbciApp[Event]):
     cross_period_persisted_keys: List[str] = [
         "token_to_data",
         "last_update_time",
+        "last_parsed_block",
     ]
