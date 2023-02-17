@@ -1,11 +1,11 @@
 # IEKit
-An autonomous service implementing a decentralized Impact Evaluator built with the [open-autonomy](https://github.com/valory-xyz/open-autonomy) framework. The service tracks mentions to [@autonolas](https://twitter.com/autonolas) on Twitter, assigns scores to them and writes those scores to a [Ceramic](https://ceramic.network/) stream. It then reads verified wallets (a mapping between twitter handles and ethereum addresses) from another Ceramic stream, checks for users that have minted a token, and updates their token metadata according to their scores so NFT images are upgraded over time.
+An autonomous service implementing a decentralized Impact Evaluator built with the [open-autonomy](https://github.com/valory-xyz/open-autonomy) framework. The service tracks mentions to [@autonolas](https://twitter.com/autonolas) on Twitter, assigns scores to them and writes those scores to a [Ceramic](https://ceramic.network/) stream. It then reads verified wallets (a mapping between Wwitter handles and Ethereum addresses) from another Ceramic stream, checks for users that have minted a token, and updates their token metadata according to their scores so NFT images are upgraded over time.
 
 ## Architecture
 
 Autonomous services that use Autonolas technology are implemented as [Finite State Machines](https://docs.autonolas.network/open-autonomy/key_concepts/fsm/) where the logic is split across independent components: rounds define the rules to transition across different states and behaviors, who implement the actual business logic. At the end of each round, agents agree on the round’s data output.
 
-![Service FSM](./docs/FSM.png)
+![Service FSM](./docs/images/FSM.png)
 
 ### Rounds
 
@@ -67,20 +67,19 @@ Autonomous services that use Autonolas technology are implemented as [Finite Sta
 
       autonomy build-image
 
-- Export the environment variables (see ```service.yaml``` for all the available variables):
+- Export the environment variables (see ```service.yaml``` for all the available variables). These are some examples:
 
 
-      ETHEREUM_LEDGER_RPC
-      ETHEREUM_LEDGER_CHAIN_ID
-      OBSERVATION_INTERVAL
-      DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS
-      WALLETS_STREAM_ID
-      SCORES_STREAM_ID
-      CERAMIC_DID_SEED
-      CERAMIC_DID_STR
-      TWITTER_API_BEARER_TOKEN
-      TWITTER_MENTION_POINTS
-      POINTS_TO_IMAGE_HASHES
+      ETHEREUM_LEDGER_RPC=https://goerli.infura.io/v3/<infura_api_key>
+      OBSERVATION_INTERVAL=10
+      DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS=0x7C3B976434faE9986050B26089649D9f63314BD8
+      WALLETS_STREAM_ID=kjzl6cwe1jw147yrw3npgusw0jccfnaju8f3jrnb3swobxhh21vf8i96x6s8lh8
+      SCORES_STREAM_ID=kjzl6cwe1jw145z0wz2ohg5ewxu1h39eu2sc50jngw1grjut60g124d4uamnhwe
+      CERAMIC_DID_SEED=<did_seed>
+      CERAMIC_DID_STR=<did_str_without_the_did:key:_part>
+      TWITTER_API_BEARER_TOKEN=<twitter_token>
+      TWITTER_MENTION_POINTS=8000
+      POINTS_TO_IMAGE_HASHES='{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
 
 
 - Build the deployment:
