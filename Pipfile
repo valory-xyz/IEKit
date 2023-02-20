@@ -24,18 +24,18 @@ pre-commit = "==3.0.1"
 py-ecc = "==5.2.0"
 py-eth-sig-utils = "==0.4.0"
 pytz = "==2022.2.1"
-pytest = "==7.0.0"
+pytest = "==7.2.1"
 pytest-asyncio = "==0.18.0"
 pytest-cov = "==3.0.0"
 pytest-randomly = "==3.11.0"
 openapi-core = "==0.13.2"
 openapi-spec-validator = "==0.2.8"
-open-aea = "==1.28.0.post1"
-open-aea-ledger-ethereum = "==1.28.0.post1"
-open-aea-ledger-cosmos = "==1.28.0.post1"
-open-aea-cli-ipfs = "==1.28.0.post1"
-open-aea-test-autonomy = "==0.8.0"
-open-autonomy = {version = "==0.8.0", extras = [ "all"]}
+open-aea = "==1.29.0"
+open-aea-ledger-ethereum = "==1.29.0"
+open-aea-ledger-cosmos = "==1.29.0"
+open-aea-cli-ipfs = "==1.29.0"
+open-aea-test-autonomy = "==0.9.0"
+open-autonomy = {version = "==0.9.0", extras = [ "all"]}
 tomte = {version = "==0.1.5", extras = ["tox", "tests"]}
 
 [requires]

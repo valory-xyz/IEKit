@@ -67,6 +67,7 @@ security:
 # update copyright headers
 .PHONY: generators
 generators:
+	find . -empty -type d -delete  # remove empty directories to avoid wrong hashes
 	tox -e abci-docstrings
 	tox -e fix-copyright
 	autonomy packages lock
