@@ -22,7 +22,7 @@
 import json
 from abc import ABC
 from enum import Enum
-from typing import Dict, List, Optional, Set, Tuple, cast
+from typing import Dict, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
@@ -83,7 +83,6 @@ class NewTokensRound(CollectSameUntilThresholdRound):
     """NewTokensRound"""
 
     payload_class = NewTokensPayload
-    payload_attribute: str = "content"
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = {"error": True}
@@ -140,18 +139,18 @@ class DynamicNFTAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    db_pre_conditions: Dict[AppState, List[str]] = {
-        NewTokensRound: [],
+    db_pre_conditions: Dict[AppState, Set[str]] = {
+        NewTokensRound: set(),
     }
-    db_post_conditions: Dict[AppState, List[str]] = {
-        FinishedNewTokensRound: [
+    db_post_conditions: Dict[AppState, Set[str]] = {
+        FinishedNewTokensRound: {
             get_name(SynchronizedData.token_to_data),
             get_name(SynchronizedData.last_update_time),
-        ]
+        }
     }
-    cross_period_persisted_keys: List[str] = [
+    cross_period_persisted_keys: Set[str] = {
         "token_to_data",
         "last_update_time",
         "last_parsed_block",
         "user_to_total_points",
-    ]
+    }

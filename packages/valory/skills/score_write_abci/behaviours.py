@@ -21,7 +21,6 @@
 
 import json
 from abc import ABC
-from collections import OrderedDict
 from typing import Dict, Generator, Optional, Set, Type, cast
 
 from web3 import Web3
@@ -278,11 +277,7 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
             method="POST",
             url=url,
             content=json.dumps(commit_payload).encode(),
-            headers=[
-                OrderedDict(
-                    {"Content-Type": "application/json", "Accept": "application/json"}
-                )
-            ],
+            headers={"Content-Type": "application/json", "Accept": "application/json"},
         )
 
         if response.status_code != 200:

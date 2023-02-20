@@ -42,6 +42,8 @@ models:
         all_participants: ${ALL_PARTICIPANTS:list:[]}
         safe_contract_address:
         - '0x0000000000000000000000000000000000000000'
+        consensus_threshold:
+        - null
 ---
 public_id: valory/ledger:0.19.0
 type: connection

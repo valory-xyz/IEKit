@@ -21,7 +21,6 @@
 
 import json
 from abc import ABC
-from collections import OrderedDict
 from typing import Dict, Generator, Set, Type, cast
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
@@ -89,9 +88,7 @@ class TwitterObservationBehaviour(ScoreReadBaseBehaviour):
             "{since_id}", str(next_tweet_id)
         )
         api_url = api_base + api_endpoint + api_args
-        headers = [
-            OrderedDict(Authorization=f"Bearer {self.params.twitter_api_bearer_token}")
-        ]
+        headers = dict(Authorization=f"Bearer {self.params.twitter_api_bearer_token}")
 
         self.context.logger.info(f"Retrieving mentions from Twitter API [{api_url}]")
 

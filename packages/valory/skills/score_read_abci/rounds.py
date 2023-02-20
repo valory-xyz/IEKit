@@ -21,7 +21,7 @@
 
 import json
 from enum import Enum
-from typing import Dict, List, Optional, Set, Tuple, cast
+from typing import Dict, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
@@ -75,7 +75,6 @@ class TwitterObservationRound(CollectSameUntilThresholdRound):
     """TwitterObservationRound"""
 
     payload_class = TwitterObservationPayload
-    payload_attribute = "content"
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = "{}"
@@ -106,7 +105,6 @@ class ScoringRound(CollectSameUntilThresholdRound):
     """ScoringRound"""
 
     payload_class = ScoringPayload
-    payload_attribute = "content"
     synchronized_data_class = SynchronizedData
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
@@ -161,13 +159,13 @@ class ScoreReadAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: List[str] = ["latest_tweet_id"]
-    db_pre_conditions: Dict[AppState, List[str]] = {
-        TwitterObservationRound: [],
+    cross_period_persisted_keys: Set[str] = {"latest_tweet_id"}
+    db_pre_conditions: Dict[AppState, Set[str]] = {
+        TwitterObservationRound: set(),
     }
-    db_post_conditions: Dict[AppState, List[str]] = {
-        FinishedScoringRound: [
+    db_post_conditions: Dict[AppState, Set[str]] = {
+        FinishedScoringRound: {
             get_name(SynchronizedData.user_to_new_points),
             get_name(SynchronizedData.latest_tweet_id),
-        ],
+        },
     }

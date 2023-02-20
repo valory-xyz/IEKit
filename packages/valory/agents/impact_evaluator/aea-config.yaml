@@ -117,8 +117,6 @@ models:
       wallets_stream_id: ${str:wallet_to_users_stream_id}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
-      consensus:
-        max_participants: ${MAX_PARTICIPANTS:int:1}
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
       earliest_block_to_monitor: ${int:8053690}
       genesis_config:
@@ -151,6 +149,8 @@ models:
       setup:
         all_participants: ${list:[]}
         safe_contract_address: ${list:["0x0000000000000000000000000000000000000000"]}
+        consensus_threshold:
+        - null
       share_tm_config_on_startup: ${bool:false}
       sleep_time: 1
       dynamic_contribution_contract_address: ${str:0x5FbDB2315678afecb367f032d93F642f64180aa3}
