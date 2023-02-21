@@ -87,7 +87,7 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
 
         if response.status_code != 200:
             self.context.logger.error(
-                f"API error while reading the stream: {response.status_code}: '{response.body}'"
+                f"API error while reading the stream: {response.status_code}: '{response.body}'"  # noqa: B028
             )
             return None
 
@@ -95,7 +95,7 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
             api_data = json.loads(response.body)
         except json.decoder.JSONDecodeError:
             self.context.logger.error(
-                f"API error while loading the response json. Response body: '{response.body}'"
+                f"API error while loading the response json. Response body: '{response.body}'"  # noqa: B028
             )
             return None
 
@@ -105,7 +105,7 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
 
         # Rebuild the current data
         self.context.logger.info(
-            f"Bulding stream data from commits:\n'{api_data['commits']}'"
+            f"Bulding stream data from commits:\n'{api_data['commits']}'"  # noqa: B028
         )
         data = build_data_from_commits(api_data["commits"])
 

@@ -123,7 +123,7 @@ class TwitterObservationBehaviour(ScoreReadBaseBehaviour):
             # Check the meta field
             if "meta" not in api_data:
                 self.context.logger.error(
-                    f"Twitter API response does not contain the required 'meta' field: {api_data}"
+                    f"Twitter API response does not contain the required 'meta' field: {api_data}"  # noqa: B028
                 )
                 return TwitterObservationRound.ERROR_PAYLOAD
 
@@ -137,7 +137,7 @@ class TwitterObservationBehaviour(ScoreReadBaseBehaviour):
             # Check that the data exists
             if "data" not in api_data or "newest_id" not in api_data["meta"]:
                 self.context.logger.error(
-                    f"Twitter API response does not contain the required 'meta' field: {api_data}"
+                    f"Twitter API response does not contain the required 'meta' field: {api_data}"  # noqa: B028
                 )
                 return TwitterObservationRound.ERROR_PAYLOAD
 
