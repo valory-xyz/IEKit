@@ -81,6 +81,12 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the wallet to twitter user mapping."""
         return cast(dict, self.db.get("wallet_to_users", {}))
 
+    @property
+    def most_voted_randomness_round(self) -> int:  # pragma: no cover
+        """Get the first in priority keeper to try to re-submit a transaction."""
+        round_ = self.db.get_strict("most_voted_randomness_round")
+        return cast(int, round_)
+
 
 class ScoreAddRound(CollectSameUntilThresholdRound):
     """ScoreAddRound"""
@@ -126,7 +132,10 @@ class RandomnessRound(CollectSameUntilThresholdRound):
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
     collection_key = get_name(SynchronizedData.participant_to_randomness)
-    selection_key = get_name(SynchronizedData.most_voted_randomness)
+    selection_key = (
+        get_name(SynchronizedData.most_voted_randomness_round),
+        get_name(SynchronizedData.most_voted_randomness),
+    )
 
 
 class SelectKeeperRound(CollectSameUntilThresholdRound):
