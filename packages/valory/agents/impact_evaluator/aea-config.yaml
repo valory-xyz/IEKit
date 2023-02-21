@@ -106,8 +106,13 @@ is_abstract: true
 public_id: valory/impact_evaluator_abci:0.1.0
 type: skill
 models:
+  benchmark_tool:
+    args:
+      log_dir: /logs
   params:
     args:
+      broadcast_to_server: false
+      history_end: null
       ceramic_api_base: ${str:https://ceramic-clay.3boxlabs.com/}
       ceramic_api_commit_endpoint: ${str:api/v0/commits}
       ceramic_api_read_endpoint: ${str:api/v0/commits/{stream_id}}
@@ -118,6 +123,7 @@ models:
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
+      dynamic_contribution_contract_address: ${str:0x5FbDB2315678afecb367f032d93F642f64180aa3}
       earliest_block_to_monitor: ${int:8053690}
       genesis_config:
         genesis_time: '2022-09-26T00:00:00.000000000Z'
@@ -137,12 +143,15 @@ models:
           version: {}
         voting_power: '10'
       keeper_timeout: 30.0
+      max_attempts: 10
       max_healthcheck: 120
       observation_interval: ${int:300}
       on_chain_service_id: null
       reset_tendermint_after: 2
       retry_attempts: 400
       retry_timeout: 3
+      request_retry_delay: 1.0
+      request_timeout: 10.0
       round_timeout_seconds: 30.0
       service_id: impact_evaluator
       service_registry_address: null
@@ -153,11 +162,11 @@ models:
         - null
       share_tm_config_on_startup: ${bool:false}
       sleep_time: 1
-      dynamic_contribution_contract_address: ${str:0x5FbDB2315678afecb367f032d93F642f64180aa3}
       tendermint_check_sleep_delay: 3
       tendermint_com_url: ${TENDERMINT_COM_URL:str:http://localhost:8080}
       tendermint_max_retries: 5
       tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
+      tendermint_p2p_url: localhost:26656
       token_uri_base: ${str:https://pfp.staging.autonolas.tech/}
       whitelist_api_key: null
       whitelist_endpoint: http://localhost
@@ -168,6 +177,7 @@ models:
       twitter_api_args: ${str:tweet.fields=author_id&user.fields=name&max_results=100&since_id={since_id}}
       twitter_mention_points: ${int:200}
       twitter_max_pages: 10
+      tx_timeout: 10.0
 ---
 public_id: fetchai/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
 type: connection

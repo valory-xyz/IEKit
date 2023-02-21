@@ -14,9 +14,13 @@ number_of_agents: 4
 public_id: valory/impact_evaluator_abci:0.1.0
 type: skill
 models:
+  benchmark_tool:
+    args:
+      log_dir: /logs
   params:
     args:
       broadcast_to_server: false
+      history_end: null
       ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
       ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
       ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
@@ -24,26 +28,65 @@ models:
       ceramic_did_str: ${CERAMIC_DID_STR:str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
       scores_stream_id: ${SCORES_STREAM_ID:str:user_to_points_stream_id}
       wallets_stream_id: ${WALLETS_STREAM_ID:str:wallet_to_users_stream_id}
+      cleanup_history_depth: 1
+      cleanup_history_depth_current: null
+      drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
       dynamic_contribution_contract_address: ${DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS:str:0x5FbDB2315678afecb367f032d93F642f64180aa3}
       earliest_block_to_monitor: ${EARLIEST_BLOCK_TO_MONITOR:int:8053690}
-      history_end: null
+      genesis_config:
+        genesis_time: '2022-09-26T00:00:00.000000000Z'
+        chain_id: chain-c4daS1
+        consensus_params:
+          block:
+            max_bytes: '22020096'
+            max_gas: '-1'
+            time_iota_ms: '1000'
+          evidence:
+            max_age_num_blocks: '100000'
+            max_age_duration: '172800000000000'
+            max_bytes: '1048576'
+          validator:
+            pub_key_types:
+            - ed25519
+          version: {}
+        voting_power: '10'
+      keeper_timeout: 30.0
+      max_attempts: 10
+      max_healthcheck: 120
       observation_interval: ${OBSERVATION_INTERVAL:int:300}
-      points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:null}
-      share_tm_config_on_startup: ${USE_ACN:bool:false}
-      token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
-      twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
-      twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
-      twitter_api_endpoint: ${TWITTER_API_ENDPOINT:str:2/users/1450081635559428107/mentions?}
-      twitter_api_args: ${TWITTER_API_ARGS:str:tweet.fields=author_id&user.fields=name&max_results=100&since_id={since_id}}
-      twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
-      consensus:
-        max_participants: 4
+      on_chain_service_id: null
+      reset_tendermint_after: 2
+      retry_attempts: 400
+      retry_timeout: 3
+      request_retry_delay: 1.0
+      request_timeout: 10.0
+      round_timeout_seconds: 30.0
+      service_id: impact_evaluator
+      service_registry_address: null
       setup:
         all_participants: ${ALL_PARTICIPANTS:list:[]}
         safe_contract_address:
         - '0x0000000000000000000000000000000000000000'
         consensus_threshold:
         - null
+      share_tm_config_on_startup: ${USE_ACN:bool:false}
+      sleep_time: 1
+      tendermint_check_sleep_delay: 3
+      tendermint_com_url: ${TENDERMINT_COM_URL:str:http://localhost:8080}
+      tendermint_max_retries: 5
+      tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
+      tendermint_p2p_url: localhost:26656
+      token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
+      whitelist_api_key: null
+      whitelist_endpoint: http://localhost
+      points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:null}
+      twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
+      twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
+      twitter_api_endpoint: ${TWITTER_API_ENDPOINT:str:2/users/1450081635559428107/mentions?}
+      twitter_api_args: ${TWITTER_API_ARGS:str:tweet.fields=author_id&user.fields=name&max_results=100&since_id={since_id}}
+      twitter_max_pages: 10
+      twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
+      tx_timeout: 10.0
 ---
 public_id: valory/ledger:0.19.0
 type: connection

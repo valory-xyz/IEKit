@@ -77,6 +77,8 @@ models:
     class_name: LedgerApiDialogues
   params:
     args:
+      broadcast_to_server: false
+      history_end: null
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
       ceramic_api_commit_endpoint: api/v0/commits
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
