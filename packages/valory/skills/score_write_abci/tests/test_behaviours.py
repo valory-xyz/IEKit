@@ -390,7 +390,7 @@ class BaseSelectKeeperCeramicBehaviourTest(BaseScoreWriteTest):
         self,
     ) -> None:
         """Test select keeper agent."""
-        participants = frozenset({self.skill.skill_context.agent_address, "a_1", "a_2"})
+        participants = [self.skill.skill_context.agent_address, "a_1", "a_2"]
         self.fast_forward_to_behaviour(
             behaviour=self.behaviour,
             behaviour_id=self.select_keeper_behaviour_class.auto_behaviour_id(),

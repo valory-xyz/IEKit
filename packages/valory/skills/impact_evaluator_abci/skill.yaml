@@ -23,12 +23,12 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeicvbxixjsu3bgjk5frqz5mq2kmv44grwd6324viz4tehw3yejfhji
-- valory/score_read_abci:0.1.0:bafybeicenb6ou23gxbf6rzshlmz55bg7vzzqdndarahkv7dvzypw6aqluu
-- valory/score_write_abci:0.1.0:bafybeig4zcuiiarargpp26nbbodtkfn4bmoxwdo7kq5em2lnnudks2hfhi
-- valory/dynamic_nft_abci:0.1.0:bafybeicn3hhsfqest5rusqtukdb5p2mfqai57unkyrslqucudr2ng7jjja
-- valory/registration_abci:0.1.0:bafybeihai2otcmnb2w7k64bnwf5qagfexg5gqow74xhj3wynikgdxre3ka
-- valory/reset_pause_abci:0.1.0:bafybeifs6zpg5nbvuapmxafzo6fdhoz5ebpiujetvk243apo3iwl2rn45i
+- valory/abstract_round_abci:0.1.0:bafybeiami2y2uwvtmjf76hl3jvfahujdir5docjby6erdyjl66ekoblesi
+- valory/score_read_abci:0.1.0:bafybeifcrz2vtpik7xynuqquodbhdbbn6td2qsmevh5evvvvxwfip52yhy
+- valory/score_write_abci:0.1.0:bafybeicmj2gutndjbd2onj6qadtvfwazwxh76c2pmbiunfq6y6tzdebod4
+- valory/dynamic_nft_abci:0.1.0:bafybeieubi5ewqoraerouuvlm5wuzrec4hhqqj3zahxfgv5vcwuc5viwiq
+- valory/registration_abci:0.1.0:bafybeieaggf6mc43tses5k7fg3pyxca43wsmfvnnzszzucohp5ebg3umwq
+- valory/reset_pause_abci:0.1.0:bafybeic6ayed23np6ngkawsf2you6nnfuvbq4smcepdvvcrw5wxn5jaevy
 behaviours:
   main:
     args: {}
@@ -86,8 +86,6 @@ models:
       wallets_stream_id: wallet_to_users_stream_id
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
-      consensus:
-        max_participants: 1
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
       dynamic_contribution_contract_address: '0x5FbDB2315678afecb367f032d93F642f64180aa3'
       earliest_block_to_monitor: 8053690
@@ -129,6 +127,8 @@ models:
         all_participants: []
         safe_contract_address:
         - '0x0000000000000000000000000000000000000000'
+        consensus_threshold:
+        - null
       share_tm_config_on_startup: false
       sleep_time: 1
       tendermint_check_sleep_delay: 3
@@ -150,9 +150,9 @@ models:
   randomness_api:
     args:
       api_id: cloudflare
-      headers: []
+      headers: {}
       method: GET
-      parameters: []
+      parameters: {}
       response_key: null
       response_type: dict
       retries: 5

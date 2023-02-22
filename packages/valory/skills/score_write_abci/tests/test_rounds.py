@@ -21,18 +21,7 @@
 
 import json
 from dataclasses import dataclass, field
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    FrozenSet,
-    Hashable,
-    List,
-    Mapping,
-    Optional,
-    Union,
-    cast,
-)
+from typing import Any, Callable, Dict, Hashable, List, Mapping, Optional, Union, cast
 from unittest import mock
 
 import pytest
@@ -41,7 +30,6 @@ from packages.valory.skills.abstract_round_abci.base import (
     AbciAppDB,
     AbstractRound,
     BaseTxPayload,
-    ConsensusParams,
 )
 from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
     BaseCollectSameUntilThresholdRoundTest,
@@ -71,9 +59,9 @@ from packages.valory.skills.score_write_abci.rounds import (
 MAX_PARTICIPANTS: int = 4
 
 
-def get_participants() -> FrozenSet[str]:
+def get_participants() -> List[str]:
     """Participants"""
-    return frozenset([f"agent_{i}" for i in range(MAX_PARTICIPANTS)])
+    return [f"agent_{i}" for i in range(MAX_PARTICIPANTS)]
 
 
 def get_payloads(
@@ -98,8 +86,7 @@ class BaseRoundTestClass:
     """Base test class for Rounds."""
 
     synchronized_data: SynchronizedData
-    consensus_params: ConsensusParams
-    participants: FrozenSet[str]
+    participants: List[str]
 
     @classmethod
     def setup(
@@ -111,11 +98,12 @@ class BaseRoundTestClass:
         cls.synchronized_data = SynchronizedData(
             AbciAppDB(
                 setup_data=dict(
-                    participants=[cls.participants], all_participants=[cls.participants]
+                    participants=[cls.participants],
+                    all_participants=[cls.participants],
+                    consensus_threshold=[3],
                 ),
             )
         )
-        cls.consensus_params = ConsensusParams(max_participants=MAX_PARTICIPANTS)
 
     def _test_no_majority_event(self, round_obj: AbstractRound) -> None:
         """Test the NO_MAJORITY event."""
@@ -136,7 +124,6 @@ class TestCollectRandomnessRound(BaseRoundTestClass):
 
         test_round = RandomnessRound(
             synchronized_data=self.synchronized_data,
-            consensus_params=self.consensus_params,
         )
         first_payload, *payloads = [
             RandomnessPayload(sender=participant, randomness=RANDOMNESS, round_id=0)
@@ -153,7 +140,7 @@ class TestCollectRandomnessRound(BaseRoundTestClass):
             test_round.process_payload(payload)
 
         actual_next_behaviour = self.synchronized_data.update(
-            participant_to_randomness=test_round.collection,
+            participant_to_randomness=test_round.serialized_collection,
             most_voted_randomness=test_round.most_voted_payload,
         )
 
@@ -182,7 +169,6 @@ class TestSelectKeeperRound(BaseRoundTestClass):
 
         test_round = SelectKeeperRound(
             synchronized_data=self.synchronized_data,
-            consensus_params=self.consensus_params,
         )
 
         first_payload, *payloads = [
@@ -200,7 +186,7 @@ class TestSelectKeeperRound(BaseRoundTestClass):
             test_round.process_payload(payload)
 
         actual_next_behaviour = self.synchronized_data.update(
-            participant_to_selection=test_round.collection,
+            participant_to_selection=test_round.serialized_collection,
             most_voted_keeper_address=test_round.most_voted_payload,
         )
 
@@ -276,7 +262,6 @@ class BaseScoreWriteRoundTest(BaseCollectSameUntilThresholdRoundTest):
 
         test_round = self.round_class(
             synchronized_data=self.synchronized_data,
-            consensus_params=self.consensus_params,
         )
 
         self._complete_run(
@@ -383,7 +368,7 @@ class TestCeramicWriteRound(BaseOnlyKeeperSendsRoundTest):
         self.synchronized_data = cast(
             SynchronizedData,
             self.synchronized_data.update(
-                participants=frozenset([f"agent_{i}" + "-" * 35 for i in range(4)]),
+                participants=[f"agent_{i}" + "-" * 35 for i in range(4)],
                 keeper=sender,
                 most_voted_keeper_address=sender,
             ),
@@ -391,7 +376,6 @@ class TestCeramicWriteRound(BaseOnlyKeeperSendsRoundTest):
 
         test_round = self._round_class(
             synchronized_data=self.synchronized_data,
-            consensus_params=self.consensus_params,
         )
 
         self._complete_run(

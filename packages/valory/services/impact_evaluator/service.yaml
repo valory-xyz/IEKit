@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibk5iyiobvfgd6w3z75amk7muou3kqqq5rj3mze6rnzlmzpaiwtii
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeiajm644t3gs57xsajzdn6axaczw7cpjaweg7niizsy2xbjm7v6zui
+agent: valory/impact_evaluator:0.1.0:bafybeifnkrf5ixszg4wjzvxjvfypl4np755z3mo2nnwc7w5lv7mj22gvaq
 number_of_agents: 4
 ---
 public_id: valory/impact_evaluator_abci:0.1.0
@@ -42,6 +42,8 @@ models:
         all_participants: ${ALL_PARTICIPANTS:list:[]}
         safe_contract_address:
         - '0x0000000000000000000000000000000000000000'
+        consensus_threshold:
+        - null
 ---
 public_id: valory/ledger:0.19.0
 type: connection

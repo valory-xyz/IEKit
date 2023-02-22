@@ -21,7 +21,6 @@
 
 import json
 from abc import ABC
-from collections import OrderedDict
 from typing import Dict, Generator, Optional, Set, Type, cast
 
 from web3 import Web3
@@ -88,7 +87,7 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
 
         if response.status_code != 200:
             self.context.logger.error(
-                f"API error while reading the stream: {response.status_code}: '{response.body}'"
+                f"API error while reading the stream: {response.status_code}: '{response.body!r}'"
             )
             return None
 
@@ -96,7 +95,7 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
             api_data = json.loads(response.body)
         except json.decoder.JSONDecodeError:
             self.context.logger.error(
-                f"API error while loading the response json. Response body: '{response.body}'"
+                f"API error while loading the response json. Response body: '{response.body!r}'"
             )
             return None
 
@@ -106,7 +105,7 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
 
         # Rebuild the current data
         self.context.logger.info(
-            f"Bulding stream data from commits:\n'{api_data['commits']}'"
+            f"Bulding stream data from commits:\n'{api_data['commits']!r}'"
         )
         data = build_data_from_commits(api_data["commits"])
 
@@ -278,11 +277,7 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
             method="POST",
             url=url,
             content=json.dumps(commit_payload).encode(),
-            headers=[
-                OrderedDict(
-                    {"Content-Type": "application/json", "Accept": "application/json"}
-                )
-            ],
+            headers={"Content-Type": "application/json", "Accept": "application/json"},
         )
 
         if response.status_code != 200:

@@ -127,7 +127,6 @@ class BaseDynamicNFTRoundTestClass(BaseCollectSameUntilThresholdRoundTest):
 
         test_round = self.round_class(
             synchronized_data=self.synchronized_data,
-            consensus_params=self.consensus_params,
         )
 
         self._complete_run(

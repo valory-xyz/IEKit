@@ -21,7 +21,7 @@
 
 import json
 from enum import Enum
-from typing import Dict, List, Optional, Set, Tuple, cast
+from typing import Dict, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
@@ -81,12 +81,17 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the wallet to twitter user mapping."""
         return cast(dict, self.db.get("wallet_to_users", {}))
 
+    @property
+    def most_voted_randomness_round(self) -> int:  # pragma: no cover
+        """Get the first in priority keeper to try to re-submit a transaction."""
+        round_ = self.db.get_strict("most_voted_randomness_round")
+        return cast(int, round_)
+
 
 class ScoreAddRound(CollectSameUntilThresholdRound):
     """ScoreAddRound"""
 
     payload_class = ScoreAddPayload
-    payload_attribute = "content"
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = "error"
@@ -123,19 +128,20 @@ class RandomnessRound(CollectSameUntilThresholdRound):
     """A round for generating randomness"""
 
     payload_class = RandomnessPayload
-    payload_attribute = "randomness"
     synchronized_data_class = SynchronizedData
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
     collection_key = get_name(SynchronizedData.participant_to_randomness)
-    selection_key = get_name(SynchronizedData.most_voted_randomness)
+    selection_key = (
+        get_name(SynchronizedData.most_voted_randomness_round),
+        get_name(SynchronizedData.most_voted_randomness),
+    )
 
 
 class SelectKeeperRound(CollectSameUntilThresholdRound):
     """A round in which a keeper is selected for transaction submission"""
 
     payload_class = SelectKeeperPayload
-    payload_attribute = "keeper"
     synchronized_data_class = SynchronizedData
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
@@ -147,7 +153,6 @@ class CeramicWriteRound(OnlyKeeperSendsRound):
     """CeramicWriteRound"""
 
     payload_class = CeramicWritePayload
-    payload_attribute = "content"
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = "error"
@@ -159,13 +164,13 @@ class CeramicWriteRound(OnlyKeeperSendsRound):
         Tuple[BaseSynchronizedData, Enum]
     ]:  # pylint: disable=too-many-return-statements
         """Process the end of the block."""
-        if not self.has_keeper_sent_payload:
+        if self.keeper_payload is None:
             return None
 
         if self.keeper_payload is None:  # pragma: no cover
             return self.synchronized_data, Event.DID_NOT_SEND
 
-        if self.keeper_payload == self.ERROR_PAYLOAD:
+        if self.keeper_payload.content == self.ERROR_PAYLOAD:
             return self.synchronized_data, Event.API_ERROR
 
         return self.synchronized_data, Event.DONE
@@ -175,7 +180,6 @@ class VerificationRound(CollectSameUntilThresholdRound):
     """VerificationRound"""
 
     payload_class = VerificationPayload
-    payload_attribute = "content"
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = "error"
@@ -208,7 +212,6 @@ class WalletReadRound(CollectSameUntilThresholdRound):
     """WalletReadRound"""
 
     payload_class = WalletReadPayload
-    payload_attribute = "content"
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = "error"
@@ -289,10 +292,10 @@ class ScoreWriteAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: List[str] = ["latest_tweet_id", "user_to_total_points"]
-    db_pre_conditions: Dict[AppState, List[str]] = {
-        ScoreAddRound: [],
+    cross_period_persisted_keys: Set[str] = {"latest_tweet_id", "user_to_total_points"}
+    db_pre_conditions: Dict[AppState, Set[str]] = {
+        ScoreAddRound: set(),
     }
-    db_post_conditions: Dict[AppState, List[str]] = {
-        FinishedWalletReadRound: [],
+    db_post_conditions: Dict[AppState, Set[str]] = {
+        FinishedWalletReadRound: set(),
     }
