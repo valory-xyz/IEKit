@@ -39,6 +39,7 @@ from packages.valory.skills.score_write_abci.payloads import (
     RandomnessPayload,
     ScoreAddPayload,
     SelectKeeperPayload,
+    StartupScoreReadPayload,
     VerificationPayload,
     WalletReadPayload,
 )
@@ -86,6 +87,53 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the first in priority keeper to try to re-submit a transaction."""
         round_ = self.db.get_strict("most_voted_randomness_round")
         return cast(int, round_)
+
+    @property
+    def latest_tweet_id(self) -> int:
+        """Get the latest tracked tweet id."""
+        return cast(int, self.db.get("latest_tweet_id", 0))
+
+
+class StartupScoreReadRound(CollectSameUntilThresholdRound):
+    """StartupScoreReadRound"""
+
+    payload_class = StartupScoreReadPayload
+    synchronized_data_class = SynchronizedData
+
+    ERROR_PAYLOAD = "error"
+    SUCCCESS_PAYLOAD = "success"
+
+    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
+        """Process the end of the block."""
+        if self.threshold_reached:
+            if self.most_voted_payload == self.ERROR_PAYLOAD:
+                return self.synchronized_data, Event.API_ERROR
+
+            payload = json.loads(self.most_voted_payload)
+
+            synchronized_data = self.synchronized_data.update(
+                synchronized_data_class=SynchronizedData,
+                **{
+                    get_name(SynchronizedData.user_to_total_points): payload[
+                        "user_to_total_points"
+                    ],
+                    get_name(SynchronizedData.latest_tweet_id): payload[
+                        "latest_tweet_id"
+                    ],
+                }
+            )
+
+            return synchronized_data, Event.DONE
+
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
+        return None
+
+
+class FinishedStartupScoreReadRound(DegenerateRound):
+    """FinishedStartupScoreReadRound"""
 
 
 class ScoreAddRound(CollectSameUntilThresholdRound):
@@ -249,8 +297,15 @@ class ScoreWriteAbciApp(AbciApp[Event]):
     """ScoreWriteAbciApp"""
 
     initial_round_cls: AppState = ScoreAddRound
-    initial_states: Set[AppState] = {ScoreAddRound}
+    initial_states: Set[AppState] = {StartupScoreReadRound, ScoreAddRound}
     transition_function: AbciAppTransitionFunction = {
+        StartupScoreReadRound: {
+            Event.DONE: FinishedStartupScoreReadRound,
+            Event.NO_MAJORITY: StartupScoreReadRound,
+            Event.ROUND_TIMEOUT: StartupScoreReadRound,
+            Event.API_ERROR: StartupScoreReadRound,
+        },
+        FinishedStartupScoreReadRound: {},
         ScoreAddRound: {
             Event.DONE: RandomnessRound,
             Event.NO_CHANGES: WalletReadRound,
@@ -288,14 +343,19 @@ class ScoreWriteAbciApp(AbciApp[Event]):
         },
         FinishedWalletReadRound: {},
     }
-    final_states: Set[AppState] = {FinishedWalletReadRound}
+    final_states: Set[AppState] = {
+        FinishedStartupScoreReadRound,
+        FinishedWalletReadRound,
+    }
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
     cross_period_persisted_keys: Set[str] = {"latest_tweet_id", "user_to_total_points"}
     db_pre_conditions: Dict[AppState, Set[str]] = {
+        StartupScoreReadRound: set(),
         ScoreAddRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
+        FinishedStartupScoreReadRound: {"user_to_scores"},
         FinishedWalletReadRound: set(),
     }

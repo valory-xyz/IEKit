@@ -44,6 +44,7 @@ from packages.valory.skills.score_write_abci.payloads import (
     RandomnessPayload,
     ScoreAddPayload,
     SelectKeeperPayload,
+    StartupScoreReadPayload,
     VerificationPayload,
     WalletReadPayload,
 )
@@ -53,6 +54,7 @@ from packages.valory.skills.score_write_abci.rounds import (
     ScoreAddRound,
     ScoreWriteAbciApp,
     SelectKeeperRound,
+    StartupScoreReadRound,
     SynchronizedData,
     VerificationRound,
     WalletReadRound,
@@ -116,6 +118,58 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
             "previous_cid_str": previous_cid_str,
             "data": data,
         }
+
+
+class StartupScoreReadBehaviour(ScoreWriteBaseBehaviour):
+    """StartupScoreReadBehaviour"""
+
+    matching_round: Type[AbstractRound] = StartupScoreReadRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+
+            # Get the current data
+            data = yield from self._get_stream_data(self.params.scores_stream_id)
+
+            if not data:
+                self.context.logger.info(
+                    "An error happened while getting scores data from the stream at startup"
+                )
+                payload_content = StartupScoreReadRound.ERROR_PAYLOAD
+            else:
+                self.context.logger.info(
+                    f"Retrieved score data from Ceramic: {data['data']}"
+                )
+
+                user_to_total_points = (
+                    data["data"]["user_to_total_points"]
+                    if "user_to_total_points" in data["data"]
+                    else {}
+                )
+                latest_tweet_id = (
+                    data["data"]["latest_tweet_id"]
+                    if "latest_tweet_id" in data["data"]
+                    else 0
+                )
+
+                payload_content = json.dumps(
+                    {
+                        "user_to_total_points": user_to_total_points,
+                        "latest_tweet_id": latest_tweet_id,
+                    },
+                    sort_keys=True,
+                )
+
+            sender = self.context.agent_address
+            payload = StartupScoreReadPayload(sender=sender, content=payload_content)
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
 
 
 class ScoreAddBehaviour(ScoreWriteBaseBehaviour):
@@ -381,6 +435,7 @@ class ScoreWriteRoundBehaviour(AbstractRoundBehaviour):
     initial_behaviour_cls = ScoreAddBehaviour
     abci_app_cls = ScoreWriteAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
+        StartupScoreReadBehaviour,
         ScoreAddBehaviour,
         RandomnessBehaviour,
         SelectKeeperCeramicBehaviour,
