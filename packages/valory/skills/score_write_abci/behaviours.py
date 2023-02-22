@@ -182,11 +182,9 @@ class ScoreAddBehaviour(ScoreWriteBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
-            user_to_total_points = yield from self._add_points()
+            user_to_total_points = self._add_points()
 
-            if user_to_total_points is None:
-                payload_content = ScoreAddRound.ERROR_PAYLOAD
-            elif user_to_total_points == {}:
+            if user_to_total_points == {}:
                 payload_content = ScoreAddRound.NO_CHANGES_PAYLOAD
             else:
                 payload_content = json.dumps(user_to_total_points, sort_keys=True)
@@ -211,15 +209,7 @@ class ScoreAddBehaviour(ScoreWriteBaseBehaviour):
             return {}
 
         # Get the old scores
-        data = yield from self._get_stream_data(self.params.scores_stream_id)
-
-        if not data:
-            self.context.logger.error(
-                "An error happened while retrieving the old scores from Ceramic"
-            )
-            return None
-
-        user_to_old_points = data["data"]
+        user_to_old_points = self.synchronized_data.user_to_total_points
 
         # Add the points
         user_to_total_points = user_to_old_points
@@ -230,7 +220,6 @@ class ScoreAddBehaviour(ScoreWriteBaseBehaviour):
                 user_to_total_points[user] += new_points
 
         self.context.logger.info(f"Calculated new total points: {user_to_total_points}")
-
         return user_to_total_points
 
 
@@ -305,18 +294,23 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
         """Write the scores to the Ceramic stream"""
 
         # Get the current stream data
-        data = yield from self._get_stream_data(self.params.scores_stream_id)
+        old_data = yield from self._get_stream_data(self.params.scores_stream_id)
 
-        if not data:
+        if not old_data:
             return False
+
+        new_data = {
+            "user_to_total_points": self.synchronized_data.user_to_total_points,
+            "latest_tweet_id": self.synchronized_data.latest_tweet_id,
+        }
 
         # Prepare the commit payload
         commit_payload = build_commit_payload(
             self.params.ceramic_did_str,
             self.params.ceramic_did_seed,
             self.params.scores_stream_id,
-            data,
-            self.synchronized_data.user_to_total_points,
+            old_data,
+            new_data,
         )
 
         # Send the payload
@@ -359,7 +353,11 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
 
             # Verify if the retrieved data matches local user_to_total_points
             expected_data = json.dumps(
-                self.synchronized_data.user_to_total_points, sort_keys=True
+                {
+                    "user_to_total_points": self.synchronized_data.user_to_total_points,
+                    "latest_tweet_id": self.synchronized_data.latest_tweet_id,
+                },
+                sort_keys=True,
             )
 
             # TODO: during e2e, the mocked Ceramic stream can't be updated, so verification will always fail

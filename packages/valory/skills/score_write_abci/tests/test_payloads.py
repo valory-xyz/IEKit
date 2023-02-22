@@ -30,6 +30,7 @@ from packages.valory.skills.score_write_abci.payloads import (
     RandomnessPayload,
     ScoreAddPayload,
     SelectKeeperPayload,
+    StartupScoreReadPayload,
     VerificationPayload,
     WalletReadPayload,
 )
@@ -65,6 +66,10 @@ def test_select_keeper_payload() -> None:
 @pytest.mark.parametrize(
     "test_case",
     [
+        PayloadTestCase(
+            payload_cls=StartupScoreReadPayload,
+            content="payload_test_content",
+        ),
         PayloadTestCase(
             payload_cls=ScoreAddPayload,
             content="payload_test_content",

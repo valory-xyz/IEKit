@@ -91,7 +91,7 @@ class SynchronizedData(BaseSynchronizedData):
     @property
     def latest_tweet_id(self) -> int:
         """Get the latest tracked tweet id."""
-        return cast(int, self.db.get("latest_tweet_id", 0))
+        return cast(int, self.db.get("latest_tweet_id", 0))  # pragma: no cover
 
 
 class StartupScoreReadRound(CollectSameUntilThresholdRound):
