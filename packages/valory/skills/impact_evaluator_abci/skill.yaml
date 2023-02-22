@@ -8,9 +8,9 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
   behaviours.py: bafybeiauwwtjzjyceeiew3qkzppyakxcojzzfgha3reo6k7tyvuqo7tolu
-  composition.py: bafybeieyirmbam7e6ji3s4unt426wpirfickp4glbel5tnpf2uffqzs3mu
+  composition.py: bafybeiefjpcvh2eojfmnsojsmy5bantthzfrpmr7ogdmbqytfhoghjlvem
   dialogues.py: bafybeigpwuzku3we7axmxeamg7vn656maww6emuztau5pg3ebsoquyfdqm
-  fsm_specification.yaml: bafybeibvv3jfju4u7hyp2czbqpjqqmundcc4ncm2eatmtt2sp4qtoifo7q
+  fsm_specification.yaml: bafybeifevkeavjocdbocjzi3t5iji22etyh64cdlfhzef4wreqjjarlcnq
   handlers.py: bafybeiaqgaev2nfhuihhuxxxxtuiggin5zcpwn7ik7lok2n6ywi6dqy2ta
   models.py: bafybeidd57qvfq7hcpcp7ogvrneq4uyrpjey6hov3rdennyd3lnamqmpby
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
@@ -25,7 +25,7 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiami2y2uwvtmjf76hl3jvfahujdir5docjby6erdyjl66ekoblesi
 - valory/score_read_abci:0.1.0:bafybeifcrz2vtpik7xynuqquodbhdbbn6td2qsmevh5evvvvxwfip52yhy
-- valory/score_write_abci:0.1.0:bafybeihpggyxwu5betvvqnqxk2pojp7lg24m4wd4xlnu7pdavre4wanh7y
+- valory/score_write_abci:0.1.0:bafybeifu2j53ciitovc726acs7h6we6t7rssinulyzbar7xoeey2d35e5q
 - valory/dynamic_nft_abci:0.1.0:bafybeieubi5ewqoraerouuvlm5wuzrec4hhqqj3zahxfgv5vcwuc5viwiq
 - valory/registration_abci:0.1.0:bafybeieaggf6mc43tses5k7fg3pyxca43wsmfvnnzszzucohp5ebg3umwq
 - valory/reset_pause_abci:0.1.0:bafybeic6ayed23np6ngkawsf2you6nnfuvbq4smcepdvvcrw5wxn5jaevy

@@ -66,12 +66,14 @@ from packages.valory.skills.score_write_abci.rounds import (
     SelectKeeperRound,
     CeramicWriteRound,
     VerificationRound,
-    ScoreAddRound
+    ScoreAddRound,
+    StartupScoreReadRound,
 )
 
 
 HAPPY_PATH: Tuple[RoundChecks, ...] = (
     RoundChecks(RegistrationStartupRound.auto_round_id()),
+    RoundChecks(StartupScoreReadRound.auto_round_id(), n_periods=1),
     RoundChecks(TwitterObservationRound.auto_round_id(), n_periods=2),
     RoundChecks(ScoringRound.auto_round_id(), n_periods=2),
     RoundChecks(ScoreAddRound.auto_round_id(), n_periods=2),
@@ -85,6 +87,7 @@ HAPPY_PATH: Tuple[RoundChecks, ...] = (
 
 # strict check log messages of the happy path
 STRICT_CHECK_STRINGS = (
+    "Retrieved initial score data from Ceramic:",
     "Retrieving mentions from Twitter API",
     "Calculated score data:",
     "Calculated new total points",

@@ -140,7 +140,7 @@ class StartupScoreReadBehaviour(ScoreWriteBaseBehaviour):
                 payload_content = StartupScoreReadRound.ERROR_PAYLOAD
             else:
                 self.context.logger.info(
-                    f"Retrieved score data from Ceramic: {data['data']}"
+                    f"Retrieved initial score data from Ceramic: {data['data']}"
                 )
 
                 user_to_total_points = (

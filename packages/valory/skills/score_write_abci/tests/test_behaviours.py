@@ -348,12 +348,11 @@ class TestScoreAddBehaviour(BaseScoreWriteTest):
                     "Happy path",
                     initial_data=dict(
                         user_to_total_points={"user_a": 20, "user_b": 20},
-                        user_to_new_points={"user_a": 10, "user_b": 10, "user_c": 10}
+                        user_to_new_points={"user_a": 10, "user_b": 10, "user_c": 10},
                     ),
                     event=Event.DONE,
                 ),
-                {
-                },
+                {},
             ),
         ],
     )

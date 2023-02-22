@@ -9,10 +9,10 @@ fingerprint:
   tests/__init__.py: bafybeicmv3jjcqcdnmubfmrgdgeyic3nkm77z4mutsyuo34hpddwupofre
   tests/helpers/__init__.py: bafybeiauwuw4a4wxqacqqkkk52ktps2qedadhypvh3ex7uqs7qaqrpygmy
   tests/helpers/constants.py: bafybeibbokz7gzdlubnjwxrmh4tqckc7j75hfy3ae6l5a63mrbd4hp6l7u
-  tests/helpers/data/json_server/data.json: bafybeicn4kcveaawctmhxs2wbxhztteqrs5ak3m7vgyceot5shahvvvoxu
+  tests/helpers/data/json_server/data.json: bafybeics26yd33ng22lhzb3had4eevbfkfdj2jbp3qhvjpygwhkwlzhrq4
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
-  tests/test_impact_evaluator.py: bafybeif7rdginbmc2ssx4sq7ijkg3nvgipbazccpktbzw6kwk2ifpfry6m
+  tests/test_impact_evaluator.py: bafybeifkdk5u2p664uxta32ur3yzz3pzsfza7zomirbwt2f4pyv2n3tiki
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihaax5od5zo5jk2l62hv4jwuwtxloh5mijozudpsjombqc4ncmi6i
@@ -29,9 +29,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeiheudaobfaj5lcrqvgwmdysq3za5yjrjtpdiuwhmw5c7lmbgglxti
 - valory/abstract_round_abci:0.1.0:bafybeiami2y2uwvtmjf76hl3jvfahujdir5docjby6erdyjl66ekoblesi
-- valory/impact_evaluator_abci:0.1.0:bafybeiczkui7lqxrhmtcr5ipp6jv3on2fqvcmeb2tw65tp54czvupqoz6i
+- valory/impact_evaluator_abci:0.1.0:bafybeiegpvsmdumcg7jv3demugjuyqmccgibth7autm3hxmd5e2o6gjzee
 - valory/score_read_abci:0.1.0:bafybeifcrz2vtpik7xynuqquodbhdbbn6td2qsmevh5evvvvxwfip52yhy
-- valory/score_write_abci:0.1.0:bafybeihpggyxwu5betvvqnqxk2pojp7lg24m4wd4xlnu7pdavre4wanh7y
+- valory/score_write_abci:0.1.0:bafybeifu2j53ciitovc726acs7h6we6t7rssinulyzbar7xoeey2d35e5q
 - valory/dynamic_nft_abci:0.1.0:bafybeieubi5ewqoraerouuvlm5wuzrec4hhqqj3zahxfgv5vcwuc5viwiq
 - valory/registration_abci:0.1.0:bafybeieaggf6mc43tses5k7fg3pyxca43wsmfvnnzszzucohp5ebg3umwq
 - valory/reset_pause_abci:0.1.0:bafybeic6ayed23np6ngkawsf2you6nnfuvbq4smcepdvvcrw5wxn5jaevy
