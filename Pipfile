@@ -34,8 +34,8 @@ open-aea = "==1.29.0"
 open-aea-ledger-ethereum = "==1.29.0"
 open-aea-ledger-cosmos = "==1.29.0"
 open-aea-cli-ipfs = "==1.29.0"
-open-aea-test-autonomy = "==0.9.0"
-open-autonomy = {version = "==0.9.0", extras = [ "all"]}
+open-aea-test-autonomy = "==0.9.1"
+open-autonomy = {version = "==0.9.1", extras = [ "all"]}
 tomte = {version = "==0.2.2", extras = ["tox", "tests"]}
 
 [requires]
