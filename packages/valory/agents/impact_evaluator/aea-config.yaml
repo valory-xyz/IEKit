@@ -9,10 +9,10 @@ fingerprint:
   tests/__init__.py: bafybeicmv3jjcqcdnmubfmrgdgeyic3nkm77z4mutsyuo34hpddwupofre
   tests/helpers/__init__.py: bafybeiauwuw4a4wxqacqqkkk52ktps2qedadhypvh3ex7uqs7qaqrpygmy
   tests/helpers/constants.py: bafybeibbokz7gzdlubnjwxrmh4tqckc7j75hfy3ae6l5a63mrbd4hp6l7u
-  tests/helpers/data/json_server/data.json: bafybeicn4kcveaawctmhxs2wbxhztteqrs5ak3m7vgyceot5shahvvvoxu
+  tests/helpers/data/json_server/data.json: bafybeics26yd33ng22lhzb3had4eevbfkfdj2jbp3qhvjpygwhkwlzhrq4
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
-  tests/test_impact_evaluator.py: bafybeif7rdginbmc2ssx4sq7ijkg3nvgipbazccpktbzw6kwk2ifpfry6m
+  tests/test_impact_evaluator.py: bafybeifkdk5u2p664uxta32ur3yzz3pzsfza7zomirbwt2f4pyv2n3tiki
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihaax5od5zo5jk2l62hv4jwuwtxloh5mijozudpsjombqc4ncmi6i
@@ -29,9 +29,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeihkrunmigvlcze7uxhafj2h3kvpf2kifggq7zqj42n2we4mcwuvou
 - valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
-- valory/impact_evaluator_abci:0.1.0:bafybeiffaozxvqkkdwt7uh337jw6syvgozc6rzn7tipnlrguvkpkgl4aha
+- valory/impact_evaluator_abci:0.1.0:bafybeid6wqlic62m7ehxdbqjpjlve323g33mupf4zrsliq7kos5mtv7y4i
 - valory/score_read_abci:0.1.0:bafybeieq6lagl6mn2hhipkzce3vviepxvabfwywfz2chaviuhayhbj73xa
-- valory/score_write_abci:0.1.0:bafybeiegtzgr275ybcjnsczin7adao3rlvw5xxl4gkpxdvlwlbjvsti4wy
+- valory/score_write_abci:0.1.0:bafybeibfoa4vz6tbtob5xwqnon3hasf4c3ta3if5xem5w2inemyabiawx4
 - valory/dynamic_nft_abci:0.1.0:bafybeiddcix52ycxtgmzaroxvp5lez5cckbbf65gblwmhznthfc3b34keq
 - valory/registration_abci:0.1.0:bafybeidgoqi7fa2gb56hdfsf74bbunfii63zgeo4qhggb66ofver2n2gya
 - valory/reset_pause_abci:0.1.0:bafybeievxhu6u5r5wlpjfzcwuowlbanhfbi25saf25qit53jauv4kq6gne
@@ -106,8 +106,13 @@ is_abstract: true
 public_id: valory/impact_evaluator_abci:0.1.0
 type: skill
 models:
+  benchmark_tool:
+    args:
+      log_dir: /logs
   params:
     args:
+      broadcast_to_server: false
+      history_end: null
       ceramic_api_base: ${str:https://ceramic-clay.3boxlabs.com/}
       ceramic_api_commit_endpoint: ${str:api/v0/commits}
       ceramic_api_read_endpoint: ${str:api/v0/commits/{stream_id}}
@@ -118,6 +123,7 @@ models:
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
+      dynamic_contribution_contract_address: ${str:0x5FbDB2315678afecb367f032d93F642f64180aa3}
       earliest_block_to_monitor: ${int:8053690}
       genesis_config:
         genesis_time: '2022-09-26T00:00:00.000000000Z'
@@ -137,12 +143,15 @@ models:
           version: {}
         voting_power: '10'
       keeper_timeout: 30.0
+      max_attempts: 10
       max_healthcheck: 120
       observation_interval: ${int:300}
       on_chain_service_id: null
       reset_tendermint_after: 2
       retry_attempts: 400
       retry_timeout: 3
+      request_retry_delay: 1.0
+      request_timeout: 10.0
       round_timeout_seconds: 30.0
       service_id: impact_evaluator
       service_registry_address: null
@@ -153,11 +162,11 @@ models:
         - null
       share_tm_config_on_startup: ${bool:false}
       sleep_time: 1
-      dynamic_contribution_contract_address: ${str:0x5FbDB2315678afecb367f032d93F642f64180aa3}
       tendermint_check_sleep_delay: 3
       tendermint_com_url: ${TENDERMINT_COM_URL:str:http://localhost:8080}
       tendermint_max_retries: 5
       tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
+      tendermint_p2p_url: localhost:26656
       token_uri_base: ${str:https://pfp.staging.autonolas.tech/}
       whitelist_api_key: null
       whitelist_endpoint: http://localhost
@@ -166,8 +175,9 @@ models:
       twitter_api_bearer_token: ${str:<default_bearer_token>}
       twitter_api_endpoint: ${str:2/users/1450081635559428107/mentions?}
       twitter_api_args: ${str:tweet.fields=author_id&user.fields=name&max_results=100&since_id={since_id}}
-      twitter_mention_points: ${int:200}
       twitter_max_pages: 10
+      twitter_mention_points: ${int:200}
+      tx_timeout: 10.0
 ---
 public_id: fetchai/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
 type: connection

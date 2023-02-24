@@ -44,6 +44,7 @@ from packages.valory.skills.score_write_abci.payloads import (
     RandomnessPayload,
     ScoreAddPayload,
     SelectKeeperPayload,
+    StartupScoreReadPayload,
     VerificationPayload,
     WalletReadPayload,
 )
@@ -53,6 +54,7 @@ from packages.valory.skills.score_write_abci.rounds import (
     ScoreAddRound,
     ScoreWriteAbciApp,
     SelectKeeperRound,
+    StartupScoreReadRound,
     SynchronizedData,
     VerificationRound,
     WalletReadRound,
@@ -118,6 +120,58 @@ class ScoreWriteBaseBehaviour(BaseBehaviour, ABC):
         }
 
 
+class StartupScoreReadBehaviour(ScoreWriteBaseBehaviour):
+    """StartupScoreReadBehaviour"""
+
+    matching_round: Type[AbstractRound] = StartupScoreReadRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+
+            # Get the current data
+            data = yield from self._get_stream_data(self.params.scores_stream_id)
+
+            if not data:
+                self.context.logger.info(
+                    "An error happened while getting scores data from the stream at startup"
+                )
+                payload_content = StartupScoreReadRound.ERROR_PAYLOAD
+            else:
+                self.context.logger.info(
+                    f"Retrieved initial score data from Ceramic: {data['data']}"
+                )
+
+                user_to_total_points = (
+                    data["data"]["user_to_total_points"]
+                    if "user_to_total_points" in data["data"]
+                    else {}
+                )
+                latest_tweet_id = (
+                    data["data"]["latest_tweet_id"]
+                    if "latest_tweet_id" in data["data"]
+                    else 0
+                )
+
+                payload_content = json.dumps(
+                    {
+                        "user_to_total_points": user_to_total_points,
+                        "latest_tweet_id": latest_tweet_id,
+                    },
+                    sort_keys=True,
+                )
+
+            sender = self.context.agent_address
+            payload = StartupScoreReadPayload(sender=sender, content=payload_content)
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
+
+
 class ScoreAddBehaviour(ScoreWriteBaseBehaviour):
     """ScoreAddBehaviour"""
 
@@ -128,11 +182,9 @@ class ScoreAddBehaviour(ScoreWriteBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
-            user_to_total_points = yield from self._add_points()
+            user_to_total_points = self._add_points()
 
-            if user_to_total_points is None:
-                payload_content = ScoreAddRound.ERROR_PAYLOAD
-            elif user_to_total_points == {}:
+            if user_to_total_points == {}:
                 payload_content = ScoreAddRound.NO_CHANGES_PAYLOAD
             else:
                 payload_content = json.dumps(user_to_total_points, sort_keys=True)
@@ -157,15 +209,7 @@ class ScoreAddBehaviour(ScoreWriteBaseBehaviour):
             return {}
 
         # Get the old scores
-        data = yield from self._get_stream_data(self.params.scores_stream_id)
-
-        if not data:
-            self.context.logger.error(
-                "An error happened while retrieving the old scores from Ceramic"
-            )
-            return None
-
-        user_to_old_points = data["data"]
+        user_to_old_points = self.synchronized_data.user_to_total_points
 
         # Add the points
         user_to_total_points = user_to_old_points
@@ -176,7 +220,6 @@ class ScoreAddBehaviour(ScoreWriteBaseBehaviour):
                 user_to_total_points[user] += new_points
 
         self.context.logger.info(f"Calculated new total points: {user_to_total_points}")
-
         return user_to_total_points
 
 
@@ -251,18 +294,23 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
         """Write the scores to the Ceramic stream"""
 
         # Get the current stream data
-        data = yield from self._get_stream_data(self.params.scores_stream_id)
+        old_data = yield from self._get_stream_data(self.params.scores_stream_id)
 
-        if not data:
+        if not old_data:
             return False
+
+        new_data = {
+            "user_to_total_points": self.synchronized_data.user_to_total_points,
+            "latest_tweet_id": self.synchronized_data.latest_tweet_id,
+        }
 
         # Prepare the commit payload
         commit_payload = build_commit_payload(
             self.params.ceramic_did_str,
             self.params.ceramic_did_seed,
             self.params.scores_stream_id,
-            data,
-            self.synchronized_data.user_to_total_points,
+            old_data,
+            new_data,
         )
 
         # Send the payload
@@ -305,7 +353,11 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
 
             # Verify if the retrieved data matches local user_to_total_points
             expected_data = json.dumps(
-                self.synchronized_data.user_to_total_points, sort_keys=True
+                {
+                    "user_to_total_points": self.synchronized_data.user_to_total_points,
+                    "latest_tweet_id": self.synchronized_data.latest_tweet_id,
+                },
+                sort_keys=True,
             )
 
             # TODO: during e2e, the mocked Ceramic stream can't be updated, so verification will always fail
@@ -381,6 +433,7 @@ class ScoreWriteRoundBehaviour(AbstractRoundBehaviour):
     initial_behaviour_cls = ScoreAddBehaviour
     abci_app_cls = ScoreWriteAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
+        StartupScoreReadBehaviour,
         ScoreAddBehaviour,
         RandomnessBehaviour,
         SelectKeeperCeramicBehaviour,

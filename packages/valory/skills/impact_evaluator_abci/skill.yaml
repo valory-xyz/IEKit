@@ -8,9 +8,9 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
   behaviours.py: bafybeiauwwtjzjyceeiew3qkzppyakxcojzzfgha3reo6k7tyvuqo7tolu
-  composition.py: bafybeieyirmbam7e6ji3s4unt426wpirfickp4glbel5tnpf2uffqzs3mu
+  composition.py: bafybeiefjpcvh2eojfmnsojsmy5bantthzfrpmr7ogdmbqytfhoghjlvem
   dialogues.py: bafybeigpwuzku3we7axmxeamg7vn656maww6emuztau5pg3ebsoquyfdqm
-  fsm_specification.yaml: bafybeibvv3jfju4u7hyp2czbqpjqqmundcc4ncm2eatmtt2sp4qtoifo7q
+  fsm_specification.yaml: bafybeifevkeavjocdbocjzi3t5iji22etyh64cdlfhzef4wreqjjarlcnq
   handlers.py: bafybeiaqgaev2nfhuihhuxxxxtuiggin5zcpwn7ik7lok2n6ywi6dqy2ta
   models.py: bafybeidd57qvfq7hcpcp7ogvrneq4uyrpjey6hov3rdennyd3lnamqmpby
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
@@ -25,7 +25,7 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
 - valory/score_read_abci:0.1.0:bafybeieq6lagl6mn2hhipkzce3vviepxvabfwywfz2chaviuhayhbj73xa
-- valory/score_write_abci:0.1.0:bafybeiegtzgr275ybcjnsczin7adao3rlvw5xxl4gkpxdvlwlbjvsti4wy
+- valory/score_write_abci:0.1.0:bafybeibfoa4vz6tbtob5xwqnon3hasf4c3ta3if5xem5w2inemyabiawx4
 - valory/dynamic_nft_abci:0.1.0:bafybeiddcix52ycxtgmzaroxvp5lez5cckbbf65gblwmhznthfc3b34keq
 - valory/registration_abci:0.1.0:bafybeidgoqi7fa2gb56hdfsf74bbunfii63zgeo4qhggb66ofver2n2gya
 - valory/reset_pause_abci:0.1.0:bafybeievxhu6u5r5wlpjfzcwuowlbanhfbi25saf25qit53jauv4kq6gne
@@ -77,6 +77,8 @@ models:
     class_name: LedgerApiDialogues
   params:
     args:
+      broadcast_to_server: false
+      history_end: null
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
       ceramic_api_commit_endpoint: api/v0/commits
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}

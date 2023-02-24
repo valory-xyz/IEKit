@@ -7,16 +7,20 @@ alphabet_in:
 - ROUND_TIMEOUT
 default_start_state: ScoreAddRound
 final_states:
+- FinishedStartupScoreReadRound
 - FinishedWalletReadRound
 label: ScoreWriteAbciApp
 start_states:
 - ScoreAddRound
+- StartupScoreReadRound
 states:
 - CeramicWriteRound
+- FinishedStartupScoreReadRound
 - FinishedWalletReadRound
 - RandomnessRound
 - ScoreAddRound
 - SelectKeeperRound
+- StartupScoreReadRound
 - VerificationRound
 - WalletReadRound
 transition_func:
@@ -35,6 +39,10 @@ transition_func:
     (SelectKeeperRound, DONE): CeramicWriteRound
     (SelectKeeperRound, NO_MAJORITY): RandomnessRound
     (SelectKeeperRound, ROUND_TIMEOUT): RandomnessRound
+    (StartupScoreReadRound, API_ERROR): StartupScoreReadRound
+    (StartupScoreReadRound, DONE): FinishedStartupScoreReadRound
+    (StartupScoreReadRound, NO_MAJORITY): StartupScoreReadRound
+    (StartupScoreReadRound, ROUND_TIMEOUT): StartupScoreReadRound
     (VerificationRound, API_ERROR): RandomnessRound
     (VerificationRound, DONE): WalletReadRound
     (VerificationRound, NO_MAJORITY): RandomnessRound

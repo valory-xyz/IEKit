@@ -41,6 +41,7 @@ from packages.valory.skills.score_write_abci.payloads import (
     RandomnessPayload,
     ScoreAddPayload,
     SelectKeeperPayload,
+    StartupScoreReadPayload,
     VerificationPayload,
     WalletReadPayload,
 )
@@ -50,6 +51,7 @@ from packages.valory.skills.score_write_abci.rounds import (
     RandomnessRound,
     ScoreAddRound,
     SelectKeeperRound,
+    StartupScoreReadRound,
     SynchronizedData,
     VerificationRound,
     WalletReadRound,
@@ -223,6 +225,16 @@ class RoundTestCase:
     synchronized_data_attr_checks: List[Callable] = field(default_factory=list)
 
 
+def get_dummy_startup_read_payload_serialized(api_error: bool = False) -> str:
+    """Dummy startup score read payload"""
+    if api_error:
+        return "error"
+    return json.dumps(
+        {"user_to_total_points": {"user_a": 10, "user_b": 20}, "latest_tweet_id": 5},
+        sort_keys=True,
+    )
+
+
 def get_dummy_ceramic_write_payload_serialized(api_error: bool = False) -> str:
     """Dummy ceramic write payload"""
     if api_error:
@@ -276,6 +288,54 @@ class BaseScoreWriteRoundTest(BaseCollectSameUntilThresholdRoundTest):
                 exit_event=test_case.event,
             )
         )
+
+
+class TestStartupScoreReadRound(BaseScoreWriteRoundTest):
+    """Tests for StartupScoreReadRound."""
+
+    round_class = StartupScoreReadRound
+
+    @pytest.mark.parametrize(
+        "test_case",
+        (
+            RoundTestCase(
+                name="Happy path",
+                initial_data={},
+                payloads=get_payloads(
+                    payload_cls=StartupScoreReadPayload,
+                    data=get_dummy_startup_read_payload_serialized(),
+                ),
+                final_data={
+                    "user_to_total_points": json.loads(
+                        get_dummy_startup_read_payload_serialized()
+                    )["user_to_total_points"],
+                    "latest_tweet_id": 5,
+                },
+                event=Event.DONE,
+                most_voted_payload=get_dummy_startup_read_payload_serialized(),
+                synchronized_data_attr_checks=[
+                    lambda _synchronized_data: _synchronized_data.wallet_to_users
+                ],
+            ),
+            RoundTestCase(
+                name="API error",
+                initial_data={},
+                payloads=get_payloads(
+                    payload_cls=StartupScoreReadPayload,
+                    data=get_dummy_startup_read_payload_serialized(api_error=True),
+                ),
+                final_data={},
+                event=Event.API_ERROR,
+                most_voted_payload=get_dummy_startup_read_payload_serialized(
+                    api_error=True
+                ),
+                synchronized_data_attr_checks=[],
+            ),
+        ),
+    )
+    def test_run(self, test_case: RoundTestCase) -> None:
+        """Run tests."""
+        self.run_test(test_case)
 
 
 class TestScoreAddRound(BaseScoreWriteRoundTest):
