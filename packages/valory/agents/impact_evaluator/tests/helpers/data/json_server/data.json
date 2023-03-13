@@ -12,6 +12,22 @@
             "author_id": "315490172"
          }
       ],
+      "includes": {
+         "users": [
+            {
+               "id": "315490172",
+               "username": "username_a"
+            },
+            {
+               "id": "315490172",
+               "username": "username_b"
+            },
+            {
+               "id": "315490172",
+               "username": "username_c"
+            }
+         ]
+      },
       "meta": {
          "newest_id": 0
       }

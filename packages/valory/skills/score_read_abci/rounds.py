@@ -66,6 +66,11 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(dict, self.db.get("user_to_new_points", {}))
 
     @property
+    def id_to_usernames(self) -> dict:
+        """Get the id to usernames."""
+        return cast(dict, self.db.get("id_to_usernames", {}))
+
+    @property
     def latest_tweet_id(self) -> int:
         """Get the latest tracked tweet id."""
         return cast(int, self.db.get("latest_tweet_id", 0))
@@ -113,12 +118,19 @@ class ScoringRound(CollectSameUntilThresholdRound):
 
             payload = json.loads(self.most_voted_payload)
 
+            # Update id_to_usernames
+            id_to_usernames = cast(
+                SynchronizedData, self.synchronized_data
+            ).id_to_usernames
+            id_to_usernames.update(payload["id_to_usernames"])
+
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
                     get_name(SynchronizedData.user_to_new_points): payload[
                         "user_to_new_points"
                     ],
+                    get_name(SynchronizedData.id_to_usernames): id_to_usernames,
                     get_name(SynchronizedData.latest_tweet_id): payload[
                         "latest_tweet_id"
                     ],
@@ -159,7 +171,7 @@ class ScoreReadAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: Set[str] = {"latest_tweet_id"}
+    cross_period_persisted_keys: Set[str] = {"latest_tweet_id", "id_to_usernames"}
     db_pre_conditions: Dict[AppState, Set[str]] = {
         TwitterObservationRound: set(),
     }

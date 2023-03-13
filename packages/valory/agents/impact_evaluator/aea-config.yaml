@@ -9,7 +9,7 @@ fingerprint:
   tests/__init__.py: bafybeicmv3jjcqcdnmubfmrgdgeyic3nkm77z4mutsyuo34hpddwupofre
   tests/helpers/__init__.py: bafybeiauwuw4a4wxqacqqkkk52ktps2qedadhypvh3ex7uqs7qaqrpygmy
   tests/helpers/constants.py: bafybeibbokz7gzdlubnjwxrmh4tqckc7j75hfy3ae6l5a63mrbd4hp6l7u
-  tests/helpers/data/json_server/data.json: bafybeics26yd33ng22lhzb3had4eevbfkfdj2jbp3qhvjpygwhkwlzhrq4
+  tests/helpers/data/json_server/data.json: bafybeieke2buibzy5yww6zlgimfpffzfmwedpc35dn3nh44ucosx5jrt4m
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
   tests/test_impact_evaluator.py: bafybeifkdk5u2p664uxta32ur3yzz3pzsfza7zomirbwt2f4pyv2n3tiki
@@ -29,9 +29,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeihkrunmigvlcze7uxhafj2h3kvpf2kifggq7zqj42n2we4mcwuvou
 - valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
-- valory/impact_evaluator_abci:0.1.0:bafybeid6wqlic62m7ehxdbqjpjlve323g33mupf4zrsliq7kos5mtv7y4i
-- valory/score_read_abci:0.1.0:bafybeieq6lagl6mn2hhipkzce3vviepxvabfwywfz2chaviuhayhbj73xa
-- valory/score_write_abci:0.1.0:bafybeibfoa4vz6tbtob5xwqnon3hasf4c3ta3if5xem5w2inemyabiawx4
+- valory/impact_evaluator_abci:0.1.0:bafybeieqqlcwwm4wpwxkm7ysd3usya5wbyxngvb2e4ebjiqlviiusdbdwy
+- valory/score_read_abci:0.1.0:bafybeibey2s2nwogalgyzjo6kt6y6hqblz3tbqlfewh2dzp3gdxnqnlrci
+- valory/score_write_abci:0.1.0:bafybeidj5wdvggtyehb36jh5ikeecjch52wkpbo3636cavszhz2w52gsde
 - valory/dynamic_nft_abci:0.1.0:bafybeiddcix52ycxtgmzaroxvp5lez5cckbbf65gblwmhznthfc3b34keq
 - valory/registration_abci:0.1.0:bafybeidgoqi7fa2gb56hdfsf74bbunfii63zgeo4qhggb66ofver2n2gya
 - valory/reset_pause_abci:0.1.0:bafybeievxhu6u5r5wlpjfzcwuowlbanhfbi25saf25qit53jauv4kq6gne
@@ -174,7 +174,7 @@ models:
       twitter_api_base: ${str:https://api.twitter.com/}
       twitter_api_bearer_token: ${str:<default_bearer_token>}
       twitter_api_endpoint: ${str:2/users/1450081635559428107/mentions?}
-      twitter_api_args: ${str:tweet.fields=author_id&user.fields=name&max_results=100&since_id={since_id}}
+      twitter_api_args: ${str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
       twitter_max_pages: 10
       twitter_mention_points: ${int:200}
       tx_timeout: 10.0

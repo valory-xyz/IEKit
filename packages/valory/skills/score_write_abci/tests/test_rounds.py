@@ -230,7 +230,11 @@ def get_dummy_startup_read_payload_serialized(api_error: bool = False) -> str:
     if api_error:
         return "error"
     return json.dumps(
-        {"user_to_total_points": {"user_a": 10, "user_b": 20}, "latest_tweet_id": 5},
+        {
+            "user_to_total_points": {"user_a": 10, "user_b": 20},
+            "id_to_usernames": {"user_a": "username_1", "user_b": "username_2"},
+            "latest_tweet_id": 5,
+        },
         sort_keys=True,
     )
 

@@ -46,7 +46,7 @@ from packages.valory.skills.score_read_abci.rounds import (
 )
 
 
-TWITTER_API_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id&user.fields=name&max_results=100&since_id=0"
+TWITTER_API_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id=0"
 
 DUMMY_API_RESPONSE = {
     "data": [
@@ -55,6 +55,14 @@ DUMMY_API_RESPONSE = {
         {"author_id": "1286010187325812738", "text": "dummy_text"},
         {"author_id": "1286010187325812737", "text": "dummy_text"},
     ],
+    "includes": {
+        "users": [
+            {"id": "1286010187325812739", "username": "username_a"},
+            {"id": "1286010187325812739", "username": "username_b"},
+            {"id": "1286010187325812738", "username": "username_c"},
+            {"id": "1286010187325812737", "username": "username_d"},
+        ]
+    },
     "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
 }
 
@@ -65,10 +73,28 @@ DUMMY_API_RESPONSE_END = {
         {"author_id": "1286010187325812738", "text": "dummy_text"},
         {"author_id": "1286010187325812737", "text": "dummy_text"},
     ],
+    "includes": {
+        "users": [
+            {"id": "1286010187325812739", "username": "username_a"},
+            {"id": "1286010187325812739", "username": "username_b"},
+            {"id": "1286010187325812738", "username": "username_c"},
+            {"id": "1286010187325812737", "username": "username_d"},
+        ]
+    },
     "meta": {"result_count": 0},
 }
 
 DUMMY_API_RESPONSE_MISSING_DATA = {
+    "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
+}
+
+DUMMY_API_RESPONSE_MISSING_INCLUDES = {
+    "data": [
+        {"author_id": "1286010187325812739", "text": "dummy_text"},
+        {"author_id": "1286010187325812739", "text": "dummy_text"},
+        {"author_id": "1286010187325812738", "text": "dummy_text"},
+        {"author_id": "1286010187325812737", "text": "dummy_text"},
+    ],
     "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
 }
 
@@ -81,6 +107,14 @@ DUMMY_API_RESPONSE_MULTIPAGE = {
         {"author_id": "1286010187325812738", "text": "dummy_text"},
         {"author_id": "1286010187325812737", "text": "dummy_text"},
     ],
+    "includes": {
+        "users": [
+            {"id": "1286010187325812739", "username": "username_a"},
+            {"id": "1286010187325812739", "username": "username_b"},
+            {"id": "1286010187325812738", "username": "username_c"},
+            {"id": "1286010187325812737", "username": "username_d"},
+        ]
+    },
     "meta": {
         "result_count": 4,
         "newest_id": "1",
@@ -94,6 +128,11 @@ DUMMY_MOST_VOTED_API_DATA = {
         "1286010187325812739": 2,
         "1286010187325812738": 1,
         "1286010187325812737": 1,
+    },
+    "id_to_usernames": {
+        "1286010187325812739": "username_1",
+        "1286010187325812738": "username_2",
+        "1286010187325812737": "username_3",
     },
     "latest_tweet_id": DUMMY_API_RESPONSE["meta"]["newest_id"],
 }
@@ -278,6 +317,19 @@ class TestTwitterObservationBehaviourAPIError(BaseSwaapTest):
                 {
                     "body": json.dumps(
                         DUMMY_API_RESPONSE_MISSING_META,
+                    ),
+                    "status_code": 200,
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "API error: missing includes",
+                    initial_data=dict(),
+                    event=Event.API_ERROR,
+                ),
+                {
+                    "body": json.dumps(
+                        DUMMY_API_RESPONSE_MISSING_INCLUDES,
                     ),
                     "status_code": 200,
                 },

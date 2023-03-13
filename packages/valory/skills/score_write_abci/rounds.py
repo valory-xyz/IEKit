@@ -78,6 +78,11 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(dict, self.db.get("user_to_total_points", {}))
 
     @property
+    def id_to_usernames(self) -> dict:
+        """Get the id to usernames."""
+        return cast(dict, self.db.get("id_to_usernames", {}))
+
+    @property
     def wallet_to_users(self) -> dict:
         """Get the wallet to twitter user mapping."""
         return cast(dict, self.db.get("wallet_to_users", {}))
@@ -116,6 +121,9 @@ class StartupScoreReadRound(CollectSameUntilThresholdRound):
                 **{
                     get_name(SynchronizedData.user_to_total_points): payload[
                         "user_to_total_points"
+                    ],
+                    get_name(SynchronizedData.id_to_usernames): payload[
+                        "id_to_usernames"
                     ],
                     get_name(SynchronizedData.latest_tweet_id): payload[
                         "latest_tweet_id"
@@ -350,7 +358,11 @@ class ScoreWriteAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: Set[str] = {"latest_tweet_id", "user_to_total_points"}
+    cross_period_persisted_keys: Set[str] = {
+        "latest_tweet_id",
+        "user_to_total_points",
+        "id_to_usernames",
+    }
     db_pre_conditions: Dict[AppState, Set[str]] = {
         StartupScoreReadRound: set(),
         ScoreAddRound: set(),

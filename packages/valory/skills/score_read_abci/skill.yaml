@@ -8,20 +8,20 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaihgox5qvdfcwwo7xj3f5brxtexkpmu6zuppcqcadygadz2xjgua
-  behaviours.py: bafybeigokcllw72o5t6sjr5lxsc3dotb66fyivtgxbrmlxmhfcjbk53uim
+  behaviours.py: bafybeib47ztuscrq5s7pjgef7neevzk6s3rvd7u3zz2z6khs7f2qmay5rm
   dialogues.py: bafybeihzb65chutzt4j2kqo5lfzddwbsrnefmnp2gco2z3nrwknpry2s64
   fsm_specification.yaml: bafybeibna2fcbi64vekws364kaw4vcrkamdjrl6vvscp3cvpb3keqmorce
   handlers.py: bafybeibx6spjkdoko37b6opwhhvmftsdi32hfpmlk73nkmujz3wwi6jn5m
   models.py: bafybeifu4e5kbbhowgyw3vkqrovjuwt4xb6au5lfncknixt2j6ok7vu5qi
   payloads.py: bafybeiblmc4a6b74xf5wnnshu255xbmbixgrqhkhy3zwlspf6odlcck74u
-  rounds.py: bafybeiculll2hrof7vqxsdbr7fytxrgywmvs4trepbdac33sggtijqgsze
+  rounds.py: bafybeig3hcxtymelmhlovfcha3krdizolqbtzoq2etqfgkjtophtm2ermy
   tests/__init__.py: bafybeigz2mhcrhytwp5swse6tqwlidybjfhsuvp5ilegmhthfaitzvv4pa
-  tests/test_behaviours.py: bafybeic3scidflxwwy6s4mwxu6oajtn7kihni664vmtjf4gbj6wttiyufm
+  tests/test_behaviours.py: bafybeicfaiuhijdskfvheg6ync3i5th4bcaczx7oywajr57qtix43vpyta
   tests/test_dialogues.py: bafybeicgx3uspr6lh54364nmklbakjzmj5vjqgaoafr2xmel66nv7xrcii
   tests/test_handlers.py: bafybeihhxn6uawckdodoank5jgqnhk2cb7js24re3vl2wduh2rvuntyflu
   tests/test_models.py: bafybeibbb5mnltyr2w6afwaghd24ie5m7izgrcifv7yqa75z4jc6tl7j5m
   tests/test_payloads.py: bafybeidjdrcjzi7rhzdg7rjkinmjv74pvodgj3zmnfu6sy6zffymnkzqey
-  tests/test_rounds.py: bafybeigqzt2kil7to52c7rxqqytwnzthel3kd3ozfgp5pysbi4vs26bdsy
+  tests/test_rounds.py: bafybeia7djfzpwqijulc44yjo4ec7nmo5a2uida4xrxi6k6tgqgofdovsu
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
@@ -118,7 +118,7 @@ models:
       twitter_api_base: https://api.twitter.com/
       twitter_api_bearer_token: <default_bearer_token>
       twitter_api_endpoint: 2/users/1450081635559428107/mentions?
-      twitter_api_args: tweet.fields=author_id&user.fields=name&max_results=100&since_id={since_id}
+      twitter_api_args: tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
       twitter_mention_points: 200
       twitter_max_pages: 10
       validate_timeout: 1205
