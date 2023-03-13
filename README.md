@@ -33,7 +33,7 @@ Autonomous services that use Autonolas technology are implemented as [Finite Sta
 - System requirements:
 
     - Python `>=3.7`
-    - [Tendermint](https://docs.tendermint.com/master/introduction/install.html) `==0.34.19`
+    - [Tendermint](https://docs.tendermint.com/v0.34/introduction/install.html) `==0.34.19`
     - [IPFS node](https://docs.ipfs.io/install/command-line/#official-distributions) `==0.6.0`
     - [Pipenv](https://pipenv.pypa.io/en/latest/install/) `>=2021.x.xx`
     - [Docker Engine](https://docs.docker.com/engine/install/)
