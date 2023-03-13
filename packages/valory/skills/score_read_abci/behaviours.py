@@ -21,7 +21,7 @@
 
 import json
 from abc import ABC
-from typing import Dict, Generator, Set, Type, cast
+from typing import Dict, Generator, List, Set, Type, cast
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
@@ -93,6 +93,7 @@ class TwitterObservationBehaviour(ScoreReadBaseBehaviour):
         self.context.logger.info(f"Retrieving mentions from Twitter API [{api_url}]")
 
         mentions = []
+        user_data = []
         next_token = None
         latest_tweet_id = None
 
@@ -141,7 +142,14 @@ class TwitterObservationBehaviour(ScoreReadBaseBehaviour):
                 )
                 return TwitterObservationRound.ERROR_PAYLOAD
 
+            if "includes" not in api_data or "users" not in api_data["includes"]:
+                self.context.logger.error(
+                    f"Twitter API response does not contain the required 'includes/users' field: {api_data!r}"
+                )
+                return TwitterObservationRound.ERROR_PAYLOAD
+
             mentions += api_data["data"]
+            user_data += api_data["includes"]["users"]
             latest_tweet_id = api_data["meta"]["newest_id"]
 
             if "next_token" in api_data["meta"]:
@@ -151,10 +159,12 @@ class TwitterObservationBehaviour(ScoreReadBaseBehaviour):
             break
 
         user_to_mentions = self._count_mentions(mentions)
+        id_to_usernames = self._get_id_to_usernames(user_data)
 
         return json.dumps(
             {
                 "user_to_mentions": user_to_mentions,
+                "id_to_usernames": id_to_usernames,
                 "latest_tweet_id": latest_tweet_id or next_tweet_id,
             },
             sort_keys=True,
@@ -173,6 +183,10 @@ class TwitterObservationBehaviour(ScoreReadBaseBehaviour):
                 user_to_mentions[author] = user_to_mentions[author] + 1
 
         return user_to_mentions
+
+    def _get_id_to_usernames(self, user_data: List) -> Dict:
+        """Process Twitter user data"""
+        return {i["id"]: "@" + i["username"] for i in user_data}
 
 
 class ScoringBehaviour(ScoreReadBaseBehaviour):
