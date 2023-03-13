@@ -1,0 +1,79 @@
+site_name: product/iekit #Required format to work with monorepo including a specific route in the address.
+site_url: https://docs.autonolas.network/product/iekit/
+site_description: Autonolas ContributionKit developer documentation
+repo_url: https://github.com/valory-xyz/contribution-service
+site_author: developer@valory.xyz
+edit_uri: ""
+copyright:  Copyright &copy; 2021 - 2023 Valory AG 
+  
+
+strict: true
+
+ 
+theme:
+  name: 'material'
+  language: en
+  favicon: images/favicon.ico
+  features:
+    - navigation.indexes
+    - navigation.instant
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+        
+    
+extra_css:
+  - stylesheets/extra.css
+ 
+
+nav:
+  - CoordinationKit: 'index.md' 
+
+  
+plugins:
+  - monorepo
+  - macros
+  - search  
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed 
+  - pymdownx.highlight
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.arithmatex
+  - def_list  
+  - md_in_html
+  - toc:
+      title: On this page
+
+
+extra:
+  open_aea: '[Open AEA](https://github.com/valory-xyz/open-aea)'
+  open_aea_doc: '[Open AEA documentation](https://open-aea.docs.autonolas.tech)'
+  open_aea_api: '[Open AEA API](https://open-aea.docs.autonolas.tech/api/)'
+  fsm_app: 'FSM App'
+  open_autonomy: '[Open Autonomy](https://github.com/valory-xyz/open-autonomy)'
+  open_autonomy_api: '[Open Autonomy API](https://docs.autonolas.network/)'
+  on_chain_frontend: '[on-chain protocol frontend](https://protocol.autonolas.network/)'
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/autonolas
+      name: Autonolas on Twitter
+    - icon: fontawesome/brands/discord
+      link: https://discord.com/invite/z2PT65jKqQ
+      name: Autonolas on Discord
+    - icon: fontawesome/brands/github
+      link: https://github.com/valory-xyz
+      name: Autonolas on GitHub
+
+
+extra_javascript:
+    - https://unpkg.com/mermaid@8.10.1/dist/mermaid.min.js
+    - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML  
