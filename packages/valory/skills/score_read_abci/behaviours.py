@@ -229,6 +229,9 @@ class ScoringBehaviour(ScoreReadBaseBehaviour):
 
         return {
             "user_to_new_points": user_to_new_points,
+            "id_to_usernames": self.synchronized_data.most_voted_api_data[
+                "id_to_usernames"
+            ],
             "latest_tweet_id": self.synchronized_data.most_voted_api_data[
                 "latest_tweet_id"
             ],
