@@ -110,7 +110,11 @@ def build_data_from_commits(commits):
 
     # If the first patch only contains operations, we start with an empty object.
     # In other case, the first patch is the base content.
-    if all(type(ops) == dict and all(field in ops.keys() for field in ["op", "value", "path"]) for ops in patches[0]):
+    if all(
+        type(ops) == dict
+        and all(field in ops.keys() for field in ["op", "value", "path"])
+        for ops in patches[0]
+    ):
         content = {}
     else:
         content = patches.pop(0)
