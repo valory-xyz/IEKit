@@ -93,6 +93,9 @@ Autonomous services that use Autonolas technology are implemented as [Finite Sta
 
 - Some examples on how to curl the service endpoints from inside the container:
 
+      # Enter one of the agent containers
+      docker exec -it <container_id> /bin/bash
+
       # Install curl and jq if they are not present
       sudo apt install -y curl jq
 

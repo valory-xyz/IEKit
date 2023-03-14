@@ -11,6 +11,8 @@ CeramicWrite
 WalletRead
 NewTokens
 HttpHandler
+Infura
+CoordinationKit
 NFT-enabled
 leaderboard
 OpenAPI
