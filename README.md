@@ -1,5 +1,12 @@
 # IEKit
-An autonomous service implementing a decentralized Impact Evaluator built with the [Open Autonomy](https://docs.autonolas.network/open-autonomy/) framework. The service tracks mentions to [@autonolas](https://twitter.com/autonolas) on Twitter, assigns scores to them and writes those scores to a [Ceramic](https://ceramic.network/) stream. It then reads verified wallets (a mapping between Twitter handles and Ethereum addresses) from another Ceramic stream, checks for users that have minted a token, and updates their token metadata according to their scores so NFT images are upgraded over time.
+An toolkit for autonomous services implementing a decentralized Impact Evaluator built with the [Open Autonomy](https://docs.autonolas.network/open-autonomy/) framework.
+
+The demo service for the IEKit tracks mentions of [@autonolas](https://twitter.com/autonolas) on Twitter, assigns scores to them and writes those scores to a [Ceramic](https://ceramic.network/) stream.
+The service then:
+
+1. reads verified wallets (a mapping between Twitter handles and Ethereum addresses) from another Ceramic stream,
+2. checks for users that have minted a token, and
+3. updates their token metadata according to their scores so NFT images are upgraded over time.
 
 ## Architecture
 

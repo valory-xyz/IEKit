@@ -1,14 +1,14 @@
 ![IEKit](images/iekit.svg){ align=left }
-The Impact Evaluator Kit (IEKit) is an enhanced version of the [CoordinationKit](https://docs.autonolas.network/product/coordinationkit/), which leverages [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) to automate the tracking and rewarding of users' contributions on the ecosystem. The Autonolas Impact Evaluator (IE) is an agent service based on the IEKit. This service is designed to track contributions in the form of Twitter mentions of the Autonolas DAO ([@autonolas](https://twitter.com/autonolas)). The service implements three main features:
+The Impact Evaluator Kit (IEKit) is an enhanced version of the [CoordinationKit](https://docs.autonolas.network/product/coordinationkit/), which leverages [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) to automate the tracking and rewarding of users' contributions on the ecosystem. We provide a demo agent service based on the IEKit which is designed to track contributions in the form of Twitter mentions of the Autonolas DAO ([@autonolas](https://twitter.com/autonolas)). The demo service implements three main features:
 
-1. **Monitor for new users' registrations.** Any user can register as a contributor to the DAO by minting an NFT (through the [associated contract](https://etherscan.io/address/0x02c26437b292d86c5f4f21bbcce0771948274f84)) and sending a Tweet linking their wallet address.
+1. **Monitor for new users' registrations.** Reads registered users from a [Ceramic stream](https://developers.ceramic.network/docs/advanced/standards/stream-programs/). This stream contains a mapping that links Ethereum addresses to their corresponding Twitter user.
 
-2. **Monitor for users' contributions.** The service periodically scans for new mentions of @autonolas on Twitter. If the mentions come from registered contributing users, the service increments and update their score.
+2. **Monitor for users' contributions.** The service periodically scans for new mentions of @autonolas on Twitter, and increments and updates the score of the corresponding user.
 
 3. **Update the badge of users according to their score.** To access the badge image associated to a user's NFT, the metadata URI associated to it is redirected to an agent in the service. Upon reading the concrete NFT from the request, the service provides the IPFS address of the image, which is updated periodically in relation to the user's score.
 
-The service uses dedicated [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) as a persistent solution to store users' scores and registration metadata. 
-The Autonolas IE service demonstrates the applicability of the IEKit to build a particular use case, but of course, the IEKit is modular by design and can be adapted to a range of custom impact evaluators.
+The demo service uses dedicated [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) as a persistent solution to store users' scores and registration metadata. 
+The service demonstrates the applicability of the IEKit to build a particular use case, but of course, the IEKit is modular by design and can be adapted to a range of custom impact evaluators.
 
 ## Demo
 
@@ -16,7 +16,7 @@ The Autonolas IE service demonstrates the applicability of the IEKit to build a 
 
     This section is under active development - please report issues in the [Autonolas Discord](https://discord.com/invite/z2PT65jKqQ).
 
-In order to run a local demo of the Autonolas IE service:
+In order to run a local demo service based on the IEKit:
 
 1. [Set up your system](https://docs.autonolas.network/open-autonomy/guides/set_up/) to work with the Open Autonomy framework. We recommend that you use these commands:
 
@@ -70,11 +70,15 @@ In order to run a local demo of the Autonolas IE service:
 
 5. Prepare the environment and build the service deployment.
 
-    1. Create an API key for Google Spreadsheets API (you can follow [this guide](https://www.sharperlight.com/uncategorized/2022/04/06/accessing-the-google-sheets-api-via-sharperlight-query-builder/)).
+    1. Create a [Twitter API Bearer Token](https://developer.twitter.com/en/portal/dashboard).
 
-    2. Create an API key for [Infura](https://www.infura.io/) or your preferred provider.
+    2. Create a Ceramic Decentralized Identity (DID) using [Glaze](https://github.com/ceramicstudio/js-glaze).
 
-    3. Create an `.env` file with the required environment variables, modifying its values to your needs.
+    3. Using the DID created in the previous step, create two Ceramic streams. You can follow [this tutorial](https://developers.ceramic.network/reference/stream-programs/tile-document/).
+
+    4. Create an API key for [Infura](https://www.infura.io/) or your preferred provider.
+
+    5. Create an `.env` file with the required environment variables, modifying its values to your needs.
 
         ```bash
         ETHEREUM_LEDGER_RPC=https://goerli.infura.io/v3/<infura_api_key>
@@ -96,7 +100,7 @@ In order to run a local demo of the Autonolas IE service:
         export $(grep -v '^#' .env | xargs)
         ```
 
-    4. Build the service deployment.
+    6. Build the service deployment.
 
         ```bash
         autonomy deploy build keys.json -ltm
