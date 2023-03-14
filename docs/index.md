@@ -3,7 +3,143 @@ Description of the IEKit
 
 ## Demo
 
-Demo of the IEKit.
+!!! warning "Important"
+
+	This section is under active development - please report issues in the [Autonolas Discord](https://discord.com/invite/z2PT65jKqQ).
+
+In order to run a local demo of a service based on the IEKit (Ceramic Impact Evaluator):
+
+1. [Set up your system](https://docs.autonolas.network/open-autonomy/guides/set_up/) to work with the Open Autonomy framework. We recommend that you use these commands:
+
+    ```bash
+    mkdir your_workspace && cd your_workspace
+    touch Pipfile && pipenv --python 3.10 && pipenv shell
+
+    pipenv install open-autonomy[all]==0.9.1
+    autonomy init --remote --ipfs --reset --author=your_name
+    ```
+
+2. Fetch the IEKit.
+
+	```bash
+	autonomy fetch valory/impact_evaluator:0.1.0:bafybeid6bymtsysuuf3dq5gi7btxmpfruxnzyh5l5xl6trui644qnbwwee --service
+	```
+
+3. Build the Docker image of the service agents
+
+	```bash
+	cd impact_evaluator
+	autonomy build-image
+	```
+
+4. Prepare the `keys.json` file containing the wallet address and the private key for each of the agents.
+
+    ??? example "Example of a `keys.json` file"
+
+        <span style="color:red">**WARNING: Use this file for testing purposes only. Never use the keys or addresses provided in this example in a production environment or for personal use.**</span>
+
+        ```json
+        [
+          {
+              "address": "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65",
+              "private_key": "0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a"
+          },
+          {
+              "address": "0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc",
+              "private_key": "0x8b3a350cf5c34c9194ca85829a2df0ec3153be0318b5e2d3348e872092edffba"
+          },
+          {
+              "address": "0x976EA74026E726554dB657fA54763abd0C3a0aa9",
+              "private_key": "0x92db14e403b83dfe3df233f83dfa3a0d7096f21ca9b0d6d6b8d88b2b4ec1564e"
+          },
+          {
+              "address": "0x14dC79964da2C08b23698B3D3cc7Ca32193d9955",
+              "private_key": "0x4bbbf85ce3377467afe5d46f804f221813b2bb87f24d81f60f1fcdbf7cbf4356"
+          }
+        ]
+        ```
+
+5. Prepare the environment and build the service deployment.
+
+	1. Create an API key for Google Spreadsheets API (you can follow [this guide](https://www.sharperlight.com/uncategorized/2022/04/06/accessing-the-google-sheets-api-via-sharperlight-query-builder/)).
+
+    2. Create an API key for [Infura](https://www.infura.io/) or your preferred provider.
+
+	3. Create an `.env` file with the required environment variables, modifying its values to your needs.
+
+		```bash
+		ETHEREUM_LEDGER_RPC=https://goerli.infura.io/v3/<infura_api_key>
+		DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS=0x7C3B976434faE9986050B26089649D9f63314BD8
+		WALLETS_STREAM_ID=<wallets_stream>
+		SCORES_STREAM_ID=<scores_stream>
+		CERAMIC_DID_SEED=<ceramic_seed_did>
+		CERAMIC_DID_STR=<ceramic_did_string>
+		TWITTER_API_BEARER_TOKEN=<twitter_api_token>
+		TWITTER_MENTION_POINTS=300
+		OBSERVATION_INTERVAL=10
+		ALL_PARTICIPANTS='[["0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65","0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc","0x976EA74026E726554dB657fA54763abd0C3a0aa9","0x14dC79964da2C08b23698B3D3cc7Ca32193d9955"]]'
+		POINTS_TO_IMAGE_HASHES='{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
+		```
+
+	    and export them:
+	
+	    ```bash
+	    export $(grep -v '^#' .env | xargs)
+	    ```
+
+	4. Build the service deployment.
+
+	    ```bash
+	    autonomy deploy build keys.json -ltm
+	    ```
+
+6. Run the service.
+
+	```bash
+	cd abci_build
+	autonomy deploy run
+	```
+
+	You can cancel the local execution at any time by pressing ++ctrl+c++.
+
+7. Check that the service is running. Open a separate terminal and execute the command below. You should see the service transitioning along different states.
+
+	```bash
+	docker logs -f abci0 | grep -E 'Entered|round is done'
+	```
+
+8. You can try some examples on how to curl the service endpoints from inside one of the agent containers. For example:
+
+    ```bash
+    # Enter one of the agent containers
+    docker exec -it <container_id> /bin/bash
+
+	# Install curl and jq if they are not present
+	sudo apt install -y curl jq
+	
+	# Get the metadata for the token with id=1
+	curl localhost:8000/1 | jq
+	
+	# Output
+	{
+	  "title": "Autonolas Contribute Badges",
+	  "name": "Badge 1",
+	  "description": "This NFT recognizes the contributions made by the holder to the Autonolas Community.",
+	  "image": "ipfs://bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm",
+	  "attributes": []
+	}
+	
+	# Get the service health status
+	curl localhost:8000/healthcheck | jq
+	
+	# Output
+	{
+	  "seconds_since_last_reset": 15.812911033630371,
+	  "healthy": true,
+	  "seconds_until_next_update": -5.812911033630371
+	}
+    ```
+
 
 ## Build
 
