@@ -31,7 +31,7 @@ In order to run a local demo of the Autonolas IE service:
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeid6bymtsysuuf3dq5gi7btxmpfruxnzyh5l5xl6trui644qnbwwee --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeibwicilsd323odawiwxfr3a44ytiuoatmsx6djd63fyrpqrrbnewu --service
     ```
 
 3. Build the Docker image of the service agents
