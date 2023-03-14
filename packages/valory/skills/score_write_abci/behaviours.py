@@ -362,6 +362,7 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
             expected_data = json.dumps(
                 {
                     "user_to_total_points": self.synchronized_data.user_to_total_points,
+                    "id_to_usernames": self.synchronized_data.id_to_usernames,
                     "latest_tweet_id": self.synchronized_data.latest_tweet_id,
                 },
                 sort_keys=True,
@@ -375,7 +376,7 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
                 not data or json.dumps(data["data"], sort_keys=True) != expected_data
             ):
                 self.context.logger.info(
-                    f"An error happened while verifying data.\nExpected data:\n{self.synchronized_data.user_to_total_points}. Actual data:\n{data}\nSkip verification: {skip_verify}"
+                    f"An error happened while verifying data.\nExpected data:\n{expected_data}. Actual data:\n{data}\nSkip verification: {skip_verify}"
                 )
                 payload_content = CeramicWriteRound.ERROR_PAYLOAD
             else:
