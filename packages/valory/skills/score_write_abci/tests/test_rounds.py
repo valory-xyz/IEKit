@@ -233,7 +233,7 @@ def get_dummy_startup_read_payload_serialized(api_error: bool = False) -> str:
         {
             "user_to_total_points": {"user_a": 10, "user_b": 20},
             "id_to_usernames": {"user_a": "username_1", "user_b": "username_2"},
-            "latest_tweet_id": 5,
+            "latest_mention_tweet_id": 5,
         },
         sort_keys=True,
     )
@@ -313,7 +313,7 @@ class TestStartupScoreReadRound(BaseScoreWriteRoundTest):
                     "user_to_total_points": json.loads(
                         get_dummy_startup_read_payload_serialized()
                     )["user_to_total_points"],
-                    "latest_tweet_id": 5,
+                    "latest_mention_tweet_id": 5,
                 },
                 event=Event.DONE,
                 most_voted_payload=get_dummy_startup_read_payload_serialized(),

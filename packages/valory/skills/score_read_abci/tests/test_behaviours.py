@@ -134,7 +134,7 @@ DUMMY_MOST_VOTED_API_DATA = {
         "1286010187325812738": "username_2",
         "1286010187325812737": "username_3",
     },
-    "latest_tweet_id": DUMMY_API_RESPONSE["meta"]["newest_id"],
+    "latest_mention_tweet_id": DUMMY_API_RESPONSE["meta"]["newest_id"],
 }
 
 

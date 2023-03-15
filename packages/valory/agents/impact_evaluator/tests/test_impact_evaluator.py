@@ -125,7 +125,7 @@ class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
             "value": f"{MOCK_TWITTER_API_ADDRESS}:{MOCK_TWITTER_API_PORT}/",
         },
         {
-            "dotted_path": f"{__param_args_prefix}.twitter_api_args",
+            "dotted_path": f"{__param_args_prefix}.twitter_mentions_args",
             "value": "",
         },
         {

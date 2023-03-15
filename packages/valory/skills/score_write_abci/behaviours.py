@@ -153,9 +153,9 @@ class StartupScoreReadBehaviour(ScoreWriteBaseBehaviour):
                     if "id_to_usernames" in data["data"]
                     else {}
                 )
-                latest_tweet_id = (
-                    data["data"]["latest_tweet_id"]
-                    if "latest_tweet_id" in data["data"]
+                latest_mention_tweet_id = (
+                    data["data"]["latest_mention_tweet_id"]
+                    if "latest_mention_tweet_id" in data["data"]
                     else 0
                 )
 
@@ -163,7 +163,7 @@ class StartupScoreReadBehaviour(ScoreWriteBaseBehaviour):
                     {
                         "user_to_total_points": user_to_total_points,
                         "id_to_usernames": id_to_usernames,
-                        "latest_tweet_id": latest_tweet_id,
+                        "latest_mention_tweet_id": latest_mention_tweet_id,
                     },
                     sort_keys=True,
                 )
@@ -308,7 +308,7 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
         new_data = {
             "user_to_total_points": self.synchronized_data.user_to_total_points,
             "id_to_usernames": self.synchronized_data.id_to_usernames,
-            "latest_tweet_id": self.synchronized_data.latest_tweet_id,
+            "latest_mention_tweet_id": self.synchronized_data.latest_mention_tweet_id,
         }
 
         # Prepare the commit payload
@@ -363,7 +363,7 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
                 {
                     "user_to_total_points": self.synchronized_data.user_to_total_points,
                     "id_to_usernames": self.synchronized_data.id_to_usernames,
-                    "latest_tweet_id": self.synchronized_data.latest_tweet_id,
+                    "latest_mention_tweet_id": self.synchronized_data.latest_mention_tweet_id,
                 },
                 sort_keys=True,
             )

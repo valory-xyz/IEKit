@@ -73,7 +73,7 @@ CERAMIC_API_STREAM_URL_WALLETS_READ = (
     "https://ceramic-clay.3boxlabs.com/api/v0/commits/wallet_to_users_stream_id"
 )
 
-# This response contains the data: {"user_to_total_points": {"user_a": 10, "user_b": 10}, "latest_tweet_id": 15}
+# This response contains the data: {"user_to_total_points": {"user_a": 10, "user_b": 10}, "latest_mention_tweet_id": 15}
 DUMMY_API_RESPONSE_READ_POINTS = {
     "streamId": "kjzl6cwe1jw14bi6yb7jlpm5zrgad3b94kdrg28q5k6jlpbxvzbh9smmpv3ewvp",
     "docId": "kjzl6cwe1jw14bi6yb7jlpm5zrgad3b94kdrg28q5k6jlpbxvzbh9smmpv3ewvp",
@@ -663,7 +663,7 @@ class TestVerificationBehaviour(BaseScoreWriteTest):
                     "Happy path",
                     initial_data=dict(
                         user_to_total_points=DUMMY_USER_TO_SCORES,
-                        latest_tweet_id=15,
+                        latest_mention_tweet_id=15,
                     ),
                     event=Event.DONE,
                 ),

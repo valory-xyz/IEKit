@@ -94,9 +94,9 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(int, round_)
 
     @property
-    def latest_tweet_id(self) -> int:
+    def latest_mention_tweet_id(self) -> int:
         """Get the latest tracked tweet id."""
-        return cast(int, self.db.get("latest_tweet_id", 0))  # pragma: no cover
+        return cast(int, self.db.get("latest_mention_tweet_id", 0))  # pragma: no cover
 
 
 class StartupScoreReadRound(CollectSameUntilThresholdRound):
@@ -125,8 +125,8 @@ class StartupScoreReadRound(CollectSameUntilThresholdRound):
                     get_name(SynchronizedData.id_to_usernames): payload[
                         "id_to_usernames"
                     ],
-                    get_name(SynchronizedData.latest_tweet_id): payload[
-                        "latest_tweet_id"
+                    get_name(SynchronizedData.latest_mention_tweet_id): payload[
+                        "latest_mention_tweet_id"
                     ],
                 }
             )
@@ -359,7 +359,7 @@ class ScoreWriteAbciApp(AbciApp[Event]):
         Event.ROUND_TIMEOUT: 30.0,
     }
     cross_period_persisted_keys: Set[str] = {
-        "latest_tweet_id",
+        "latest_mention_tweet_id",
         "user_to_total_points",
         "id_to_usernames",
     }
