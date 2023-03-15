@@ -1,9 +1,16 @@
 # IEKit
-An autonomous service implementing a decentralized Impact Evaluator built with the [Open Autonomy](https://docs.autonolas.network/open-autonomy/) framework. The service tracks mentions to [@autonolas](https://twitter.com/autonolas) on Twitter, assigns scores to them and writes those scores to a [Ceramic](https://ceramic.network/) stream. It then reads verified wallets (a mapping between Wwitter handles and Ethereum addresses) from another Ceramic stream, checks for users that have minted a token, and updates their token metadata according to their scores so NFT images are upgraded over time.
+An toolkit for autonomous services implementing a decentralized Impact Evaluator built with the [Open Autonomy](https://docs.autonolas.network/open-autonomy/) framework.
+
+The demo service for the IEKit tracks mentions of [@autonolas](https://twitter.com/autonolas) on Twitter, assigns scores to them and writes those scores to a [Ceramic](https://ceramic.network/) stream.
+The service then:
+
+1. reads verified wallets (a mapping between Twitter handles and Ethereum addresses) from another Ceramic stream,
+2. checks for users that have minted a token, and
+3. updates their token metadata according to their scores so NFT images are upgraded over time.
 
 ## Architecture
 
-Autonomous services that use Autonolas technology are implemented as [Finite State Machines](https://docs.autonolas.network/open-autonomy/key_concepts/fsm/) where the logic is split across independent components: rounds define the rules to transition across different states and behaviors, who implement the actual business logic. At the end of each round, agents agree on the round’s data output.
+Autonomous services that use Autonolas technology are implemented as [Finite State Machines](https://docs.autonolas.network/open-autonomy/key_concepts/fsm/) where the logic is split across independent components: rounds define the rules to transition across different states and behaviours, which implement the actual business logic. At the end of each round, agents agree on the round’s data output.
 
 ![Service FSM](./docs/images/FSM.png)
 
@@ -33,7 +40,7 @@ Autonomous services that use Autonolas technology are implemented as [Finite Sta
 - System requirements:
 
     - Python `>=3.7`
-    - [Tendermint](https://docs.tendermint.com/master/introduction/install.html) `==0.34.19`
+    - [Tendermint](https://docs.tendermint.com/v0.34/introduction/install.html) `==0.34.19`
     - [IPFS node](https://docs.ipfs.io/install/command-line/#official-distributions) `==0.6.0`
     - [Pipenv](https://pipenv.pypa.io/en/latest/install/) `>=2021.x.xx`
     - [Docker Engine](https://docs.docker.com/engine/install/)
@@ -92,6 +99,9 @@ Autonomous services that use Autonolas technology are implemented as [Finite Sta
       autonomy deploy run --build-dir abci_build/
 
 - Some examples on how to curl the service endpoints from inside the container:
+
+      # Enter one of the agent containers
+      docker exec -it <container_id> /bin/bash
 
       # Install curl and jq if they are not present
       sudo apt install -y curl jq
