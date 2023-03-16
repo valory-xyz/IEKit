@@ -3,6 +3,12 @@ An toolkit for autonomous services implementing a decentralized Impact Evaluator
 
 The demo service for the IEKit tracks mentions of [@autonolas](https://twitter.com/autonolas) on Twitter, assigns scores to them and writes those scores to a [Ceramic](https://ceramic.network/) stream.
 
+## Running a demo service
+
+To learn how to run a demo service based on the IEKit, read the [IEKit technical docs](https://docs.autonolas.network/product/iekit/).
+
+## Requirements
+
 - Clone the repository:
 
       git clone git@github.com:valory-xyz/iekit.git
@@ -32,7 +38,3 @@ The demo service for the IEKit tracks mentions of [@autonolas](https://twitter.c
 - Pull packages:
 
       autonomy packages sync --update-packages
-
-## Running a demo the service
-
-To learn how to run a demo service based on the IEKit, read the [IEKit techncical docs](https://docs.autonolas.network/product/iekit/).
