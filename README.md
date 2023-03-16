@@ -35,4 +35,4 @@ The demo service for the IEKit tracks mentions of [@autonolas](https://twitter.c
 
 ## Running the service
 
-To learn how to run the service, check the [IEKit tutorial](https://docs.autonolas.network/product/iekit/).
+To learn how to run a demo service based on the IEKit, read the [IEKit techncical docs](https://docs.autonolas.network/product/iekit/).
