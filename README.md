@@ -7,7 +7,9 @@ The demo service for the IEKit tracks mentions of [@autonolas](https://twitter.c
 
 To learn how to run a demo service based on the IEKit, read the [IEKit technical docs](https://docs.autonolas.network/product/iekit/).
 
-## Requirements
+## For Developers
+
+Prepare the environment to build your own IEKit-based service.
 
 - Clone the repository:
 
