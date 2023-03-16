@@ -7,7 +7,7 @@ The Impact Evaluator Kit (IEKit) is an enhanced version of the [CoordinationKit]
 
 3. **Update the badge of users according to their score.** To access the badge image associated to a user's NFT, the metadata URI associated to it is redirected to an agent in the service. Upon reading the concrete NFT from the request, the service provides the IPFS address of the image, which is updated periodically in relation to the user's score.
 
-The demo service uses dedicated [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) as a persistent solution to store users' scores and registration metadata. 
+The demo service uses dedicated [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) as a persistent solution to store users' scores and registration metadata.
 The service demonstrates the applicability of the IEKit to build a particular use case, but of course, the IEKit is modular by design and can be adapted to a range of custom impact evaluators.
 
 ## Demo
@@ -74,7 +74,14 @@ In order to run a local demo service based on the IEKit:
 
     2. Create a Ceramic Decentralized Identity (DID) using [Glaze](https://github.com/ceramicstudio/js-glaze).
 
-    3. Using the DID created in the previous step, create two Ceramic streams. You can follow [this tutorial](https://developers.ceramic.network/reference/stream-programs/tile-document/).
+    3. Using the DID created in the previous step, create two Ceramic streams. You can follow [this tutorial](https://developers.ceramic.network/reference/stream-programs/tile-document/). One of the streams should be empty and the service will write scores on it. The other should contain a mapping from Ethereum addresses to Twitter ids, so the service knows how to assign scores:
+
+    ```python
+    {
+        "<eth_address_1>": "<twitter_id_1>",
+        "eth_address_2": "twitter_id_2",
+    }
+    ```
 
     4. Create an API key for [Infura](https://www.infura.io/) or your preferred provider.
 
@@ -129,10 +136,10 @@ In order to run a local demo service based on the IEKit:
 
     # Install curl and jq if they are not present
     sudo apt install -y curl jq
-    
+
     # Get the metadata for the token with id=1
     curl localhost:8000/1 | jq
-    
+
     # Output
     {
       "title": "Autonolas Contribute Badges",
@@ -141,10 +148,10 @@ In order to run a local demo service based on the IEKit:
       "image": "ipfs://bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm",
       "attributes": []
     }
-    
+
     # Get the service health status
     curl localhost:8000/healthcheck | jq
-    
+
     # Output
     {
       "seconds_since_last_reset": 15.812911033630371,
