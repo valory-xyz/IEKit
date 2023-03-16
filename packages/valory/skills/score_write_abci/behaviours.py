@@ -158,12 +158,18 @@ class StartupScoreReadBehaviour(ScoreWriteBaseBehaviour):
                     if "latest_mention_tweet_id" in data["data"]
                     else 0
                 )
+                wallet_to_users = (
+                    data["data"]["wallet_to_users"]
+                    if "wallet_to_users" in data["data"]
+                    else {}
+                )
 
                 payload_content = json.dumps(
                     {
                         "user_to_total_points": user_to_total_points,
                         "id_to_usernames": id_to_usernames,
                         "latest_mention_tweet_id": latest_mention_tweet_id,
+                        "wallet_to_users": wallet_to_users,
                     },
                     sort_keys=True,
                 )
@@ -309,6 +315,7 @@ class CeramicWriteBehaviour(ScoreWriteBaseBehaviour):
             "user_to_total_points": self.synchronized_data.user_to_total_points,
             "id_to_usernames": self.synchronized_data.id_to_usernames,
             "latest_mention_tweet_id": self.synchronized_data.latest_mention_tweet_id,
+            "wallet_to_users": self.synchronized_data.wallet_to_users,
         }
 
         # Prepare the commit payload
@@ -364,6 +371,7 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
                     "user_to_total_points": self.synchronized_data.user_to_total_points,
                     "id_to_usernames": self.synchronized_data.id_to_usernames,
                     "latest_mention_tweet_id": self.synchronized_data.latest_mention_tweet_id,
+                    "wallet_to_users": self.synchronized_data.wallet_to_users,
                 },
                 sort_keys=True,
             )
@@ -393,48 +401,6 @@ class VerificationBehaviour(ScoreWriteBaseBehaviour):
         self.set_done()
 
 
-class WalletReadBehaviour(ScoreWriteBaseBehaviour):
-    """WalletReadBehaviour"""
-
-    matching_round: Type[AbstractRound] = WalletReadRound
-
-    def async_act(self) -> Generator:
-        """Do the act, supporting asynchronous execution."""
-
-        with self.context.benchmark_tool.measure(self.behaviour_id).local():
-
-            # Get the current data
-            data = yield from self._get_stream_data(self.params.wallets_stream_id)
-
-            if not data:
-                self.context.logger.info(
-                    "An error happened while getting wallet data from the stream"
-                )
-                payload_content = WalletReadRound.ERROR_PAYLOAD
-            else:
-                self.context.logger.info(
-                    f"Retrieved wallet data from Ceramic: {data['data']}"
-                )
-
-                # Checksum addresses
-                wallet_to_users = data["data"]
-                checksum_wallet_to_users = {
-                    Web3.toChecksumAddress(address): user
-                    for address, user in wallet_to_users.items()
-                }
-
-                payload_content = json.dumps(checksum_wallet_to_users, sort_keys=True)
-
-            sender = self.context.agent_address
-            payload = WalletReadPayload(sender=sender, content=payload_content)
-
-        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
-            yield from self.send_a2a_transaction(payload)
-            yield from self.wait_until_round_end()
-
-        self.set_done()
-
-
 class ScoreWriteRoundBehaviour(AbstractRoundBehaviour):
     """ScoreWriteRoundBehaviour"""
 
@@ -447,5 +413,4 @@ class ScoreWriteRoundBehaviour(AbstractRoundBehaviour):
         SelectKeeperCeramicBehaviour,
         CeramicWriteBehaviour,
         VerificationBehaviour,
-        WalletReadBehaviour,
     ]

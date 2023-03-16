@@ -121,6 +121,8 @@ models:
       twitter_mentions_args: tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
       twitter_mention_points: 200
       twitter_max_pages: 10
+      twitter_search_endpoint: 2/tweets/search/recent?
+      twitter_search_args: query=%23autonolas&tweet.fields=author_id,created_at&max_results=100
       validate_timeout: 1205
     class_name: Params
   requests:

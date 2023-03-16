@@ -51,7 +51,6 @@ class Params(BaseParams):
             "ceramic_api_read_endpoint", kwargs, str
         )
         self.scores_stream_id = self._ensure("scores_stream_id", kwargs, str)
-        self.wallets_stream_id = self._ensure("wallets_stream_id", kwargs, str)
         self.ceramic_did_str = "did:key:" + self._ensure("ceramic_did_str", kwargs, str)
         self.ceramic_did_seed = self._ensure("ceramic_did_seed", kwargs, str)
         super().__init__(*args, **kwargs)

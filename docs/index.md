@@ -74,14 +74,7 @@ In order to run a local demo service based on the IEKit:
 
     2. Create a Ceramic Decentralized Identity (DID) using [Glaze](https://github.com/ceramicstudio/js-glaze).
 
-    3. Using the DID created in the previous step, create two Ceramic streams. You can follow [this tutorial](https://developers.ceramic.network/reference/stream-programs/tile-document/). One of the streams should be empty and the service will write scores on it. The other should contain a mapping from Ethereum addresses to Twitter ids, so the service knows how to assign scores:
-
-    ```python
-    {
-        "<eth_address_1>": "<twitter_id_1>",
-        "eth_address_2": "twitter_id_2",
-    }
-    ```
+    3. Using the DID created in the previous step, create an empty Ceramic stream. You can follow [this tutorial](https://developers.ceramic.network/reference/stream-programs/tile-document/). The service will write scores to this stream.
 
     4. Create an API key for [Infura](https://www.infura.io/) or your preferred provider.
 
@@ -90,7 +83,6 @@ In order to run a local demo service based on the IEKit:
         ```bash
         ETHEREUM_LEDGER_RPC=https://goerli.infura.io/v3/<infura_api_key>
         DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS=0x7C3B976434faE9986050B26089649D9f63314BD8
-        WALLETS_STREAM_ID=<wallets_stream>
         SCORES_STREAM_ID=<scores_stream>
         CERAMIC_DID_SEED=<ceramic_seed_did>
         CERAMIC_DID_STR=<ceramic_did_string>

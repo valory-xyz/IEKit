@@ -75,6 +75,11 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the latest tracked tweet id."""
         return cast(int, self.db.get("latest_mention_tweet_id", 0))
 
+    @property
+    def wallet_to_users(self) -> dict:
+        """Get the wallet to twitter user mapping."""
+        return cast(dict, self.db.get("wallet_to_users", {}))
+
 
 class TwitterObservationRound(CollectSameUntilThresholdRound):
     """TwitterObservationRound"""
@@ -82,20 +87,27 @@ class TwitterObservationRound(CollectSameUntilThresholdRound):
     payload_class = TwitterObservationPayload
     synchronized_data_class = SynchronizedData
 
-    ERROR_PAYLOAD = "{}"
+    ERROR_PAYLOAD = {"error": "true"}
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
-            if self.most_voted_payload == self.ERROR_PAYLOAD:
+            if self.most_voted_payload == json.dumps(
+                self.ERROR_PAYLOAD, sort_keys=True
+            ):
                 return self.synchronized_data, Event.API_ERROR
 
             payload = json.loads(self.most_voted_payload)
+
+            # Add the new registrations
+            wallet_to_users = self.synchronized_data
+            wallet_to_users.update(payload["wallet_to_users"])
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
                     get_name(SynchronizedData.most_voted_api_data): payload,
+                    get_name(SynchronizedData.wallet_to_users): wallet_to_users,
                 }
             )
             return synchronized_data, Event.DONE
@@ -171,7 +183,11 @@ class ScoreReadAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: Set[str] = {"latest_mention_tweet_id", "id_to_usernames"}
+    cross_period_persisted_keys: Set[str] = {
+        "latest_mention_tweet_id",
+        "id_to_usernames",
+        "wallet_to_users",
+    }
     db_pre_conditions: Dict[AppState, Set[str]] = {
         TwitterObservationRound: set(),
     }

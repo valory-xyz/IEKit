@@ -128,6 +128,9 @@ class StartupScoreReadRound(CollectSameUntilThresholdRound):
                     get_name(SynchronizedData.latest_mention_tweet_id): payload[
                         "latest_mention_tweet_id"
                     ],
+                    get_name(SynchronizedData.wallet_to_users): payload[
+                        "wallet_to_users"
+                    ],
                 }
             )
 
@@ -264,41 +267,8 @@ class VerificationRound(CollectSameUntilThresholdRound):
         return None
 
 
-class WalletReadRound(CollectSameUntilThresholdRound):
-    """WalletReadRound"""
-
-    payload_class = WalletReadPayload
-    synchronized_data_class = SynchronizedData
-
-    ERROR_PAYLOAD = "error"
-    SUCCCESS_PAYLOAD = "success"
-
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
-        """Process the end of the block."""
-        if self.threshold_reached:
-            if self.most_voted_payload == self.ERROR_PAYLOAD:
-                return self.synchronized_data, Event.API_ERROR
-
-            payload = json.loads(self.most_voted_payload)
-
-            synchronized_data = self.synchronized_data.update(
-                synchronized_data_class=SynchronizedData,
-                **{
-                    get_name(SynchronizedData.wallet_to_users): payload,
-                }
-            )
-
-            return synchronized_data, Event.DONE
-
-        if not self.is_majority_possible(
-            self.collection, self.synchronized_data.nb_participants
-        ):
-            return self.synchronized_data, Event.NO_MAJORITY
-        return None
-
-
-class FinishedWalletReadRound(DegenerateRound):
-    """FinishedWalletReadRound"""
+class FinishedVerificationound(DegenerateRound):
+    """FinishedVerificationound"""
 
 
 class ScoreWriteAbciApp(AbciApp[Event]):
@@ -316,7 +286,7 @@ class ScoreWriteAbciApp(AbciApp[Event]):
         FinishedStartupScoreReadRound: {},
         ScoreAddRound: {
             Event.DONE: RandomnessRound,
-            Event.NO_CHANGES: WalletReadRound,
+            Event.NO_CHANGES: FinishedVerificationound,
             Event.NO_MAJORITY: ScoreAddRound,
             Event.ROUND_TIMEOUT: ScoreAddRound,
             Event.API_ERROR: ScoreAddRound,
@@ -338,22 +308,16 @@ class ScoreWriteAbciApp(AbciApp[Event]):
             Event.DID_NOT_SEND: RandomnessRound,
         },
         VerificationRound: {
-            Event.DONE: WalletReadRound,
+            Event.DONE: FinishedVerificationound,
             Event.NO_MAJORITY: RandomnessRound,
             Event.ROUND_TIMEOUT: RandomnessRound,
             Event.API_ERROR: RandomnessRound,
         },
-        WalletReadRound: {
-            Event.DONE: FinishedWalletReadRound,
-            Event.NO_MAJORITY: RandomnessRound,
-            Event.ROUND_TIMEOUT: RandomnessRound,
-            Event.API_ERROR: RandomnessRound,
-        },
-        FinishedWalletReadRound: {},
+        FinishedVerificationound: {},
     }
     final_states: Set[AppState] = {
         FinishedStartupScoreReadRound,
-        FinishedWalletReadRound,
+        FinishedVerificationound,
     }
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
@@ -362,6 +326,7 @@ class ScoreWriteAbciApp(AbciApp[Event]):
         "latest_mention_tweet_id",
         "user_to_total_points",
         "id_to_usernames",
+        "wallet_to_users",
     }
     db_pre_conditions: Dict[AppState, Set[str]] = {
         StartupScoreReadRound: set(),
@@ -369,5 +334,5 @@ class ScoreWriteAbciApp(AbciApp[Event]):
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedStartupScoreReadRound: {"user_to_scores"},
-        FinishedWalletReadRound: set(),
+        FinishedVerificationound: set(),
     }

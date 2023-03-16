@@ -80,7 +80,6 @@ Autonomous services that use Autonolas technology are implemented as [Finite Sta
       ETHEREUM_LEDGER_RPC=https://goerli.infura.io/v3/<infura_api_key>
       OBSERVATION_INTERVAL=10
       DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS=0x7C3B976434faE9986050B26089649D9f63314BD8
-      WALLETS_STREAM_ID=kjzl6cwe1jw147yrw3npgusw0jccfnaju8f3jrnb3swobxhh21vf8i96x6s8lh8
       SCORES_STREAM_ID=kjzl6cwe1jw145z0wz2ohg5ewxu1h39eu2sc50jngw1grjut60g124d4uamnhwe
       CERAMIC_DID_SEED=<did_seed>
       CERAMIC_DID_STR=<did_str_without_the_did:key:_part>

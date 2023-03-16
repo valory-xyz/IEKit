@@ -35,7 +35,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     RegistrationAbci.FinishedRegistrationRound: ScoreWriteAbciAbci.StartupScoreReadRound,
     ScoreWriteAbciAbci.FinishedStartupScoreReadRound: ScoreReadAbciAbci.TwitterObservationRound,
     ScoreReadAbciAbci.FinishedScoringRound: ScoreWriteAbciAbci.ScoreAddRound,
-    ScoreWriteAbciAbci.FinishedWalletReadRound: DynamicNFTAbci.NewTokensRound,
+    ScoreWriteAbciAbci.FinishedVerificationound: DynamicNFTAbci.NewTokensRound,
     DynamicNFTAbci.FinishedNewTokensRound: ResetAndPauseAbci.ResetAndPauseRound,
     ResetAndPauseAbci.FinishedResetAndPauseRound: ScoreReadAbciAbci.TwitterObservationRound,
     ResetAndPauseAbci.FinishedResetAndPauseErrorRound: RegistrationAbci.RegistrationRound,
