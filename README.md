@@ -33,6 +33,6 @@ The demo service for the IEKit tracks mentions of [@autonolas](https://twitter.c
 
       autonomy packages sync --update-packages
 
-## Running the service
+## Running a demo the service
 
 To learn how to run a demo service based on the IEKit, read the [IEKit techncical docs](https://docs.autonolas.network/product/iekit/).
