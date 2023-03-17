@@ -8,9 +8,9 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
   behaviours.py: bafybeiauwwtjzjyceeiew3qkzppyakxcojzzfgha3reo6k7tyvuqo7tolu
-  composition.py: bafybeiefjpcvh2eojfmnsojsmy5bantthzfrpmr7ogdmbqytfhoghjlvem
+  composition.py: bafybeidleksob2cqwmuxbd4dq2dnlxexbvapubkocrbmtfi57jxixgr4uu
   dialogues.py: bafybeigpwuzku3we7axmxeamg7vn656maww6emuztau5pg3ebsoquyfdqm
-  fsm_specification.yaml: bafybeifevkeavjocdbocjzi3t5iji22etyh64cdlfhzef4wreqjjarlcnq
+  fsm_specification.yaml: bafybeiavzzuzfklc56icg235g4vlhuwgl2wc7iiv6i7rrrhhd5vxiftljm
   handlers.py: bafybeiaqgaev2nfhuihhuxxxxtuiggin5zcpwn7ik7lok2n6ywi6dqy2ta
   models.py: bafybeidd57qvfq7hcpcp7ogvrneq4uyrpjey6hov3rdennyd3lnamqmpby
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
@@ -24,8 +24,8 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
-- valory/score_read_abci:0.1.0:bafybeibey2s2nwogalgyzjo6kt6y6hqblz3tbqlfewh2dzp3gdxnqnlrci
-- valory/score_write_abci:0.1.0:bafybeiaxg55bzyihifqayq6yvfumyqx42y3fnehbobf6k35rui3yvpurme
+- valory/score_read_abci:0.1.0:bafybeiambo4idhtenspj5fveoiorkd3mc2g55rplv6pd2h6535km6gbjwq
+- valory/score_write_abci:0.1.0:bafybeifsh3dy53nse52ofiwcjjrohb3zze5p6kpez5opq2i3voey5cmdbq
 - valory/dynamic_nft_abci:0.1.0:bafybeiddcix52ycxtgmzaroxvp5lez5cckbbf65gblwmhznthfc3b34keq
 - valory/registration_abci:0.1.0:bafybeidgoqi7fa2gb56hdfsf74bbunfii63zgeo4qhggb66ofver2n2gya
 - valory/reset_pause_abci:0.1.0:bafybeievxhu6u5r5wlpjfzcwuowlbanhfbi25saf25qit53jauv4kq6gne
@@ -144,6 +144,8 @@ models:
       twitter_mentions_args: tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
       twitter_mention_points: 200
       twitter_max_pages: 10
+      twitter_search_endpoint: 2/tweets/search/recent?
+      twitter_search_args: query=%23autonolas&tweet.fields=author_id,created_at&max_results=100
       tx_timeout: 10.0
       whitelist_api_key: null
       whitelist_endpoint: http://localhost

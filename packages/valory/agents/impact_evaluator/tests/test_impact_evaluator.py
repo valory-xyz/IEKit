@@ -89,10 +89,10 @@ HAPPY_PATH: Tuple[RoundChecks, ...] = (
 STRICT_CHECK_STRINGS = (
     "Retrieved initial score data from Ceramic:",
     "Retrieving mentions from Twitter API",
+    "Retrieving wallets from Twitter API",
     "Calculated score data:",
     "Calculated new total points",
     "Data verification successful",
-    "Retrieved wallet data from Ceramic:",
     "Got the new token data:",
     "Period end",
 )
@@ -126,6 +126,10 @@ class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
         },
         {
             "dotted_path": f"{__param_args_prefix}.twitter_mentions_args",
+            "value": "",
+        },
+        {
+            "dotted_path": f"{__param_args_prefix}.twitter_search_args",
             "value": "",
         },
         {
