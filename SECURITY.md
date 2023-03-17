@@ -6,9 +6,10 @@ This document outlines security procedures and general policies for the `IEKit` 
 
 The following table shows which versions of `IEKit` are currently being supported with security updates.
 
-| Version   | Supported          |
-| --------- | ------------------ |
-| `N/A`     | 'N/A'              |
+| Version     | Supported          |
+| ----------- | ------------------ |
+| `v0.1.0`    | :white_check_mark: |
+| `< v0.1.0`  | :x:                |
 
 ## Reporting a Vulnerability
 
