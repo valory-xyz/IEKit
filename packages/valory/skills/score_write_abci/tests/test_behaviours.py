@@ -46,12 +46,11 @@ from packages.valory.skills.score_write_abci.behaviours import (
     SelectKeeperCeramicBehaviour,
     StartupScoreReadBehaviour,
     VerificationBehaviour,
-    WalletReadBehaviour,
 )
 from packages.valory.skills.score_write_abci.rounds import (
     Event,
     FinishedStartupScoreReadRound,
-    FinishedWalletReadRound,
+    FinishedVerificationound,
     SynchronizedData,
 )
 
@@ -73,41 +72,48 @@ CERAMIC_API_STREAM_URL_WALLETS_READ = (
     "https://ceramic-clay.3boxlabs.com/api/v0/commits/wallet_to_users_stream_id"
 )
 
-# This response contains the data: {"user_to_total_points": {"user_a": 10, "user_b": 10}, "latest_tweet_id": 15}
+# This response contains the data:
+# {                                                           # noqa: E800
+#     "user_to_total_points": {"user_a": 10, "user_b": 10},   # noqa: E800
+#     "latest_mention_tweet_id": 15,                          # noqa: E800
+#     "id_to_usernames": {},                                  # noqa: E800
+#     "wallet_to_users": {},                                  # noqa: E800
+# }                                                           # noqa: E800
+
 DUMMY_API_RESPONSE_READ_POINTS = {
-    "streamId": "kjzl6cwe1jw14bi6yb7jlpm5zrgad3b94kdrg28q5k6jlpbxvzbh9smmpv3ewvp",
-    "docId": "kjzl6cwe1jw14bi6yb7jlpm5zrgad3b94kdrg28q5k6jlpbxvzbh9smmpv3ewvp",
+    "streamId": "kjzl6cwe1jw14bgd22tdiyp3l2te7mdco5bv9eqyj221i7pjfc1ip1n1ltearq5",
+    "docId": "kjzl6cwe1jw14bgd22tdiyp3l2te7mdco5bv9eqyj221i7pjfc1ip1n1ltearq5",
     "commits": [
         {
-            "cid": "bagcqcera7h7ljgkwpic4ymgemap22xefung6qqjpxy7d7e3t45wtprjjnt2q",
+            "cid": "bagcqcera672hmi33bvunpd54gfoac5s62oszsciv7vcf3qpah2tzzlmittoq",
             "value": {
                 "jws": {
-                    "payload": "AXESIBvWeWZrTqYVnYFruCaMOo9m0Tw0h7HIvUU7WrhvB3NN",
+                    "payload": "AXESICx425k4xUCsg-PpRlRNL1Im9a_qRpst0mGK4awhqTxU",
                     "signatures": [
                         {
-                            "signature": "0btZ4B4Cp-bcfKkCWlLBz1En_vdsg4uq0qtrdrBng9iWZtbFRCDKBXM7fx4E6JuhB8F9e87pk_M9Lr7OYTugBg",
-                            "protected": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29uM05lY2Q2TmtreWZvR29IeGlkMnpuR2M1OUxVM0s3bXViYVJjRmJMZkxYI3o2TWtvbjNOZWNkNk5ra3lmb0dvSHhpZDJ6bkdjNTlMVTNLN211YmFSY0ZiTGZMWCJ9",
+                            "signature": "TZjZtY2F43Z5orqrxOnpC7jIXrr4u73JdGNOLMHh1xPDJaTUulsU6svdDnuL8mhrNyEbRs0kTurqOHSzFToUBw",
+                            "protected": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3JCM1VuMWhUNWdiY0JtWTVHaU1rZkpNMmdnVFpCRXlaUThVc2l2czUzbnFTI3o2TWtyQjNVbjFoVDVnYmNCbVk1R2lNa2ZKTTJnZ1RaQkV5WlE4VXNpdnM1M25xUyJ9",
                         }
                     ],
-                    "link": "bafyreia32z4wm22ouykz3allxatiyoupm3itynehwhel2rj3lk4g6b3tju",
+                    "link": "bafyreibmpdnzsogficwihy7jizke2l2se32272sgtmw5eymk4gwcdkj4kq",
                 },
-                "linkedBlock": "omRkYXRhoWVoZWxsb2V3b3JsZGZoZWFkZXKiZnVuaXF1ZXB5VkFXeXBrdEZhT1YyUFlna2NvbnRyb2xsZXJzgXg4ZGlkOmtleTp6Nk1rb24zTmVjZDZOa2t5Zm9Hb0h4aWQyem5HYzU5TFUzSzdtdWJhUmNGYkxmTFg",
+                "linkedBlock": "oWZoZWFkZXKiZnVuaXF1ZXBhY3hGOElBYVIyNVJFYWZva2NvbnRyb2xsZXJzgXg4ZGlkOmtleTp6Nk1rckIzVW4xaFQ1Z2JjQm1ZNUdpTWtmSk0yZ2dUWkJFeVpROFVzaXZzNTNucVM",
             },
         },
         {
-            "cid": "bagcqceray2vwkfbkbwa74axaykjihx6hk4qhwvtzibl2jdsrjrggm6nvolma",
+            "cid": "bagcqcera65nduwkmdw4keoclb5ka6jvny5tacubbdjd2iskptcehom53lmga",
             "value": {
                 "jws": {
-                    "payload": "AXESIHBTJSuAP_cDM5qqEB006s1sXkiwY7JjnPMYwHKJBkfg",
+                    "payload": "AXESIBK9z2d0Q57t1E6NxqUOhBkDSW_T0me2g8s1hTN_Tio9",
                     "signatures": [
                         {
-                            "signature": "vAwTl2bvpCGgybGIpIpFlAPPVLGZqrxl0wqEtA5gGwbNg9nToOpHC7ttpc8XYtaYah6JyEtsZ8_ZJtKABOwqCw",
-                            "protected": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa29uM05lY2Q2TmtreWZvR29IeGlkMnpuR2M1OUxVM0s3bXViYVJjRmJMZkxYI3o2TWtvbjNOZWNkNk5ra3lmb0dvSHhpZDJ6bkdjNTlMVTNLN211YmFSY0ZiTGZMWCJ9",
+                            "signature": "zhjZTgjfaMb6a3mN6yaEC_BXBVTzDHKbBXhJc48nYhAazTixKG9Rl5Ljv5wrEuOK3bJLbfIXlsgqyit56nMjBg",
+                            "protected": "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3JCM1VuMWhUNWdiY0JtWTVHaU1rZkpNMmdnVFpCRXlaUThVc2l2czUzbnFTI3o2TWtyQjNVbjFoVDVnYmNCbVk1R2lNa2ZKTTJnZ1RaQkV5WlE4VXNpdnM1M25xUyJ9",
                         }
                     ],
-                    "link": "bafyreidqkmssxab764bthgvkcaotj2wnnrpermddwjrzz4yyybzisbsh4a",
+                    "link": "bafyreiasxxhwo5cdt3w5ituny2sq5bazanew7u6sm63ihszvquzx6trkhu",
                 },
-                "linkedBlock": "pGJpZNgqWCYAAYUBEiD5/rSZVnoFzDDEYB+tXIWjTehBL74+P5Nz5203xSls9WRkYXRhg6Jib3BmcmVtb3ZlZHBhdGhmL2hlbGxvo2JvcGNhZGRkcGF0aHUvdXNlcl90b190b3RhbF9wb2ludHNldmFsdWWiZnVzZXJfYQpmdXNlcl9iCqNib3BjYWRkZHBhdGhwL2xhdGVzdF90d2VldF9pZGV2YWx1ZQ9kcHJldtgqWCYAAYUBEiD5/rSZVnoFzDDEYB+tXIWjTehBL74+P5Nz5203xSls9WZoZWFkZXKg",
+                "linkedBlock": "pGJpZNgqWCYAAYUBEiD39HYjew1o14+8MVwBdl7TpZkJFf1EXcHgPqecrYic3WRkYXRhhKNib3BjYWRkZHBhdGhwL3dhbGxldF90b191c2Vyc2V2YWx1ZaCjYm9wY2FkZGRwYXRodS91c2VyX3RvX3RvdGFsX3BvaW50c2V2YWx1ZaJmdXNlcl9hCmZ1c2VyX2IKo2JvcGNhZGRkcGF0aHAvaWRfdG9fdXNlcm5hbWVzZXZhbHVloKNib3BjYWRkZHBhdGh4GC9sYXRlc3RfbWVudGlvbl90d2VldF9pZGV2YWx1ZQ9kcHJldtgqWCYAAYUBEiD39HYjew1o14+8MVwBdl7TpZkJFf1EXcHgPqecrYic3WZoZWFkZXKg",
             },
         },
     ],
@@ -367,7 +373,7 @@ class TestScoreAddNoChangesBehaviour(BaseScoreWriteTest):
     """Tests ScoreAddBehaviour"""
 
     behaviour_class = ScoreAddBehaviour
-    next_behaviour_class = WalletReadBehaviour
+    next_behaviour_class = make_degenerate_behaviour(FinishedVerificationound)
 
     @pytest.mark.parametrize(
         "test_case, kwargs",
@@ -653,7 +659,7 @@ class TestVerificationBehaviour(BaseScoreWriteTest):
     """Tests CeramicWriteBehaviour"""
 
     behaviour_class = VerificationBehaviour
-    next_behaviour_class = WalletReadBehaviour
+    next_behaviour_class = make_degenerate_behaviour(FinishedVerificationound)
 
     @pytest.mark.parametrize(
         "test_case, kwargs",
@@ -663,7 +669,7 @@ class TestVerificationBehaviour(BaseScoreWriteTest):
                     "Happy path",
                     initial_data=dict(
                         user_to_total_points=DUMMY_USER_TO_SCORES,
-                        latest_tweet_id=15,
+                        latest_mention_tweet_id=15,
                     ),
                     event=Event.DONE,
                 ),
@@ -744,98 +750,6 @@ class TestVerificationBehaviourApiError(BaseScoreWriteTest):
                 headers="",
                 version="",
                 url=CERAMIC_API_STREAM_URL_POINTS_READ,
-            ),
-            response_kwargs=dict(
-                version="",
-                status_code=kwargs.get("status_code"),
-                status_text="",
-                body=kwargs.get("body").encode(),
-            ),
-        )
-        self.complete(test_case.event)
-
-
-class TestWalletReadBehaviour(BaseScoreWriteTest):
-    """Tests WalletReadBehaviour"""
-
-    behaviour_class = WalletReadBehaviour
-    next_behaviour_class = make_degenerate_behaviour(  # type: ignore
-        FinishedWalletReadRound
-    )
-
-    @pytest.mark.parametrize(
-        "test_case, kwargs",
-        [
-            (
-                BehaviourTestCase(
-                    "Happy path",
-                    initial_data=dict(),
-                    event=Event.DONE,
-                ),
-                {
-                    "body": json.dumps(
-                        DUMMY_API_RESPONSE_READ_WALLETS,
-                    ),
-                    "status_code": 200,
-                },
-            ),
-        ],
-    )
-    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
-        """Run tests."""
-        self.fast_forward(test_case.initial_data)
-        self.behaviour.act_wrapper()
-        self.mock_http_request(
-            request_kwargs=dict(
-                method="GET",
-                headers="",
-                version="",
-                url=CERAMIC_API_STREAM_URL_WALLETS_READ,
-            ),
-            response_kwargs=dict(
-                version="",
-                status_code=kwargs.get("status_code"),
-                status_text="",
-                body=kwargs.get("body").encode(),
-            ),
-        )
-        self.complete(test_case.event)
-
-
-class TestWalletReadBehaviourApiError(BaseScoreWriteTest):
-    """Tests WalletReadBehaviour"""
-
-    behaviour_class = WalletReadBehaviour
-    next_behaviour_class = RandomnessBehaviour
-
-    @pytest.mark.parametrize(
-        "test_case, kwargs",
-        [
-            (
-                BehaviourTestCase(
-                    "Api Error",
-                    initial_data=dict(),
-                    event=Event.API_ERROR,
-                ),
-                {
-                    "body": json.dumps(
-                        {},
-                    ),
-                    "status_code": 404,
-                },
-            ),
-        ],
-    )
-    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
-        """Run tests."""
-        self.fast_forward(test_case.initial_data)
-        self.behaviour.act_wrapper()
-        self.mock_http_request(
-            request_kwargs=dict(
-                method="GET",
-                headers="",
-                version="",
-                url=CERAMIC_API_STREAM_URL_WALLETS_READ,
             ),
             response_kwargs=dict(
                 version="",

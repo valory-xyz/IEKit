@@ -32,7 +32,6 @@ from packages.valory.skills.score_write_abci.payloads import (
     SelectKeeperPayload,
     StartupScoreReadPayload,
     VerificationPayload,
-    WalletReadPayload,
 )
 
 
@@ -80,10 +79,6 @@ def test_select_keeper_payload() -> None:
         ),
         PayloadTestCase(
             payload_cls=VerificationPayload,
-            content="payload_test_content",
-        ),
-        PayloadTestCase(
-            payload_cls=WalletReadPayload,
             content="payload_test_content",
         ),
     ],

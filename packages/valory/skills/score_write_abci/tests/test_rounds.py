@@ -43,7 +43,6 @@ from packages.valory.skills.score_write_abci.payloads import (
     SelectKeeperPayload,
     StartupScoreReadPayload,
     VerificationPayload,
-    WalletReadPayload,
 )
 from packages.valory.skills.score_write_abci.rounds import (
     CeramicWriteRound,
@@ -54,7 +53,6 @@ from packages.valory.skills.score_write_abci.rounds import (
     StartupScoreReadRound,
     SynchronizedData,
     VerificationRound,
-    WalletReadRound,
 )
 
 
@@ -233,7 +231,8 @@ def get_dummy_startup_read_payload_serialized(api_error: bool = False) -> str:
         {
             "user_to_total_points": {"user_a": 10, "user_b": 20},
             "id_to_usernames": {"user_a": "username_1", "user_b": "username_2"},
-            "latest_tweet_id": 5,
+            "latest_mention_tweet_id": 5,
+            "wallet_to_users": {"address_a": "user_a", "address_b": "user_b"},
         },
         sort_keys=True,
     )
@@ -244,13 +243,6 @@ def get_dummy_ceramic_write_payload_serialized(api_error: bool = False) -> str:
     if api_error:
         return "error"
     return "success"
-
-
-def get_dummy_wallet_read_payload_serialized(api_error: bool = False) -> str:
-    """Dummy wallet read payload"""
-    if api_error:
-        return "error"
-    return json.dumps({"wallet_a": "user_a", "wallet_b": "user_b"}, sort_keys=True)
 
 
 def get_dummy_score_add_payload_serialized(
@@ -313,7 +305,13 @@ class TestStartupScoreReadRound(BaseScoreWriteRoundTest):
                     "user_to_total_points": json.loads(
                         get_dummy_startup_read_payload_serialized()
                     )["user_to_total_points"],
-                    "latest_tweet_id": 5,
+                    "latest_mention_tweet_id": 5,
+                    "id_to_usernames": json.loads(
+                        get_dummy_startup_read_payload_serialized()
+                    )["id_to_usernames"],
+                    "wallet_to_users": json.loads(
+                        get_dummy_startup_read_payload_serialized()
+                    )["wallet_to_users"],
                 },
                 event=Event.DONE,
                 most_voted_payload=get_dummy_startup_read_payload_serialized(),
@@ -490,53 +488,6 @@ class TestVerificationRound(BaseScoreWriteRoundTest):
                 final_data={},
                 event=Event.API_ERROR,
                 most_voted_payload=get_dummy_ceramic_write_payload_serialized(
-                    api_error=True
-                ),
-                synchronized_data_attr_checks=[],
-            ),
-        ),
-    )
-    def test_run(self, test_case: RoundTestCase) -> None:
-        """Run tests."""
-        self.run_test(test_case)
-
-
-class TestWalletReadRound(BaseScoreWriteRoundTest):
-    """Tests for WalletReadRound."""
-
-    round_class = WalletReadRound
-
-    @pytest.mark.parametrize(
-        "test_case",
-        (
-            RoundTestCase(
-                name="Happy path",
-                initial_data={},
-                payloads=get_payloads(
-                    payload_cls=WalletReadPayload,
-                    data=get_dummy_wallet_read_payload_serialized(),
-                ),
-                final_data={
-                    "wallet_to_users": json.loads(
-                        get_dummy_wallet_read_payload_serialized()
-                    ),
-                },
-                event=Event.DONE,
-                most_voted_payload=get_dummy_wallet_read_payload_serialized(),
-                synchronized_data_attr_checks=[
-                    lambda _synchronized_data: _synchronized_data.wallet_to_users
-                ],
-            ),
-            RoundTestCase(
-                name="API error",
-                initial_data={},
-                payloads=get_payloads(
-                    payload_cls=WalletReadPayload,
-                    data=get_dummy_wallet_read_payload_serialized(api_error=True),
-                ),
-                final_data={},
-                event=Event.API_ERROR,
-                most_voted_payload=get_dummy_wallet_read_payload_serialized(
                     api_error=True
                 ),
                 synchronized_data_attr_checks=[],

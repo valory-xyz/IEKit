@@ -8,7 +8,7 @@ alphabet_in:
 default_start_state: ScoreAddRound
 final_states:
 - FinishedStartupScoreReadRound
-- FinishedWalletReadRound
+- FinishedVerificationound
 label: ScoreWriteAbciApp
 start_states:
 - ScoreAddRound
@@ -16,13 +16,12 @@ start_states:
 states:
 - CeramicWriteRound
 - FinishedStartupScoreReadRound
-- FinishedWalletReadRound
+- FinishedVerificationound
 - RandomnessRound
 - ScoreAddRound
 - SelectKeeperRound
 - StartupScoreReadRound
 - VerificationRound
-- WalletReadRound
 transition_func:
     (CeramicWriteRound, API_ERROR): RandomnessRound
     (CeramicWriteRound, DID_NOT_SEND): RandomnessRound
@@ -33,7 +32,7 @@ transition_func:
     (RandomnessRound, ROUND_TIMEOUT): RandomnessRound
     (ScoreAddRound, API_ERROR): ScoreAddRound
     (ScoreAddRound, DONE): RandomnessRound
-    (ScoreAddRound, NO_CHANGES): WalletReadRound
+    (ScoreAddRound, NO_CHANGES): FinishedVerificationound
     (ScoreAddRound, NO_MAJORITY): ScoreAddRound
     (ScoreAddRound, ROUND_TIMEOUT): ScoreAddRound
     (SelectKeeperRound, DONE): CeramicWriteRound
@@ -44,10 +43,6 @@ transition_func:
     (StartupScoreReadRound, NO_MAJORITY): StartupScoreReadRound
     (StartupScoreReadRound, ROUND_TIMEOUT): StartupScoreReadRound
     (VerificationRound, API_ERROR): RandomnessRound
-    (VerificationRound, DONE): WalletReadRound
+    (VerificationRound, DONE): FinishedVerificationound
     (VerificationRound, NO_MAJORITY): RandomnessRound
     (VerificationRound, ROUND_TIMEOUT): RandomnessRound
-    (WalletReadRound, API_ERROR): RandomnessRound
-    (WalletReadRound, DONE): FinishedWalletReadRound
-    (WalletReadRound, NO_MAJORITY): RandomnessRound
-    (WalletReadRound, ROUND_TIMEOUT): RandomnessRound

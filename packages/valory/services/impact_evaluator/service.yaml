@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibk5iyiobvfgd6w3z75amk7muou3kqqq5rj3mze6rnzlmzpaiwtii
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeigceznrlhjmij5y6q5ytpp4mbktum6jat4rha5enuk6zsi2rkmuse
+agent: valory/impact_evaluator:0.1.0:bafybeihwk5w7whadofftp6jw4w7wu6wizaizcfi3a6dbbe7n4d7vrd2t2u
 number_of_agents: 4
 ---
 public_id: valory/impact_evaluator_abci:0.1.0
@@ -27,7 +27,6 @@ models:
       ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
       ceramic_did_str: ${CERAMIC_DID_STR:str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
       scores_stream_id: ${SCORES_STREAM_ID:str:user_to_points_stream_id}
-      wallets_stream_id: ${WALLETS_STREAM_ID:str:wallet_to_users_stream_id}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -82,10 +81,14 @@ models:
       points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:null}
       twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
       twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
-      twitter_api_endpoint: ${TWITTER_API_ENDPOINT:str:2/users/1450081635559428107/mentions?}
-      twitter_api_args: ${TWITTER_API_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
+      twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
+      twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
       twitter_max_pages: 10
       twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
+      twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
+      twitter_search_args:
+        TWITTER_SEARCH_ARGS:str:query=%23autonolas&tweet.fields=author_id: null
+        created_at&max_results=100: null
       tx_timeout: 10.0
 ---
 public_id: valory/ledger:0.19.0

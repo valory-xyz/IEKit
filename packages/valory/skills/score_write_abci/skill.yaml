@@ -7,22 +7,22 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifrmnxnnnpitgpdr7i2bjtunda3mckriobf6bvdjo6zbajokj4hyq
-  behaviours.py: bafybeicsnb6fe2d2lm4frc6wpoi7tmfgyjcgoksw42qcdyarvfnk5p3gzu
+  behaviours.py: bafybeifj3yvdrixuwfgfu76u5c7eioc5ur34kklnrv4mxxgogh3heah7hm
   ceramic/__init__.py: bafybeias4e3s6p5qtx6mmmcwkcd6kvbdnudy7sxai7d2suk75aazzdzdie
   ceramic/payloads.py: bafybeicr75fitoucqknzu6vzic4jjb3w3pw655klbi36kwt4haplkg2dsy
   dialogues.py: bafybeih2d4h2vaqn76s7npubkejevbwd4fwa6ytsoowntgpqk4d2wpyllu
-  fsm_specification.yaml: bafybeicgs3im52zo25euknuqfjbifa6tb5vlpjjodvxgndynhip4cx2req
+  fsm_specification.yaml: bafybeidj7klayhxlincnb2bdh36cqw5r5svlesokus5do2tbxpxagm52su
   handlers.py: bafybeiax2wjff4ps3kmbsc2ysihu62ja7xk36gbznjoyagtjhe6fa7ctei
-  models.py: bafybeih7hu552itb7dahxirlm4q52mymbttc33mm4cvargdoqkiblt7cqm
-  payloads.py: bafybeiazxcgimxpl6rkqtngmrosfiqzojhgbz2g3552pjbfcymbeoowrdy
-  rounds.py: bafybeib4h66crutwqj3s5u3zj64c4yd3f2sbkuarhdoujuccrtvcnhklf4
+  models.py: bafybeiepywmjxh53gbboeeysb65k6wetd6z3dpvpkbbryk3qay3dvarhh4
+  payloads.py: bafybeibphkv53kmfzchm5mooecaftfoohsqzyirug2xqu7n6sc3snzevr4
+  rounds.py: bafybeigrbp6ceecgtrye4k3nt54fw4mtcpp2pv4ly3ayvnsbndk74lf6fu
   tests/__init__.py: bafybeiht2sfiedgsx6vk2dott2fdu6rqekt324nf7afbsk3unshcf74fgi
-  tests/test_behaviours.py: bafybeihhpoqli4qesw76jkmhkoymvbvt3zeinya3s4a64nruikh5krwbqu
+  tests/test_behaviours.py: bafybeihl36eihftcrbphds3qyhc2n7rpig4n7zcf2xl4z33tku3hkt3cyq
   tests/test_dialogues.py: bafybeifoltm3tyb6prv7mmqoh7uoap6kvmiextyl6k33whjigfxkgsdup4
   tests/test_handlers.py: bafybeibz75vof3xdzgikipztbyza6ahg2ajq277nrtim2mvzxol37lgn4q
   tests/test_models.py: bafybeiebtxif37wrac7744vo6pmpbq63adghq6ybtdh6nbw7yvccgbdsdq
-  tests/test_payloads.py: bafybeied7z5ylw5qazsn47vjhgiraudcr7ctrotfncwh66iqmyfliisiue
-  tests/test_rounds.py: bafybeih6nlzbq2efhzs5ttqaszljhn7ruj7t5k5drt3yfac77gyrzloi4y
+  tests/test_payloads.py: bafybeifkloxnejwcvqwdnrc4dalhvq6bt227uv4tot46nxgwhi56akvtd4
+  tests/test_rounds.py: bafybeiaf7zaibgc3t4e4kemjkhoitoe332tkllkdytkwxwhc55eyhxwsyu
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
@@ -77,7 +77,6 @@ models:
       ceramic_did_seed: '0101010101010101010101010101010101010101010101010101010101010101'
       ceramic_did_str: z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX
       scores_stream_id: user_to_points_stream_id
-      wallets_stream_id: wallet_to_users_stream_id
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -159,6 +158,4 @@ dependencies:
     version: ==1.32
   multiformats:
     version: ==0.1.4.post3
-  web3:
-    version: ==5.25.0
 is_abstract: true

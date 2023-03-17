@@ -66,7 +66,7 @@ class RoundTestCase:
 
 
 MAX_PARTICIPANTS: int = 4
-DUMMY_LATEST_TWEET_ID = 0
+DUMMY_latest_mention_tweet_id = 0
 
 
 def get_participants() -> FrozenSet[str]:
@@ -88,12 +88,13 @@ def get_payloads(
 def get_dummy_twitter_observation_payload_serialized(api_error: bool = False) -> str:
     """Dummy twitter observation payload"""
     if api_error:
-        return json.dumps({})
+        return json.dumps({"error": "true"})
     return json.dumps(
         {
             "user_to_mentions": {"user_a": 1, "user_b": 2},
             "id_to_usernames": {"user_a": "username_a", "user_b": "username_b"},
-            "latest_tweet_id": DUMMY_LATEST_TWEET_ID,
+            "latest_mention_tweet_id": DUMMY_latest_mention_tweet_id,
+            "wallet_to_users": {"address_a": "user_a", "address_b": "user_b"},
         },
         sort_keys=True,
     )
@@ -105,7 +106,7 @@ def get_dummy_scoring_payload_serialized() -> str:
         {
             "user_to_new_points": {"1": 200, "2": 300, "3": 500},
             "id_to_usernames": {"1": "username_a", "2": "username_b"},
-            "latest_tweet_id": "1",
+            "latest_mention_tweet_id": "1",
         },
         sort_keys=True,
     )
@@ -160,13 +161,13 @@ class TestTwitterObservationRound(BaseScoreReadRoundTest):
                     "most_voted_api_data": json.loads(
                         get_dummy_twitter_observation_payload_serialized()
                     ),
-                    "latest_tweet_id": DUMMY_LATEST_TWEET_ID,
+                    "latest_mention_tweet_id": DUMMY_latest_mention_tweet_id,
                 },
                 event=Event.DONE,
                 most_voted_payload=get_dummy_twitter_observation_payload_serialized(),
                 synchronized_data_attr_checks=[
                     lambda _synchronized_data: _synchronized_data.most_voted_api_data,
-                    lambda _synchronized_data: _synchronized_data.latest_tweet_id,
+                    lambda _synchronized_data: _synchronized_data.latest_mention_tweet_id,
                 ],
             ),
             RoundTestCase(
@@ -210,13 +211,13 @@ class TestScoringRound(BaseScoreReadRoundTest):
                 final_data={
                     "user_to_new_points": {"1": 200, "2": 300, "3": 500},
                     "id_to_usernames": {},
-                    "latest_tweet_id": "1",
+                    "latest_mention_tweet_id": "1",
                 },
                 event=Event.DONE,
                 most_voted_payload=get_dummy_scoring_payload_serialized(),
                 synchronized_data_attr_checks=[
                     lambda _synchronized_data: _synchronized_data.user_to_new_points,
-                    lambda _synchronized_data: _synchronized_data.latest_tweet_id,
+                    lambda _synchronized_data: _synchronized_data.latest_mention_tweet_id,
                 ],
             ),
         ),

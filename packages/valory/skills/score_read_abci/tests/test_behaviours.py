@@ -46,9 +46,12 @@ from packages.valory.skills.score_read_abci.rounds import (
 )
 
 
-TWITTER_API_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id=0"
+ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
-DUMMY_API_RESPONSE = {
+TWITTER_MENTIONS_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id=0"
+TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=%23autonolas&tweet.fields=author_id,created_at&max_results=100"
+
+DUMMY_MENTIONS_RESPONSE = {
     "data": [
         {"author_id": "1286010187325812739", "text": "dummy_text"},
         {"author_id": "1286010187325812739", "text": "dummy_text"},
@@ -66,7 +69,7 @@ DUMMY_API_RESPONSE = {
     "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
 }
 
-DUMMY_API_RESPONSE_END = {
+DUMMY_MENTIONS_RESPONSE_COUNT_ZERO = {
     "data": [
         {"author_id": "1286010187325812739", "text": "dummy_text"},
         {"author_id": "1286010187325812739", "text": "dummy_text"},
@@ -84,11 +87,11 @@ DUMMY_API_RESPONSE_END = {
     "meta": {"result_count": 0},
 }
 
-DUMMY_API_RESPONSE_MISSING_DATA = {
+DUMMY_MENTIONS_RESPONSE_MISSING_DATA = {
     "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
 }
 
-DUMMY_API_RESPONSE_MISSING_INCLUDES = {
+DUMMY_MENTIONS_RESPONSE_MISSING_INCLUDES = {
     "data": [
         {"author_id": "1286010187325812739", "text": "dummy_text"},
         {"author_id": "1286010187325812739", "text": "dummy_text"},
@@ -98,9 +101,9 @@ DUMMY_API_RESPONSE_MISSING_INCLUDES = {
     "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
 }
 
-DUMMY_API_RESPONSE_MISSING_META = {}
+DUMMY_MENTIONS_RESPONSE_MISSING_META = {}
 
-DUMMY_API_RESPONSE_MULTIPAGE = {
+DUMMY_MENTIONS_RESPONSE_MULTIPAGE = {
     "data": [
         {"author_id": "1286010187325812739", "text": "dummy_text"},
         {"author_id": "1286010187325812739", "text": "dummy_text"},
@@ -123,7 +126,7 @@ DUMMY_API_RESPONSE_MULTIPAGE = {
     },
 }
 
-DUMMY_MOST_VOTED_API_DATA = {
+DUMMY_MOST_VOTED_MENTIONS_DATA = {
     "user_to_mentions": {
         "1286010187325812739": 2,
         "1286010187325812738": 1,
@@ -134,7 +137,55 @@ DUMMY_MOST_VOTED_API_DATA = {
         "1286010187325812738": "username_2",
         "1286010187325812737": "username_3",
     },
-    "latest_tweet_id": DUMMY_API_RESPONSE["meta"]["newest_id"],
+    "latest_mention_tweet_id": DUMMY_MENTIONS_RESPONSE["meta"]["newest_id"],
+}
+
+DUMMY_REGISTRATIONS_RESPONSE = {
+    "data": [
+        {
+            "author_id": "1286010187325812739",
+            "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
+        },
+    ],
+    "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
+}
+
+DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE = {
+    "data": [
+        {
+            "author_id": "1286010187325812739",
+            "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
+        },
+    ],
+    "meta": {
+        "result_count": 1,
+        "newest_id": "1",
+        "oldest_id": "0",
+        "next_token": "dummy_next_token",
+    },
+}
+
+DUMMY_REGISTRATIONS_RESPONSE_COUNT_ZERO = {
+    "data": [
+        {
+            "author_id": "1286010187325812739",
+            "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
+        },
+    ],
+    "meta": {"result_count": 0, "newest_id": "1", "oldest_id": "0"},
+}
+
+DUMMY_REGISTRATIONS_RESPONSE_MISSING_META = {
+    "data": [
+        {
+            "author_id": "1286010187325812739",
+            "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
+        },
+    ]
+}
+
+DUMMY_REGISTRATIONS_RESPONSE_MISSING_DATA = {
+    "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
 }
 
 
@@ -148,7 +199,7 @@ class BehaviourTestCase:
     next_behaviour_class: Optional[Type[ScoreReadBaseBehaviour]] = None
 
 
-class BaseSwaapTest(FSMBehaviourBaseCase):
+class BaseBehaviourTest(FSMBehaviourBaseCase):
     """Base test case."""
 
     path_to_skill = Path(__file__).parent.parent
@@ -186,7 +237,7 @@ class BaseSwaapTest(FSMBehaviourBaseCase):
         )
 
 
-class TestTwitterObservationBehaviour(BaseSwaapTest):
+class TestTwitterObservationBehaviour(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
     behaviour_class = TwitterObservationBehaviour
@@ -202,11 +253,14 @@ class TestTwitterObservationBehaviour(BaseSwaapTest):
                     event=Event.DONE,
                 ),
                 {
-                    "urls": [TWITTER_API_URL],
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
                     "bodies": [
                         json.dumps(
-                            DUMMY_API_RESPONSE,
-                        )
+                            DUMMY_MENTIONS_RESPONSE,
+                        ),
+                        json.dumps(
+                            DUMMY_REGISTRATIONS_RESPONSE,
+                        ),
                     ],
                     "status_code": 200,
                 },
@@ -219,15 +273,24 @@ class TestTwitterObservationBehaviour(BaseSwaapTest):
                 ),
                 {
                     "urls": [
-                        TWITTER_API_URL,
-                        TWITTER_API_URL + "&pagination_token=dummy_next_token",
+                        TWITTER_MENTIONS_URL,
+                        TWITTER_MENTIONS_URL + "&pagination_token=dummy_next_token",
+                        TWITTER_REGISTRATIONS_URL,
+                        TWITTER_REGISTRATIONS_URL
+                        + "&pagination_token=dummy_next_token",
                     ],
                     "bodies": [
                         json.dumps(
-                            DUMMY_API_RESPONSE_MULTIPAGE,
+                            DUMMY_MENTIONS_RESPONSE_MULTIPAGE,
                         ),
                         json.dumps(
-                            DUMMY_API_RESPONSE,
+                            DUMMY_MENTIONS_RESPONSE,
+                        ),
+                        json.dumps(
+                            DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE,
+                        ),
+                        json.dumps(
+                            DUMMY_REGISTRATIONS_RESPONSE,
                         ),
                     ],
                     "status_code": 200,
@@ -240,11 +303,14 @@ class TestTwitterObservationBehaviour(BaseSwaapTest):
                     event=Event.DONE,
                 ),
                 {
-                    "urls": [TWITTER_API_URL],
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
                     "bodies": [
                         json.dumps(
-                            DUMMY_API_RESPONSE_END,
-                        )
+                            DUMMY_MENTIONS_RESPONSE_COUNT_ZERO,
+                        ),
+                        json.dumps(
+                            DUMMY_REGISTRATIONS_RESPONSE_COUNT_ZERO,
+                        ),
                     ],
                     "status_code": 200,
                 },
@@ -273,7 +339,7 @@ class TestTwitterObservationBehaviour(BaseSwaapTest):
         self.complete(test_case.event)
 
 
-class TestTwitterObservationBehaviourAPIError(BaseSwaapTest):
+class TestTwitterObservationBehaviourAPIError(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
     behaviour_class = TwitterObservationBehaviour
@@ -284,54 +350,119 @@ class TestTwitterObservationBehaviourAPIError(BaseSwaapTest):
         [
             (
                 BehaviourTestCase(
-                    "API error: 200",
+                    "API error mentions: 404",
                     initial_data=dict(),
                     event=Event.API_ERROR,
                 ),
                 {
-                    "body": json.dumps(
-                        DUMMY_API_RESPONSE,
-                    ),
-                    "status_code": 404,
+                    "urls": [TWITTER_MENTIONS_URL],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_MENTIONS_RESPONSE,
+                        )
+                    ],
+                    "status_codes": [404],
                 },
             ),
             (
                 BehaviourTestCase(
-                    "API error: missing data",
+                    "API error registrations: 404",
                     initial_data=dict(),
                     event=Event.API_ERROR,
                 ),
                 {
-                    "body": json.dumps(
-                        DUMMY_API_RESPONSE_MISSING_DATA,
-                    ),
-                    "status_code": 200,
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_MENTIONS_RESPONSE,
+                        ),
+                        json.dumps({}),
+                    ],
+                    "status_codes": [200, 404],
                 },
             ),
             (
                 BehaviourTestCase(
-                    "API error: missing meta",
+                    "API error mentions: missing data",
                     initial_data=dict(),
                     event=Event.API_ERROR,
                 ),
                 {
-                    "body": json.dumps(
-                        DUMMY_API_RESPONSE_MISSING_META,
-                    ),
-                    "status_code": 200,
+                    "urls": [TWITTER_MENTIONS_URL],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_MENTIONS_RESPONSE_MISSING_DATA,
+                        )
+                    ],
+                    "status_codes": [200],
                 },
             ),
             (
                 BehaviourTestCase(
-                    "API error: missing includes",
+                    "API error registrations: missing data",
                     initial_data=dict(),
                     event=Event.API_ERROR,
                 ),
                 {
-                    "body": json.dumps(
-                        DUMMY_API_RESPONSE_MISSING_INCLUDES,
-                    ),
-                    "status_code": 200,
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_MENTIONS_RESPONSE,
+                        ),
+                        json.dumps(
+                            DUMMY_REGISTRATIONS_RESPONSE_MISSING_DATA,
+                        ),
+                    ],
+                    "status_codes": [200, 200],
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "API error mentions: missing meta",
+                    initial_data=dict(),
+                    event=Event.API_ERROR,
+                ),
+                {
+                    "urls": [TWITTER_MENTIONS_URL],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_MENTIONS_RESPONSE_MISSING_META,
+                        )
+                    ],
+                    "status_codes": [200],
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "API error registrations: missing meta",
+                    initial_data=dict(),
+                    event=Event.API_ERROR,
+                ),
+                {
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_MENTIONS_RESPONSE,
+                        ),
+                        json.dumps(DUMMY_REGISTRATIONS_RESPONSE_MISSING_META),
+                    ],
+                    "status_codes": [200, 200],
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "API error mentions: missing includes",
+                    initial_data=dict(),
+                    event=Event.API_ERROR,
+                ),
+                {
+                    "urls": [TWITTER_MENTIONS_URL],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_MENTIONS_RESPONSE_MISSING_INCLUDES,
+                        )
+                    ],
+                    "status_codes": [200],
                 },
             ),
         ],
@@ -340,24 +471,25 @@ class TestTwitterObservationBehaviourAPIError(BaseSwaapTest):
         """Run tests."""
         self.fast_forward(test_case.initial_data)
         self.behaviour.act_wrapper()
-        self.mock_http_request(  # we will fail during the first call
-            request_kwargs=dict(
-                method="GET",
-                headers="Authorization: Bearer <default_bearer_token>\r\n",
-                version="",
-                url=TWITTER_API_URL,
-            ),
-            response_kwargs=dict(
-                version="",
-                status_code=kwargs.get("status_code"),
-                status_text="",
-                body=kwargs.get("body").encode(),
-            ),
-        )
+        for i in range(len(kwargs.get("urls"))):
+            self.mock_http_request(
+                request_kwargs=dict(
+                    method="GET",
+                    headers="Authorization: Bearer <default_bearer_token>\r\n",
+                    version="",
+                    url=kwargs.get("urls")[i],
+                ),
+                response_kwargs=dict(
+                    version="",
+                    status_code=kwargs.get("status_codes")[i],
+                    status_text="",
+                    body=kwargs.get("bodies")[i].encode(),
+                ),
+            )
         self.complete(test_case.event)
 
 
-class TestScoringBehaviour(BaseSwaapTest):
+class TestScoringBehaviour(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
     behaviour_class = ScoringBehaviour
@@ -370,7 +502,7 @@ class TestScoringBehaviour(BaseSwaapTest):
         [
             BehaviourTestCase(
                 "Happy path",
-                initial_data={"most_voted_api_data": DUMMY_MOST_VOTED_API_DATA},
+                initial_data={"most_voted_api_data": DUMMY_MOST_VOTED_MENTIONS_DATA},
                 event=Event.DONE,
             ),
         ],

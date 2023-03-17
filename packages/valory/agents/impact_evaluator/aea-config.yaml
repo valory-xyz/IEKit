@@ -9,10 +9,10 @@ fingerprint:
   tests/__init__.py: bafybeicmv3jjcqcdnmubfmrgdgeyic3nkm77z4mutsyuo34hpddwupofre
   tests/helpers/__init__.py: bafybeiauwuw4a4wxqacqqkkk52ktps2qedadhypvh3ex7uqs7qaqrpygmy
   tests/helpers/constants.py: bafybeibbokz7gzdlubnjwxrmh4tqckc7j75hfy3ae6l5a63mrbd4hp6l7u
-  tests/helpers/data/json_server/data.json: bafybeieke2buibzy5yww6zlgimfpffzfmwedpc35dn3nh44ucosx5jrt4m
+  tests/helpers/data/json_server/data.json: bafybeibg7ajqfnazwgc3jd5xcsyn6jgtntetdp3ygstprijhbv4l32etsu
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
-  tests/test_impact_evaluator.py: bafybeifkdk5u2p664uxta32ur3yzz3pzsfza7zomirbwt2f4pyv2n3tiki
+  tests/test_impact_evaluator.py: bafybeiexgm4zwh6ys2qlno35zxe5qpde5wyypagv3e723646qjpa4ymgdi
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihaax5od5zo5jk2l62hv4jwuwtxloh5mijozudpsjombqc4ncmi6i
@@ -29,9 +29,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeihkrunmigvlcze7uxhafj2h3kvpf2kifggq7zqj42n2we4mcwuvou
 - valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
-- valory/impact_evaluator_abci:0.1.0:bafybeibqttmemvkfxvea4jgwmkypnpzzkeiyvz4m7ynuatqlswwiisl674
-- valory/score_read_abci:0.1.0:bafybeibey2s2nwogalgyzjo6kt6y6hqblz3tbqlfewh2dzp3gdxnqnlrci
-- valory/score_write_abci:0.1.0:bafybeiaxg55bzyihifqayq6yvfumyqx42y3fnehbobf6k35rui3yvpurme
+- valory/impact_evaluator_abci:0.1.0:bafybeif7c52neqfc2acui2qrbjikyyyzeo4jd53an6papanamvhw22m2fu
+- valory/score_read_abci:0.1.0:bafybeiambo4idhtenspj5fveoiorkd3mc2g55rplv6pd2h6535km6gbjwq
+- valory/score_write_abci:0.1.0:bafybeifsh3dy53nse52ofiwcjjrohb3zze5p6kpez5opq2i3voey5cmdbq
 - valory/dynamic_nft_abci:0.1.0:bafybeiddcix52ycxtgmzaroxvp5lez5cckbbf65gblwmhznthfc3b34keq
 - valory/registration_abci:0.1.0:bafybeidgoqi7fa2gb56hdfsf74bbunfii63zgeo4qhggb66ofver2n2gya
 - valory/reset_pause_abci:0.1.0:bafybeievxhu6u5r5wlpjfzcwuowlbanhfbi25saf25qit53jauv4kq6gne
@@ -119,7 +119,6 @@ models:
       ceramic_did_seed: ${str:0101010101010101010101010101010101010101010101010101010101010101}
       ceramic_did_str: ${str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
       scores_stream_id: ${str:user_to_points_stream_id}
-      wallets_stream_id: ${str:wallet_to_users_stream_id}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -173,10 +172,12 @@ models:
       points_to_image_hashes: ${str:null}
       twitter_api_base: ${str:https://api.twitter.com/}
       twitter_api_bearer_token: ${str:<default_bearer_token>}
-      twitter_api_endpoint: ${str:2/users/1450081635559428107/mentions?}
-      twitter_api_args: ${str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
+      twitter_mentions_endpoint: ${str:2/users/1450081635559428107/mentions?}
+      twitter_mentions_args: ${str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
       twitter_max_pages: 10
       twitter_mention_points: ${int:200}
+      twitter_search_endpoint: ${str:2/tweets/search/recent?}
+      twitter_search_args: ${str:query=%23autonolas&tweet.fields=author_id,created_at&max_results=100}
       tx_timeout: 10.0
 ---
 public_id: fetchai/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq

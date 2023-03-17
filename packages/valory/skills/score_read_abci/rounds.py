@@ -71,9 +71,14 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(dict, self.db.get("id_to_usernames", {}))
 
     @property
-    def latest_tweet_id(self) -> int:
+    def latest_mention_tweet_id(self) -> int:
         """Get the latest tracked tweet id."""
-        return cast(int, self.db.get("latest_tweet_id", 0))
+        return cast(int, self.db.get("latest_mention_tweet_id", 0))
+
+    @property
+    def wallet_to_users(self) -> dict:
+        """Get the wallet to twitter user mapping."""
+        return cast(dict, self.db.get("wallet_to_users", {}))
 
 
 class TwitterObservationRound(CollectSameUntilThresholdRound):
@@ -82,20 +87,29 @@ class TwitterObservationRound(CollectSameUntilThresholdRound):
     payload_class = TwitterObservationPayload
     synchronized_data_class = SynchronizedData
 
-    ERROR_PAYLOAD = "{}"
+    ERROR_PAYLOAD = {"error": "true"}
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
-            if self.most_voted_payload == self.ERROR_PAYLOAD:
+            if self.most_voted_payload == json.dumps(
+                self.ERROR_PAYLOAD, sort_keys=True
+            ):
                 return self.synchronized_data, Event.API_ERROR
 
             payload = json.loads(self.most_voted_payload)
+
+            # Add the new registrations
+            wallet_to_users = cast(
+                SynchronizedData, self.synchronized_data
+            ).wallet_to_users
+            wallet_to_users.update(payload["wallet_to_users"])
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
                     get_name(SynchronizedData.most_voted_api_data): payload,
+                    get_name(SynchronizedData.wallet_to_users): wallet_to_users,
                 }
             )
             return synchronized_data, Event.DONE
@@ -131,8 +145,8 @@ class ScoringRound(CollectSameUntilThresholdRound):
                         "user_to_new_points"
                     ],
                     get_name(SynchronizedData.id_to_usernames): id_to_usernames,
-                    get_name(SynchronizedData.latest_tweet_id): payload[
-                        "latest_tweet_id"
+                    get_name(SynchronizedData.latest_mention_tweet_id): payload[
+                        "latest_mention_tweet_id"
                     ],
                 }
             )
@@ -171,13 +185,17 @@ class ScoreReadAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: Set[str] = {"latest_tweet_id", "id_to_usernames"}
+    cross_period_persisted_keys: Set[str] = {
+        "latest_mention_tweet_id",
+        "id_to_usernames",
+        "wallet_to_users",
+    }
     db_pre_conditions: Dict[AppState, Set[str]] = {
         TwitterObservationRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedScoringRound: {
             get_name(SynchronizedData.user_to_new_points),
-            get_name(SynchronizedData.latest_tweet_id),
+            get_name(SynchronizedData.latest_mention_tweet_id),
         },
     }
