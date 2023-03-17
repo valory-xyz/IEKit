@@ -23,8 +23,6 @@ import json
 from abc import ABC
 from typing import Dict, Generator, Optional, Set, Type, cast
 
-from web3 import Web3
-
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
@@ -46,7 +44,6 @@ from packages.valory.skills.score_write_abci.payloads import (
     SelectKeeperPayload,
     StartupScoreReadPayload,
     VerificationPayload,
-    WalletReadPayload,
 )
 from packages.valory.skills.score_write_abci.rounds import (
     CeramicWriteRound,

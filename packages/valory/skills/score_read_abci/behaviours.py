@@ -24,6 +24,8 @@ import re
 from abc import ABC
 from typing import Dict, Generator, List, Set, Type, cast
 
+from web3 import Web3
+
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
@@ -216,7 +218,7 @@ class TwitterObservationBehaviour(ScoreReadBaseBehaviour):
         for tweet in tweets:
             match = re.search(ADDRESS_REGEX, tweet["text"])
             if match:
-                result[match.group()] = tweet["author_id"]  # TODO: validate address
+                result[Web3.toChecksumAddress(match.group())] = tweet["author_id"]
         return result
 
     def _get_twitter_registrations(self) -> Generator[None, None, Dict]:

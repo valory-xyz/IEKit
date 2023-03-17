@@ -43,7 +43,6 @@ from packages.valory.skills.score_write_abci.payloads import (
     SelectKeeperPayload,
     StartupScoreReadPayload,
     VerificationPayload,
-    WalletReadPayload,
 )
 from packages.valory.skills.score_write_abci.rounds import (
     CeramicWriteRound,
@@ -244,13 +243,6 @@ def get_dummy_ceramic_write_payload_serialized(api_error: bool = False) -> str:
     if api_error:
         return "error"
     return "success"
-
-
-def get_dummy_wallet_read_payload_serialized(api_error: bool = False) -> str:
-    """Dummy wallet read payload"""
-    if api_error:
-        return "error"
-    return json.dumps({"wallet_a": "user_a", "wallet_b": "user_b"}, sort_keys=True)
 
 
 def get_dummy_score_add_payload_serialized(

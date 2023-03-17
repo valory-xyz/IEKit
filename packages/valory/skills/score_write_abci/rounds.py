@@ -41,7 +41,6 @@ from packages.valory.skills.score_write_abci.payloads import (
     SelectKeeperPayload,
     StartupScoreReadPayload,
     VerificationPayload,
-    WalletReadPayload,
 )
 
 
@@ -247,12 +246,9 @@ class VerificationRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
+
             if self.most_voted_payload == self.ERROR_PAYLOAD:
                 return self.synchronized_data, Event.API_ERROR
-            return self.synchronized_data, Event.DONE
-        if not self.is_majority_possible(
-            self.collection, self.synchronized_data.nb_participants
-        ):
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
@@ -262,8 +258,12 @@ class VerificationRound(CollectSameUntilThresholdRound):
                     ): {},  # Remove points that have been succesfully written to Ceramic
                 }
             )
+            return synchronized_data, Event.DONE
 
-            return synchronized_data, Event.NO_MAJORITY
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
         return None
 
 

@@ -69,7 +69,7 @@ DUMMY_MENTIONS_RESPONSE = {
     "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
 }
 
-DUMMY_MENTIONS_RESPONSE_END = {
+DUMMY_MENTIONS_RESPONSE_COUNT_ZERO = {
     "data": [
         {"author_id": "1286010187325812739", "text": "dummy_text"},
         {"author_id": "1286010187325812739", "text": "dummy_text"},
@@ -147,6 +147,44 @@ DUMMY_REGISTRATIONS_RESPONSE = {
             "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
         },
     ],
+    "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
+}
+
+DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE = {
+    "data": [
+        {
+            "author_id": "1286010187325812739",
+            "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
+        },
+    ],
+    "meta": {
+        "result_count": 1,
+        "newest_id": "1",
+        "oldest_id": "0",
+        "next_token": "dummy_next_token",
+    },
+}
+
+DUMMY_REGISTRATIONS_RESPONSE_COUNT_ZERO = {
+    "data": [
+        {
+            "author_id": "1286010187325812739",
+            "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
+        },
+    ],
+    "meta": {"result_count": 0, "newest_id": "1", "oldest_id": "0"},
+}
+
+DUMMY_REGISTRATIONS_RESPONSE_MISSING_META = {
+    "data": [
+        {
+            "author_id": "1286010187325812739",
+            "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
+        },
+    ]
+}
+
+DUMMY_REGISTRATIONS_RESPONSE_MISSING_DATA = {
     "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
 }
 
@@ -238,6 +276,8 @@ class TestTwitterObservationBehaviour(BaseBehaviourTest):
                         TWITTER_MENTIONS_URL,
                         TWITTER_MENTIONS_URL + "&pagination_token=dummy_next_token",
                         TWITTER_REGISTRATIONS_URL,
+                        TWITTER_REGISTRATIONS_URL
+                        + "&pagination_token=dummy_next_token",
                     ],
                     "bodies": [
                         json.dumps(
@@ -245,6 +285,9 @@ class TestTwitterObservationBehaviour(BaseBehaviourTest):
                         ),
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE,
+                        ),
+                        json.dumps(
+                            DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE,
                         ),
                         json.dumps(
                             DUMMY_REGISTRATIONS_RESPONSE,
@@ -263,10 +306,10 @@ class TestTwitterObservationBehaviour(BaseBehaviourTest):
                     "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
                     "bodies": [
                         json.dumps(
-                            DUMMY_MENTIONS_RESPONSE_END,
+                            DUMMY_MENTIONS_RESPONSE_COUNT_ZERO,
                         ),
                         json.dumps(
-                            DUMMY_REGISTRATIONS_RESPONSE,
+                            DUMMY_REGISTRATIONS_RESPONSE_COUNT_ZERO,
                         ),
                     ],
                     "status_code": 200,
@@ -307,54 +350,119 @@ class TestTwitterObservationBehaviourAPIError(BaseBehaviourTest):
         [
             (
                 BehaviourTestCase(
-                    "API error: 200",
+                    "API error mentions: 404",
                     initial_data=dict(),
                     event=Event.API_ERROR,
                 ),
                 {
-                    "body": json.dumps(
-                        DUMMY_MENTIONS_RESPONSE,
-                    ),
-                    "status_code": 404,
+                    "urls": [TWITTER_MENTIONS_URL],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_MENTIONS_RESPONSE,
+                        )
+                    ],
+                    "status_codes": [404],
                 },
             ),
             (
                 BehaviourTestCase(
-                    "API error: missing data",
+                    "API error registrations: 404",
                     initial_data=dict(),
                     event=Event.API_ERROR,
                 ),
                 {
-                    "body": json.dumps(
-                        DUMMY_MENTIONS_RESPONSE_MISSING_DATA,
-                    ),
-                    "status_code": 200,
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_MENTIONS_RESPONSE,
+                        ),
+                        json.dumps({}),
+                    ],
+                    "status_codes": [200, 404],
                 },
             ),
             (
                 BehaviourTestCase(
-                    "API error: missing meta",
+                    "API error mentions: missing data",
                     initial_data=dict(),
                     event=Event.API_ERROR,
                 ),
                 {
-                    "body": json.dumps(
-                        DUMMY_MENTIONS_RESPONSE_MISSING_META,
-                    ),
-                    "status_code": 200,
+                    "urls": [TWITTER_MENTIONS_URL],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_MENTIONS_RESPONSE_MISSING_DATA,
+                        )
+                    ],
+                    "status_codes": [200],
                 },
             ),
             (
                 BehaviourTestCase(
-                    "API error: missing includes",
+                    "API error registrations: missing data",
                     initial_data=dict(),
                     event=Event.API_ERROR,
                 ),
                 {
-                    "body": json.dumps(
-                        DUMMY_MENTIONS_RESPONSE_MISSING_INCLUDES,
-                    ),
-                    "status_code": 200,
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_MENTIONS_RESPONSE,
+                        ),
+                        json.dumps(
+                            DUMMY_REGISTRATIONS_RESPONSE_MISSING_DATA,
+                        ),
+                    ],
+                    "status_codes": [200, 200],
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "API error mentions: missing meta",
+                    initial_data=dict(),
+                    event=Event.API_ERROR,
+                ),
+                {
+                    "urls": [TWITTER_MENTIONS_URL],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_MENTIONS_RESPONSE_MISSING_META,
+                        )
+                    ],
+                    "status_codes": [200],
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "API error registrations: missing meta",
+                    initial_data=dict(),
+                    event=Event.API_ERROR,
+                ),
+                {
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_MENTIONS_RESPONSE,
+                        ),
+                        json.dumps(DUMMY_REGISTRATIONS_RESPONSE_MISSING_META),
+                    ],
+                    "status_codes": [200, 200],
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "API error mentions: missing includes",
+                    initial_data=dict(),
+                    event=Event.API_ERROR,
+                ),
+                {
+                    "urls": [TWITTER_MENTIONS_URL],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_MENTIONS_RESPONSE_MISSING_INCLUDES,
+                        )
+                    ],
+                    "status_codes": [200],
                 },
             ),
         ],
@@ -363,20 +471,21 @@ class TestTwitterObservationBehaviourAPIError(BaseBehaviourTest):
         """Run tests."""
         self.fast_forward(test_case.initial_data)
         self.behaviour.act_wrapper()
-        self.mock_http_request(  # we will fail during the first call
-            request_kwargs=dict(
-                method="GET",
-                headers="Authorization: Bearer <default_bearer_token>\r\n",
-                version="",
-                url=TWITTER_MENTIONS_URL,
-            ),
-            response_kwargs=dict(
-                version="",
-                status_code=kwargs.get("status_code"),
-                status_text="",
-                body=kwargs.get("body").encode(),
-            ),
-        )
+        for i in range(len(kwargs.get("urls"))):
+            self.mock_http_request(
+                request_kwargs=dict(
+                    method="GET",
+                    headers="Authorization: Bearer <default_bearer_token>\r\n",
+                    version="",
+                    url=kwargs.get("urls")[i],
+                ),
+                response_kwargs=dict(
+                    version="",
+                    status_code=kwargs.get("status_codes")[i],
+                    status_text="",
+                    body=kwargs.get("bodies")[i].encode(),
+                ),
+            )
         self.complete(test_case.event)
 
 
