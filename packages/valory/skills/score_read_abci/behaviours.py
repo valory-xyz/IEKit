@@ -70,11 +70,13 @@ class TwitterObservationBehaviour(ScoreReadBaseBehaviour):
             mentions = yield from self._get_twitter_mentions()
             self.context.logger.info(f"Retrieved new mentions from Twitter: {mentions}")
 
-            # Get registrations from Twitter
-            registrations = yield from self._get_twitter_registrations()
-            self.context.logger.info(
-                f"Retrieved recent registrations from Twitter: {registrations}"
-            )
+            registrations = {}
+            if mentions != TwitterObservationRound.ERROR_PAYLOAD:
+                # Get registrations from Twitter
+                registrations = yield from self._get_twitter_registrations()
+                self.context.logger.info(
+                    f"Retrieved recent registrations from Twitter: {registrations}"
+                )
 
             # Check for errors and merge data
             if (
@@ -222,7 +224,7 @@ class TwitterObservationBehaviour(ScoreReadBaseBehaviour):
 
         api_base = self.params.twitter_api_base
         api_endpoint = self.params.twitter_search_endpoint
-        api_args = self.params.twitter_mentions_args
+        api_args = self.params.twitter_search_args
         api_url = api_base + api_endpoint + api_args
 
         headers = dict(Authorization=f"Bearer {self.params.twitter_api_bearer_token}")

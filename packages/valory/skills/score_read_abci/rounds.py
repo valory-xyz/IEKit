@@ -100,7 +100,9 @@ class TwitterObservationRound(CollectSameUntilThresholdRound):
             payload = json.loads(self.most_voted_payload)
 
             # Add the new registrations
-            wallet_to_users = self.synchronized_data
+            wallet_to_users = cast(
+                SynchronizedData, self.synchronized_data
+            ).wallet_to_users
             wallet_to_users.update(payload["wallet_to_users"])
 
             synchronized_data = self.synchronized_data.update(

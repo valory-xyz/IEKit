@@ -88,12 +88,13 @@ def get_payloads(
 def get_dummy_twitter_observation_payload_serialized(api_error: bool = False) -> str:
     """Dummy twitter observation payload"""
     if api_error:
-        return json.dumps({})
+        return json.dumps({"error": "true"})
     return json.dumps(
         {
             "user_to_mentions": {"user_a": 1, "user_b": 2},
             "id_to_usernames": {"user_a": "username_a", "user_b": "username_b"},
             "latest_mention_tweet_id": DUMMY_latest_mention_tweet_id,
+            "wallet_to_users": {"address_a": "user_a", "address_b": "user_b"},
         },
         sort_keys=True,
     )

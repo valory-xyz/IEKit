@@ -46,12 +46,11 @@ from packages.valory.skills.score_write_abci.behaviours import (
     SelectKeeperCeramicBehaviour,
     StartupScoreReadBehaviour,
     VerificationBehaviour,
-    WalletReadBehaviour,
 )
 from packages.valory.skills.score_write_abci.rounds import (
     Event,
     FinishedStartupScoreReadRound,
-    FinishedWalletReadRound,
+    FinishedVerificationound,
     SynchronizedData,
 )
 
@@ -367,7 +366,7 @@ class TestScoreAddNoChangesBehaviour(BaseScoreWriteTest):
     """Tests ScoreAddBehaviour"""
 
     behaviour_class = ScoreAddBehaviour
-    next_behaviour_class = WalletReadBehaviour
+    next_behaviour_class = make_degenerate_behaviour(FinishedVerificationound)
 
     @pytest.mark.parametrize(
         "test_case, kwargs",
@@ -653,7 +652,7 @@ class TestVerificationBehaviour(BaseScoreWriteTest):
     """Tests CeramicWriteBehaviour"""
 
     behaviour_class = VerificationBehaviour
-    next_behaviour_class = WalletReadBehaviour
+    next_behaviour_class = make_degenerate_behaviour(FinishedVerificationound)
 
     @pytest.mark.parametrize(
         "test_case, kwargs",
@@ -744,98 +743,6 @@ class TestVerificationBehaviourApiError(BaseScoreWriteTest):
                 headers="",
                 version="",
                 url=CERAMIC_API_STREAM_URL_POINTS_READ,
-            ),
-            response_kwargs=dict(
-                version="",
-                status_code=kwargs.get("status_code"),
-                status_text="",
-                body=kwargs.get("body").encode(),
-            ),
-        )
-        self.complete(test_case.event)
-
-
-class TestWalletReadBehaviour(BaseScoreWriteTest):
-    """Tests WalletReadBehaviour"""
-
-    behaviour_class = WalletReadBehaviour
-    next_behaviour_class = make_degenerate_behaviour(  # type: ignore
-        FinishedWalletReadRound
-    )
-
-    @pytest.mark.parametrize(
-        "test_case, kwargs",
-        [
-            (
-                BehaviourTestCase(
-                    "Happy path",
-                    initial_data=dict(),
-                    event=Event.DONE,
-                ),
-                {
-                    "body": json.dumps(
-                        DUMMY_API_RESPONSE_READ_WALLETS,
-                    ),
-                    "status_code": 200,
-                },
-            ),
-        ],
-    )
-    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
-        """Run tests."""
-        self.fast_forward(test_case.initial_data)
-        self.behaviour.act_wrapper()
-        self.mock_http_request(
-            request_kwargs=dict(
-                method="GET",
-                headers="",
-                version="",
-                url=CERAMIC_API_STREAM_URL_WALLETS_READ,
-            ),
-            response_kwargs=dict(
-                version="",
-                status_code=kwargs.get("status_code"),
-                status_text="",
-                body=kwargs.get("body").encode(),
-            ),
-        )
-        self.complete(test_case.event)
-
-
-class TestWalletReadBehaviourApiError(BaseScoreWriteTest):
-    """Tests WalletReadBehaviour"""
-
-    behaviour_class = WalletReadBehaviour
-    next_behaviour_class = RandomnessBehaviour
-
-    @pytest.mark.parametrize(
-        "test_case, kwargs",
-        [
-            (
-                BehaviourTestCase(
-                    "Api Error",
-                    initial_data=dict(),
-                    event=Event.API_ERROR,
-                ),
-                {
-                    "body": json.dumps(
-                        {},
-                    ),
-                    "status_code": 404,
-                },
-            ),
-        ],
-    )
-    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
-        """Run tests."""
-        self.fast_forward(test_case.initial_data)
-        self.behaviour.act_wrapper()
-        self.mock_http_request(
-            request_kwargs=dict(
-                method="GET",
-                headers="",
-                version="",
-                url=CERAMIC_API_STREAM_URL_WALLETS_READ,
             ),
             response_kwargs=dict(
                 version="",

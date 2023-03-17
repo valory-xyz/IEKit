@@ -46,9 +46,12 @@ from packages.valory.skills.score_read_abci.rounds import (
 )
 
 
-TWITTER_API_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id=0"
+ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
-DUMMY_API_RESPONSE = {
+TWITTER_MENTIONS_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id=0"
+TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=%23autonolas&tweet.fields=author_id,created_at&max_results=100"
+
+DUMMY_MENTIONS_RESPONSE = {
     "data": [
         {"author_id": "1286010187325812739", "text": "dummy_text"},
         {"author_id": "1286010187325812739", "text": "dummy_text"},
@@ -66,7 +69,7 @@ DUMMY_API_RESPONSE = {
     "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
 }
 
-DUMMY_API_RESPONSE_END = {
+DUMMY_MENTIONS_RESPONSE_END = {
     "data": [
         {"author_id": "1286010187325812739", "text": "dummy_text"},
         {"author_id": "1286010187325812739", "text": "dummy_text"},
@@ -84,11 +87,11 @@ DUMMY_API_RESPONSE_END = {
     "meta": {"result_count": 0},
 }
 
-DUMMY_API_RESPONSE_MISSING_DATA = {
+DUMMY_MENTIONS_RESPONSE_MISSING_DATA = {
     "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
 }
 
-DUMMY_API_RESPONSE_MISSING_INCLUDES = {
+DUMMY_MENTIONS_RESPONSE_MISSING_INCLUDES = {
     "data": [
         {"author_id": "1286010187325812739", "text": "dummy_text"},
         {"author_id": "1286010187325812739", "text": "dummy_text"},
@@ -98,9 +101,9 @@ DUMMY_API_RESPONSE_MISSING_INCLUDES = {
     "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
 }
 
-DUMMY_API_RESPONSE_MISSING_META = {}
+DUMMY_MENTIONS_RESPONSE_MISSING_META = {}
 
-DUMMY_API_RESPONSE_MULTIPAGE = {
+DUMMY_MENTIONS_RESPONSE_MULTIPAGE = {
     "data": [
         {"author_id": "1286010187325812739", "text": "dummy_text"},
         {"author_id": "1286010187325812739", "text": "dummy_text"},
@@ -123,7 +126,7 @@ DUMMY_API_RESPONSE_MULTIPAGE = {
     },
 }
 
-DUMMY_MOST_VOTED_API_DATA = {
+DUMMY_MOST_VOTED_MENTIONS_DATA = {
     "user_to_mentions": {
         "1286010187325812739": 2,
         "1286010187325812738": 1,
@@ -134,7 +137,17 @@ DUMMY_MOST_VOTED_API_DATA = {
         "1286010187325812738": "username_2",
         "1286010187325812737": "username_3",
     },
-    "latest_mention_tweet_id": DUMMY_API_RESPONSE["meta"]["newest_id"],
+    "latest_mention_tweet_id": DUMMY_MENTIONS_RESPONSE["meta"]["newest_id"],
+}
+
+DUMMY_REGISTRATIONS_RESPONSE = {
+    "data": [
+        {
+            "author_id": "1286010187325812739",
+            "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
+        },
+    ],
+    "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
 }
 
 
@@ -148,7 +161,7 @@ class BehaviourTestCase:
     next_behaviour_class: Optional[Type[ScoreReadBaseBehaviour]] = None
 
 
-class BaseSwaapTest(FSMBehaviourBaseCase):
+class BaseBehaviourTest(FSMBehaviourBaseCase):
     """Base test case."""
 
     path_to_skill = Path(__file__).parent.parent
@@ -186,7 +199,7 @@ class BaseSwaapTest(FSMBehaviourBaseCase):
         )
 
 
-class TestTwitterObservationBehaviour(BaseSwaapTest):
+class TestTwitterObservationBehaviour(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
     behaviour_class = TwitterObservationBehaviour
@@ -202,11 +215,14 @@ class TestTwitterObservationBehaviour(BaseSwaapTest):
                     event=Event.DONE,
                 ),
                 {
-                    "urls": [TWITTER_API_URL],
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
                     "bodies": [
                         json.dumps(
-                            DUMMY_API_RESPONSE,
-                        )
+                            DUMMY_MENTIONS_RESPONSE,
+                        ),
+                        json.dumps(
+                            DUMMY_REGISTRATIONS_RESPONSE,
+                        ),
                     ],
                     "status_code": 200,
                 },
@@ -219,15 +235,19 @@ class TestTwitterObservationBehaviour(BaseSwaapTest):
                 ),
                 {
                     "urls": [
-                        TWITTER_API_URL,
-                        TWITTER_API_URL + "&pagination_token=dummy_next_token",
+                        TWITTER_MENTIONS_URL,
+                        TWITTER_MENTIONS_URL + "&pagination_token=dummy_next_token",
+                        TWITTER_REGISTRATIONS_URL,
                     ],
                     "bodies": [
                         json.dumps(
-                            DUMMY_API_RESPONSE_MULTIPAGE,
+                            DUMMY_MENTIONS_RESPONSE_MULTIPAGE,
                         ),
                         json.dumps(
-                            DUMMY_API_RESPONSE,
+                            DUMMY_MENTIONS_RESPONSE,
+                        ),
+                        json.dumps(
+                            DUMMY_REGISTRATIONS_RESPONSE,
                         ),
                     ],
                     "status_code": 200,
@@ -240,11 +260,14 @@ class TestTwitterObservationBehaviour(BaseSwaapTest):
                     event=Event.DONE,
                 ),
                 {
-                    "urls": [TWITTER_API_URL],
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
                     "bodies": [
                         json.dumps(
-                            DUMMY_API_RESPONSE_END,
-                        )
+                            DUMMY_MENTIONS_RESPONSE_END,
+                        ),
+                        json.dumps(
+                            DUMMY_REGISTRATIONS_RESPONSE,
+                        ),
                     ],
                     "status_code": 200,
                 },
@@ -273,7 +296,7 @@ class TestTwitterObservationBehaviour(BaseSwaapTest):
         self.complete(test_case.event)
 
 
-class TestTwitterObservationBehaviourAPIError(BaseSwaapTest):
+class TestTwitterObservationBehaviourAPIError(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
     behaviour_class = TwitterObservationBehaviour
@@ -290,7 +313,7 @@ class TestTwitterObservationBehaviourAPIError(BaseSwaapTest):
                 ),
                 {
                     "body": json.dumps(
-                        DUMMY_API_RESPONSE,
+                        DUMMY_MENTIONS_RESPONSE,
                     ),
                     "status_code": 404,
                 },
@@ -303,7 +326,7 @@ class TestTwitterObservationBehaviourAPIError(BaseSwaapTest):
                 ),
                 {
                     "body": json.dumps(
-                        DUMMY_API_RESPONSE_MISSING_DATA,
+                        DUMMY_MENTIONS_RESPONSE_MISSING_DATA,
                     ),
                     "status_code": 200,
                 },
@@ -316,7 +339,7 @@ class TestTwitterObservationBehaviourAPIError(BaseSwaapTest):
                 ),
                 {
                     "body": json.dumps(
-                        DUMMY_API_RESPONSE_MISSING_META,
+                        DUMMY_MENTIONS_RESPONSE_MISSING_META,
                     ),
                     "status_code": 200,
                 },
@@ -329,7 +352,7 @@ class TestTwitterObservationBehaviourAPIError(BaseSwaapTest):
                 ),
                 {
                     "body": json.dumps(
-                        DUMMY_API_RESPONSE_MISSING_INCLUDES,
+                        DUMMY_MENTIONS_RESPONSE_MISSING_INCLUDES,
                     ),
                     "status_code": 200,
                 },
@@ -345,7 +368,7 @@ class TestTwitterObservationBehaviourAPIError(BaseSwaapTest):
                 method="GET",
                 headers="Authorization: Bearer <default_bearer_token>\r\n",
                 version="",
-                url=TWITTER_API_URL,
+                url=TWITTER_MENTIONS_URL,
             ),
             response_kwargs=dict(
                 version="",
@@ -357,7 +380,7 @@ class TestTwitterObservationBehaviourAPIError(BaseSwaapTest):
         self.complete(test_case.event)
 
 
-class TestScoringBehaviour(BaseSwaapTest):
+class TestScoringBehaviour(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
     behaviour_class = ScoringBehaviour
@@ -370,7 +393,7 @@ class TestScoringBehaviour(BaseSwaapTest):
         [
             BehaviourTestCase(
                 "Happy path",
-                initial_data={"most_voted_api_data": DUMMY_MOST_VOTED_API_DATA},
+                initial_data={"most_voted_api_data": DUMMY_MOST_VOTED_MENTIONS_DATA},
                 event=Event.DONE,
             ),
         ],

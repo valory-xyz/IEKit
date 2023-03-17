@@ -57,7 +57,6 @@ from packages.valory.skills.score_write_abci.rounds import (
     StartupScoreReadRound,
     SynchronizedData,
     VerificationRound,
-    WalletReadRound,
 )
 
 
