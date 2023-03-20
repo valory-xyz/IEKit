@@ -153,5 +153,15 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
-dependencies: {}
+dependencies:
+  Authlib:
+    version: ==1.2.0
+  dag-cbor:
+    version: ==0.2.2
+  cryptography:
+    version: ==39.0.0
+  jsonpatch:
+    version: ==1.32
+  multiformats:
+    version: ==0.1.4.post3
 is_abstract: true
