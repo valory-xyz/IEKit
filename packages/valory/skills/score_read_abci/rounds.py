@@ -103,7 +103,16 @@ class TwitterObservationRound(CollectSameUntilThresholdRound):
             wallet_to_users = cast(
                 SynchronizedData, self.synchronized_data
             ).wallet_to_users
-            wallet_to_users.update(payload["wallet_to_users"])
+
+            for wallet, user in payload["wallet_to_users"].items():
+                if user in wallet_to_users.values():
+                    # Delete the old entry
+                    old_wallet = list(wallet_to_users.keys())[
+                        list(wallet_to_users.values()).index(user)
+                    ]
+                    del wallet_to_users[old_wallet]
+                # Add the new entry
+                wallet_to_users[wallet] = user
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
