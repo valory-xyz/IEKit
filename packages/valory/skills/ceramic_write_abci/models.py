@@ -17,9 +17,9 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the shared state for the abci skill of ScoreWriteAbciApp."""
+"""This module contains the shared state for the abci skill of CeramicWriteAbciApp."""
 
-from packages.valory.skills.abstract_round_abci.models import BaseParams
+from packages.valory.skills.abstract_round_abci.models import ApiSpecs, BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
 )
@@ -27,15 +27,35 @@ from packages.valory.skills.abstract_round_abci.models import Requests as BaseRe
 from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
-from packages.valory.skills.score_write_abci.rounds import ScoreWriteAbciApp
+from packages.valory.skills.ceramic_write_abci.rounds import CeramicWriteAbciApp
+from typing import Any
 
 
 class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
 
-    abci_app_cls = ScoreWriteAbciApp
+    abci_app_cls = CeramicWriteAbciApp
 
 
-Params = BaseParams
+class Params(BaseParams):
+    """Parameters."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the parameters object."""
+
+        self.ceramic_api_base = self._ensure("ceramic_api_base", kwargs, str)
+        self.ceramic_api_commit_endpoint = self._ensure(
+            "ceramic_api_commit_endpoint", kwargs, str
+        )
+        self.ceramic_api_read_endpoint = self._ensure(
+            "ceramic_api_read_endpoint", kwargs, str
+        )
+
+        super().__init__(*args, **kwargs)
+
+
+class RandomnessApi(ApiSpecs):
+    """A model that wraps ApiSpecs for randomness api specifications."""
+
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool

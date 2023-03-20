@@ -17,22 +17,16 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the ScoreWriteAbciApp."""
+"""Test the models.py module of the CeramicWrite."""
 
-from dataclasses import dataclass
-
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
-
-
-@dataclass(frozen=True)
-class StartupScoreReadPayload(BaseTxPayload):
-    """Represent a transaction payload for the StartupScoreReadRound."""
-
-    content: str
+from packages.valory.skills.abstract_round_abci.test_tools.base import DummyContext
+from packages.valory.skills.ceramic_write_abci.models import SharedState
 
 
-@dataclass(frozen=True)
-class ScoreAddPayload(BaseTxPayload):
-    """Represent a transaction payload for the ScoreAddRound."""
+class TestSharedState:
+    """Test SharedState of CeramicWrite."""
 
-    content: str
+    def test_initialization(self) -> None:
+        """Test initialization."""
+        SharedState(name="", skill_context=DummyContext())
+

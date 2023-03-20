@@ -1,28 +1,26 @@
-name: score_write_abci
+name: ceramic_write_abci
 author: valory
 version: 0.1.0
 type: skill
-description: A skill that writes user scores to a Ceramic stream.
+description: A skill that writes data to a Ceramic stream.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeifrmnxnnnpitgpdr7i2bjtunda3mckriobf6bvdjo6zbajokj4hyq
-  behaviours.py: bafybeid5bkdkb6l5ycvvkpvpetfzz6bk5g5hlg3jn7cclzmp7aarmna724
-  ceramic/__init__.py: bafybeias4e3s6p5qtx6mmmcwkcd6kvbdnudy7sxai7d2suk75aazzdzdie
-  ceramic/payloads.py: bafybeicr75fitoucqknzu6vzic4jjb3w3pw655klbi36kwt4haplkg2dsy
-  dialogues.py: bafybeih2d4h2vaqn76s7npubkejevbwd4fwa6ytsoowntgpqk4d2wpyllu
-  fsm_specification.yaml: bafybeidj7klayhxlincnb2bdh36cqw5r5svlesokus5do2tbxpxagm52su
-  handlers.py: bafybeiax2wjff4ps3kmbsc2ysihu62ja7xk36gbznjoyagtjhe6fa7ctei
-  models.py: bafybeiepywmjxh53gbboeeysb65k6wetd6z3dpvpkbbryk3qay3dvarhh4
-  payloads.py: bafybeibphkv53kmfzchm5mooecaftfoohsqzyirug2xqu7n6sc3snzevr4
-  rounds.py: bafybeigrbp6ceecgtrye4k3nt54fw4mtcpp2pv4ly3ayvnsbndk74lf6fu
-  tests/__init__.py: bafybeiht2sfiedgsx6vk2dott2fdu6rqekt324nf7afbsk3unshcf74fgi
-  tests/test_behaviours.py: bafybeihl36eihftcrbphds3qyhc2n7rpig4n7zcf2xl4z33tku3hkt3cyq
-  tests/test_dialogues.py: bafybeifoltm3tyb6prv7mmqoh7uoap6kvmiextyl6k33whjigfxkgsdup4
-  tests/test_handlers.py: bafybeibz75vof3xdzgikipztbyza6ahg2ajq277nrtim2mvzxol37lgn4q
-  tests/test_models.py: bafybeiebtxif37wrac7744vo6pmpbq63adghq6ybtdh6nbw7yvccgbdsdq
-  tests/test_payloads.py: bafybeifkloxnejwcvqwdnrc4dalhvq6bt227uv4tot46nxgwhi56akvtd4
-  tests/test_rounds.py: bafybeiaf7zaibgc3t4e4kemjkhoitoe332tkllkdytkwxwhc55eyhxwsyu
+  __init__.py: bafybeiasv3vjhjbl4bexgglo3exyxm4b4jwvcsnwtsaukyuttzbeqnnxni
+  behaviours.py: bafybeiaioeyv3pdnnkrc3ybhyam6n74jqh4vkwewqjbxgzp2rox47opnc4
+  dialogues.py: bafybeifvrclkqpnl3dw46zwareemio6vgrqm4c5f3wfgv6rp267fcbyf5e
+  fsm_specification.yaml: bafybeiczl2ghftywb36cpm556bztkspa7ujv2f5ol5mpd6nit6lltaa55u
+  handlers.py: bafybeib3aiosxhbyudcxtybdrvsmn6bvnl4ao3fwf2uc7lkidpnhvnucam
+  models.py: bafybeicy76okojty4dax4xydch44rswr64l6np5mwballzpmbeh3f6zb7y
+  payloads.py: bafybeialab3cjdikvv3rfewdegb5qufsbdskmzln7ehamf377kogu6zqwu
+  rounds.py: bafybeifrm3wor7zajrtwae3f3kenoncskdue7t5u27sdiz6vzijow7ea4y
+  tests/__init__.py: bafybeic3534aro4pdtsdcuxywzlgkccczx2elhnwisiq3r6okvnrdu4aia
+  tests/test_behaviours.py: bafybeiel2mdmqldm4orh2vm4swotv6uzs47b3jeann6jg4tvq452cgj2hm
+  tests/test_dialogues.py: bafybeibvhslg6mwhvmeffhoho5olnmr56ohvx63onv63aryhaidizk3jou
+  tests/test_handlers.py: bafybeiefztf4d5cg2vva5jkyqekhe67lwqtq7guz7t2vhxjgdpe4vtdswm
+  tests/test_models.py: bafybeia5irbdz2gqkoodzytghrcqf56dquqol3ix3uzgbjfuspylcuhvky
+  tests/test_payloads.py: bafybeidvyu4ezdoncxsebbz26lg7qlyxserf4bqyb2dgdbbysry5cz6yru
+  tests/test_rounds.py: bafybeihvmkkpzpjjumioxslqgx6vhrxm2rgyk4icbnrzcelivvi4x4jtca
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
@@ -32,17 +30,20 @@ skills:
 behaviours:
   main:
     args: {}
-    class_name: ScoreWriteRoundBehaviour
+    class_name: CeramicWriteRoundBehaviour
 handlers:
   abci:
     args: {}
-    class_name: ABCIRoundHandler
+    class_name: ABCIHandler
   contract_api:
     args: {}
     class_name: ContractApiHandler
   http:
     args: {}
     class_name: HttpHandler
+  ipfs:
+    args: {}
+    class_name: IpfsHandler
   ledger_api:
     args: {}
     class_name: LedgerApiHandler
@@ -66,6 +67,9 @@ models:
   http_dialogues:
     args: {}
     class_name: HttpDialogues
+  ipfs_dialogues:
+    args: {}
+    class_name: IpfsDialogues
   ledger_api_dialogues:
     args: {}
     class_name: LedgerApiDialogues
@@ -74,9 +78,6 @@ models:
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
       ceramic_api_commit_endpoint: api/v0/commits
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
-      ceramic_did_seed: '0101010101010101010101010101010101010101010101010101010101010101'
-      ceramic_did_str: z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX
-      scores_stream_id: user_to_points_stream_id
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -99,6 +100,7 @@ models:
         genesis_time: '2022-05-20T16:00:21.735122717Z'
         voting_power: '10'
       history_check_timeout: 1205
+      ipfs_domain_name: null
       keeper_allowed_retries: 3
       keeper_timeout: 30.0
       max_attempts: 10
@@ -111,9 +113,13 @@ models:
       retry_attempts: 400
       retry_timeout: 3
       round_timeout_seconds: 30.0
-      service_id: score_read
+      service_id: ceramic_write
       service_registry_address: null
-      setup: {}
+      setup:
+        all_participants:
+        - - '0x0000000000000000000000000000000000000000'
+        safe_contract_address:
+        - '0x0000000000000000000000000000000000000000'
       share_tm_config_on_startup: false
       sleep_time: 1
       tendermint_check_sleep_delay: 3
@@ -124,6 +130,17 @@ models:
       tx_timeout: 10.0
       validate_timeout: 1205
     class_name: Params
+  randomness_api:
+    args:
+      api_id: cloudflare
+      headers: {}
+      method: GET
+      parameters: {}
+      response_key: null
+      response_type: dict
+      retries: 5
+      url: https://drand.cloudflare.com/public/latest
+    class_name: RandomnessApi
   requests:
     args: {}
     class_name: Requests
@@ -136,15 +153,5 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
-dependencies:
-  Authlib:
-    version: ==1.2.0
-  dag-cbor:
-    version: ==0.2.2
-  cryptography:
-    version: ==39.0.0
-  jsonpatch:
-    version: ==1.32
-  multiformats:
-    version: ==0.1.4.post3
+dependencies: {}
 is_abstract: true

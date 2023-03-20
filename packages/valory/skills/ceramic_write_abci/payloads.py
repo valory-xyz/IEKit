@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the ScoreWriteAbciApp."""
+"""This module contains the transaction payloads of the CeramicWriteAbciApp."""
 
 from dataclasses import dataclass
 
@@ -25,14 +25,29 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 
 @dataclass(frozen=True)
-class StartupScoreReadPayload(BaseTxPayload):
-    """Represent a transaction payload for the StartupScoreReadRound."""
+class RandomnessPayload(BaseTxPayload):
+    """Represent a transaction payload of type 'randomness'."""
+
+    round_id: int
+    randomness: str
+
+
+@dataclass(frozen=True)
+class SelectKeeperPayload(BaseTxPayload):
+    """Represent a transaction payload of type 'select_keeper'."""
+
+    keeper: str
+
+
+@dataclass(frozen=True)
+class StreamWritePayload(BaseTxPayload):
+    """Represent a transaction payload for the StreamWriteRound."""
 
     content: str
 
 
 @dataclass(frozen=True)
-class ScoreAddPayload(BaseTxPayload):
-    """Represent a transaction payload for the ScoreAddRound."""
+class VerificationPayload(BaseTxPayload):
+    """Represent a transaction payload for the VerificationRound."""
 
     content: str

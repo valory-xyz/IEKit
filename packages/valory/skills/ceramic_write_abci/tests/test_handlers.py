@@ -17,22 +17,11 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the ScoreWriteAbciApp."""
+"""Test the handlers.py module of the CeramicWrite."""
 
-from dataclasses import dataclass
-
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
+import packages.valory.skills.ceramic_write_abci.handlers  # noqa
 
 
-@dataclass(frozen=True)
-class StartupScoreReadPayload(BaseTxPayload):
-    """Represent a transaction payload for the StartupScoreReadRound."""
+def test_import() -> None:
+    """Test that the 'handlers.py' of the CeramicWrite can be imported."""
 
-    content: str
-
-
-@dataclass(frozen=True)
-class ScoreAddPayload(BaseTxPayload):
-    """Represent a transaction payload for the ScoreAddRound."""
-
-    content: str

@@ -182,95 +182,6 @@ class ScoreAddRound(CollectSameUntilThresholdRound):
         return None
 
 
-class RandomnessRound(CollectSameUntilThresholdRound):
-    """A round for generating randomness"""
-
-    payload_class = RandomnessPayload
-    synchronized_data_class = SynchronizedData
-    done_event = Event.DONE
-    no_majority_event = Event.NO_MAJORITY
-    collection_key = get_name(SynchronizedData.participant_to_randomness)
-    selection_key = (
-        get_name(SynchronizedData.most_voted_randomness_round),
-        get_name(SynchronizedData.most_voted_randomness),
-    )
-
-
-class SelectKeeperRound(CollectSameUntilThresholdRound):
-    """A round in which a keeper is selected for transaction submission"""
-
-    payload_class = SelectKeeperPayload
-    synchronized_data_class = SynchronizedData
-    done_event = Event.DONE
-    no_majority_event = Event.NO_MAJORITY
-    collection_key = get_name(SynchronizedData.participant_to_selection)
-    selection_key = get_name(SynchronizedData.most_voted_keeper_address)
-
-
-class CeramicWriteRound(OnlyKeeperSendsRound):
-    """CeramicWriteRound"""
-
-    payload_class = CeramicWritePayload
-    synchronized_data_class = SynchronizedData
-
-    ERROR_PAYLOAD = "error"
-    SUCCCESS_PAYLOAD = "success"
-
-    def end_block(
-        self,
-    ) -> Optional[
-        Tuple[BaseSynchronizedData, Enum]
-    ]:  # pylint: disable=too-many-return-statements
-        """Process the end of the block."""
-        if self.keeper_payload is None:
-            return None
-
-        if self.keeper_payload is None:  # pragma: no cover
-            return self.synchronized_data, Event.DID_NOT_SEND
-
-        if self.keeper_payload.content == self.ERROR_PAYLOAD:
-            return self.synchronized_data, Event.API_ERROR
-
-        return self.synchronized_data, Event.DONE
-
-
-class VerificationRound(CollectSameUntilThresholdRound):
-    """VerificationRound"""
-
-    payload_class = VerificationPayload
-    synchronized_data_class = SynchronizedData
-
-    ERROR_PAYLOAD = "error"
-    SUCCCESS_PAYLOAD = "success"
-
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
-        """Process the end of the block."""
-        if self.threshold_reached:
-
-            if self.most_voted_payload == self.ERROR_PAYLOAD:
-                return self.synchronized_data, Event.API_ERROR
-
-            synchronized_data = self.synchronized_data.update(
-                synchronized_data_class=SynchronizedData,
-                **{
-                    get_name(
-                        SynchronizedData.user_to_new_points
-                    ): {},  # Remove points that have been succesfully written to Ceramic
-                }
-            )
-            return synchronized_data, Event.DONE
-
-        if not self.is_majority_possible(
-            self.collection, self.synchronized_data.nb_participants
-        ):
-            return self.synchronized_data, Event.NO_MAJORITY
-        return None
-
-
-class FinishedVerificationound(DegenerateRound):
-    """FinishedVerificationound"""
-
-
 class ScoreWriteAbciApp(AbciApp[Event]):
     """ScoreWriteAbciApp"""
 
@@ -291,29 +202,7 @@ class ScoreWriteAbciApp(AbciApp[Event]):
             Event.ROUND_TIMEOUT: ScoreAddRound,
             Event.API_ERROR: ScoreAddRound,
         },
-        RandomnessRound: {
-            Event.DONE: SelectKeeperRound,
-            Event.NO_MAJORITY: RandomnessRound,
-            Event.ROUND_TIMEOUT: RandomnessRound,
-        },
-        SelectKeeperRound: {
-            Event.DONE: CeramicWriteRound,
-            Event.NO_MAJORITY: RandomnessRound,
-            Event.ROUND_TIMEOUT: RandomnessRound,
-        },
-        CeramicWriteRound: {
-            Event.DONE: VerificationRound,
-            Event.ROUND_TIMEOUT: RandomnessRound,
-            Event.API_ERROR: RandomnessRound,
-            Event.DID_NOT_SEND: RandomnessRound,
-        },
-        VerificationRound: {
-            Event.DONE: FinishedVerificationound,
-            Event.NO_MAJORITY: RandomnessRound,
-            Event.ROUND_TIMEOUT: RandomnessRound,
-            Event.API_ERROR: RandomnessRound,
-        },
-        FinishedVerificationound: {},
+        FinishedAddRound: {},
     }
     final_states: Set[AppState] = {
         FinishedStartupScoreReadRound,

@@ -142,7 +142,7 @@ class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
         },
         {
             "dotted_path": f"{__param_args_prefix}.scores_stream_id",
-            "value": "user_to_points_stream_id_e2e",
+            "value": "stream_id_e2e",
         },
     ]
 
