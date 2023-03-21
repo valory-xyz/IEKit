@@ -152,7 +152,7 @@ class TestTwitterObservationRound(BaseScoreReadRoundTest):
         (
             RoundTestCase(
                 name="Happy path",
-                initial_data={},
+                initial_data={"wallet_to_users": {"address_a": "user_a"}},
                 payloads=get_payloads(
                     payload_cls=TwitterObservationPayload,
                     data=get_dummy_twitter_observation_payload_serialized(),
