@@ -15,3 +15,4 @@ ec0f0f07657cba49587c23bd4ab0aa4777d78b49:packages/valory/agents/impact_evaluator
 17e1ac6e463b27cfc24ee8b671f4351b95464dec:docs/index.md:generic-api-key:57
 057e7cfe3b376478eb0420bc463b3e2d62f316d4:packages/valory/skills/ceramic_write_abci/skill.yaml:generic-api-key:83
 7bdb5dda10514dd9618551fe57882abfe2d7e44b:packages/valory/skills/ceramic_read_abci/skill.yaml:generic-api-key:82
+7c0cb3f2d20573d8415c21fab15c6fcf13fbda02:packages/valory/skills/ceramic_read_abci/skill.yaml:generic-api-key:82
