@@ -6,6 +6,7 @@
         "skill/valory/dynamic_nft_abci/0.1.0": "bafybeiddcix52ycxtgmzaroxvp5lez5cckbbf65gblwmhznthfc3b34keq",
         "skill/valory/score_read_abci/0.1.0": "bafybeia67hgl44rvmrtmcgt7shzekldtxc6hc3hhykbntkllj4ufwj67qa",
         "skill/valory/score_write_abci/0.1.0": "bafybeiazrw2dbb4vod65enu66juuoitavzksns3zggoebj5dgsm5ob6yea",
+        "skill/valory/ceramic_read_abci/0.1.0": "bafybeiazrw2dbb4vod65enu66juuoitavzksns3zggoebj5dgsm5ob6yea",
         "skill/valory/ceramic_write_abci/0.1.0": "bafybeiazrw2dbb4vod65enu66juuoitavzksns3zggoebj5dgsm5ob6yea",
         "skill/valory/impact_evaluator_abci/0.1.0": "bafybeickkd3kinek7rwan7dx2fhk5ikne5z6xhu4tcrhbggfj7wlqskdvq"
     },

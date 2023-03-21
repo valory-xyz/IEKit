@@ -1,0 +1,147 @@
+name: ceramic_read_abci
+author: valory
+version: 0.1.0
+type: skill
+description: A skill that reads data from a Ceramic stream.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeid4qqyvqr7m3hhcs7725kdi3drro5ucgu4qyegdwlzdhqpoqkifmy
+  behaviours.py: bafybeid5obni42g27tl5ivdl4dj5gbni27xmt4qmlxmncgannnpru5iljq
+  dialogues.py: bafybeibz3rwmothfrywu3b3rdktiu25eiivkc7ob2sodlcnmrxhyeeq56i
+  fsm_specification.yaml: bafybeibuj4iweeeytah2mepgfrhfqbqxpfm2cs5hv7tth7oscowolzmca4
+  handlers.py: bafybeiemyqiqwj4igqlsvujggkclknh4icgkhwdjf7bszjzbvtv33f23yq
+  models.py: bafybeihwtxq5mrh2gxcgtywtu5v4vkzfsnbldso3lls5djdefx2yhz4qma
+  payloads.py: bafybeibrlxlvdrf6qwfys76dbee2cgpeof3ior4wjpcy2ntkiv7oxfwgpa
+  rounds.py: bafybeid6uxoqi5gtpps5m2m27omq2mkkdoajamud7qp3bmkjta4jxm3ucu
+  tests/__init__.py: bafybeic3534aro4pdtsdcuxywzlgkccczx2elhnwisiq3r6okvnrdu4aia
+  tests/test_behaviours.py: bafybeidceknnl4cts45dsplkzt637basqn3dskspt5wn5vcwo6cdreupbu
+  tests/test_dialogues.py: bafybeia7zqprdvo3spmyq2rxofmoqjrodxapqkmglo6e24dg6wioxrf4o4
+  tests/test_handlers.py: bafybeibjj4absdkjx2x77txrrbfhgprdnipo4u6vtv7s2hyespmzt65iku
+  tests/test_models.py: bafybeid2fk7zovpo3e6ths44gl2k4dzkndwium4l7vjal3mokne2dmrdui
+  tests/test_payloads.py: bafybeiaoobph36mxzuplh6xnrpldomwxfxelmztz2ewyeuvlo6c3qgl7py
+  tests/test_rounds.py: bafybeihq4ujiycbpwgbizrt7l23gdiugkae4mglnjhatnt56yngoklucna
+fingerprint_ignore_patterns: []
+connections: []
+contracts: []
+protocols: []
+skills:
+- valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
+behaviours:
+  main:
+    args: {}
+    class_name: CeramicReadRoundBehaviour
+handlers:
+  abci:
+    args: {}
+    class_name: ABCIHandler
+  contract_api:
+    args: {}
+    class_name: ContractApiHandler
+  http:
+    args: {}
+    class_name: HttpHandler
+  ipfs:
+    args: {}
+    class_name: IpfsHandler
+  ledger_api:
+    args: {}
+    class_name: LedgerApiHandler
+  signing:
+    args: {}
+    class_name: SigningHandler
+  tendermint:
+    args: {}
+    class_name: TendermintHandler
+models:
+  abci_dialogues:
+    args: {}
+    class_name: AbciDialogues
+  benchmark_tool:
+    args:
+      log_dir: /logs
+    class_name: BenchmarkTool
+  contract_api_dialogues:
+    args: {}
+    class_name: ContractApiDialogues
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+  ipfs_dialogues:
+    args: {}
+    class_name: IpfsDialogues
+  ledger_api_dialogues:
+    args: {}
+    class_name: LedgerApiDialogues
+  params:
+    args:
+      ceramic_api_base: https://ceramic-clay.3boxlabs.com/
+      ceramic_api_read_endpoint: api/v0/commits/{stream_id}
+      cleanup_history_depth: 1
+      cleanup_history_depth_current: null
+      drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
+      finalize_timeout: 60.0
+      genesis_config:
+        chain_id: chain-c4daS1
+        consensus_params:
+          block:
+            max_bytes: '22020096'
+            max_gas: '-1'
+            time_iota_ms: '1000'
+          evidence:
+            max_age_duration: '172800000000000'
+            max_age_num_blocks: '100000'
+            max_bytes: '1048576'
+          validator:
+            pub_key_types:
+            - ed25519
+          version: {}
+        genesis_time: '2022-05-20T16:00:21.735122717Z'
+        voting_power: '10'
+      history_check_timeout: 1205
+      ipfs_domain_name: null
+      keeper_allowed_retries: 3
+      keeper_timeout: 30.0
+      max_attempts: 10
+      max_healthcheck: 120
+      observation_interval: 10
+      on_chain_service_id: null
+      request_retry_delay: 1.0
+      request_timeout: 10.0
+      reset_tendermint_after: 2
+      retry_attempts: 400
+      retry_timeout: 3
+      round_timeout_seconds: 30.0
+      service_id: ceramic_read
+      service_registry_address: null
+      setup:
+        all_participants:
+        - - '0x0000000000000000000000000000000000000000'
+        safe_contract_address:
+        - '0x0000000000000000000000000000000000000000'
+      share_tm_config_on_startup: false
+      sleep_time: 1
+      tendermint_check_sleep_delay: 3
+      tendermint_com_url: http://localhost:8080
+      tendermint_max_retries: 5
+      tendermint_p2p_url: localhost:26656
+      tendermint_url: http://localhost:26657
+      tx_timeout: 10.0
+      validate_timeout: 1205
+      stream_id: null
+      target_property_name: null
+    class_name: Params
+  requests:
+    args: {}
+    class_name: Requests
+  signing_dialogues:
+    args: {}
+    class_name: SigningDialogues
+  state:
+    args: {}
+    class_name: SharedState
+  tendermint_dialogues:
+    args: {}
+    class_name: TendermintDialogues
+dependencies: {}
+is_abstract: true

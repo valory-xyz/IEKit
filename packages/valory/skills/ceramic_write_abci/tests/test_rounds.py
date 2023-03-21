@@ -227,7 +227,7 @@ def get_dummy_ceramic_write_payload_serialized(api_error: bool = False) -> str:
 
 
 
-class BaseStreamWriteRoundTest(BaseCollectSameUntilThresholdRoundTest):
+class BaseCeramicWriteRoundTest(BaseCollectSameUntilThresholdRoundTest):
     """Base test class for ScoreWrite rounds."""
 
     synchronized_data: SynchronizedData
@@ -316,7 +316,7 @@ class TestStreamWriteRound(BaseOnlyKeeperSendsRoundTest):
         )
 
 
-class TestVerificationRound(BaseStreamWriteRoundTest):
+class TestVerificationRound(BaseCeramicWriteRoundTest):
     """Tests for VerificationRound."""
 
     round_class = VerificationRound
