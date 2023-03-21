@@ -17,4 +17,10 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the tests for the score_read_abci skill."""
+"""Test the dialogues.py module of the ScoreRead."""
+
+import packages.valory.skills.twitter_scoring_abci.dialogues  # noqa
+
+
+def test_import() -> None:
+    """Test that the 'dialogues.py' of the ScoreRead can be imported."""

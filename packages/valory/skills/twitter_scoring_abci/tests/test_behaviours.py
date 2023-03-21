@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains round behaviours of ScoreReadAbciApp."""
+"""This package contains round behaviours of TwitterScoringAbciApp."""
 
 import json
 from dataclasses import dataclass
@@ -33,15 +33,14 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
 from packages.valory.skills.abstract_round_abci.test_tools.base import (
     FSMBehaviourBaseCase,
 )
-from packages.valory.skills.score_read_abci.behaviours import (
+from packages.valory.skills.twitter_scoring_abci.behaviours import (
     ScoreReadBaseBehaviour,
-    ScoreReadRoundBehaviour,
-    ScoringBehaviour,
-    TwitterObservationBehaviour,
+    TwitterScoringBehaviour,
+    TwitterScoringRoundBehaviour,
 )
-from packages.valory.skills.score_read_abci.rounds import (
+from packages.valory.skills.twitter_scoring_abci.rounds import (
     Event,
-    FinishedScoringRound,
+    FinishedTwitterScoringRound,
     SynchronizedData,
 )
 
@@ -204,7 +203,7 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
 
     path_to_skill = Path(__file__).parent.parent
 
-    behaviour: ScoreReadRoundBehaviour
+    behaviour: TwitterScoringRoundBehaviour
     behaviour_class: Type[ScoreReadBaseBehaviour]
     next_behaviour_class: Type[ScoreReadBaseBehaviour]
     synchronized_data: SynchronizedData
@@ -237,11 +236,11 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
         )
 
 
-class TestTwitterObservationBehaviour(BaseBehaviourTest):
+class TestTwitterScoringBehaviour(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
-    behaviour_class = TwitterObservationBehaviour
-    next_behaviour_class = ScoringBehaviour
+    behaviour_class = TwitterScoringBehaviour
+    next_behaviour_class = make_degenerate_behaviour(FinishedTwitterScoringRound)
 
     @pytest.mark.parametrize(
         "test_case, kwargs",
@@ -249,7 +248,7 @@ class TestTwitterObservationBehaviour(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "Happy path",
-                    initial_data=dict(),
+                    initial_data=dict(ceramic_db={}),
                     event=Event.DONE,
                 ),
                 {
@@ -268,7 +267,7 @@ class TestTwitterObservationBehaviour(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "Happy path, multi-page",
-                    initial_data=dict(),
+                    initial_data=dict(ceramic_db={}),
                     event=Event.DONE,
                 ),
                 {
@@ -299,7 +298,7 @@ class TestTwitterObservationBehaviour(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "Happy path, result_count=0",
-                    initial_data=dict(),
+                    initial_data=dict(ceramic_db={}),
                     event=Event.DONE,
                 ),
                 {
@@ -339,11 +338,11 @@ class TestTwitterObservationBehaviour(BaseBehaviourTest):
         self.complete(test_case.event)
 
 
-class TestTwitterObservationBehaviourAPIError(BaseBehaviourTest):
+class TestTwitterScoringBehaviourAPIError(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
-    behaviour_class = TwitterObservationBehaviour
-    next_behaviour_class = TwitterObservationBehaviour
+    behaviour_class = TwitterScoringBehaviour
+    next_behaviour_class = TwitterScoringBehaviour
 
     @pytest.mark.parametrize(
         "test_case, kwargs",
@@ -351,7 +350,7 @@ class TestTwitterObservationBehaviourAPIError(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "API error mentions: 404",
-                    initial_data=dict(),
+                    initial_data=dict(ceramic_db={}),
                     event=Event.API_ERROR,
                 ),
                 {
@@ -367,7 +366,7 @@ class TestTwitterObservationBehaviourAPIError(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "API error registrations: 404",
-                    initial_data=dict(),
+                    initial_data=dict(ceramic_db={}),
                     event=Event.API_ERROR,
                 ),
                 {
@@ -384,7 +383,7 @@ class TestTwitterObservationBehaviourAPIError(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "API error mentions: missing data",
-                    initial_data=dict(),
+                    initial_data=dict(ceramic_db={}),
                     event=Event.API_ERROR,
                 ),
                 {
@@ -400,7 +399,7 @@ class TestTwitterObservationBehaviourAPIError(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "API error registrations: missing data",
-                    initial_data=dict(),
+                    initial_data=dict(ceramic_db={}),
                     event=Event.API_ERROR,
                 ),
                 {
@@ -419,7 +418,7 @@ class TestTwitterObservationBehaviourAPIError(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "API error mentions: missing meta",
-                    initial_data=dict(),
+                    initial_data=dict(ceramic_db={}),
                     event=Event.API_ERROR,
                 ),
                 {
@@ -435,7 +434,7 @@ class TestTwitterObservationBehaviourAPIError(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "API error registrations: missing meta",
-                    initial_data=dict(),
+                    initial_data=dict(ceramic_db={}),
                     event=Event.API_ERROR,
                 ),
                 {
@@ -452,7 +451,7 @@ class TestTwitterObservationBehaviourAPIError(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "API error mentions: missing includes",
-                    initial_data=dict(),
+                    initial_data=dict(ceramic_db={}),
                     event=Event.API_ERROR,
                 ),
                 {
@@ -486,29 +485,4 @@ class TestTwitterObservationBehaviourAPIError(BaseBehaviourTest):
                     body=kwargs.get("bodies")[i].encode(),
                 ),
             )
-        self.complete(test_case.event)
-
-
-class TestScoringBehaviour(BaseBehaviourTest):
-    """Tests BinanceObservationBehaviour"""
-
-    behaviour_class = ScoringBehaviour
-    next_behaviour_class = make_degenerate_behaviour(  # type: ignore
-        FinishedScoringRound
-    )
-
-    @pytest.mark.parametrize(
-        "test_case",
-        [
-            BehaviourTestCase(
-                "Happy path",
-                initial_data={"most_voted_api_data": DUMMY_MOST_VOTED_MENTIONS_DATA},
-                event=Event.DONE,
-            ),
-        ],
-    )
-    def test_run(self, test_case: BehaviourTestCase) -> None:
-        """Run tests."""
-        self.fast_forward(test_case.initial_data)
-        self.behaviour.act_wrapper()
         self.complete(test_case.event)

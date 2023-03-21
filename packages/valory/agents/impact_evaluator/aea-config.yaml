@@ -12,7 +12,7 @@ fingerprint:
   tests/helpers/data/json_server/data.json: bafybeibg7ajqfnazwgc3jd5xcsyn6jgtntetdp3ygstprijhbv4l32etsu
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
-  tests/test_impact_evaluator.py: bafybeiexgm4zwh6ys2qlno35zxe5qpde5wyypagv3e723646qjpa4ymgdi
+  tests/test_impact_evaluator.py: bafybeifx337jvbw5pta4pkjzedfnjrl7gj7acok6uv6lqirxvclsbqgnym
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihaax5od5zo5jk2l62hv4jwuwtxloh5mijozudpsjombqc4ncmi6i
@@ -29,10 +29,11 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeihkrunmigvlcze7uxhafj2h3kvpf2kifggq7zqj42n2we4mcwuvou
 - valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
-- valory/impact_evaluator_abci:0.1.0:bafybeickkd3kinek7rwan7dx2fhk5ikne5z6xhu4tcrhbggfj7wlqskdvq
-- valory/score_read_abci:0.1.0:bafybeia67hgl44rvmrtmcgt7shzekldtxc6hc3hhykbntkllj4ufwj67qa
-- valory/score_write_abci:0.1.0:bafybeiazrw2dbb4vod65enu66juuoitavzksns3zggoebj5dgsm5ob6yea
-- valory/dynamic_nft_abci:0.1.0:bafybeiddcix52ycxtgmzaroxvp5lez5cckbbf65gblwmhznthfc3b34keq
+- valory/impact_evaluator_abci:0.1.0:bafybeiemaewmsze63horxxro7c5gk3scqyaftyvm5esi6faxb3lm4uwj3y
+- valory/twitter_scoring_abci:0.1.0:bafybeibqqd67txatfrnpxwc4xdkjw2qbk6jmohljalji7hy7ovr46wbog4
+- valory/ceramic_read_abci:0.1.0:bafybeihiier33ifua3s2e2ylfuxi24f7i3rlpuymz2akr6ajd2ribogzsu
+- valory/ceramic_write_abci:0.1.0:bafybeihigg2amvkw3wnhsnhmvl6npar7ikeub5s5y3fuelt4vjj7fuas4q
+- valory/dynamic_nft_abci:0.1.0:bafybeibsu5hr5hsqucvvjic2mikekyqzqg3lc3g3gyh5fnp4ply42hgaku
 - valory/registration_abci:0.1.0:bafybeidgoqi7fa2gb56hdfsf74bbunfii63zgeo4qhggb66ofver2n2gya
 - valory/reset_pause_abci:0.1.0:bafybeievxhu6u5r5wlpjfzcwuowlbanhfbi25saf25qit53jauv4kq6gne
 default_ledger: ethereum

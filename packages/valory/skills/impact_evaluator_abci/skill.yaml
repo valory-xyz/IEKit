@@ -7,12 +7,12 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
-  behaviours.py: bafybeiauwwtjzjyceeiew3qkzppyakxcojzzfgha3reo6k7tyvuqo7tolu
-  composition.py: bafybeidleksob2cqwmuxbd4dq2dnlxexbvapubkocrbmtfi57jxixgr4uu
+  behaviours.py: bafybeibsbey3iggo4nxmcspy7wsyc76ximvcrnxpud7mvs4xin4ulei744
+  composition.py: bafybeidvuwd2hj25cycyp7mit35a4atr2mmt2a7gpb2fsb5zvhvpfumcgi
   dialogues.py: bafybeigpwuzku3we7axmxeamg7vn656maww6emuztau5pg3ebsoquyfdqm
-  fsm_specification.yaml: bafybeiavzzuzfklc56icg235g4vlhuwgl2wc7iiv6i7rrrhhd5vxiftljm
+  fsm_specification.yaml: bafybeigtl672ibon5hriwx4fsjbd2hl36eyphyelf3mkjkuh744vyzolhe
   handlers.py: bafybeiaqgaev2nfhuihhuxxxxtuiggin5zcpwn7ik7lok2n6ywi6dqy2ta
-  models.py: bafybeidd57qvfq7hcpcp7ogvrneq4uyrpjey6hov3rdennyd3lnamqmpby
+  models.py: bafybeidtwkv5cffed4ck4euq6dazhxovrx3fuvcy27ipcjmdkjmyx7yj3y
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
   tests/test_behaviours.py: bafybeifkazsevd6vsfaapulouxepez3rl24y3rxgja5zhmj7s323zdjlmq
   tests/test_dialogues.py: bafybeieaos2byphju6i6xvytppqqcuqqvnpilnflsy73l3wqazzjttbg7m
@@ -24,9 +24,10 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
-- valory/score_read_abci:0.1.0:bafybeia67hgl44rvmrtmcgt7shzekldtxc6hc3hhykbntkllj4ufwj67qa
-- valory/score_write_abci:0.1.0:bafybeiazrw2dbb4vod65enu66juuoitavzksns3zggoebj5dgsm5ob6yea
-- valory/dynamic_nft_abci:0.1.0:bafybeiddcix52ycxtgmzaroxvp5lez5cckbbf65gblwmhznthfc3b34keq
+- valory/ceramic_read_abci:0.1.0:bafybeihiier33ifua3s2e2ylfuxi24f7i3rlpuymz2akr6ajd2ribogzsu
+- valory/twitter_scoring_abci:0.1.0:bafybeibqqd67txatfrnpxwc4xdkjw2qbk6jmohljalji7hy7ovr46wbog4
+- valory/ceramic_write_abci:0.1.0:bafybeihigg2amvkw3wnhsnhmvl6npar7ikeub5s5y3fuelt4vjj7fuas4q
+- valory/dynamic_nft_abci:0.1.0:bafybeibsu5hr5hsqucvvjic2mikekyqzqg3lc3g3gyh5fnp4ply42hgaku
 - valory/registration_abci:0.1.0:bafybeidgoqi7fa2gb56hdfsf74bbunfii63zgeo4qhggb66ofver2n2gya
 - valory/reset_pause_abci:0.1.0:bafybeievxhu6u5r5wlpjfzcwuowlbanhfbi25saf25qit53jauv4kq6gne
 behaviours:

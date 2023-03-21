@@ -18,11 +18,12 @@
 # ------------------------------------------------------------------------------
 
 """This package contains round behaviours of ImpactEvaluatorSkillAbciApp."""
+import packages.valory.skills.ceramic_read_abci.rounds as CeramicReadAbci
+import packages.valory.skills.ceramic_write_abci.rounds as CeramicWriteAbci
 import packages.valory.skills.dynamic_nft_abci.rounds as DynamicNFTAbci
 import packages.valory.skills.registration_abci.rounds as RegistrationAbci
 import packages.valory.skills.reset_pause_abci.rounds as ResetAndPauseAbci
-import packages.valory.skills.score_read_abci.rounds as ScoreReadAbciAbci
-import packages.valory.skills.score_write_abci.rounds as ScoreWriteAbciAbci
+import packages.valory.skills.twitter_scoring_abci.rounds as TwitterScoringAbci
 from packages.valory.skills.abstract_round_abci.abci_app_chain import (
     AbciAppTransitionMapping,
     chain,
@@ -32,20 +33,21 @@ from packages.valory.skills.abstract_round_abci.abci_app_chain import (
 # Here we define how the transition between the FSMs should happen
 # more information here: https://docs.autonolas.network/fsm_app_introduction/#composition-of-fsm-apps
 abci_app_transition_mapping: AbciAppTransitionMapping = {
-    RegistrationAbci.FinishedRegistrationRound: ScoreWriteAbciAbci.StartupScoreReadRound,
-    ScoreWriteAbciAbci.FinishedStartupScoreReadRound: ScoreReadAbciAbci.TwitterObservationRound,
-    ScoreReadAbciAbci.FinishedScoringRound: ScoreWriteAbciAbci.ScoreAddRound,
-    ScoreWriteAbciAbci.FinishedVerificationound: DynamicNFTAbci.NewTokensRound,
+    RegistrationAbci.FinishedRegistrationRound: CeramicReadAbci.StreamReadRound,
+    CeramicReadAbci.FinishedReadingRound: TwitterScoringAbci.TwitterScoringRound,
+    TwitterScoringAbci.FinishedTwitterScoringRound: CeramicWriteAbci.RandomnessRound,
+    CeramicWriteAbci.FinishedVerificationRound: DynamicNFTAbci.NewTokensRound,
     DynamicNFTAbci.FinishedNewTokensRound: ResetAndPauseAbci.ResetAndPauseRound,
-    ResetAndPauseAbci.FinishedResetAndPauseRound: ScoreReadAbciAbci.TwitterObservationRound,
+    ResetAndPauseAbci.FinishedResetAndPauseRound: TwitterScoringAbci.TwitterScoringRound,
     ResetAndPauseAbci.FinishedResetAndPauseErrorRound: RegistrationAbci.RegistrationRound,
 }
 
 ImpactEvaluatorSkillAbciApp = chain(
     (
         RegistrationAbci.AgentRegistrationAbciApp,
-        ScoreReadAbciAbci.ScoreReadAbciApp,
-        ScoreWriteAbciAbci.ScoreWriteAbciApp,
+        CeramicReadAbci.CeramicReadAbciApp,
+        TwitterScoringAbci.TwitterScoringAbciApp,
+        CeramicWriteAbci.CeramicWriteAbciApp,
         DynamicNFTAbci.DynamicNFTAbciApp,
         ResetAndPauseAbci.ResetPauseAbciApp,
     ),

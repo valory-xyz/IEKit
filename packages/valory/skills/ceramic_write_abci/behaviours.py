@@ -19,37 +19,35 @@
 
 """This package contains round behaviours of CeramicWriteAbciApp."""
 
+import json
 from abc import ABC
-from typing import Generator, Set, Type, cast
 from typing import Generator, Optional, Set, Type, cast
+
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-import json
-from packages.valory.skills.ceramic_write_abci.models import Params
-from packages.valory.skills.ceramic_write_abci.rounds import (
-    SynchronizedData,
-    CeramicWriteAbciApp,
-    RandomnessRound,
-    SelectKeeperRound,
-    StreamWriteRound,
-    VerificationRound,
-)
-from packages.valory.skills.ceramic_write_abci.rounds import (
-    RandomnessPayload,
-    SelectKeeperPayload,
-    StreamWritePayload,
-    VerificationPayload,
+from packages.valory.skills.abstract_round_abci.common import (
+    RandomnessBehaviour,
+    SelectKeeperBehaviour,
 )
 from packages.valory.skills.ceramic_write_abci.ceramic.payloads import (
     build_commit_payload,
     build_data_from_commits,
 )
-from packages.valory.skills.abstract_round_abci.common import (
-    RandomnessBehaviour,
-    SelectKeeperBehaviour,
+from packages.valory.skills.ceramic_write_abci.models import Params
+from packages.valory.skills.ceramic_write_abci.rounds import (
+    CeramicWriteAbciApp,
+    RandomnessPayload,
+    RandomnessRound,
+    SelectKeeperPayload,
+    SelectKeeperRound,
+    StreamWritePayload,
+    StreamWriteRound,
+    SynchronizedData,
+    VerificationPayload,
+    VerificationRound,
 )
 
 
@@ -268,7 +266,6 @@ class VerificationBehaviour(CeramicWriteBaseBehaviour):
         self.set_done()
 
 
-
 class CeramicWriteRoundBehaviour(AbstractRoundBehaviour):
     """CeramicWriteRoundBehaviour"""
 
@@ -278,5 +275,5 @@ class CeramicWriteRoundBehaviour(AbstractRoundBehaviour):
         RandomnessCeramicBehaviour,
         SelectKeeperCeramicBehaviour,
         StreamWriteBehaviour,
-        VerificationBehaviour
+        VerificationBehaviour,
     ]

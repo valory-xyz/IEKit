@@ -26,9 +26,9 @@ import pytest
 
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 from packages.valory.skills.ceramic_write_abci.payloads import (
-    StreamWritePayload,
     RandomnessPayload,
     SelectKeeperPayload,
+    StreamWritePayload,
     VerificationPayload,
 )
 

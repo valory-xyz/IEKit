@@ -57,29 +57,23 @@ from packages.valory.skills.reset_pause_abci.rounds import ResetAndPauseRound
 from packages.valory.skills.dynamic_nft_abci.rounds import (
     NewTokensRound,
 )
-from packages.valory.skills.score_read_abci.rounds import (
-    TwitterObservationRound,
-    ScoringRound
+from packages.valory.skills.twitter_scoring_abci.rounds import (
+    TwitterScoringRound,
 )
-from packages.valory.skills.score_write_abci.rounds import (
+from packages.valory.skills.ceramic_write_abci.rounds import (
     RandomnessRound,
     SelectKeeperRound,
-    CeramicWriteRound,
+    StreamWriteRound,
     VerificationRound,
-    ScoreAddRound,
-    StartupScoreReadRound,
 )
 
 
 HAPPY_PATH: Tuple[RoundChecks, ...] = (
     RoundChecks(RegistrationStartupRound.auto_round_id()),
-    RoundChecks(StartupScoreReadRound.auto_round_id(), n_periods=1),
-    RoundChecks(TwitterObservationRound.auto_round_id(), n_periods=2),
-    RoundChecks(ScoringRound.auto_round_id(), n_periods=2),
-    RoundChecks(ScoreAddRound.auto_round_id(), n_periods=2),
+    RoundChecks(TwitterScoringRound.auto_round_id(), n_periods=2),
     RoundChecks(RandomnessRound.auto_round_id(), n_periods=2),
     RoundChecks(SelectKeeperRound.auto_round_id(), n_periods=2),
-    RoundChecks(CeramicWriteRound.auto_round_id(), n_periods=2),
+    RoundChecks(StreamWriteRound.auto_round_id(), n_periods=2),
     RoundChecks(VerificationRound.auto_round_id(), n_periods=2),
     RoundChecks(NewTokensRound.auto_round_id(), n_periods=2),
     RoundChecks(ResetAndPauseRound.auto_round_id(), n_periods=2),

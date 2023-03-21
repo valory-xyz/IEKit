@@ -17,33 +17,32 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains the rounds of CeramicReadAbciApp."""
+"""This package contains the rounds of TwitterScoringAbciApp."""
 
+import json
 from enum import Enum
 from typing import Dict, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    CollectSameUntilThresholdRound,
     AppState,
     BaseSynchronizedData,
+    CollectSameUntilThresholdRound,
     DegenerateRound,
     EventToTimeout,
+    get_name,
 )
-import json
-from packages.valory.skills.ceramic_read_abci.payloads import (
-    StreamReadPayload,
-)
+from packages.valory.skills.twitter_scoring_abci.payloads import TwitterScoringPayload
 
 
 class Event(Enum):
-    """CeramicReadAbciApp Events"""
+    """TwitterScoringAbciApp Events"""
 
+    DONE = "done"
+    NO_MAJORITY = "no_majority"
     ROUND_TIMEOUT = "round_timeout"
     API_ERROR = "api_error"
-    NO_MAJORITY = "no_majority"
-    DONE = "done"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -54,20 +53,15 @@ class SynchronizedData(BaseSynchronizedData):
     """
 
     @property
-    def stream_id(self) -> Optional[str]:
-        """Get the user new points."""
-        return cast(str, self.db.get("stream_id", None))
-
-    @property
-    def target_property_name(self) -> Optional[str]:
-        """Get the user new points."""
-        return cast(str, self.db.get("target_property_name", None))
+    def ceramic_db(self) -> dict:
+        """Get the data stored in the main stream."""
+        return cast(dict, self.db.get_strict("ceramic_db"))
 
 
-class StreamReadRound(CollectSameUntilThresholdRound):
-    """StreamReadRound"""
+class TwitterScoringRound(CollectSameUntilThresholdRound):
+    """TwitterScoringRound"""
 
-    payload_class = StreamReadPayload
+    payload_class = TwitterScoringPayload
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = {"error": "true"}
@@ -75,20 +69,20 @@ class StreamReadRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
+            if self.most_voted_payload == json.dumps(
+                self.ERROR_PAYLOAD, sort_keys=True
+            ):
+                return self.synchronized_data, Event.API_ERROR
 
             payload = json.loads(self.most_voted_payload)
-
-            if payload == self.ERROR_PAYLOAD:
-                return self.synchronized_data, Event.API_ERROR
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    payload["target_property_name"]: payload["stream_data"],
+                    get_name(SynchronizedData.ceramic_db): payload,
                 }
             )
             return synchronized_data, Event.DONE
-
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
         ):
@@ -96,32 +90,36 @@ class StreamReadRound(CollectSameUntilThresholdRound):
         return None
 
 
-class FinishedReadingRound(DegenerateRound):
-    """FinishedReadingRound"""
+class FinishedTwitterScoringRound(DegenerateRound):
+    """FinishedTwitterScoringRound"""
 
 
-class CeramicReadAbciApp(AbciApp[Event]):
-    """CeramicReadAbciApp"""
+class TwitterScoringAbciApp(AbciApp[Event]):
+    """TwitterScoringAbciApp"""
 
-    initial_round_cls: AppState = StreamReadRound
-    initial_states: Set[AppState] = {StreamReadRound}
+    initial_round_cls: AppState = TwitterScoringRound
+    initial_states: Set[AppState] = {TwitterScoringRound}
     transition_function: AbciAppTransitionFunction = {
-        StreamReadRound: {
-            Event.DONE: FinishedReadingRound,
-            Event.API_ERROR: StreamReadRound,
-            Event.NO_MAJORITY: StreamReadRound,
-            Event.ROUND_TIMEOUT: StreamReadRound
+        TwitterScoringRound: {
+            Event.DONE: FinishedTwitterScoringRound,
+            Event.NO_MAJORITY: TwitterScoringRound,
+            Event.ROUND_TIMEOUT: TwitterScoringRound,
+            Event.API_ERROR: TwitterScoringRound,
         },
-        FinishedReadingRound: {}
+        FinishedTwitterScoringRound: {},
     }
-    final_states: Set[AppState] = {FinishedReadingRound}
+    final_states: Set[AppState] = {FinishedTwitterScoringRound}
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: Set[str] = set()
+    cross_period_persisted_keys: Set[str] = {
+        "ceramic_db",
+    }
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        StreamReadRound: set(),
+        TwitterScoringRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedReadingRound: set(),
+        FinishedTwitterScoringRound: {
+            get_name(SynchronizedData.ceramic_db),
+        },
     }

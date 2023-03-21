@@ -19,7 +19,6 @@
 
 """This package contains the tests for rounds of ScoreRead."""
 
-import json
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, Hashable, List, Mapping, Optional, Union, cast
 from unittest import mock
@@ -37,16 +36,16 @@ from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
     CollectSameUntilThresholdRound,
 )
 from packages.valory.skills.ceramic_write_abci.payloads import (
-    StreamWritePayload,
     RandomnessPayload,
     SelectKeeperPayload,
+    StreamWritePayload,
     VerificationPayload,
 )
 from packages.valory.skills.ceramic_write_abci.rounds import (
-    StreamWriteRound,
     Event,
     RandomnessRound,
     SelectKeeperRound,
+    StreamWriteRound,
     SynchronizedData,
     VerificationRound,
 )
@@ -224,7 +223,6 @@ def get_dummy_ceramic_write_payload_serialized(api_error: bool = False) -> str:
     if api_error:
         return "error"
     return "success"
-
 
 
 class BaseCeramicWriteRoundTest(BaseCollectSameUntilThresholdRoundTest):

@@ -40,15 +40,11 @@ from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
     BaseCollectSameUntilThresholdRoundTest,
     CollectSameUntilThresholdRound,
 )
-from packages.valory.skills.score_read_abci.payloads import (
-    ScoringPayload,
-    TwitterObservationPayload,
-)
-from packages.valory.skills.score_read_abci.rounds import (
+from packages.valory.skills.twitter_scoring_abci.payloads import TwitterScoringPayload
+from packages.valory.skills.twitter_scoring_abci.rounds import (
     Event,
-    ScoringRound,
     SynchronizedData,
-    TwitterObservationRound,
+    TwitterScoringRound,
 )
 
 
@@ -85,28 +81,13 @@ def get_payloads(
     }
 
 
-def get_dummy_twitter_observation_payload_serialized(api_error: bool = False) -> str:
+def get_dummy_twitter_scoring_payload_serialized(api_error: bool = False) -> str:
     """Dummy twitter observation payload"""
     if api_error:
         return json.dumps({"error": "true"})
     return json.dumps(
         {
-            "user_to_mentions": {"user_a": 1, "user_b": 2},
-            "id_to_usernames": {"user_a": "username_a", "user_b": "username_b"},
-            "latest_mention_tweet_id": DUMMY_latest_mention_tweet_id,
-            "wallet_to_users": {"address_a": "user_a", "address_b": "user_b"},
-        },
-        sort_keys=True,
-    )
-
-
-def get_dummy_scoring_payload_serialized() -> str:
-    """Dummy scoring payload"""
-    return json.dumps(
-        {
-            "user_to_new_points": {"1": 200, "2": 300, "3": 500},
-            "id_to_usernames": {"1": "username_a", "2": "username_b"},
-            "latest_mention_tweet_id": "1",
+            "dummy": "data",
         },
         sort_keys=True,
     )
@@ -142,83 +123,45 @@ class BaseScoreReadRoundTest(BaseCollectSameUntilThresholdRoundTest):
         )
 
 
-class TestTwitterObservationRound(BaseScoreReadRoundTest):
-    """Tests for TwitterObservationRound."""
+class TestTwitterScoringRound(BaseScoreReadRoundTest):
+    """Tests for TwitterScoringRound."""
 
-    round_class = TwitterObservationRound
+    round_class = TwitterScoringRound
 
     @pytest.mark.parametrize(
         "test_case",
         (
             RoundTestCase(
                 name="Happy path",
-                initial_data={"wallet_to_users": {"address_a": "user_a"}},
+                initial_data={"ceramic_db": {}},
                 payloads=get_payloads(
-                    payload_cls=TwitterObservationPayload,
-                    data=get_dummy_twitter_observation_payload_serialized(),
+                    payload_cls=TwitterScoringPayload,
+                    data=get_dummy_twitter_scoring_payload_serialized(),
                 ),
                 final_data={
-                    "most_voted_api_data": json.loads(
-                        get_dummy_twitter_observation_payload_serialized()
+                    "ceramic_db": json.loads(
+                        get_dummy_twitter_scoring_payload_serialized()
                     ),
-                    "latest_mention_tweet_id": DUMMY_latest_mention_tweet_id,
                 },
                 event=Event.DONE,
-                most_voted_payload=get_dummy_twitter_observation_payload_serialized(),
+                most_voted_payload=get_dummy_twitter_scoring_payload_serialized(),
                 synchronized_data_attr_checks=[
-                    lambda _synchronized_data: _synchronized_data.most_voted_api_data,
-                    lambda _synchronized_data: _synchronized_data.latest_mention_tweet_id,
+                    lambda _synchronized_data: _synchronized_data.ceramic_db,
                 ],
             ),
             RoundTestCase(
                 name="API error",
                 initial_data={},
                 payloads=get_payloads(
-                    payload_cls=TwitterObservationPayload,
-                    data=get_dummy_twitter_observation_payload_serialized(
-                        api_error=True
-                    ),
+                    payload_cls=TwitterScoringPayload,
+                    data=get_dummy_twitter_scoring_payload_serialized(api_error=True),
                 ),
                 final_data={},
                 event=Event.API_ERROR,
-                most_voted_payload=get_dummy_twitter_observation_payload_serialized(
+                most_voted_payload=get_dummy_twitter_scoring_payload_serialized(
                     api_error=True
                 ),
                 synchronized_data_attr_checks=[],
-            ),
-        ),
-    )
-    def test_run(self, test_case: RoundTestCase) -> None:
-        """Run tests."""
-        self.run_test(test_case)
-
-
-class TestScoringRound(BaseScoreReadRoundTest):
-    """Tests for ScoringRound."""
-
-    round_class = ScoringRound
-
-    @pytest.mark.parametrize(
-        "test_case",
-        (
-            RoundTestCase(
-                name="Happy path",
-                initial_data={},
-                payloads=get_payloads(
-                    payload_cls=ScoringPayload,
-                    data=get_dummy_scoring_payload_serialized(),
-                ),
-                final_data={
-                    "user_to_new_points": {"1": 200, "2": 300, "3": 500},
-                    "id_to_usernames": {},
-                    "latest_mention_tweet_id": "1",
-                },
-                event=Event.DONE,
-                most_voted_payload=get_dummy_scoring_payload_serialized(),
-                synchronized_data_attr_checks=[
-                    lambda _synchronized_data: _synchronized_data.user_to_new_points,
-                    lambda _synchronized_data: _synchronized_data.latest_mention_tweet_id,
-                ],
             ),
         ),
     )

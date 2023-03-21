@@ -6,21 +6,23 @@ description: A skill that writes data to a Ceramic stream.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeiasv3vjhjbl4bexgglo3exyxm4b4jwvcsnwtsaukyuttzbeqnnxni
-  behaviours.py: bafybeiaioeyv3pdnnkrc3ybhyam6n74jqh4vkwewqjbxgzp2rox47opnc4
+  __init__.py: bafybeic3je64koagffola4n4khlbp4jdfhonyl6dwmodwz4r4oglnbwyma
+  behaviours.py: bafybeih3ffbzekypecuv2bww7qsh3skbeq4ta5zatavava4b2ujvbwexcu
+  ceramic/__init__.py: bafybeias4e3s6p5qtx6mmmcwkcd6kvbdnudy7sxai7d2suk75aazzdzdie
+  ceramic/payloads.py: bafybeicr75fitoucqknzu6vzic4jjb3w3pw655klbi36kwt4haplkg2dsy
   dialogues.py: bafybeifvrclkqpnl3dw46zwareemio6vgrqm4c5f3wfgv6rp267fcbyf5e
-  fsm_specification.yaml: bafybeiczl2ghftywb36cpm556bztkspa7ujv2f5ol5mpd6nit6lltaa55u
+  fsm_specification.yaml: bafybeiht5zkrrfhtwe4fjehygwfoymnzguhic2kataztdi473qmuujdr5e
   handlers.py: bafybeib3aiosxhbyudcxtybdrvsmn6bvnl4ao3fwf2uc7lkidpnhvnucam
-  models.py: bafybeicy76okojty4dax4xydch44rswr64l6np5mwballzpmbeh3f6zb7y
-  payloads.py: bafybeialab3cjdikvv3rfewdegb5qufsbdskmzln7ehamf377kogu6zqwu
-  rounds.py: bafybeifrm3wor7zajrtwae3f3kenoncskdue7t5u27sdiz6vzijow7ea4y
-  tests/__init__.py: bafybeic3534aro4pdtsdcuxywzlgkccczx2elhnwisiq3r6okvnrdu4aia
-  tests/test_behaviours.py: bafybeiel2mdmqldm4orh2vm4swotv6uzs47b3jeann6jg4tvq452cgj2hm
+  models.py: bafybeibtnhz5gnkmb3b2dcvbyn6satuitj4vmjyejtzmlptpkivw3ccqkm
+  payloads.py: bafybeig63ibt5qa5sa4nw37gly3lvf4wwtps7vgr2zbvpp5zz6hzm66edq
+  rounds.py: bafybeihf7d7pqhp2vzzo2javszw7gm5p65tz4f3xvjp4ya4gepobzdlrwm
+  tests/__init__.py: bafybeigknrv5xw52pmcscrsxhtpibey5jbr26dss7o5eofery6ktd6w42e
+  tests/test_behaviours.py: bafybeihfd2m7j7qbherwxsxlirtpd227oe3wsk56yomgckjfeo2cfhxvm4
   tests/test_dialogues.py: bafybeibvhslg6mwhvmeffhoho5olnmr56ohvx63onv63aryhaidizk3jou
-  tests/test_handlers.py: bafybeiefztf4d5cg2vva5jkyqekhe67lwqtq7guz7t2vhxjgdpe4vtdswm
-  tests/test_models.py: bafybeia5irbdz2gqkoodzytghrcqf56dquqol3ix3uzgbjfuspylcuhvky
-  tests/test_payloads.py: bafybeidvyu4ezdoncxsebbz26lg7qlyxserf4bqyb2dgdbbysry5cz6yru
-  tests/test_rounds.py: bafybeihvmkkpzpjjumioxslqgx6vhrxm2rgyk4icbnrzcelivvi4x4jtca
+  tests/test_handlers.py: bafybeih6yobt7ihsp32n6nliq3ourwfmgpc7lvb672timj7cqx4wg4n5ba
+  tests/test_models.py: bafybeihqwbnrtarzos5tak2ywurtbel6fxodpupyk677aipdemaxlgs7qi
+  tests/test_payloads.py: bafybeicbuestgyhvx6obesc25tcupca3oqracjo2oevl5x3bfrf7sj3eay
+  tests/test_rounds.py: bafybeic7el2uhn63buev5rrjohcmhjb56hmcpsbm44tptkbtmlxhxm2zcm
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []

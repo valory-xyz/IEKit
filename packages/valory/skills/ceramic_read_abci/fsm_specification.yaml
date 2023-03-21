@@ -10,10 +10,10 @@ label: CeramicReadAbciApp
 start_states:
 - StreamReadRound
 states:
-- StreamReadRound
 - FinishedReadingRound
+- StreamReadRound
 transition_func:
-    (StreamReadRound, DONE): FinishedReadingRound
     (StreamReadRound, API_ERROR): StreamReadRound
+    (StreamReadRound, DONE): FinishedReadingRound
     (StreamReadRound, NO_MAJORITY): StreamReadRound
     (StreamReadRound, ROUND_TIMEOUT): StreamReadRound

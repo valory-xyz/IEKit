@@ -20,8 +20,8 @@
 """This package contains the rounds of CeramicWriteAbciApp."""
 
 from enum import Enum
-from typing import Dict, Optional, Set, Tuple
 from typing import Dict, Optional, Set, Tuple, cast
+
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
@@ -33,11 +33,10 @@ from packages.valory.skills.abstract_round_abci.base import (
     OnlyKeeperSendsRound,
     get_name,
 )
-
 from packages.valory.skills.ceramic_write_abci.payloads import (
-    StreamWritePayload,
     RandomnessPayload,
     SelectKeeperPayload,
+    StreamWritePayload,
     VerificationPayload,
 )
 
@@ -173,36 +172,38 @@ class CeramicWriteAbciApp(AbciApp[Event]):
     initial_round_cls: AppState = RandomnessRound
     initial_states: Set[AppState] = {RandomnessRound}
     transition_function: AbciAppTransitionFunction = {
-        StreamWriteRound: {
-            Event.API_ERROR: RandomnessRound,
-            Event.DID_NOT_SEND: RandomnessRound,
-            Event.DONE: VerificationRound,
-            Event.ROUND_TIMEOUT: RandomnessRound
-        },
         RandomnessRound: {
             Event.DONE: SelectKeeperRound,
             Event.NO_MAJORITY: RandomnessRound,
-            Event.ROUND_TIMEOUT: RandomnessRound
+            Event.ROUND_TIMEOUT: RandomnessRound,
         },
         SelectKeeperRound: {
             Event.DONE: StreamWriteRound,
             Event.NO_MAJORITY: RandomnessRound,
-            Event.ROUND_TIMEOUT: RandomnessRound
+            Event.ROUND_TIMEOUT: RandomnessRound,
+        },
+        StreamWriteRound: {
+            Event.API_ERROR: RandomnessRound,
+            Event.DID_NOT_SEND: RandomnessRound,
+            Event.DONE: VerificationRound,
+            Event.ROUND_TIMEOUT: RandomnessRound,
         },
         VerificationRound: {
             Event.API_ERROR: RandomnessRound,
             Event.DONE: FinishedVerificationRound,
             Event.NO_MAJORITY: RandomnessRound,
-            Event.ROUND_TIMEOUT: RandomnessRound
+            Event.ROUND_TIMEOUT: RandomnessRound,
         },
-        FinishedVerificationRound: {}
+        FinishedVerificationRound: {},
     }
     final_states: Set[AppState] = {FinishedVerificationRound}
-    event_to_timeout: EventToTimeout = {}
-    cross_period_persisted_keys: Set[str] = []
+    event_to_timeout: EventToTimeout = {
+        Event.ROUND_TIMEOUT: 30.0,
+    }
+    cross_period_persisted_keys: Set[str] = set()
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        RandomnessRound: [],
+        RandomnessRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedVerificationRound: [],
+        FinishedVerificationRound: set(),
     }

@@ -14,13 +14,13 @@ fingerprint:
   models.py: bafybeianeimox27xwxbm5yq6go3ygf3oa2cbuv6h4y64oyjo3m2ua23sxq
   payloads.py: bafybeia5tm23kb7ho33cgsupvhkywjuv4q3zeaon4mbaerjgdvhlyht4xm
   rounds.py: bafybeienmsfgzurxvtvkiuncntuaz5syihsb73qe4omlgat4vdcpao3nd4
-  tests/__init__.py: bafybeia2xqlacp44lylwlkf7f7ci6m3yshppv3vusgcdjpj4bbcbnuhvla
+  tests/__init__.py: bafybeidxte5jeugotf25yogfbsoivyokeqffrvzo7lqgspm4kzrgbhvc3u
   tests/test_behaviours.py: bafybeibx3eftpwcigh7g3s5cfc3344u2c4gtz4qlonyk2zjyqof6sjvkte
-  tests/test_dialogues.py: bafybeibfzhpyz2kdokjkz76oxz4sc6nw26dw5pgx5fwvloyfyl2inixwdi
-  tests/test_handlers.py: bafybeibccfer4sbdcn3sc25tkamyexnoz4tb7nyatnyhxkjjsqyrodqvpe
-  tests/test_models.py: bafybeidqf7caad3zke6xzefmfoufce6bfn5bqgbiy4racghm5w67yddrea
+  tests/test_dialogues.py: bafybeigybvptoehtw2o2jbudvyxggo5yr4pyqic7m732sha4xtaaxnfdpe
+  tests/test_handlers.py: bafybeia66otzm676tsyoapvmdk7pkpyxtf4nhiukzp2ji44ay75izcnuyu
+  tests/test_models.py: bafybeietgyqb5rsbnzqgzcsgm2pu2qcadu7rr7akxscfmegtghc5aguz44
   tests/test_payloads.py: bafybeihdgzd3swzl534hdkf3tn7dt2gs2yd3soyozsoqiflsptrmhnwqye
-  tests/test_rounds.py: bafybeibgb7nhxr4jv4m6utp3mbpjhaq2avue5vzdyhcxxn5cg7ajuvj7xi
+  tests/test_rounds.py: bafybeigkxw56tbvzn6tamgflkoolg4w4luffbqeq4piwfwafs5a4ouhhdy
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihaax5od5zo5jk2l62hv4jwuwtxloh5mijozudpsjombqc4ncmi6i

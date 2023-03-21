@@ -24,6 +24,12 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
+from packages.valory.skills.ceramic_read_abci.behaviours import (
+    CeramicReadRoundBehaviour,
+)
+from packages.valory.skills.ceramic_write_abci.behaviours import (
+    CeramicWriteRoundBehaviour,
+)
 from packages.valory.skills.dynamic_nft_abci.behaviours import DynamicNFTRoundBehaviour
 from packages.valory.skills.impact_evaluator_abci.composition import (
     ImpactEvaluatorSkillAbciApp,
@@ -35,8 +41,9 @@ from packages.valory.skills.registration_abci.behaviours import (
 from packages.valory.skills.reset_pause_abci.behaviours import (
     ResetPauseABCIConsensusBehaviour,
 )
-from packages.valory.skills.score_read_abci.behaviours import ScoreReadRoundBehaviour
-from packages.valory.skills.score_write_abci.behaviours import ScoreWriteRoundBehaviour
+from packages.valory.skills.twitter_scoring_abci.behaviours import (
+    TwitterScoringRoundBehaviour,
+)
 
 
 class ImpactEvaluatorConsensusBehaviour(AbstractRoundBehaviour):
@@ -45,9 +52,10 @@ class ImpactEvaluatorConsensusBehaviour(AbstractRoundBehaviour):
     initial_behaviour_cls = RegistrationStartupBehaviour
     abci_app_cls = ImpactEvaluatorSkillAbciApp
     behaviours: Set[Type[BaseBehaviour]] = {
-        *ScoreReadRoundBehaviour.behaviours,
-        *ScoreWriteRoundBehaviour.behaviours,
-        *DynamicNFTRoundBehaviour.behaviours,
         *AgentRegistrationRoundBehaviour.behaviours,
+        *CeramicReadRoundBehaviour.behaviours,
+        *TwitterScoringRoundBehaviour.behaviours,
+        *CeramicWriteRoundBehaviour.behaviours,
+        *DynamicNFTRoundBehaviour.behaviours,
         *ResetPauseABCIConsensusBehaviour.behaviours,
     }
