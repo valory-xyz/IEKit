@@ -242,7 +242,7 @@ class VerificationBehaviour(CeramicWriteBaseBehaviour):
             )
 
             # TODO: during e2e, the mocked Ceramic stream can't be updated, so verification will always fail
-            # In this cases, we need to skip verification by detecting if scores_stream_id contains the default value
+            # In this cases, we need to skip verification by detecting if stream_id contains the default value
             skip_verify = self.synchronized_data.stream_id == "stream_id_e2e"
 
             if not skip_verify and (

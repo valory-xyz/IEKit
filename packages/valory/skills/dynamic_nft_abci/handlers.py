@@ -256,9 +256,9 @@ class HttpHandler(BaseHttpHandler):
         # Get the requested uri and the token table
         request_uri = http_msg.url
         token_id = str(request_uri.split("/")[-1])
-        token_to_data = self.synchronized_data.token_to_data
+        token_id_to_points = self.synchronized_data.token_id_to_points
 
-        if token_id not in token_to_data:
+        if token_id not in token_id_to_points:
             self.context.logger.info(
                 f"Requested URL {request_uri} is not present in token table"
             )
@@ -269,10 +269,9 @@ class HttpHandler(BaseHttpHandler):
             f"Requested URL {request_uri} is present in token table"
         )
 
-        image_hash = self.get_image_hash(token_to_data[token_id]["points"])
-
         # Attributes
-        user_points = token_to_data[token_id]["points"]
+        user_points = token_id_to_points[token_id]
+        image_hash = self.get_image_hash(user_points)
         user_level = None
         for level, threshold in BADGE_LEVELS.items():
             if not threshold or user_points < threshold:

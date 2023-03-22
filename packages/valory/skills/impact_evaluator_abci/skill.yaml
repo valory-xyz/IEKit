@@ -8,9 +8,9 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
   behaviours.py: bafybeibsbey3iggo4nxmcspy7wsyc76ximvcrnxpud7mvs4xin4ulei744
-  composition.py: bafybeidvuwd2hj25cycyp7mit35a4atr2mmt2a7gpb2fsb5zvhvpfumcgi
+  composition.py: bafybeigi5k2ssomjfyibpook74cdrvyclgnhsrokhhvoij7f3kxvro5h4i
   dialogues.py: bafybeigpwuzku3we7axmxeamg7vn656maww6emuztau5pg3ebsoquyfdqm
-  fsm_specification.yaml: bafybeigtl672ibon5hriwx4fsjbd2hl36eyphyelf3mkjkuh744vyzolhe
+  fsm_specification.yaml: bafybeietf7fifhre3kn2wknr6r3vz2wxqls2ii6fwrr3ex54m442ffmow4
   handlers.py: bafybeiaqgaev2nfhuihhuxxxxtuiggin5zcpwn7ik7lok2n6ywi6dqy2ta
   models.py: bafybeidtwkv5cffed4ck4euq6dazhxovrx3fuvcy27ipcjmdkjmyx7yj3y
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
@@ -25,9 +25,9 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
 - valory/ceramic_read_abci:0.1.0:bafybeihiier33ifua3s2e2ylfuxi24f7i3rlpuymz2akr6ajd2ribogzsu
-- valory/twitter_scoring_abci:0.1.0:bafybeibqqd67txatfrnpxwc4xdkjw2qbk6jmohljalji7hy7ovr46wbog4
-- valory/ceramic_write_abci:0.1.0:bafybeihigg2amvkw3wnhsnhmvl6npar7ikeub5s5y3fuelt4vjj7fuas4q
-- valory/dynamic_nft_abci:0.1.0:bafybeibsu5hr5hsqucvvjic2mikekyqzqg3lc3g3gyh5fnp4ply42hgaku
+- valory/twitter_scoring_abci:0.1.0:bafybeidti2x33i5tuepgyhqpo3wtfgs6dg3awap3wvgnrmnnin4fxa527q
+- valory/ceramic_write_abci:0.1.0:bafybeia4ymeeaaofgdjqtw4qlwljeofoyjmub4lslr5ciae2azvcmojgre
+- valory/dynamic_nft_abci:0.1.0:bafybeiba52235st7o5s6pc5zb7wsgi4w7ob5ldmzq2zrfqntb5p24ev3nu
 - valory/registration_abci:0.1.0:bafybeidgoqi7fa2gb56hdfsf74bbunfii63zgeo4qhggb66ofver2n2gya
 - valory/reset_pause_abci:0.1.0:bafybeievxhu6u5r5wlpjfzcwuowlbanhfbi25saf25qit53jauv4kq6gne
 behaviours:
@@ -85,7 +85,7 @@ models:
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
       ceramic_did_seed: '0101010101010101010101010101010101010101010101010101010101010101'
       ceramic_did_str: z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX
-      scores_stream_id: user_to_points_stream_id
+      ceramic_db_stream_id: ceramic_db_stream_id
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31

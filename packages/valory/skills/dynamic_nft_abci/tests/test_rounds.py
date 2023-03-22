@@ -38,30 +38,36 @@ from packages.valory.skills.dynamic_nft_abci.rounds import (
 )
 
 
-DUMMY_TOKEN_TO_DATA = {
-    "token_to_data": {
-        "1": {
-            "address": "0x54EfA9b1865FFE8c528fb375A7A606149598932A",
+DUMMY_CERAMIC_DB = {
+    "users": [
+        {
+            "wallet_address": "0x54EfA9b1865FFE8c528fb375A7A606149598932A",
             "points": DEFAULT_POINTS,
         },
-        "2": {
-            "address": "0x3c03a080638b3c176aB7D9ed56E25bC416dFf525",
+        {
+            "wallet_address": "0x3c03a080638b3c176aB7D9ed56E25bC416dFf525",
             "points": DEFAULT_POINTS,
         },
-        "3": {
-            "address": "0x44704AE66f0B9FF08a7b0584B49FE941AdD1bAE7",
+        {
+            "wallet_address": "0x44704AE66f0B9FF08a7b0584B49FE941AdD1bAE7",
             "points": DEFAULT_POINTS,
         },
-        "4": {
-            "address": "0x19B043aD06C48aeCb2028B0f10503422BD0E0918",
+        {
+            "wallet_address": "0x19B043aD06C48aeCb2028B0f10503422BD0E0918",
             "points": DEFAULT_POINTS,
         },
-        "5": {
-            "address": "0x8325c5e4a56E352355c590E4A43420840F067F98",
+        {
+            "wallet_address": "0x8325c5e4a56E352355c590E4A43420840F067F98",
             "points": DEFAULT_POINTS,
         },
-    },
-    "last_update_time": "dummy_timestamp",
+    ],
+    "modules": {"dynamic_nft": {}},
+}
+
+DUMMY_TOKEN_ID_TO_POINTS = {
+    "1": 100,
+    "2": 200,
+    "3": 300,
 }
 
 
@@ -85,8 +91,9 @@ def get_dummy_new_tokens_payload_serialized() -> str:
     """Dummy new tokens payload"""
     return json.dumps(
         {
-            **DUMMY_TOKEN_TO_DATA,
-            "last_parsed_block": 100,
+            "ceramic_db": DUMMY_CERAMIC_DB,
+            "token_id_to_points": DUMMY_TOKEN_ID_TO_POINTS,
+            "last_update_time": "dymmy_last_update_time",
         },
         sort_keys=True,
     )
@@ -159,14 +166,22 @@ class TestNewTokensRound(BaseDynamicNFTRoundTestClass):
                     data=get_dummy_new_tokens_payload_serialized(),
                 ),
                 final_data={
-                    "token_to_data": json.loads(
+                    "token_id_to_points": json.loads(
                         get_dummy_new_tokens_payload_serialized()
-                    )["token_to_data"],
+                    )["token_id_to_points"],
+                    "ceramic_db": json.loads(get_dummy_new_tokens_payload_serialized())[
+                        "ceramic_db"
+                    ],
+                    "last_update_time": json.loads(
+                        get_dummy_new_tokens_payload_serialized()
+                    )["last_update_time"],
                 },
                 event=Event.DONE,
                 most_voted_payload=get_dummy_new_tokens_payload_serialized(),
                 synchronized_data_attr_checks=[
-                    lambda _synchronized_data: _synchronized_data.token_to_data,
+                    lambda _synchronized_data: _synchronized_data.token_id_to_points,
+                    lambda _synchronized_data: _synchronized_data.ceramic_db,
+                    lambda _synchronized_data: _synchronized_data.last_update_time,
                 ],
             ),
             RoundTestCase(
@@ -176,11 +191,7 @@ class TestNewTokensRound(BaseDynamicNFTRoundTestClass):
                     payload_cls=NewTokensPayload,
                     data=get_dummy_new_tokens_payload_error_serialized(),
                 ),
-                final_data={
-                    "token_to_data": json.loads(
-                        get_dummy_new_tokens_payload_error_serialized()
-                    ),
-                },
+                final_data={},
                 event=Event.CONTRACT_ERROR,
                 most_voted_payload=get_dummy_new_tokens_payload_error_serialized(),
                 synchronized_data_attr_checks=[],

@@ -12,7 +12,7 @@ fingerprint:
   tests/helpers/data/json_server/data.json: bafybeibg7ajqfnazwgc3jd5xcsyn6jgtntetdp3ygstprijhbv4l32etsu
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
-  tests/test_impact_evaluator.py: bafybeifx337jvbw5pta4pkjzedfnjrl7gj7acok6uv6lqirxvclsbqgnym
+  tests/test_impact_evaluator.py: bafybeihis3nmnudkqkghksqk4epeej35blrjgqqxl3l6gg5afamp4nrkum
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihaax5od5zo5jk2l62hv4jwuwtxloh5mijozudpsjombqc4ncmi6i
@@ -29,11 +29,11 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeihkrunmigvlcze7uxhafj2h3kvpf2kifggq7zqj42n2we4mcwuvou
 - valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
-- valory/impact_evaluator_abci:0.1.0:bafybeiemaewmsze63horxxro7c5gk3scqyaftyvm5esi6faxb3lm4uwj3y
-- valory/twitter_scoring_abci:0.1.0:bafybeibqqd67txatfrnpxwc4xdkjw2qbk6jmohljalji7hy7ovr46wbog4
+- valory/impact_evaluator_abci:0.1.0:bafybeignjt7toxzzdmffaes6a5y66egibimkyerxeqxn2oa4lcvpwzpwtm
+- valory/twitter_scoring_abci:0.1.0:bafybeidti2x33i5tuepgyhqpo3wtfgs6dg3awap3wvgnrmnnin4fxa527q
 - valory/ceramic_read_abci:0.1.0:bafybeihiier33ifua3s2e2ylfuxi24f7i3rlpuymz2akr6ajd2ribogzsu
-- valory/ceramic_write_abci:0.1.0:bafybeihigg2amvkw3wnhsnhmvl6npar7ikeub5s5y3fuelt4vjj7fuas4q
-- valory/dynamic_nft_abci:0.1.0:bafybeibsu5hr5hsqucvvjic2mikekyqzqg3lc3g3gyh5fnp4ply42hgaku
+- valory/ceramic_write_abci:0.1.0:bafybeia4ymeeaaofgdjqtw4qlwljeofoyjmub4lslr5ciae2azvcmojgre
+- valory/dynamic_nft_abci:0.1.0:bafybeiba52235st7o5s6pc5zb7wsgi4w7ob5ldmzq2zrfqntb5p24ev3nu
 - valory/registration_abci:0.1.0:bafybeidgoqi7fa2gb56hdfsf74bbunfii63zgeo4qhggb66ofver2n2gya
 - valory/reset_pause_abci:0.1.0:bafybeievxhu6u5r5wlpjfzcwuowlbanhfbi25saf25qit53jauv4kq6gne
 default_ledger: ethereum
@@ -119,7 +119,7 @@ models:
       ceramic_api_read_endpoint: ${str:api/v0/commits/{stream_id}}
       ceramic_did_seed: ${str:0101010101010101010101010101010101010101010101010101010101010101}
       ceramic_did_str: ${str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
-      scores_stream_id: ${str:user_to_points_stream_id}
+      ceramic_db_stream_id: ${str:ceramic_db_stream_id}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
