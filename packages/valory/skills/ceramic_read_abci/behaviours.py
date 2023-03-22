@@ -115,7 +115,7 @@ class StreamReadBehaviour(CeramicReadBaseBehaviour):
             if not stream_id:
                 raise ValueError("stream_id has not been set neither in the synchronized_data nor as a parameter")
 
-            target_property_name = self.synchronized_data.target_property_name or self.params.target_property_name
+            target_property_name = self.synchronized_data.target_property_name or self.params.default_target_property_name
             if not target_property_name:
                 raise ValueError("target_property_name has not been set neither in the synchronized_data nor as a parameter")
 

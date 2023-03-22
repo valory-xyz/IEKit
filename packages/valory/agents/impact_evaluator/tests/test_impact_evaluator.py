@@ -142,6 +142,10 @@ class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
             "dotted_path": f"{__param_args_prefix}.ceramic_default_write_stream_id",
             "value": "stream_id_e2e",
         },
+        {
+            "dotted_path": f"{__param_args_prefix}.default_target_property_name",
+            "value": "ceramic_db",
+        },
     ]
 
     http_server_port_config = {

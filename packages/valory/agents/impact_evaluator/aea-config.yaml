@@ -12,7 +12,7 @@ fingerprint:
   tests/helpers/data/json_server/data.json: bafybeibg7ajqfnazwgc3jd5xcsyn6jgtntetdp3ygstprijhbv4l32etsu
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
-  tests/test_impact_evaluator.py: bafybeicjlpmkid3guaicpsteoqf7xqttzuwpns4nrm65yfp3brtbbogv6i
+  tests/test_impact_evaluator.py: bafybeih5wcitm5vmmyn62ewkeqmmlu3vs7fkt33zupqgiukyexpzd4c3dm
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihaax5od5zo5jk2l62hv4jwuwtxloh5mijozudpsjombqc4ncmi6i
@@ -29,9 +29,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeihkrunmigvlcze7uxhafj2h3kvpf2kifggq7zqj42n2we4mcwuvou
 - valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
-- valory/impact_evaluator_abci:0.1.0:bafybeidueqimfv2ikp6s4va5rig6flagqpkicbxc5dzb35ocwd7ow57isa
+- valory/impact_evaluator_abci:0.1.0:bafybeigr337z7aaqmyxvuis27pcgnh4e53uqgfmt4vfxmodimcwmgony5m
 - valory/twitter_scoring_abci:0.1.0:bafybeidk33c5lhg7smhg2wvw6hsbwyp6vhetar7nozw7rl5w5zxvkj62lu
-- valory/ceramic_read_abci:0.1.0:bafybeid5goh5oajmkk7tdlw2osgmzn762cogagm2mbl4pxhiikijl7d2iq
+- valory/ceramic_read_abci:0.1.0:bafybeigtiucnhufdiy56fodt4vk54rg5rnv3aomawrllhwdszqagmx5xj4
 - valory/ceramic_write_abci:0.1.0:bafybeichhbbfk3uy7eg55iexw4siihrlqnmxfm3pqsmh3ufs3oln76kegu
 - valory/dynamic_nft_abci:0.1.0:bafybeigtcz4abuwv4j37pjc6hgzdso3jqyf36abov3ic3nzjiykkctox4m
 - valory/registration_abci:0.1.0:bafybeidgoqi7fa2gb56hdfsf74bbunfii63zgeo4qhggb66ofver2n2gya
@@ -121,6 +121,7 @@ models:
       ceramic_did_str: ${str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
       ceramic_default_read_stream_id: ${str:ceramic_default_read_stream_id}
       ceramic_default_write_stream_id: ${str:ceramic_default_write_stream_id}
+      default_target_property_name: ${str:default_target_property_name}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31

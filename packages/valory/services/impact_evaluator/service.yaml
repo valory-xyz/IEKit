@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibk5iyiobvfgd6w3z75amk7muou3kqqq5rj3mze6rnzlmzpaiwtii
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeibdcc65f6kqufsnab6is566rvdnt46n3drctmcgsxlr5n4sr4wwlm
+agent: valory/impact_evaluator:0.1.0:bafybeiaqitfh4tfuprthulxxbdh2xmj2hvvxne2zsliwnrpjzzhs7c6674
 number_of_agents: 4
 ---
 public_id: valory/impact_evaluator_abci:0.1.0
@@ -28,6 +28,7 @@ models:
       ceramic_did_str: ${CERAMIC_DID_STR:str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
       ceramic_default_read_stream_id: ${CERAMIC_DEFAULT_READ_STREAM_ID:str:ceramic_default_read_stream_id}
       ceramic_default_write_stream_id: ${CERAMIC_DEFAULT_READ_STREAM_ID:str:ceramic_default_write_stream_id}
+      default_target_property_name: ${DEFAULT_TARGET_PROPERTY_NAME:str:default_target_property_name}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
