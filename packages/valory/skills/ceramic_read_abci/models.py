@@ -48,7 +48,7 @@ class Params(BaseParams):
         )
 
         # These parameters are optional, therefore we do not use ensure
-        self.stream_id = kwargs.pop("stream_id", None)
+        self.ceramic_default_read_stream_id = kwargs.pop("ceramic_default_read_stream_id", None)
         self.target_property_name = kwargs.pop("target_property_name", None)
 
         super().__init__(*args, **kwargs)

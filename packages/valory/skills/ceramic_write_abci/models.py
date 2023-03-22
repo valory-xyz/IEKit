@@ -52,6 +52,11 @@ class Params(BaseParams):
             "ceramic_api_read_endpoint", kwargs, str
         )
 
+        # This parameter is optional, therefore we do not use ensure
+        self.ceramic_default_write_stream_id = kwargs.pop(
+            "ceramic_default_write_stream_id", None
+        )
+
         super().__init__(*args, **kwargs)
 
 

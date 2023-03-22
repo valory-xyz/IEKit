@@ -141,7 +141,7 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
         token_id_to_points = self.synchronized_data.token_id_to_points
 
         # Instantiate the db
-        ceramic_db = CeramicDB(self.synchronized_data.ceramic_db)
+        ceramic_db = CeramicDB(self.synchronized_data.ceramic_db, self.context.logger)
 
         # Update token_ids in the ceramic_db
         for token_id, address in new_token_id_to_address.items():

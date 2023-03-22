@@ -180,8 +180,18 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
     def _write_ceramic_data(self) -> Generator[None, None, bool]:
         """Write the scores to the Ceramic stream"""
 
+        # stream_id can be set either in the synchronized_data or as a param. The former has higher priority.
+        stream_id = (
+            self.synchronized_data.stream_id
+            or self.params.ceramic_default_write_stream_id
+        )
+        if not stream_id:
+            raise ValueError(
+                "stream_id has not been set neither in the synchronized_data nor as a parameter"
+            )
+
         # Get the current stream data
-        old_data = yield from self._get_stream_data(self.synchronized_data.stream_id)
+        old_data = yield from self._get_stream_data(stream_id)
 
         if not old_data:
             return False
@@ -192,7 +202,7 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
         commit_payload = build_commit_payload(
             self.synchronized_data.did,
             self.synchronized_data.did_seed,
-            self.synchronized_data.stream_id,
+            stream_id,
             old_data,
             new_data,
         )
@@ -232,8 +242,18 @@ class VerificationBehaviour(CeramicWriteBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
+            # stream_id can be set either in the synchronized_data or as a param. The former has higher priority.
+            stream_id = (
+                self.synchronized_data.stream_id
+                or self.params.ceramic_default_write_stream_id
+            )
+            if not stream_id:
+                raise ValueError(
+                    "stream_id has not been set neither in the synchronized_data nor as a parameter"
+                )
+
             # Get the current data
-            data = yield from self._get_stream_data(self.synchronized_data.stream_id)
+            data = yield from self._get_stream_data(stream_id)
 
             # Verify if the retrieved data matches local user_to_total_points
             expected_data = json.dumps(
@@ -243,7 +263,7 @@ class VerificationBehaviour(CeramicWriteBaseBehaviour):
 
             # TODO: during e2e, the mocked Ceramic stream can't be updated, so verification will always fail
             # In this cases, we need to skip verification by detecting if stream_id contains the default value
-            skip_verify = self.synchronized_data.stream_id == "stream_id_e2e"
+            skip_verify = stream_id == "stream_id_e2e"
 
             if not skip_verify and (
                 not data or json.dumps(data["data"], sort_keys=True) != expected_data

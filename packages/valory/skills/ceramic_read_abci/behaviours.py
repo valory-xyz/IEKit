@@ -111,7 +111,7 @@ class StreamReadBehaviour(CeramicReadBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
             # stream_id and target_property_name can be set either in the synchronized_data or as a param. The former has higher priority.
-            stream_id = self.synchronized_data.stream_id or self.params.stream_id
+            stream_id = self.synchronized_data.stream_id or self.params.ceramic_default_read_stream_id
             if not stream_id:
                 raise ValueError("stream_id has not been set neither in the synchronized_data nor as a parameter")
 
