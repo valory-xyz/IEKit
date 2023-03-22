@@ -66,28 +66,28 @@ from packages.valory.skills.ceramic_write_abci.rounds import (
     StreamWriteRound,
     VerificationRound,
 )
+from packages.valory.skills.ceramic_read_abci.rounds import StreamReadRound
 
 
 HAPPY_PATH: Tuple[RoundChecks, ...] = (
-    RoundChecks(RegistrationStartupRound.auto_round_id()),
+    RoundChecks(RegistrationStartupRound.auto_round_id(), n_periods=1),
+    RoundChecks(StreamReadRound.auto_round_id(), n_periods=1),
     RoundChecks(TwitterScoringRound.auto_round_id(), n_periods=2),
+    RoundChecks(NewTokensRound.auto_round_id(), n_periods=2),
     RoundChecks(RandomnessRound.auto_round_id(), n_periods=2),
     RoundChecks(SelectKeeperRound.auto_round_id(), n_periods=2),
     RoundChecks(StreamWriteRound.auto_round_id(), n_periods=2),
     RoundChecks(VerificationRound.auto_round_id(), n_periods=2),
-    RoundChecks(NewTokensRound.auto_round_id(), n_periods=2),
     RoundChecks(ResetAndPauseRound.auto_round_id(), n_periods=2),
 )
 
 # strict check log messages of the happy path
 STRICT_CHECK_STRINGS = (
-    "Retrieved initial score data from Ceramic:",
-    "Retrieving mentions from Twitter API",
-    "Retrieving wallets from Twitter API",
-    "Calculated score data:",
-    "Calculated new total points",
+    "Got data from Ceramic API",
+    "Retrieved new mentions from Twitter",
+    "Retrieved recent registrations from Twitter",
+    "Got token_id to address data up to block",
     "Data verification successful",
-    "Got the new token data:",
     "Period end",
 )
 PACKAGES_DIR = Path(__file__).parent.parent.parent.parent.parent
