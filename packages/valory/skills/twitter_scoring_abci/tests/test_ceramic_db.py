@@ -36,7 +36,7 @@ DEFAULT_DATA = {
 def test_create_empty():
     """Test CeramicDB"""
     db = CeramicDB()
-    assert db.data == {"users": [], "module_data": {"twitter": {}}}
+    assert db.data == {"users": [], "module_data": {"twitter": {}, "dynamic_nft": {}}}
 
 
 def test_create_non_empty():
