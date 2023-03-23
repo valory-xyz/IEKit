@@ -1,13 +1,13 @@
 {
     "dev": {
-        "agent/valory/impact_evaluator/0.1.0": "bafybeiae4xvjgd4uj5gttjwq2xtw2unag42ekishwyvyxv54voq2lvqr5m",
+        "agent/valory/impact_evaluator/0.1.0": "bafybeibgs3xheoiqpfhgp4s4zobhe6gypqa2r2pe6ymwqdom3xazbbp7tq",
         "contract/valory/dynamic_contribution/0.1.0": "bafybeiap7dvbkfbh2t5f5sm3k4zlh6rhf4sle4v5d2xakcl2haoeh2qjja",
-        "service/valory/impact_evaluator/0.1.0": "bafybeih4nhxvipl3tt576ooucpy5bzpktikllwdqgqzzfkkcvyqmedglcu",
-        "skill/valory/dynamic_nft_abci/0.1.0": "bafybeiba52235st7o5s6pc5zb7wsgi4w7ob5ldmzq2zrfqntb5p24ev3nu",
-        "skill/valory/twitter_scoring_abci/0.1.0": "bafybeickbf5iv4utuflgn7r7vq3f3ze34tusvbi4tl4hra2mz6ym7wxf3a",
-        "skill/valory/ceramic_read_abci/0.1.0": "bafybeihiier33ifua3s2e2ylfuxi24f7i3rlpuymz2akr6ajd2ribogzsu",
-        "skill/valory/ceramic_write_abci/0.1.0": "bafybeia4ymeeaaofgdjqtw4qlwljeofoyjmub4lslr5ciae2azvcmojgre",
-        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeifbub4vm7uk3odtsw3gigz5j2i5r4pgwmm5dpic2b2bnux36z3wu4"
+        "service/valory/impact_evaluator/0.1.0": "bafybeih5hxgnmv64gontyhvlvzyiuyizi2t3xce53a4lzjfyfyjnrymqoe",
+        "skill/valory/dynamic_nft_abci/0.1.0": "bafybeibkkdswv2aq5x7zmyhwwt7wvejvyobt4xweslpgbtda2dsmuxsx7q",
+        "skill/valory/twitter_scoring_abci/0.1.0": "bafybeigh5mg4jfwwslxje4qcuef5hzsziwdkmuisgdibdtcm7bhny357oy",
+        "skill/valory/ceramic_read_abci/0.1.0": "bafybeid27nqqr5omexipv53voz2tqmby7dnl24c7hevftza3ry4xprx2ye",
+        "skill/valory/ceramic_write_abci/0.1.0": "bafybeicd6mypbecvh3msubvlyn4pv3ywvufbrasx2ef2nh2zgygoamopnu",
+        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeihvsvd7upkpktw6jqccqy3ejcw4eyfpsm6qtxm24d6es43jcmrxqi"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeibqlfmikg5hk4phzak6gqzhpkt6akckx7xppbp53mvwt6r73h7tk4",

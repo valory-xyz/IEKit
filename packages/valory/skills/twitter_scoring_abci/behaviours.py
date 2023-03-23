@@ -304,7 +304,7 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
         """Calculate the new content of the DB"""
 
         # Instantiate the db
-        ceramic_db = CeramicDB(self.synchronized_data.ceramic_db)
+        ceramic_db = CeramicDB(self.synchronized_data.ceramic_db, self.context.logger)
 
         # Add the new mention points
         for twitter_id, mentions in api_data["user_to_mentions"].items():

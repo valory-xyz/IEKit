@@ -19,7 +19,7 @@
 
 """This package implements user db handling."""
 
-from typing import Dict, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
 
 
 class CeramicDB:
@@ -33,25 +33,34 @@ class CeramicDB:
         "points",
     }
 
-    def __init__(self, data: Optional[Dict] = None) -> None:
+    def __init__(
+        self, data: Optional[Dict] = None, logger: Optional[Any] = None
+    ) -> None:
         """Create a database"""
         self.data = (
             data
-            if data
+            if data not in (None, {})
             else {"users": [], "module_data": {"twitter": {}, "dynamic_nft": {}}}
         )
+
+        self.logger = logger
+        if self.logger:
+            self.logger.info(f"DB: created new db: {self.data}")
 
     def create_user(self, user_data):
         """Create a new user"""
 
         fields = self.USER_FIELDS.union(user_data.keys())
 
-        self.data["users"].append(
-            {
-                field: user_data.get(field, 0 if field == "points" else None)
-                for field in fields
-            }
-        )
+        new_user = {
+            field: user_data.get(field, 0 if field == "points" else None)
+            for field in fields
+        }
+
+        self.data["users"].append(new_user)
+
+        if self.logger:
+            self.logger.info(f"DB: created new user: {new_user}")
 
     def get_user_by_field(self, field, value) -> Tuple[Optional[Dict], Optional[int]]:
         """Search users"""
@@ -66,15 +75,20 @@ class CeramicDB:
         """Update an existing user"""
         user, index = self.get_user_by_field(field, value)
 
-        if None in (index, user):
+        if user is None or index is None:
             self.create_user({field: value, **new_data})
             return
 
         fields = set(user).union(new_data.keys())
 
-        self.data["users"][index] = {
+        updated_user = {
             field: new_data.get(field, user.get(field))
             if field != "points"
             else user["points"] + new_data.get("points", 0)
             for field in fields
         }
+
+        if self.logger:
+            self.logger.info(f"DB: updated user: from {user} to {updated_user}")
+
+        self.data["users"][index] = updated_user
