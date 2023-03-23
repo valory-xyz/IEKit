@@ -7,13 +7,13 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeic3je64koagffola4n4khlbp4jdfhonyl6dwmodwz4r4oglnbwyma
-  behaviours.py: bafybeicxsvq7dkkloeos77cymyttzr3yjjbwhr3zgsilpvlk5k2dy54zq4
+  behaviours.py: bafybeiejmumitozhzvllpoyjypvbwh64twrguj3qpoqy2rod3emdvw3zcq
   ceramic/__init__.py: bafybeias4e3s6p5qtx6mmmcwkcd6kvbdnudy7sxai7d2suk75aazzdzdie
   ceramic/payloads.py: bafybeicr75fitoucqknzu6vzic4jjb3w3pw655klbi36kwt4haplkg2dsy
   dialogues.py: bafybeifvrclkqpnl3dw46zwareemio6vgrqm4c5f3wfgv6rp267fcbyf5e
   fsm_specification.yaml: bafybeiht5zkrrfhtwe4fjehygwfoymnzguhic2kataztdi473qmuujdr5e
   handlers.py: bafybeib3aiosxhbyudcxtybdrvsmn6bvnl4ao3fwf2uc7lkidpnhvnucam
-  models.py: bafybeia2mbr6lvwsvvzbtbv3wu7vgll6moo3bdgvfjqvripvdbifjh23gu
+  models.py: bafybeidylsyumpgsparwdjokx4vsjum45unfvqc6gbnuhoe4kveo47ydqq
   payloads.py: bafybeig63ibt5qa5sa4nw37gly3lvf4wwtps7vgr2zbvpp5zz6hzm66edq
   rounds.py: bafybeidot2dd5dbeenmgnb6sppjxzkqfl6q5455zan6qikfdj7b3xsg3vm
   tests/__init__.py: bafybeigknrv5xw52pmcscrsxhtpibey5jbr26dss7o5eofery6ktd6w42e
@@ -80,6 +80,8 @@ models:
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
       ceramic_api_commit_endpoint: api/v0/commits
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
+      ceramic_did_seed: '0101010101010101010101010101010101010101010101010101010101010101'
+      ceramic_did_str: z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX
       default_write_stream_id: default_write_stream_id
       default_write_property_name: default_write_property_name
       cleanup_history_depth: 1

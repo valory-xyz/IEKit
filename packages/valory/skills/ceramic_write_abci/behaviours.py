@@ -213,8 +213,8 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
 
         # Prepare the commit payload
         commit_payload = build_commit_payload(
-            self.synchronized_data.did,
-            self.synchronized_data.did_seed,
+            self.params.ceramic_did_str,
+            self.params.ceramic_did_seed,
             stream_id,
             old_data,
             new_data,

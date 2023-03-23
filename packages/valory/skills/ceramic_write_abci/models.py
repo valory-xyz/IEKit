@@ -54,6 +54,9 @@ class Params(BaseParams):
             "ceramic_api_read_endpoint"
         )  # shared param, can't use ensure
 
+        self.ceramic_did_seed = self._ensure("ceramic_did_seed", kwargs, str)
+        self.ceramic_did_str = self._ensure("ceramic_did_str", kwargs, str)
+
         # These parameters are optional, therefore we do not use ensure
         self.default_write_stream_id = kwargs.pop("default_write_stream_id", None)
         self.default_write_target_property = kwargs.pop(
