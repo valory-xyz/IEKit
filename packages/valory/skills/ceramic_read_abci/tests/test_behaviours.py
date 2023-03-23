@@ -188,7 +188,7 @@ class TestStreamReadBehaviour(BaseCeramicReadTest):
                 BehaviourTestCase(
                     "Happy path",
                     initial_data=dict(
-                        stream_id="dummy_stream_id",
+                        read_stream_id="dummy_stream_id",
                         target_property_name="dummy_property_name",
                     ),
                     event=Event.DONE,
@@ -207,7 +207,7 @@ class TestStreamReadBehaviour(BaseCeramicReadTest):
                 BehaviourTestCase(
                     "Json decode error",
                     initial_data=dict(
-                        stream_id="dummy_stream_id",
+                        read_stream_id="dummy_stream_id",
                         target_property_name="dummy_property_name",
                     ),
                     event=Event.DONE,
@@ -260,7 +260,7 @@ class TestStreamReadBehaviourApiError(BaseCeramicReadTest):
                 BehaviourTestCase(
                     "API read error",
                     initial_data=dict(
-                        stream_id="dummy_stream_id",
+                        read_stream_id="dummy_stream_id",
                         target_property_name="dummy_property_name",
                     ),
                     event=Event.API_ERROR,

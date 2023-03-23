@@ -24,10 +24,10 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
-- valory/ceramic_read_abci:0.1.0:bafybeigtiucnhufdiy56fodt4vk54rg5rnv3aomawrllhwdszqagmx5xj4
-- valory/twitter_scoring_abci:0.1.0:bafybeidk33c5lhg7smhg2wvw6hsbwyp6vhetar7nozw7rl5w5zxvkj62lu
-- valory/ceramic_write_abci:0.1.0:bafybeichhbbfk3uy7eg55iexw4siihrlqnmxfm3pqsmh3ufs3oln76kegu
-- valory/dynamic_nft_abci:0.1.0:bafybeigtcz4abuwv4j37pjc6hgzdso3jqyf36abov3ic3nzjiykkctox4m
+- valory/ceramic_read_abci:0.1.0:bafybeid27nqqr5omexipv53voz2tqmby7dnl24c7hevftza3ry4xprx2ye
+- valory/twitter_scoring_abci:0.1.0:bafybeigh5mg4jfwwslxje4qcuef5hzsziwdkmuisgdibdtcm7bhny357oy
+- valory/ceramic_write_abci:0.1.0:bafybeiat6vb2eztz3og2rinhymck7h7of4piyvdsp6js5km5twnynp4ygu
+- valory/dynamic_nft_abci:0.1.0:bafybeiaejts7ehxpon4v353hief6ilojyhftv5t6fjlxotd7yxflegdrre
 - valory/registration_abci:0.1.0:bafybeidgoqi7fa2gb56hdfsf74bbunfii63zgeo4qhggb66ofver2n2gya
 - valory/reset_pause_abci:0.1.0:bafybeievxhu6u5r5wlpjfzcwuowlbanhfbi25saf25qit53jauv4kq6gne
 behaviours:
@@ -85,9 +85,10 @@ models:
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
       ceramic_did_seed: '0101010101010101010101010101010101010101010101010101010101010101'
       ceramic_did_str: z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX
-      ceramic_default_read_stream_id: ceramic_default_read_stream_id
-      ceramic_default_write_stream_id: ceramic_default_write_stream_id
-      default_target_property_name: default_target_property_name
+      default_read_stream_id: default_read_stream_id
+      default_write_stream_id: default_write_stream_id
+      default_read_target_property: default_read_target_property
+      default_write_target_property: default_write_target_property
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31

@@ -7,17 +7,17 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeic3je64koagffola4n4khlbp4jdfhonyl6dwmodwz4r4oglnbwyma
-  behaviours.py: bafybeicm2ayvz6vwrk7ew2ml4mj7sahbfztd3btzvrxq7w3ubxleyhl3fu
+  behaviours.py: bafybeicxsvq7dkkloeos77cymyttzr3yjjbwhr3zgsilpvlk5k2dy54zq4
   ceramic/__init__.py: bafybeias4e3s6p5qtx6mmmcwkcd6kvbdnudy7sxai7d2suk75aazzdzdie
   ceramic/payloads.py: bafybeicr75fitoucqknzu6vzic4jjb3w3pw655klbi36kwt4haplkg2dsy
   dialogues.py: bafybeifvrclkqpnl3dw46zwareemio6vgrqm4c5f3wfgv6rp267fcbyf5e
   fsm_specification.yaml: bafybeiht5zkrrfhtwe4fjehygwfoymnzguhic2kataztdi473qmuujdr5e
   handlers.py: bafybeib3aiosxhbyudcxtybdrvsmn6bvnl4ao3fwf2uc7lkidpnhvnucam
-  models.py: bafybeidgzogq7dnxxkb4uddenyqzlr7p2hqyt56m46zmh4iawpckkc34ni
+  models.py: bafybeia2mbr6lvwsvvzbtbv3wu7vgll6moo3bdgvfjqvripvdbifjh23gu
   payloads.py: bafybeig63ibt5qa5sa4nw37gly3lvf4wwtps7vgr2zbvpp5zz6hzm66edq
-  rounds.py: bafybeihf7d7pqhp2vzzo2javszw7gm5p65tz4f3xvjp4ya4gepobzdlrwm
+  rounds.py: bafybeidot2dd5dbeenmgnb6sppjxzkqfl6q5455zan6qikfdj7b3xsg3vm
   tests/__init__.py: bafybeigknrv5xw52pmcscrsxhtpibey5jbr26dss7o5eofery6ktd6w42e
-  tests/test_behaviours.py: bafybeihfd2m7j7qbherwxsxlirtpd227oe3wsk56yomgckjfeo2cfhxvm4
+  tests/test_behaviours.py: bafybeiddh4wyk3q243sqjkmdfxposblvxrggb6fujuacdqmwxlizxykk4q
   tests/test_dialogues.py: bafybeibvhslg6mwhvmeffhoho5olnmr56ohvx63onv63aryhaidizk3jou
   tests/test_handlers.py: bafybeih6yobt7ihsp32n6nliq3ourwfmgpc7lvb672timj7cqx4wg4n5ba
   tests/test_models.py: bafybeihqwbnrtarzos5tak2ywurtbel6fxodpupyk677aipdemaxlgs7qi
@@ -80,7 +80,8 @@ models:
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
       ceramic_api_commit_endpoint: api/v0/commits
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
-      ceramic_default_write_stream_id: ceramic_default_write_stream_id
+      default_write_stream_id: default_write_stream_id
+      default_write_property_name: default_write_property_name
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31

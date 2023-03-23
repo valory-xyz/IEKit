@@ -21,7 +21,7 @@
 
 import json
 from abc import ABC
-from typing import Generator, Optional, Set, Type, cast
+from typing import Generator, Optional, Set, Tuple, Type, cast
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
@@ -109,6 +109,29 @@ class CeramicWriteBaseBehaviour(BaseBehaviour, ABC):
             "data": data,
         }
 
+    def _get_stream_and_target_property(self) -> Tuple[str, str]:
+        """Get the target stream_id and content"""
+        # stream_id and target_property_name can be set either in the synchronized_data or as a param. The former has higher priority.
+        stream_id = (
+            self.synchronized_data.write_stream_id
+            or self.params.default_write_stream_id
+        )
+        if not stream_id:
+            raise ValueError(
+                "write_stream_id has not been set neither in the synchronized_data nor as a default parameter"
+            )
+
+        target_property_name = (
+            self.synchronized_data.write_target_property
+            or self.params.default_write_target_property
+        )
+        if not target_property_name:
+            raise ValueError(
+                "write_target_property has not been set neither in the synchronized_data nor as a default parameter"
+            )
+
+        return stream_id, target_property_name
+
 
 class RandomnessCeramicBehaviour(RandomnessBehaviour):
     """Retrieve randomness."""
@@ -158,14 +181,8 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             success = yield from self._write_ceramic_data()
             if success:
-                self.context.logger.info(
-                    f"Wrote data to ceramic stream with id: {self.synchronized_data.stream_id}"
-                )
                 payload_content = StreamWriteRound.SUCCCESS_PAYLOAD
             else:
-                self.context.logger.info(
-                    f"An error happened while writing data to ceramic stream with id: {self.synchronized_data.stream_id}"
-                )
                 payload_content = StreamWriteRound.ERROR_PAYLOAD
 
             sender = self.context.agent_address
@@ -180,23 +197,19 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
     def _write_ceramic_data(self) -> Generator[None, None, bool]:
         """Write the scores to the Ceramic stream"""
 
-        # stream_id can be set either in the synchronized_data or as a param. The former has higher priority.
-        stream_id = (
-            self.synchronized_data.stream_id
-            or self.params.ceramic_default_write_stream_id
-        )
-        if not stream_id:
-            raise ValueError(
-                "stream_id has not been set neither in the synchronized_data nor as a parameter"
-            )
+        stream_id, target_property_name = self._get_stream_and_target_property()
 
         # Get the current stream data
         old_data = yield from self._get_stream_data(stream_id)
 
         if not old_data:
+            self.context.logger.error(
+                f"Could not get the previous data from stream {stream_id}"
+            )
             return False
 
-        new_data = self.synchronized_data.stream_content
+        # stream_content can be set either in the synchronized_data directly or read using a param. The former has higher priority.
+        new_data = self.synchronized_data.db.get_strict(target_property_name)
 
         # Prepare the commit payload
         commit_payload = build_commit_payload(
@@ -228,7 +241,7 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
             )
             return False
 
-        self.context.logger.info("Updated the stream correctly")
+        self.context.logger.info(f"Updated the stream correctly: {stream_id}")
         return True
 
 
@@ -242,22 +255,14 @@ class VerificationBehaviour(CeramicWriteBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
-            # stream_id can be set either in the synchronized_data or as a param. The former has higher priority.
-            stream_id = (
-                self.synchronized_data.stream_id
-                or self.params.ceramic_default_write_stream_id
-            )
-            if not stream_id:
-                raise ValueError(
-                    "stream_id has not been set neither in the synchronized_data nor as a parameter"
-                )
+            stream_id, target_property_name = self._get_stream_and_target_property()
 
             # Get the current data
             data = yield from self._get_stream_data(stream_id)
 
             # Verify if the retrieved data matches local user_to_total_points
             expected_data = json.dumps(
-                self.synchronized_data.stream_content,
+                self.synchronized_data.db.get_strict(target_property_name),
                 sort_keys=True,
             )
 

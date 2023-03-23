@@ -111,20 +111,21 @@ class StreamReadBehaviour(CeramicReadBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
             # stream_id and target_property_name can be set either in the synchronized_data or as a param. The former has higher priority.
-            stream_id = self.synchronized_data.stream_id or self.params.ceramic_default_read_stream_id
+            stream_id = self.synchronized_data.read_stream_id or self.params.default_read_stream_id
             if not stream_id:
-                raise ValueError("stream_id has not been set neither in the synchronized_data nor as a parameter")
+                raise ValueError("read_stream_id has not been set neither in the synchronized_data nor as a default parameter")
 
-            target_property_name = self.synchronized_data.target_property_name or self.params.default_target_property_name
+            target_property_name = self.synchronized_data.read_target_property or self.params.default_read_target_property
             if not target_property_name:
-                raise ValueError("target_property_name has not been set neither in the synchronized_data nor as a parameter")
+                raise ValueError("read_target_property has not been set neither in the synchronized_data nor as a default parameter")
 
             # Get the stream data
             stream_data = yield from self._get_stream_data(stream_id)
             if not stream_data:
                 payload_content = StreamReadRound.ERROR_PAYLOAD
             else:
-                payload_content = {"stream_data": stream_data, "target_property_name": target_property_name}
+                payload_content = {"stream_data": stream_data["data"], "target_property_name": target_property_name}
+                self.context.logger.info(f"Loading data into 'synchronized_data.{target_property_name}': {stream_data['data']}")
 
             # Send the payload
             sender = self.context.agent_address

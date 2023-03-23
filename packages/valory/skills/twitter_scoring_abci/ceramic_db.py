@@ -39,11 +39,13 @@ class CeramicDB:
         """Create a database"""
         self.data = (
             data
-            if data
+            if data not in (None, {})
             else {"users": [], "module_data": {"twitter": {}, "dynamic_nft": {}}}
         )
 
         self.logger = logger
+        if self.logger:
+            self.logger.info(f"DB: created new db: {self.data}")
 
     def create_user(self, user_data):
         """Create a new user"""
