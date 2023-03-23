@@ -158,7 +158,9 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
 
         # Rebuild token_to_points
         new_token_id_to_points = {
-            user["token_id"]: user["points"] for user in ceramic_db.data["users"]
+            user["token_id"]: user["points"]
+            for user in ceramic_db.data["users"]
+            if user["token_id"]
         }
 
         # ceramic_db only stores the first minted token for each user
@@ -181,11 +183,15 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
             SharedState, self.context.state
         ).round_sequence.last_round_transition_timestamp.timestamp()
 
-        return {
+        data = {
             "last_update_time": last_update_time,
             "token_id_to_points": token_id_to_points,
             "ceramic_db": ceramic_db.data,
         }
+
+        self.context.logger.info(f"Data updated [NewTokens]: {data}")
+
+        return data
 
 
 class DynamicNFTRoundBehaviour(AbstractRoundBehaviour):
