@@ -54,46 +54,28 @@ from packages.valory.skills.dynamic_nft_abci.rounds import (
 
 DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
 
-DUMMY_TOKEN_TO_DATA = {
-    "1": {
-        "address": "0x54EfA9b1865FFE8c528fb375A7A606149598932A",
-        "points": DEFAULT_POINTS,
-    },
-    "2": {
-        "address": "0x3c03a080638b3c176aB7D9ed56E25bC416dFf525",
-        "points": DEFAULT_POINTS,
-    },
-    "3": {
-        "address": "0x44704AE66f0B9FF08a7b0584B49FE941AdD1bAE7",
-        "points": DEFAULT_POINTS,
-    },
-    "4": {
-        "address": "0x19B043aD06C48aeCb2028B0f10503422BD0E0918",
-        "points": DEFAULT_POINTS,
-    },
-    "5": {
-        "address": "0x8325c5e4a56E352355c590E4A43420840F067F98",
-        "points": DEFAULT_POINTS,
-    },
-    "6": {
-        "address": "0x54EfA9b1865FFE8c528fb375A7A606149598932A",
-        "points": DEFAULT_POINTS,
-    },
-}
-
-
 DUMMY_ADDRESSES = [
     "0x54EfA9b1865FFE8c528fb375A7A606149598932A",
     "0x3c03a080638b3c176aB7D9ed56E25bC416dFf525",
     "0x44704AE66f0B9FF08a7b0584B49FE941AdD1bAE7",
     "0x7B394CD0B75f774c6808cc681b26aC3E5DF96E27",
-    "0x54EfA9b1865FFE8c528fb375A7A606149598932A",  # addresses are repeated
-    "0x3c03a080638b3c176aB7D9ed56E25bC416dFf525",
-    "0x44704AE66f0B9FF08a7b0584B49FE941AdD1bAE7",
-    "0x7B394CD0B75f774c6808cc681b26aC3E5DF96E27",
 ]
 
-DUMMY_TOKEN_ID_TO_MEMBER = {i: member for i, member in enumerate(DUMMY_ADDRESSES)}
+DUMMY_CERAMIC_DB = {
+    "users": [
+        {
+            "wallet_address": address,
+            "token_id": None,
+            "points": DEFAULT_POINTS,
+        }
+        for address in DUMMY_ADDRESSES
+    ],
+    "module_data": {"dynamic_nft": {}},
+}
+
+DUMMY_TOKEN_ID_TO_ADDRESS = {i: member for i, member in enumerate(DUMMY_ADDRESSES)}
+# Add an extra token for the first address
+DUMMY_TOKEN_ID_TO_ADDRESS[100] = "0x54EfA9b1865FFE8c528fb375A7A606149598932A"
 
 
 @dataclass
@@ -179,28 +161,12 @@ class TestNewTokensBehaviour(BaseDynamicNFTTest):
             (
                 BehaviourTestCase(
                     "Happy path",
-                    initial_data=dict(
-                        token_to_data={
-                            "0": {"address": "dummy_address_0", "points": 0},
-                            "1": {"address": "dummy_address_1", "points": 0},
-                            "2": {"address": "dummy_address_2", "points": 0},
-                        },
-                        user_to_total_points={
-                            "dummy_user_0": 10,
-                            "dummy_user_1": 20,
-                            "dummy_user_8": 10,
-                        },
-                        wallet_to_users={
-                            "dummy_address": "dummy_user",
-                            "dummy_address_0": "dummy_user_0",
-                            "dummy_address_8": "dummy_user_8",
-                        },
-                    ),
+                    initial_data=dict(ceramic_db=DUMMY_CERAMIC_DB),
                     event=Event.DONE,
                 ),
                 {
                     "mock_response_data": dict(
-                        token_id_to_member=DUMMY_TOKEN_ID_TO_MEMBER,
+                        token_id_to_member=DUMMY_TOKEN_ID_TO_ADDRESS,
                         last_block=100,
                     ),
                     "mock_response_performative": ContractApiMessage.Performative.STATE,
@@ -234,7 +200,7 @@ class TestNewTokensBehaviourContractError(TestNewTokensBehaviour):
             (
                 BehaviourTestCase(
                     "Contract error",
-                    initial_data=dict(),
+                    initial_data=dict(ceramic_db=DUMMY_CERAMIC_DB),
                     event=Event.CONTRACT_ERROR,
                 ),
                 {

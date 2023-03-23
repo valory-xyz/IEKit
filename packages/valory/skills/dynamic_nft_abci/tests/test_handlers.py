@@ -84,7 +84,7 @@ class HandlerTestCase:
     name: str
     request_url: str
     request_body: bytes
-    token_to_data: Dict[str, str]
+    token_id_to_points: Dict[str, int]
     response_status_code: int
     response_status_text: str
     response_headers: str
@@ -178,11 +178,8 @@ class TestHttpHandler(BaseSkillTestCase):
             HandlerTestCase(
                 name="id in token table",
                 request_url=f"{TOKEN_URI_BASE}0",
-                token_to_data={
-                    "0": {
-                        "image_hash": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm",
-                        "points": 10,
-                    }
+                token_id_to_points={
+                    "0": 10,
                 },
                 request_body=b"some_body/",
                 response_status_code=OK_CODE,
@@ -199,12 +196,7 @@ class TestHttpHandler(BaseSkillTestCase):
             HandlerTestCase(
                 name="id in token table, no threshold match",
                 request_url=f"{TOKEN_URI_BASE}0",
-                token_to_data={
-                    "0": {
-                        "image_hash": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm",
-                        "points": -10,
-                    }
-                },
+                token_id_to_points={"0": -10},
                 request_body=b"some_body/",
                 response_status_code=OK_CODE,
                 response_status_text="Success",
@@ -222,7 +214,7 @@ class TestHttpHandler(BaseSkillTestCase):
             HandlerTestCase(
                 name="id not in token table",
                 request_url=f"{TOKEN_URI_BASE}1",
-                token_to_data={},
+                token_id_to_points={},
                 request_body=b"some_body/",
                 response_status_code=NOT_FOUND_CODE,
                 response_status_text="Not found",
@@ -234,7 +226,7 @@ class TestHttpHandler(BaseSkillTestCase):
             HandlerTestCase(
                 name="healthcheck",
                 request_url=f"{TOKEN_URI_BASE}healthcheck",
-                token_to_data={},
+                token_id_to_points={},
                 request_body=b"some_body/",
                 response_status_code=OK_CODE,
                 response_status_text="Success",
@@ -246,7 +238,7 @@ class TestHttpHandler(BaseSkillTestCase):
             HandlerTestCase(
                 name="healthcheck_time_not_updated_yet",
                 request_url=f"{TOKEN_URI_BASE}healthcheck",
-                token_to_data={},
+                token_id_to_points={},
                 request_body=b"some_body/",
                 response_status_code=OK_CODE,
                 response_status_text="Success",
@@ -261,7 +253,7 @@ class TestHttpHandler(BaseSkillTestCase):
             HandlerTestCase(
                 name="no-handler",
                 request_url="wrong_uri",
-                token_to_data={},
+                token_id_to_points={},
                 request_body=b"some_body/",
                 response_status_code=BAD_REQUEST_CODE,
                 response_status_text="Bad request",
@@ -297,7 +289,7 @@ class TestHttpHandler(BaseSkillTestCase):
             mock_now_time = datetime.datetime(2022, 1, 1)
             mock_now_time_timestamp = mock_now_time.timestamp()
             mock_round_sequence.latest_synchronized_data.db = {
-                "token_to_data": test_case.token_to_data,
+                "token_id_to_points": test_case.token_id_to_points,
                 "last_update_time": mock_now_time_timestamp - 5.0  # 5 seconds before
                 if test_case.set_last_update_time
                 else None,

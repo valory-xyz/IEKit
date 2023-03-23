@@ -25,7 +25,7 @@ states:
 - VerificationRound
 transition_func:
     (NewTokensRound, CONTRACT_ERROR): NewTokensRound
-    (NewTokensRound, DONE): ResetAndPauseRound
+    (NewTokensRound, DONE): RandomnessRound
     (NewTokensRound, NO_MAJORITY): NewTokensRound
     (NewTokensRound, ROUND_TIMEOUT): NewTokensRound
     (RandomnessRound, DONE): SelectKeeperRound
@@ -49,10 +49,10 @@ transition_func:
     (StreamWriteRound, DONE): VerificationRound
     (StreamWriteRound, ROUND_TIMEOUT): RandomnessRound
     (TwitterScoringRound, API_ERROR): TwitterScoringRound
-    (TwitterScoringRound, DONE): RandomnessRound
+    (TwitterScoringRound, DONE): NewTokensRound
     (TwitterScoringRound, NO_MAJORITY): TwitterScoringRound
     (TwitterScoringRound, ROUND_TIMEOUT): TwitterScoringRound
     (VerificationRound, API_ERROR): RandomnessRound
-    (VerificationRound, DONE): NewTokensRound
+    (VerificationRound, DONE): ResetAndPauseRound
     (VerificationRound, NO_MAJORITY): RandomnessRound
     (VerificationRound, ROUND_TIMEOUT): RandomnessRound

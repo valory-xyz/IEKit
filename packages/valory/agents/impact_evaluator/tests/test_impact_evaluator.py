@@ -66,28 +66,28 @@ from packages.valory.skills.ceramic_write_abci.rounds import (
     StreamWriteRound,
     VerificationRound,
 )
+from packages.valory.skills.ceramic_read_abci.rounds import StreamReadRound
 
 
 HAPPY_PATH: Tuple[RoundChecks, ...] = (
-    RoundChecks(RegistrationStartupRound.auto_round_id()),
+    RoundChecks(RegistrationStartupRound.auto_round_id(), n_periods=1),
+    RoundChecks(StreamReadRound.auto_round_id(), n_periods=1),
     RoundChecks(TwitterScoringRound.auto_round_id(), n_periods=2),
+    RoundChecks(NewTokensRound.auto_round_id(), n_periods=2),
     RoundChecks(RandomnessRound.auto_round_id(), n_periods=2),
     RoundChecks(SelectKeeperRound.auto_round_id(), n_periods=2),
     RoundChecks(StreamWriteRound.auto_round_id(), n_periods=2),
     RoundChecks(VerificationRound.auto_round_id(), n_periods=2),
-    RoundChecks(NewTokensRound.auto_round_id(), n_periods=2),
     RoundChecks(ResetAndPauseRound.auto_round_id(), n_periods=2),
 )
 
 # strict check log messages of the happy path
 STRICT_CHECK_STRINGS = (
-    "Retrieved initial score data from Ceramic:",
-    "Retrieving mentions from Twitter API",
-    "Retrieving wallets from Twitter API",
-    "Calculated score data:",
-    "Calculated new total points",
+    "Got data from Ceramic API",
+    "Retrieved new mentions from Twitter",
+    "Retrieved recent registrations from Twitter",
+    "Got token_id to address data up to block",
     "Data verification successful",
-    "Got the new token data:",
     "Period end",
 )
 PACKAGES_DIR = Path(__file__).parent.parent.parent.parent.parent
@@ -135,8 +135,20 @@ class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
             "value": '{"0": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm", "100": "bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q", "50000": "bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4", "100000": "bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy", "150000": "bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}',
         },
         {
-            "dotted_path": f"{__param_args_prefix}.scores_stream_id",
+            "dotted_path": f"{__param_args_prefix}.default_read_stream_id",
             "value": "stream_id_e2e",
+        },
+        {
+            "dotted_path": f"{__param_args_prefix}.default_write_stream_id",
+            "value": "stream_id_e2e",
+        },
+        {
+            "dotted_path": f"{__param_args_prefix}.default_read_target_property",
+            "value": "ceramic_db",
+        },
+        {
+            "dotted_path": f"{__param_args_prefix}.default_write_target_property",
+            "value": "ceramic_db",
         },
     ]
 

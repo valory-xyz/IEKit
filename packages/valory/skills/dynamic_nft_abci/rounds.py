@@ -54,14 +54,9 @@ class SynchronizedData(BaseSynchronizedData):
     """
 
     @property
-    def token_to_data(self) -> dict:
-        """Get the token table."""
-        return cast(dict, self.db.get("token_to_data", {}))
-
-    @property
-    def user_to_total_points(self) -> dict:
-        """Get the user scores."""
-        return cast(dict, self.db.get("user_to_total_points", {}))
+    def token_id_to_points(self) -> dict:
+        """Get the token id to points mapping."""
+        return cast(dict, self.db.get("token_id_to_points", {}))
 
     @property
     def last_update_time(self) -> float:
@@ -69,14 +64,9 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(float, self.db.get("last_update_time", None))
 
     @property
-    def wallet_to_users(self) -> dict:
-        """Get the wallet to twitter user mapping."""
-        return cast(dict, self.db.get("wallet_to_users", {}))
-
-    @property
-    def last_parsed_block(self) -> int:
-        """Get the last parsed block."""
-        return cast(int, self.db.get("last_parsed_block", None))
+    def ceramic_db(self) -> dict:
+        """Get the data stored in the main stream."""
+        return cast(dict, self.db.get_strict("ceramic_db"))
 
 
 class NewTokensRound(CollectSameUntilThresholdRound):
@@ -95,16 +85,16 @@ class NewTokensRound(CollectSameUntilThresholdRound):
             if payload == NewTokensRound.ERROR_PAYLOAD:
                 return self.synchronized_data, Event.CONTRACT_ERROR
 
-            token_to_data = payload["token_to_data"]
+            token_id_to_points = payload["token_id_to_points"]
             last_update_time = payload["last_update_time"]
-            last_parsed_block = payload["last_parsed_block"]
+            ceramic_db = payload["ceramic_db"]
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    get_name(SynchronizedData.token_to_data): token_to_data,
+                    get_name(SynchronizedData.token_id_to_points): token_id_to_points,
                     get_name(SynchronizedData.last_update_time): last_update_time,
-                    get_name(SynchronizedData.last_parsed_block): last_parsed_block,
+                    get_name(SynchronizedData.ceramic_db): ceramic_db,
                 }
             )
             return synchronized_data, Event.DONE
@@ -144,13 +134,13 @@ class DynamicNFTAbciApp(AbciApp[Event]):
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedNewTokensRound: {
-            get_name(SynchronizedData.token_to_data),
+            get_name(SynchronizedData.token_id_to_points),
             get_name(SynchronizedData.last_update_time),
+            get_name(SynchronizedData.ceramic_db),
         }
     }
     cross_period_persisted_keys: Set[str] = {
-        "token_to_data",
+        "token_id_to_points",
         "last_update_time",
-        "last_parsed_block",
-        "user_to_total_points",
+        "ceramic_db",
     }

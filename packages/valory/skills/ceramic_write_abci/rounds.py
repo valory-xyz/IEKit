@@ -65,14 +65,14 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(int, round_)
 
     @property
-    def stream_id(self) -> str:
-        """Get the stream id."""
-        return self.db.get_strict("stream_id")
+    def write_stream_id(self) -> Optional[str]:
+        """Get the write_stream_id."""
+        return self.db.get("write_stream_id", None)
 
     @property
-    def stream_content(self) -> dict:
-        """Get the stream content."""
-        return self.db.get_strict("stream_content")
+    def write_target_property(self) -> Optional[str]:
+        """Get the write_target_property."""
+        return self.db.get("write_target_property", None)
 
     @property
     def did_seed(self) -> str:

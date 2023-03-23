@@ -54,13 +54,13 @@ class SynchronizedData(BaseSynchronizedData):
     """
 
     @property
-    def stream_id(self) -> Optional[str]:
-        """Get the user new points."""
-        return cast(str, self.db.get("stream_id", None))
+    def read_stream_id(self) -> Optional[str]:
+        """Get the read_stream_id."""
+        return cast(str, self.db.get("read_stream_id", None))
 
     @property
-    def target_property_name(self) -> Optional[str]:
-        """Get the user new points."""
+    def read_target_property(self) -> Optional[str]:
+        """Get the target_property_name."""
         return cast(str, self.db.get("target_property_name", None))
 
 

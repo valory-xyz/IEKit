@@ -21,7 +21,7 @@
 
 from copy import copy
 
-from packages.valory.skills.twitter_scoring_abci.ceramic_db import CeramicDB
+from packages.valory.skills.dynamic_nft_abci.ceramic_db import CeramicDB
 
 
 DEFAULT_DATA = {

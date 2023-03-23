@@ -35,9 +35,9 @@ from packages.valory.skills.abstract_round_abci.abci_app_chain import (
 abci_app_transition_mapping: AbciAppTransitionMapping = {
     RegistrationAbci.FinishedRegistrationRound: CeramicReadAbci.StreamReadRound,
     CeramicReadAbci.FinishedReadingRound: TwitterScoringAbci.TwitterScoringRound,
-    TwitterScoringAbci.FinishedTwitterScoringRound: CeramicWriteAbci.RandomnessRound,
-    CeramicWriteAbci.FinishedVerificationRound: DynamicNFTAbci.NewTokensRound,
-    DynamicNFTAbci.FinishedNewTokensRound: ResetAndPauseAbci.ResetAndPauseRound,
+    TwitterScoringAbci.FinishedTwitterScoringRound: DynamicNFTAbci.NewTokensRound,
+    DynamicNFTAbci.FinishedNewTokensRound: CeramicWriteAbci.RandomnessRound,
+    CeramicWriteAbci.FinishedVerificationRound: ResetAndPauseAbci.ResetAndPauseRound,
     ResetAndPauseAbci.FinishedResetAndPauseRound: TwitterScoringAbci.TwitterScoringRound,
     ResetAndPauseAbci.FinishedResetAndPauseErrorRound: RegistrationAbci.RegistrationRound,
 }
@@ -47,8 +47,8 @@ ImpactEvaluatorSkillAbciApp = chain(
         RegistrationAbci.AgentRegistrationAbciApp,
         CeramicReadAbci.CeramicReadAbciApp,
         TwitterScoringAbci.TwitterScoringAbciApp,
-        CeramicWriteAbci.CeramicWriteAbciApp,
         DynamicNFTAbci.DynamicNFTAbciApp,
+        CeramicWriteAbci.CeramicWriteAbciApp,
         ResetAndPauseAbci.ResetPauseAbciApp,
     ),
     abci_app_transition_mapping,
