@@ -19,7 +19,8 @@
 
 """This package implements user db handling."""
 
-from typing import Any, Dict, Optional, Tuple
+import itertools
+from typing import Any, Dict, List, Optional, Tuple
 
 
 class CeramicDB:
@@ -67,9 +68,17 @@ class CeramicDB:
 
         for index, user in enumerate(self.data["users"]):
             if user[field] == value:
-                return user, index
+                return user, index  # returns the first user that marches
 
         return None, None
+
+    def get_users_by_field(self, field, value) -> List[Tuple[Dict, int]]:
+        """Search users"""
+        users = []
+        for index, user in enumerate(self.data["users"]):
+            if user[field] == value:
+                users.append((user, index))
+        return users
 
     def update_or_create_user(self, field: str, value: str, new_data: Dict):
         """Update an existing user"""
@@ -92,3 +101,55 @@ class CeramicDB:
             self.logger.info(f"DB: updated user: from {user} to {updated_user}")
 
         self.data["users"][index] = updated_user
+
+    def merge_by_wallet(self):
+        """Merges users that share the wallet"""
+        wallet_addresses = set(
+            [
+                user["wallet_address"]
+                for user in self.data["users"]
+                if user["wallet_address"]
+            ]
+        )
+
+        for wallet_address in wallet_addresses:
+            users = self.get_users_by_field("wallet_address", wallet_address)
+
+            if len(users) > 1:
+                # Get the set of fields
+                fields = set(itertools.chain(*[list(user.keys()) for user, _ in users]))
+                fields.remove(
+                    "wallet_address"
+                )  # we already know this one is duplicated
+
+                # Build the merged user
+                merged_user = {}
+                for field in fields:
+                    # Get all the non None values from all users
+                    values = [
+                        user[field]
+                        for user, _ in users
+                        if field in user and user[field] is not None
+                    ]
+
+                    # Check whether all values are the same
+                    if len(values) > 1:
+                        values = (
+                            [values[0]]
+                            if all([v == values[0] for v in values])
+                            else values
+                        )
+
+                    if len(values) > 1:
+                        raise ValueError(
+                            f"DB: multiple valid values found for '{field}' [{values}] while merging users: {users}"
+                        )
+                    merged_user[field] = values[0] if values else None
+                merged_user["wallet_address"] = wallet_address
+
+                # Remove duplicated users
+                for index in sorted([index for _, index in users], reverse=True):
+                    self.data["users"].pop(index)
+
+                # Add merged user
+                self.data["users"].append(merged_user)
