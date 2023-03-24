@@ -150,7 +150,7 @@ class CeramicDB:
                     # Raise on multiple different valid values
                     if len(values) > 1:
                         raise ValueError(
-                            f"DB: multiple valid values found for '{field}' [{values}] while merging users: {users}"
+                            f"DB: multiple valid values found for {field} [{values}] while merging users: {users}"
                         )
                     merged_user[field] = values[0] if values else None
                 merged_user["wallet_address"] = wallet_address

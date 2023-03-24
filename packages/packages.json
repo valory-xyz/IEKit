@@ -1,13 +1,15 @@
 {
     "dev": {
-        "agent/valory/impact_evaluator/0.1.0": "bafybeihow7arywhlgautlycfidwvzm34jcbpcjwt3uluhjoifuz6nelpku",
+        "agent/valory/impact_evaluator/0.1.0": "bafybeib6m3afwoabjzpwjktrbmm5aj6w3cwg3c6pxeym3ip5devux5jq7y",
         "contract/valory/dynamic_contribution/0.1.0": "bafybeiap7dvbkfbh2t5f5sm3k4zlh6rhf4sle4v5d2xakcl2haoeh2qjja",
-        "service/valory/impact_evaluator/0.1.0": "bafybeighz4i5zsigqyyi23mwjdfjavp5hdngr2gwoo2xy3qssdfayxpll4",
-        "skill/valory/dynamic_nft_abci/0.1.0": "bafybeid4x75grvrjkvst4dhly4y7op6re5uqscevdzh7a3q2y5f4epb6pm",
-        "skill/valory/twitter_scoring_abci/0.1.0": "bafybeifs6btlmoomrrygfeaolaqa4awvavub7ijthbmt5p5nyizueevnwq",
-        "skill/valory/ceramic_read_abci/0.1.0": "bafybeid27nqqr5omexipv53voz2tqmby7dnl24c7hevftza3ry4xprx2ye",
-        "skill/valory/ceramic_write_abci/0.1.0": "bafybeicd6mypbecvh3msubvlyn4pv3ywvufbrasx2ef2nh2zgygoamopnu",
-        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeib252fmmqal6j7z33omdd6hkqcdbv7vbov7bocqehkrcb7nbygwue"
+        "service/valory/impact_evaluator/0.1.0": "bafybeibounko3s6pyzseu7fvtomjfjou7k2ufwgvk47nxfzf5i3dvkogqm",
+        "skill/valory/dynamic_nft_abci/0.1.0": "bafybeibcwmgoi6svv4qnuwgdpl67bikiyhyas3xj3rmpmwacw73423cabu",
+        "skill/valory/twitter_scoring_abci/0.1.0": "bafybeidjdlayoxisqhxhnaiwnch676vhrrozjfy3mn4ezvl7kd6xucqhfu",
+        "skill/valory/ceramic_read_abci/0.1.0": "bafybeifticrrzvdh2un7pde6m2doxpr3bbbqjls6gkll7d7m74kwc62qty",
+        "skill/valory/ceramic_write_abci/0.1.0": "bafybeig74d27o2uia7utvwce3eset26zd4lcxomisz4qf26vkiihmyswky",
+        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeibnb7ijkkkypw6dlqro5r3c2xcab2zgc5xtdaiejbxdmb5ifizeqm",
+        "skill/valory/generic_scoring_abci/0.1.0": "bafybeibmzotvt3mcp43qpg5gq74xprmym7etjx6b7wijnobx2z5kkrlfiy",
+        "skill/valory/path_switch_abci/0.1.0": "bafybeihjgrrghdceesokdxve6ylzqopdq75wxhrfjvggvxyy5b5ejpvwjq"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeibqlfmikg5hk4phzak6gqzhpkt6akckx7xppbp53mvwt6r73h7tk4",

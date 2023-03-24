@@ -19,9 +19,9 @@
 
 """This package contains round behaviours of PathSwitchAbciApp."""
 
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Optional, Type
-from dataclasses import dataclass
 
 import pytest
 
@@ -30,19 +30,18 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     BaseBehaviour,
     make_degenerate_behaviour,
 )
-from packages.valory.skills.path_switch_abci.behaviours import (
-    PathSwitchBaseBehaviour,
-    PathSwitchRoundBehaviour,
-    PathSwitchBehaviour,
-)
-from packages.valory.skills.path_switch_abci.rounds import (
-    SynchronizedData,
-    Event,
-    FinishedPathSwitchReadRound,
-)
-
 from packages.valory.skills.abstract_round_abci.test_tools.base import (
     FSMBehaviourBaseCase,
+)
+from packages.valory.skills.path_switch_abci.behaviours import (
+    PathSwitchBaseBehaviour,
+    PathSwitchBehaviour,
+    PathSwitchRoundBehaviour,
+)
+from packages.valory.skills.path_switch_abci.rounds import (
+    Event,
+    FinishedPathSwitchReadRound,
+    SynchronizedData,
 )
 
 
@@ -97,7 +96,9 @@ class TestPathSwitchBehaviour(BasePathSwitchTest):
     """Tests PathSwitchBehaviour"""
 
     behaviour_class: Type[BaseBehaviour] = PathSwitchBehaviour
-    next_behaviour_class: Type[BaseBehaviour] = make_degenerate_behaviour(FinishedPathSwitchReadRound)
+    next_behaviour_class: Type[BaseBehaviour] = make_degenerate_behaviour(
+        FinishedPathSwitchReadRound
+    )
 
     @pytest.mark.parametrize(
         "test_case, kwargs",
@@ -108,8 +109,7 @@ class TestPathSwitchBehaviour(BasePathSwitchTest):
                     initial_data=dict(),
                     event=Event.DONE_READ,
                 ),
-                {
-                },
+                {},
             )
         ],
     )
@@ -118,4 +118,3 @@ class TestPathSwitchBehaviour(BasePathSwitchTest):
         self.fast_forward(test_case.initial_data)
         self.behaviour.act_wrapper()
         self.complete(test_case.event)
-

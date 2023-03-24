@@ -19,6 +19,7 @@
 
 """This package contains round behaviours of PathSwitchAbciApp."""
 
+import json
 from abc import ABC
 from typing import Generator, Set, Type, cast
 
@@ -27,17 +28,13 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-
 from packages.valory.skills.path_switch_abci.models import Params
 from packages.valory.skills.path_switch_abci.rounds import (
-    SynchronizedData,
     PathSwitchAbciApp,
-    PathSwitchRound,
-)
-from packages.valory.skills.path_switch_abci.rounds import (
     PathSwitchPayload,
+    PathSwitchRound,
+    SynchronizedData,
 )
-import json
 
 
 class PathSwitchBaseBehaviour(BaseBehaviour, ABC):
@@ -71,7 +68,9 @@ class PathSwitchBehaviour(PathSwitchBaseBehaviour):
             }
 
             sender = self.context.agent_address
-            payload = PathSwitchPayload(sender=sender, content=json.dumps(payload_data, sort_keys=True))
+            payload = PathSwitchPayload(
+                sender=sender, content=json.dumps(payload_data, sort_keys=True)
+            )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(payload)
@@ -85,6 +84,4 @@ class PathSwitchRoundBehaviour(AbstractRoundBehaviour):
 
     initial_behaviour_cls = PathSwitchBehaviour
     abci_app_cls = PathSwitchAbciApp  # type: ignore
-    behaviours: Set[Type[BaseBehaviour]] = [
-        PathSwitchBehaviour
-    ]
+    behaviours: Set[Type[BaseBehaviour]] = [PathSwitchBehaviour]

@@ -19,9 +19,9 @@
 
 """This package contains round behaviours of GenericScoringAbciApp."""
 
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Optional, Type
-from dataclasses import dataclass
 
 import pytest
 
@@ -30,29 +30,46 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     BaseBehaviour,
     make_degenerate_behaviour,
 )
-from packages.valory.skills.generic_scoring_abci.behaviours import (
-    GenericScoringBaseBehaviour,
-    GenericScoringRoundBehaviour,
-    GenericScoringBehaviour,
-)
-from packages.valory.skills.generic_scoring_abci.rounds import (
-    SynchronizedData,
-    Event,
-    FinishedGenericScoringRound,
-)
-
 from packages.valory.skills.abstract_round_abci.test_tools.base import (
     FSMBehaviourBaseCase,
 )
+from packages.valory.skills.generic_scoring_abci.behaviours import (
+    GenericScoringBaseBehaviour,
+    GenericScoringBehaviour,
+    GenericScoringRoundBehaviour,
+)
+from packages.valory.skills.generic_scoring_abci.rounds import (
+    Event,
+    FinishedGenericScoringRound,
+    SynchronizedData,
+)
+
 
 DUMMY_CERAMIC_DB = {
-    "users": [{"discord_id": "dummy_discord_id", "wallet_address": "dummy_wallet_address", "points": 10}],
-    "module_data": {"twitter": {}, "dynamic_nft": {}, "generic": {}}}
+    "users": [
+        {
+            "discord_id": "dummy_discord_id",
+            "wallet_address": "dummy_wallet_address",
+            "points": 10,
+        }
+    ],
+    "module_data": {"twitter": {}, "dynamic_nft": {}, "generic": {}},
+}
 
 DUMMY_SCORE_DATA = {
-    "users": [{"discord_id": "dummy_discord_id", "wallet_address": "dummy_wallet_address", "points": 10}],
-    "module_data": {"twitter": {}, "dynamic_nft": {}, "generic": {"latest_update_id": 1}}}
-
+    "users": [
+        {
+            "discord_id": "dummy_discord_id",
+            "wallet_address": "dummy_wallet_address",
+            "points": 10,
+        }
+    ],
+    "module_data": {
+        "twitter": {},
+        "dynamic_nft": {},
+        "generic": {"latest_update_id": 1},
+    },
+}
 
 
 @dataclass
@@ -107,7 +124,9 @@ class TestGenericScoringBehaviour(BaseGenericScoringTest):
     """Tests GenericScoringBehaviour"""
 
     behaviour_class: Type[BaseBehaviour] = GenericScoringBehaviour
-    next_behaviour_class: Type[BaseBehaviour] = make_degenerate_behaviour(FinishedGenericScoringRound)
+    next_behaviour_class: Type[BaseBehaviour] = make_degenerate_behaviour(
+        FinishedGenericScoringRound
+    )
 
     @pytest.mark.parametrize(
         "test_case, kwargs",
@@ -116,12 +135,11 @@ class TestGenericScoringBehaviour(BaseGenericScoringTest):
                 BehaviourTestCase(
                     "Happy path",
                     initial_data=dict(
-                        ceramic_db=DUMMY_CERAMIC_DB,
-                        score_data=DUMMY_SCORE_DATA
+                        ceramic_db=DUMMY_CERAMIC_DB, score_data=DUMMY_SCORE_DATA
                     ),
                     event=Event.DONE,
                 ),
-                {}
+                {},
             )
         ],
     )
@@ -130,4 +148,3 @@ class TestGenericScoringBehaviour(BaseGenericScoringTest):
         self.fast_forward(test_case.initial_data)
         self.behaviour.act_wrapper()
         self.complete(test_case.event)
-

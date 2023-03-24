@@ -19,22 +19,20 @@
 
 """This package contains the rounds of CeramicReadAbciApp."""
 
+import json
 from enum import Enum
 from typing import Dict, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    CollectSameUntilThresholdRound,
     AppState,
     BaseSynchronizedData,
+    CollectSameUntilThresholdRound,
     DegenerateRound,
     EventToTimeout,
 )
-import json
-from packages.valory.skills.ceramic_read_abci.payloads import (
-    StreamReadPayload,
-)
+from packages.valory.skills.ceramic_read_abci.payloads import StreamReadPayload
 
 
 class Event(Enum):
@@ -110,9 +108,9 @@ class CeramicReadAbciApp(AbciApp[Event]):
             Event.DONE: FinishedReadingRound,
             Event.API_ERROR: StreamReadRound,
             Event.NO_MAJORITY: StreamReadRound,
-            Event.ROUND_TIMEOUT: StreamReadRound
+            Event.ROUND_TIMEOUT: StreamReadRound,
         },
-        FinishedReadingRound: {}
+        FinishedReadingRound: {},
     }
     final_states: Set[AppState] = {FinishedReadingRound}
     event_to_timeout: EventToTimeout = {

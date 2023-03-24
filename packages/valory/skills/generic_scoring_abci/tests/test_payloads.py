@@ -19,8 +19,8 @@
 
 """This package contains payload tests for the GenericScoringAbciApp."""
 
-from typing import Hashable
 from dataclasses import dataclass
+from typing import Hashable
 
 import pytest
 
@@ -57,4 +57,3 @@ def test_payloads(test_case: PayloadTestCase) -> None:
     assert payload.sender == "sender"
     assert payload.content == test_case.content
     assert payload.from_json(payload.json) == payload
-

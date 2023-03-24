@@ -24,4 +24,3 @@ import packages.valory.skills.generic_scoring_abci.handlers  # noqa
 
 def test_import() -> None:
     """Test that the 'handlers.py' of the GenericScoring can be imported."""
-

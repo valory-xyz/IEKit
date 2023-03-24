@@ -24,4 +24,3 @@ import packages.valory.skills.path_switch_abci.handlers  # noqa
 
 def test_import() -> None:
     """Test that the 'handlers.py' of the PathSwitch can be imported."""
-

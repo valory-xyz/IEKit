@@ -29,4 +29,3 @@ class GenericScoringPayload(BaseTxPayload):
     """Represent a transaction payload for the GenericScoringRound."""
 
     content: str
-

@@ -74,16 +74,6 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the write_target_property."""
         return self.db.get("write_target_property", None)
 
-    @property
-    def did_seed(self) -> str:
-        """Get the did seed."""
-        return self.db.get_strict("did_seed")
-
-    @property
-    def did(self) -> str:
-        """Get the did."""
-        return self.db.get_strict("did")
-
 
 class RandomnessRound(CollectSameUntilThresholdRound):
     """A round for generating randomness"""

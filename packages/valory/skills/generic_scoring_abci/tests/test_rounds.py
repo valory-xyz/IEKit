@@ -19,6 +19,8 @@
 
 """This package contains the tests for rounds of GenericScoring."""
 
+import json
+from dataclasses import dataclass, field
 from typing import (
     Any,
     Callable,
@@ -30,26 +32,20 @@ from typing import (
     Optional,
     cast,
 )
-from dataclasses import dataclass, field
 
 import pytest
 
-from packages.valory.skills.generic_scoring_abci.payloads import (
-    GenericScoringPayload,
-)
-from packages.valory.skills.generic_scoring_abci.rounds import (
-    Event,
-    SynchronizedData,
-    GenericScoringRound,
-)
-from packages.valory.skills.abstract_round_abci.base import (
-    BaseTxPayload,
-)
+from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
     BaseCollectSameUntilThresholdRoundTest,
     CollectSameUntilThresholdRound,
- )
-import json
+)
+from packages.valory.skills.generic_scoring_abci.payloads import GenericScoringPayload
+from packages.valory.skills.generic_scoring_abci.rounds import (
+    Event,
+    GenericScoringRound,
+    SynchronizedData,
+)
 
 
 @dataclass
@@ -86,6 +82,7 @@ def get_payloads(
 
 
 def get_dummy_generic_scoring_payload_serialized():
+    """Dummy payload"""
     return json.dumps({}, sort_keys=True)
 
 
@@ -150,4 +147,3 @@ class TestGenericScoringRound(BaseGenericScoringRoundTest):
     def test_run(self, test_case: RoundTestCase) -> None:
         """Run tests."""
         self.run_test(test_case)
-

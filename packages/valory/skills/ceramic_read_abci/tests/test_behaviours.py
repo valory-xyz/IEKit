@@ -19,17 +19,19 @@
 
 """This package contains round behaviours of CeramicReadAbciApp."""
 
-from pathlib import Path
-from typing import Any, Dict, Hashable, Optional, Type
-from dataclasses import dataclass, field
 import json
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, Optional, Type
+
 import pytest
 
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.valory.skills.abstract_round_abci.behaviours import (
-    AbstractRoundBehaviour,
-    BaseBehaviour,
     make_degenerate_behaviour,
+)
+from packages.valory.skills.abstract_round_abci.test_tools.base import (
+    FSMBehaviourBaseCase,
 )
 from packages.valory.skills.ceramic_read_abci.behaviours import (
     CeramicReadBaseBehaviour,
@@ -37,17 +39,11 @@ from packages.valory.skills.ceramic_read_abci.behaviours import (
     StreamReadBehaviour,
 )
 from packages.valory.skills.ceramic_read_abci.rounds import (
-    SynchronizedData,
-    DegenerateRound,
     Event,
-    CeramicReadAbciApp,
     FinishedReadingRound,
-    StreamReadRound,
+    SynchronizedData,
 )
 
-from packages.valory.skills.abstract_round_abci.test_tools.base import (
-    FSMBehaviourBaseCase,
-)
 
 CERAMIC_API_STREAM_URL_READ = (
     "https://ceramic-clay.3boxlabs.com/api/v0/commits/dummy_stream_id"
@@ -125,6 +121,7 @@ DUMMY_API_RESPONSE_READ_WRONG = {
 }
 
 DUMMY_API_RESPONSE_READ_WRONG_JSON = "-"
+
 
 @dataclass
 class BehaviourTestCase:
@@ -244,7 +241,6 @@ class TestStreamReadBehaviour(BaseCeramicReadTest):
         )
 
         self.complete(test_case.event)
-
 
 
 class TestStreamReadBehaviourApiError(BaseCeramicReadTest):

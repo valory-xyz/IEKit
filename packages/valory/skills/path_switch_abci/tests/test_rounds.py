@@ -19,6 +19,8 @@
 
 """This package contains the tests for rounds of PathSwitch."""
 
+import json
+from dataclasses import dataclass, field
 from typing import (
     Any,
     Callable,
@@ -30,26 +32,20 @@ from typing import (
     Optional,
     cast,
 )
-from dataclasses import dataclass, field
 
 import pytest
 
-from packages.valory.skills.path_switch_abci.payloads import (
-    PathSwitchPayload,
-)
-from packages.valory.skills.path_switch_abci.rounds import (
-    Event,
-    SynchronizedData,
-    PathSwitchRound,
-)
-from packages.valory.skills.abstract_round_abci.base import (
-    BaseTxPayload,
-)
+from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
     BaseCollectSameUntilThresholdRoundTest,
     CollectSameUntilThresholdRound,
- )
-import json
+)
+from packages.valory.skills.path_switch_abci.payloads import PathSwitchPayload
+from packages.valory.skills.path_switch_abci.rounds import (
+    Event,
+    PathSwitchRound,
+    SynchronizedData,
+)
 
 
 @dataclass
@@ -86,11 +82,15 @@ def get_payloads(
 
 
 def get_dummy_path_switch_payload_serialized():
+    """Dummy payload"""
 
-    return json.dumps({
-                "read_stream_id": "dummy_read_stream_id",
-                "read_target_property": "dummy_read_target_property",
-            }, sort_keys=True)
+    return json.dumps(
+        {
+            "read_stream_id": "dummy_read_stream_id",
+            "read_target_property": "dummy_read_target_property",
+        },
+        sort_keys=True,
+    )
 
 
 class BasePathSwitchRoundTest(BaseCollectSameUntilThresholdRoundTest):
@@ -140,11 +140,11 @@ class TestPathSwitchRound(BasePathSwitchRoundTest):
                 ),
                 final_data={
                     "read_stream_id": json.loads(
-                        get_dummy_path_switch_payload_serialized())["read_stream_id"]
-                    ,
+                        get_dummy_path_switch_payload_serialized()
+                    )["read_stream_id"],
                     "read_target_property": json.loads(
-                        get_dummy_path_switch_payload_serialized())["read_target_property"]
-                    ,
+                        get_dummy_path_switch_payload_serialized()
+                    )["read_target_property"],
                 },
                 event=Event.DONE_SCORE,
                 most_voted_payload=get_dummy_path_switch_payload_serialized(),
@@ -160,8 +160,7 @@ class TestPathSwitchRound(BasePathSwitchRoundTest):
                     payload_cls=PathSwitchPayload,
                     data=get_dummy_path_switch_payload_serialized(),
                 ),
-                final_data={
-                },
+                final_data={},
                 event=Event.DONE_READ,
                 most_voted_payload=get_dummy_path_switch_payload_serialized(),
                 synchronized_data_attr_checks=[],
@@ -171,4 +170,3 @@ class TestPathSwitchRound(BasePathSwitchRoundTest):
     def test_run(self, test_case: RoundTestCase) -> None:
         """Run tests."""
         self.run_test(test_case)
-

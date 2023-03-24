@@ -19,25 +19,23 @@
 
 """This package contains round behaviours of GenericScoringAbciApp."""
 
+import json
 from abc import ABC
-from typing import Generator, Set, Type, cast, Dict
+from typing import Dict, Generator, Set, Type, cast
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-import json
+from packages.valory.skills.generic_scoring_abci.ceramic_db import CeramicDB
 from packages.valory.skills.generic_scoring_abci.models import Params
 from packages.valory.skills.generic_scoring_abci.rounds import (
-    SynchronizedData,
     GenericScoringAbciApp,
-    GenericScoringRound,
-)
-from packages.valory.skills.generic_scoring_abci.rounds import (
     GenericScoringPayload,
+    GenericScoringRound,
+    SynchronizedData,
 )
-from packages.valory.skills.generic_scoring_abci.ceramic_db import CeramicDB
 
 
 class GenericScoringBaseBehaviour(BaseBehaviour, ABC):
@@ -65,7 +63,9 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             payload_data = self.update_ceramic_db()
             sender = self.context.agent_address
-            payload = GenericScoringPayload(sender=sender, content=json.dumps(payload_data, sort_keys=True))
+            payload = GenericScoringPayload(
+                sender=sender, content=json.dumps(payload_data, sort_keys=True)
+            )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(payload)
@@ -82,12 +82,14 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
         # discord_id, discord_handle, points, wallet_address
         for user in self.synchronized_data.score_data["users"]:
             discord_id = user.pop("discord_id")
-            ceramic_db.update_or_create_user(
-                "discord_id", discord_id, user
-            )
+            ceramic_db.update_or_create_user("discord_id", discord_id, user)
 
         # latest_update_id
-        ceramic_db.data["module_data"]["generic"]["latest_update_id"] = self.synchronized_data.score_data["module_data"]["generic"]["latest_update_id"]
+        ceramic_db.data["module_data"]["generic"][
+            "latest_update_id"
+        ] = self.synchronized_data.score_data["module_data"]["generic"][
+            "latest_update_id"
+        ]
 
         # If a user has first contributed to one module (i.e. twitter) without registering a wallet,
         # and later he/she contributes to another module, it could happen that we have two different
@@ -106,6 +108,4 @@ class GenericScoringRoundBehaviour(AbstractRoundBehaviour):
 
     initial_behaviour_cls = GenericScoringBehaviour
     abci_app_cls = GenericScoringAbciApp  # type: ignore
-    behaviours: Set[Type[BaseBehaviour]] = [
-        GenericScoringBehaviour
-    ]
+    behaviours: Set[Type[BaseBehaviour]] = [GenericScoringBehaviour]

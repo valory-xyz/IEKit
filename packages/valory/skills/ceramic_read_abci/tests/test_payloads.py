@@ -19,8 +19,8 @@
 
 """This package contains payload tests for the CeramicReadAbciApp."""
 
-from typing import Type, Hashable
 from dataclasses import dataclass
+from typing import Hashable, Type
 
 import pytest
 

@@ -19,23 +19,21 @@
 
 """This package contains the rounds of PathSwitchAbciApp."""
 
-from enum import Enum
-from typing import Dict, cast, Optional, Set, Tuple
 import json
+from enum import Enum
+from typing import Dict, Optional, Set, Tuple, cast
+
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    CollectSameUntilThresholdRound,
     AppState,
     BaseSynchronizedData,
+    CollectSameUntilThresholdRound,
     DegenerateRound,
     EventToTimeout,
     get_name,
 )
-
-from packages.valory.skills.path_switch_abci.payloads import (
-    PathSwitchPayload,
-)
+from packages.valory.skills.path_switch_abci.payloads import PathSwitchPayload
 
 
 class Event(Enum):
@@ -82,8 +80,12 @@ class PathSwitchRound(CollectSameUntilThresholdRound):
                 synchronized_data = self.synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
                     **{
-                        get_name(SynchronizedData.read_stream_id): payload["read_stream_id"],
-                        get_name(SynchronizedData.read_target_property): payload["read_target_property"],
+                        get_name(SynchronizedData.read_stream_id): payload[
+                            "read_stream_id"
+                        ],
+                        get_name(SynchronizedData.read_target_property): payload[
+                            "read_target_property"
+                        ],
                     }
                 )
 
@@ -101,6 +103,7 @@ class PathSwitchRound(CollectSameUntilThresholdRound):
 class FinishedPathSwitchReadRound(DegenerateRound):
     """FinishedPathSwitchReadRound"""
 
+
 class FinishedPathSwitchScoreRound(DegenerateRound):
     """FinishedPathSwitchScoreRound"""
 
@@ -115,12 +118,15 @@ class PathSwitchAbciApp(AbciApp[Event]):
             Event.DONE_READ: FinishedPathSwitchReadRound,
             Event.DONE_SCORE: FinishedPathSwitchScoreRound,
             Event.NO_MAJORITY: PathSwitchRound,
-            Event.ROUND_TIMEOUT: PathSwitchRound
+            Event.ROUND_TIMEOUT: PathSwitchRound,
         },
         FinishedPathSwitchReadRound: {},
-        FinishedPathSwitchScoreRound: {}
+        FinishedPathSwitchScoreRound: {},
     }
-    final_states: Set[AppState] = {FinishedPathSwitchReadRound, FinishedPathSwitchScoreRound}
+    final_states: Set[AppState] = {
+        FinishedPathSwitchReadRound,
+        FinishedPathSwitchScoreRound,
+    }
     event_to_timeout: EventToTimeout = {}
     cross_period_persisted_keys: Set[str] = {"read_stream_id", "read_target_property"}
     db_pre_conditions: Dict[AppState, Set[str]] = {

@@ -19,6 +19,8 @@
 
 """This module contains the shared state for the abci skill of PathSwitchAbciApp."""
 
+from typing import Any
+
 from packages.valory.skills.abstract_round_abci.models import BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
@@ -28,7 +30,6 @@ from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
 from packages.valory.skills.path_switch_abci.rounds import PathSwitchAbciApp
-from typing import Any
 
 
 class SharedState(BaseSharedState):
@@ -50,6 +51,7 @@ class Params(BaseParams):
         )
 
         super().__init__(*args, **kwargs)
+
 
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool

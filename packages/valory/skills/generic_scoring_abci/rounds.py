@@ -19,24 +19,21 @@
 
 """This package contains the rounds of GenericScoringAbciApp."""
 
+import json
 from enum import Enum
-from typing import Dict, cast, Optional, Set, Tuple
+from typing import Dict, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    CollectSameUntilThresholdRound,
     AppState,
     BaseSynchronizedData,
+    CollectSameUntilThresholdRound,
     DegenerateRound,
     EventToTimeout,
-    get_name
+    get_name,
 )
-
-from packages.valory.skills.generic_scoring_abci.payloads import (
-    GenericScoringPayload,
-)
-import json
+from packages.valory.skills.generic_scoring_abci.payloads import GenericScoringPayload
 
 
 class Event(Enum):
@@ -106,9 +103,9 @@ class GenericScoringAbciApp(AbciApp[Event]):
         GenericScoringRound: {
             Event.DONE: FinishedGenericScoringRound,
             Event.NO_MAJORITY: GenericScoringRound,
-            Event.ROUND_TIMEOUT: GenericScoringRound
+            Event.ROUND_TIMEOUT: GenericScoringRound,
         },
-        FinishedGenericScoringRound: {}
+        FinishedGenericScoringRound: {},
     }
     final_states: Set[AppState] = {FinishedGenericScoringRound}
     event_to_timeout: EventToTimeout = {}
