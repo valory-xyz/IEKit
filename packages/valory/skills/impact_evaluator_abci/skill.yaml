@@ -25,6 +25,8 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
 - valory/ceramic_read_abci:0.1.0:bafybeifticrrzvdh2un7pde6m2doxpr3bbbqjls6gkll7d7m74kwc62qty
+- valory/path_switch_abci:0.1.0:bafybeieohu4gtwn4z6h7j3c5f7wxqcjg5iccqfiny5fzcwdajlijeushku
+- valory/generic_scoring_abci:0.1.0:bafybeiacenocm2spypi77xff5hq6hfgd24h7twp6luxvwq5z2onho47fie
 - valory/twitter_scoring_abci:0.1.0:bafybeidjdlayoxisqhxhnaiwnch676vhrrozjfy3mn4ezvl7kd6xucqhfu
 - valory/ceramic_write_abci:0.1.0:bafybeig74d27o2uia7utvwce3eset26zd4lcxomisz4qf26vkiihmyswky
 - valory/dynamic_nft_abci:0.1.0:bafybeibcwmgoi6svv4qnuwgdpl67bikiyhyas3xj3rmpmwacw73423cabu
@@ -89,6 +91,8 @@ models:
       default_write_stream_id: default_write_stream_id
       default_read_target_property: default_read_target_property
       default_write_target_property: default_write_target_property
+      manual_points_stream_id: manual_points_stream_id
+      manual_points_target_property: score_data
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31

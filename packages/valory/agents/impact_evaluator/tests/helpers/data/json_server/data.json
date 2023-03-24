@@ -80,5 +80,29 @@
   "/api/v0/commits": {
    "get": {},
    "post": {}
+  },
+  "/api/v0/commits/manual_points_stream_id": {
+   "get": {
+      "streamId":"kjzl6cwe1jw145gahtt59tvldftsoc2nbnw896et6nkihlnc26oeqw9l9du4sj1",
+      "docId":"kjzl6cwe1jw145gahtt59tvldftsoc2nbnw896et6nkihlnc26oeqw9l9du4sj1",
+      "commits":[
+         {
+            "cid":"bagcqceraa4sjz7jy7xjgrt2yfoi5arvgezznl2v4zmishfgau6hpiuv2nnwq",
+            "value":{
+               "jws":{
+                  "payload":"AXESIDWL3Gnrgm-8MVLSnW7mN1fCvubLTmzW_czXOtEyQHLh",
+                  "signatures":[
+                     {
+                        "signature":"vyKTfxbr5lUoyO_tpjVImhxA-sxDk5YX6m7LGu9c2-RCPResbYu84bqplkWL2P8c5e7p5dXhe9742FMw3xsDBQ",
+                        "protected":"eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa3JCM1VuMWhUNWdiY0JtWTVHaU1rZkpNMmdnVFpCRXlaUThVc2l2czUzbnFTI3o2TWtyQjNVbjFoVDVnYmNCbVk1R2lNa2ZKTTJnZ1RaQkV5WlE4VXNpdnM1M25xUyJ9"
+                     }
+                  ],
+                  "link":"bafyreibvrpogt24cn66dcuwstvxomn2xyk7ons2ontlp3tgxhliteqds4e"
+               },
+               "linkedBlock":"omRkYXRhomV1c2Vyc4BrbW9kdWxlX2RhdGGjZ2dlbmVyaWOgZ3R3aXR0ZXKga2R5bmFtaWNfbmZ0oGZoZWFkZXKiZnVuaXF1ZXA1ZWo1eVVLU1pJVWw2VExva2NvbnRyb2xsZXJzgXg4ZGlkOmtleTp6Nk1rckIzVW4xaFQ1Z2JjQm1ZNUdpTWtmSk0yZ2dUWkJFeVpROFVzaXZzNTNucVM"
+            }
+         }
+      ]
+   }
   }
 }
