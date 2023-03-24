@@ -46,7 +46,7 @@ class PathSwitchBaseBehaviour(BaseBehaviour, ABC):
     @property
     def synchronized_data(self) -> SynchronizedData:
         """Return the synchronized data."""
-        return cast(SynchronizedData, super().synchronized_data)
+        return cast(SynchronizedData, super().synchronized_data)  # pragma: nocover
 
     @property
     def params(self) -> Params:

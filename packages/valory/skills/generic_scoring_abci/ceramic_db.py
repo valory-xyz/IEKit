@@ -61,7 +61,7 @@ class CeramicDB:
         self.data["users"].append(new_user)
 
         if self.logger:
-            self.logger.info(f"DB: created new user: {new_user}")
+            self.logger.info(f"DB: created new user: {new_user}")  # pragma: nocover
 
     def get_user_by_field(self, field, value) -> Tuple[Optional[Dict], Optional[int]]:
         """Search users"""

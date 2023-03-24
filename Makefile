@@ -81,14 +81,18 @@ common-checks-1:
 test:
 	pytest \
 	-rfE packages/valory/skills/ceramic_read_abci \
+	-rfE packages/valory/skills/path_switch_abci \
+	-rfE packages/valory/skills/generic_scoring_abci \
 	-rfE packages/valory/skills/twitter_scoring_abci \
+	-rfE packages/valory/skills/dynamic_nft_abci \
 	-rfE packages/valory/skills/ceramic_write_abci \
 	-rfE packages/valory/skills/impact_evaluator_abci \
-	-rfE packages/valory/skills/dynamic_nft_abci \
 	--cov=packages.valory.skills.ceramic_read_abci \
+	--cov=packages.valory.skills.path_switch_abci \
+	--cov=packages.valory.skills.generic_scoring_abci \
 	--cov=packages.valory.skills.twitter_scoring_abci \
-	--cov=packages.valory.skills.ceramic_write_abci \
 	--cov=packages.valory.skills.dynamic_nft_abci \
+	--cov=packages.valory.skills.ceramic_write_abci \
 	--cov=packages.valory.skills.impact_evaluator_abci \
 	--cov-report=xml --cov-report=term --cov-report=term-missing --cov-config=.coveragerc
 	find . -name ".coverage*" -not -name ".coveragerc" -exec rm -fr "{}" \;

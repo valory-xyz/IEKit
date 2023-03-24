@@ -20,14 +20,13 @@
 """This package contains round behaviours of PathSwitchAbciApp."""
 
 from pathlib import Path
-from typing import Any, Dict, Hashable, Optional, Type
-from dataclasses import dataclass, field
+from typing import Any, Dict, Optional, Type
+from dataclasses import dataclass
 
 import pytest
 
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.valory.skills.abstract_round_abci.behaviours import (
-    AbstractRoundBehaviour,
     BaseBehaviour,
     make_degenerate_behaviour,
 )
@@ -38,11 +37,8 @@ from packages.valory.skills.path_switch_abci.behaviours import (
 )
 from packages.valory.skills.path_switch_abci.rounds import (
     SynchronizedData,
-    DegenerateRound,
     Event,
-    PathSwitchAbciApp,
-    FinishedPathSwitchRound,
-    PathSwitchRound,
+    FinishedPathSwitchReadRound,
 )
 
 from packages.valory.skills.abstract_round_abci.test_tools.base import (
@@ -101,7 +97,7 @@ class TestPathSwitchBehaviour(BasePathSwitchTest):
     """Tests PathSwitchBehaviour"""
 
     behaviour_class: Type[BaseBehaviour] = PathSwitchBehaviour
-    next_behaviour_class: Type[BaseBehaviour] = ...
+    next_behaviour_class: Type[BaseBehaviour] = make_degenerate_behaviour(FinishedPathSwitchReadRound)
 
     @pytest.mark.parametrize(
         "test_case, kwargs",
@@ -109,14 +105,10 @@ class TestPathSwitchBehaviour(BasePathSwitchTest):
             (
                 BehaviourTestCase(
                     "Contract error",
-                    initial_data=dict(ceramic_db=DUMMY_CERAMIC_DB),
-                    event=Event.CONTRACT_ERROR,
+                    initial_data=dict(),
+                    event=Event.DONE_READ,
                 ),
                 {
-                    "mock_response_data": dict(
-                        member_to_token_id=NewTokensRound.ERROR_PAYLOAD
-                    ),
-                    "mock_response_performative": ContractApiMessage.Performative.ERROR,
                 },
             )
         ],
@@ -125,9 +117,5 @@ class TestPathSwitchBehaviour(BasePathSwitchTest):
         """Run tests."""
         self.fast_forward(test_case.initial_data)
         self.behaviour.act_wrapper()
-        self._mock_dynamic_contribution_contract_request(
-            response_body=kwargs.get("mock_response_data"),
-            response_performative=kwargs.get("mock_response_performative"),
-        )
         self.complete(test_case.event)
 

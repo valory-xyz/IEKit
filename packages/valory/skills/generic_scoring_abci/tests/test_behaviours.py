@@ -20,14 +20,13 @@
 """This package contains round behaviours of GenericScoringAbciApp."""
 
 from pathlib import Path
-from typing import Any, Dict, Hashable, Optional, Type
-from dataclasses import dataclass, field
+from typing import Any, Dict, Optional, Type
+from dataclasses import dataclass
 
 import pytest
 
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.valory.skills.abstract_round_abci.behaviours import (
-    AbstractRoundBehaviour,
     BaseBehaviour,
     make_degenerate_behaviour,
 )
@@ -38,20 +37,21 @@ from packages.valory.skills.generic_scoring_abci.behaviours import (
 )
 from packages.valory.skills.generic_scoring_abci.rounds import (
     SynchronizedData,
-    DegenerateRound,
     Event,
-    GenericScoringAbciApp,
     FinishedGenericScoringRound,
-    GenericScoringRound,
 )
 
 from packages.valory.skills.abstract_round_abci.test_tools.base import (
     FSMBehaviourBaseCase,
 )
 
-DUMMY_SCORE_DATA = {
+DUMMY_CERAMIC_DB = {
     "users": [{"discord_id": "dummy_discord_id", "wallet_address": "dummy_wallet_address", "points": 10}],
     "module_data": {"twitter": {}, "dynamic_nft": {}, "generic": {}}}
+
+DUMMY_SCORE_DATA = {
+    "users": [{"discord_id": "dummy_discord_id", "wallet_address": "dummy_wallet_address", "points": 10}],
+    "module_data": {"twitter": {}, "dynamic_nft": {}, "generic": {"latest_update_id": 1}}}
 
 
 
@@ -110,18 +110,22 @@ class TestGenericScoringBehaviour(BaseGenericScoringTest):
     next_behaviour_class: Type[BaseBehaviour] = make_degenerate_behaviour(FinishedGenericScoringRound)
 
     @pytest.mark.parametrize(
-        "test_case",
+        "test_case, kwargs",
         [
             (
                 BehaviourTestCase(
-                    "Contract error",
-                    initial_data=dict(score_data=DUMMY_SCORE_DATA),
+                    "Happy path",
+                    initial_data=dict(
+                        ceramic_db=DUMMY_CERAMIC_DB,
+                        score_data=DUMMY_SCORE_DATA
+                    ),
                     event=Event.DONE,
                 ),
+                {}
             )
         ],
     )
-    def test_run(self, test_case: BehaviourTestCase) -> None:
+    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
         """Run tests."""
         self.fast_forward(test_case.initial_data)
         self.behaviour.act_wrapper()

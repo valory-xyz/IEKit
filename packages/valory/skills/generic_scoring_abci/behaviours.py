@@ -83,7 +83,7 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
         for user in self.synchronized_data.score_data["users"]:
             discord_id = user.pop("discord_id")
             ceramic_db.update_or_create_user(
-                discord_id, user["discord_id"], user
+                "discord_id", discord_id, user
             )
 
         # latest_update_id
