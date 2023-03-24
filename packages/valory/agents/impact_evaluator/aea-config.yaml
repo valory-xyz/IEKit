@@ -9,10 +9,10 @@ fingerprint:
   tests/__init__.py: bafybeicmv3jjcqcdnmubfmrgdgeyic3nkm77z4mutsyuo34hpddwupofre
   tests/helpers/__init__.py: bafybeiauwuw4a4wxqacqqkkk52ktps2qedadhypvh3ex7uqs7qaqrpygmy
   tests/helpers/constants.py: bafybeibbokz7gzdlubnjwxrmh4tqckc7j75hfy3ae6l5a63mrbd4hp6l7u
-  tests/helpers/data/json_server/data.json: bafybeibg7ajqfnazwgc3jd5xcsyn6jgtntetdp3ygstprijhbv4l32etsu
+  tests/helpers/data/json_server/data.json: bafybeia3lvjalkzzusb7to6p5vfy74xibwo65nb4tukrxhbbsh6gyiegeu
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
-  tests/test_impact_evaluator.py: bafybeiexgm4zwh6ys2qlno35zxe5qpde5wyypagv3e723646qjpa4ymgdi
+  tests/test_impact_evaluator.py: bafybeifdcvbix5q4gxlovpdizvt36zgneiddzpfqiwwraye3d4iwtcsqb4
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihaax5od5zo5jk2l62hv4jwuwtxloh5mijozudpsjombqc4ncmi6i
@@ -29,10 +29,11 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeihkrunmigvlcze7uxhafj2h3kvpf2kifggq7zqj42n2we4mcwuvou
 - valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
-- valory/impact_evaluator_abci:0.1.0:bafybeickkd3kinek7rwan7dx2fhk5ikne5z6xhu4tcrhbggfj7wlqskdvq
-- valory/score_read_abci:0.1.0:bafybeia67hgl44rvmrtmcgt7shzekldtxc6hc3hhykbntkllj4ufwj67qa
-- valory/score_write_abci:0.1.0:bafybeiazrw2dbb4vod65enu66juuoitavzksns3zggoebj5dgsm5ob6yea
-- valory/dynamic_nft_abci:0.1.0:bafybeiddcix52ycxtgmzaroxvp5lez5cckbbf65gblwmhznthfc3b34keq
+- valory/impact_evaluator_abci:0.1.0:bafybeihvsvd7upkpktw6jqccqy3ejcw4eyfpsm6qtxm24d6es43jcmrxqi
+- valory/twitter_scoring_abci:0.1.0:bafybeigh5mg4jfwwslxje4qcuef5hzsziwdkmuisgdibdtcm7bhny357oy
+- valory/ceramic_read_abci:0.1.0:bafybeid27nqqr5omexipv53voz2tqmby7dnl24c7hevftza3ry4xprx2ye
+- valory/ceramic_write_abci:0.1.0:bafybeicd6mypbecvh3msubvlyn4pv3ywvufbrasx2ef2nh2zgygoamopnu
+- valory/dynamic_nft_abci:0.1.0:bafybeibkkdswv2aq5x7zmyhwwt7wvejvyobt4xweslpgbtda2dsmuxsx7q
 - valory/registration_abci:0.1.0:bafybeidgoqi7fa2gb56hdfsf74bbunfii63zgeo4qhggb66ofver2n2gya
 - valory/reset_pause_abci:0.1.0:bafybeievxhu6u5r5wlpjfzcwuowlbanhfbi25saf25qit53jauv4kq6gne
 default_ledger: ethereum
@@ -118,7 +119,10 @@ models:
       ceramic_api_read_endpoint: ${str:api/v0/commits/{stream_id}}
       ceramic_did_seed: ${str:0101010101010101010101010101010101010101010101010101010101010101}
       ceramic_did_str: ${str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
-      scores_stream_id: ${str:user_to_points_stream_id}
+      default_read_stream_id: ${str:default_read_stream_id}
+      default_write_stream_id: ${str:default_write_stream_id}
+      default_read_target_property: ${str:default_read_target_property}
+      default_write_target_property: ${str:default_write_target_property}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31

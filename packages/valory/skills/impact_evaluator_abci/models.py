@@ -26,6 +26,17 @@ from packages.valory.skills.abstract_round_abci.models import Requests as BaseRe
 from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
+from packages.valory.skills.ceramic_read_abci.models import (
+    Params as CeramicReadAbciParams,
+)
+from packages.valory.skills.ceramic_read_abci.rounds import Event as CeramicReadEvent
+from packages.valory.skills.ceramic_write_abci.models import (
+    Params as CeramicWriteAbciParams,
+)
+from packages.valory.skills.ceramic_write_abci.models import (
+    RandomnessApi as CeramicWriteRandomnessApi,
+)
+from packages.valory.skills.ceramic_write_abci.rounds import Event as CeramicWriteEvent
 from packages.valory.skills.dynamic_nft_abci.models import (
     Params as DynamicNFTAbciParams,
 )
@@ -34,23 +45,22 @@ from packages.valory.skills.impact_evaluator_abci.composition import (
     ImpactEvaluatorSkillAbciApp,
 )
 from packages.valory.skills.reset_pause_abci.rounds import Event as ResetPauseEvent
-from packages.valory.skills.score_read_abci.models import Params as ScoreReadAbciParams
-from packages.valory.skills.score_read_abci.rounds import Event as ScoreReadEvent
-from packages.valory.skills.score_write_abci.models import (
-    Params as ScoreWriteAbciParams,
+from packages.valory.skills.twitter_scoring_abci.models import (
+    Params as TwitterScoringAbciParams,
 )
-from packages.valory.skills.score_write_abci.models import (
-    RandomnessApi as ScoreWriteRandomnessApi,
+from packages.valory.skills.twitter_scoring_abci.rounds import (
+    Event as TwitterScoringEvent,
 )
-from packages.valory.skills.score_write_abci.rounds import Event as ScoreWriteEvent
 
 
-ScoreReadParams = ScoreReadAbciParams
-ScoreWriteParams = ScoreWriteAbciParams
+CeramicReadParams = CeramicReadAbciParams
+CeramicWriteParams = CeramicWriteAbciParams
 DynamicNFTParams = DynamicNFTAbciParams
+TwitterScoringParams = TwitterScoringAbciParams
+
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
-RandomnessApi = ScoreWriteRandomnessApi
+RandomnessApi = CeramicWriteRandomnessApi
 
 MARGIN = 5
 MULTIPLIER = 2
@@ -65,10 +75,13 @@ class SharedState(BaseSharedState):
         """Set up."""
         super().setup()
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
-            ScoreReadEvent.ROUND_TIMEOUT
+            CeramicReadEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
-            ScoreWriteEvent.ROUND_TIMEOUT
+            CeramicWriteEvent.ROUND_TIMEOUT
+        ] = self.context.params.round_timeout_seconds
+        ImpactEvaluatorSkillAbciApp.event_to_timeout[
+            TwitterScoringEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds
         ImpactEvaluatorSkillAbciApp.event_to_timeout[DynamicNFTEvent.ROUND_TIMEOUT] = (
             self.context.params.round_timeout_seconds * MULTIPLIER
@@ -81,5 +94,7 @@ class SharedState(BaseSharedState):
         ] = (self.context.params.observation_interval + MARGIN)
 
 
-class Params(ScoreReadParams, ScoreWriteParams, DynamicNFTParams):
+class Params(
+    CeramicReadParams, TwitterScoringParams, CeramicWriteParams, DynamicNFTParams
+):
     """A model to represent params for multiple abci apps."""
