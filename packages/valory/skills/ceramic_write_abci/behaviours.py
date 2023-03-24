@@ -19,37 +19,35 @@
 
 """This package contains round behaviours of CeramicWriteAbciApp."""
 
+import json
 from abc import ABC
-from typing import Generator, Set, Type, cast
-from typing import Generator, Optional, Set, Type, cast
+from typing import Generator, Optional, Set, Tuple, Type, cast
+
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-import json
-from packages.valory.skills.ceramic_write_abci.models import Params
-from packages.valory.skills.ceramic_write_abci.rounds import (
-    SynchronizedData,
-    CeramicWriteAbciApp,
-    RandomnessRound,
-    SelectKeeperRound,
-    StreamWriteRound,
-    VerificationRound,
-)
-from packages.valory.skills.ceramic_write_abci.rounds import (
-    RandomnessPayload,
-    SelectKeeperPayload,
-    StreamWritePayload,
-    VerificationPayload,
+from packages.valory.skills.abstract_round_abci.common import (
+    RandomnessBehaviour,
+    SelectKeeperBehaviour,
 )
 from packages.valory.skills.ceramic_write_abci.ceramic.payloads import (
     build_commit_payload,
     build_data_from_commits,
 )
-from packages.valory.skills.abstract_round_abci.common import (
-    RandomnessBehaviour,
-    SelectKeeperBehaviour,
+from packages.valory.skills.ceramic_write_abci.models import Params
+from packages.valory.skills.ceramic_write_abci.rounds import (
+    CeramicWriteAbciApp,
+    RandomnessPayload,
+    RandomnessRound,
+    SelectKeeperPayload,
+    SelectKeeperRound,
+    StreamWritePayload,
+    StreamWriteRound,
+    SynchronizedData,
+    VerificationPayload,
+    VerificationRound,
 )
 
 
@@ -111,6 +109,29 @@ class CeramicWriteBaseBehaviour(BaseBehaviour, ABC):
             "data": data,
         }
 
+    def _get_stream_and_target_property(self) -> Tuple[str, str]:
+        """Get the target stream_id and content"""
+        # stream_id and target_property_name can be set either in the synchronized_data or as a param. The former has higher priority.
+        stream_id = (
+            self.synchronized_data.write_stream_id
+            or self.params.default_write_stream_id
+        )
+        if not stream_id:
+            raise ValueError(
+                "write_stream_id has not been set neither in the synchronized_data nor as a default parameter"
+            )
+
+        target_property_name = (
+            self.synchronized_data.write_target_property
+            or self.params.default_write_target_property
+        )
+        if not target_property_name:
+            raise ValueError(
+                "write_target_property has not been set neither in the synchronized_data nor as a default parameter"
+            )
+
+        return stream_id, target_property_name
+
 
 class RandomnessCeramicBehaviour(RandomnessBehaviour):
     """Retrieve randomness."""
@@ -160,14 +181,8 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             success = yield from self._write_ceramic_data()
             if success:
-                self.context.logger.info(
-                    f"Wrote data to ceramic stream with id: {self.synchronized_data.stream_id}"
-                )
                 payload_content = StreamWriteRound.SUCCCESS_PAYLOAD
             else:
-                self.context.logger.info(
-                    f"An error happened while writing data to ceramic stream with id: {self.synchronized_data.stream_id}"
-                )
                 payload_content = StreamWriteRound.ERROR_PAYLOAD
 
             sender = self.context.agent_address
@@ -182,19 +197,25 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
     def _write_ceramic_data(self) -> Generator[None, None, bool]:
         """Write the scores to the Ceramic stream"""
 
+        stream_id, target_property_name = self._get_stream_and_target_property()
+
         # Get the current stream data
-        old_data = yield from self._get_stream_data(self.synchronized_data.stream_id)
+        old_data = yield from self._get_stream_data(stream_id)
 
         if not old_data:
+            self.context.logger.error(
+                f"Could not get the previous data from stream {stream_id}"
+            )
             return False
 
-        new_data = self.synchronized_data.stream_content
+        # stream_content can be set either in the synchronized_data directly or read using a param. The former has higher priority.
+        new_data = self.synchronized_data.db.get_strict(target_property_name)
 
         # Prepare the commit payload
         commit_payload = build_commit_payload(
-            self.synchronized_data.did,
-            self.synchronized_data.did_seed,
-            self.synchronized_data.stream_id,
+            self.params.ceramic_did_str,
+            self.params.ceramic_did_seed,
+            stream_id,
             old_data,
             new_data,
         )
@@ -220,7 +241,7 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
             )
             return False
 
-        self.context.logger.info("Updated the stream correctly")
+        self.context.logger.info(f"Updated the stream correctly: {stream_id}")
         return True
 
 
@@ -234,18 +255,20 @@ class VerificationBehaviour(CeramicWriteBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
+            stream_id, target_property_name = self._get_stream_and_target_property()
+
             # Get the current data
-            data = yield from self._get_stream_data(self.synchronized_data.stream_id)
+            data = yield from self._get_stream_data(stream_id)
 
             # Verify if the retrieved data matches local user_to_total_points
             expected_data = json.dumps(
-                self.synchronized_data.stream_content,
+                self.synchronized_data.db.get_strict(target_property_name),
                 sort_keys=True,
             )
 
             # TODO: during e2e, the mocked Ceramic stream can't be updated, so verification will always fail
-            # In this cases, we need to skip verification by detecting if scores_stream_id contains the default value
-            skip_verify = self.synchronized_data.stream_id == "stream_id_e2e"
+            # In this cases, we need to skip verification by detecting if stream_id contains the default value
+            skip_verify = stream_id == "stream_id_e2e"
 
             if not skip_verify and (
                 not data or json.dumps(data["data"], sort_keys=True) != expected_data
@@ -268,7 +291,6 @@ class VerificationBehaviour(CeramicWriteBaseBehaviour):
         self.set_done()
 
 
-
 class CeramicWriteRoundBehaviour(AbstractRoundBehaviour):
     """CeramicWriteRoundBehaviour"""
 
@@ -278,5 +300,5 @@ class CeramicWriteRoundBehaviour(AbstractRoundBehaviour):
         RandomnessCeramicBehaviour,
         SelectKeeperCeramicBehaviour,
         StreamWriteBehaviour,
-        VerificationBehaviour
+        VerificationBehaviour,
     ]

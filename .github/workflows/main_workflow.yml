@@ -59,8 +59,10 @@ jobs:
           sudo apt-get autoclean
           pip install tomte[tox]==0.2.2
           pip install --upgrade setuptools==60.10.0
-      - name: Check copyright
+      - name: Check copyright headers
         run: tox -e check-copyright
+      - name: License compatibility check
+        run: tox -e liccheck
       - name: Check doc links and IPFS hashes
         run: tox -e check-doc-links-hashes
 

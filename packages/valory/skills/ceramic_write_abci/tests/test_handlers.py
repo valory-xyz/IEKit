@@ -24,4 +24,3 @@ import packages.valory.skills.ceramic_write_abci.handlers  # noqa
 
 def test_import() -> None:
     """Test that the 'handlers.py' of the CeramicWrite can be imported."""
-
