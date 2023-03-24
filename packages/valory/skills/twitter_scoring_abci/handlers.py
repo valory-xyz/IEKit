@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the handlers for the skill of ScoreWriteAbciApp."""
+"""This module contains the handlers for the skill of TwitterScoringAbciApp."""
 
 from packages.valory.skills.abstract_round_abci.handlers import (
     ABCIRoundHandler as BaseABCIRoundHandler,

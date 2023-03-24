@@ -54,13 +54,13 @@ class SynchronizedData(BaseSynchronizedData):
     """
 
     @property
-    def stream_id(self) -> Optional[str]:
-        """Get the user new points."""
-        return cast(str, self.db.get("stream_id", None))
+    def read_stream_id(self) -> Optional[str]:
+        """Get the read_stream_id."""
+        return cast(str, self.db.get("read_stream_id", None))
 
     @property
-    def target_property_name(self) -> Optional[str]:
-        """Get the user new points."""
+    def read_target_property(self) -> Optional[str]:
+        """Get the target_property_name."""
         return cast(str, self.db.get("target_property_name", None))
 
 
@@ -115,11 +115,13 @@ class CeramicReadAbciApp(AbciApp[Event]):
         FinishedReadingRound: {}
     }
     final_states: Set[AppState] = {FinishedReadingRound}
-    event_to_timeout: EventToTimeout = {}
-    cross_period_persisted_keys: Set[str] = []
+    event_to_timeout: EventToTimeout = {
+        Event.ROUND_TIMEOUT: 30.0,
+    }
+    cross_period_persisted_keys: Set[str] = set()
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        StreamReadRound: [],
+        StreamReadRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedReadingRound: [],
+        FinishedReadingRound: set(),
     }

@@ -17,10 +17,9 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains the rounds of DynamicNFTAbciApp."""
+"""This package contains the rounds of TwitterScoringAbciApp."""
 
 import json
-from abc import ABC
 from enum import Enum
 from typing import Dict, Optional, Set, Tuple, cast
 
@@ -34,16 +33,16 @@ from packages.valory.skills.abstract_round_abci.base import (
     EventToTimeout,
     get_name,
 )
-from packages.valory.skills.dynamic_nft_abci.payloads import NewTokensPayload
+from packages.valory.skills.twitter_scoring_abci.payloads import TwitterScoringPayload
 
 
 class Event(Enum):
-    """DynamicNFTAbciApp Events"""
+    """TwitterScoringAbciApp Events"""
 
-    NO_MAJORITY = "no_majority"
     DONE = "done"
+    NO_MAJORITY = "no_majority"
     ROUND_TIMEOUT = "round_timeout"
-    CONTRACT_ERROR = "contract_error"
+    API_ERROR = "api_error"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -54,47 +53,33 @@ class SynchronizedData(BaseSynchronizedData):
     """
 
     @property
-    def token_id_to_points(self) -> dict:
-        """Get the token id to points mapping."""
-        return cast(dict, self.db.get("token_id_to_points", {}))
-
-    @property
-    def last_update_time(self) -> float:
-        """Get the last update time."""
-        return cast(float, self.db.get("last_update_time", None))
-
-    @property
     def ceramic_db(self) -> dict:
         """Get the data stored in the main stream."""
         return cast(dict, self.db.get_strict("ceramic_db"))
 
 
-class NewTokensRound(CollectSameUntilThresholdRound):
-    """NewTokensRound"""
+class TwitterScoringRound(CollectSameUntilThresholdRound):
+    """TwitterScoringRound"""
 
-    payload_class = NewTokensPayload
+    payload_class = TwitterScoringPayload
     synchronized_data_class = SynchronizedData
 
-    ERROR_PAYLOAD = {"error": True}
+    ERROR_PAYLOAD = {"error": "true"}
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
+            if self.most_voted_payload == json.dumps(
+                self.ERROR_PAYLOAD, sort_keys=True
+            ):
+                return self.synchronized_data, Event.API_ERROR
+
             payload = json.loads(self.most_voted_payload)
-
-            if payload == NewTokensRound.ERROR_PAYLOAD:
-                return self.synchronized_data, Event.CONTRACT_ERROR
-
-            token_id_to_points = payload["token_id_to_points"]
-            last_update_time = payload["last_update_time"]
-            ceramic_db = payload["ceramic_db"]
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    get_name(SynchronizedData.token_id_to_points): token_id_to_points,
-                    get_name(SynchronizedData.last_update_time): last_update_time,
-                    get_name(SynchronizedData.ceramic_db): ceramic_db,
+                    get_name(SynchronizedData.ceramic_db): payload,
                 }
             )
             return synchronized_data, Event.DONE
@@ -105,42 +90,36 @@ class NewTokensRound(CollectSameUntilThresholdRound):
         return None
 
 
-class FinishedNewTokensRound(DegenerateRound, ABC):
-    """FinishedNewTokensRound"""
-
-    round_id: str = "finished_new_tokens"
+class FinishedTwitterScoringRound(DegenerateRound):
+    """FinishedTwitterScoringRound"""
 
 
-class DynamicNFTAbciApp(AbciApp[Event]):
-    """DynamicNFTAbciApp"""
+class TwitterScoringAbciApp(AbciApp[Event]):
+    """TwitterScoringAbciApp"""
 
-    initial_round_cls: AppState = NewTokensRound
-    initial_states: Set[AppState] = {NewTokensRound}
+    initial_round_cls: AppState = TwitterScoringRound
+    initial_states: Set[AppState] = {TwitterScoringRound}
     transition_function: AbciAppTransitionFunction = {
-        NewTokensRound: {
-            Event.DONE: FinishedNewTokensRound,
-            Event.CONTRACT_ERROR: NewTokensRound,
-            Event.NO_MAJORITY: NewTokensRound,
-            Event.ROUND_TIMEOUT: NewTokensRound,
+        TwitterScoringRound: {
+            Event.DONE: FinishedTwitterScoringRound,
+            Event.NO_MAJORITY: TwitterScoringRound,
+            Event.ROUND_TIMEOUT: TwitterScoringRound,
+            Event.API_ERROR: TwitterScoringRound,
         },
-        FinishedNewTokensRound: {},
+        FinishedTwitterScoringRound: {},
     }
-    final_states: Set[AppState] = {FinishedNewTokensRound}
+    final_states: Set[AppState] = {FinishedTwitterScoringRound}
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
+    cross_period_persisted_keys: Set[str] = {
+        "ceramic_db",
+    }
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        NewTokensRound: set(),
+        TwitterScoringRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedNewTokensRound: {
-            get_name(SynchronizedData.token_id_to_points),
-            get_name(SynchronizedData.last_update_time),
+        FinishedTwitterScoringRound: {
             get_name(SynchronizedData.ceramic_db),
-        }
-    }
-    cross_period_persisted_keys: Set[str] = {
-        "token_id_to_points",
-        "last_update_time",
-        "ceramic_db",
+        },
     }

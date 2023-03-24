@@ -21,7 +21,7 @@
 
 import json
 from abc import ABC
-from typing import Generator, Optional, Set, Tuple, Type, cast
+from typing import Dict, Generator, Optional, Set, Tuple, Type, cast
 
 from packages.valory.contracts.dynamic_contribution.contract import (
     DynamicContributionContract,
@@ -32,6 +32,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
+from packages.valory.skills.dynamic_nft_abci.ceramic_db import CeramicDB
 from packages.valory.skills.dynamic_nft_abci.models import Params, SharedState
 from packages.valory.skills.dynamic_nft_abci.payloads import NewTokensPayload
 from packages.valory.skills.dynamic_nft_abci.rounds import (
@@ -71,97 +72,42 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
         ).local():
 
             (
-                token_id_to_address,
+                new_token_id_to_address,
                 last_parsed_block,
-            ) = yield from self.get_token_id_to_member()
+            ) = yield from self.get_token_id_to_address()
 
-            if token_id_to_address == NewTokensRound.ERROR_PAYLOAD:
-                payload_data = json.dumps(NewTokensRound.ERROR_PAYLOAD, sort_keys=True)
+            if (
+                new_token_id_to_address == NewTokensRound.ERROR_PAYLOAD
+                or not last_parsed_block
+            ):
+                payload_data = NewTokensRound.ERROR_PAYLOAD
             else:
-                old_token_to_data = self.synchronized_data.token_to_data
-
-                # Get the new tokens that have been minted and which have a linked Twitter user
-                new_token_to_data = {
-                    token_id: {
-                        "address": address,
-                        "points": DEFAULT_POINTS,
-                    }
-                    for token_id, address in token_id_to_address.items()
-                    if token_id not in old_token_to_data
-                }
-
-                token_to_data = {
-                    **old_token_to_data,
-                    **new_token_to_data,
-                }
-
-                address_to_token_ids = {
-                    data["address"]: token_id
-                    for token_id, data in token_to_data.items()
-                }
-                users_to_address = {
-                    user: address
-                    for address, user in self.synchronized_data.wallet_to_users.items()
-                }
-
-                self.context.logger.info(
-                    f"Updating badge points. User to total points: {self.synchronized_data.user_to_total_points}"
+                payload_data = self.update_ceramic_db(
+                    new_token_id_to_address, last_parsed_block
                 )
-
-                # Update points in token_to_data with the updated points
-                for user, points in self.synchronized_data.user_to_total_points.items():
-                    # No wallet linked to Twitter user
-                    if user not in users_to_address:
-                        self.context.logger.info(
-                            f"Twitter user {user} has not linked a wallet yet. Skipping..."
-                        )
-                        continue
-                    address = users_to_address[user]
-                    # Not minted
-                    if address not in address_to_token_ids:
-                        self.context.logger.info(
-                            f"Twitter user {user} has not minted a token yet. Skipping..."
-                        )
-                        continue
-                    token_id = address_to_token_ids[address]
-                    token_to_data[token_id]["points"] = points
-                    self.context.logger.info(
-                        f"Twitter user {user} minted token {token_id} and has {points} points"
-                    )
-
-                self.context.logger.info(f"Got the new token data: {token_to_data}")
-
-                last_update_time = cast(
-                    SharedState, self.context.state
-                ).round_sequence.last_round_transition_timestamp.timestamp()
-
-                payload_data = json.dumps(
-                    {
-                        "token_to_data": token_to_data,
-                        "last_update_time": int(last_update_time),
-                        "last_parsed_block": last_parsed_block,
-                    },
-                )
-
-                self.context.logger.info(f"Payload data={payload_data}")
 
         with self.context.benchmark_tool.measure(
             self.behaviour_id,
         ).consensus():
-            payload = NewTokensPayload(self.context.agent_address, payload_data)
+            payload = NewTokensPayload(
+                self.context.agent_address, json.dumps(payload_data, sort_keys=True)
+            )
             yield from self.send_a2a_transaction(payload)
             yield from self.wait_until_round_end()
 
         self.set_done()
 
-    def get_token_id_to_member(
+    def get_token_id_to_address(
         self,
     ) -> Generator[None, None, Tuple[dict, Optional[int]]]:
-        """Get token id to member data."""
-        from_block = (
-            self.synchronized_data.last_parsed_block
-            or self.params.earliest_block_to_monitor
-        )
+        """Get token id to address data."""
+        try:
+            from_block = self.synchronized_data.ceramic_db["module_data"][
+                "dynamic_nft"
+            ]["last_parsed_block"]
+        except KeyError:
+            from_block = self.params.earliest_block_to_monitor
+
         self.context.logger.info(
             f"Retrieving Transfer events later than block {from_block}"
             f" for contract at {self.params.dynamic_contribution_contract_address}"
@@ -175,14 +121,77 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
             from_block=from_block,
         )
         if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
-            self.context.logger.info("Error retrieving the token_id to member data")
+            self.context.logger.info("Error retrieving the token_id to address data")
             return NewTokensRound.ERROR_PAYLOAD, from_block
         data = cast(dict, contract_api_msg.state.body["token_id_to_member"])
         last_block = cast(int, contract_api_msg.state.body["last_block"])
         self.context.logger.info(
-            f"Got token_id to member data up to block {last_block}: {data}"
+            f"Got token_id to address data up to block {last_block}: {data}"
         )
         return data, last_block
+
+    def update_ceramic_db(
+        self, new_token_id_to_address: Dict, last_parsed_block: int
+    ) -> Dict:
+        """Calculate the new content of the DB"""
+
+        # We store a token_id to points mapping so it is quick
+        # to retrieve the scores for a given token_id, which is done
+        # during each request to the handler
+        token_id_to_points = self.synchronized_data.token_id_to_points
+
+        # Instantiate the db
+        ceramic_db = CeramicDB(self.synchronized_data.ceramic_db, self.context.logger)
+
+        # Update token_ids in the ceramic_db
+        for token_id, address in new_token_id_to_address.items():
+            user, _ = ceramic_db.get_user_by_field("wallet_address", address)
+
+            # Create a new user if it does not exist
+            # Update user in the following cases:
+            # - User exists and its current token_id is None
+            # - User exists and its current token_id is greater than the one in this iteration (only the first minted token is assigned to the user)
+            if not user or user["token_id"] is None or user["token_id"] > token_id:
+                ceramic_db.update_or_create_user(
+                    "wallet_address", address, {"token_id": token_id}
+                )
+
+        # Rebuild token_to_points
+        new_token_id_to_points = {
+            user["token_id"]: user["points"]
+            for user in ceramic_db.data["users"]
+            if user["token_id"]
+        }
+
+        # ceramic_db only stores the first minted token for each user
+        # We add the extra tokens to new_token_id_to_points and assing a score of 0
+        for token_id in new_token_id_to_address.keys():
+            user, _ = ceramic_db.get_user_by_field("token_id", token_id)
+            if not user:
+                new_token_id_to_points[token_id] = DEFAULT_POINTS
+
+        # Update token_id_to_points
+        token_id_to_points.update(new_token_id_to_points)
+
+        # Last parsed block
+        ceramic_db.data["module_data"]["dynamic_nft"][
+            "last_parsed_block"
+        ] = last_parsed_block
+
+        # Last update time
+        last_update_time = cast(
+            SharedState, self.context.state
+        ).round_sequence.last_round_transition_timestamp.timestamp()
+
+        data = {
+            "last_update_time": last_update_time,
+            "token_id_to_points": token_id_to_points,
+            "ceramic_db": ceramic_db.data,
+        }
+
+        self.context.logger.info(f"Data updated [NewTokens]: {data}")
+
+        return data
 
 
 class DynamicNFTRoundBehaviour(AbstractRoundBehaviour):

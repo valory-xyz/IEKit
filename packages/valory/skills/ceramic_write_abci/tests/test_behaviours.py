@@ -38,11 +38,11 @@ from packages.valory.skills.abstract_round_abci.test_tools.common import (
     BaseRandomnessBehaviourTest,
 )
 from packages.valory.skills.ceramic_write_abci.behaviours import (
-    StreamWriteBehaviour,
-    RandomnessCeramicBehaviour,
     CeramicWriteBaseBehaviour,
     CeramicWriteRoundBehaviour,
+    RandomnessCeramicBehaviour,
     SelectKeeperCeramicBehaviour,
+    StreamWriteBehaviour,
     VerificationBehaviour,
 )
 from packages.valory.skills.ceramic_write_abci.rounds import (
@@ -157,7 +157,6 @@ class BaseCeramicWriteTest(FSMBehaviourBaseCase):
     synchronized_data: SynchronizedData
     done_event = Event.DONE
 
-
     def fast_forward(self, data: Optional[Dict[str, Any]] = None) -> None:
         """Fast-forward on initialization"""
 
@@ -258,10 +257,11 @@ class TestStreamWriteBehaviourSender(BaseCeramicWriteTest):
                     "Happy path",
                     initial_data=dict(
                         most_voted_keeper_address="test_agent_address",
-                        stream_id="dummy_stream_id",
+                        write_stream_id="dummy_stream_id",
+                        write_target_property="stream_content",
                         stream_content=DUMMY_DATA,
                         did=DUMMY_DID,
-                        did_seed=DUMMY_DID_SEED
+                        did_seed=DUMMY_DID_SEED,
                     ),
                     event=Event.DONE,
                 ),
@@ -287,10 +287,12 @@ class TestStreamWriteBehaviourSender(BaseCeramicWriteTest):
                     "Json decode error",
                     initial_data=dict(
                         most_voted_keeper_address="test_agent_address",
-                        stream_id="dummy_stream_id",
+                        write_stream_id="dummy_stream_id",
+                        write_target_property="stream_content",
                         stream_content=DUMMY_DATA,
+                        default_write_property_name="stream_content",
                         did=DUMMY_DID,
-                        did_seed=DUMMY_DID_SEED
+                        did_seed=DUMMY_DID_SEED,
                     ),
                     event=Event.DONE,
                 ),
@@ -381,10 +383,12 @@ class TestStreamWriteBehaviourApiError(BaseCeramicWriteTest):
                     "API read error",
                     initial_data=dict(
                         most_voted_keeper_address="test_agent_address",
-                        stream_id="dummy_stream_id",
+                        write_stream_id="dummy_stream_id",
+                        write_target_property="stream_content",
                         stream_content=DUMMY_DATA,
+                        default_write_property_name="stream_content",
                         did=DUMMY_DID,
-                        did_seed=DUMMY_DID_SEED
+                        did_seed=DUMMY_DID_SEED,
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -403,10 +407,12 @@ class TestStreamWriteBehaviourApiError(BaseCeramicWriteTest):
                     "API write error",
                     initial_data=dict(
                         most_voted_keeper_address="test_agent_address",
-                        stream_id="dummy_stream_id",
+                        write_stream_id="dummy_stream_id",
+                        write_target_property="stream_content",
                         stream_content=DUMMY_DATA,
+                        default_write_property_name="stream_content",
                         did=DUMMY_DID,
-                        did_seed=DUMMY_DID_SEED
+                        did_seed=DUMMY_DID_SEED,
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -484,10 +490,12 @@ class TestVerificationBehaviour(BaseCeramicWriteTest):
                     "Happy path",
                     initial_data=dict(
                         most_voted_keeper_address="test_agent_address",
-                        stream_id="dummy_stream_id",
+                        write_stream_id="dummy_stream_id",
+                        write_target_property="stream_content",
                         stream_content=DUMMY_DATA,
+                        default_write_property_name="stream_content",
                         did=DUMMY_DID,
-                        did_seed=DUMMY_DID_SEED
+                        did_seed=DUMMY_DID_SEED,
                     ),
                     event=Event.DONE,
                 ),
@@ -535,10 +543,12 @@ class TestVerificationBehaviourApiError(BaseCeramicWriteTest):
                     "Api Error",
                     initial_data=dict(
                         most_voted_keeper_address="test_agent_address",
-                        stream_id="dummy_stream_id",
+                        write_stream_id="dummy_stream_id",
+                        write_target_property="stream_content",
                         stream_content=DUMMY_DATA,
+                        default_write_property_name="stream_content",
                         did=DUMMY_DID,
-                        did_seed=DUMMY_DID_SEED
+                        did_seed=DUMMY_DID_SEED,
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -554,10 +564,12 @@ class TestVerificationBehaviourApiError(BaseCeramicWriteTest):
                     "Api wrong data",
                     initial_data=dict(
                         most_voted_keeper_address="test_agent_address",
-                        stream_id="dummy_stream_id",
+                        write_stream_id="dummy_stream_id",
+                        write_target_property="stream_content",
                         stream_content=DUMMY_DATA,
+                        default_write_property_name="stream_content",
                         did=DUMMY_DID,
-                        did_seed=DUMMY_DID_SEED
+                        did_seed=DUMMY_DID_SEED,
                     ),
                     event=Event.API_ERROR,
                 ),

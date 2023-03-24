@@ -1,4 +1,4 @@
-6788a510e5fc5396ce53fc281126ddeaa3371dde:packages/valory/skills/score_read_abci/skill.yaml:generic-api-key:77
+6788a510e5fc5396ce53fc281126ddeaa3371dde:packages/valory/skills/twitter_scoring_abci/skill.yaml:generic-api-key:77
 ab6d04ff17be9841760c859443b3ad6379ff191c:packages/valory/skills/score_write_abci/skill.yaml:generic-api-key:74
 c03ff9f401b34ba48df45f8390658d018ea2a74d:packages/valory/skills/impact_evaluator_abci/skill.yaml:generic-api-key:85
 8a1cc3dda3f8dc4cfce07f6e781f097ae050dfb5:packages/valory/skills/dynamic_nft_abci/skill.yaml:generic-api-key:87
@@ -16,3 +16,4 @@ ec0f0f07657cba49587c23bd4ab0aa4777d78b49:packages/valory/agents/impact_evaluator
 057e7cfe3b376478eb0420bc463b3e2d62f316d4:packages/valory/skills/ceramic_write_abci/skill.yaml:generic-api-key:83
 7bdb5dda10514dd9618551fe57882abfe2d7e44b:packages/valory/skills/ceramic_read_abci/skill.yaml:generic-api-key:82
 7c0cb3f2d20573d8415c21fab15c6fcf13fbda02:packages/valory/skills/ceramic_read_abci/skill.yaml:generic-api-key:82
+6788a510e5fc5396ce53fc281126ddeaa3371dde:packages/valory/skills/score_read_abci/skill.yaml:generic-api-key:77

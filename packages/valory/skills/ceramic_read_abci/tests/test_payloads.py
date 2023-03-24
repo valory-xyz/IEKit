@@ -48,7 +48,7 @@ class PayloadTestCase:
     ],
 )
 def test_payloads(test_case: PayloadTestCase) -> None:
-    """Tests for ScoreReadAbciApp payloads"""
+    """Tests for TwitterScoringAbciApp payloads"""
 
     payload = test_case.payload_cls(
         sender="sender",

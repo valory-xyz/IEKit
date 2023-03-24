@@ -17,7 +17,9 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the shared state for the abci skill of ScoreWriteAbciApp."""
+"""This module contains the shared state for the abci skill of TwitterScoringAbciApp."""
+
+from typing import Any
 
 from packages.valory.skills.abstract_round_abci.models import BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
@@ -27,15 +29,38 @@ from packages.valory.skills.abstract_round_abci.models import Requests as BaseRe
 from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
-from packages.valory.skills.score_write_abci.rounds import ScoreWriteAbciApp
+from packages.valory.skills.twitter_scoring_abci.rounds import TwitterScoringAbciApp
 
 
 class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
 
-    abci_app_cls = ScoreWriteAbciApp
+    abci_app_cls = TwitterScoringAbciApp
 
 
-Params = BaseParams
+class Params(BaseParams):
+    """Parameters."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the parameters object."""
+        self.twitter_api_base = self._ensure("twitter_api_base", kwargs, str)
+        self.twitter_api_bearer_token = self._ensure(
+            "twitter_api_bearer_token", kwargs, str
+        )
+        self.twitter_mentions_endpoint = self._ensure(
+            "twitter_mentions_endpoint", kwargs, str
+        )
+        self.twitter_mentions_args = self._ensure("twitter_mentions_args", kwargs, str)
+        self.twitter_mention_points = self._ensure(
+            "twitter_mention_points", kwargs, int
+        )
+        self.twitter_max_pages = self._ensure("twitter_max_pages", kwargs, int)
+        self.twitter_search_endpoint = self._ensure(
+            "twitter_search_endpoint", kwargs, str
+        )
+        self.twitter_search_args = self._ensure("twitter_search_args", kwargs, str)
+        super().__init__(*args, **kwargs)
+
+
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool

@@ -17,10 +17,15 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Test the dialogues.py module of the ScoreRead."""
+"""This module contains the transaction payloads of the TwitterScoringAbciApp."""
 
-import packages.valory.skills.score_write_abci.dialogues  # noqa
+from dataclasses import dataclass
+
+from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 
-def test_import() -> None:
-    """Test that the 'dialogues.py' of the ScoreRead can be imported."""
+@dataclass(frozen=True)
+class TwitterScoringPayload(BaseTxPayload):
+    """Represent a transaction payload for the TwitterScoringRound."""
+
+    content: str

@@ -17,15 +17,10 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Test the models.py module of the ScoreRead."""
+"""Test the handlers.py module of the ScoreRead."""
 
-from packages.valory.skills.abstract_round_abci.test_tools.base import DummyContext
-from packages.valory.skills.score_read_abci.models import SharedState
+import packages.valory.skills.twitter_scoring_abci.handlers  # noqa
 
 
-class TestSharedState:
-    """Test SharedState of ScoreRead."""
-
-    def test_initialization(self) -> None:
-        """Test initialization."""
-        SharedState(name="", skill_context=DummyContext())
+def test_import() -> None:
+    """Test that the 'handlers.py' of the ScoreRead can be imported."""

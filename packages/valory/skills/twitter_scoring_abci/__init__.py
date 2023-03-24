@@ -17,22 +17,9 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the ScoreWriteAbciApp."""
+"""This module contains the implementation of the default skill."""
 
-from dataclasses import dataclass
-
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
+from aea.configurations.base import PublicId
 
 
-@dataclass(frozen=True)
-class StartupScoreReadPayload(BaseTxPayload):
-    """Represent a transaction payload for the StartupScoreReadRound."""
-
-    content: str
-
-
-@dataclass(frozen=True)
-class ScoreAddPayload(BaseTxPayload):
-    """Represent a transaction payload for the ScoreAddRound."""
-
-    content: str
+PUBLIC_ID = PublicId.from_str("valory/twitter_scoring_abci:0.1.0")
