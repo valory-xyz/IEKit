@@ -108,7 +108,9 @@ class GenericScoringAbciApp(AbciApp[Event]):
         FinishedGenericScoringRound: {},
     }
     final_states: Set[AppState] = {FinishedGenericScoringRound}
-    event_to_timeout: EventToTimeout = {}
+    event_to_timeout: EventToTimeout = {
+        Event.ROUND_TIMEOUT: 30.0,
+    }
     cross_period_persisted_keys: Set[str] = set()
     db_pre_conditions: Dict[AppState, Set[str]] = {
         GenericScoringRound: set(),

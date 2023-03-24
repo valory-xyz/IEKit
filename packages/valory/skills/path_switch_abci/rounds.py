@@ -127,7 +127,9 @@ class PathSwitchAbciApp(AbciApp[Event]):
         FinishedPathSwitchReadRound,
         FinishedPathSwitchScoreRound,
     }
-    event_to_timeout: EventToTimeout = {}
+    event_to_timeout: EventToTimeout = {
+        Event.ROUND_TIMEOUT: 30.0,
+    }
     cross_period_persisted_keys: Set[str] = {"read_stream_id", "read_target_property"}
     db_pre_conditions: Dict[AppState, Set[str]] = {
         PathSwitchRound: set(),

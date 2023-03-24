@@ -21,6 +21,8 @@
 import packages.valory.skills.ceramic_read_abci.rounds as CeramicReadAbci
 import packages.valory.skills.ceramic_write_abci.rounds as CeramicWriteAbci
 import packages.valory.skills.dynamic_nft_abci.rounds as DynamicNFTAbci
+import packages.valory.skills.generic_scoring_abci.rounds as GenericScoringAbci
+import packages.valory.skills.path_switch_abci.rounds as PathSwitchAbci
 import packages.valory.skills.registration_abci.rounds as RegistrationAbci
 import packages.valory.skills.reset_pause_abci.rounds as ResetAndPauseAbci
 import packages.valory.skills.twitter_scoring_abci.rounds as TwitterScoringAbci
@@ -34,7 +36,10 @@ from packages.valory.skills.abstract_round_abci.abci_app_chain import (
 # more information here: https://docs.autonolas.network/fsm_app_introduction/#composition-of-fsm-apps
 abci_app_transition_mapping: AbciAppTransitionMapping = {
     RegistrationAbci.FinishedRegistrationRound: CeramicReadAbci.StreamReadRound,
-    CeramicReadAbci.FinishedReadingRound: TwitterScoringAbci.TwitterScoringRound,
+    CeramicReadAbci.FinishedReadingRound: PathSwitchAbci.PathSwitchRound,
+    PathSwitchAbci.FinishedPathSwitchReadRound: CeramicReadAbci.StreamReadRound,
+    PathSwitchAbci.FinishedPathSwitchScoreRound: GenericScoringAbci.GenericScoringRound,
+    GenericScoringAbci.FinishedGenericScoringRound: TwitterScoringAbci.TwitterScoringRound,
     TwitterScoringAbci.FinishedTwitterScoringRound: DynamicNFTAbci.NewTokensRound,
     DynamicNFTAbci.FinishedNewTokensRound: CeramicWriteAbci.RandomnessRound,
     CeramicWriteAbci.FinishedVerificationRound: ResetAndPauseAbci.ResetAndPauseRound,
@@ -46,6 +51,8 @@ ImpactEvaluatorSkillAbciApp = chain(
     (
         RegistrationAbci.AgentRegistrationAbciApp,
         CeramicReadAbci.CeramicReadAbciApp,
+        PathSwitchAbci.PathSwitchAbciApp,
+        GenericScoringAbci.GenericScoringAbciApp,
         TwitterScoringAbci.TwitterScoringAbciApp,
         DynamicNFTAbci.DynamicNFTAbciApp,
         CeramicWriteAbci.CeramicWriteAbciApp,

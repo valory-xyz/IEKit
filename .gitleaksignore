@@ -17,3 +17,5 @@ ec0f0f07657cba49587c23bd4ab0aa4777d78b49:packages/valory/agents/impact_evaluator
 7bdb5dda10514dd9618551fe57882abfe2d7e44b:packages/valory/skills/ceramic_read_abci/skill.yaml:generic-api-key:82
 7c0cb3f2d20573d8415c21fab15c6fcf13fbda02:packages/valory/skills/ceramic_read_abci/skill.yaml:generic-api-key:82
 6788a510e5fc5396ce53fc281126ddeaa3371dde:packages/valory/skills/score_read_abci/skill.yaml:generic-api-key:77
+cf730c42226587eb9a74c96986605f95f71772ce:packages/valory/skills/generic_scoring_abci/skill.yaml:generic-api-key:80
+cf730c42226587eb9a74c96986605f95f71772ce:packages/valory/skills/path_switch_abci/skill.yaml:generic-api-key:80
