@@ -41,7 +41,10 @@ class CeramicDB:
         self.data = (
             data
             if data not in (None, {})
-            else {"users": [], "module_data": {"twitter": {}, "dynamic_nft": {}}}
+            else {
+                "users": [],
+                "module_data": {"twitter": {}, "dynamic_nft": {}, "generic": {}},
+            }
         )
 
         self.logger = logger
@@ -132,6 +135,10 @@ class CeramicDB:
                         if field in user and user[field] is not None
                     ]
 
+                    # Points must be added
+                    if field == "points":
+                        values = [sum(values)]
+
                     # Check whether all values are the same
                     if len(values) > 1:
                         values = (
@@ -140,6 +147,7 @@ class CeramicDB:
                             else values
                         )
 
+                    # Raise on multiple different valid values
                     if len(values) > 1:
                         raise ValueError(
                             f"DB: multiple valid values found for '{field}' [{values}] while merging users: {users}"

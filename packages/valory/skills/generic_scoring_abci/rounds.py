@@ -20,21 +20,23 @@
 """This package contains the rounds of GenericScoringAbciApp."""
 
 from enum import Enum
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, cast, Optional, Set, Tuple
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    AbstractRound,
+    CollectSameUntilThresholdRound,
     AppState,
     BaseSynchronizedData,
     DegenerateRound,
     EventToTimeout,
+    get_name
 )
 
 from packages.valory.skills.generic_scoring_abci.payloads import (
     GenericScoringPayload,
 )
+import json
 
 
 class Event(Enum):
@@ -43,7 +45,6 @@ class Event(Enum):
     ROUND_TIMEOUT = "round_timeout"
     DONE = "done"
     NO_MAJORITY = "no_majority"
-    API_ERROR = "api_error"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -53,31 +54,43 @@ class SynchronizedData(BaseSynchronizedData):
     This data is replicated by the tendermint application.
     """
 
+    @property
+    def score_data(self) -> dict:
+        """Get the read_stream_id."""
+        return cast(dict, self.db.get_strict("score_data"))
 
-class GenericScoringRound(AbstractRound):
+    @property
+    def ceramic_db(self) -> dict:
+        """Get the data stored in the main stream."""
+        return cast(dict, self.db.get_strict("ceramic_db"))
+
+
+class GenericScoringRound(CollectSameUntilThresholdRound):
     """GenericScoringRound"""
 
     payload_class = GenericScoringPayload
-    payload_attribute = ""  # TODO: update
     synchronized_data_class = SynchronizedData
 
-    # TODO: replace AbstractRound with one of CollectDifferentUntilAllRound,
-    # CollectSameUntilAllRound, CollectSameUntilThresholdRound,
-    # CollectDifferentUntilThresholdRound, OnlyKeeperSendsRound, VotingRound,
-    # from packages/valory/skills/abstract_round_abci/base.py
-    # or implement the methods
-
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
+    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
-        raise NotImplementedError
+        if self.threshold_reached:
 
-    def check_payload(self, payload: GenericScoringPayload) -> None:
-        """Check payload."""
-        raise NotImplementedError
+            payload = json.loads(self.most_voted_payload)
 
-    def process_payload(self, payload: GenericScoringPayload) -> None:
-        """Process payload."""
-        raise NotImplementedError
+            synchronized_data = self.synchronized_data.update(
+                synchronized_data_class=SynchronizedData,
+                **{
+                    get_name(SynchronizedData.ceramic_db): payload,
+                }
+            )
+
+            return synchronized_data, Event.DONE
+
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
+        return None
 
 
 class FinishedGenericScoringRound(DegenerateRound):
@@ -91,7 +104,6 @@ class GenericScoringAbciApp(AbciApp[Event]):
     initial_states: Set[AppState] = {GenericScoringRound}
     transition_function: AbciAppTransitionFunction = {
         GenericScoringRound: {
-            Event.API_ERROR: GenericScoringRound,
             Event.DONE: FinishedGenericScoringRound,
             Event.NO_MAJORITY: GenericScoringRound,
             Event.ROUND_TIMEOUT: GenericScoringRound
@@ -100,10 +112,10 @@ class GenericScoringAbciApp(AbciApp[Event]):
     }
     final_states: Set[AppState] = {FinishedGenericScoringRound}
     event_to_timeout: EventToTimeout = {}
-    cross_period_persisted_keys: Set[str] = []
+    cross_period_persisted_keys: Set[str] = set()
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        GenericScoringRound: [],
+        GenericScoringRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedGenericScoringRound: [],
+        FinishedGenericScoringRound: set(),
     }

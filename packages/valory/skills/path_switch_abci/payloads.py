@@ -28,5 +28,4 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 class PathSwitchPayload(BaseTxPayload):
     """Represent a transaction payload for the PathSwitchRound."""
 
-    # TODO: define your attributes
-
+    content: str

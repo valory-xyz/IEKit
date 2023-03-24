@@ -55,9 +55,9 @@ class BehaviourTestCase:
     """BehaviourTestCase"""
 
     name: str
-    initial_data: Dict[str, Hashable]
+    initial_data: Dict[str, Any]
     event: Event
-    kwargs: Dict[str, Any] = field(default_factory=dict)
+    next_behaviour_class: Optional[Type[PathSwitchBaseBehaviour]] = None
 
 
 class BasePathSwitchTest(FSMBehaviourBaseCase):
@@ -69,24 +69,20 @@ class BasePathSwitchTest(FSMBehaviourBaseCase):
     behaviour_class: Type[PathSwitchBaseBehaviour]
     next_behaviour_class: Type[PathSwitchBaseBehaviour]
     synchronized_data: SynchronizedData
-    done_event = Event.DONE
-
-    @property
-    def current_behaviour_id(self) -> str:
-        """Current RoundBehaviour's behaviour id"""
-
-        return self.behaviour.current_behaviour.behaviour_id
 
     def fast_forward(self, data: Optional[Dict[str, Any]] = None) -> None:
         """Fast-forward on initialization"""
 
         data = data if data is not None else {}
         self.fast_forward_to_behaviour(
-            self.behaviour,
-            self.behaviour_class.behaviour_id,
+            self.behaviour,  # type: ignore
+            self.behaviour_class.auto_behaviour_id(),
             SynchronizedData(AbciAppDB(setup_data=AbciAppDB.data_to_lists(data))),
         )
-        assert self.current_behaviour_id == self.behaviour_class.behaviour_id
+        assert (
+            self.behaviour.current_behaviour.auto_behaviour_id()  # type: ignore
+            == self.behaviour_class.auto_behaviour_id()
+        )
 
     def complete(self, event: Event) -> None:
         """Complete test"""
@@ -95,23 +91,43 @@ class BasePathSwitchTest(FSMBehaviourBaseCase):
         self.mock_a2a_transaction()
         self._test_done_flag_set()
         self.end_round(done_event=event)
-        assert self.current_behaviour_id == self.next_behaviour_class.behaviour_id
+        assert (
+            self.behaviour.current_behaviour.auto_behaviour_id()  # type: ignore
+            == self.next_behaviour_class.auto_behaviour_id()
+        )
 
 
 class TestPathSwitchBehaviour(BasePathSwitchTest):
     """Tests PathSwitchBehaviour"""
 
-    # TODO: set next_behaviour_class
     behaviour_class: Type[BaseBehaviour] = PathSwitchBehaviour
     next_behaviour_class: Type[BaseBehaviour] = ...
 
-    # TODO: provide test cases
-    @pytest.mark.parametrize("test_case", [])
-    def test_run(self, test_case: BehaviourTestCase) -> None:
+    @pytest.mark.parametrize(
+        "test_case, kwargs",
+        [
+            (
+                BehaviourTestCase(
+                    "Contract error",
+                    initial_data=dict(ceramic_db=DUMMY_CERAMIC_DB),
+                    event=Event.CONTRACT_ERROR,
+                ),
+                {
+                    "mock_response_data": dict(
+                        member_to_token_id=NewTokensRound.ERROR_PAYLOAD
+                    ),
+                    "mock_response_performative": ContractApiMessage.Performative.ERROR,
+                },
+            )
+        ],
+    )
+    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
         """Run tests."""
-
         self.fast_forward(test_case.initial_data)
-        # TODO: mock the necessary calls
-        # self.mock_ ...
+        self.behaviour.act_wrapper()
+        self._mock_dynamic_contribution_contract_request(
+            response_body=kwargs.get("mock_response_data"),
+            response_performative=kwargs.get("mock_response_performative"),
+        )
         self.complete(test_case.event)
 

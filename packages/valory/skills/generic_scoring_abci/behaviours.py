@@ -20,14 +20,14 @@
 """This package contains round behaviours of GenericScoringAbciApp."""
 
 from abc import ABC
-from typing import Generator, Set, Type, cast
+from typing import Generator, Set, Type, cast, Dict
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-
+import json
 from packages.valory.skills.generic_scoring_abci.models import Params
 from packages.valory.skills.generic_scoring_abci.rounds import (
     SynchronizedData,
@@ -37,6 +37,7 @@ from packages.valory.skills.generic_scoring_abci.rounds import (
 from packages.valory.skills.generic_scoring_abci.rounds import (
     GenericScoringPayload,
 )
+from packages.valory.skills.generic_scoring_abci.ceramic_db import CeramicDB
 
 
 class GenericScoringBaseBehaviour(BaseBehaviour, ABC):
@@ -58,19 +59,46 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
 
     matching_round: Type[AbstractRound] = GenericScoringRound
 
-    # TODO: implement logic required to set payload content for synchronization
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            payload_data = self.update_ceramic_db()
             sender = self.context.agent_address
-            payload = GenericScoringPayload(sender=sender, content=...)
+            payload = GenericScoringPayload(sender=sender, content=json.dumps(payload_data, sort_keys=True))
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(payload)
             yield from self.wait_until_round_end()
 
         self.set_done()
+
+    def update_ceramic_db(self) -> Dict:
+        """Calculate the new content of the DB"""
+
+        # Instantiate the db
+        ceramic_db = CeramicDB(self.synchronized_data.ceramic_db, self.context.logger)
+
+        # discord_id, discord_handle, points, wallet_address
+        for user in self.synchronized_data.score_data["users"]:
+            discord_id = user.pop("discord_id")
+            ceramic_db.update_or_create_user(
+                discord_id, user["discord_id"], user
+            )
+
+        # latest_update_id
+        ceramic_db.data["module_data"]["generic"]["latest_update_id"] = self.synchronized_data.score_data["module_data"]["generic"]["latest_update_id"]
+
+        # If a user has first contributed to one module (i.e. twitter) without registering a wallet,
+        # and later he/she contributes to another module, it could happen that we have two different
+        # entries on the database
+        ceramic_db.merge_by_wallet()
+
+        self.context.logger.info(
+            f"The ceramic_db will be updated to: {ceramic_db.data!r}"
+        )
+
+        return ceramic_db.data
 
 
 class GenericScoringRoundBehaviour(AbstractRoundBehaviour):

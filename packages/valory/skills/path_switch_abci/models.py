@@ -28,6 +28,7 @@ from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
 from packages.valory.skills.path_switch_abci.rounds import PathSwitchAbciApp
+from typing import Any
 
 
 class SharedState(BaseSharedState):
@@ -36,6 +37,19 @@ class SharedState(BaseSharedState):
     abci_app_cls = PathSwitchAbciApp
 
 
-Params = BaseParams
+class Params(BaseParams):
+    """Parameters."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the parameters object."""
+        self.manual_points_stream_id = self._ensure(
+            "manual_points_stream_id", kwargs, str
+        )
+        self.manual_points_target_property = self._ensure(
+            "manual_points_target_property", kwargs, str
+        )
+
+        super().__init__(*args, **kwargs)
+
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool

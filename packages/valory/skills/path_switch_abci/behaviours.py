@@ -37,6 +37,7 @@ from packages.valory.skills.path_switch_abci.rounds import (
 from packages.valory.skills.path_switch_abci.rounds import (
     PathSwitchPayload,
 )
+import json
 
 
 class PathSwitchBaseBehaviour(BaseBehaviour, ABC):
@@ -58,13 +59,19 @@ class PathSwitchBehaviour(PathSwitchBaseBehaviour):
 
     matching_round: Type[AbstractRound] = PathSwitchRound
 
-    # TODO: implement logic required to set payload content for synchronization
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
+
+            # Data needed for the decision making
+            payload_data = {
+                "read_stream_id": self.params.manual_points_stream_id,
+                "read_target_property": self.params.manual_points_target_property,
+            }
+
             sender = self.context.agent_address
-            payload = PathSwitchPayload(sender=sender, content=...)
+            payload = PathSwitchPayload(sender=sender, content=json.dumps(payload_data, sort_keys=True))
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(payload)

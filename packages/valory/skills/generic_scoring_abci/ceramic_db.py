@@ -41,10 +41,7 @@ class CeramicDB:
         self.data = (
             data
             if data not in (None, {})
-            else {
-                "users": [],
-                "module_data": {"twitter": {}, "dynamic_nft": {}, "generic": {}},
-            }
+            else {"users": [], "module_data": {"twitter": {}, "dynamic_nft": {}, "generic": {}}}
         )
 
         self.logger = logger

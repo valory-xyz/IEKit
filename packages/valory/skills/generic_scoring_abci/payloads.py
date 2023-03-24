@@ -28,5 +28,5 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 class GenericScoringPayload(BaseTxPayload):
     """Represent a transaction payload for the GenericScoringRound."""
 
-    # TODO: define your attributes
+    content: str
 

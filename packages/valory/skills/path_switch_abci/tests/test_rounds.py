@@ -19,7 +19,17 @@
 
 """This package contains the tests for rounds of PathSwitch."""
 
-from typing import Any, Type, Dict, List, Callable, Hashable, Mapping
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    FrozenSet,
+    Hashable,
+    List,
+    Mapping,
+    Optional,
+    cast,
+)
 from dataclasses import dataclass, field
 
 import pytest
@@ -28,7 +38,6 @@ from packages.valory.skills.path_switch_abci.payloads import (
     PathSwitchPayload,
 )
 from packages.valory.skills.path_switch_abci.rounds import (
-    AbstractRound,
     Event,
     SynchronizedData,
     PathSwitchRound,
@@ -37,11 +46,10 @@ from packages.valory.skills.abstract_round_abci.base import (
     BaseTxPayload,
 )
 from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
-    BaseRoundTestClass,
-    BaseOnlyKeeperSendsRoundTest,
-    BaseCollectDifferentUntilThresholdRoundTest,
     BaseCollectSameUntilThresholdRoundTest,
+    CollectSameUntilThresholdRound,
  )
+import json
 
 
 @dataclass
@@ -51,19 +59,43 @@ class RoundTestCase:
     name: str
     initial_data: Dict[str, Hashable]
     payloads: Mapping[str, BaseTxPayload]
-    final_data: Dict[str, Hashable]
+    final_data: Dict[str, Any]
     event: Event
+    most_voted_payload: Any
     synchronized_data_attr_checks: List[Callable] = field(default_factory=list)
-    kwargs: Dict[str, Any] = field(default_factory=dict)
 
 
 MAX_PARTICIPANTS: int = 4
+DUMMY_latest_mention_tweet_id = 0
 
 
-class BasePathSwitchRoundTest(BaseRoundTestClass):
-    """Base test class for PathSwitch rounds."""
+def get_participants() -> FrozenSet[str]:
+    """Participants"""
+    return frozenset([f"agent_{i}" for i in range(MAX_PARTICIPANTS)])
 
-    round_cls: Type[AbstractRound]
+
+def get_payloads(
+    payload_cls: BaseTxPayload,
+    data: Optional[str],
+) -> Mapping[str, BaseTxPayload]:
+    """Get payloads."""
+    return {
+        participant: payload_cls(participant, data)
+        for participant in get_participants()
+    }
+
+
+def get_dummy_path_switch_payload_serialized():
+
+    return json.dumps({
+                "read_stream_id": "dummy_read_stream_id",
+                "read_target_property": "dummy_read_target_property",
+            }, sort_keys=True)
+
+
+class BasePathSwitchRoundTest(BaseCollectSameUntilThresholdRoundTest):
+    """Base test class for ScoreRead rounds."""
+
     synchronized_data: SynchronizedData
     _synchronized_data_class = SynchronizedData
     _event_class = Event
@@ -73,18 +105,20 @@ class BasePathSwitchRoundTest(BaseRoundTestClass):
 
         self.synchronized_data.update(**test_case.initial_data)
 
-        test_round = self.round_cls(
+        test_round = self.round_class(
             synchronized_data=self.synchronized_data,
         )
 
         self._complete_run(
             self._test_round(
-                test_round=test_round,
+                test_round=cast(CollectSameUntilThresholdRound, test_round),
                 round_payloads=test_case.payloads,
-                synchronized_data_update_fn=lambda sync_data, _: sync_data.update(**test_case.final_data),
+                synchronized_data_update_fn=lambda sync_data, _: sync_data.update(
+                    **test_case.final_data
+                ),
                 synchronized_data_attr_checks=test_case.synchronized_data_attr_checks,
+                most_voted_payload=test_case.most_voted_payload,
                 exit_event=test_case.event,
-                **test_case.kwargs,  # varies per BaseRoundTestClass child
             )
         )
 
@@ -94,10 +128,47 @@ class TestPathSwitchRound(BasePathSwitchRoundTest):
 
     round_class = PathSwitchRound
 
-    # TODO: provide test cases
-    @pytest.mark.parametrize("test_case", [])
+    @pytest.mark.parametrize(
+        "test_case",
+        (
+            RoundTestCase(
+                name="Happy path - READ path",
+                initial_data={"read_stream_id": "dummy_read_stream_id"},
+                payloads=get_payloads(
+                    payload_cls=PathSwitchPayload,
+                    data=get_dummy_path_switch_payload_serialized(),
+                ),
+                final_data={
+                    "read_stream_id": json.loads(
+                        get_dummy_path_switch_payload_serialized())["read_stream_id"]
+                    ,
+                    "read_target_property": json.loads(
+                        get_dummy_path_switch_payload_serialized())["read_target_property"]
+                    ,
+                },
+                event=Event.DONE_SCORE,
+                most_voted_payload=get_dummy_path_switch_payload_serialized(),
+                synchronized_data_attr_checks=[
+                    lambda _synchronized_data: _synchronized_data.read_stream_id,
+                    lambda _synchronized_data: _synchronized_data.read_target_property,
+                ],
+            ),
+            RoundTestCase(
+                name="Happy path - SCORE path",
+                initial_data={},
+                payloads=get_payloads(
+                    payload_cls=PathSwitchPayload,
+                    data=get_dummy_path_switch_payload_serialized(),
+                ),
+                final_data={
+                },
+                event=Event.DONE_READ,
+                most_voted_payload=get_dummy_path_switch_payload_serialized(),
+                synchronized_data_attr_checks=[],
+            ),
+        ),
+    )
     def test_run(self, test_case: RoundTestCase) -> None:
         """Run tests."""
-
         self.run_test(test_case)
 

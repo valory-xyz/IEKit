@@ -19,7 +19,7 @@
 
 """This package contains payload tests for the GenericScoringAbciApp."""
 
-from typing import Type, Hashable
+from typing import Hashable
 from dataclasses import dataclass
 
 import pytest
@@ -34,17 +34,27 @@ from packages.valory.skills.generic_scoring_abci.payloads import (
 class PayloadTestCase:
     """PayloadTestCase"""
 
-    name: str
-    payload_cls: Type[BaseTxPayload]
+    payload_cls: BaseTxPayload
     content: Hashable
 
 
-# TODO: provide test cases
-@pytest.mark.parametrize("test_case", [])
+@pytest.mark.parametrize(
+    "test_case",
+    [
+        PayloadTestCase(
+            payload_cls=GenericScoringPayload,
+            content="payload_test_content",
+        ),
+    ],
+)
 def test_payloads(test_case: PayloadTestCase) -> None:
-    """Tests for GenericScoringAbciApp payloads"""
+    """Tests for TwitterScoringAbciApp payloads"""
 
-    payload = test_case.payload_cls(sender="sender", content=test_case.content)
+    payload = test_case.payload_cls(
+        sender="sender",
+        content=test_case.content,
+    )
     assert payload.sender == "sender"
+    assert payload.content == test_case.content
     assert payload.from_json(payload.json) == payload
 
