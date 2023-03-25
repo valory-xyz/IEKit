@@ -40,7 +40,11 @@ def test_create_empty():
     db = CeramicDB()
     assert db.data == {
         "users": [],
-        "module_data": {"twitter": {}, "dynamic_nft": {}, "generic": {}},
+        "module_data": {
+            "twitter": {"latest_mention_tweet_id": 0},
+            "dynamic_nft": {},
+            "generic": {"latest_update_id": 0},
+        },
     }
 
 
@@ -85,8 +89,16 @@ def test_add_user():
 def test_merge_by_wallet():
     """Test CeramicDB"""
     db = CeramicDB()
-    user_a = {"twitter_id": "dummy_twitter_id", "wallet_address": "dummy_address"}
-    user_b = {"discord_id": "dummy_discord_id", "wallet_address": "dummy_address"}
+    user_a = {
+        "twitter_id": "dummy_twitter_id",
+        "wallet_address": "dummy_address",
+        "points": 10,
+    }
+    user_b = {
+        "discord_id": "dummy_discord_id",
+        "wallet_address": "dummy_address",
+        "points": 10,
+    }
     db.create_user(user_a)
     db.create_user(user_b)
     db.merge_by_wallet()
@@ -95,7 +107,7 @@ def test_merge_by_wallet():
         "twitter_id": "dummy_twitter_id",
         "wallet_address": "dummy_address",
         "discord_id": "dummy_discord_id",
-        "points": 0,
+        "points": 20,
         "token_id": None,
         "twitter_handle": None,
     }

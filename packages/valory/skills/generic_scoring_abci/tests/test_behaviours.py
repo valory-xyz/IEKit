@@ -53,7 +53,11 @@ DUMMY_CERAMIC_DB = {
             "points": 10,
         }
     ],
-    "module_data": {"twitter": {}, "dynamic_nft": {}, "generic": {}},
+    "module_data": {
+        "twitter": {"latest_mention_tweet_id": 0},
+        "dynamic_nft": {},
+        "generic": {"latest_update_id": 0},
+    },
 }
 
 DUMMY_SCORE_DATA = {

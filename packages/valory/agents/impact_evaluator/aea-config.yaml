@@ -9,10 +9,10 @@ fingerprint:
   tests/__init__.py: bafybeicmv3jjcqcdnmubfmrgdgeyic3nkm77z4mutsyuo34hpddwupofre
   tests/helpers/__init__.py: bafybeiauwuw4a4wxqacqqkkk52ktps2qedadhypvh3ex7uqs7qaqrpygmy
   tests/helpers/constants.py: bafybeibbokz7gzdlubnjwxrmh4tqckc7j75hfy3ae6l5a63mrbd4hp6l7u
-  tests/helpers/data/json_server/data.json: bafybeiel7fudazt47hut3hqo44k4qxguv2ez7jemncssvuekb5top7xcfi
+  tests/helpers/data/json_server/data.json: bafybeidjhs6bp4vvkbuetddg4yq6ilvqobq755cixq2vv233k2u352rq7m
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
-  tests/test_impact_evaluator.py: bafybeidhwhs6qtzdqprzs3a2bi22rpeshr2ocky65gcik4dskk7x5v47ze
+  tests/test_impact_evaluator.py: bafybeidwccacpcwky44jhznu6qexnqm76unzqfvxhe2uvbkyswjap3itgi
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihaax5od5zo5jk2l62hv4jwuwtxloh5mijozudpsjombqc4ncmi6i
@@ -29,11 +29,13 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeihkrunmigvlcze7uxhafj2h3kvpf2kifggq7zqj42n2we4mcwuvou
 - valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
-- valory/impact_evaluator_abci:0.1.0:bafybeieh6qrdx5ku3oh7vogn4jdi3pthgmofd56wwjcbvdnrocjdouclmy
-- valory/twitter_scoring_abci:0.1.0:bafybeidjdlayoxisqhxhnaiwnch676vhrrozjfy3mn4ezvl7kd6xucqhfu
-- valory/ceramic_read_abci:0.1.0:bafybeifticrrzvdh2un7pde6m2doxpr3bbbqjls6gkll7d7m74kwc62qty
-- valory/ceramic_write_abci:0.1.0:bafybeig74d27o2uia7utvwce3eset26zd4lcxomisz4qf26vkiihmyswky
-- valory/dynamic_nft_abci:0.1.0:bafybeibcwmgoi6svv4qnuwgdpl67bikiyhyas3xj3rmpmwacw73423cabu
+- valory/impact_evaluator_abci:0.1.0:bafybeibt2ynjuewiijpfv67jwg4rvwbqmgh7md54ucbazb2pbqaocm2oom
+- valory/path_switch_abci:0.1.0:bafybeih6rodvijrwzczxjl2bdd3q3lcuxgxyxwx7r7yxnskc3ri3f2dulq
+- valory/generic_scoring_abci:0.1.0:bafybeifqn255yyzvun3c3m3tucgdelqlvl73b7uqmn3j55nnaz3i4mfut4
+- valory/twitter_scoring_abci:0.1.0:bafybeidyzmvjdqpbjkonro63ihv44qkoai4mvntfrnyiioen4jnheuhpry
+- valory/ceramic_read_abci:0.1.0:bafybeicjedmoecplxf6rnbnsuphdjeosgybxaek55gwuks2eheeo7a5mr4
+- valory/ceramic_write_abci:0.1.0:bafybeih7smg2hxg4t6ixnaq7epyfczdr4wjbw5smvzh55fgbi43ekwvk3m
+- valory/dynamic_nft_abci:0.1.0:bafybeigfzg7wg2mpdxl7tga46bymisdoal3dgaazpjeims4kqo3fpvr22m
 - valory/registration_abci:0.1.0:bafybeidgoqi7fa2gb56hdfsf74bbunfii63zgeo4qhggb66ofver2n2gya
 - valory/reset_pause_abci:0.1.0:bafybeievxhu6u5r5wlpjfzcwuowlbanhfbi25saf25qit53jauv4kq6gne
 default_ledger: ethereum

@@ -133,7 +133,7 @@ class TestPathSwitchRound(BasePathSwitchRoundTest):
         (
             RoundTestCase(
                 name="Happy path - READ path",
-                initial_data={"read_stream_id": "dummy_read_stream_id"},
+                initial_data={},
                 payloads=get_payloads(
                     payload_cls=PathSwitchPayload,
                     data=get_dummy_path_switch_payload_serialized(),
@@ -146,7 +146,7 @@ class TestPathSwitchRound(BasePathSwitchRoundTest):
                         get_dummy_path_switch_payload_serialized()
                     )["read_target_property"],
                 },
-                event=Event.DONE_SCORE,
+                event=Event.DONE_READ,
                 most_voted_payload=get_dummy_path_switch_payload_serialized(),
                 synchronized_data_attr_checks=[
                     lambda _synchronized_data: _synchronized_data.read_stream_id,
@@ -155,13 +155,13 @@ class TestPathSwitchRound(BasePathSwitchRoundTest):
             ),
             RoundTestCase(
                 name="Happy path - SCORE path",
-                initial_data={},
+                initial_data={"read_stream_id": "dummy_read_stream_id"},
                 payloads=get_payloads(
                     payload_cls=PathSwitchPayload,
                     data=get_dummy_path_switch_payload_serialized(),
                 ),
                 final_data={},
-                event=Event.DONE_READ,
+                event=Event.DONE_SCORE,
                 most_voted_payload=get_dummy_path_switch_payload_serialized(),
                 synchronized_data_attr_checks=[],
             ),

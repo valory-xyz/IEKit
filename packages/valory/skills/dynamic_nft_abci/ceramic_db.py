@@ -43,7 +43,11 @@ class CeramicDB:
             if data not in (None, {})
             else {
                 "users": [],
-                "module_data": {"twitter": {}, "dynamic_nft": {}, "generic": {}},
+                "module_data": {
+                    "twitter": {"latest_mention_tweet_id": 0},
+                    "dynamic_nft": {},
+                    "generic": {"latest_update_id": 0},
+                },
             }
         )
 

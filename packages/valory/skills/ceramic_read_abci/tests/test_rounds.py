@@ -64,7 +64,7 @@ def get_dummy_ceramic_read_payload_serialized(api_error: bool = False) -> str:
     else:
         payload = {
             "stream_data": {"dummy": "data"},
-            "target_property_name": "dummy_property_name",
+            "read_target_property": "dummy_property_name",
         }
     return json.dumps(payload, sort_keys=True)
 

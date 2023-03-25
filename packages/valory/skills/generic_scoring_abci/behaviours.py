@@ -79,6 +79,15 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
         # Instantiate the db
         ceramic_db = CeramicDB(self.synchronized_data.ceramic_db, self.context.logger)
 
+        # Only update if latest_update_id has increased
+        if (
+            self.synchronized_data.score_data["module_data"]["generic"][
+                "latest_update_id"
+            ]
+            <= ceramic_db.data["module_data"]["generic"]["latest_update_id"]
+        ):
+            return ceramic_db.data
+
         # discord_id, discord_handle, points, wallet_address
         for user in self.synchronized_data.score_data["users"]:
             discord_id = user.pop("discord_id")

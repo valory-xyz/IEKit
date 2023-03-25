@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeibciswqz4enbsrvhpueewvbsmaqd7k4la2dowl2n4th7fn5ffnpqu
-  behaviours.py: bafybeia3hghnzypbzyxnuuvscmegtr6odvcj6jqxte5enxj3abup3rqva4
+  behaviours.py: bafybeiffahup2pdhkfmjp2pvgkffityx452pfizrfuihrkipgkup6zky6y
   ceramic/__init__.py: bafybeias4e3s6p5qtx6mmmcwkcd6kvbdnudy7sxai7d2suk75aazzdzdie
   ceramic/payloads.py: bafybeicr75fitoucqknzu6vzic4jjb3w3pw655klbi36kwt4haplkg2dsy
   dialogues.py: bafybeibz3rwmothfrywu3b3rdktiu25eiivkc7ob2sodlcnmrxhyeeq56i
@@ -15,14 +15,14 @@ fingerprint:
   handlers.py: bafybeiemyqiqwj4igqlsvujggkclknh4icgkhwdjf7bszjzbvtv33f23yq
   models.py: bafybeihwi3oasbvb7g6lvzxtt3o6diilrmgbg4wcgqejcdmwg6niz6x6ei
   payloads.py: bafybeigxhmr2m7ej7caedeqbheabq2tmnhxosyfvgpjfofgke4zkiyj3tm
-  rounds.py: bafybeicigifyqpg5bvi3xk34y6quvhgsbaknwri4aogvxtpfmqxrwmky5e
+  rounds.py: bafybeibeejgchozj77q6z25biyvxn3vmiycai7n6ev6vlxi5hkhk6usagi
   tests/__init__.py: bafybeibkxeuyukyuzek3lk5bqmo7jhl354fyznmqxv3dh4lsnly56xjkzu
-  tests/test_behaviours.py: bafybeiencozkujwfvhzz52omcw4uy6oui32dqbjenchldpr2o4h7kbsgo4
+  tests/test_behaviours.py: bafybeicf3zsok3mntdmemhiotjbtnriehttkpziabgo7j5slzeo7piijyi
   tests/test_dialogues.py: bafybeias37opzowuenzii2dzwgwyaz57t3o4ocec67a274ghokptkdqaq4
   tests/test_handlers.py: bafybeid26pxtjf33fkpmzpgfdg3fqyp6uttrscacwb7odprvjvysjmu36q
   tests/test_models.py: bafybeicuelcbuv2n2n5k3bdm3ek4gorpife5sg3whytnrpvfovyrz4mu7i
   tests/test_payloads.py: bafybeihfgzwmku4mt2wauhq6elvllx3xft3mwrpldlpxvlwlmytndmket4
-  tests/test_rounds.py: bafybeibxtuoc263kcxgwobkm37vsgivnb37immdrfiw2bddm7biguyuxqu
+  tests/test_rounds.py: bafybeign245nbeyvtikbbs65kgwjgy3z5yckqpfg7o65xygdfzxnynywxu
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
@@ -133,7 +133,7 @@ models:
       tx_timeout: 10.0
       validate_timeout: 1205
       stream_id: null
-      target_property_name: null
+      read_target_property: null
     class_name: Params
   requests:
     args: {}

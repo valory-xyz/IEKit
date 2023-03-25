@@ -94,7 +94,7 @@ HAPPY_PATH: Tuple[RoundChecks, ...] = (
 # strict check log messages of the happy path
 STRICT_CHECK_STRINGS = (
     "Got data from Ceramic API",
-
+    "Path switch:",
     "Retrieved new mentions from Twitter",
     "Retrieved recent registrations from Twitter",
     "Got token_id to address data up to block",

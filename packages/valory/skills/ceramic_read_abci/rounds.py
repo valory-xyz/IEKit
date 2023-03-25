@@ -58,8 +58,8 @@ class SynchronizedData(BaseSynchronizedData):
 
     @property
     def read_target_property(self) -> Optional[str]:
-        """Get the target_property_name."""
-        return cast(str, self.db.get("target_property_name", None))
+        """Get the read_target_property."""
+        return cast(str, self.db.get("read_target_property", None))
 
 
 class StreamReadRound(CollectSameUntilThresholdRound):
@@ -82,7 +82,7 @@ class StreamReadRound(CollectSameUntilThresholdRound):
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    payload["target_property_name"]: payload["stream_data"],
+                    payload["read_target_property"]: payload["stream_data"],
                 }
             )
             return synchronized_data, Event.DONE

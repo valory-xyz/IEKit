@@ -61,6 +61,14 @@ class PathSwitchBehaviour(PathSwitchBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
+            # Read the current decision data just for logging purposes
+            read_stream_id = self.synchronized_data.read_stream_id
+            read_target_property = self.synchronized_data.read_target_property
+
+            self.context.logger.info(
+                f"Path switch: read_stream_id={read_stream_id}, read_target_property={read_target_property}"
+            )
+
             # Data needed for the decision making
             payload_data = {
                 "read_stream_id": self.params.manual_points_stream_id,

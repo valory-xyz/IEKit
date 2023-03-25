@@ -43,7 +43,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     TwitterScoringAbci.FinishedTwitterScoringRound: DynamicNFTAbci.NewTokensRound,
     DynamicNFTAbci.FinishedNewTokensRound: CeramicWriteAbci.RandomnessRound,
     CeramicWriteAbci.FinishedVerificationRound: ResetAndPauseAbci.ResetAndPauseRound,
-    ResetAndPauseAbci.FinishedResetAndPauseRound: TwitterScoringAbci.TwitterScoringRound,
+    ResetAndPauseAbci.FinishedResetAndPauseRound: CeramicReadAbci.StreamReadRound,
     ResetAndPauseAbci.FinishedResetAndPauseErrorRound: RegistrationAbci.RegistrationRound,
 }
 
