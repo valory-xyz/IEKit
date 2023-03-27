@@ -226,7 +226,7 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
         url = api_base + api_endpoint
 
         self.context.logger.info(
-            f"Writing new data to Ceramic API [{url}]:\n{new_data}\nPayload: {commit_payload}"
+            f"Writing new data to Ceramic stream {stream_id} using did {self.params.ceramic_did_str} [{url}]:\n{new_data}\nPayload: {commit_payload}"
         )
         response = yield from self.get_http_response(
             method="POST",

@@ -29,12 +29,12 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeigg5ofide2gxwgjvljjgpyy6ombby7ph6pg7erj3h6itduwpn6pqu
 - valory/abstract_round_abci:0.1.0:bafybeicn5utwviq46ubguok5rl5go4hb7oxluj7t6bja2ut4epjw2hevei
-- valory/impact_evaluator_abci:0.1.0:bafybeigsznqatczaddvbafcqrasm24u62wkcylrphqreqbqkn2efwdtna4
+- valory/impact_evaluator_abci:0.1.0:bafybeiejmnkzqjgz6ie7r5mf7aqkoeuxvuhte5jconsnvctbejkjlygi6a
 - valory/path_switch_abci:0.1.0:bafybeia6oyknmwe3sn5wm526cnp2dnvd5pvvionkiptbaod77fhbxx6xju
 - valory/generic_scoring_abci:0.1.0:bafybeihyf7ivuj7rdmp3tyawtfas4slefo3wifthmpnszaidzofzplieu4
 - valory/twitter_scoring_abci:0.1.0:bafybeignctvt7ce3osdmz3qtmwu7yf3yk6jf3q5bkxrmo5f5eitlp57esq
 - valory/ceramic_read_abci:0.1.0:bafybeifdrfae4de7fsg2jfmak5yjyn6oacopgsf5zbpt2v23sqerwc5vc4
-- valory/ceramic_write_abci:0.1.0:bafybeieryatey2ds3g7iye36rzsl5vmvushk4fswjp5dxqlctanogaswxy
+- valory/ceramic_write_abci:0.1.0:bafybeihfth3kojxnozmv5ekyfnt2ls2mkd4t4ayzrkdzxhwidhudzu3lqy
 - valory/dynamic_nft_abci:0.1.0:bafybeifggr52bdakdjzthbzjawxjn65ynref22oclqfcogfvdupzrx74mq
 - valory/registration_abci:0.1.0:bafybeid7gh35wnotm27hwuuuv3oozu33izjfafy7vbyzejdy3scx4oc7cu
 - valory/reset_pause_abci:0.1.0:bafybeidtb4v44zbxx7uw2c5yrbmmvzuh4mkgvcqdfyf4eq2xuhvxnbfiru
