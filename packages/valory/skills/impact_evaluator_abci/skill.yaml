@@ -7,12 +7,12 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
-  behaviours.py: bafybeibsbey3iggo4nxmcspy7wsyc76ximvcrnxpud7mvs4xin4ulei744
-  composition.py: bafybeigi5k2ssomjfyibpook74cdrvyclgnhsrokhhvoij7f3kxvro5h4i
+  behaviours.py: bafybeievuw5zaiib3l3t3k5l25kr5gh4s6te434e7lapdvomwhpt5yncku
+  composition.py: bafybeihprauqe2gdxbaagbjga7kutr5d2wpfjrnrg5ogteb3enakfdqgpu
   dialogues.py: bafybeigpwuzku3we7axmxeamg7vn656maww6emuztau5pg3ebsoquyfdqm
-  fsm_specification.yaml: bafybeietf7fifhre3kn2wknr6r3vz2wxqls2ii6fwrr3ex54m442ffmow4
+  fsm_specification.yaml: bafybeici3dxwmm6vvx54wgknqavuyd5mlnjgcknup3kvr7lhoiwn7at4pm
   handlers.py: bafybeiaqgaev2nfhuihhuxxxxtuiggin5zcpwn7ik7lok2n6ywi6dqy2ta
-  models.py: bafybeidtwkv5cffed4ck4euq6dazhxovrx3fuvcy27ipcjmdkjmyx7yj3y
+  models.py: bafybeic2dholhpbw7ittysogf4546ukea6swyj3cvry25alsupbeirgsgm
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
   tests/test_behaviours.py: bafybeifkazsevd6vsfaapulouxepez3rl24y3rxgja5zhmj7s323zdjlmq
   tests/test_dialogues.py: bafybeieaos2byphju6i6xvytppqqcuqqvnpilnflsy73l3wqazzjttbg7m
@@ -23,13 +23,15 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
-- valory/ceramic_read_abci:0.1.0:bafybeid27nqqr5omexipv53voz2tqmby7dnl24c7hevftza3ry4xprx2ye
-- valory/twitter_scoring_abci:0.1.0:bafybeigh5mg4jfwwslxje4qcuef5hzsziwdkmuisgdibdtcm7bhny357oy
-- valory/ceramic_write_abci:0.1.0:bafybeicd6mypbecvh3msubvlyn4pv3ywvufbrasx2ef2nh2zgygoamopnu
-- valory/dynamic_nft_abci:0.1.0:bafybeibkkdswv2aq5x7zmyhwwt7wvejvyobt4xweslpgbtda2dsmuxsx7q
-- valory/registration_abci:0.1.0:bafybeidgoqi7fa2gb56hdfsf74bbunfii63zgeo4qhggb66ofver2n2gya
-- valory/reset_pause_abci:0.1.0:bafybeievxhu6u5r5wlpjfzcwuowlbanhfbi25saf25qit53jauv4kq6gne
+- valory/abstract_round_abci:0.1.0:bafybeicn5utwviq46ubguok5rl5go4hb7oxluj7t6bja2ut4epjw2hevei
+- valory/ceramic_read_abci:0.1.0:bafybeifdrfae4de7fsg2jfmak5yjyn6oacopgsf5zbpt2v23sqerwc5vc4
+- valory/path_switch_abci:0.1.0:bafybeia6oyknmwe3sn5wm526cnp2dnvd5pvvionkiptbaod77fhbxx6xju
+- valory/generic_scoring_abci:0.1.0:bafybeig7is6ulwjlomu5lixmad56vdvwcqnnr5azyjrwajlugreupx5foq
+- valory/twitter_scoring_abci:0.1.0:bafybeignctvt7ce3osdmz3qtmwu7yf3yk6jf3q5bkxrmo5f5eitlp57esq
+- valory/ceramic_write_abci:0.1.0:bafybeieryatey2ds3g7iye36rzsl5vmvushk4fswjp5dxqlctanogaswxy
+- valory/dynamic_nft_abci:0.1.0:bafybeifggr52bdakdjzthbzjawxjn65ynref22oclqfcogfvdupzrx74mq
+- valory/registration_abci:0.1.0:bafybeid7gh35wnotm27hwuuuv3oozu33izjfafy7vbyzejdy3scx4oc7cu
+- valory/reset_pause_abci:0.1.0:bafybeidtb4v44zbxx7uw2c5yrbmmvzuh4mkgvcqdfyf4eq2xuhvxnbfiru
 behaviours:
   main:
     args: {}
@@ -89,6 +91,8 @@ models:
       default_write_stream_id: default_write_stream_id
       default_read_target_property: default_read_target_property
       default_write_target_property: default_write_target_property
+      manual_points_stream_id: manual_points_stream_id
+      manual_points_target_property: score_data
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -114,7 +118,7 @@ models:
       keeper_timeout: 30.0
       max_attempts: 10
       max_healthcheck: 120
-      observation_interval: 10
+      reset_pause_duration: 10
       on_chain_service_id: null
       points_to_image_hashes: '{"0": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm",
         "100": "bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q", "50000":
@@ -130,10 +134,8 @@ models:
       service_registry_address: null
       setup:
         all_participants: []
-        safe_contract_address:
-        - '0x0000000000000000000000000000000000000000'
-        consensus_threshold:
-        - null
+        safe_contract_address: '0x0000000000000000000000000000000000000000'
+        consensus_threshold: null
       share_tm_config_on_startup: false
       sleep_time: 1
       tendermint_check_sleep_delay: 3
@@ -153,6 +155,7 @@ models:
       tx_timeout: 10.0
       whitelist_api_key: null
       whitelist_endpoint: http://localhost
+      use_termination: false
     class_name: Params
   randomness_api:
     args:

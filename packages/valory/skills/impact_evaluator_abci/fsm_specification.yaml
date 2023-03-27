@@ -3,6 +3,8 @@ alphabet_in:
 - CONTRACT_ERROR
 - DID_NOT_SEND
 - DONE
+- DONE_READ
+- DONE_SCORE
 - NO_MAJORITY
 - RESET_AND_PAUSE_TIMEOUT
 - ROUND_TIMEOUT
@@ -13,7 +15,9 @@ start_states:
 - RegistrationRound
 - RegistrationStartupRound
 states:
+- GenericScoringRound
 - NewTokensRound
+- PathSwitchRound
 - RandomnessRound
 - RegistrationRound
 - RegistrationStartupRound
@@ -24,24 +28,31 @@ states:
 - TwitterScoringRound
 - VerificationRound
 transition_func:
+    (GenericScoringRound, DONE): TwitterScoringRound
+    (GenericScoringRound, NO_MAJORITY): GenericScoringRound
+    (GenericScoringRound, ROUND_TIMEOUT): GenericScoringRound
     (NewTokensRound, CONTRACT_ERROR): NewTokensRound
     (NewTokensRound, DONE): RandomnessRound
     (NewTokensRound, NO_MAJORITY): NewTokensRound
     (NewTokensRound, ROUND_TIMEOUT): NewTokensRound
+    (PathSwitchRound, DONE_READ): StreamReadRound
+    (PathSwitchRound, DONE_SCORE): GenericScoringRound
+    (PathSwitchRound, NO_MAJORITY): PathSwitchRound
+    (PathSwitchRound, ROUND_TIMEOUT): PathSwitchRound
     (RandomnessRound, DONE): SelectKeeperRound
     (RandomnessRound, NO_MAJORITY): RandomnessRound
     (RandomnessRound, ROUND_TIMEOUT): RandomnessRound
     (RegistrationRound, DONE): StreamReadRound
     (RegistrationRound, NO_MAJORITY): RegistrationRound
     (RegistrationStartupRound, DONE): StreamReadRound
-    (ResetAndPauseRound, DONE): TwitterScoringRound
+    (ResetAndPauseRound, DONE): StreamReadRound
     (ResetAndPauseRound, NO_MAJORITY): RegistrationRound
     (ResetAndPauseRound, RESET_AND_PAUSE_TIMEOUT): RegistrationRound
     (SelectKeeperRound, DONE): StreamWriteRound
     (SelectKeeperRound, NO_MAJORITY): RandomnessRound
     (SelectKeeperRound, ROUND_TIMEOUT): RandomnessRound
     (StreamReadRound, API_ERROR): StreamReadRound
-    (StreamReadRound, DONE): TwitterScoringRound
+    (StreamReadRound, DONE): PathSwitchRound
     (StreamReadRound, NO_MAJORITY): StreamReadRound
     (StreamReadRound, ROUND_TIMEOUT): StreamReadRound
     (StreamWriteRound, API_ERROR): RandomnessRound

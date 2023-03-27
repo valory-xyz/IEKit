@@ -19,6 +19,8 @@
 
 """This module contains the shared state for the abci skill of CeramicReadAbciApp."""
 
+from typing import Any
+
 from packages.valory.skills.abstract_round_abci.models import BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
@@ -28,7 +30,7 @@ from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
 from packages.valory.skills.ceramic_read_abci.rounds import CeramicReadAbciApp
-from typing import Any
+
 
 class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
@@ -42,16 +44,19 @@ class Params(BaseParams):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the parameters object."""
 
-        self.ceramic_api_base = kwargs.get("ceramic_api_base")  # shared param, can't use ensure
-        self.ceramic_api_read_endpoint = kwargs.get(
-            "ceramic_api_read_endpoint"
-        )
+        self.ceramic_api_base = kwargs.get(
+            "ceramic_api_base"
+        )  # shared param, can't use ensure
+        self.ceramic_api_read_endpoint = kwargs.get("ceramic_api_read_endpoint")
 
         # These parameters are optional, therefore we do not use ensure
         self.default_read_stream_id = kwargs.pop("default_read_stream_id", None)
-        self.default_read_target_property = kwargs.pop("default_read_target_property", None)
+        self.default_read_target_property = kwargs.pop(
+            "default_read_target_property", None
+        )
 
         super().__init__(*args, **kwargs)
+
 
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool

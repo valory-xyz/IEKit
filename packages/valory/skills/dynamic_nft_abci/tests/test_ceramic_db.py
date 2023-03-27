@@ -21,6 +21,8 @@
 
 from copy import copy
 
+import pytest
+
 from packages.valory.skills.dynamic_nft_abci.ceramic_db import CeramicDB
 
 
@@ -36,7 +38,14 @@ DEFAULT_DATA = {
 def test_create_empty():
     """Test CeramicDB"""
     db = CeramicDB()
-    assert db.data == {"users": [], "module_data": {"twitter": {}, "dynamic_nft": {}}}
+    assert db.data == {
+        "users": [],
+        "module_data": {
+            "twitter": {"latest_mention_tweet_id": 0},
+            "dynamic_nft": {},
+            "generic": {"latest_update_id": 0},
+        },
+    }
 
 
 def test_create_non_empty():
@@ -75,3 +84,41 @@ def test_add_user():
 
     user, _ = db.get_user_by_field("dummy", "data")
     assert user == default_data
+
+
+def test_merge_by_wallet():
+    """Test CeramicDB"""
+    db = CeramicDB()
+    user_a = {
+        "twitter_id": "dummy_twitter_id",
+        "wallet_address": "dummy_address",
+        "points": 10,
+    }
+    user_b = {
+        "discord_id": "dummy_discord_id",
+        "wallet_address": "dummy_address",
+        "points": 10,
+    }
+    db.create_user(user_a)
+    db.create_user(user_b)
+    db.merge_by_wallet()
+    assert len(db.data["users"]) == 1, "User merge was not successful"
+    assert db.data["users"][0] == {
+        "twitter_id": "dummy_twitter_id",
+        "wallet_address": "dummy_address",
+        "discord_id": "dummy_discord_id",
+        "points": 20,
+        "token_id": None,
+        "twitter_handle": None,
+    }
+
+
+def test_merge_by_wallet_raises():
+    """Test CeramicDB"""
+    db = CeramicDB()
+    user_a = {"twitter_id": "dummy_twitter_id", "wallet_address": "dummy_address"}
+    user_b = {"twitter_id": "dummy_twitter_id_2", "wallet_address": "dummy_address"}
+    db.create_user(user_a)
+    db.create_user(user_b)
+    with pytest.raises(ValueError):
+        db.merge_by_wallet()

@@ -7,17 +7,17 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiasfbratsbsxyji2k2xeft3jdqaajwqskjsvbjsqht4mrew6wb2km
-  behaviours.py: bafybeicarj45un3uplkxu74jtxuxijcl2lfmah3aof2b5slsdnb2fw4zdm
-  ceramic_db.py: bafybeihsm4psc27cq3xqiotzhevkuxqzozcrokexmplmvfx6ljqy4npna4
+  behaviours.py: bafybeidu2cuclzktkxgys3eua7euuku7gqcy6he5drthvkrpq3ak2yuxjy
+  ceramic_db.py: bafybeien2vtgummhuamfjwp6dpmzieighjpq2os6y5anlixdb7bzcu2mhm
   dialogues.py: bafybeiabtq2to7x6bbbnxzrvupz5rky4b6k73y2lw5dmclb6xx74nuzxe4
   fsm_specification.yaml: bafybeihm464d5ol3qumlyb7kb2uhnhki5hsldgjrzkkk4adwmqbxedbw54
-  handlers.py: bafybeie4kw64vje2w6fglnhgu3apg4nyrejdu4ibdw5i7yuioctnsqvycu
+  handlers.py: bafybeifbmzk7a7v5yoxcxmrnzcf6oho6zq3mmm7vns3vljotlhn5axktna
   models.py: bafybeianeimox27xwxbm5yq6go3ygf3oa2cbuv6h4y64oyjo3m2ua23sxq
   payloads.py: bafybeia5tm23kb7ho33cgsupvhkywjuv4q3zeaon4mbaerjgdvhlyht4xm
-  rounds.py: bafybeien7kgt7aeojnep2fdvchbeji7t634v5uw2hoa3riuneia6qyyzve
+  rounds.py: bafybeih7kzmp3lw5grfz5277efgccb72gu2jsz6xs4shkxm56kvxhvmf4e
   tests/__init__.py: bafybeidxte5jeugotf25yogfbsoivyokeqffrvzo7lqgspm4kzrgbhvc3u
   tests/test_behaviours.py: bafybeieaikjy3a5xie73pxz3trlnbaazke73psn62yan6fip3xzlwzow6e
-  tests/test_ceramic_db.py: bafybeiagvap2sudwmyklvrd3emewdgudefeknng7jiqqiy6ksaokmkjo2y
+  tests/test_ceramic_db.py: bafybeiap52rjwpvwe2xrwkndv3fgrdeckp3llfeholtbydl3oycpmlaf5y
   tests/test_dialogues.py: bafybeigybvptoehtw2o2jbudvyxggo5yr4pyqic7m732sha4xtaaxnfdpe
   tests/test_handlers.py: bafybeib3a7l5tted7klfea6ctrj5k3nxroiuq4ribywspjac6og4sgze24
   tests/test_models.py: bafybeietgyqb5rsbnzqgzcsgm2pu2qcadu7rr7akxscfmegtghc5aguz44
@@ -27,12 +27,12 @@ fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihaax5od5zo5jk2l62hv4jwuwtxloh5mijozudpsjombqc4ncmi6i
 contracts:
-- valory/dynamic_contribution:0.1.0:bafybeiap7dvbkfbh2t5f5sm3k4zlh6rhf4sle4v5d2xakcl2haoeh2qjja
+- valory/dynamic_contribution:0.1.0:bafybeidizr2junhzmfxaibjmapr5rtir6bkpkalsuin3adgiq5cck3kvo4
 protocols:
 - valory/contract_api:1.0.0:bafybeidv6wxpjyb2sdyibnmmum45et4zcla6tl63bnol6ztyoqvpl4spmy
 - valory/http:1.0.0:bafybeifyoio7nlh5zzyn5yz7krkou56l22to3cwg7gw5v5o3vxwklibhty
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
+- valory/abstract_round_abci:0.1.0:bafybeicn5utwviq46ubguok5rl5go4hb7oxluj7t6bja2ut4epjw2hevei
 behaviours:
   main:
     args: {}
@@ -106,7 +106,7 @@ models:
       keeper_timeout: 30.0
       max_attempts: 10
       max_healthcheck: 120
-      observation_interval: 10
+      reset_pause_duration: 10
       on_chain_service_id: null
       points_to_image_hashes: '{"0": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm",
         "100": "bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q", "50000":
@@ -120,7 +120,10 @@ models:
       round_timeout_seconds: 30.0
       service_id: contribution_service
       service_registry_address: null
-      setup: {}
+      setup:
+        all_participants: []
+        safe_contract_address: '0x0000000000000000000000000000000000000000'
+        consensus_threshold: null
       share_tm_config_on_startup: false
       sleep_time: 1
       tendermint_check_sleep_delay: 3
@@ -130,6 +133,7 @@ models:
       tendermint_url: http://localhost:26657
       token_uri_base: https://pfp.staging.autonolas.tech/
       tx_timeout: 10.0
+      use_termination: false
     class_name: Params
   requests:
     args: {}

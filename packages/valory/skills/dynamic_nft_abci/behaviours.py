@@ -156,6 +156,11 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
                     "wallet_address", address, {"token_id": token_id}
                 )
 
+        # If a user has first contributed to one module (i.e. twitter) without registering a wallet,
+        # and later he/she contributes to another module, it could happen that we have two different
+        # entries on the database
+        ceramic_db.merge_by_wallet()
+
         # Rebuild token_to_points
         new_token_id_to_points = {
             user["token_id"]: user["points"]

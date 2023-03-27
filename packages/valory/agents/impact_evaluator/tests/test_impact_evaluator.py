@@ -68,10 +68,20 @@ from packages.valory.skills.ceramic_write_abci.rounds import (
 )
 from packages.valory.skills.ceramic_read_abci.rounds import StreamReadRound
 
+from packages.valory.skills.generic_scoring_abci.rounds import (
+    GenericScoringRound,
+)
+
+from packages.valory.skills.path_switch_abci.rounds import (
+    PathSwitchRound,
+)
+
 
 HAPPY_PATH: Tuple[RoundChecks, ...] = (
     RoundChecks(RegistrationStartupRound.auto_round_id(), n_periods=1),
-    RoundChecks(StreamReadRound.auto_round_id(), n_periods=1),
+    RoundChecks(StreamReadRound.auto_round_id(), n_periods=3),
+    RoundChecks(PathSwitchRound.auto_round_id(), n_periods=3),
+    RoundChecks(GenericScoringRound.auto_round_id(), n_periods=2),
     RoundChecks(TwitterScoringRound.auto_round_id(), n_periods=2),
     RoundChecks(NewTokensRound.auto_round_id(), n_periods=2),
     RoundChecks(RandomnessRound.auto_round_id(), n_periods=2),
@@ -84,6 +94,7 @@ HAPPY_PATH: Tuple[RoundChecks, ...] = (
 # strict check log messages of the happy path
 STRICT_CHECK_STRINGS = (
     "Got data from Ceramic API",
+    "Path switch:",
     "Retrieved new mentions from Twitter",
     "Retrieved recent registrations from Twitter",
     "Got token_id to address data up to block",
@@ -149,6 +160,10 @@ class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
         {
             "dotted_path": f"{__param_args_prefix}.default_write_target_property",
             "value": "ceramic_db",
+        },
+        {
+            "dotted_path": f"{__param_args_prefix}.manual_points_stream_id",
+            "value": "manual_points_stream_id",
         },
     ]
 

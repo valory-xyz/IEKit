@@ -8,8 +8,9 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibk5iyiobvfgd6w3z75amk7muou3kqqq5rj3mze6rnzlmzpaiwtii
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeibgs3xheoiqpfhgp4s4zobhe6gypqa2r2pe6ymwqdom3xazbbp7tq
+agent: valory/impact_evaluator:0.1.0:bafybeibpy56tskk5qbgpsbe5vnkmtpnjktwbio6xwb3wfsbif5wq7uporm
 number_of_agents: 4
+deployment: {}
 ---
 public_id: valory/impact_evaluator_abci:0.1.0
 type: skill
@@ -30,6 +31,10 @@ models:
       default_write_stream_id: ${DEFAULT_WRITE_STREAM_ID:str:default_write_stream_id}
       default_read_target_property: ${DEFAULT_READ_TARGET_PROPERTY:str:default_read_target_property}
       default_write_target_property: ${DEFAULT_WRITE_TARGET_PROPERTY:str:default_write_target_property}
+      manual_points_stream_id:
+        MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id: null
+      manual_points_target_property:
+        MANUAL_POINTS_TARGET_PROPERTY:str:score_data: null
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -55,7 +60,7 @@ models:
       keeper_timeout: 30.0
       max_attempts: 10
       max_healthcheck: 120
-      observation_interval: ${OBSERVATION_INTERVAL:int:300}
+      reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
       on_chain_service_id: null
       reset_tendermint_after: 2
       retry_attempts: 400
@@ -67,10 +72,8 @@ models:
       service_registry_address: null
       setup:
         all_participants: ${ALL_PARTICIPANTS:list:[]}
-        safe_contract_address:
-        - '0x0000000000000000000000000000000000000000'
-        consensus_threshold:
-        - null
+        safe_contract_address: '0x0000000000000000000000000000000000000000'
+        consensus_threshold: null
       share_tm_config_on_startup: ${USE_ACN:bool:false}
       sleep_time: 1
       tendermint_check_sleep_delay: 3

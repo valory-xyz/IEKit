@@ -325,6 +325,11 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 "twitter_id", twitter_id, {"wallet_address": wallet_address}
             )
 
+        # If a user has first contributed to one module (i.e. twitter) without registering a wallet,
+        # and later he/she contributes to another module, it could happen that we have two different
+        # entries on the database
+        ceramic_db.merge_by_wallet()
+
         # latest_mention_tweet_id
         ceramic_db.data["module_data"]["twitter"]["latest_mention_tweet_id"] = api_data[
             "latest_mention_tweet_id"

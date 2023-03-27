@@ -111,7 +111,7 @@ class CeramicWriteBaseBehaviour(BaseBehaviour, ABC):
 
     def _get_stream_and_target_property(self) -> Tuple[str, str]:
         """Get the target stream_id and content"""
-        # stream_id and target_property_name can be set either in the synchronized_data or as a param. The former has higher priority.
+        # stream_id and read_target_property can be set either in the synchronized_data or as a param. The former has higher priority.
         stream_id = (
             self.synchronized_data.write_stream_id
             or self.params.default_write_stream_id
@@ -121,16 +121,16 @@ class CeramicWriteBaseBehaviour(BaseBehaviour, ABC):
                 "write_stream_id has not been set neither in the synchronized_data nor as a default parameter"
             )
 
-        target_property_name = (
+        read_target_property = (
             self.synchronized_data.write_target_property
             or self.params.default_write_target_property
         )
-        if not target_property_name:
+        if not read_target_property:
             raise ValueError(
                 "write_target_property has not been set neither in the synchronized_data nor as a default parameter"
             )
 
-        return stream_id, target_property_name
+        return stream_id, read_target_property
 
 
 class RandomnessCeramicBehaviour(RandomnessBehaviour):
@@ -197,7 +197,7 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
     def _write_ceramic_data(self) -> Generator[None, None, bool]:
         """Write the scores to the Ceramic stream"""
 
-        stream_id, target_property_name = self._get_stream_and_target_property()
+        stream_id, read_target_property = self._get_stream_and_target_property()
 
         # Get the current stream data
         old_data = yield from self._get_stream_data(stream_id)
@@ -209,7 +209,7 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
             return False
 
         # stream_content can be set either in the synchronized_data directly or read using a param. The former has higher priority.
-        new_data = self.synchronized_data.db.get_strict(target_property_name)
+        new_data = self.synchronized_data.db.get_strict(read_target_property)
 
         # Prepare the commit payload
         commit_payload = build_commit_payload(
@@ -255,14 +255,14 @@ class VerificationBehaviour(CeramicWriteBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
-            stream_id, target_property_name = self._get_stream_and_target_property()
+            stream_id, read_target_property = self._get_stream_and_target_property()
 
             # Get the current data
             data = yield from self._get_stream_data(stream_id)
 
             # Verify if the retrieved data matches local user_to_total_points
             expected_data = json.dumps(
-                self.synchronized_data.db.get_strict(target_property_name),
+                self.synchronized_data.db.get_strict(read_target_property),
                 sort_keys=True,
             )
 

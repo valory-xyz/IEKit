@@ -19,26 +19,24 @@
 
 """This package contains round behaviours of CeramicReadAbciApp."""
 
-from abc import ABC
-from typing import Generator, Set, Type, cast, Optional
 import json
-from packages.valory.skills.abstract_round_abci.base import VALUE_NOT_PROVIDED, AbstractRound
+from abc import ABC
+from typing import Generator, Optional, Set, Type, cast
+
+from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-
-from packages.valory.skills.ceramic_read_abci.models import Params
-from packages.valory.skills.ceramic_read_abci.rounds import (
-    SynchronizedData,
-    CeramicReadAbciApp,
-    StreamReadRound,
-)
-from packages.valory.skills.ceramic_read_abci.rounds import (
-    StreamReadPayload,
-)
 from packages.valory.skills.ceramic_read_abci.ceramic.payloads import (
     build_data_from_commits,
+)
+from packages.valory.skills.ceramic_read_abci.models import Params
+from packages.valory.skills.ceramic_read_abci.rounds import (
+    CeramicReadAbciApp,
+    StreamReadPayload,
+    StreamReadRound,
+    SynchronizedData,
 )
 
 
@@ -100,6 +98,7 @@ class CeramicReadBaseBehaviour(BaseBehaviour, ABC):
             "data": data,
         }
 
+
 class StreamReadBehaviour(CeramicReadBaseBehaviour):
     """StreamReadBehaviour"""
 
@@ -110,26 +109,43 @@ class StreamReadBehaviour(CeramicReadBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
-            # stream_id and target_property_name can be set either in the synchronized_data or as a param. The former has higher priority.
-            stream_id = self.synchronized_data.read_stream_id or self.params.default_read_stream_id
+            # stream_id and read_target_property can be set either in the synchronized_data or as a param. The former has higher priority.
+            stream_id = (
+                self.synchronized_data.read_stream_id
+                or self.params.default_read_stream_id
+            )
             if not stream_id:
-                raise ValueError("read_stream_id has not been set neither in the synchronized_data nor as a default parameter")
+                raise ValueError(
+                    "read_stream_id has not been set neither in the synchronized_data nor as a default parameter"
+                )
 
-            target_property_name = self.synchronized_data.read_target_property or self.params.default_read_target_property
-            if not target_property_name:
-                raise ValueError("read_target_property has not been set neither in the synchronized_data nor as a default parameter")
+            read_target_property = (
+                self.synchronized_data.read_target_property
+                or self.params.default_read_target_property
+            )
+            if not read_target_property:
+                raise ValueError(
+                    "read_target_property has not been set neither in the synchronized_data nor as a default parameter"
+                )
 
             # Get the stream data
             stream_data = yield from self._get_stream_data(stream_id)
             if not stream_data:
                 payload_content = StreamReadRound.ERROR_PAYLOAD
             else:
-                payload_content = {"stream_data": stream_data["data"], "target_property_name": target_property_name}
-                self.context.logger.info(f"Loading data into 'synchronized_data.{target_property_name}': {stream_data['data']}")
+                payload_content = {
+                    "stream_data": stream_data["data"],
+                    "read_target_property": read_target_property,
+                }
+                self.context.logger.info(
+                    f"Loading data into 'synchronized_data.{read_target_property}': {stream_data['data']}"
+                )
 
             # Send the payload
             sender = self.context.agent_address
-            payload = StreamReadPayload(sender=sender, content=json.dumps(payload_content, sort_keys=True))
+            payload = StreamReadPayload(
+                sender=sender, content=json.dumps(payload_content, sort_keys=True)
+            )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(payload)
@@ -143,6 +159,4 @@ class CeramicReadRoundBehaviour(AbstractRoundBehaviour):
 
     initial_behaviour_cls = StreamReadBehaviour
     abci_app_cls = CeramicReadAbciApp  # type: ignore
-    behaviours: Set[Type[BaseBehaviour]] = [
-        StreamReadBehaviour
-    ]
+    behaviours: Set[Type[BaseBehaviour]] = [StreamReadBehaviour]

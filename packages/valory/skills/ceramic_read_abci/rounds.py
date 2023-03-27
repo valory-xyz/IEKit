@@ -19,22 +19,20 @@
 
 """This package contains the rounds of CeramicReadAbciApp."""
 
+import json
 from enum import Enum
-from typing import Dict, Optional, Set, Tuple, cast
+from typing import Dict, FrozenSet, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    CollectSameUntilThresholdRound,
     AppState,
     BaseSynchronizedData,
+    CollectSameUntilThresholdRound,
     DegenerateRound,
     EventToTimeout,
 )
-import json
-from packages.valory.skills.ceramic_read_abci.payloads import (
-    StreamReadPayload,
-)
+from packages.valory.skills.ceramic_read_abci.payloads import StreamReadPayload
 
 
 class Event(Enum):
@@ -60,8 +58,8 @@ class SynchronizedData(BaseSynchronizedData):
 
     @property
     def read_target_property(self) -> Optional[str]:
-        """Get the target_property_name."""
-        return cast(str, self.db.get("target_property_name", None))
+        """Get the read_target_property."""
+        return cast(str, self.db.get("read_target_property", None))
 
 
 class StreamReadRound(CollectSameUntilThresholdRound):
@@ -84,7 +82,7 @@ class StreamReadRound(CollectSameUntilThresholdRound):
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    payload["target_property_name"]: payload["stream_data"],
+                    payload["read_target_property"]: payload["stream_data"],
                 }
             )
             return synchronized_data, Event.DONE
@@ -110,15 +108,15 @@ class CeramicReadAbciApp(AbciApp[Event]):
             Event.DONE: FinishedReadingRound,
             Event.API_ERROR: StreamReadRound,
             Event.NO_MAJORITY: StreamReadRound,
-            Event.ROUND_TIMEOUT: StreamReadRound
+            Event.ROUND_TIMEOUT: StreamReadRound,
         },
-        FinishedReadingRound: {}
+        FinishedReadingRound: {},
     }
     final_states: Set[AppState] = {FinishedReadingRound}
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: Set[str] = set()
+    cross_period_persisted_keys: FrozenSet[str] = frozenset()
     db_pre_conditions: Dict[AppState, Set[str]] = {
         StreamReadRound: set(),
     }

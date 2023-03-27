@@ -41,9 +41,16 @@ from packages.valory.skills.dynamic_nft_abci.models import (
     Params as DynamicNFTAbciParams,
 )
 from packages.valory.skills.dynamic_nft_abci.rounds import Event as DynamicNFTEvent
+from packages.valory.skills.generic_scoring_abci.rounds import (
+    Event as GenericScoringEvent,
+)
 from packages.valory.skills.impact_evaluator_abci.composition import (
     ImpactEvaluatorSkillAbciApp,
 )
+from packages.valory.skills.path_switch_abci.models import (
+    Params as PathSwitchAbciParams,
+)
+from packages.valory.skills.path_switch_abci.rounds import Event as PathSwitchEvent
 from packages.valory.skills.reset_pause_abci.rounds import Event as ResetPauseEvent
 from packages.valory.skills.twitter_scoring_abci.models import (
     Params as TwitterScoringAbciParams,
@@ -57,6 +64,7 @@ CeramicReadParams = CeramicReadAbciParams
 CeramicWriteParams = CeramicWriteAbciParams
 DynamicNFTParams = DynamicNFTAbciParams
 TwitterScoringParams = TwitterScoringAbciParams
+PathSwitchParams = PathSwitchAbciParams
 
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
@@ -83,6 +91,12 @@ class SharedState(BaseSharedState):
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             TwitterScoringEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds
+        ImpactEvaluatorSkillAbciApp.event_to_timeout[
+            PathSwitchEvent.ROUND_TIMEOUT
+        ] = self.context.params.round_timeout_seconds
+        ImpactEvaluatorSkillAbciApp.event_to_timeout[
+            GenericScoringEvent.ROUND_TIMEOUT
+        ] = self.context.params.round_timeout_seconds
         ImpactEvaluatorSkillAbciApp.event_to_timeout[DynamicNFTEvent.ROUND_TIMEOUT] = (
             self.context.params.round_timeout_seconds * MULTIPLIER
         )
@@ -91,10 +105,14 @@ class SharedState(BaseSharedState):
         ] = self.context.params.round_timeout_seconds
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             ResetPauseEvent.RESET_AND_PAUSE_TIMEOUT
-        ] = (self.context.params.observation_interval + MARGIN)
+        ] = (self.context.params.reset_pause_duration + MARGIN)
 
 
 class Params(
-    CeramicReadParams, TwitterScoringParams, CeramicWriteParams, DynamicNFTParams
+    CeramicReadParams,
+    TwitterScoringParams,
+    CeramicWriteParams,
+    DynamicNFTParams,
+    PathSwitchParams,
 ):
     """A model to represent params for multiple abci apps."""

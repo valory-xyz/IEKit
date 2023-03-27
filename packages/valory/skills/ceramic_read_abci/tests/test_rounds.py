@@ -19,30 +19,27 @@
 
 """This package contains the tests for rounds of CeramicRead."""
 
-from typing import Any, cast, Dict, List, Callable, Hashable, Mapping, Optional
+import json
 from dataclasses import dataclass, field
+from typing import Any, Callable, Dict, Hashable, List, Mapping, Optional, cast
 
 import pytest
 
-from packages.valory.skills.ceramic_read_abci.payloads import (
-    StreamReadPayload,
+from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
+from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
+    BaseCollectSameUntilThresholdRoundTest,
+    CollectSameUntilThresholdRound,
 )
+from packages.valory.skills.ceramic_read_abci.payloads import StreamReadPayload
 from packages.valory.skills.ceramic_read_abci.rounds import (
     Event,
-    SynchronizedData,
     StreamReadRound,
+    SynchronizedData,
 )
-from packages.valory.skills.abstract_round_abci.base import (
-    BaseTxPayload,
-    AbstractRound
-)
-from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
-    CollectSameUntilThresholdRound,
-    BaseCollectSameUntilThresholdRoundTest,
- )
-import json
+
 
 MAX_PARTICIPANTS: int = 4
+
 
 def get_participants() -> List[str]:
     """Participants"""
@@ -59,6 +56,7 @@ def get_payloads(
         for participant in get_participants()
     }
 
+
 def get_dummy_ceramic_read_payload_serialized(api_error: bool = False) -> str:
     """Dummy ceramic write payload"""
     if api_error:
@@ -66,7 +64,7 @@ def get_dummy_ceramic_read_payload_serialized(api_error: bool = False) -> str:
     else:
         payload = {
             "stream_data": {"dummy": "data"},
-            "target_property_name": "dummy_property_name",
+            "read_target_property": "dummy_property_name",
         }
     return json.dumps(payload, sort_keys=True)
 
@@ -82,9 +80,6 @@ class RoundTestCase:
     event: Event
     most_voted_payload: Any
     synchronized_data_attr_checks: List[Callable] = field(default_factory=list)
-
-
-
 
 
 class BaseCeramicReadRoundTest(BaseCollectSameUntilThresholdRoundTest):

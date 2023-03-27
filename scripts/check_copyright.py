@@ -312,9 +312,11 @@ def main() -> None:
         lambda x: x not in exclude_files,
         itertools.chain(
             Path("packages", "valory", "skills", "ceramic_read_abci").glob("**/*.py"),
+            Path("packages", "valory", "skills", "path_switch_abci").glob("**/*.py"),
+            Path("packages", "valory", "skills", "generic_scoring_abci").glob("**/*.py"),
             Path("packages", "valory", "skills", "twitter_scoring_abci").glob("**/*.py"),
-            Path("packages", "valory", "skills", "ceramic_write_abci").glob("**/*.py"),
             Path("packages", "valory", "skills", "dynamic_nft_abci").glob("**/*.py"),
+            Path("packages", "valory", "skills", "ceramic_write_abci").glob("**/*.py"),
             Path("packages", "valory", "skills", "impact_evaluator_abci").glob("**/*.py"),
             Path("tests").glob("**/*.py"),
             Path("scripts").glob("**/*.py"),

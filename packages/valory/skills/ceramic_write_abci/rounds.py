@@ -20,7 +20,7 @@
 """This package contains the rounds of CeramicWriteAbciApp."""
 
 from enum import Enum
-from typing import Dict, Optional, Set, Tuple, cast
+from typing import Dict, FrozenSet, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
@@ -73,16 +73,6 @@ class SynchronizedData(BaseSynchronizedData):
     def write_target_property(self) -> Optional[str]:
         """Get the write_target_property."""
         return self.db.get("write_target_property", None)
-
-    @property
-    def did_seed(self) -> str:
-        """Get the did seed."""
-        return self.db.get_strict("did_seed")
-
-    @property
-    def did(self) -> str:
-        """Get the did."""
-        return self.db.get_strict("did")
 
 
 class RandomnessRound(CollectSameUntilThresholdRound):
@@ -200,7 +190,7 @@ class CeramicWriteAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: Set[str] = set()
+    cross_period_persisted_keys: FrozenSet[str] = frozenset()
     db_pre_conditions: Dict[AppState, Set[str]] = {
         RandomnessRound: set(),
     }
