@@ -30,13 +30,13 @@ pytest-cov = "==4.0.0"
 pytest-randomly = "==3.12.0"
 openapi-core = "==0.13.2"
 openapi-spec-validator = "==0.2.8"
-open-aea = "==1.29.0"
-open-aea-ledger-ethereum = "==1.29.0"
-open-aea-ledger-cosmos = "==1.29.0"
-open-aea-cli-ipfs = "==1.29.0"
-open-aea-test-autonomy = "==0.9.1"
-open-autonomy = {version = "==0.9.1", extras = [ "all"]}
-tomte = {version = "==0.2.2", extras = ["tox", "tests"]}
+open-aea = "==1.31.0"
+open-aea-ledger-ethereum = "==1.31.0"
+open-aea-ledger-cosmos = "==1.31.0"
+open-aea-cli-ipfs = "==1.31.0"
+open-aea-test-autonomy = "==0.10.0.post1"
+open-autonomy = {version = "==0.10.0.post1", extras = [ "all"]}
+tomte = {version = "==0.2.4", extras = ["tox", "tests"]}
 
 [requires]
 python_version = "3.10"

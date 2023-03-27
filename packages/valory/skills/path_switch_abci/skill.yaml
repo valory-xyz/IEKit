@@ -13,7 +13,7 @@ fingerprint:
   handlers.py: bafybeihcjegswyqyrf3hoq5swwl2whx72fwpu5s67cv4fhr4uwzinfyoou
   models.py: bafybeifbhes3uvu2c5qjens5kjkc5fxpo63yzz2gx6iwutzbf2pfmvvakq
   payloads.py: bafybeifa3ai22zuizkqlb4nhwzonzj74x57zinrtzc3nsqyi6c65bdyxem
-  rounds.py: bafybeihn67plt4pbzbfde6uho4b6ofivjgfv2pnvpgypropgc5zgrebldu
+  rounds.py: bafybeih4w3wbpofgqp62la2dc646racn2obr6ogfgpqpqgrqb535nawdnm
   tests/__init__.py: bafybeidckclnaqynfr376mhkqwna63tl357vvpo3gtb375fa2fw5oi5nvy
   tests/test_behaviours.py: bafybeifvw43ehjncrzwrgfy3glgf6iyaeaqbo5mixzqhsdlwkrvum2tyne
   tests/test_dialogues.py: bafybeibgcontngti7x65n3qx2se5hmkelrh4tfdbjev3nqb6usll7d7nb4
@@ -26,7 +26,7 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
+- valory/abstract_round_abci:0.1.0:bafybeicn5utwviq46ubguok5rl5go4hb7oxluj7t6bja2ut4epjw2hevei
 behaviours:
   main:
     args: {}
@@ -104,7 +104,7 @@ models:
       keeper_timeout: 30.0
       max_attempts: 10
       max_healthcheck: 120
-      observation_interval: 10
+      reset_pause_duration: 10
       on_chain_service_id: null
       request_retry_delay: 1.0
       request_timeout: 10.0
@@ -114,7 +114,10 @@ models:
       round_timeout_seconds: 30.0
       service_id: path_switch
       service_registry_address: null
-      setup: {}
+      setup:
+        all_participants: []
+        safe_contract_address: '0x0000000000000000000000000000000000000000'
+        consensus_threshold: null
       share_tm_config_on_startup: false
       sleep_time: 1
       tendermint_check_sleep_delay: 3
@@ -124,6 +127,7 @@ models:
       tendermint_url: http://localhost:26657
       tx_timeout: 10.0
       validate_timeout: 1205
+      use_termination: false
     class_name: Params
   requests:
     args: {}

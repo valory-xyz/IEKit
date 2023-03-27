@@ -314,16 +314,16 @@ class HttpHandler(BaseHttpHandler):
 
             current_time = datetime.datetime.now().timestamp()
 
-            observation_interval = self.context.params.observation_interval
+            reset_pause_duration = self.context.params.reset_pause_duration
 
             seconds_since_last_reset = current_time - last_update_time
             seconds_until_next_update = (
-                AVERAGE_PERIOD_SECONDS + observation_interval - seconds_since_last_reset
+                AVERAGE_PERIOD_SECONDS + reset_pause_duration - seconds_since_last_reset
             )  # this can be negative if we have passed the estimated reset time without resetting
 
             is_healthy = all(
                 [
-                    seconds_since_last_reset < 2 * observation_interval,
+                    seconds_since_last_reset < 2 * reset_pause_duration,
                     not is_tm_unhealthy,
                 ]
             )

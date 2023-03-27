@@ -15,7 +15,7 @@ fingerprint:
   handlers.py: bafybeich5zejyjlh7tqfh345r3ds5m75h5w64oqh4q5dtevpj4lkina4ku
   models.py: bafybeia3qlccegbbh4kd4s7oaad72ppeolqb2noavbjyk2mcqahkwlt3vm
   payloads.py: bafybeifu7fzhpugvvvouwlimjosffrkljjp3uqxgw7xptq5kgzcq6tco4u
-  rounds.py: bafybeigpkxcdwhetljm7yeyewyekkc66anppio47j3w2wqakhwq2jfjuxy
+  rounds.py: bafybeih2yquptm7knchlemy7lnqrrbjongdoojvkzdsw2vtaxlb67437hi
   tests/__init__.py: bafybeidwzzd4ejsyf3aryd5kmrvd63h7ajgqyrxphmfaacvpjnneacejay
   tests/test_behaviours.py: bafybeifqs5j3tgh7wf43qxa6bdfzuvmoummmlg4o4nwv3kslszsinnmysa
   tests/test_ceramic_db.py: bafybeidt2k6pnlxxeduxu37fhi7y63kopjz6sqkrvuitp3pjxd3b4t7ate
@@ -29,7 +29,7 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
+- valory/abstract_round_abci:0.1.0:bafybeicn5utwviq46ubguok5rl5go4hb7oxluj7t6bja2ut4epjw2hevei
 behaviours:
   main:
     args: {}
@@ -98,7 +98,7 @@ models:
       keeper_timeout: 30.0
       max_attempts: 10
       max_healthcheck: 120
-      observation_interval: 10
+      reset_pause_duration: 10
       on_chain_service_id: null
       request_retry_delay: 1.0
       request_timeout: 10.0
@@ -108,7 +108,10 @@ models:
       round_timeout_seconds: 30.0
       service_id: score_read
       service_registry_address: null
-      setup: {}
+      setup:
+        all_participants: []
+        safe_contract_address: '0x0000000000000000000000000000000000000000'
+        consensus_threshold: null
       share_tm_config_on_startup: false
       sleep_time: 1
       tendermint_check_sleep_delay: 3
@@ -126,6 +129,7 @@ models:
       twitter_search_endpoint: 2/tweets/search/recent?
       twitter_search_args: query=%23autonolas&tweet.fields=author_id,created_at&max_results=100
       validate_timeout: 1205
+      use_termination: false
     class_name: Params
   requests:
     args: {}

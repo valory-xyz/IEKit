@@ -21,7 +21,7 @@
 
 import json
 from enum import Enum
-from typing import Dict, Optional, Set, Tuple, cast
+from typing import Dict, FrozenSet, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
@@ -112,9 +112,11 @@ class TwitterScoringAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: Set[str] = {
-        "ceramic_db",
-    }
+    cross_period_persisted_keys: FrozenSet[str] = frozenset(
+        [
+            "ceramic_db",
+        ]
+    )
     db_pre_conditions: Dict[AppState, Set[str]] = {
         TwitterScoringRound: set(),
     }
