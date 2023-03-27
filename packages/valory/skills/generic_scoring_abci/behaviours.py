@@ -78,27 +78,23 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
 
         # Instantiate the db
         ceramic_db = CeramicDB(self.synchronized_data.ceramic_db, self.context.logger)
+        scores_db = CeramicDB(self.synchronized_data.score_data)
 
         # Only update if latest_update_id has increased
-        if (
-            self.synchronized_data.score_data["module_data"]["generic"][
-                "latest_update_id"
-            ]
-            <= ceramic_db.data["module_data"]["generic"]["latest_update_id"]
+        if int(scores_db.data["module_data"]["generic"]["latest_update_id"]) <= int(
+            ceramic_db.data["module_data"]["generic"]["latest_update_id"]
         ):
             return ceramic_db.data
 
         # discord_id, discord_handle, points, wallet_address
-        for user in self.synchronized_data.score_data["users"]:
+        for user in scores_db.data["users"]:
             discord_id = user.pop("discord_id")
             ceramic_db.update_or_create_user("discord_id", discord_id, user)
 
         # latest_update_id
-        ceramic_db.data["module_data"]["generic"][
-            "latest_update_id"
-        ] = self.synchronized_data.score_data["module_data"]["generic"][
-            "latest_update_id"
-        ]
+        ceramic_db.data["module_data"]["generic"]["latest_update_id"] = str(
+            scores_db.data["module_data"]["generic"]["latest_update_id"]
+        )
 
         # If a user has first contributed to one module (i.e. twitter) without registering a wallet,
         # and later he/she contributes to another module, it could happen that we have two different

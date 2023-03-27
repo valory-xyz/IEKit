@@ -1,9 +1,9 @@
 ![IEKit](images/iekit.svg){ align=left }
-The Impact Evaluator Kit (IEKit) is an enhanced version of the [CoordinationKit](https://docs.autonolas.network/product/coordinationkit/), which leverages [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) to automate the tracking and rewarding of users' contributions on the ecosystem. We provide a demo agent service based on the IEKit which is designed to track contributions in the form of Twitter mentions of the Autonolas DAO ([@autonolas](https://twitter.com/autonolas)). The demo service implements three main features:
+The Impact Evaluator Kit (IEKit) is an enhanced version of the [CoordinationKit](https://docs.autonolas.network/product/coordinationkit/), which leverages [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) to automate the tracking and rewarding of users' contributions on the ecosystem. We provide a demo agent service based on the IEKit which is designed to track contributions in the form of Twitter mentions of the Autonolas DAO ([@autonolas](https://twitter.com/autonolas)). Generic scores can be also read from a [Ceramic stream](https://developers.ceramic.network/docs/advanced/standards/stream-programs/). The demo service implements three main features:
 
-1. **Monitor for new users' registrations.** Reads registered users from a [Ceramic stream](https://developers.ceramic.network/docs/advanced/standards/stream-programs/). This stream contains a mapping that links Ethereum addresses to their corresponding Twitter user.
+1. **Monitor for new users' registrations.** Reads registered users both from tweets that contain the `#autonolas` hashtag and also from a [Ceramic stream](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) that contains user data like discord ids and wallet addresses.
 
-2. **Monitor for users' contributions.** The service periodically scans for new mentions of @autonolas on Twitter, and increments and updates the score of the corresponding user.
+2. **Monitor for users' contributions.** The service periodically scans for new mentions of @autonolas on Twitter and updates to the scores stream, and increments and updates the score of the corresponding user.
 
 3. **Update the badge of users according to their score.** To access the badge image associated to a user's NFT, the metadata URI associated to it is redirected to an agent in the service. Upon reading the concrete NFT from the request, the service provides the IPFS address of the image, which is updated periodically in relation to the user's score.
 
@@ -31,7 +31,7 @@ In order to run a local demo service based on the IEKit:
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeihwajfcu6a423ta6thxyzrtsobf24tsxjqfs34vhnkz7ou3rl26ei --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeihfds3nxuagyuofeqgd6ada3hu7zv6bjietw62kaa2i2ocxc3qzji --service
     ```
 
 3. Build the Docker image of the service agents
@@ -74,7 +74,7 @@ In order to run a local demo service based on the IEKit:
 
     2. Create a Ceramic Decentralized Identity (DID) using [Glaze](https://github.com/ceramicstudio/js-glaze).
 
-    3. Using the DID created in the previous step, create an empty Ceramic stream. You can follow [this tutorial](https://developers.ceramic.network/reference/stream-programs/tile-document/). The service will write scores to this stream.
+    3. Using the DID created in the previous step, create two empty Ceramic streams. You can follow [this tutorial](https://developers.ceramic.network/reference/stream-programs/tile-document/). The service will optionally read generic scores from the first one and will write scores to the second one.
 
     4. Create an API key for [Infura](https://www.infura.io/) or your preferred provider.
 
@@ -83,12 +83,16 @@ In order to run a local demo service based on the IEKit:
         ```bash
         ETHEREUM_LEDGER_RPC=https://goerli.infura.io/v3/<infura_api_key>
         DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS=0x7C3B976434faE9986050B26089649D9f63314BD8
-        SCORES_STREAM_ID=<scores_stream>
         CERAMIC_DID_SEED=<ceramic_seed_did>
         CERAMIC_DID_STR=<ceramic_did_string>
+        DEFAULT_READ_STREAM_ID=<main_database_stream>
+        DEFAULT_WRITE_STREAM_ID=<main_database_stream>
+        DEFAULT_READ_TARGET_PROPERTY=ceramic_db
+        DEFAULT_WRITE_TARGET_PROPERTY=ceramic_db
+        MANUAL_POINTS_STREAM_ID=<generic_scores_stream>
         TWITTER_API_BEARER_TOKEN=<twitter_api_token>
         TWITTER_MENTION_POINTS=300
-        OBSERVATION_INTERVAL=10
+        RESET_PAUSE_DURATION=10
         ALL_PARTICIPANTS='["0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65","0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc","0x976EA74026E726554dB657fA54763abd0C3a0aa9","0x14dC79964da2C08b23698B3D3cc7Ca32193d9955"]'
         POINTS_TO_IMAGE_HASHES='{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
         ```

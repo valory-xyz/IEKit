@@ -108,9 +108,11 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
         api_base = self.params.twitter_api_base
         api_endpoint = self.params.twitter_mentions_endpoint
         try:
-            latest_mention_tweet_id = self.synchronized_data.ceramic_db["module_data"][
-                "twitter"
-            ]["latest_mention_tweet_id"]
+            latest_mention_tweet_id = int(
+                self.synchronized_data.ceramic_db["module_data"]["twitter"][
+                    "latest_mention_tweet_id"
+                ]
+            )
         except KeyError:
             latest_mention_tweet_id = 0
         next_tweet_id = (
@@ -331,9 +333,9 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
         ceramic_db.merge_by_wallet()
 
         # latest_mention_tweet_id
-        ceramic_db.data["module_data"]["twitter"]["latest_mention_tweet_id"] = api_data[
-            "latest_mention_tweet_id"
-        ]
+        ceramic_db.data["module_data"]["twitter"]["latest_mention_tweet_id"] = str(
+            api_data["latest_mention_tweet_id"]
+        )
 
         self.context.logger.info(
             f"The ceramic_db will be updated to: {ceramic_db.data!r}"
