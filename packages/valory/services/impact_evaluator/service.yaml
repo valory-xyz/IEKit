@@ -31,10 +31,8 @@ models:
       default_write_stream_id: ${DEFAULT_WRITE_STREAM_ID:str:default_write_stream_id}
       default_read_target_property: ${DEFAULT_READ_TARGET_PROPERTY:str:default_read_target_property}
       default_write_target_property: ${DEFAULT_WRITE_TARGET_PROPERTY:str:default_write_target_property}
-      manual_points_stream_id:
-        MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id: null
-      manual_points_target_property:
-        MANUAL_POINTS_TARGET_PROPERTY:str:score_data: null
+      manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
+      manual_points_target_property: ${MANUAL_POINTS_TARGET_PROPERTY:str:score_data}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -92,9 +90,7 @@ models:
       twitter_max_pages: 10
       twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
       twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-      twitter_search_args:
-        TWITTER_SEARCH_ARGS:str:query=%23autonolas&tweet.fields=author_id: null
-        created_at&max_results=100: null
+      twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23autonolas&tweet.fields=author_id,created_at&max_results=100}
       tx_timeout: 10.0
 ---
 public_id: valory/ledger:0.19.0
