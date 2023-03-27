@@ -14,7 +14,7 @@ fingerprint:
   handlers.py: bafybeidtzcefjwj5rqhk6xw7b4vlzsyfqs47y3kvrrbhxeypbz7mhenzum
   models.py: bafybeidt2oytgtchp364doam5b2g62zeuut24janmhwuxcjlg4fi2yhko4
   payloads.py: bafybeib7zsfjxhilao35g3zus4pslr3dr3q6m3ovhlyn5rwe2f63u44s44
-  rounds.py: bafybeig4grjml3dz7fnaixanmzsy7n22biu6mwzob3gmampw6km5ivhj5e
+  rounds.py: bafybeictwbp2oiriodzybvq2m3eeu3lmvdw3tkmuoircxl7n6zmlmris5m
   tests/__init__.py: bafybeichcvoln3af5zl4rbefhdw5hd3n6dijbgygb3guiqgn7n2ad5vhrq
   tests/test_behaviours.py: bafybeicqw5cxfarjoqhdgppae3uk6r5gbcqdgoeb46iaxbnl2dgleujnxa
   tests/test_ceramic_db.py: bafybeia2dih7qi2zbcqzpsfyen7tme6il3lxana4nwln7v44bwwlsgsqjm
@@ -28,7 +28,7 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
+- valory/abstract_round_abci:0.1.0:bafybeicn5utwviq46ubguok5rl5go4hb7oxluj7t6bja2ut4epjw2hevei
 behaviours:
   main:
     args: {}
@@ -104,7 +104,7 @@ models:
       keeper_timeout: 30.0
       max_attempts: 10
       max_healthcheck: 120
-      observation_interval: 10
+      reset_pause_duration: 10
       on_chain_service_id: null
       request_retry_delay: 1.0
       request_timeout: 10.0
@@ -124,6 +124,7 @@ models:
       tendermint_url: http://localhost:26657
       tx_timeout: 10.0
       validate_timeout: 1205
+      use_termination: false
     class_name: Params
   requests:
     args: {}

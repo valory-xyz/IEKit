@@ -16,28 +16,28 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihaax5od5zo5jk2l62hv4jwuwtxloh5mijozudpsjombqc4ncmi6i
-- valory/abci:0.1.0:bafybeiedhipcrpx7sg7qwitwox6iqrbbb4vfnvqqyok2vc6wq6inrcszey
+- valory/abci:0.1.0:bafybeienpqzsym3rg7nnomd6mxgbt4didwd4wfj72oadde27trdmcgsu5y
 - valory/http_client:0.23.0:bafybeidykl4elwbcjkqn32wt5h4h7tlpeqovrcq3c5bcplt6nhpznhgczi
-- valory/ledger:0.19.0:bafybeicxcypcg2lxmtktbmuhqcyluzmasfsdeljyk2pvaabzc3h2jmcsui
+- valory/ledger:0.19.0:bafybeighon6i2qfl2xrg7t3lbdzlkyo4v2a7ayvwso7m5w7pf2hvjfs2ma
 - valory/p2p_libp2p_client:0.1.0:bafybeidwcobzb7ut3efegoedad7jfckvt2n6prcmd4g7xnkm6hp6aafrva
 contracts:
-- valory/dynamic_contribution:0.1.0:bafybeiap7dvbkfbh2t5f5sm3k4zlh6rhf4sle4v5d2xakcl2haoeh2qjja
+- valory/dynamic_contribution:0.1.0:bafybeidizr2junhzmfxaibjmapr5rtir6bkpkalsuin3adgiq5cck3kvo4
 protocols:
 - open_aea/signing:1.0.0:bafybeibqlfmikg5hk4phzak6gqzhpkt6akckx7xppbp53mvwt6r73h7tk4
 - valory/contract_api:1.0.0:bafybeidv6wxpjyb2sdyibnmmum45et4zcla6tl63bnol6ztyoqvpl4spmy
 - valory/http:1.0.0:bafybeifyoio7nlh5zzyn5yz7krkou56l22to3cwg7gw5v5o3vxwklibhty
 skills:
-- valory/abstract_abci:0.1.0:bafybeihkrunmigvlcze7uxhafj2h3kvpf2kifggq7zqj42n2we4mcwuvou
-- valory/abstract_round_abci:0.1.0:bafybeib2jw7hjccou42wis35orckwycb2dgjk7yw46anuqysf2h7su3fi4
-- valory/impact_evaluator_abci:0.1.0:bafybeibt2ynjuewiijpfv67jwg4rvwbqmgh7md54ucbazb2pbqaocm2oom
-- valory/path_switch_abci:0.1.0:bafybeih6rodvijrwzczxjl2bdd3q3lcuxgxyxwx7r7yxnskc3ri3f2dulq
-- valory/generic_scoring_abci:0.1.0:bafybeifqn255yyzvun3c3m3tucgdelqlvl73b7uqmn3j55nnaz3i4mfut4
-- valory/twitter_scoring_abci:0.1.0:bafybeidyzmvjdqpbjkonro63ihv44qkoai4mvntfrnyiioen4jnheuhpry
-- valory/ceramic_read_abci:0.1.0:bafybeicjedmoecplxf6rnbnsuphdjeosgybxaek55gwuks2eheeo7a5mr4
-- valory/ceramic_write_abci:0.1.0:bafybeih7smg2hxg4t6ixnaq7epyfczdr4wjbw5smvzh55fgbi43ekwvk3m
-- valory/dynamic_nft_abci:0.1.0:bafybeigfzg7wg2mpdxl7tga46bymisdoal3dgaazpjeims4kqo3fpvr22m
-- valory/registration_abci:0.1.0:bafybeidgoqi7fa2gb56hdfsf74bbunfii63zgeo4qhggb66ofver2n2gya
-- valory/reset_pause_abci:0.1.0:bafybeievxhu6u5r5wlpjfzcwuowlbanhfbi25saf25qit53jauv4kq6gne
+- valory/abstract_abci:0.1.0:bafybeigg5ofide2gxwgjvljjgpyy6ombby7ph6pg7erj3h6itduwpn6pqu
+- valory/abstract_round_abci:0.1.0:bafybeicn5utwviq46ubguok5rl5go4hb7oxluj7t6bja2ut4epjw2hevei
+- valory/impact_evaluator_abci:0.1.0:bafybeiado4oa2dngnitfjvwyt622mdaqcb5xbnmkdjm6qlvzrh6sgn6qha
+- valory/path_switch_abci:0.1.0:bafybeia6oyknmwe3sn5wm526cnp2dnvd5pvvionkiptbaod77fhbxx6xju
+- valory/generic_scoring_abci:0.1.0:bafybeig7is6ulwjlomu5lixmad56vdvwcqnnr5azyjrwajlugreupx5foq
+- valory/twitter_scoring_abci:0.1.0:bafybeignctvt7ce3osdmz3qtmwu7yf3yk6jf3q5bkxrmo5f5eitlp57esq
+- valory/ceramic_read_abci:0.1.0:bafybeifdrfae4de7fsg2jfmak5yjyn6oacopgsf5zbpt2v23sqerwc5vc4
+- valory/ceramic_write_abci:0.1.0:bafybeieryatey2ds3g7iye36rzsl5vmvushk4fswjp5dxqlctanogaswxy
+- valory/dynamic_nft_abci:0.1.0:bafybeifggr52bdakdjzthbzjawxjn65ynref22oclqfcogfvdupzrx74mq
+- valory/registration_abci:0.1.0:bafybeid7gh35wnotm27hwuuuv3oozu33izjfafy7vbyzejdy3scx4oc7cu
+- valory/reset_pause_abci:0.1.0:bafybeidtb4v44zbxx7uw2c5yrbmmvzuh4mkgvcqdfyf4eq2xuhvxnbfiru
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -54,7 +54,7 @@ logging_config:
     logfile:
       class: logging.FileHandler
       formatter: standard
-      filename: ${LOG_FILE:str:log.txt}
+      filename: ${str:log.txt}
       level: INFO
     console:
       class: logging.StreamHandler
@@ -69,26 +69,26 @@ logging_config:
 skill_exception_policy: stop_and_exit
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==1.29.0
+    version: ==1.31.0
 default_connection: null
 ---
 public_id: valory/abci:0.1.0
 type: connection
 config:
   target_skill_id: valory/impact_evaluator_abci:0.1.0
-  host: ${ABCI_HOST:str:localhost}
-  port: ${ABCI_PORT:int:26658}
-  use_tendermint: ${ABCI_USE_TENDERMINT:bool:false}
+  host: ${str:localhost}
+  port: ${int:26658}
+  use_tendermint: ${bool:false}
 ---
 public_id: valory/ledger:0.19.0
 type: connection
 config:
   ledger_apis:
     ethereum:
-      address: ${CONNECTION_LEDGER_CONFIG_LEDGER_APIS_ETHEREUM_ADDRESS:str:http://localhost:8545}
-      chain_id: ${CONNECTION_LEDGER_CONFIG_LEDGER_APIS_ETHEREUM_CHAIN_ID:int:31337}
-      poa_chain: ${CONNECTION_LEDGER_CONFIG_LEDGER_APIS_ETHEREUM_POA_CHAIN:bool:false}
-      default_gas_price_strategy: ${CONNECTION_LEDGER_CONFIG_LEDGER_APIS_ETHEREUM_DEFAULT_GAS_PRICE_STRATEGY:str:eip1559}
+      address: ${str:http://localhost:8545}
+      chain_id: ${int:31337}
+      poa_chain: ${bool:false}
+      default_gas_price_strategy: ${str:eip1559}
 ---
 public_id: valory/p2p_libp2p_client:0.1.0
 type: connection
@@ -152,7 +152,7 @@ models:
       keeper_timeout: 30.0
       max_attempts: 10
       max_healthcheck: 120
-      observation_interval: ${int:300}
+      reset_pause_duration: ${int:300}
       on_chain_service_id: null
       reset_tendermint_after: 2
       retry_attempts: 400
@@ -164,15 +164,14 @@ models:
       service_registry_address: null
       setup:
         all_participants: ${list:[]}
-        safe_contract_address: ${list:["0x0000000000000000000000000000000000000000"]}
-        consensus_threshold:
-        - null
+        safe_contract_address: ${str:0x0000000000000000000000000000000000000000}
+        consensus_threshold: ${int:null}
       share_tm_config_on_startup: ${bool:false}
       sleep_time: 1
       tendermint_check_sleep_delay: 3
-      tendermint_com_url: ${TENDERMINT_COM_URL:str:http://localhost:8080}
+      tendermint_com_url: ${str:http://localhost:8080}
       tendermint_max_retries: 5
-      tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
+      tendermint_url: ${str:http://localhost:26657}
       tendermint_p2p_url: localhost:26656
       token_uri_base: ${str:https://pfp.staging.autonolas.tech/}
       whitelist_api_key: null
@@ -187,6 +186,7 @@ models:
       twitter_search_endpoint: ${str:2/tweets/search/recent?}
       twitter_search_args: ${str:query=%23autonolas&tweet.fields=author_id,created_at&max_results=100}
       tx_timeout: 10.0
+      use_termination: ${bool:false}
 ---
 public_id: fetchai/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
 type: connection

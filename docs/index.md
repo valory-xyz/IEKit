@@ -24,14 +24,14 @@ In order to run a local demo service based on the IEKit:
     mkdir your_workspace && cd your_workspace
     touch Pipfile && pipenv --python 3.10 && pipenv shell
 
-    pipenv install open-autonomy[all]==0.9.1
+    pipenv install open-autonomy[all]==0.10.0.post1
     autonomy init --remote --ipfs --reset --author=your_name
     ```
 
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeifkqx6o3nzgqnrxqdgcuz2d7m4gnbp62qsbex6llqjoaiwusbwpku --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeihwajfcu6a423ta6thxyzrtsobf24tsxjqfs34vhnkz7ou3rl26ei --service
     ```
 
 3. Build the Docker image of the service agents
@@ -89,7 +89,7 @@ In order to run a local demo service based on the IEKit:
         TWITTER_API_BEARER_TOKEN=<twitter_api_token>
         TWITTER_MENTION_POINTS=300
         OBSERVATION_INTERVAL=10
-        ALL_PARTICIPANTS='[["0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65","0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc","0x976EA74026E726554dB657fA54763abd0C3a0aa9","0x14dC79964da2C08b23698B3D3cc7Ca32193d9955"]]'
+        ALL_PARTICIPANTS='["0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65","0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc","0x976EA74026E726554dB657fA54763abd0C3a0aa9","0x14dC79964da2C08b23698B3D3cc7Ca32193d9955"]'
         POINTS_TO_IMAGE_HASHES='{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
         ```
 
