@@ -29,13 +29,13 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeigg5ofide2gxwgjvljjgpyy6ombby7ph6pg7erj3h6itduwpn6pqu
 - valory/abstract_round_abci:0.1.0:bafybeicn5utwviq46ubguok5rl5go4hb7oxluj7t6bja2ut4epjw2hevei
-- valory/impact_evaluator_abci:0.1.0:bafybeidwbzrktpc3ylma5uyvunhbe3uqza3cqdjqothmst34ptv5noc5ku
+- valory/impact_evaluator_abci:0.1.0:bafybeifsrxq5ymjg4277wg2j7ovayjm2rlnbnptqqpdu6nirgofvobuzdm
 - valory/path_switch_abci:0.1.0:bafybeia6oyknmwe3sn5wm526cnp2dnvd5pvvionkiptbaod77fhbxx6xju
-- valory/generic_scoring_abci:0.1.0:bafybeif2pdzm2a57kib4h47zpwlo4prx4tw2sg5hfr5qk2uycvm67ikfnq
-- valory/twitter_scoring_abci:0.1.0:bafybeia6vb4om6kzhdqmxsi5lh3kdbmlylllohbfuzsbdyfxidackoryhi
+- valory/generic_scoring_abci:0.1.0:bafybeibtxfwqlb5kun6feti4bmadstr6cako7iompweupqegidymqk4s7i
+- valory/twitter_scoring_abci:0.1.0:bafybeicdaalb5l6yeetsh2m4yrg5greu2biklcifmhglobwsz4x4g5p4dy
 - valory/ceramic_read_abci:0.1.0:bafybeifdrfae4de7fsg2jfmak5yjyn6oacopgsf5zbpt2v23sqerwc5vc4
 - valory/ceramic_write_abci:0.1.0:bafybeihfth3kojxnozmv5ekyfnt2ls2mkd4t4ayzrkdzxhwidhudzu3lqy
-- valory/dynamic_nft_abci:0.1.0:bafybeifggr52bdakdjzthbzjawxjn65ynref22oclqfcogfvdupzrx74mq
+- valory/dynamic_nft_abci:0.1.0:bafybeibk4w5ddx27p3ea4js3j2juenuwvuhe6jycwvjr6j3fiwnxsqqpxy
 - valory/registration_abci:0.1.0:bafybeid7gh35wnotm27hwuuuv3oozu33izjfafy7vbyzejdy3scx4oc7cu
 - valory/reset_pause_abci:0.1.0:bafybeidtb4v44zbxx7uw2c5yrbmmvzuh4mkgvcqdfyf4eq2xuhvxnbfiru
 default_ledger: ethereum

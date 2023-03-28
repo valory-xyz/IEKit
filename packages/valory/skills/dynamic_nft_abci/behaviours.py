@@ -102,9 +102,11 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
     ) -> Generator[None, None, Tuple[dict, Optional[int]]]:
         """Get token id to address data."""
         try:
-            from_block = self.synchronized_data.ceramic_db["module_data"][
-                "dynamic_nft"
-            ]["last_parsed_block"]
+            from_block = int(
+                self.synchronized_data.ceramic_db["module_data"]["dynamic_nft"][
+                    "last_parsed_block"
+                ]
+            )
         except KeyError:
             from_block = self.params.earliest_block_to_monitor
 
@@ -151,7 +153,11 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
             # Update user in the following cases:
             # - User exists and its current token_id is None
             # - User exists and its current token_id is greater than the one in this iteration (only the first minted token is assigned to the user)
-            if not user or user["token_id"] is None or user["token_id"] > token_id:
+            if (
+                not user
+                or user["token_id"] is None
+                or int(token_id) < int(user["token_id"])
+            ):
                 ceramic_db.update_or_create_user(
                     "wallet_address", address, {"token_id": token_id}
                 )
@@ -179,9 +185,9 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
         token_id_to_points.update(new_token_id_to_points)
 
         # Last parsed block
-        ceramic_db.data["module_data"]["dynamic_nft"][
-            "last_parsed_block"
-        ] = last_parsed_block
+        ceramic_db.data["module_data"]["dynamic_nft"]["last_parsed_block"] = str(
+            last_parsed_block
+        )
 
         # Last update time
         last_update_time = cast(
