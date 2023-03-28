@@ -29,6 +29,8 @@ class CeramicDB:
     USER_FIELDS = {
         "twitter_id",
         "twitter_handle",
+        "discord_id",
+        "discord_handle",
         "wallet_address",
         "token_id",
         "points",

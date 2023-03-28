@@ -81,15 +81,25 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
         scores_db = CeramicDB(self.synchronized_data.score_data)
 
         # Only update if latest_update_id has increased
-        if int(scores_db.data["module_data"]["generic"]["latest_update_id"]) <= int(
+        latest_update_id_stream = int(
+            scores_db.data["module_data"]["generic"]["latest_update_id"]
+        )
+        latest_update_id_db = int(
             ceramic_db.data["module_data"]["generic"]["latest_update_id"]
-        ):
+        )
+
+        if latest_update_id_stream <= latest_update_id_db:
+            self.context.logger.info(
+                f"Not adding scores from the stream because latest_update_id_stream({latest_update_id_stream!r}) <= latest_update_id_db({latest_update_id_db!r})"
+            )
             return ceramic_db.data
 
         # discord_id, discord_handle, points, wallet_address
         for user in scores_db.data["users"]:
             discord_id = user.pop("discord_id")
-            ceramic_db.update_or_create_user("discord_id", discord_id, user)
+            ceramic_db.update_or_create_user(  # overwrites all common fields for the user
+                "discord_id", discord_id, user
+            )
 
         # latest_update_id
         ceramic_db.data["module_data"]["generic"]["latest_update_id"] = str(

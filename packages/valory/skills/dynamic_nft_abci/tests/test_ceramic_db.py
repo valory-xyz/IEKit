@@ -32,6 +32,8 @@ DEFAULT_DATA = {
     "twitter_handle": None,
     "twitter_id": None,
     "wallet_address": None,
+    "discord_id": None,
+    "discord_handle": None,
 }
 
 
@@ -110,6 +112,7 @@ def test_merge_by_wallet():
         "points": 20,
         "token_id": None,
         "twitter_handle": None,
+        "discord_handle": None,
     }
 
 
