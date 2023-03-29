@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibk5iyiobvfgd6w3z75amk7muou3kqqq5rj3mze6rnzlmzpaiwtii
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeifj7kp46zkllsn43bfgvwg5mnwprjgk3mul7eev7bg6nirn2no6pu
+agent: valory/impact_evaluator:0.1.0:bafybeifxba7mtvzfmxuv5za4w5h3qzadrr5upafkyygtpeextfilv6443m
 number_of_agents: 4
 deployment: {}
 ---
@@ -78,7 +78,7 @@ models:
       tendermint_com_url: ${TENDERMINT_COM_URL:str:http://localhost:8080}
       tendermint_max_retries: 5
       tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
-      tendermint_p2p_url: localhost:26656
+      tendermint_p2p_url: ${TENDERMINT_P2P_URL_0:str:26656}
       token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
       whitelist_api_key: null
       whitelist_endpoint: http://localhost

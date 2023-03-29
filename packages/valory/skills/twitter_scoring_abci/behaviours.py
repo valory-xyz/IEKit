@@ -298,6 +298,8 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
         wallet_to_ids = self._get_wallet_to_ids(registrations)
 
+        self.context.logger.info(f"Got Twitter registrations: {wallet_to_ids}")
+
         return {
             "wallet_to_users": wallet_to_ids,
         }
