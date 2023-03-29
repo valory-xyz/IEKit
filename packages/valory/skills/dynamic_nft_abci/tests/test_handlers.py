@@ -35,6 +35,7 @@ from packages.fetchai.connections.http_server.connection import (
     PUBLIC_ID as HTTP_SERVER_PUBLIC_ID,
 )
 from packages.valory.protocols.http.message import HttpMessage
+from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.valory.skills.dynamic_nft_abci.dialogues import HttpDialogues
 from packages.valory.skills.dynamic_nft_abci.handlers import (
     BAD_REQUEST_CODE,
@@ -74,6 +75,7 @@ def get_dummy_health(time_updated: bool = True):
         "seconds_since_last_reset": 5.0 if time_updated else None,
         "healthy": True if time_updated else None,
         "seconds_until_next_update": 15.0 if time_updated else None,
+        "period": 0,
     }
 
 
@@ -288,12 +290,17 @@ class TestHttpHandler(BaseSkillTestCase):
         ) as mock_round_sequence:
             mock_now_time = datetime.datetime(2022, 1, 1)
             mock_now_time_timestamp = mock_now_time.timestamp()
-            mock_round_sequence.latest_synchronized_data.db = {
-                "token_id_to_points": test_case.token_id_to_points,
-                "last_update_time": mock_now_time_timestamp - 5.0  # 5 seconds before
-                if test_case.set_last_update_time
-                else None,
-            }
+            abci_app_db = AbciAppDB(
+                {
+                    "token_id_to_points": [test_case.token_id_to_points],
+                    "last_update_time": [
+                        mock_now_time_timestamp - 5.0
+                    ]  # 5 seconds before
+                    if test_case.set_last_update_time
+                    else [None],
+                }
+            )
+            mock_round_sequence.latest_synchronized_data.db = abci_app_db
             mock_round_sequence.block_stall_deadline_expired = False
 
             datetime_mock = Mock(wraps=datetime.datetime)

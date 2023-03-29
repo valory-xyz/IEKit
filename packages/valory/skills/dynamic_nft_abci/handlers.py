@@ -337,6 +337,7 @@ class HttpHandler(BaseHttpHandler):
             "seconds_since_last_reset": seconds_since_last_reset,
             "healthy": is_healthy,
             "seconds_until_next_update": seconds_until_next_update,
+            "period": self.synchronized_data.period_count,
         }
 
         self._send_ok_response(http_msg, http_dialogue, data)
