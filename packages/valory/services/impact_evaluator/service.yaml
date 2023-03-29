@@ -10,7 +10,17 @@ fingerprint:
 fingerprint_ignore_patterns: []
 agent: valory/impact_evaluator:0.1.0:bafybeifljoyhlkz6afwy26a3o5g3jjpghn5ubpjtlxe3wcnps6orhzhhyy
 number_of_agents: 4
-deployment: {}
+deployment:
+  agent:
+    ports:
+      0:
+        8000: 8000
+      1:
+        8000: 8000
+      2:
+        8000: 8000
+      3:
+        8000: 8000
 ---
 public_id: valory/impact_evaluator_abci:0.1.0
 type: skill
