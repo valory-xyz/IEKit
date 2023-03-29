@@ -20,6 +20,7 @@
 """This package implements user db handling."""
 
 import itertools
+import json
 from typing import Any, Dict, List, Optional, Tuple
 
 
@@ -107,7 +108,9 @@ class CeramicDB:
         }
 
         if self.logger:
-            self.logger.info(f"DB: updated user: from {user} to {updated_user}")
+            self.logger.info(
+                f"DB: updated user: from {json.dumps(user, sort_keys=True)} to {json.dumps(updated_user, sort_keys=True)}"
+            )
 
         self.data["users"][index] = updated_user
 

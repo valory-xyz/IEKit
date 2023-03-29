@@ -26,10 +26,10 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeicn5utwviq46ubguok5rl5go4hb7oxluj7t6bja2ut4epjw2hevei
 - valory/ceramic_read_abci:0.1.0:bafybeifdrfae4de7fsg2jfmak5yjyn6oacopgsf5zbpt2v23sqerwc5vc4
 - valory/path_switch_abci:0.1.0:bafybeia6oyknmwe3sn5wm526cnp2dnvd5pvvionkiptbaod77fhbxx6xju
-- valory/generic_scoring_abci:0.1.0:bafybeibtxfwqlb5kun6feti4bmadstr6cako7iompweupqegidymqk4s7i
-- valory/twitter_scoring_abci:0.1.0:bafybeicdaalb5l6yeetsh2m4yrg5greu2biklcifmhglobwsz4x4g5p4dy
+- valory/generic_scoring_abci:0.1.0:bafybeigx2p5uqnqizvx4urlty3vgt34uhdrra3eqbmljbs5gizc5u52py4
+- valory/twitter_scoring_abci:0.1.0:bafybeifasaiztodr6vyad3sf6yzkmaibdw57gptjqifoeuiknyc7ejqbz4
 - valory/ceramic_write_abci:0.1.0:bafybeihfth3kojxnozmv5ekyfnt2ls2mkd4t4ayzrkdzxhwidhudzu3lqy
-- valory/dynamic_nft_abci:0.1.0:bafybeicxd5vaigf3ofmd47tvxo2p7x7xuovdp5jpitlkgcbnve3sr63vk4
+- valory/dynamic_nft_abci:0.1.0:bafybeih6fapuwwah34tjlg6slyfceuslx3ojfz44fatnkbwu7mhof5bzcm
 - valory/registration_abci:0.1.0:bafybeid7gh35wnotm27hwuuuv3oozu33izjfafy7vbyzejdy3scx4oc7cu
 - valory/reset_pause_abci:0.1.0:bafybeidtb4v44zbxx7uw2c5yrbmmvzuh4mkgvcqdfyf4eq2xuhvxnbfiru
 behaviours:

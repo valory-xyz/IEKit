@@ -8,7 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiasfbratsbsxyji2k2xeft3jdqaajwqskjsvbjsqht4mrew6wb2km
   behaviours.py: bafybeiaojsrg5w7qjoq3sexwhs6awbacrmlvknsbv5enb3cstsymuwx7pe
-  ceramic_db.py: bafybeicyxmwchdqpbtdru7c3vwazrtzxrwjkiznj7zpgh4x34fykjafzfa
+  ceramic_db.py: bafybeiem2xntdgeiv5uyco3vokxuktld5xgv2e5mcgncodadhoxrgwxs4y
   dialogues.py: bafybeiabtq2to7x6bbbnxzrvupz5rky4b6k73y2lw5dmclb6xx74nuzxe4
   fsm_specification.yaml: bafybeihm464d5ol3qumlyb7kb2uhnhki5hsldgjrzkkk4adwmqbxedbw54
   handlers.py: bafybeidj7r52gsaikaoofukbxsclmenpi5ck2zfj52nrrbhlrrayj3lhaq
