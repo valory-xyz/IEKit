@@ -42,6 +42,8 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
 
 
 ADDRESS_REGEX = r"0x[a-fA-F0-9]{40}"
+WHITEPAPER_LINK = "https://t.co/lDssYx8Mmu"  # https://www.autonolas.network/whitepaper
+TAGLINE = "Autonomy is dead, long live autonomy"
 
 
 class ScoreReadBaseBehaviour(BaseBehaviour, ABC):
@@ -224,8 +226,9 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
         result = {}
         for tweet in tweets:
             match = re.search(ADDRESS_REGEX, tweet["text"])
-            if match:
-                result[Web3.toChecksumAddress(match.group())] = tweet["author_id"]
+            if match and WHITEPAPER_LINK in tweet["text"] and TAGLINE in tweet["text"]:
+                wallet_address = Web3.toChecksumAddress(match.group())
+                result[wallet_address] = tweet["author_id"]
         return result
 
     def _get_twitter_registrations(self) -> Generator[None, None, Dict]:
