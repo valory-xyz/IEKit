@@ -16,11 +16,11 @@ deployment:
       0:
         8000: 8000
       1:
-        8000: 8000
+        8001: 8000
       2:
-        8000: 8000
+        8002: 8000
       3:
-        8000: 8000
+        8003: 8000
 ---
 public_id: valory/impact_evaluator_abci:0.1.0
 type: skill
