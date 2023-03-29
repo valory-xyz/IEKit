@@ -1,5 +1,10 @@
 # Release History - `IEKit`
 
+# 0.2.1 (2023-03-29)
+
+- Fixes an issue with the Ceramic protocol not being able to process big integers
+- Adds the period number to the healthcheck
+
 # 0.2.0 (2023-03-27)
 
 - Bumps to open-autonomy@v0.10.0.post1, open-aea@1.31.0, and tomte@0.2.4
