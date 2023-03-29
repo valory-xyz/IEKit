@@ -172,7 +172,7 @@ models:
       tendermint_com_url: ${str:http://localhost:8080}
       tendermint_max_retries: 5
       tendermint_url: ${str:http://localhost:26657}
-      tendermint_p2p_url: localhost:26656
+      tendermint_p2p_url: ${str:localhost:26656}
       token_uri_base: ${str:https://pfp.staging.autonolas.tech/}
       whitelist_api_key: null
       whitelist_endpoint: http://localhost
