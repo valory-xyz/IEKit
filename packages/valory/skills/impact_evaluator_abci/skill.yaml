@@ -23,15 +23,15 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeicn5utwviq46ubguok5rl5go4hb7oxluj7t6bja2ut4epjw2hevei
-- valory/ceramic_read_abci:0.1.0:bafybeifdrfae4de7fsg2jfmak5yjyn6oacopgsf5zbpt2v23sqerwc5vc4
-- valory/path_switch_abci:0.1.0:bafybeia6oyknmwe3sn5wm526cnp2dnvd5pvvionkiptbaod77fhbxx6xju
-- valory/generic_scoring_abci:0.1.0:bafybeigx2p5uqnqizvx4urlty3vgt34uhdrra3eqbmljbs5gizc5u52py4
-- valory/twitter_scoring_abci:0.1.0:bafybeifasaiztodr6vyad3sf6yzkmaibdw57gptjqifoeuiknyc7ejqbz4
-- valory/ceramic_write_abci:0.1.0:bafybeihfth3kojxnozmv5ekyfnt2ls2mkd4t4ayzrkdzxhwidhudzu3lqy
-- valory/dynamic_nft_abci:0.1.0:bafybeih6fapuwwah34tjlg6slyfceuslx3ojfz44fatnkbwu7mhof5bzcm
-- valory/registration_abci:0.1.0:bafybeid7gh35wnotm27hwuuuv3oozu33izjfafy7vbyzejdy3scx4oc7cu
-- valory/reset_pause_abci:0.1.0:bafybeidtb4v44zbxx7uw2c5yrbmmvzuh4mkgvcqdfyf4eq2xuhvxnbfiru
+- valory/abstract_round_abci:0.1.0:bafybeib7q4t5jh6gic3i2pzuzlk7q2xmnueyxjpftm4gl56vnnz4vs4f7a
+- valory/ceramic_read_abci:0.1.0:bafybeibzu4t3iqkfdq4gs7lccc4enzvfnpuxxe3eic4tzcrjftu5ryoqjy
+- valory/path_switch_abci:0.1.0:bafybeifgkjr373dikaxod6ksritpr76gup7gaciu6zzxotuac7woj4s7ca
+- valory/generic_scoring_abci:0.1.0:bafybeihfcswohb4nwbxcgkxc5oa4lhfkbb3eziqbz7na47aomcbctw7ipa
+- valory/twitter_scoring_abci:0.1.0:bafybeico23v4q4xijosx6i54og2q7meg4yfecrbgrq4z6elntqrqfj2ajy
+- valory/ceramic_write_abci:0.1.0:bafybeiecfaku4lswae4dim66zj5t75lswa233n6kodefhudhlcwmddvhjq
+- valory/dynamic_nft_abci:0.1.0:bafybeifbjyejezk7fqqhuji73holuuv6zuhphzqocukg55t4rtked3jpme
+- valory/registration_abci:0.1.0:bafybeidc6iv54mr2antvrw3r4tldm635othi62bhzeyyid7kejzxw4fwiq
+- valory/reset_pause_abci:0.1.0:bafybeige4ncfhwlqbthmfvdu7aogl2qqsozpz3h5el3xokmq4hcqujgsqy
 behaviours:
   main:
     args: {}
