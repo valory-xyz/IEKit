@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeibk5iyiobvfgd6w3z75amk7muou3kqqq5rj3mze6rnzlmzpaiwtii
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeifljoyhlkz6afwy26a3o5g3jjpghn5ubpjtlxe3wcnps6orhzhhyy
+agent: valory/impact_evaluator:0.1.0:bafybeibib5p7a3cpgfiemq4pewo4od6iraybd6hl5mfivvcfv3mjjchqwe
 number_of_agents: 4
 deployment:
   agent:
@@ -79,7 +79,7 @@ extra:
         max_attempts: 10
         max_healthcheck: 120
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
-        on_chain_service_id: null
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
         reset_tendermint_after: 2
         retry_attempts: 400
         retry_timeout: 3
@@ -87,7 +87,7 @@ extra:
         request_timeout: 10.0
         round_timeout_seconds: 30.0
         service_id: impact_evaluator
-        service_registry_address: null
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:null}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         sleep_time: 1
         tendermint_check_sleep_delay: 3
@@ -139,7 +139,7 @@ extra:
         max_attempts: 10
         max_healthcheck: 120
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
-        on_chain_service_id: null
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
         reset_tendermint_after: 2
         retry_attempts: 400
         retry_timeout: 3
@@ -147,7 +147,7 @@ extra:
         request_timeout: 10.0
         round_timeout_seconds: 30.0
         service_id: impact_evaluator
-        service_registry_address: null
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:null}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         sleep_time: 1
         tendermint_check_sleep_delay: 3
@@ -199,7 +199,7 @@ extra:
         max_attempts: 10
         max_healthcheck: 120
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
-        on_chain_service_id: null
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
         reset_tendermint_after: 2
         retry_attempts: 400
         retry_timeout: 3
@@ -207,7 +207,7 @@ extra:
         request_timeout: 10.0
         round_timeout_seconds: 30.0
         service_id: impact_evaluator
-        service_registry_address: null
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:null}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         sleep_time: 1
         tendermint_check_sleep_delay: 3
@@ -259,7 +259,7 @@ extra:
         max_attempts: 10
         max_healthcheck: 120
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
-        on_chain_service_id: null
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
         reset_tendermint_after: 2
         retry_attempts: 400
         retry_timeout: 3
@@ -267,7 +267,7 @@ extra:
         request_timeout: 10.0
         round_timeout_seconds: 30.0
         service_id: impact_evaluator
-        service_registry_address: null
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:null}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
         sleep_time: 1
         tendermint_check_sleep_delay: 3
