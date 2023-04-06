@@ -54,8 +54,8 @@ logging_config:
     logfile:
       class: logging.FileHandler
       formatter: standard
-      filename: ${str:log.txt}
-      level: INFO
+      filename: ${LOG_FILE:str:log.txt}
+      level: ${LOG_LEVEL:str:INFO}
     console:
       class: logging.StreamHandler
       formatter: standard
@@ -65,7 +65,7 @@ logging_config:
       handlers:
       - logfile
       - console
-      propagate: false
+      propagate: true
 skill_exception_policy: stop_and_exit
 dependencies:
   open-aea-ledger-ethereum:
