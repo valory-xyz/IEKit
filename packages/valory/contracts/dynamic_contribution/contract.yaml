@@ -15,7 +15,7 @@ contract_interface_paths:
   ethereum: build/DynamicContribution.json
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==1.31.0
+    version: ==1.32.0
   web3:
     version: ==5.25.0
 contracts: []
