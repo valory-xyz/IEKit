@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Integration tests for the valory/oracle_abci skill."""
+"""Integration tests for the valory/impact_evaluator agent."""
 
 from pathlib import Path
 from typing import Tuple

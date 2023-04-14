@@ -1,14 +1,14 @@
 name: impact_evaluator
 author: valory
 version: 0.1.0
-description: A service that tracks mentions on Twitter, assigns scores to them and
-  updates community member' NFTs autonomously.
+description: A service that tracks community members' contributions, scores them and
+  updates their NFT images autonomously.
 aea_version: '>=1.0.0, <2.0.0'
 license: Apache-2.0
 fingerprint:
-  README.md: bafybeibk5iyiobvfgd6w3z75amk7muou3kqqq5rj3mze6rnzlmzpaiwtii
+  README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeigcwkkx6uvsyq3hq5dkzfczz55a2v47zfdvy3tsdokr54hjm4fbli
+agent: valory/impact_evaluator:0.1.0:bafybeihixd2lvgfqj6aojvmkaxodbel7zubox2oo4sczvfsqsubir4h6me
 number_of_agents: 4
 deployment:
   agent:

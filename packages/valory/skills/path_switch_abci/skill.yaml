@@ -2,7 +2,7 @@ name: path_switch_abci
 author: valory
 version: 0.1.0
 type: skill
-description: The scaffold skill is a scaffold for your own skill implementation.
+description: A decision making skill where the FSM execution path is dynamically set.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:

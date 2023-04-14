@@ -1,3 +1,3 @@
 ## Impact Evaluator Service
 
-A service that tracks mentions on Twitter, assigns scores to them and updates community member' NFTs autonomously.
+A service that tracks community members' contributions, scores them and updates their NFT images autonomously.
