@@ -1,10 +1,15 @@
 # Release History - `IEKit`
 
+# 0.2.2 (2023-04-14)
+
+- Bumps `open-autonomy` and `open-aea` frameworks
+- Adds extra overrides to the agent and the service
+
 # 0.2.1.post1 (2023-04-03)
 
 - Bump `open-autonomy` to `v0.10.0.post2`
 - Sets the `p2p_libp2p_client` as non abstract to enable `ACN`
-  
+
 # 0.2.1 (2023-03-29)
 
 - Fixes an issue with the Ceramic protocol not being able to process big integers
