@@ -2,7 +2,7 @@ name: dynamic_contribution
 author: valory
 version: 0.1.0
 type: contract
-description: dynamic_contribution contract
+description: Contract package wrapping DynamicContribution contract instances.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
