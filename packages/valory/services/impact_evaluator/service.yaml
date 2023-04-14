@@ -108,6 +108,7 @@ extra:
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23autonolas&tweet.fields=author_id,created_at&max_results=100}
         tx_timeout: 10.0
+        use_termination: ${USE_TERMINATION:bool:false}
 1:
   models:
     benchmark_tool:
@@ -168,6 +169,7 @@ extra:
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23autonolas&tweet.fields=author_id,created_at&max_results=100}
         tx_timeout: 10.0
+        use_termination: ${USE_TERMINATION:bool:false}
 2:
   models:
     benchmark_tool:
@@ -228,6 +230,7 @@ extra:
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23autonolas&tweet.fields=author_id,created_at&max_results=100}
         tx_timeout: 10.0
+        use_termination: ${USE_TERMINATION:bool:false}
 3:
   models:
     benchmark_tool:
@@ -288,6 +291,7 @@ extra:
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23autonolas&tweet.fields=author_id,created_at&max_results=100}
         tx_timeout: 10.0
+        use_termination: ${USE_TERMINATION:bool:false}
 ---
 public_id: valory/ledger:0.19.0
 type: connection
