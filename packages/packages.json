@@ -1,15 +1,15 @@
 {
     "dev": {
-        "agent/valory/impact_evaluator/0.1.0": "bafybeibny4v26ehznckpal7k5woceyarirsncslvlzkgbc53rgib4cz4jm",
-        "contract/valory/dynamic_contribution/0.1.0": "bafybeidizr2junhzmfxaibjmapr5rtir6bkpkalsuin3adgiq5cck3kvo4",
-        "service/valory/impact_evaluator/0.1.0": "bafybeigaq7ellre57hzw2i67b4hbjmotfnt2dvdxbiyqrgv3pjv6qcdwiq",
-        "skill/valory/dynamic_nft_abci/0.1.0": "bafybeifbjyejezk7fqqhuji73holuuv6zuhphzqocukg55t4rtked3jpme",
-        "skill/valory/twitter_scoring_abci/0.1.0": "bafybeico23v4q4xijosx6i54og2q7meg4yfecrbgrq4z6elntqrqfj2ajy",
-        "skill/valory/ceramic_read_abci/0.1.0": "bafybeibzu4t3iqkfdq4gs7lccc4enzvfnpuxxe3eic4tzcrjftu5ryoqjy",
-        "skill/valory/ceramic_write_abci/0.1.0": "bafybeiecfaku4lswae4dim66zj5t75lswa233n6kodefhudhlcwmddvhjq",
-        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeibc24yanuijhntdm75jfavv4blu66xna4vrklnq7553734n6exkiq",
-        "skill/valory/generic_scoring_abci/0.1.0": "bafybeihfcswohb4nwbxcgkxc5oa4lhfkbb3eziqbz7na47aomcbctw7ipa",
-        "skill/valory/path_switch_abci/0.1.0": "bafybeifgkjr373dikaxod6ksritpr76gup7gaciu6zzxotuac7woj4s7ca"
+        "agent/valory/impact_evaluator/0.1.0": "bafybeigcwkkx6uvsyq3hq5dkzfczz55a2v47zfdvy3tsdokr54hjm4fbli",
+        "contract/valory/dynamic_contribution/0.1.0": "bafybeifpnm4i3irhb6jgrztdbhtivwadv45l5ep2toxadax7kgjpjts4pu",
+        "service/valory/impact_evaluator/0.1.0": "bafybeidqizd36lepmvapb4oe2qyyxns6gpunqn3qmpuhsyehgaeqeiyvoe",
+        "skill/valory/dynamic_nft_abci/0.1.0": "bafybeic6netdgg5by6qjzpxhctxcyzz6vuhhnwvz7haphkrgkukshn6x7y",
+        "skill/valory/twitter_scoring_abci/0.1.0": "bafybeibeqmbf6ffxyh3edvtkqfsbnxoyyimvtwc654vizclae5vo3dcd4u",
+        "skill/valory/ceramic_read_abci/0.1.0": "bafybeigwxrhrzzloze724ms7vgzgslbumznyk3kjsn4xjx4ullrbphtzma",
+        "skill/valory/ceramic_write_abci/0.1.0": "bafybeib6bwztugeemkyjmyuquwwlsglidgtn66ec3zdaddtukchoaxz2qi",
+        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeiciewdj5j5lnnlygso4pktjnj6iohjvijg6z7yhqad2tpxy5sj7i4",
+        "skill/valory/generic_scoring_abci/0.1.0": "bafybeicppcl42euiukrcvbsgcbnyud3nt2yo5emapzvkc26q2ysj3pqrki",
+        "skill/valory/path_switch_abci/0.1.0": "bafybeiexaklyypeqgrzfalaelb32unjwopn22mjv4coafytbxslq2b4hxi"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeibqlfmikg5hk4phzak6gqzhpkt6akckx7xppbp53mvwt6r73h7tk4",
