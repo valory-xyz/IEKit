@@ -1,5 +1,9 @@
 # Release History - `IEKit`
 
+## 0.2.3 (2023-04-25)
+
+- Bumps `open-autonomy` framework
+
 # 0.2.2 (2023-04-14)
 
 - Bumps `open-autonomy` and `open-aea` frameworks
