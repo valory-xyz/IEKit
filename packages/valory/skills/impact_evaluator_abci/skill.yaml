@@ -23,15 +23,15 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiar4gy4brpuxekiwjq7osh3fm254jgdoxlgkvqcp5lytu4uzrmbsm
-- valory/ceramic_read_abci:0.1.0:bafybeigwxrhrzzloze724ms7vgzgslbumznyk3kjsn4xjx4ullrbphtzma
-- valory/path_switch_abci:0.1.0:bafybeig2jm6q7s5x3pnfwvcl5nlbhvdkksummhe4vhs3sws7rsigjucbhm
-- valory/generic_scoring_abci:0.1.0:bafybeiag4xpdai3p2rfsd5snhbr3yh6mvctpesjyjqcl2uqwsknetghe34
-- valory/twitter_scoring_abci:0.1.0:bafybeibeqmbf6ffxyh3edvtkqfsbnxoyyimvtwc654vizclae5vo3dcd4u
-- valory/ceramic_write_abci:0.1.0:bafybeib6bwztugeemkyjmyuquwwlsglidgtn66ec3zdaddtukchoaxz2qi
-- valory/dynamic_nft_abci:0.1.0:bafybeih3il6ut7eqwfmhxhhaezan4bz7kwvgel3gklhkn5qczghgzyp72m
-- valory/registration_abci:0.1.0:bafybeicoi3eczbytx2hporiblyogj73r6oqbwdx3wenuyn7mjdztfsldbi
-- valory/reset_pause_abci:0.1.0:bafybeibayjshwvymeieird2cm6m5jeduqxq7dpdplef2qx4lse64n5j4xq
+- valory/abstract_round_abci:0.1.0:bafybeigiolzp3i6b3wwuau3yv2h5udqape3i7of73mlm2d6ud22irlkbme
+- valory/ceramic_read_abci:0.1.0:bafybeibv44crneztbnnv5uskglcik2mxzlgt6z4tejzotcyfr7ffn7jqzq
+- valory/path_switch_abci:0.1.0:bafybeiafxl4unwcnf3sue5rmdssly6w63r5tvyqnf4ju2a6aotmqo3fuwu
+- valory/generic_scoring_abci:0.1.0:bafybeiatdyzeptcbyg7wiqxowrla3j54ywjyrzdm3mthmcqmxydejhz73m
+- valory/twitter_scoring_abci:0.1.0:bafybeifixzrn73k7ma2elfnlzpxaknoe24mvpiitgtjd26erkrgw4ejfdq
+- valory/ceramic_write_abci:0.1.0:bafybeiew6gvkka6eaylhtkkqkobeaeogfiohwjot3hzuscbsb5qxkklk5i
+- valory/dynamic_nft_abci:0.1.0:bafybeihnewwdo72yg56k57r35vil4jthteglcwqxliast5crsqmg6dcufq
+- valory/registration_abci:0.1.0:bafybeigjzfdhhu6ody2qo5v2xjobafujnodklia4zw6bkkhahxtjfo3wby
+- valory/reset_pause_abci:0.1.0:bafybeieeux3rdlcwgjbdfrluvkhqv26qdparre6pabatietw7juklljil4
 behaviours:
   main:
     args: {}
