@@ -417,6 +417,26 @@ class TestHttpHandler(BaseSkillTestCase):
             ("http://pfp.staging.autonolas.tech/1", "get", "_handle_get_metadata"),
             ("http://pfp.staging.autonolas.tech/999", "get", "_handle_get_metadata"),
             ("http://pfp.staging.autonolas.tech/-999", "get", "_handle_bad_request"),
+            (
+                "https://b1f305361a323839.agent.propel.staging.autonolas.tech/1",
+                "get",
+                "_handle_get_metadata",
+            ),
+            (
+                "http://b1f305361a323839.agent.propel.staging.autonolas.tech/1",
+                "get",
+                "_handle_get_metadata",
+            ),
+            (
+                "https://b72085557196153b.agent.propel.autonolas.tech/1",
+                "get",
+                "_handle_get_metadata",
+            ),
+            (
+                "http://b72085557196153b.agent.propel.autonolas.tech/1",
+                "get",
+                "_handle_get_metadata",
+            ),
         ],
     )
     def test_get_handler(self, url, method, expected_handler_name):

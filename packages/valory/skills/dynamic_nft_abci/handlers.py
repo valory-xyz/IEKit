@@ -98,10 +98,13 @@ class HttpHandler(BaseHttpHandler):
 
     def setup(self) -> None:
         """Implement the setup."""
-        uri_base_hostname = urlparse(self.context.params.token_uri_base).hostname
+        config_uri_base_hostname = urlparse(self.context.params.token_uri_base).hostname
+        propel_uri_base_hostname = (
+            r"https?:\/\/[a-zA-Z0-9]{16}.agent\.propel\.(staging\.)?autonolas\.tech"
+        )
 
         # Route regexes
-        hostname_regex = rf".*({uri_base_hostname}|localhost|127.0.0.1)(:\d+)?"
+        hostname_regex = rf".*({config_uri_base_hostname}|{propel_uri_base_hostname}|localhost|127.0.0.1|0.0.0.0)(:\d+)?"
         self.handler_url_regex = rf"{hostname_regex}\/.*"
         metadata_url_regex = rf"{hostname_regex}\/\d+"
         health_url_regex = rf"{hostname_regex}\/healthcheck"
