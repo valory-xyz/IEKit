@@ -30,6 +30,9 @@ from packages.valory.skills.abstract_round_abci.abci_app_chain import (
     AbciAppTransitionMapping,
     chain,
 )
+from packages.valory.skills.termination_abci.rounds import BackgroundRound
+from packages.valory.skills.termination_abci.rounds import Event as TerminationEvent
+from packages.valory.skills.termination_abci.rounds import TerminationAbciApp
 
 
 # Here we define how the transition between the FSMs should happen
@@ -59,4 +62,8 @@ ImpactEvaluatorSkillAbciApp = chain(
         ResetAndPauseAbci.ResetPauseAbciApp,
     ),
     abci_app_transition_mapping,
+).add_termination(
+    background_round_cls=BackgroundRound,
+    termination_event=TerminationEvent.TERMINATE,
+    termination_abci_app=TerminationAbciApp,
 )

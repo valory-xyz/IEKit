@@ -45,6 +45,13 @@ from packages.valory.skills.registration_abci.behaviours import (
 from packages.valory.skills.reset_pause_abci.behaviours import (
     ResetPauseABCIConsensusBehaviour,
 )
+from packages.valory.skills.termination_abci.behaviours import (
+    BackgroundBehaviour,
+    TerminationAbciBehaviours,
+)
+from packages.valory.skills.transaction_settlement_abci.behaviours import (
+    TransactionSettlementRoundBehaviour,
+)
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
     TwitterScoringRoundBehaviour,
 )
@@ -64,4 +71,7 @@ class ImpactEvaluatorConsensusBehaviour(AbstractRoundBehaviour):
         *DynamicNFTRoundBehaviour.behaviours,
         *CeramicWriteRoundBehaviour.behaviours,
         *ResetPauseABCIConsensusBehaviour.behaviours,
+        *TransactionSettlementRoundBehaviour.behaviours,
+        *TerminationAbciBehaviours.behaviours,
     }
+    background_behaviour_cls = BackgroundBehaviour

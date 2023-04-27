@@ -52,6 +52,7 @@ from packages.valory.skills.path_switch_abci.models import (
 )
 from packages.valory.skills.path_switch_abci.rounds import Event as PathSwitchEvent
 from packages.valory.skills.reset_pause_abci.rounds import Event as ResetPauseEvent
+from packages.valory.skills.termination_abci.models import TerminationParams
 from packages.valory.skills.twitter_scoring_abci.models import (
     Params as TwitterScoringAbciParams,
 )
@@ -114,5 +115,6 @@ class Params(
     CeramicWriteParams,
     DynamicNFTParams,
     PathSwitchParams,
+    TerminationParams,
 ):
     """A model to represent params for multiple abci apps."""
