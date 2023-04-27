@@ -1,0 +1,12 @@
+token_id-"component_id"
+X-"contract/valory/dynamic_contribution/0.1.0"
+X-"skill/valory/ceramic_read_abci/0.1.0" - 14
+X-"skill/valory/ceramic_write_abci/0.1.0" - 14
+X-"skill/valory/dynamic_nft_abci/0.1.0" - 3, 4, 14, 60, "contract/valory/dynamic_contribution/0.1.0"
+X-"skill/valory/generic_scoring_abci/0.1.0" - 14
+X-"skill/valory/path_switch_abci/0.1.0" - 14
+X-"skill/valory/twitter_scoring_abci/0.1.0" - 14
+X-"skill/valory/impact_evaluator_abci/0.1.0" - 14, 16, 17, 33, 6 abci skills above
+---
+token_id-"agent_id"
+1-"agent/valory/impact_evaluator:0.1.0" - 3, 4, 7, 8, 9, 10, 11, 13, 14, 16, 17, 22, 33, 60, "contract/valory/dynamic_contribution/0.1.0", 7 abci skills above
