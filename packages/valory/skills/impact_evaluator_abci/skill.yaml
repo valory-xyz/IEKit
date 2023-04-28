@@ -7,12 +7,12 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
-  behaviours.py: bafybeievuw5zaiib3l3t3k5l25kr5gh4s6te434e7lapdvomwhpt5yncku
-  composition.py: bafybeihprauqe2gdxbaagbjga7kutr5d2wpfjrnrg5ogteb3enakfdqgpu
+  behaviours.py: bafybeifp3ycbgedwpfzhjcahld7ynzfzz6ag7nkhwmbb2yv4l6pulnd6ca
+  composition.py: bafybeia7h5ouft6jwfium2hxj34b6argci2udlq2kldbhc3ulrzolh24v4
   dialogues.py: bafybeigpwuzku3we7axmxeamg7vn656maww6emuztau5pg3ebsoquyfdqm
   fsm_specification.yaml: bafybeici3dxwmm6vvx54wgknqavuyd5mlnjgcknup3kvr7lhoiwn7at4pm
   handlers.py: bafybeiaqgaev2nfhuihhuxxxxtuiggin5zcpwn7ik7lok2n6ywi6dqy2ta
-  models.py: bafybeic2dholhpbw7ittysogf4546ukea6swyj3cvry25alsupbeirgsgm
+  models.py: bafybeic2dy7sphq7362crijel7wzmltapnj32cmncnpkxyatxzi45pd2i4
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
   tests/test_behaviours.py: bafybeifkazsevd6vsfaapulouxepez3rl24y3rxgja5zhmj7s323zdjlmq
   tests/test_dialogues.py: bafybeieaos2byphju6i6xvytppqqcuqqvnpilnflsy73l3wqazzjttbg7m
@@ -24,14 +24,16 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeigiolzp3i6b3wwuau3yv2h5udqape3i7of73mlm2d6ud22irlkbme
-- valory/ceramic_read_abci:0.1.0:bafybeibv44crneztbnnv5uskglcik2mxzlgt6z4tejzotcyfr7ffn7jqzq
-- valory/path_switch_abci:0.1.0:bafybeiafxl4unwcnf3sue5rmdssly6w63r5tvyqnf4ju2a6aotmqo3fuwu
-- valory/generic_scoring_abci:0.1.0:bafybeiatdyzeptcbyg7wiqxowrla3j54ywjyrzdm3mthmcqmxydejhz73m
-- valory/twitter_scoring_abci:0.1.0:bafybeifixzrn73k7ma2elfnlzpxaknoe24mvpiitgtjd26erkrgw4ejfdq
-- valory/ceramic_write_abci:0.1.0:bafybeiew6gvkka6eaylhtkkqkobeaeogfiohwjot3hzuscbsb5qxkklk5i
-- valory/dynamic_nft_abci:0.1.0:bafybeihdcsm42rmwrocfpakgo2tuok65vddu3fxzmul4nzupnmcgeutk7a
+- valory/ceramic_read_abci:0.1.0:bafybeib4v4t7lzqfsftfhd6e6ctcnarl7rizd7vigeiomvvhcjfyc5r23m
+- valory/path_switch_abci:0.1.0:bafybeigo42z4ufwdatwzkrhmxx6koaqpn4gijrb6jfhcljehbngyssr3xy
+- valory/generic_scoring_abci:0.1.0:bafybeibnao2hl2774kkwcvyj2636o6fako46swqnpwr2jmr3s45r4txxqu
+- valory/twitter_scoring_abci:0.1.0:bafybeicqqdpz4m4egac2aggfkdqqwvy4prcwi7dmw4eclqafenvtd6g7bi
+- valory/ceramic_write_abci:0.1.0:bafybeienxgaiaehbq5e4ehjufv44z3p632rmku67yh5s5t4aah2d4lm4yu
+- valory/dynamic_nft_abci:0.1.0:bafybeifunwos3tva7upqm3c43jc2p3rpiflgiuew33g3c36sma4obguzvi
 - valory/registration_abci:0.1.0:bafybeigjzfdhhu6ody2qo5v2xjobafujnodklia4zw6bkkhahxtjfo3wby
 - valory/reset_pause_abci:0.1.0:bafybeieeux3rdlcwgjbdfrluvkhqv26qdparre6pabatietw7juklljil4
+- valory/termination_abci:0.1.0:bafybeifkl4ab6dnvtsaefe56dbzshmp5mozn7exwcaj2a3wjeq7u3hpezm
+- valory/transaction_settlement_abci:0.1.0:bafybeifsz2ll7gmy6vmx34t6q5bdv6zzwp5zrehr6di6v3thcpc3sztkta
 behaviours:
   main:
     args: {}
@@ -118,6 +120,10 @@ models:
       keeper_timeout: 30.0
       max_attempts: 10
       max_healthcheck: 120
+      multisend_address: '0x0000000000000000000000000000000000000000'
+      termination_sleep: 900
+      init_fallback_gas: 0
+      keeper_allowed_retries: 3
       reset_pause_duration: 10
       on_chain_service_id: null
       points_to_image_hashes: '{"0": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm",
@@ -156,6 +162,9 @@ models:
       whitelist_api_key: null
       whitelist_endpoint: http://localhost
       use_termination: false
+      validate_timeout: 1205
+      finalize_timeout: 60.0
+      history_check_timeout: 1205
     class_name: Params
   randomness_api:
     args:

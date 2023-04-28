@@ -77,6 +77,8 @@ models:
     class_name: LedgerApiDialogues
   params:
     args:
+      multisend_address: '0x0000000000000000000000000000000000000000'
+      termination_sleep: 900
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
       default_read_stream_id: default_read_stream_id
