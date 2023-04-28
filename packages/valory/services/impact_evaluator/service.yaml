@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeidl6ywk6dgj5u6o3xvjs42ixqy4hphape2mshl5yblzkaw5bj34zy
+agent: valory/impact_evaluator:0.1.0:bafybeiadxqzvi3xf46mx2vnwufjztaxpult5k6p6xtyi6u3gbpt4a5tifa
 number_of_agents: 4
 deployment:
   agent:
@@ -78,6 +78,8 @@ extra:
         keeper_timeout: 30.0
         max_attempts: 10
         max_healthcheck: 120
+        multisend_address: ${MULTISEND_ADDRESS:str:0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761}
+        termination_sleep: ${TERMINATION_SLEEP:int:900}
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
         on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
         reset_tendermint_after: 2
@@ -109,6 +111,7 @@ extra:
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23autonolas&tweet.fields=author_id,created_at&max_results=100}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
+        validate_timeout: 1205
 1:
   models:
     benchmark_tool:
@@ -139,6 +142,8 @@ extra:
         keeper_timeout: 30.0
         max_attempts: 10
         max_healthcheck: 120
+        multisend_address: ${MULTISEND_ADDRESS:str:0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761}
+        termination_sleep: ${TERMINATION_SLEEP:int:900}
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
         on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
         reset_tendermint_after: 2
@@ -170,6 +175,7 @@ extra:
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23autonolas&tweet.fields=author_id,created_at&max_results=100}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
+        validate_timeout: 1205
 2:
   models:
     benchmark_tool:
@@ -200,6 +206,8 @@ extra:
         keeper_timeout: 30.0
         max_attempts: 10
         max_healthcheck: 120
+        multisend_address: ${MULTISEND_ADDRESS:str:0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761}
+        termination_sleep: ${TERMINATION_SLEEP:int:900}
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
         on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
         reset_tendermint_after: 2
@@ -231,6 +239,7 @@ extra:
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23autonolas&tweet.fields=author_id,created_at&max_results=100}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
+        validate_timeout: 1205
 3:
   models:
     benchmark_tool:
@@ -261,6 +270,10 @@ extra:
         keeper_timeout: 30.0
         max_attempts: 10
         max_healthcheck: 120
+        multisend_address: ${MULTISEND_ADDRESS:str:0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761}
+        termination_sleep: ${TERMINATION_SLEEP:int:900}
+        init_fallback_gas: 0
+        keeper_allowed_retries: 3
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
         on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
         reset_tendermint_after: 2
@@ -292,6 +305,9 @@ extra:
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23autonolas&tweet.fields=author_id,created_at&max_results=100}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
+        validate_timeout: 1205
+        finalize_timeout: 60.0
+        history_check_timeout: 1205
 ---
 public_id: valory/ledger:0.19.0
 type: connection

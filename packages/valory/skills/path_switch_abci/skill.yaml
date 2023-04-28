@@ -75,6 +75,8 @@ models:
     class_name: LedgerApiDialogues
   params:
     args:
+      multisend_address: '0x0000000000000000000000000000000000000000'
+      termination_sleep: 900
       manual_points_stream_id: manual_points_stream_id
       manual_points_target_property: score_data
       cleanup_history_depth: 1
