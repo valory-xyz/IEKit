@@ -94,7 +94,7 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
             self.context.logger.info(
                 f"Not adding scores from the stream because latest_update_id_stream({latest_update_id_stream!r}) <= latest_update_id_db({latest_update_id_db!r})"
             )
-            return ceramic_db.data
+            return {"ceramic_db": ceramic_db.data, "pending_write": pending_write}
 
         # discord_id, discord_handle, points, wallet_address
         for user in scores_db.data["users"]:
