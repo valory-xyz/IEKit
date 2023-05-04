@@ -83,7 +83,7 @@ HAPPY_PATH: Tuple[RoundChecks, ...] = (
     RoundChecks(PathSwitchRound.auto_round_id(), n_periods=3),
     RoundChecks(GenericScoringRound.auto_round_id(), n_periods=2),
     RoundChecks(TwitterScoringRound.auto_round_id(), n_periods=2),
-    RoundChecks(TokenTrackRound.auto_round_id(), n_periods=2),
+    RoundChecks(TokenTrackRound.auto_round_id(), success_event="WRITE", n_periods=2),
     RoundChecks(RandomnessRound.auto_round_id(), n_periods=2),
     RoundChecks(SelectKeeperRound.auto_round_id(), n_periods=2),
     RoundChecks(StreamWriteRound.auto_round_id(), n_periods=2),

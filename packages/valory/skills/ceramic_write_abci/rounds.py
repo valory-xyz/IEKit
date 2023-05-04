@@ -77,7 +77,7 @@ class SynchronizedData(BaseSynchronizedData):
     @property
     def pending_write(self) -> bool:
         """Checks whether there are changes pending to be written to Ceramic."""
-        return cast(bool, self.db.get_strict("pending_write"))
+        return cast(bool, self.db.get("pending_write", False))
 
 
 class RandomnessRound(CollectSameUntilThresholdRound):

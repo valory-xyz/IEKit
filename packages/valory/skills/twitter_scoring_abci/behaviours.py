@@ -90,12 +90,16 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
             else:
                 api_data = mentions
                 api_data.update(registrations)
+                pending_write = (
+                    self.synchronized_data.pending_write
+                    or api_data["user_to_mentions"]
+                    or api_data["id_to_usernames"]
+                    or api_data["wallet_to_users"]
+                )
                 # Calculate the new Ceramic content
                 payload_data = {
                     "ceramic_db": self.update_ceramic_db(api_data),
-                    "pending_write": api_data["user_to_mentions"]
-                    or api_data["id_to_usernames"]
-                    or api_data["wallet_to_users"],
+                    "pending_write": pending_write,
                 }
 
             sender = self.context.agent_address

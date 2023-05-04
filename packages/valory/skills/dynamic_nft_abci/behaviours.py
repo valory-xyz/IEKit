@@ -137,7 +137,7 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
     ) -> Dict:
         """Calculate the new content of the DB"""
 
-        pending_write = False
+        pending_write = self.synchronized_data.pending_write
 
         # We store a token_id to points mapping so it is quick
         # to retrieve the scores for a given token_id, which is done

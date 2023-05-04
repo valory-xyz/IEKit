@@ -97,7 +97,7 @@ class BaseDynamicNFTTest(FSMBehaviourBaseCase):
     behaviour_class: Type[DynamicNFTBaseBehaviour]
     next_behaviour_class: Type[DynamicNFTBaseBehaviour]
     synchronized_data: SynchronizedData
-    done_event = Event.DONE
+    done_event = Event.WRITE
 
     def fast_forward(self, data: Optional[Dict[str, Any]] = None) -> None:
         """Fast-forward on initialization"""
@@ -162,7 +162,7 @@ class TestTokenTrackBehaviour(BaseDynamicNFTTest):
                 BehaviourTestCase(
                     "Happy path",
                     initial_data=dict(ceramic_db=DUMMY_CERAMIC_DB),
-                    event=Event.DONE,
+                    event=Event.WRITE,
                 ),
                 {
                     "mock_response_data": dict(

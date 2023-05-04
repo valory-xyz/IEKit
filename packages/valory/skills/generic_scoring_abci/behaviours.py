@@ -76,7 +76,7 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
     def update_ceramic_db(self) -> Dict:
         """Calculate the new content of the DB"""
 
-        pending_write = False
+        pending_write = self.synchronized_data.pending_write
 
         # Instantiate the db
         ceramic_db = CeramicDB(self.synchronized_data.ceramic_db, self.context.logger)
