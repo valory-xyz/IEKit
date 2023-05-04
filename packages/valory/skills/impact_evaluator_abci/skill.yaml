@@ -8,9 +8,9 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
   behaviours.py: bafybeifp3ycbgedwpfzhjcahld7ynzfzz6ag7nkhwmbb2yv4l6pulnd6ca
-  composition.py: bafybeia7h5ouft6jwfium2hxj34b6argci2udlq2kldbhc3ulrzolh24v4
+  composition.py: bafybeihgxoxreqkpwct5pn7j432ar7g26vk46qql2cu5ioicqwgxdr3uo4
   dialogues.py: bafybeigpwuzku3we7axmxeamg7vn656maww6emuztau5pg3ebsoquyfdqm
-  fsm_specification.yaml: bafybeici3dxwmm6vvx54wgknqavuyd5mlnjgcknup3kvr7lhoiwn7at4pm
+  fsm_specification.yaml: bafybeie3fo2rtmo4kc4xivzhu2wgmnektgc6jewlxvcekwwusssa4cdxdq
   handlers.py: bafybeiaqgaev2nfhuihhuxxxxtuiggin5zcpwn7ik7lok2n6ywi6dqy2ta
   models.py: bafybeic2dy7sphq7362crijel7wzmltapnj32cmncnpkxyatxzi45pd2i4
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
@@ -29,7 +29,7 @@ skills:
 - valory/generic_scoring_abci:0.1.0:bafybeibnao2hl2774kkwcvyj2636o6fako46swqnpwr2jmr3s45r4txxqu
 - valory/twitter_scoring_abci:0.1.0:bafybeicqqdpz4m4egac2aggfkdqqwvy4prcwi7dmw4eclqafenvtd6g7bi
 - valory/ceramic_write_abci:0.1.0:bafybeienxgaiaehbq5e4ehjufv44z3p632rmku67yh5s5t4aah2d4lm4yu
-- valory/dynamic_nft_abci:0.1.0:bafybeifunwos3tva7upqm3c43jc2p3rpiflgiuew33g3c36sma4obguzvi
+- valory/dynamic_nft_abci:0.1.0:bafybeidbkfn5fy53oks2rqxquragthimyac2erl66sfxqqm2ihpvdv764a
 - valory/registration_abci:0.1.0:bafybeigjzfdhhu6ody2qo5v2xjobafujnodklia4zw6bkkhahxtjfo3wby
 - valory/reset_pause_abci:0.1.0:bafybeieeux3rdlcwgjbdfrluvkhqv26qdparre6pabatietw7juklljil4
 - valory/termination_abci:0.1.0:bafybeifkl4ab6dnvtsaefe56dbzshmp5mozn7exwcaj2a3wjeq7u3hpezm

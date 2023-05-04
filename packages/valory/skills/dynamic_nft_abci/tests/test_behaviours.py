@@ -41,14 +41,14 @@ from packages.valory.skills.abstract_round_abci.test_tools.base import (
 from packages.valory.skills.dynamic_nft_abci.behaviours import (
     DEFAULT_POINTS,
     DynamicNFTBaseBehaviour,
-    NewTokensBehaviour,
+    TokenTrackBehaviour,
 )
 from packages.valory.skills.dynamic_nft_abci.models import SharedState
 from packages.valory.skills.dynamic_nft_abci.rounds import (
     Event,
-    FinishedNewTokensRound,
-    NewTokensRound,
+    FinishedTokenTrackWriteRound,
     SynchronizedData,
+    TokenTrackRound,
 )
 
 
@@ -126,12 +126,12 @@ class BaseDynamicNFTTest(FSMBehaviourBaseCase):
         )
 
 
-class TestNewTokensBehaviour(BaseDynamicNFTTest):
-    """Tests NewTokensBehaviour"""
+class TestTokenTrackBehaviour(BaseDynamicNFTTest):
+    """Tests TokenTrackBehaviour"""
 
-    behaviour_class = NewTokensBehaviour
+    behaviour_class = TokenTrackBehaviour
     next_behaviour_class = make_degenerate_behaviour(  # type: ignore
-        FinishedNewTokensRound
+        FinishedTokenTrackWriteRound
     )
 
     def _mock_dynamic_contribution_contract_request(
@@ -188,11 +188,11 @@ class TestNewTokensBehaviour(BaseDynamicNFTTest):
         self.complete(test_case.event)
 
 
-class TestNewTokensBehaviourContractError(TestNewTokensBehaviour):
-    """Tests NewTokensBehaviour"""
+class TestTokenTrackBehaviourContractError(TestTokenTrackBehaviour):
+    """Tests TokenTrackBehaviour"""
 
-    behaviour_class = NewTokensBehaviour
-    next_behaviour_class = NewTokensBehaviour
+    behaviour_class = TokenTrackBehaviour
+    next_behaviour_class = TokenTrackBehaviour
 
     @pytest.mark.parametrize(
         "test_case, kwargs",
@@ -205,7 +205,7 @@ class TestNewTokensBehaviourContractError(TestNewTokensBehaviour):
                 ),
                 {
                     "mock_response_data": dict(
-                        member_to_token_id=NewTokensRound.ERROR_PAYLOAD
+                        member_to_token_id=TokenTrackRound.ERROR_PAYLOAD
                     ),
                     "mock_response_performative": ContractApiMessage.Performative.ERROR,
                 },

@@ -34,7 +34,7 @@ from packages.valory.skills.abstract_round_abci.base import (
     EventToTimeout,
     get_name,
 )
-from packages.valory.skills.dynamic_nft_abci.payloads import NewTokensPayload
+from packages.valory.skills.dynamic_nft_abci.payloads import TokenTrackPayload
 
 
 class Event(Enum):
@@ -69,10 +69,10 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(dict, self.db.get_strict("ceramic_db"))
 
 
-class NewTokensRound(CollectSameUntilThresholdRound):
-    """NewTokensRound"""
+class TokenTrackRound(CollectSameUntilThresholdRound):
+    """TokenTrackRound"""
 
-    payload_class = NewTokensPayload
+    payload_class = TokenTrackPayload
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = {"error": True}
@@ -82,7 +82,7 @@ class NewTokensRound(CollectSameUntilThresholdRound):
         if self.threshold_reached:
             payload = json.loads(self.most_voted_payload)
 
-            if payload == NewTokensRound.ERROR_PAYLOAD:
+            if payload == TokenTrackRound.ERROR_PAYLOAD:
                 return self.synchronized_data, Event.CONTRACT_ERROR
 
             token_id_to_points = payload["token_id_to_points"]
@@ -105,35 +105,33 @@ class NewTokensRound(CollectSameUntilThresholdRound):
         return None
 
 
-class FinishedNewTokensRound(DegenerateRound, ABC):
-    """FinishedNewTokensRound"""
-
-    round_id: str = "finished_new_tokens"
+class FinishedTokenTrackWriteRound(DegenerateRound, ABC):
+    """FinishedTokenTrackWriteRound"""
 
 
 class DynamicNFTAbciApp(AbciApp[Event]):
     """DynamicNFTAbciApp"""
 
-    initial_round_cls: AppState = NewTokensRound
-    initial_states: Set[AppState] = {NewTokensRound}
+    initial_round_cls: AppState = TokenTrackRound
+    initial_states: Set[AppState] = {TokenTrackRound}
     transition_function: AbciAppTransitionFunction = {
-        NewTokensRound: {
-            Event.DONE: FinishedNewTokensRound,
-            Event.CONTRACT_ERROR: NewTokensRound,
-            Event.NO_MAJORITY: NewTokensRound,
-            Event.ROUND_TIMEOUT: NewTokensRound,
+        TokenTrackRound: {
+            Event.DONE: FinishedTokenTrackWriteRound,
+            Event.CONTRACT_ERROR: TokenTrackRound,
+            Event.NO_MAJORITY: TokenTrackRound,
+            Event.ROUND_TIMEOUT: TokenTrackRound,
         },
-        FinishedNewTokensRound: {},
+        FinishedTokenTrackWriteRound: {},
     }
-    final_states: Set[AppState] = {FinishedNewTokensRound}
+    final_states: Set[AppState] = {FinishedTokenTrackWriteRound}
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        NewTokensRound: set(),
+        TokenTrackRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedNewTokensRound: {
+        FinishedTokenTrackWriteRound: {
             get_name(SynchronizedData.token_id_to_points),
             get_name(SynchronizedData.last_update_time),
             get_name(SynchronizedData.ceramic_db),

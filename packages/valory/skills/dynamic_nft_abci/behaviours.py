@@ -34,11 +34,11 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
 )
 from packages.valory.skills.dynamic_nft_abci.ceramic_db import CeramicDB
 from packages.valory.skills.dynamic_nft_abci.models import Params, SharedState
-from packages.valory.skills.dynamic_nft_abci.payloads import NewTokensPayload
+from packages.valory.skills.dynamic_nft_abci.payloads import TokenTrackPayload
 from packages.valory.skills.dynamic_nft_abci.rounds import (
     DynamicNFTAbciApp,
-    NewTokensRound,
     SynchronizedData,
+    TokenTrackRound,
 )
 
 
@@ -60,10 +60,10 @@ class DynamicNFTBaseBehaviour(BaseBehaviour, ABC):
         return cast(Params, super().params)
 
 
-class NewTokensBehaviour(DynamicNFTBaseBehaviour):
-    """NewTokensBehaviour"""
+class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
+    """TokenTrackBehaviour"""
 
-    matching_round: Type[AbstractRound] = NewTokensRound
+    matching_round: Type[AbstractRound] = TokenTrackRound
 
     def async_act(self) -> Generator:
         """Get a list of the new tokens."""
@@ -77,10 +77,10 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
             ) = yield from self.get_token_id_to_address()
 
             if (
-                new_token_id_to_address == NewTokensRound.ERROR_PAYLOAD
+                new_token_id_to_address == TokenTrackRound.ERROR_PAYLOAD
                 or not last_parsed_block
             ):
-                payload_data = NewTokensRound.ERROR_PAYLOAD
+                payload_data = TokenTrackRound.ERROR_PAYLOAD
             else:
                 payload_data = self.update_ceramic_db(
                     new_token_id_to_address, last_parsed_block
@@ -89,7 +89,7 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
         with self.context.benchmark_tool.measure(
             self.behaviour_id,
         ).consensus():
-            payload = NewTokensPayload(
+            payload = TokenTrackPayload(
                 self.context.agent_address, json.dumps(payload_data, sort_keys=True)
             )
             yield from self.send_a2a_transaction(payload)
@@ -124,7 +124,7 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
         )
         if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
             self.context.logger.info("Error retrieving the token_id to address data")
-            return NewTokensRound.ERROR_PAYLOAD, from_block
+            return TokenTrackRound.ERROR_PAYLOAD, from_block
         data = cast(dict, contract_api_msg.state.body["token_id_to_member"])
         last_block = cast(int, contract_api_msg.state.body["last_block"])
         self.context.logger.info(
@@ -200,7 +200,7 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
             "ceramic_db": ceramic_db.data,
         }
 
-        self.context.logger.info(f"Data updated [NewTokens]: {data}")
+        self.context.logger.info(f"Token data updated: {data}")
 
         return data
 
@@ -208,8 +208,8 @@ class NewTokensBehaviour(DynamicNFTBaseBehaviour):
 class DynamicNFTRoundBehaviour(AbstractRoundBehaviour):
     """DynamicNFTRoundBehaviour"""
 
-    initial_behaviour_cls = NewTokensBehaviour
+    initial_behaviour_cls = TokenTrackBehaviour
     abci_app_cls = DynamicNFTAbciApp
     behaviours: Set[Type[BaseBehaviour]] = [
-        NewTokensBehaviour,
+        TokenTrackBehaviour,
     ]

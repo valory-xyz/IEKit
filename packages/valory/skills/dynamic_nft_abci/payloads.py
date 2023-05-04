@@ -25,7 +25,7 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 
 @dataclass(frozen=True)
-class NewTokensPayload(BaseTxPayload):
-    """Represent a transaction payload for the NewTokensRound."""
+class TokenTrackPayload(BaseTxPayload):
+    """Represent a transaction payload for the TokenTrackRound."""
 
     content: str

@@ -55,7 +55,7 @@ from packages.valory.agents.impact_evaluator.tests.helpers.docker import (
 from packages.valory.skills.registration_abci.rounds import RegistrationStartupRound
 from packages.valory.skills.reset_pause_abci.rounds import ResetAndPauseRound
 from packages.valory.skills.dynamic_nft_abci.rounds import (
-    NewTokensRound,
+    TokenTrackRound,
 )
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     TwitterScoringRound,
@@ -83,7 +83,7 @@ HAPPY_PATH: Tuple[RoundChecks, ...] = (
     RoundChecks(PathSwitchRound.auto_round_id(), n_periods=3),
     RoundChecks(GenericScoringRound.auto_round_id(), n_periods=2),
     RoundChecks(TwitterScoringRound.auto_round_id(), n_periods=2),
-    RoundChecks(NewTokensRound.auto_round_id(), n_periods=2),
+    RoundChecks(TokenTrackRound.auto_round_id(), n_periods=2),
     RoundChecks(RandomnessRound.auto_round_id(), n_periods=2),
     RoundChecks(SelectKeeperRound.auto_round_id(), n_periods=2),
     RoundChecks(StreamWriteRound.auto_round_id(), n_periods=2),
