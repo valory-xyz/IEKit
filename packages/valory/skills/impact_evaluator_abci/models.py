@@ -83,12 +83,12 @@ class SharedState(BaseSharedState):
     def setup(self) -> None:
         """Set up."""
         super().setup()
-        ImpactEvaluatorSkillAbciApp.event_to_timeout[
-            CeramicReadEvent.ROUND_TIMEOUT
-        ] = self.context.params.round_timeout_seconds
+        ImpactEvaluatorSkillAbciApp.event_to_timeout[CeramicReadEvent.ROUND_TIMEOUT] = (
+            self.context.params.round_timeout_seconds * MULTIPLIER
+        )
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             CeramicWriteEvent.ROUND_TIMEOUT
-        ] = self.context.params.round_timeout_seconds
+        ] = (self.context.params.round_timeout_seconds * MULTIPLIER)
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             TwitterScoringEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds

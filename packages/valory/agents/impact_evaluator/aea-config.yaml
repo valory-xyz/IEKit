@@ -29,7 +29,7 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeifuclb6cikagtg2zn7dkjnnv3f7re2tfgzk6c4h3scgyzaaqeg55m
 - valory/abstract_round_abci:0.1.0:bafybeigiolzp3i6b3wwuau3yv2h5udqape3i7of73mlm2d6ud22irlkbme
-- valory/impact_evaluator_abci:0.1.0:bafybeich56ul4be7ggpk2zjlqxhnzmmrodrr33cuxk2ldx2llvt3ozodle
+- valory/impact_evaluator_abci:0.1.0:bafybeihipeftauj7ml7373s7ob7xrlc2elf4kzhnzoqtrm4wrmztddnche
 - valory/path_switch_abci:0.1.0:bafybeigo42z4ufwdatwzkrhmxx6koaqpn4gijrb6jfhcljehbngyssr3xy
 - valory/generic_scoring_abci:0.1.0:bafybeiacijbuvm2fsscxhw7zyktfnw5dxcmi6uf55gzdxr62vodcvtdpoi
 - valory/twitter_scoring_abci:0.1.0:bafybeiad3za426phwn3hs75nefayhm2ep2kofgk4a6ym6l3mm3ifvwiisi
