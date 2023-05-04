@@ -29,13 +29,13 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeifuclb6cikagtg2zn7dkjnnv3f7re2tfgzk6c4h3scgyzaaqeg55m
 - valory/abstract_round_abci:0.1.0:bafybeigiolzp3i6b3wwuau3yv2h5udqape3i7of73mlm2d6ud22irlkbme
-- valory/impact_evaluator_abci:0.1.0:bafybeidyp47detdpiuywpoasfnp4jpiao5ae5j6dvy3ajywld666uxqa5a
+- valory/impact_evaluator_abci:0.1.0:bafybeieiqg5hfa5y2za56vkdcksl6r6yxafaheyt4yjaknh52jn5hdlkgi
 - valory/path_switch_abci:0.1.0:bafybeigo42z4ufwdatwzkrhmxx6koaqpn4gijrb6jfhcljehbngyssr3xy
 - valory/generic_scoring_abci:0.1.0:bafybeiecm2lu7lla4shajprfuel2d6iitxpjbq5mezaxkug2nc2sax5vde
 - valory/twitter_scoring_abci:0.1.0:bafybeifk3mz5lcqvjfua3msvzklrs4j62qtlkttyw32bamhbzyqxyfbcjm
 - valory/ceramic_read_abci:0.1.0:bafybeib4v4t7lzqfsftfhd6e6ctcnarl7rizd7vigeiomvvhcjfyc5r23m
 - valory/ceramic_write_abci:0.1.0:bafybeihsadycl5tk5zxsnyb7dkkaglriw4b3h6vw5aqztgag2fxqyjwfae
-- valory/dynamic_nft_abci:0.1.0:bafybeia5umicjlj2w4ijgcea27ezljhmen3rm4vkdtjnxyketxjywnfuae
+- valory/dynamic_nft_abci:0.1.0:bafybeigcfp2xt5ximluo3yqdwk2sgxuwia4pxgt6ysm3frvvs45pcbrfmi
 - valory/registration_abci:0.1.0:bafybeigjzfdhhu6ody2qo5v2xjobafujnodklia4zw6bkkhahxtjfo3wby
 - valory/reset_pause_abci:0.1.0:bafybeieeux3rdlcwgjbdfrluvkhqv26qdparre6pabatietw7juklljil4
 - valory/termination_abci:0.1.0:bafybeifkl4ab6dnvtsaefe56dbzshmp5mozn7exwcaj2a3wjeq7u3hpezm
