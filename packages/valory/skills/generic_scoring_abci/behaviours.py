@@ -76,6 +76,8 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
     def update_ceramic_db(self) -> Dict:
         """Calculate the new content of the DB"""
 
+        pending_write = False
+
         # Instantiate the db
         ceramic_db = CeramicDB(self.synchronized_data.ceramic_db, self.context.logger)
         scores_db = CeramicDB(self.synchronized_data.score_data)
@@ -100,6 +102,7 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
             ceramic_db.update_or_create_user(  # overwrites all common fields for the user
                 "discord_id", discord_id, user
             )
+            pending_write = True
 
         # latest_update_id
         ceramic_db.data["module_data"]["generic"]["latest_update_id"] = str(
@@ -115,7 +118,7 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
             f"The ceramic_db will be updated to: {ceramic_db.data!r}"
         )
 
-        return ceramic_db.data
+        return {"ceramic_db": ceramic_db.data, "pending_write": pending_write}
 
 
 class GenericScoringRoundBehaviour(AbstractRoundBehaviour):

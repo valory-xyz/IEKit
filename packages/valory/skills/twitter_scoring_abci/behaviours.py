@@ -91,7 +91,12 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 api_data = mentions
                 api_data.update(registrations)
                 # Calculate the new Ceramic content
-                payload_data = self.update_ceramic_db(api_data)
+                payload_data = {
+                    "ceramic_db": self.update_ceramic_db(api_data),
+                    "pending_write": api_data["user_to_mentions"]
+                    or api_data["id_to_usernames"]
+                    or api_data["wallet_to_users"],
+                }
 
             sender = self.context.agent_address
             payload = TwitterScoringPayload(

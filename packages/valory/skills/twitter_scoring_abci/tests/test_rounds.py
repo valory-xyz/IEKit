@@ -87,7 +87,8 @@ def get_dummy_twitter_scoring_payload_serialized(api_error: bool = False) -> str
         return json.dumps({"error": "true"})
     return json.dumps(
         {
-            "dummy": "data",
+            "ceramic_db": {"dummy": "data"},
+            "pending_write": False,
         },
         sort_keys=True,
     )
@@ -141,7 +142,7 @@ class TestTwitterScoringRound(BaseScoreReadRoundTest):
                 final_data={
                     "ceramic_db": json.loads(
                         get_dummy_twitter_scoring_payload_serialized()
-                    ),
+                    )["ceramic_db"],
                 },
                 event=Event.DONE,
                 most_voted_payload=get_dummy_twitter_scoring_payload_serialized(),

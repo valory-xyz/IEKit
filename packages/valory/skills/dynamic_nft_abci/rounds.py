@@ -68,6 +68,11 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the data stored in the main stream."""
         return cast(dict, self.db.get_strict("ceramic_db"))
 
+    @property
+    def pending_write(self) -> bool:
+        """Checks whether there are changes pending to be written to Ceramic."""
+        return cast(bool, self.db.get_strict("pending_write"))
+
 
 class TokenTrackRound(CollectSameUntilThresholdRound):
     """TokenTrackRound"""
@@ -88,6 +93,7 @@ class TokenTrackRound(CollectSameUntilThresholdRound):
             token_id_to_points = payload["token_id_to_points"]
             last_update_time = payload["last_update_time"]
             ceramic_db = payload["ceramic_db"]
+            pending_write = payload["pending_write"]
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
@@ -95,6 +101,7 @@ class TokenTrackRound(CollectSameUntilThresholdRound):
                     get_name(SynchronizedData.token_id_to_points): token_id_to_points,
                     get_name(SynchronizedData.last_update_time): last_update_time,
                     get_name(SynchronizedData.ceramic_db): ceramic_db,
+                    get_name(SynchronizedData.pending_write): pending_write,
                 }
             )
             return synchronized_data, Event.DONE
@@ -138,5 +145,5 @@ class DynamicNFTAbciApp(AbciApp[Event]):
         }
     }
     cross_period_persisted_keys: FrozenSet[str] = frozenset(
-        ["token_id_to_points", "last_update_time", "ceramic_db"]
+        ["token_id_to_points", "last_update_time", "ceramic_db", "pending_write"]
     )

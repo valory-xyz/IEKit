@@ -137,6 +137,8 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
     ) -> Dict:
         """Calculate the new content of the DB"""
 
+        pending_write = False
+
         # We store a token_id to points mapping so it is quick
         # to retrieve the scores for a given token_id, which is done
         # during each request to the handler
@@ -161,6 +163,7 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
                 ceramic_db.update_or_create_user(
                     "wallet_address", address, {"token_id": token_id}
                 )
+                pending_write = True  # user is created or updated
 
         # If a user has first contributed to one module (i.e. twitter) without registering a wallet,
         # and later he/she contributes to another module, it could happen that we have two different
@@ -198,6 +201,7 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
             "last_update_time": last_update_time,
             "token_id_to_points": token_id_to_points,
             "ceramic_db": ceramic_db.data,
+            "pending_write": pending_write,
         }
 
         self.context.logger.info(f"Token data updated: {data}")

@@ -94,6 +94,7 @@ def get_dummy_token_track_payload_serialized() -> str:
             "ceramic_db": DUMMY_CERAMIC_DB,
             "token_id_to_points": DUMMY_TOKEN_ID_TO_POINTS,
             "last_update_time": "dymmy_last_update_time",
+            "pending_write": True,
         },
         sort_keys=True,
     )
@@ -150,7 +151,7 @@ class BaseDynamicNFTRoundTestClass(BaseCollectSameUntilThresholdRoundTest):
         )
 
 
-class TesTokenTrackRound(BaseDynamicNFTRoundTestClass):
+class TestTokenTrackRound(BaseDynamicNFTRoundTestClass):
     """Tests for TokenTrackRound."""
 
     round_class = TokenTrackRound

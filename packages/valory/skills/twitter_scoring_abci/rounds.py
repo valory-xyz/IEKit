@@ -57,6 +57,11 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the data stored in the main stream."""
         return cast(dict, self.db.get_strict("ceramic_db"))
 
+    @property
+    def pending_write(self) -> bool:
+        """Checks whether there are changes pending to be written to Ceramic."""
+        return cast(bool, self.db.get_strict("pending_write"))
+
 
 class TwitterScoringRound(CollectSameUntilThresholdRound):
     """TwitterScoringRound"""
@@ -79,7 +84,8 @@ class TwitterScoringRound(CollectSameUntilThresholdRound):
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    get_name(SynchronizedData.ceramic_db): payload,
+                    get_name(SynchronizedData.ceramic_db): payload["ceramic_db"],
+                    get_name(SynchronizedData.pending_write): payload["pending_write"],
                 }
             )
             return synchronized_data, Event.DONE
@@ -115,6 +121,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
     cross_period_persisted_keys: FrozenSet[str] = frozenset(
         [
             "ceramic_db",
+            "pending_write",
         ]
     )
     db_pre_conditions: Dict[AppState, Set[str]] = {

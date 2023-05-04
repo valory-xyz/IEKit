@@ -29,13 +29,13 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeifuclb6cikagtg2zn7dkjnnv3f7re2tfgzk6c4h3scgyzaaqeg55m
 - valory/abstract_round_abci:0.1.0:bafybeigiolzp3i6b3wwuau3yv2h5udqape3i7of73mlm2d6ud22irlkbme
-- valory/impact_evaluator_abci:0.1.0:bafybeigxmeo3zf47amhhvcjt7ru2gkuu3cg46fzbgnmtk5vvzz6kedkfa4
+- valory/impact_evaluator_abci:0.1.0:bafybeich56ul4be7ggpk2zjlqxhnzmmrodrr33cuxk2ldx2llvt3ozodle
 - valory/path_switch_abci:0.1.0:bafybeigo42z4ufwdatwzkrhmxx6koaqpn4gijrb6jfhcljehbngyssr3xy
-- valory/generic_scoring_abci:0.1.0:bafybeibnao2hl2774kkwcvyj2636o6fako46swqnpwr2jmr3s45r4txxqu
-- valory/twitter_scoring_abci:0.1.0:bafybeicqqdpz4m4egac2aggfkdqqwvy4prcwi7dmw4eclqafenvtd6g7bi
+- valory/generic_scoring_abci:0.1.0:bafybeiacijbuvm2fsscxhw7zyktfnw5dxcmi6uf55gzdxr62vodcvtdpoi
+- valory/twitter_scoring_abci:0.1.0:bafybeiad3za426phwn3hs75nefayhm2ep2kofgk4a6ym6l3mm3ifvwiisi
 - valory/ceramic_read_abci:0.1.0:bafybeib4v4t7lzqfsftfhd6e6ctcnarl7rizd7vigeiomvvhcjfyc5r23m
-- valory/ceramic_write_abci:0.1.0:bafybeienxgaiaehbq5e4ehjufv44z3p632rmku67yh5s5t4aah2d4lm4yu
-- valory/dynamic_nft_abci:0.1.0:bafybeidbkfn5fy53oks2rqxquragthimyac2erl66sfxqqm2ihpvdv764a
+- valory/ceramic_write_abci:0.1.0:bafybeiap34n4fi6fn52nysqcn6bydsichf64pot4mshnt6vsxbdv6sa5rm
+- valory/dynamic_nft_abci:0.1.0:bafybeicicmszujkgvnrlvqvsgonyoycgtopdzkcg5cintbapybsb26lnja
 - valory/registration_abci:0.1.0:bafybeigjzfdhhu6ody2qo5v2xjobafujnodklia4zw6bkkhahxtjfo3wby
 - valory/reset_pause_abci:0.1.0:bafybeieeux3rdlcwgjbdfrluvkhqv26qdparre6pabatietw7juklljil4
 - valory/termination_abci:0.1.0:bafybeifkl4ab6dnvtsaefe56dbzshmp5mozn7exwcaj2a3wjeq7u3hpezm
