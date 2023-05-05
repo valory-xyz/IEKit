@@ -30,11 +30,11 @@ from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
     BaseCollectSameUntilThresholdRoundTest,
 )
 from packages.valory.skills.dynamic_nft_abci.behaviours import DEFAULT_POINTS
-from packages.valory.skills.dynamic_nft_abci.payloads import NewTokensPayload
+from packages.valory.skills.dynamic_nft_abci.payloads import TokenTrackPayload
 from packages.valory.skills.dynamic_nft_abci.rounds import (
     Event,
-    NewTokensRound,
     SynchronizedData,
+    TokenTrackRound,
 )
 
 
@@ -87,19 +87,20 @@ def get_payloads(
     }
 
 
-def get_dummy_new_tokens_payload_serialized() -> str:
+def get_dummy_token_track_payload_serialized() -> str:
     """Dummy new tokens payload"""
     return json.dumps(
         {
             "ceramic_db": DUMMY_CERAMIC_DB,
             "token_id_to_points": DUMMY_TOKEN_ID_TO_POINTS,
             "last_update_time": "dymmy_last_update_time",
+            "pending_write": True,
         },
         sort_keys=True,
     )
 
 
-def get_dummy_new_tokens_payload_error_serialized() -> str:
+def get_dummy_token_track_payload_error_serialized() -> str:
     """Dummy new tokens payload"""
     return json.dumps({"error": True}, sort_keys=True)
 
@@ -150,10 +151,10 @@ class BaseDynamicNFTRoundTestClass(BaseCollectSameUntilThresholdRoundTest):
         )
 
 
-class TestNewTokensRound(BaseDynamicNFTRoundTestClass):
-    """Tests for NewTokensRound."""
+class TestTokenTrackRound(BaseDynamicNFTRoundTestClass):
+    """Tests for TokenTrackRound."""
 
-    round_class = NewTokensRound
+    round_class = TokenTrackRound
 
     @pytest.mark.parametrize(
         "test_case",
@@ -162,22 +163,22 @@ class TestNewTokensRound(BaseDynamicNFTRoundTestClass):
                 name="Happy path",
                 initial_data={},
                 payloads=get_payloads(
-                    payload_cls=NewTokensPayload,
-                    data=get_dummy_new_tokens_payload_serialized(),
+                    payload_cls=TokenTrackPayload,
+                    data=get_dummy_token_track_payload_serialized(),
                 ),
                 final_data={
                     "token_id_to_points": json.loads(
-                        get_dummy_new_tokens_payload_serialized()
+                        get_dummy_token_track_payload_serialized()
                     )["token_id_to_points"],
-                    "ceramic_db": json.loads(get_dummy_new_tokens_payload_serialized())[
-                        "ceramic_db"
-                    ],
+                    "ceramic_db": json.loads(
+                        get_dummy_token_track_payload_serialized()
+                    )["ceramic_db"],
                     "last_update_time": json.loads(
-                        get_dummy_new_tokens_payload_serialized()
+                        get_dummy_token_track_payload_serialized()
                     )["last_update_time"],
                 },
-                event=Event.DONE,
-                most_voted_payload=get_dummy_new_tokens_payload_serialized(),
+                event=Event.WRITE,
+                most_voted_payload=get_dummy_token_track_payload_serialized(),
                 synchronized_data_attr_checks=[
                     lambda _synchronized_data: _synchronized_data.token_id_to_points,
                     lambda _synchronized_data: _synchronized_data.ceramic_db,
@@ -188,12 +189,12 @@ class TestNewTokensRound(BaseDynamicNFTRoundTestClass):
                 name="Contract error",
                 initial_data={},
                 payloads=get_payloads(
-                    payload_cls=NewTokensPayload,
-                    data=get_dummy_new_tokens_payload_error_serialized(),
+                    payload_cls=TokenTrackPayload,
+                    data=get_dummy_token_track_payload_error_serialized(),
                 ),
                 final_data={},
                 event=Event.CONTRACT_ERROR,
-                most_voted_payload=get_dummy_new_tokens_payload_error_serialized(),
+                most_voted_payload=get_dummy_token_track_payload_error_serialized(),
                 synchronized_data_attr_checks=[],
             ),
         ),

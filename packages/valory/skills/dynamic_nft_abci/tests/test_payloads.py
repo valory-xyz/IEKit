@@ -25,7 +25,7 @@ from typing import Hashable
 import pytest
 
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
-from packages.valory.skills.dynamic_nft_abci.payloads import NewTokensPayload
+from packages.valory.skills.dynamic_nft_abci.payloads import TokenTrackPayload
 
 
 @dataclass
@@ -40,7 +40,7 @@ class PayloadTestCase:
     "test_case",
     [
         PayloadTestCase(
-            payload_cls=NewTokensPayload,
+            payload_cls=TokenTrackPayload,
             content="payload_test_content",
         ),
     ],

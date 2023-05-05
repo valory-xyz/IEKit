@@ -74,6 +74,11 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the write_target_property."""
         return self.db.get("write_target_property", None)
 
+    @property
+    def pending_write(self) -> bool:
+        """Checks whether there are changes pending to be written to Ceramic."""
+        return cast(bool, self.db.get("pending_write", False))
+
 
 class RandomnessRound(CollectSameUntilThresholdRound):
     """A round for generating randomness"""
@@ -143,7 +148,14 @@ class VerificationRound(CollectSameUntilThresholdRound):
             if self.most_voted_payload == self.ERROR_PAYLOAD:
                 return self.synchronized_data, Event.API_ERROR
 
-            return self.synchronized_data, Event.DONE
+            synchronized_data = self.synchronized_data.update(
+                synchronized_data_class=SynchronizedData,
+                **{
+                    get_name(SynchronizedData.pending_write): False,
+                }
+            )
+
+            return synchronized_data, Event.DONE
 
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
@@ -190,7 +202,11 @@ class CeramicWriteAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: FrozenSet[str] = frozenset()
+    cross_period_persisted_keys: FrozenSet[str] = frozenset(
+        [
+            "pending_write",
+        ]
+    )
     db_pre_conditions: Dict[AppState, Set[str]] = {
         RandomnessRound: set(),
     }

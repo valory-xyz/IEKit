@@ -6,8 +6,10 @@ alphabet_in:
 - DONE_READ
 - DONE_SCORE
 - NO_MAJORITY
+- NO_WRITE
 - RESET_AND_PAUSE_TIMEOUT
 - ROUND_TIMEOUT
+- WRITE
 default_start_state: RegistrationStartupRound
 final_states: []
 label: ImpactEvaluatorSkillAbciApp
@@ -16,7 +18,6 @@ start_states:
 - RegistrationStartupRound
 states:
 - GenericScoringRound
-- NewTokensRound
 - PathSwitchRound
 - RandomnessRound
 - RegistrationRound
@@ -25,16 +26,13 @@ states:
 - SelectKeeperRound
 - StreamReadRound
 - StreamWriteRound
+- TokenTrackRound
 - TwitterScoringRound
 - VerificationRound
 transition_func:
     (GenericScoringRound, DONE): TwitterScoringRound
     (GenericScoringRound, NO_MAJORITY): GenericScoringRound
     (GenericScoringRound, ROUND_TIMEOUT): GenericScoringRound
-    (NewTokensRound, CONTRACT_ERROR): NewTokensRound
-    (NewTokensRound, DONE): RandomnessRound
-    (NewTokensRound, NO_MAJORITY): NewTokensRound
-    (NewTokensRound, ROUND_TIMEOUT): NewTokensRound
     (PathSwitchRound, DONE_READ): StreamReadRound
     (PathSwitchRound, DONE_SCORE): GenericScoringRound
     (PathSwitchRound, NO_MAJORITY): PathSwitchRound
@@ -59,8 +57,13 @@ transition_func:
     (StreamWriteRound, DID_NOT_SEND): RandomnessRound
     (StreamWriteRound, DONE): VerificationRound
     (StreamWriteRound, ROUND_TIMEOUT): RandomnessRound
+    (TokenTrackRound, CONTRACT_ERROR): TokenTrackRound
+    (TokenTrackRound, NO_MAJORITY): TokenTrackRound
+    (TokenTrackRound, NO_WRITE): ResetAndPauseRound
+    (TokenTrackRound, ROUND_TIMEOUT): TokenTrackRound
+    (TokenTrackRound, WRITE): RandomnessRound
     (TwitterScoringRound, API_ERROR): TwitterScoringRound
-    (TwitterScoringRound, DONE): NewTokensRound
+    (TwitterScoringRound, DONE): TokenTrackRound
     (TwitterScoringRound, NO_MAJORITY): TwitterScoringRound
     (TwitterScoringRound, ROUND_TIMEOUT): TwitterScoringRound
     (VerificationRound, API_ERROR): RandomnessRound

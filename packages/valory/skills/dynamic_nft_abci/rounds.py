@@ -34,14 +34,15 @@ from packages.valory.skills.abstract_round_abci.base import (
     EventToTimeout,
     get_name,
 )
-from packages.valory.skills.dynamic_nft_abci.payloads import NewTokensPayload
+from packages.valory.skills.dynamic_nft_abci.payloads import TokenTrackPayload
 
 
 class Event(Enum):
     """DynamicNFTAbciApp Events"""
 
     NO_MAJORITY = "no_majority"
-    DONE = "done"
+    WRITE = "write"
+    NO_WRITE = "no_write"
     ROUND_TIMEOUT = "round_timeout"
     CONTRACT_ERROR = "contract_error"
 
@@ -68,11 +69,16 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the data stored in the main stream."""
         return cast(dict, self.db.get_strict("ceramic_db"))
 
+    @property
+    def pending_write(self) -> bool:
+        """Checks whether there are changes pending to be written to Ceramic."""
+        return cast(bool, self.db.get("pending_write", False))
 
-class NewTokensRound(CollectSameUntilThresholdRound):
-    """NewTokensRound"""
 
-    payload_class = NewTokensPayload
+class TokenTrackRound(CollectSameUntilThresholdRound):
+    """TokenTrackRound"""
+
+    payload_class = TokenTrackPayload
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = {"error": True}
@@ -82,12 +88,13 @@ class NewTokensRound(CollectSameUntilThresholdRound):
         if self.threshold_reached:
             payload = json.loads(self.most_voted_payload)
 
-            if payload == NewTokensRound.ERROR_PAYLOAD:
+            if payload == TokenTrackRound.ERROR_PAYLOAD:
                 return self.synchronized_data, Event.CONTRACT_ERROR
 
             token_id_to_points = payload["token_id_to_points"]
             last_update_time = payload["last_update_time"]
             ceramic_db = payload["ceramic_db"]
+            pending_write = payload["pending_write"]
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
@@ -95,9 +102,15 @@ class NewTokensRound(CollectSameUntilThresholdRound):
                     get_name(SynchronizedData.token_id_to_points): token_id_to_points,
                     get_name(SynchronizedData.last_update_time): last_update_time,
                     get_name(SynchronizedData.ceramic_db): ceramic_db,
+                    get_name(SynchronizedData.pending_write): pending_write,
                 }
             )
-            return synchronized_data, Event.DONE
+            return (
+                synchronized_data,
+                Event.WRITE
+                if cast(SynchronizedData, synchronized_data).pending_write
+                else Event.NO_WRITE,
+            )
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
         ):
@@ -105,40 +118,48 @@ class NewTokensRound(CollectSameUntilThresholdRound):
         return None
 
 
-class FinishedNewTokensRound(DegenerateRound, ABC):
-    """FinishedNewTokensRound"""
+class FinishedTokenTrackWriteRound(DegenerateRound, ABC):
+    """FinishedTokenTrackWriteRound"""
 
-    round_id: str = "finished_new_tokens"
+
+class FinishedTokenTrackNoWriteRound(DegenerateRound, ABC):
+    """FinishedTokenTrackNoWriteRound"""
 
 
 class DynamicNFTAbciApp(AbciApp[Event]):
     """DynamicNFTAbciApp"""
 
-    initial_round_cls: AppState = NewTokensRound
-    initial_states: Set[AppState] = {NewTokensRound}
+    initial_round_cls: AppState = TokenTrackRound
+    initial_states: Set[AppState] = {TokenTrackRound}
     transition_function: AbciAppTransitionFunction = {
-        NewTokensRound: {
-            Event.DONE: FinishedNewTokensRound,
-            Event.CONTRACT_ERROR: NewTokensRound,
-            Event.NO_MAJORITY: NewTokensRound,
-            Event.ROUND_TIMEOUT: NewTokensRound,
+        TokenTrackRound: {
+            Event.WRITE: FinishedTokenTrackWriteRound,
+            Event.NO_WRITE: FinishedTokenTrackNoWriteRound,
+            Event.CONTRACT_ERROR: TokenTrackRound,
+            Event.NO_MAJORITY: TokenTrackRound,
+            Event.ROUND_TIMEOUT: TokenTrackRound,
         },
-        FinishedNewTokensRound: {},
+        FinishedTokenTrackWriteRound: {},
+        FinishedTokenTrackNoWriteRound: {},
     }
-    final_states: Set[AppState] = {FinishedNewTokensRound}
+    final_states: Set[AppState] = {
+        FinishedTokenTrackWriteRound,
+        FinishedTokenTrackNoWriteRound,
+    }
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        NewTokensRound: set(),
+        TokenTrackRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedNewTokensRound: {
+        FinishedTokenTrackWriteRound: {
             get_name(SynchronizedData.token_id_to_points),
             get_name(SynchronizedData.last_update_time),
             get_name(SynchronizedData.ceramic_db),
-        }
+        },
+        FinishedTokenTrackNoWriteRound: set(),
     }
     cross_period_persisted_keys: FrozenSet[str] = frozenset(
-        ["token_id_to_points", "last_update_time", "ceramic_db"]
+        ["token_id_to_points", "last_update_time", "ceramic_db", "pending_write"]
     )

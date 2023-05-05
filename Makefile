@@ -133,6 +133,7 @@ fix-abci-app-specs:
 all-linters:
 	gitleaks detect --report-format json --report-path leak_report
 	tox -e check-copyright
+	tox -e check-doc-links-hashes
 	tox -e bandit
 	tox -e safety
 	tox -e check-packages

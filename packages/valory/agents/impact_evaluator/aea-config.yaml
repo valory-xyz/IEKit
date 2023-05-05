@@ -12,34 +12,34 @@ fingerprint:
   tests/helpers/data/json_server/data.json: bafybeidjhs6bp4vvkbuetddg4yq6ilvqobq755cixq2vv233k2u352rq7m
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
-  tests/test_impact_evaluator.py: bafybeiefrmkbgqgkm4vjftxvrkr6uojjmzxpebnwetyzvhlmygao7bka5i
+  tests/test_impact_evaluator.py: bafybeieyrpw77jtkxafzxuqs2eygy4hnialjgpksfld54d5lnza64bvb6e
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihaax5od5zo5jk2l62hv4jwuwtxloh5mijozudpsjombqc4ncmi6i
-- valory/abci:0.1.0:bafybeih2l6ssf5ebkvgbag3hx2pd22shytszqavveib2e2s6rv4va5khv4
+- valory/abci:0.1.0:bafybeieogrpktpxfq74leeeeylfx33sob2hovhpl5coxlswae6xblzbezy
 - valory/http_client:0.23.0:bafybeidykl4elwbcjkqn32wt5h4h7tlpeqovrcq3c5bcplt6nhpznhgczi
 - valory/ledger:0.19.0:bafybeicgfupeudtmvehbwziqfxiz6ztsxr5rxzvalzvsdsspzz73o5fzfi
 - valory/p2p_libp2p_client:0.1.0:bafybeidwcobzb7ut3efegoedad7jfckvt2n6prcmd4g7xnkm6hp6aafrva
 contracts:
-- valory/dynamic_contribution:0.1.0:bafybeidhhoaimoxagkjtfezas7egq5dwrq3vtkikrbws3vbimpftxzjw6m
+- valory/dynamic_contribution:0.1.0:bafybeidbyzf2eyyzehryziipuh5gdplhr7g7btuvjs4cejmlhmo76olkf4
 protocols:
 - open_aea/signing:1.0.0:bafybeibqlfmikg5hk4phzak6gqzhpkt6akckx7xppbp53mvwt6r73h7tk4
 - valory/contract_api:1.0.0:bafybeidv6wxpjyb2sdyibnmmum45et4zcla6tl63bnol6ztyoqvpl4spmy
 - valory/http:1.0.0:bafybeifyoio7nlh5zzyn5yz7krkou56l22to3cwg7gw5v5o3vxwklibhty
 skills:
-- valory/abstract_abci:0.1.0:bafybeifuclb6cikagtg2zn7dkjnnv3f7re2tfgzk6c4h3scgyzaaqeg55m
-- valory/abstract_round_abci:0.1.0:bafybeigiolzp3i6b3wwuau3yv2h5udqape3i7of73mlm2d6ud22irlkbme
-- valory/impact_evaluator_abci:0.1.0:bafybeiglp7l5y32atfcmx562grvmjq3q7sczh3bau6r7ok7rbaskolaj3y
-- valory/path_switch_abci:0.1.0:bafybeigo42z4ufwdatwzkrhmxx6koaqpn4gijrb6jfhcljehbngyssr3xy
-- valory/generic_scoring_abci:0.1.0:bafybeibnao2hl2774kkwcvyj2636o6fako46swqnpwr2jmr3s45r4txxqu
-- valory/twitter_scoring_abci:0.1.0:bafybeicqqdpz4m4egac2aggfkdqqwvy4prcwi7dmw4eclqafenvtd6g7bi
-- valory/ceramic_read_abci:0.1.0:bafybeib4v4t7lzqfsftfhd6e6ctcnarl7rizd7vigeiomvvhcjfyc5r23m
-- valory/ceramic_write_abci:0.1.0:bafybeienxgaiaehbq5e4ehjufv44z3p632rmku67yh5s5t4aah2d4lm4yu
-- valory/dynamic_nft_abci:0.1.0:bafybeifunwos3tva7upqm3c43jc2p3rpiflgiuew33g3c36sma4obguzvi
-- valory/registration_abci:0.1.0:bafybeigjzfdhhu6ody2qo5v2xjobafujnodklia4zw6bkkhahxtjfo3wby
-- valory/reset_pause_abci:0.1.0:bafybeieeux3rdlcwgjbdfrluvkhqv26qdparre6pabatietw7juklljil4
-- valory/termination_abci:0.1.0:bafybeifkl4ab6dnvtsaefe56dbzshmp5mozn7exwcaj2a3wjeq7u3hpezm
-- valory/transaction_settlement_abci:0.1.0:bafybeifsz2ll7gmy6vmx34t6q5bdv6zzwp5zrehr6di6v3thcpc3sztkta
+- valory/abstract_abci:0.1.0:bafybeihgerjeq4u4apuue7zzhpb3wmntuju34dbdijbbvl4wclww2gy7di
+- valory/abstract_round_abci:0.1.0:bafybeicensk7a2vpqj52iyhf6yhc6z2iwulb2txbym546qvwgsxm3skvcm
+- valory/impact_evaluator_abci:0.1.0:bafybeidj4yaul4x5yxz7np2zjkpne6irce3eheo2yybnrakixaepbg4gsu
+- valory/path_switch_abci:0.1.0:bafybeihsydn7uzkwhed4uppczjjcgntba6y5stnrlxlgfpbzneglgpozm4
+- valory/generic_scoring_abci:0.1.0:bafybeie4tp4ismbsl6uhbdaa7qp4774xyodgz5xcn3sdmlaykginqodl2i
+- valory/twitter_scoring_abci:0.1.0:bafybeifayznf3yszazv6tvqq3t372hq3lfpl4gg4qctq723g5zsn34w2k4
+- valory/ceramic_read_abci:0.1.0:bafybeifyaez364gwlsfl5vf2fdudeccifbgsvu2wznywqr2vrk2o4dvizu
+- valory/ceramic_write_abci:0.1.0:bafybeih53i7hdcnzxnfm57hctzlf5aoaoxt2twbkfxetwd5hokz2w5zxrm
+- valory/dynamic_nft_abci:0.1.0:bafybeialpigwl6bci4tow2enfjkgbc2d4xczvjsb3sxj7rbtrmrz27y7mi
+- valory/registration_abci:0.1.0:bafybeicsqhakfliwauyqow62yopcjhejknmfcjzh7ilbjt32ozydbhxleq
+- valory/reset_pause_abci:0.1.0:bafybeigwsp2crzvqan7xnap6dh4f4lxdut5il6naj7r4jwaslopstufgl4
+- valory/termination_abci:0.1.0:bafybeiglkntthppslj5p64n35aoqer4fcalezhqvpndo6eb2vaoynm6qxe
+- valory/transaction_settlement_abci:0.1.0:bafybeibor5qxitvgvgm47vzor4u7p53tcpw3fzez7hbd6qv4rglxladxye
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -71,7 +71,7 @@ logging_config:
 skill_exception_policy: stop_and_exit
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==1.32.0
+    version: ==1.33.0
 default_connection: null
 ---
 public_id: valory/abci:0.1.0

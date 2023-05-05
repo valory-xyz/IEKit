@@ -9,7 +9,6 @@ ScoreAdd
 SelectKeeper
 CeramicWrite
 WalletRead
-NewTokens
 HttpHandler
 Infura
 CoordinationKit
