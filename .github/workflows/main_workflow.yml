@@ -292,6 +292,9 @@ jobs:
           pip install tomte[tox]==0.2.4
           pip install --upgrade setuptools==60.10.0
 
+          # Install requests to avoid this issue: https://github.com/docker/docker-py/issues/3113
+          pip install requests==2.28.1
+
           # install Protobuf compiler
           wget https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-linux-x86_64.zip
           unzip protoc-3.11.4-linux-x86_64.zip -d protoc
