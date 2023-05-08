@@ -42,7 +42,7 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
 
 
 ADDRESS_REGEX = r"0x[a-fA-F0-9]{40}"
-WHITEPAPER_LINK = "https://t.co/lDssYx8Mmu"  # https://www.autonolas.network/whitepaper
+TCO_LINK_REGEX = r"https:\/\/t\.co\/[A-Za-z0-9]+"
 TAGLINE = "Autonomy is dead, long live autonomy"
 
 
@@ -230,14 +230,16 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
         """Process Twitter user data"""
         return {i["id"]: "@" + i["username"] for i in user_data}
 
-    def _get_wallet_to_ids(self, tweets: List) -> Dict[str, str]:
+    def _get_wallet_to_ids(self, tweets: List) -> Generator[None, None, Dict[str, str]]:
         """Process Twitter user data"""
         result = {}
         for tweet in tweets:
             match = re.search(ADDRESS_REGEX, tweet["text"])
-            if match and WHITEPAPER_LINK in tweet["text"] and TAGLINE in tweet["text"]:
-                wallet_address = Web3.toChecksumAddress(match.group())
-                result[wallet_address] = tweet["author_id"]
+            if match and TAGLINE in tweet["text"]:
+                valid_link = yield from self.check_whitepaper_link(tweet["text"])
+                if valid_link:
+                    wallet_address = Web3.toChecksumAddress(match.group())
+                    result[wallet_address] = tweet["author_id"]
         return result
 
     def _get_twitter_registrations(self) -> Generator[None, None, Dict]:
@@ -308,13 +310,39 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
             break
 
-        wallet_to_ids = self._get_wallet_to_ids(registrations)
+        wallet_to_ids = yield from self._get_wallet_to_ids(registrations)
 
         self.context.logger.info(f"Got Twitter registrations: {wallet_to_ids}")
 
         return {
             "wallet_to_users": wallet_to_ids,
         }
+
+    def check_whitepaper_link(self, text: str) -> Generator[None, None, bool]:
+        """Check whether a text contains a shortened t.co link that points to the whitepaper"""
+
+        # Check there is a t.co link
+        match = re.search(TCO_LINK_REGEX, text)
+        if not match:
+            return False
+
+        link = match.group()
+
+        self.context.logger.info(f"Found url: {link}")
+        # Visit the link
+        headers = dict(Authorization=f"Bearer {self.params.twitter_api_bearer_token}")
+
+        # Make the request
+        response = yield from self.get_http_response(
+            method="GET", url=link, headers=headers
+        )
+
+        # Check response status
+        if response.status_code != 200:
+            self.context.logger.error(f"Could not visit url: {link}")
+            return False
+
+        return response.url == "https://www.autonolas.network/whitepaper"
 
     def update_ceramic_db(self, api_data: Dict) -> Dict:
         """Calculate the new content of the DB"""
