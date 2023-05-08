@@ -269,6 +269,11 @@ class TestTwitterScoringBehaviour(BaseBehaviourTest):
                         TWITTER_REGISTRATIONS_URL,
                         WHITEPAPER_SHORTENED_URL,
                     ],
+                    "request_headers": [
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                        "",
+                    ],
                     "response_urls": [
                         "",
                         "",
@@ -302,6 +307,12 @@ class TestTwitterScoringBehaviour(BaseBehaviourTest):
                         TWITTER_REGISTRATIONS_URL
                         + "&pagination_token=dummy_next_token",
                     ],
+                    "request_headers": [
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                    ],
                     "response_urls": ["", "", "", ""],
                     "response_bodies": [
                         json.dumps(
@@ -328,6 +339,10 @@ class TestTwitterScoringBehaviour(BaseBehaviourTest):
                 ),
                 {
                     "request_urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
+                    "request_headers": [
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                    ],
                     "response_urls": ["", ""],
                     "response_bodies": [
                         json.dumps(
@@ -350,7 +365,7 @@ class TestTwitterScoringBehaviour(BaseBehaviourTest):
             self.mock_http_request(
                 request_kwargs=dict(
                     method="GET",
-                    headers="Authorization: Bearer <default_bearer_token>\r\n",
+                    headers=kwargs.get("request_headers")[i],
                     version="",
                     url=kwargs.get("request_urls")[i],
                 ),
