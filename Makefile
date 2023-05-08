@@ -132,6 +132,7 @@ fix-abci-app-specs:
 .PHONY: all-linters
 all-linters:
 	gitleaks detect --report-format json --report-path leak_report
+	tox -e spell-check
 	tox -e check-copyright
 	tox -e check-doc-links-hashes
 	tox -e bandit
