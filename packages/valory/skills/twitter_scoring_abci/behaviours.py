@@ -310,6 +310,10 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
             break
 
+        self.context.logger.info(
+            f"Got Twitter potential registrations: {registrations}"
+        )
+
         wallet_to_ids = yield from self._get_wallet_to_ids(registrations)
 
         self.context.logger.info(f"Got Twitter registrations: {wallet_to_ids}")
@@ -326,23 +330,22 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
         if not match:
             return False
 
-        link = match.group()
+        link = match.group().strip()
 
         self.context.logger.info(f"Found url: {link}")
-        # Visit the link
-        headers = dict(Authorization=f"Bearer {self.params.twitter_api_bearer_token}")
 
-        # Make the request
+        # Visit the link
         response = yield from self.get_http_response(
-            method="GET", url=link, headers=headers
+            method="GET",
+            url=link,
         )
 
         # Check response status
         if response.status_code != 200:
-            self.context.logger.error(f"Could not visit url: {link}")
+            self.context.logger.error(f"Could not visit url: {link} [{response}]")
             return False
 
-        return response.url == "https://www.autonolas.network/whitepaper"
+        return "Whitepaper | Autonolas" in response.body.decode("utf-8")
 
     def update_ceramic_db(self, api_data: Dict) -> Dict:
         """Calculate the new content of the DB"""
