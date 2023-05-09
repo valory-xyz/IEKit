@@ -35,6 +35,7 @@ from packages.valory.skills.abstract_round_abci.test_tools.base import (
 )
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
     ScoreReadBaseBehaviour,
+    TAGLINE,
     TwitterScoringBehaviour,
     TwitterScoringRoundBehaviour,
 )
@@ -49,6 +50,7 @@ ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 TWITTER_MENTIONS_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id=0"
 TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=%23autonolas&tweet.fields=author_id,created_at&max_results=100"
+WHITEPAPER_SHORTENED_URL = "https://t.co/lDssYx8Mmu"
 
 DUMMY_MENTIONS_RESPONSE = {
     "data": [
@@ -143,7 +145,7 @@ DUMMY_REGISTRATIONS_RESPONSE = {
     "data": [
         {
             "author_id": "1286010187325812739",
-            "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
+            "text": f"{TAGLINE} #autonolas {ZERO_ADDRESS} {WHITEPAPER_SHORTENED_URL}",
         },
     ],
     "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
@@ -162,6 +164,16 @@ DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE = {
         "oldest_id": "0",
         "next_token": "dummy_next_token",
     },
+}
+
+DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE_2 = {
+    "data": [
+        {
+            "author_id": "1286010187325812739",
+            "text": f"{TAGLINE} #autonolas {ZERO_ADDRESS}",
+        },
+    ],
+    "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
 }
 
 DUMMY_REGISTRATIONS_RESPONSE_COUNT_ZERO = {
@@ -252,13 +264,30 @@ class TestTwitterScoringBehaviour(BaseBehaviourTest):
                     event=Event.DONE,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
-                    "bodies": [
+                    "request_urls": [
+                        TWITTER_MENTIONS_URL,
+                        TWITTER_REGISTRATIONS_URL,
+                        WHITEPAPER_SHORTENED_URL,
+                    ],
+                    "request_headers": [
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                        "",
+                    ],
+                    "response_urls": [
+                        "",
+                        "",
+                        "https://www.autonolas.network/whitepaper",
+                    ],
+                    "response_bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE,
                         ),
                         json.dumps(
                             DUMMY_REGISTRATIONS_RESPONSE,
+                        ),
+                        json.dumps(
+                            {},
                         ),
                     ],
                     "status_code": 200,
@@ -271,14 +300,21 @@ class TestTwitterScoringBehaviour(BaseBehaviourTest):
                     event=Event.DONE,
                 ),
                 {
-                    "urls": [
+                    "request_urls": [
                         TWITTER_MENTIONS_URL,
                         TWITTER_MENTIONS_URL + "&pagination_token=dummy_next_token",
                         TWITTER_REGISTRATIONS_URL,
                         TWITTER_REGISTRATIONS_URL
                         + "&pagination_token=dummy_next_token",
                     ],
-                    "bodies": [
+                    "request_headers": [
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                    ],
+                    "response_urls": ["", "", "", ""],
+                    "response_bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MULTIPAGE,
                         ),
@@ -289,7 +325,7 @@ class TestTwitterScoringBehaviour(BaseBehaviourTest):
                             DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE,
                         ),
                         json.dumps(
-                            DUMMY_REGISTRATIONS_RESPONSE,
+                            DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE_2,
                         ),
                     ],
                     "status_code": 200,
@@ -302,8 +338,13 @@ class TestTwitterScoringBehaviour(BaseBehaviourTest):
                     event=Event.DONE,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
-                    "bodies": [
+                    "request_urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
+                    "request_headers": [
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                    ],
+                    "response_urls": ["", ""],
+                    "response_bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_COUNT_ZERO,
                         ),
@@ -320,19 +361,20 @@ class TestTwitterScoringBehaviour(BaseBehaviourTest):
         """Run tests."""
         self.fast_forward(test_case.initial_data)
         self.behaviour.act_wrapper()
-        for i in range(len(kwargs.get("urls"))):
+        for i in range(len(kwargs.get("request_urls"))):
             self.mock_http_request(
                 request_kwargs=dict(
                     method="GET",
-                    headers="Authorization: Bearer <default_bearer_token>\r\n",
+                    headers=kwargs.get("request_headers")[i],
                     version="",
-                    url=kwargs.get("urls")[i],
+                    url=kwargs.get("request_urls")[i],
                 ),
                 response_kwargs=dict(
                     version="",
                     status_code=kwargs.get("status_code"),
                     status_text="",
-                    body=kwargs.get("bodies")[i].encode(),
+                    body=kwargs.get("response_bodies")[i].encode(),
+                    url=kwargs.get("response_urls")[i],
                 ),
             )
         self.complete(test_case.event)

@@ -1,5 +1,10 @@
 # Release History - `IEKit`
 
+## 0.2.4 (2023-05-09)
+
+- Bumps frameworks to `open-autonomy-0.10.3` and `open-aea-1.33`
+- Implements t.co link verification for registrations
+
 ## 0.2.3 (2023-04-25)
 
 - Bumps `open-autonomy` framework
