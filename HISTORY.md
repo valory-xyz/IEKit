@@ -1,5 +1,8 @@
 # Release History - `IEKit`
 
+## (TBD)
+- Bumps to `tomte@v0.2.12` and cleans up the repo #53
+
 ## 0.2.4 (2023-05-09)
 
 - Bumps frameworks to `open-autonomy-0.10.3` and `open-aea-1.33`
