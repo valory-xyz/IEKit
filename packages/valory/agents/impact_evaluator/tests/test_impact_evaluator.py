@@ -21,6 +21,7 @@
 
 from pathlib import Path
 from typing import Tuple
+
 import pytest
 from aea.configurations.data_types import PublicId
 from aea_test_autonomy.base_test_classes.agents import (
@@ -37,44 +38,35 @@ from aea_test_autonomy.fixture_helpers import ganache_scope_class  # noqa: F401
 from aea_test_autonomy.fixture_helpers import ganache_scope_function  # noqa: F401
 from aea_test_autonomy.fixture_helpers import hardhat_addr  # noqa: F401
 from aea_test_autonomy.fixture_helpers import hardhat_port  # noqa: F401
+from aea_test_autonomy.fixture_helpers import ipfs_daemon  # noqa: F401
+from aea_test_autonomy.fixture_helpers import ipfs_domain  # noqa: F401
 from aea_test_autonomy.fixture_helpers import key_pairs  # noqa: F401
 from aea_test_autonomy.fixture_helpers import tendermint  # noqa: F401
 from aea_test_autonomy.fixture_helpers import tendermint_port  # noqa: F401
-from aea_test_autonomy.fixture_helpers import ipfs_daemon  # noqa: F401
-from aea_test_autonomy.fixture_helpers import ipfs_domain  # noqa: F401
-from packages.valory.agents.impact_evaluator.tests.helpers.fixtures import (  # noqa: F401
-    UseHardHatImpactEvaluatorBaseTest,
-    UseMockTwitterApiBaseTest,
-)
+
 from packages.valory.agents.impact_evaluator.tests.helpers.docker import (
     DEFAULT_JSON_SERVER_ADDR as _DEFAULT_JSON_SERVER_ADDR,
 )
 from packages.valory.agents.impact_evaluator.tests.helpers.docker import (
     DEFAULT_JSON_SERVER_PORT as _DEFAULT_JSON_SERVER_PORT,
 )
-from packages.valory.skills.registration_abci.rounds import RegistrationStartupRound
-from packages.valory.skills.reset_pause_abci.rounds import ResetAndPauseRound
-from packages.valory.skills.dynamic_nft_abci.rounds import (
-    TokenTrackRound,
+from packages.valory.agents.impact_evaluator.tests.helpers.fixtures import (  # noqa: F401
+    UseHardHatImpactEvaluatorBaseTest,
+    UseMockTwitterApiBaseTest,
 )
-from packages.valory.skills.twitter_scoring_abci.rounds import (
-    TwitterScoringRound,
-)
+from packages.valory.skills.ceramic_read_abci.rounds import StreamReadRound
 from packages.valory.skills.ceramic_write_abci.rounds import (
     RandomnessRound,
     SelectKeeperRound,
     StreamWriteRound,
     VerificationRound,
 )
-from packages.valory.skills.ceramic_read_abci.rounds import StreamReadRound
-
-from packages.valory.skills.generic_scoring_abci.rounds import (
-    GenericScoringRound,
-)
-
-from packages.valory.skills.path_switch_abci.rounds import (
-    PathSwitchRound,
-)
+from packages.valory.skills.dynamic_nft_abci.rounds import TokenTrackRound
+from packages.valory.skills.generic_scoring_abci.rounds import GenericScoringRound
+from packages.valory.skills.path_switch_abci.rounds import PathSwitchRound
+from packages.valory.skills.registration_abci.rounds import RegistrationStartupRound
+from packages.valory.skills.reset_pause_abci.rounds import ResetAndPauseRound
+from packages.valory.skills.twitter_scoring_abci.rounds import TwitterScoringRound
 
 
 HAPPY_PATH: Tuple[RoundChecks, ...] = (
