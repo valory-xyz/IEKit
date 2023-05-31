@@ -1,7 +1,10 @@
 # Release History - `IEKit`
 
-## (TBD)
+## 0.2.5 (2023-05-31)
+
+- Bumps frameworks to `open-autonony-0.10.5.post1` and `open-aea-1.34`
 - Bumps to `tomte@v0.2.12` and cleans up the repo #53
+- Implements twitter shortened link verification
 
 ## 0.2.4 (2023-05-09)
 
