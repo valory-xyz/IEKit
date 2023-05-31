@@ -7,12 +7,12 @@ aea_version: '>=1.19.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeialhcja5fhf2ahyx5no2aajvnfhh4tj7ihhx65qpoohc4n5wfr76q
   tests/__init__.py: bafybeibknjewfed3d5ypi46ipuzfxdcps5ief2hfd3a2tfvm4gjtzzblme
-  tests/helpers/__init__.py: bafybeiauwuw4a4wxqacqqkkk52ktps2qedadhypvh3ex7uqs7qaqrpygmy
+  tests/helpers/__init__.py: bafybeif7verbag26h6i35gr5rlatxl7veq4drup5ykwdvhgtussf2jreei
   tests/helpers/constants.py: bafybeibbokz7gzdlubnjwxrmh4tqckc7j75hfy3ae6l5a63mrbd4hp6l7u
   tests/helpers/data/json_server/data.json: bafybeidjhs6bp4vvkbuetddg4yq6ilvqobq755cixq2vv233k2u352rq7m
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
-  tests/helpers/fixtures.py: bafybeid7spk5nuu5chsy5q5qjgw7gui5ysxm77lxru62imyx4ok6fjqreq
-  tests/test_impact_evaluator.py: bafybeieyrpw77jtkxafzxuqs2eygy4hnialjgpksfld54d5lnza64bvb6e
+  tests/helpers/fixtures.py: bafybeidfsamzdrqqkdra4ektollyfkhiyb2iqymy6djavgewon2cb23vwu
+  tests/test_impact_evaluator.py: bafybeiazdcvzsmm2h6h5ufx4bjdwcwbzlexemot3kjp6h6gayrrpwt4kpm
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihaax5od5zo5jk2l62hv4jwuwtxloh5mijozudpsjombqc4ncmi6i
