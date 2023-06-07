@@ -1,10 +1,15 @@
 # Release History - `IEKit`
 
+## 0.2.6 (2023-06-07)
+
+- Bumps `open-autonomy` framework to `v0.10.0.post2` #57
+- Pins typing extension #56
+
 ## 0.2.5 (2023-05-31)
 
-- Bumps frameworks to `open-autonony-0.10.5.post1` and `open-aea-1.34`
+- Bumps frameworks to `open-autonomy-0.10.5.post1` and `open-aea-1.34.0` #55
 - Bumps to `tomte@v0.2.12` and cleans up the repo #53
-- Implements twitter shortened link verification
+- Implements twitter shortened link verification #52
 
 ## 0.2.4 (2023-05-09)
 
