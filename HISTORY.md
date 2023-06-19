@@ -1,8 +1,12 @@
 # Release History - `IEKit`
 
+## 0.2.7 (2023-06-19)
+
+- Bumps `open-autonomy` framework to `v0.10.6` #58
+
 ## 0.2.6 (2023-06-07)
 
-- Bumps `open-autonomy` framework to `v0.10.0.post2` #57
+- Bumps `open-autonomy` framework to `v0.10.5.post2` #57
 - Pins typing extension #56
 
 ## 0.2.5 (2023-05-31)
