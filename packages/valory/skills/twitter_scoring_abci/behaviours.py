@@ -42,8 +42,7 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
 
 
 ADDRESS_REGEX = r"0x[a-fA-F0-9]{40}"
-TCO_LINK_REGEX = r"https:\/\/t\.co\/[A-Za-z0-9]+"
-TAGLINE = "Autonomy is dead, long live autonomy"
+TAGLINE = "I'm linking my wallet to @Autonolas Contribute:"
 
 
 class ScoreReadBaseBehaviour(BaseBehaviour, ABC):
@@ -230,16 +229,15 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
         """Process Twitter user data"""
         return {i["id"]: "@" + i["username"] for i in user_data}
 
-    def _get_wallet_to_ids(self, tweets: List) -> Generator[None, None, Dict[str, str]]:
+    def _get_wallet_to_ids(self, tweets: List) -> Dict[str, str]:
         """Process Twitter user data"""
         result = {}
         for tweet in tweets:
-            match = re.search(ADDRESS_REGEX, tweet["text"])
-            if match and TAGLINE in tweet["text"]:
-                valid_link = yield from self.check_whitepaper_link(tweet["text"])
-                if valid_link:
-                    wallet_address = Web3.toChecksumAddress(match.group())
-                    result[wallet_address] = tweet["author_id"]
+            address_match = re.search(ADDRESS_REGEX, tweet["text"])
+            tagline_match = re.search(TAGLINE, tweet["text"], re.IGNORECASE)
+            if address_match and tagline_match:
+                wallet_address = Web3.toChecksumAddress(address_match.group())
+                result[wallet_address] = tweet["author_id"]
         return result
 
     def _get_twitter_registrations(self) -> Generator[None, None, Dict]:
@@ -314,38 +312,13 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
             f"Got Twitter potential registrations: {registrations}"
         )
 
-        wallet_to_ids = yield from self._get_wallet_to_ids(registrations)
+        wallet_to_ids = self._get_wallet_to_ids(registrations)
 
         self.context.logger.info(f"Got Twitter registrations: {wallet_to_ids}")
 
         return {
             "wallet_to_users": wallet_to_ids,
         }
-
-    def check_whitepaper_link(self, text: str) -> Generator[None, None, bool]:
-        """Check whether a text contains a shortened t.co link that points to the whitepaper"""
-
-        # Check there is a t.co link
-        match = re.search(TCO_LINK_REGEX, text)
-        if not match:
-            return False
-
-        link = match.group().strip()
-
-        self.context.logger.info(f"Found url: {link}")
-
-        # Visit the link
-        response = yield from self.get_http_response(
-            method="GET",
-            url=link,
-        )
-
-        # Check response status
-        if response.status_code != 200:
-            self.context.logger.error(f"Could not visit url: {link} [{response}]")
-            return False
-
-        return "Whitepaper | Autonolas" in response.body.decode("utf-8")
 
     def update_ceramic_db(self, api_data: Dict) -> Dict:
         """Calculate the new content of the DB"""

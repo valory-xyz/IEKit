@@ -50,7 +50,6 @@ ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 TWITTER_MENTIONS_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id=0"
 TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=%23autonolas&tweet.fields=author_id,created_at&max_results=100"
-WHITEPAPER_SHORTENED_URL = "https://t.co/lDssYx8Mmu"
 
 DUMMY_MENTIONS_RESPONSE = {
     "data": [
@@ -145,7 +144,7 @@ DUMMY_REGISTRATIONS_RESPONSE = {
     "data": [
         {
             "author_id": "1286010187325812739",
-            "text": f"{TAGLINE} #autonolas {ZERO_ADDRESS} {WHITEPAPER_SHORTENED_URL}",
+            "text": f"{TAGLINE} {ZERO_ADDRESS}",
         },
     ],
     "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
@@ -170,7 +169,7 @@ DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE_2 = {
     "data": [
         {
             "author_id": "1286010187325812739",
-            "text": f"{TAGLINE} #autonolas {ZERO_ADDRESS}",
+            "text": f"{TAGLINE} {ZERO_ADDRESS}",
         },
     ],
     "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
@@ -267,7 +266,6 @@ class TestTwitterScoringBehaviour(BaseBehaviourTest):
                     "request_urls": [
                         TWITTER_MENTIONS_URL,
                         TWITTER_REGISTRATIONS_URL,
-                        WHITEPAPER_SHORTENED_URL,
                     ],
                     "request_headers": [
                         "Authorization: Bearer <default_bearer_token>\r\n",
