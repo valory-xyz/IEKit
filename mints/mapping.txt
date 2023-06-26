@@ -9,4 +9,7 @@ token_id-"component_id"
 71-"skill/valory/impact_evaluator_abci/0.1.0"
 ---
 token_id-"agent_id"
-6-"agent/valory/impact_evaluator:0.1.0"
+6-"agent/valory/impact_evaluator/0.1.0"
+---
+token_id-"service_id" (Gnosis Chain)
+6-"service/valory/impact_evaluator/0.1.0"
