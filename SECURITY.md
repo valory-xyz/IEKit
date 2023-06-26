@@ -8,8 +8,8 @@ The following table shows which versions of `IEKit` are currently being supporte
 
 | Version    | Supported          |
 |------------|--------------------|
-| `v0.2.7`   | :white_check_mark: |
-| `< v0.2.7` | :x:                |
+| `v0.2.8`   | :white_check_mark: |
+| `< v0.2.8` | :x:                |
 
 ## Reporting a Vulnerability
 

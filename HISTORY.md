@@ -1,9 +1,15 @@
 # Release History - `IEKit`
 
+## 0.2.8 (2023-06-26)
+
+- Bumps frameworks to `open-autonomy-0.10.7` and `open-aea-1.35.0` #62
+- Prepares for minting the service #61
+- Fixes olas links #60
+
 ## 0.2.7 (2023-06-20)
 
 - Bumps `open-autonomy` framework to `v0.10.6` #58
-- Updates Twitter registration requirements
+- Updates Twitter registration requirements #59
 
 ## 0.2.6 (2023-06-07)
 
