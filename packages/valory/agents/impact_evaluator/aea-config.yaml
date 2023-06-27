@@ -21,7 +21,7 @@ connections:
 - valory/ledger:0.19.0:bafybeicgfupeudtmvehbwziqfxiz6ztsxr5rxzvalzvsdsspzz73o5fzfi
 - valory/p2p_libp2p_client:0.1.0:bafybeidwcobzb7ut3efegoedad7jfckvt2n6prcmd4g7xnkm6hp6aafrva
 contracts:
-- valory/dynamic_contribution:0.1.0:bafybeih4cucaunz36ez7t73mrtpldl6ltwmohxkiqbabht5lw2amftb7ay
+- valory/dynamic_contribution:0.1.0:bafybeih7skhn4y2cheaixjd7vi6bhyr2kmpvx3idzjr3bcvrwbkw3a2jha
 protocols:
 - open_aea/signing:1.0.0:bafybeibqlfmikg5hk4phzak6gqzhpkt6akckx7xppbp53mvwt6r73h7tk4
 - valory/contract_api:1.0.0:bafybeidv6wxpjyb2sdyibnmmum45et4zcla6tl63bnol6ztyoqvpl4spmy
@@ -29,13 +29,13 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeiff2dqnkeorf343fmb3547fhiznvdw4ewbwl4rqluek2cv6ibl5hi
 - valory/abstract_round_abci:0.1.0:bafybeiac62ennpw54gns2quk4g3yoaili2mb72nj6c52czobz5dcwj4mwi
-- valory/impact_evaluator_abci:0.1.0:bafybeigr3ky4cojbtuyt6lhcx7pnlollo6h6txfnoz5agjnzgor7mf73bq
+- valory/impact_evaluator_abci:0.1.0:bafybeiem37cvriln4sbrsq6vhfwctpdyxadc6frrasx4nhfcwq5ec2buxi
 - valory/path_switch_abci:0.1.0:bafybeifsvlsqclv4otiq6foaafvlxqy2k63uojsjgvmoiouizphthfc5yy
 - valory/generic_scoring_abci:0.1.0:bafybeihg67ylttj3mka6bv6h5ezglrmuvzow2pwptaqdz4kaki5lkacmku
-- valory/twitter_scoring_abci:0.1.0:bafybeigrmvtc27gqw4xwvag4mefp3noyntygzb4nljayrzov6hgorpnrzu
+- valory/twitter_scoring_abci:0.1.0:bafybeigvvjgzyp2rdukupo6i3ifa5o65iumgkakmaab6ny6jl46pp4xlk4
 - valory/ceramic_read_abci:0.1.0:bafybeia4lpblkwvngmlmemr3ihkccsyshwqig4yas6lbi574uxpemk6fzm
 - valory/ceramic_write_abci:0.1.0:bafybeib5sci3o2xzsxpnzes4yolxuzzcijfs5bqb6hwaym5howdlwkxqx4
-- valory/dynamic_nft_abci:0.1.0:bafybeidivhmd7mvgcfwakdkjcegqjzx5vevx4354hfxy6twjhlg7oa53mu
+- valory/dynamic_nft_abci:0.1.0:bafybeicz2ctm3ymgvsbbd37w7deed2h5pgqy5sky3kt27zfbdmcntnbvdm
 - valory/registration_abci:0.1.0:bafybeib6fsfur5jnflcveidnaeylneybwazewufzwa5twnwovdqgwtwsxm
 - valory/reset_pause_abci:0.1.0:bafybeibqz7y3i4aepuprhijwdydkcsbqjtpeea6gdzpp5fgc6abrvjz25a
 - valory/termination_abci:0.1.0:bafybeieb3gnvjxxsh73g67m7rivzknwb63xu4qeagpkv7f4mqz33ecikem
