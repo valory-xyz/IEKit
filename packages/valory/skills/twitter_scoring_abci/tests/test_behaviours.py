@@ -49,7 +49,7 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 TWITTER_MENTIONS_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id=0"
-TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=%23autonolas&tweet.fields=author_id,created_at&max_results=100"
+TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=%23olas&tweet.fields=author_id,created_at&max_results=100"
 
 DUMMY_MENTIONS_RESPONSE = {
     "data": [

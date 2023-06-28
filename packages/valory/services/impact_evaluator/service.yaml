@@ -108,7 +108,7 @@ extra:
         twitter_max_pages: 10
         twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23autonolas&tweet.fields=author_id,created_at&max_results=100}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&max_results=100}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
@@ -172,7 +172,7 @@ extra:
         twitter_max_pages: 10
         twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23autonolas&tweet.fields=author_id,created_at&max_results=100}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&max_results=100}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
@@ -236,7 +236,7 @@ extra:
         twitter_max_pages: 10
         twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23autonolas&tweet.fields=author_id,created_at&max_results=100}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&max_results=100}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
@@ -302,7 +302,7 @@ extra:
         twitter_max_pages: 10
         twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23autonolas&tweet.fields=author_id,created_at&max_results=100}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&max_results=100}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205

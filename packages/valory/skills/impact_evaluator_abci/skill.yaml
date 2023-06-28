@@ -157,7 +157,7 @@ models:
       twitter_mention_points: 200
       twitter_max_pages: 10
       twitter_search_endpoint: 2/tweets/search/recent?
-      twitter_search_args: query=%23autonolas&tweet.fields=author_id,created_at&max_results=100
+      twitter_search_args: query=%23olas&tweet.fields=author_id,created_at&max_results=100
       tx_timeout: 10.0
       whitelist_api_key: null
       whitelist_endpoint: http://localhost
