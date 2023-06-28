@@ -75,10 +75,12 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
             self.context.logger.info(f"Retrieved new mentions from Twitter: {mentions}")
 
             # Get hashtags from Twitter
-            hashtag_tweets = yield from self._get_twitter_hashtag_search()
+            hashtag_data = yield from self._get_twitter_hashtag_search()
 
             # Build registrations
-            wallet_to_users = self._get_twitter_registrations(hashtag_tweets)
+            wallet_to_users = self._get_twitter_registrations(
+                hashtag_data["tweets_hashtag"]
+            )
             self.context.logger.info(
                 f"Retrieved recent registrations from Twitter: {wallet_to_users}"
             )
@@ -86,11 +88,16 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
             # Check for errors and merge data
             if (
                 mentions != TwitterScoringRound.ERROR_PAYLOAD
-                and hashtag_tweets != TwitterScoringRound.ERROR_PAYLOAD
+                and hashtag_data != TwitterScoringRound.ERROR_PAYLOAD
             ):
                 api_data = mentions
                 api_data["wallet_to_users"] = wallet_to_users
-                api_data["user_to_hashtags"] = self._count_tweets(hashtag_tweets)
+                api_data["user_to_hashtags"] = self._count_tweets(
+                    hashtag_data["tweets_hashtag"]
+                )
+                api_data["id_to_usernames_hashtag"] = hashtag_data[
+                    "id_to_usernames_hashtag"
+                ]
                 pending_write = (
                     self.synchronized_data.pending_write
                     or api_data["user_to_mentions"]
@@ -242,7 +249,7 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 result[wallet_address] = tweet["author_id"]
         return result
 
-    def _get_twitter_hashtag_search(self) -> Generator[None, None, List]:
+    def _get_twitter_hashtag_search(self) -> Generator[None, None, Dict]:
         """Get registrations from Twitter"""
 
         api_base = self.params.twitter_api_base
@@ -266,9 +273,10 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
         headers = dict(Authorization=f"Bearer {self.params.twitter_api_bearer_token}")
 
-        self.context.logger.info(f"Retrieving wallets from Twitter API [{api_url}]")
+        self.context.logger.info(f"Retrieving hashes from Twitter API [{api_url}]")
 
         hashtag_tweets = []
+        user_data = []
         next_token = None
 
         # Pagination loop: we read a max of <twitter_max_pages> pages each period
@@ -317,6 +325,7 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 return TwitterScoringRound.ERROR_PAYLOAD
 
             hashtag_tweets += api_data["data"]
+            user_data += api_data["includes"]["users"]
 
             if "next_token" in api_data["meta"]:
                 next_token = api_data["meta"]["next_token"]
@@ -326,7 +335,12 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
         self.context.logger.info(f"Got Tweets including the hashtag : {hashtag_tweets}")
 
-        return hashtag_tweets
+        id_to_usernames = self._get_id_to_usernames(user_data)
+
+        return {
+            "tweets_hashtag": hashtag_tweets,
+            "id_to_usernames_hashtag": id_to_usernames,
+        }
 
     def update_ceramic_db(self, api_data: Dict) -> Dict:
         """Calculate the new content of the DB"""
@@ -341,6 +355,12 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 "twitter_id", twitter_id, {"points": new_points}
             )
 
+        # id_to_usernames
+        for twitter_id, twitter_name in api_data["id_to_usernames"].items():
+            ceramic_db.update_or_create_user(
+                "twitter_id", twitter_id, {"twitter_handle": twitter_name}
+            )
+
         # Add the new hashtag points
         for twitter_id, mentions in api_data["user_to_hashtags"].items():
             new_points = self.params.twitter_mention_points * mentions
@@ -348,8 +368,8 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 "twitter_id", twitter_id, {"points": new_points}
             )
 
-        # id_to_usernames
-        for twitter_id, twitter_name in api_data["id_to_usernames"].items():
+        # id_to_usernames_hashtags
+        for twitter_id, twitter_name in api_data["id_to_usernames_hashtag"].items():
             ceramic_db.update_or_create_user(
                 "twitter_id", twitter_id, {"twitter_handle": twitter_name}
             )
