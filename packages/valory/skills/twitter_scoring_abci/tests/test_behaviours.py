@@ -165,6 +165,14 @@ DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE = {
             "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
         },
     ],
+    "includes": {
+        "users": [
+            {"id": "1286010187325812739", "username": "username_a"},
+            {"id": "1286010187325812739", "username": "username_b"},
+            {"id": "1286010187325812738", "username": "username_c"},
+            {"id": "1286010187325812737", "username": "username_d"},
+        ]
+    },
     "meta": {
         "result_count": 1,
         "newest_id": "1",
@@ -180,6 +188,14 @@ DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE_2 = {
             "text": f"{TAGLINE} {ZERO_ADDRESS}",
         },
     ],
+    "includes": {
+        "users": [
+            {"id": "1286010187325812739", "username": "username_a"},
+            {"id": "1286010187325812739", "username": "username_b"},
+            {"id": "1286010187325812738", "username": "username_c"},
+            {"id": "1286010187325812737", "username": "username_d"},
+        ]
+    },
     "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
 }
 
