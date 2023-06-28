@@ -49,7 +49,7 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 TWITTER_MENTIONS_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id=0"
-TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=%23olas&tweet.fields=author_id,created_at&max_results=100"
+TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=%23olas&tweet.fields=author_id,created_at&max_results=100&since_id=0"
 
 DUMMY_MENTIONS_RESPONSE = {
     "data": [
@@ -196,6 +196,16 @@ DUMMY_REGISTRATIONS_RESPONSE_MISSING_META = {
 
 DUMMY_REGISTRATIONS_RESPONSE_MISSING_DATA = {
     "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
+}
+
+DUMMY_HASHTAGS_RESPONSE = {
+    "data": [
+        {"author_id": "1286010187325812739", "text": "dummy_text"},
+        {"author_id": "1286010187325812739", "text": "dummy_text"},
+        {"author_id": "1286010187325812738", "text": "dummy_text"},
+        {"author_id": "1286010187325812737", "text": "dummy_text"},
+    ],
+    "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
 }
 
 
@@ -394,13 +404,14 @@ class TestTwitterScoringBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL],
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE,
-                        )
+                        ),
+                        json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
-                    "status_codes": [404],
+                    "status_codes": [404, 200],
                 },
             ),
             (
@@ -415,7 +426,7 @@ class TestTwitterScoringBehaviourAPIError(BaseBehaviourTest):
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE,
                         ),
-                        json.dumps({}),
+                        json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
                     "status_codes": [200, 404],
                 },
@@ -427,13 +438,14 @@ class TestTwitterScoringBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL],
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_DATA,
-                        )
+                        ),
+                        json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
-                    "status_codes": [200],
+                    "status_codes": [200, 200],
                 },
             ),
             (
@@ -462,11 +474,12 @@ class TestTwitterScoringBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL],
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_META,
-                        )
+                        ),
+                        json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
                     "status_codes": [200],
                 },
@@ -495,13 +508,14 @@ class TestTwitterScoringBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL],
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_INCLUDES,
-                        )
+                        ),
+                        json.dumps({}),
                     ],
-                    "status_codes": [200],
+                    "status_codes": [200, 200],
                 },
             ),
         ],
