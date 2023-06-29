@@ -49,7 +49,7 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 TWITTER_MENTIONS_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id=0"
-TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=%23autonolas&tweet.fields=author_id,created_at&max_results=100"
+TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id=0"
 
 DUMMY_MENTIONS_RESPONSE = {
     "data": [
@@ -147,6 +147,14 @@ DUMMY_REGISTRATIONS_RESPONSE = {
             "text": f"{TAGLINE} {ZERO_ADDRESS}",
         },
     ],
+    "includes": {
+        "users": [
+            {"id": "1286010187325812739", "username": "username_a"},
+            {"id": "1286010187325812739", "username": "username_b"},
+            {"id": "1286010187325812738", "username": "username_c"},
+            {"id": "1286010187325812737", "username": "username_d"},
+        ]
+    },
     "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
 }
 
@@ -154,9 +162,17 @@ DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE = {
     "data": [
         {
             "author_id": "1286010187325812739",
-            "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
+            "text": f"dummy_text #olas {ZERO_ADDRESS}",
         },
     ],
+    "includes": {
+        "users": [
+            {"id": "1286010187325812739", "username": "username_a"},
+            {"id": "1286010187325812739", "username": "username_b"},
+            {"id": "1286010187325812738", "username": "username_c"},
+            {"id": "1286010187325812737", "username": "username_d"},
+        ]
+    },
     "meta": {
         "result_count": 1,
         "newest_id": "1",
@@ -172,6 +188,14 @@ DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE_2 = {
             "text": f"{TAGLINE} {ZERO_ADDRESS}",
         },
     ],
+    "includes": {
+        "users": [
+            {"id": "1286010187325812739", "username": "username_a"},
+            {"id": "1286010187325812739", "username": "username_b"},
+            {"id": "1286010187325812738", "username": "username_c"},
+            {"id": "1286010187325812737", "username": "username_d"},
+        ]
+    },
     "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
 }
 
@@ -179,7 +203,7 @@ DUMMY_REGISTRATIONS_RESPONSE_COUNT_ZERO = {
     "data": [
         {
             "author_id": "1286010187325812739",
-            "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
+            "text": f"dummy_text #olas {ZERO_ADDRESS}",
         },
     ],
     "meta": {"result_count": 0, "newest_id": "1", "oldest_id": "0"},
@@ -189,13 +213,31 @@ DUMMY_REGISTRATIONS_RESPONSE_MISSING_META = {
     "data": [
         {
             "author_id": "1286010187325812739",
-            "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
+            "text": f"dummy_text #olas {ZERO_ADDRESS}",
         },
     ]
 }
 
 DUMMY_REGISTRATIONS_RESPONSE_MISSING_DATA = {
     "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
+}
+
+DUMMY_HASHTAGS_RESPONSE = {
+    "data": [
+        {"author_id": "1286010187325812739", "text": "dummy_text"},
+        {"author_id": "1286010187325812739", "text": "dummy_text"},
+        {"author_id": "1286010187325812738", "text": "dummy_text"},
+        {"author_id": "1286010187325812737", "text": "dummy_text"},
+    ],
+    "includes": {
+        "users": [
+            {"id": "1286010187325812739", "username": "username_a"},
+            {"id": "1286010187325812739", "username": "username_b"},
+            {"id": "1286010187325812738", "username": "username_c"},
+            {"id": "1286010187325812737", "username": "username_d"},
+        ]
+    },
+    "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
 }
 
 
@@ -394,13 +436,14 @@ class TestTwitterScoringBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL],
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE,
-                        )
+                        ),
+                        json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
-                    "status_codes": [404],
+                    "status_codes": [404, 200],
                 },
             ),
             (
@@ -415,7 +458,7 @@ class TestTwitterScoringBehaviourAPIError(BaseBehaviourTest):
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE,
                         ),
-                        json.dumps({}),
+                        json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
                     "status_codes": [200, 404],
                 },
@@ -427,13 +470,14 @@ class TestTwitterScoringBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL],
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_DATA,
-                        )
+                        ),
+                        json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
-                    "status_codes": [200],
+                    "status_codes": [200, 200],
                 },
             ),
             (
@@ -462,13 +506,14 @@ class TestTwitterScoringBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL],
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_META,
-                        )
+                        ),
+                        json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
-                    "status_codes": [200],
+                    "status_codes": [200, 200],
                 },
             ),
             (
@@ -495,13 +540,14 @@ class TestTwitterScoringBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL],
+                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_INCLUDES,
-                        )
+                        ),
+                        json.dumps({}),
                     ],
-                    "status_codes": [200],
+                    "status_codes": [200, 200],
                 },
             ),
         ],
