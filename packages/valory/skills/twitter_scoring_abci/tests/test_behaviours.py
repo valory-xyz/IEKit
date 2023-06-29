@@ -162,7 +162,7 @@ DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE = {
     "data": [
         {
             "author_id": "1286010187325812739",
-            "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
+            "text": f"dummy_text #olas {ZERO_ADDRESS}",
         },
     ],
     "includes": {
@@ -203,7 +203,7 @@ DUMMY_REGISTRATIONS_RESPONSE_COUNT_ZERO = {
     "data": [
         {
             "author_id": "1286010187325812739",
-            "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
+            "text": f"dummy_text #olas {ZERO_ADDRESS}",
         },
     ],
     "meta": {"result_count": 0, "newest_id": "1", "oldest_id": "0"},
@@ -213,7 +213,7 @@ DUMMY_REGISTRATIONS_RESPONSE_MISSING_META = {
     "data": [
         {
             "author_id": "1286010187325812739",
-            "text": f"dummy_text #autonolas {ZERO_ADDRESS}",
+            "text": f"dummy_text #olas {ZERO_ADDRESS}",
         },
     ]
 }
