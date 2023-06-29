@@ -77,19 +77,18 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
             # Get hashtags from Twitter
             hashtag_data = yield from self._get_twitter_hashtag_search()
 
-            # Build registrations
-            wallet_to_users = self._get_twitter_registrations(
-                hashtag_data["tweets_hashtag"]
-            )
-            self.context.logger.info(
-                f"Retrieved recent registrations from Twitter: {wallet_to_users}"
-            )
-
             # Check for errors and merge data
             if (
                 mentions != TwitterScoringRound.ERROR_PAYLOAD
                 and hashtag_data != TwitterScoringRound.ERROR_PAYLOAD
             ):
+                # Build registrations
+                wallet_to_users = self._get_twitter_registrations(
+                    hashtag_data["tweets_hashtag"]
+                )
+                self.context.logger.info(
+                    f"Retrieved recent registrations from Twitter: {wallet_to_users}"
+                )
                 api_data = mentions
                 api_data["wallet_to_users"] = wallet_to_users
                 api_data["user_to_hashtags"] = self._count_tweets(
