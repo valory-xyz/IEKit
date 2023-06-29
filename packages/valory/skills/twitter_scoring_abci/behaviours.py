@@ -323,6 +323,12 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 )
                 return TwitterScoringRound.ERROR_PAYLOAD
 
+            if "includes" not in api_data or "users" not in api_data["includes"]:
+                self.context.logger.error(
+                    f"Twitter API response does not contain the required 'includes/users' field: {api_data!r}"
+                )
+                return TwitterScoringRound.ERROR_PAYLOAD
+
             hashtag_tweets += api_data["data"]
             user_data += api_data["includes"]["users"]
 
