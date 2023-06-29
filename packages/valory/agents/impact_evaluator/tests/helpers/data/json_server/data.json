@@ -46,7 +46,23 @@
             "author_id":"1408535517558415364"
          }
       ],
-      "meta":{
+     "includes": {
+         "users": [
+            {
+               "id": "315490172",
+               "username": "username_a"
+            },
+            {
+               "id": "315490172",
+               "username": "username_b"
+            },
+            {
+               "id": "315490172",
+               "username": "username_c"
+            }
+         ]
+      },
+     "meta":{
          "newest_id":"1635694341422297098",
          "oldest_id":"1635694341422297098",
          "result_count":1
