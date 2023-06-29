@@ -513,7 +513,7 @@ class TestTwitterScoringBehaviourAPIError(BaseBehaviourTest):
                         ),
                         json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
-                    "status_codes": [200],
+                    "status_codes": [200, 200],
                 },
             ),
             (
