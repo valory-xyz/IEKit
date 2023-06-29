@@ -9,7 +9,7 @@ fingerprint:
   tests/__init__.py: bafybeibknjewfed3d5ypi46ipuzfxdcps5ief2hfd3a2tfvm4gjtzzblme
   tests/helpers/__init__.py: bafybeif7verbag26h6i35gr5rlatxl7veq4drup5ykwdvhgtussf2jreei
   tests/helpers/constants.py: bafybeibbokz7gzdlubnjwxrmh4tqckc7j75hfy3ae6l5a63mrbd4hp6l7u
-  tests/helpers/data/json_server/data.json: bafybeidjhs6bp4vvkbuetddg4yq6ilvqobq755cixq2vv233k2u352rq7m
+  tests/helpers/data/json_server/data.json: bafybeiennke2pehckrrp62zh3fwlrdn4xeyp5ecwsykfwdzuohpnq2awbu
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeidfsamzdrqqkdra4ektollyfkhiyb2iqymy6djavgewon2cb23vwu
   tests/test_impact_evaluator.py: bafybeiazdcvzsmm2h6h5ufx4bjdwcwbzlexemot3kjp6h6gayrrpwt4kpm
@@ -29,10 +29,10 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeiff2dqnkeorf343fmb3547fhiznvdw4ewbwl4rqluek2cv6ibl5hi
 - valory/abstract_round_abci:0.1.0:bafybeiac62ennpw54gns2quk4g3yoaili2mb72nj6c52czobz5dcwj4mwi
-- valory/impact_evaluator_abci:0.1.0:bafybeif7sajbt5xhdoamog225yb7zuovhug4f7xic4si3qxtvmfolvl7h4
+- valory/impact_evaluator_abci:0.1.0:bafybeid2gnxxqsocjqhjymbnufc37mzjuxkac2yj7jnmvlfgnwutkgndqa
 - valory/path_switch_abci:0.1.0:bafybeifsvlsqclv4otiq6foaafvlxqy2k63uojsjgvmoiouizphthfc5yy
 - valory/generic_scoring_abci:0.1.0:bafybeihg67ylttj3mka6bv6h5ezglrmuvzow2pwptaqdz4kaki5lkacmku
-- valory/twitter_scoring_abci:0.1.0:bafybeifn5sezkjw5zka3kditatch6wee6fotc7ni6btfrwb7q23nh3z6qq
+- valory/twitter_scoring_abci:0.1.0:bafybeifsfdgaplu3m4wj6xq3on5x4tpga5zl3gqbl7gad7ijwafasysi7i
 - valory/ceramic_read_abci:0.1.0:bafybeia4lpblkwvngmlmemr3ihkccsyshwqig4yas6lbi574uxpemk6fzm
 - valory/ceramic_write_abci:0.1.0:bafybeib5sci3o2xzsxpnzes4yolxuzzcijfs5bqb6hwaym5howdlwkxqx4
 - valory/dynamic_nft_abci:0.1.0:bafybeicz2ctm3ymgvsbbd37w7deed2h5pgqy5sky3kt27zfbdmcntnbvdm
