@@ -164,6 +164,22 @@ class TestTwitterScoringRound(BaseScoreReadRoundTest):
                 ),
                 synchronized_data_attr_checks=[],
             ),
+            RoundTestCase(
+                name="API error: max retries",
+                initial_data={
+                    "api_retries": 2,
+                },
+                payloads=get_payloads(
+                    payload_cls=TwitterScoringPayload,
+                    data=get_dummy_twitter_scoring_payload_serialized(api_error=True),
+                ),
+                final_data={},
+                event=Event.DONE,
+                most_voted_payload=get_dummy_twitter_scoring_payload_serialized(
+                    api_error=True
+                ),
+                synchronized_data_attr_checks=[],
+            ),
         ),
     )
     def test_run(self, test_case: RoundTestCase) -> None:
