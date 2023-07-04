@@ -159,7 +159,7 @@ models:
       keeper_allowed_retries: 3
       reset_pause_duration: ${int:300}
       on_chain_service_id: ${int:null}
-      reset_tendermint_after: 2
+      reset_tendermint_after: ${int:2}
       retry_attempts: 400
       retry_timeout: 3
       request_retry_delay: 1.0
