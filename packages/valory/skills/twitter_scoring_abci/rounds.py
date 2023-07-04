@@ -36,6 +36,9 @@ from packages.valory.skills.abstract_round_abci.base import (
 from packages.valory.skills.twitter_scoring_abci.payloads import TwitterScoringPayload
 
 
+MAX_API_RETRIES = 3
+
+
 class Event(Enum):
     """TwitterScoringAbciApp Events"""
 
@@ -62,6 +65,11 @@ class SynchronizedData(BaseSynchronizedData):
         """Checks whether there are changes pending to be written to Ceramic."""
         return cast(bool, self.db.get("pending_write", False))
 
+    @property
+    def api_retries(self) -> int:
+        """Gets the number of API retries."""
+        return cast(int, self.db.get("api_retries", 0))
+
 
 class TwitterScoringRound(CollectSameUntilThresholdRound):
     """TwitterScoringRound"""
@@ -77,7 +85,20 @@ class TwitterScoringRound(CollectSameUntilThresholdRound):
             if self.most_voted_payload == json.dumps(
                 self.ERROR_PAYLOAD, sort_keys=True
             ):
-                return self.synchronized_data, Event.API_ERROR
+                api_retries = (
+                    cast(SynchronizedData, self.synchronized_data).api_retries + 1
+                )
+
+                if api_retries >= MAX_API_RETRIES:
+                    return self.synchronized_data, Event.DONE
+
+                synchronized_data = self.synchronized_data.update(
+                    synchronized_data_class=SynchronizedData,
+                    **{
+                        get_name(SynchronizedData.api_retries): api_retries,
+                    }
+                )
+                return synchronized_data, Event.API_ERROR
 
             payload = json.loads(self.most_voted_payload)
 
