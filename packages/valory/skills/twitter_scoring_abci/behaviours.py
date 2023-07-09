@@ -399,7 +399,8 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
         # latest_mention_tweet_id and latest_hashtag_tweet_id
         latest_id = max(
-            api_data["latest_mention_tweet_id"], api_data["latest_hashtag_tweet_id"]
+            int(api_data["latest_mention_tweet_id"]),
+            int(api_data["latest_hashtag_tweet_id"]),
         )
 
         ceramic_db.data["module_data"]["twitter"]["latest_mention_tweet_id"] = str(
