@@ -97,11 +97,15 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 api_data["id_to_usernames_hashtag"] = hashtag_data[
                     "id_to_usernames_hashtag"
                 ]
+                api_data["latest_hashtag_tweet_id"] = hashtag_data[
+                    "latest_hashtag_tweet_id"
+                ]
                 pending_write = (
                     self.synchronized_data.pending_write
                     or api_data["user_to_mentions"]
                     or api_data["id_to_usernames"]
                     or api_data["wallet_to_users"]
+                    or api_data["user_to_hashtags"]
                 )
                 # Calculate the new Ceramic content
                 payload_data = {
@@ -254,15 +258,15 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
         api_base = self.params.twitter_api_base
         api_endpoint = self.params.twitter_search_endpoint
         try:
-            latest_mention_tweet_id = int(
+            latest_hashtag_tweet_id = int(
                 self.synchronized_data.ceramic_db["module_data"]["twitter"][
                     "latest_mention_tweet_id"
                 ]
             )
         except KeyError:
-            latest_mention_tweet_id = 0
+            latest_hashtag_tweet_id = 0
         next_tweet_id = (
-            int(latest_mention_tweet_id) + 1 if int(latest_mention_tweet_id) != 0 else 0
+            int(latest_hashtag_tweet_id) + 1 if int(latest_hashtag_tweet_id) != 0 else 0
         )
         api_args = self.params.twitter_search_args.replace(
             "{since_id}", str(next_tweet_id)
@@ -277,6 +281,7 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
         hashtag_tweets = []
         user_data = []
         next_token = None
+        latest_hashtag_tweet_id = None
 
         # Pagination loop: we read a max of <twitter_max_pages> pages each period
         # Each page contains 100 tweets. The default value for twitter_max_pages is 10
@@ -331,6 +336,7 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
             hashtag_tweets += api_data["data"]
             user_data += api_data["includes"]["users"]
+            latest_hashtag_tweet_id = api_data["meta"]["newest_id"]
 
             if "next_token" in api_data["meta"]:
                 next_token = api_data["meta"]["next_token"]
@@ -345,6 +351,7 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
         return {
             "tweets_hashtag": hashtag_tweets,
             "id_to_usernames_hashtag": id_to_usernames,
+            "latest_hashtag_tweet_id": latest_hashtag_tweet_id or next_tweet_id,
         }
 
     def update_ceramic_db(self, api_data: Dict) -> Dict:
@@ -390,9 +397,13 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
         # entries on the database
         ceramic_db.merge_by_wallet()
 
-        # latest_mention_tweet_id
+        # latest_mention_tweet_id and latest_hashtag_tweet_id
+        latest_id = max(
+            api_data["latest_mention_tweet_id"], api_data["latest_hashtag_tweet_id"]
+        )
+
         ceramic_db.data["module_data"]["twitter"]["latest_mention_tweet_id"] = str(
-            api_data["latest_mention_tweet_id"]
+            latest_id
         )
 
         self.context.logger.info(
