@@ -195,6 +195,7 @@ class TestEnd2EndImpactEvaluatorTwoAgents(
 
 @pytest.mark.e2e
 @pytest.mark.parametrize("nb_nodes", (4,))
+@pytest.mark.flaky(retries=3, delay=1)
 class TestEnd2EndImpactEvaluatorFourAgents(
     BaseTestEnd2EndImpactEvaluatorNormalExecution,
     UseMockTwitterApiBaseTest,

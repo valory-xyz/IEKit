@@ -12,7 +12,7 @@ fingerprint:
   tests/helpers/data/json_server/data.json: bafybeiennke2pehckrrp62zh3fwlrdn4xeyp5ecwsykfwdzuohpnq2awbu
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeidfsamzdrqqkdra4ektollyfkhiyb2iqymy6djavgewon2cb23vwu
-  tests/test_impact_evaluator.py: bafybeiazdcvzsmm2h6h5ufx4bjdwcwbzlexemot3kjp6h6gayrrpwt4kpm
+  tests/test_impact_evaluator.py: bafybeifd2u64oyz6lwsmeuinuv2yp4pfk7vllgvocaq6fzad7rvy67kkxm
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihaax5od5zo5jk2l62hv4jwuwtxloh5mijozudpsjombqc4ncmi6i
