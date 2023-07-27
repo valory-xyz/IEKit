@@ -181,7 +181,7 @@ models:
       token_uri_base: ${str:https://pfp.staging.autonolas.tech/}
       whitelist_api_key: null
       whitelist_endpoint: http://localhost
-      points_to_image_hashes: ${str:null}
+      points_to_image_hashes: ${str:{}}
       twitter_api_base: ${str:https://api.twitter.com/}
       twitter_api_bearer_token: ${str:<default_bearer_token>}
       twitter_mentions_endpoint: ${str:2/users/1450081635559428107/mentions?}
