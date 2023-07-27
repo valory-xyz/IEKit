@@ -23,17 +23,17 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiac62ennpw54gns2quk4g3yoaili2mb72nj6c52czobz5dcwj4mwi
-- valory/ceramic_read_abci:0.1.0:bafybeia4lpblkwvngmlmemr3ihkccsyshwqig4yas6lbi574uxpemk6fzm
-- valory/path_switch_abci:0.1.0:bafybeifsvlsqclv4otiq6foaafvlxqy2k63uojsjgvmoiouizphthfc5yy
-- valory/generic_scoring_abci:0.1.0:bafybeihg67ylttj3mka6bv6h5ezglrmuvzow2pwptaqdz4kaki5lkacmku
-- valory/twitter_scoring_abci:0.1.0:bafybeigi7b6s64o3k3v4f46fsfknis4oazjfa45haozns7kwo3axxt6hrq
-- valory/ceramic_write_abci:0.1.0:bafybeib5sci3o2xzsxpnzes4yolxuzzcijfs5bqb6hwaym5howdlwkxqx4
-- valory/dynamic_nft_abci:0.1.0:bafybeicz2ctm3ymgvsbbd37w7deed2h5pgqy5sky3kt27zfbdmcntnbvdm
-- valory/registration_abci:0.1.0:bafybeib6fsfur5jnflcveidnaeylneybwazewufzwa5twnwovdqgwtwsxm
-- valory/reset_pause_abci:0.1.0:bafybeibqz7y3i4aepuprhijwdydkcsbqjtpeea6gdzpp5fgc6abrvjz25a
-- valory/termination_abci:0.1.0:bafybeieb3gnvjxxsh73g67m7rivzknwb63xu4qeagpkv7f4mqz33ecikem
-- valory/transaction_settlement_abci:0.1.0:bafybeihdpac4ayfgop3ixflimlb3zzyeejlpqtljfptdak6tc7aq4u5fzi
+- valory/abstract_round_abci:0.1.0:bafybeihgxynrcpkil66gak4qwnixojy5vbhsulbgo22ldz3owza7vajhua
+- valory/ceramic_read_abci:0.1.0:bafybeie6jkbax6fajhuckjlpulqxs64ztp4garg2n7tf4jss7qu7ges3uq
+- valory/path_switch_abci:0.1.0:bafybeigulqqbpodhcitip37thmundxru2ewemx45r6r3zgamgr4la33bca
+- valory/generic_scoring_abci:0.1.0:bafybeifkwhko5jouk6mnsg55n2t2ivfv37e5rznt2vdnkibmqnhartas5q
+- valory/twitter_scoring_abci:0.1.0:bafybeicwp24ffhp5jpg6wse5onvgmlizpmicnfopybwr6lf76bkf2ayug4
+- valory/ceramic_write_abci:0.1.0:bafybeig3r3jgpoxetpvfc6za65vroawjubgssin7jepzwxdrlpak7pvtmm
+- valory/dynamic_nft_abci:0.1.0:bafybeigigiusqpgqpgjym2wcitfxob6fsnhsvrqvsfrcww5xqgdkbsfoke
+- valory/registration_abci:0.1.0:bafybeietkq6jj4h2i4zt2kp57rtlogg3zuckv7jnlrvflk73bfbk2p2ziq
+- valory/reset_pause_abci:0.1.0:bafybeieyf5qnf6li7s66kssqyrsbjxoezozk354habi5gqs3h25de2xrey
+- valory/termination_abci:0.1.0:bafybeiel5arbh2tibc7mtonopjjmwi3kkfroklp7mb2wdx65tzzlwip6ea
+- valory/transaction_settlement_abci:0.1.0:bafybeidzp5hd2tbuizff23uwdqvhxuhhdswr7er2ckngkpl74izxc7dqie
 behaviours:
   main:
     args: {}
