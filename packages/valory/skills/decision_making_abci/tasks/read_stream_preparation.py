@@ -48,3 +48,51 @@ class ReadCentaursPreparation(TaskPreparation):
             "current_centaur_index": 0,  # reset the centaur index after reading
         }
         return updates, None
+
+
+class ReadContributeDBPreparation(TaskPreparation):
+    """ReadContributeDBPreparation"""
+
+    task_name = "read_contribute_db"
+    task_event = Event.READ_CONTRIBUTE_DB.value
+
+    def check_extra_conditions(self):
+        """Check extra conditions"""
+        return True
+
+    def _pre_task(self):
+        """Preparations before running the task"""
+        updates = {
+            "read_stream_id": self.params.ceramic_db_stream_id,
+            "read_target_property": "ceramic_db",
+        }
+        return updates, self.task_event
+
+    def _post_task(self):
+        """Preparations after running the task"""
+        updates = {}
+        return updates, None
+
+
+class ReadManualPointsPreparation(TaskPreparation):
+    """ReadManualPointsPreparation"""
+
+    task_name = "read_manual_points"
+    task_event = Event.READ_MANUAL_POINTS.value
+
+    def check_extra_conditions(self):
+        """Check extra conditions"""
+        return True
+
+    def _pre_task(self):
+        """Preparations before running the task"""
+        updates = {
+            "read_stream_id": self.params.manual_points_stream_id,
+            "read_target_property": self.params.manual_points_target_property,
+        }
+        return updates, self.task_event
+
+    def _post_task(self):
+        """Preparations after running the task"""
+        updates = {}
+        return updates, None

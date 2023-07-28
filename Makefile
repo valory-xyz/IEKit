@@ -82,14 +82,12 @@ common-checks-1:
 test:
 	pytest \
 	-rfE packages/valory/skills/ceramic_read_abci \
-	-rfE packages/valory/skills/path_switch_abci \
 	-rfE packages/valory/skills/generic_scoring_abci \
 	-rfE packages/valory/skills/twitter_scoring_abci \
 	-rfE packages/valory/skills/dynamic_nft_abci \
 	-rfE packages/valory/skills/ceramic_write_abci \
 	-rfE packages/valory/skills/impact_evaluator_abci \
 	--cov=packages.valory.skills.ceramic_read_abci \
-	--cov=packages.valory.skills.path_switch_abci \
 	--cov=packages.valory.skills.generic_scoring_abci \
 	--cov=packages.valory.skills.twitter_scoring_abci \
 	--cov=packages.valory.skills.dynamic_nft_abci \
@@ -128,7 +126,6 @@ fix-abci-app-specs:
 	autonomy analyse fsm-specs --update --app-class DynamicNFTAbciApp --package packages/valory/skills/dynamic_nft_abci/ || (echo "Failed to check dynamic_nft_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class ImpactEvaluatorSkillAbciApp --package packages/valory/skills/impact_evaluator_abci/ || (echo "Failed to check impact_evaluator_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class GenericScoringSkillAbciApp --package packages/valory/skills/generic_scoring_abci/ || (echo "Failed to check generic_scoring_abci abci consistency" && exit 1)
-	autonomy analyse fsm-specs --update --app-class PathSwitchSkillAbciApp --package packages/valory/skills/path_switch_abci/ || (echo "Failed to check path_switch_abci abci consistency" && exit 1)
 
 .PHONY: all-linters
 all-linters:

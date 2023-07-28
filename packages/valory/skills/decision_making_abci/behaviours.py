@@ -45,6 +45,11 @@ from packages.valory.skills.decision_making_abci.tasks.llm_preparation import (
 )
 from packages.valory.skills.decision_making_abci.tasks.read_stream_preparation import (
     ReadCentaursPreparation,
+    ReadContributeDBPreparation,
+    ReadManualPointsPreparation,
+)
+from packages.valory.skills.decision_making_abci.tasks.score_preparations import (
+    ScorePreparation,
 )
 from packages.valory.skills.decision_making_abci.tasks.twitter_preparation import (
     DailyTweetPreparation,
@@ -53,6 +58,7 @@ from packages.valory.skills.decision_making_abci.tasks.twitter_preparation impor
 from packages.valory.skills.decision_making_abci.tasks.write_stream_preparation import (
     DailyOrbisPreparation,
     UpdateCentaursPreparation,
+    WriteContributeDBPreparation,
 )
 
 
@@ -84,6 +90,22 @@ previous_event_to_task_preparation_cls = {
     },
     Event.UPDATE_CENTAURS.value: {
         "prev": UpdateCentaursPreparation,
+        "next": ReadContributeDBPreparation,
+    },
+    Event.READ_CONTRIBUTE_DB.value: {
+        "prev": ReadContributeDBPreparation,
+        "next": ReadManualPointsPreparation,
+    },
+    Event.READ_MANUAL_POINTS.value: {
+        "prev": ReadManualPointsPreparation,
+        "next": ScorePreparation,
+    },
+    Event.SCORE.value: {
+        "prev": ScorePreparation,
+        "next": WriteContributeDBPreparation,
+    },
+    Event.WRITE_CONTRIBUTE_DB.value: {
+        "prev": WriteContributeDBPreparation,
         "next": FinishedPipelinePreparation,
     },
     Event.NEXT_CENTAUR.value: {

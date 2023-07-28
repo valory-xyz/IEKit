@@ -20,13 +20,13 @@
 """This package contains round behaviours of ImpactEvaluatorSkillAbciApp."""
 import packages.valory.skills.ceramic_read_abci.rounds as CeramicReadAbci
 import packages.valory.skills.ceramic_write_abci.rounds as CeramicWriteAbci
+import packages.valory.skills.decision_making_abci.rounds as DecisionMakingAbci
 import packages.valory.skills.dynamic_nft_abci.rounds as DynamicNFTAbci
 import packages.valory.skills.generic_scoring_abci.rounds as GenericScoringAbci
+import packages.valory.skills.llm_abci.rounds as LLMAbciApp
 import packages.valory.skills.registration_abci.rounds as RegistrationAbci
 import packages.valory.skills.reset_pause_abci.rounds as ResetAndPauseAbci
 import packages.valory.skills.twitter_scoring_abci.rounds as TwitterScoringAbci
-import packages.valory.skills.decision_making_abci.rounds as DecisionMakingAbci
-import packages.valory.skills.llm_abci.rounds as LLMAbciApp
 import packages.valory.skills.twitter_write_abci.rounds as TwitterWriteAbciApp
 from packages.valory.skills.abstract_round_abci.abci_app_chain import (
     AbciAppTransitionMapping,
@@ -50,8 +50,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     DecisionMakingAbci.FinishedDecisionMakingDoneRound: ResetAndPauseAbci.ResetAndPauseRound,
     GenericScoringAbci.FinishedGenericScoringRound: TwitterScoringAbci.TwitterScoringRound,
     TwitterScoringAbci.FinishedTwitterScoringRound: DynamicNFTAbci.TokenTrackRound,
-    DynamicNFTAbci.FinishedTokenTrackWriteRound: CeramicWriteAbci.RandomnessRound,
-    DynamicNFTAbci.FinishedTokenTrackNoWriteRound: DecisionMakingAbci.DecisionMakingRound,
+    DynamicNFTAbci.FinishedTokenTrackRound: DecisionMakingAbci.DecisionMakingRound,
     LLMAbciApp.FinishedLLMRound: DecisionMakingAbci.DecisionMakingRound,
     TwitterWriteAbciApp.FinishedTwitterWriteRound: DecisionMakingAbci.DecisionMakingRound,
     CeramicReadAbci.FinishedReadingRound: DecisionMakingAbci.DecisionMakingRound,

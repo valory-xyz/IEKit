@@ -64,6 +64,8 @@ class Params(BaseParams):
         self.centaurs_stream_id = self._ensure("centaurs_stream_id", kwargs, str)
         self.ceramic_did_str = "did:key:" + kwargs.get("ceramic_did_str", "")
         self.ceramic_did_seed = kwargs.get("ceramic_did_seed")
+        self.ceramic_db_stream_id = self._ensure("ceramic_db_stream_id", kwargs, str)
+        self.manual_points_stream_id = self._ensure("manual_points_stream_id", kwargs, str)
         self.centaur_id_to_secrets = json.loads(
             self._ensure("centaur_id_to_secrets", kwargs, str)
         )

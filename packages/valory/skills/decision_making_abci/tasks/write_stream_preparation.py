@@ -183,3 +183,43 @@ class UpdateCentaursPreparation(WriteStreamPreparation):
             "has_centaurs_changes": False,
         }
         return updates, None
+
+
+class WriteContributeDBPreparation(WriteStreamPreparation):
+    """WriteContributeDBPreparation"""
+
+    task_name = "write_contribute"
+    task_event = Event.WRITE_CONTRIBUTE_DB.value
+
+    def check_extra_conditions(self):
+        """Check extra conditions"""
+        if not super().check_extra_conditions():
+            return False
+
+        return self.synchronized_data.pending_write
+
+    def _pre_task(self):
+        """Preparations before running the task"""
+        write_data = [
+            {
+                "op": "update",
+                "stream_id": self.params.ceramic_db_stream_id,
+                "data": self.synchronized_data.ceramic_db,
+                "did_str": self.params.ceramic_did_str,
+                "did_seed": self.params.ceramic_did_seed,
+            }
+        ]
+
+        updates = {
+            "write_results": [],  # clear previous results
+            "write_data": write_data,
+        }
+        return updates, self.task_event
+
+    def _post_task(self):
+        """Preparations after running the task"""
+
+        updates = {
+            "pending_write": False,
+        }
+        return updates, None

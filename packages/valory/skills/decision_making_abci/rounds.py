@@ -53,6 +53,9 @@ class Event(Enum):
     UPDATE_CENTAURS = "update_centaurs"
     NEXT_CENTAUR = "next_centaur"
     DONE = "done"
+    READ_CONTRIBUTE_DB = "read_contribute_db"
+    READ_MANUAL_POINTS = "read_manual_points"
+    WRITE_CONTRIBUTE_DB = "write_contribute_db"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -131,6 +134,16 @@ class SynchronizedData(BaseSynchronizedData):
     def has_centaurs_changes(self) -> bool:
         """Gets the has_centaurs_changes."""
         return cast(bool, self.db.get("has_centaurs_changes", False))
+
+    @property
+    def ceramic_db(self) -> dict:
+        """Get the data stored in the main stream."""
+        return cast(dict, self.db.get_strict("ceramic_db"))
+
+    @property
+    def pending_write(self) -> bool:
+        """Checks whether there are changes pending to be written to Ceramic."""
+        return cast(bool, self.db.get("pending_write", False))
 
 
 class DecisionMakingRound(CollectSameUntilThresholdRound):
