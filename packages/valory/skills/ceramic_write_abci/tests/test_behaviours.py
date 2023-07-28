@@ -25,6 +25,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional, Type, cast
 
 import pytest
+from aea.exceptions import AEAActException
 
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.valory.skills.abstract_round_abci.behaviour_utils import BaseBehaviour
@@ -47,6 +48,7 @@ from packages.valory.skills.ceramic_write_abci.behaviours import (
 )
 from packages.valory.skills.ceramic_write_abci.rounds import (
     Event,
+    FinishedMaxRetriesRound,
     FinishedVerificationRound,
     SynchronizedData,
 )
@@ -61,6 +63,8 @@ CERAMIC_API_STREAM_URL_READ = (
     "https://ceramic-clay.3boxlabs.com/api/v0/commits/dummy_stream_id"
 )
 CERAMIC_API_STREAM_URL_WRITE = "https://ceramic-clay.3boxlabs.com/api/v0/commits"
+
+CERAMIC_API_STREAM_URL_CREATE = "https://ceramic-clay.3boxlabs.com/api/v0/streams"
 
 DUMMY_DATA = {
     "user_to_total_points": {"user_a": 10, "user_b": 10},
@@ -257,11 +261,15 @@ class TestStreamWriteBehaviourSender(BaseCeramicWriteTest):
                     "Happy path",
                     initial_data=dict(
                         most_voted_keeper_address="test_agent_address",
-                        write_stream_id="dummy_stream_id",
-                        write_target_property="stream_content",
-                        stream_content=DUMMY_DATA,
-                        did=DUMMY_DID,
-                        did_seed=DUMMY_DID_SEED,
+                        write_data=[
+                            {
+                                "stream_id": "dummy_stream_id",
+                                "op": "update",
+                                "data": "stream_content",
+                                "did_str": DUMMY_DID,
+                                "did_seed": DUMMY_DID_SEED,
+                            },
+                        ],
                     ),
                     event=Event.DONE,
                 ),
@@ -287,12 +295,15 @@ class TestStreamWriteBehaviourSender(BaseCeramicWriteTest):
                     "Json decode error",
                     initial_data=dict(
                         most_voted_keeper_address="test_agent_address",
-                        write_stream_id="dummy_stream_id",
-                        write_target_property="stream_content",
-                        stream_content=DUMMY_DATA,
-                        default_write_property_name="stream_content",
-                        did=DUMMY_DID,
-                        did_seed=DUMMY_DID_SEED,
+                        write_data=[
+                            {
+                                "stream_id": "dummy_stream_id",
+                                "op": "update",
+                                "data": "stream_content",
+                                "did_str": DUMMY_DID,
+                                "did_seed": DUMMY_DID_SEED,
+                            }
+                        ],
                     ),
                     event=Event.DONE,
                 ),
@@ -346,6 +357,173 @@ class TestStreamWriteBehaviourSender(BaseCeramicWriteTest):
 
         self.complete(test_case.event)
 
+    @pytest.mark.parametrize(
+        "test_case, kwargs",
+        [
+            (
+                BehaviourTestCase(
+                    "Happy path - Orbis - 200",
+                    initial_data=dict(
+                        most_voted_keeper_address="test_agent_address",
+                        write_data=[
+                            {
+                                "op": "create",
+                                "data": "stream_content",
+                                "did_str": DUMMY_DID,
+                                "did_seed": DUMMY_DID_SEED,
+                                "extra_metadata": {"family": "orbis"},
+                            },
+                        ],
+                    ),
+                    event=Event.DONE,
+                ),
+                {
+                    "write_data": {
+                        "body": json.dumps(
+                            {"streamId": "dummy_stream_id"},
+                        ),
+                        "status": 200,
+                        "headers": "Content-Type: application/json\r\nAccept: application/json\r\n",
+                    },
+                    "orbis_status": 200,
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "Happy path - Orbis - 400",
+                    initial_data=dict(
+                        most_voted_keeper_address="test_agent_address",
+                        write_data=[
+                            {
+                                "op": "create",
+                                "data": "stream_content",
+                                "did_str": DUMMY_DID,
+                                "did_seed": DUMMY_DID_SEED,
+                                "extra_metadata": {"family": "orbis"},
+                            },
+                        ],
+                    ),
+                    event=Event.DONE,
+                ),
+                {
+                    "write_data": {
+                        "body": json.dumps(
+                            {"streamId": "dummy_stream_id"},
+                        ),
+                        "status": 200,
+                        "headers": "Content-Type: application/json\r\nAccept: application/json\r\n",
+                    },
+                    "orbis_status": 400,
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "Happy path - no extra metadata",
+                    initial_data=dict(
+                        most_voted_keeper_address="test_agent_address",
+                        write_data=[
+                            {
+                                "op": "create",
+                                "data": "stream_content",
+                                "did_str": DUMMY_DID,
+                                "did_seed": DUMMY_DID_SEED,
+                            },
+                        ],
+                    ),
+                    event=Event.DONE,
+                ),
+                {
+                    "write_data": {
+                        "body": json.dumps(
+                            {"streamId": "dummy_stream_id"},
+                        ),
+                        "status": 200,
+                        "headers": "Content-Type: application/json\r\nAccept: application/json\r\n",
+                    },
+                },
+            ),
+        ],
+    )
+    def test_create(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
+        """Run tests."""
+        self.fast_forward(test_case.initial_data)
+        self.behaviour.act_wrapper()
+
+        # Write data call
+        self.mock_http_request(
+            request_kwargs=dict(
+                method="POST",
+                headers=kwargs.get("write_data")["headers"],
+                version="",
+                url=CERAMIC_API_STREAM_URL_CREATE,
+            ),
+            response_kwargs=dict(
+                version="",
+                status_code=kwargs.get("write_data")["status"],
+                status_text="",
+                body=kwargs.get("write_data")["body"].encode(),
+            ),
+        )
+
+        # Orbis update
+        if "extra_metadata" in test_case.initial_data["write_data"][0].keys():
+            self.mock_http_request(
+                request_kwargs=dict(
+                    method="GET",
+                    headers="Content-Type: application/json\r\nAccess-Control-Allow-Origin: *\r\n",
+                    version="",
+                    url="https://api.orbis.club/index-stream/mainnet/dummy_stream_id",
+                ),
+                response_kwargs=dict(
+                    version="",
+                    status_code=kwargs.get("orbis_status"),
+                    status_text="",
+                    body=json.dumps({}).encode(),
+                ),
+            )
+
+        self.complete(test_case.event)
+
+    @pytest.mark.parametrize(
+        "test_case, kwargs",
+        [
+            (
+                BehaviourTestCase(
+                    "Incorrect stream op",
+                    initial_data=dict(
+                        most_voted_keeper_address="test_agent_address",
+                        write_data=[
+                            {
+                                "op": "wrong_op",
+                                "data": "stream_content",
+                                "did_str": DUMMY_DID,
+                                "did_seed": DUMMY_DID_SEED,
+                                "extra_metadata": {"family": "orbis"},
+                            },
+                        ],
+                    ),
+                    event=Event.DONE,
+                ),
+                {
+                    "write_data": {
+                        "body": json.dumps(
+                            {"streamId": "dummy_stream_id"},
+                        ),
+                        "status": 200,
+                        "headers": "Content-Type: application/json\r\nAccept: application/json\r\n",
+                    },
+                },
+            ),
+        ],
+    )
+    def test_raises_no_op(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
+        """Run tests."""
+        self.fast_forward(test_case.initial_data)
+        with pytest.raises(
+            AEAActException, match="Operation wrong_op is not supported"
+        ):
+            self.behaviour.act_wrapper()
+
 
 class TestStreamWriteBehaviourNonSender(BaseCeramicWriteTest):
     """Tests StreamWriteBehaviour"""
@@ -383,12 +561,15 @@ class TestStreamWriteBehaviourApiError(BaseCeramicWriteTest):
                     "API read error",
                     initial_data=dict(
                         most_voted_keeper_address="test_agent_address",
-                        write_stream_id="dummy_stream_id",
-                        write_target_property="stream_content",
-                        stream_content=DUMMY_DATA,
-                        default_write_property_name="stream_content",
-                        did=DUMMY_DID,
-                        did_seed=DUMMY_DID_SEED,
+                        write_data=[
+                            {
+                                "stream_id": "dummy_stream_id",
+                                "op": "update",
+                                "data": "stream_content",
+                                "did_str": DUMMY_DID,
+                                "did_seed": DUMMY_DID_SEED,
+                            }
+                        ],
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -407,12 +588,15 @@ class TestStreamWriteBehaviourApiError(BaseCeramicWriteTest):
                     "API write error",
                     initial_data=dict(
                         most_voted_keeper_address="test_agent_address",
-                        write_stream_id="dummy_stream_id",
-                        write_target_property="stream_content",
-                        stream_content=DUMMY_DATA,
-                        default_write_property_name="stream_content",
-                        did=DUMMY_DID,
-                        did_seed=DUMMY_DID_SEED,
+                        write_data=[
+                            {
+                                "stream_id": "dummy_stream_id",
+                                "op": "update",
+                                "data": "stream_content",
+                                "did_str": DUMMY_DID,
+                                "did_seed": DUMMY_DID_SEED,
+                            }
+                        ],
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -475,6 +659,114 @@ class TestStreamWriteBehaviourApiError(BaseCeramicWriteTest):
 
         self.complete(test_case.event)
 
+    @pytest.mark.parametrize(
+        "test_case, kwargs",
+        [
+            (
+                BehaviourTestCase(
+                    "API read error",
+                    initial_data=dict(
+                        most_voted_keeper_address="test_agent_address",
+                        write_data=[
+                            {
+                                "op": "create",
+                                "data": "stream_content",
+                                "did_str": DUMMY_DID,
+                                "did_seed": DUMMY_DID_SEED,
+                            }
+                        ],
+                    ),
+                    event=Event.API_ERROR,
+                ),
+                {},
+            ),
+        ],
+    )
+    def test_create(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
+        """Run tests."""
+        self.fast_forward(test_case.initial_data)
+        self.behaviour.act_wrapper()
+
+        self.mock_http_request(
+            request_kwargs=dict(
+                method="POST",
+                headers="Content-Type: application/json\r\nAccept: application/json\r\n",
+                version="",
+                url=CERAMIC_API_STREAM_URL_CREATE,
+            ),
+            response_kwargs=dict(
+                version="",
+                status_code=400,
+                status_text="",
+                body="{}".encode(),
+            ),
+        )
+
+        self.complete(test_case.event)
+
+
+class TestStreamWriteBehaviourRetriesError(BaseCeramicWriteTest):
+    """Tests StreamWriteBehaviour"""
+
+    behaviour_class = StreamWriteBehaviour
+    next_behaviour_class = make_degenerate_behaviour(FinishedMaxRetriesRound)
+
+    @pytest.mark.parametrize(
+        "test_case, kwargs",
+        [
+            (
+                BehaviourTestCase(
+                    "API read error",
+                    initial_data=dict(
+                        most_voted_keeper_address="test_agent_address",
+                        write_data=[
+                            {
+                                "stream_id": "dummy_stream_id",
+                                "op": "update",
+                                "data": "stream_content",
+                                "did_str": DUMMY_DID,
+                                "did_seed": DUMMY_DID_SEED,
+                            }
+                        ],
+                        api_retries=2,
+                    ),
+                    event=Event.MAX_RETRIES_ERROR,
+                ),
+                {
+                    "read_data": {
+                        "body": json.dumps(
+                            DUMMY_API_RESPONSE_OK,
+                        ),
+                        "status": 404,
+                        "headers": "",
+                    },
+                },
+            ),
+        ],
+    )
+    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
+        """Run tests."""
+        self.fast_forward(test_case.initial_data)
+        self.behaviour.act_wrapper()
+
+        # Read data call
+        self.mock_http_request(
+            request_kwargs=dict(
+                method="GET",
+                headers=kwargs.get("read_data")["headers"],
+                version="",
+                url=CERAMIC_API_STREAM_URL_READ,
+            ),
+            response_kwargs=dict(
+                version="",
+                status_code=kwargs.get("read_data")["status"],
+                status_text="",
+                body=kwargs.get("read_data")["body"].encode(),
+            ),
+        )
+
+        self.complete(test_case.event)
+
 
 class TestVerificationBehaviour(BaseCeramicWriteTest):
     """Tests StreamWriteBehaviour"""
@@ -490,14 +782,26 @@ class TestVerificationBehaviour(BaseCeramicWriteTest):
                     "Happy path",
                     initial_data=dict(
                         most_voted_keeper_address="test_agent_address",
-                        write_stream_id="dummy_stream_id",
-                        write_target_property="stream_content",
-                        stream_content=DUMMY_DATA,
-                        default_write_property_name="stream_content",
-                        did=DUMMY_DID,
-                        did_seed=DUMMY_DID_SEED,
+                        write_data=[
+                            {
+                                "stream_id": "dummy_stream_id",
+                                "op": "update",
+                                "data": {
+                                    "wallet_to_users": {},
+                                    "user_to_total_points": {
+                                        "user_a": 10,
+                                        "user_b": 10,
+                                    },
+                                    "id_to_usernames": {},
+                                    "latest_mention_tweet_id": 15,
+                                },
+                                "did_str": DUMMY_DID,
+                                "did_seed": DUMMY_DID_SEED,
+                            }
+                        ],
+                        stream_id_to_verify="dummy_stream_id",
                     ),
-                    event=Event.DONE,
+                    event=Event.DONE_FINISHED,
                 ),
                 {
                     "body": json.dumps(
@@ -543,14 +847,18 @@ class TestVerificationBehaviourApiError(BaseCeramicWriteTest):
                     "Api Error",
                     initial_data=dict(
                         most_voted_keeper_address="test_agent_address",
-                        write_stream_id="dummy_stream_id",
-                        write_target_property="stream_content",
-                        stream_content=DUMMY_DATA,
-                        default_write_property_name="stream_content",
-                        did=DUMMY_DID,
-                        did_seed=DUMMY_DID_SEED,
+                        write_data=[
+                            {
+                                "stream_id": "dummy_stream_id",
+                                "op": "update",
+                                "data": "stream_content",
+                                "did_str": DUMMY_DID,
+                                "did_seed": DUMMY_DID_SEED,
+                            }
+                        ],
+                        stream_id_to_verify="dummy_stream_id",
                     ),
-                    event=Event.API_ERROR,
+                    event=Event.VERIFICATION_ERROR,
                 ),
                 {
                     "body": json.dumps(
@@ -564,14 +872,18 @@ class TestVerificationBehaviourApiError(BaseCeramicWriteTest):
                     "Api wrong data",
                     initial_data=dict(
                         most_voted_keeper_address="test_agent_address",
-                        write_stream_id="dummy_stream_id",
-                        write_target_property="stream_content",
-                        stream_content=DUMMY_DATA,
-                        default_write_property_name="stream_content",
-                        did=DUMMY_DID,
-                        did_seed=DUMMY_DID_SEED,
+                        write_data=[
+                            {
+                                "stream_id": "dummy_stream_id",
+                                "op": "update",
+                                "data": "stream_content",
+                                "did_str": DUMMY_DID,
+                                "did_seed": DUMMY_DID_SEED,
+                            }
+                        ],
+                        stream_id_to_verify="dummy_stream_id",
                     ),
-                    event=Event.API_ERROR,
+                    event=Event.VERIFICATION_ERROR,
                 ),
                 {
                     "body": json.dumps(

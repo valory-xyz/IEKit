@@ -22,9 +22,10 @@
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Optional, Type
+from typing import Any, Dict, Optional, Type, cast
 
 import pytest
+from aea.exceptions import AEAActException
 
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.valory.skills.abstract_round_abci.behaviours import (
@@ -38,6 +39,7 @@ from packages.valory.skills.ceramic_read_abci.behaviours import (
     CeramicReadRoundBehaviour,
     StreamReadBehaviour,
 )
+from packages.valory.skills.ceramic_read_abci.models import SharedState
 from packages.valory.skills.ceramic_read_abci.rounds import (
     Event,
     FinishedReadingRound,
@@ -295,3 +297,31 @@ class TestStreamReadBehaviourApiError(BaseCeramicReadTest):
         )
 
         self.complete(test_case.event)
+
+
+class TestStreamReadBehaviourRaises(BaseCeramicReadTest):
+    """Tests StreamReadBehaviour"""
+
+    behaviour_class = StreamReadBehaviour
+    next_behaviour_class = StreamReadBehaviour
+
+    def test_raises_a(self) -> None:
+        """Run tests."""
+        params = cast(SharedState, self._skill.skill_context.params)
+        params.__dict__["_frozen"] = False
+        params.default_read_stream_id = None
+        self.fast_forward({})
+        with pytest.raises(
+            AEAActException,
+            match="read_stream_id has not been set neither in the synchronized_data nor as a default parameter",
+        ):
+            self.behaviour.act_wrapper()
+
+    def test_raises_b(self) -> None:
+        """Run tests."""
+        params = cast(SharedState, self._skill.skill_context.params)
+        params.__dict__["_frozen"] = False
+        params.default_read_target_property = None
+        self.fast_forward({})
+        with pytest.raises(AEAActException):
+            self.behaviour.act_wrapper()
