@@ -24,11 +24,11 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiaseziuvbzh3trjggl5hx2tv3fduqrpiwiyksudaf6nvuxmwrg74i
-- valory/ceramic_read_abci:0.1.0:bafybeiabpzbhx7uoj53hflvtwsthlbfxmiyszjdcdsz4qcl4gibwpurwha
+- valory/ceramic_read_abci:0.1.0:bafybeidqeol6ne7mjdzpjrg2bb3hrp2msk5vco6pybro6iudgt7k2wbiyq
 - valory/path_switch_abci:0.1.0:bafybeihp6z2jyk2loc7l5s5m5d32psltsx7xzapsqtma7rew6r6n3gvkaa
 - valory/generic_scoring_abci:0.1.0:bafybeif7ldswh2r5ujuppup36hbknctqgm7fl4uxvudifqsultqu2ucf5y
 - valory/twitter_scoring_abci:0.1.0:bafybeiacpacuncevjnt67cppzlgtao426ynxidginjyol3lyxdaimctbjq
-- valory/ceramic_write_abci:0.1.0:bafybeig62z3ytev3w36ms2eemxdqndvwlmcvlh6utt56eyi5ydvks6id3a
+- valory/ceramic_write_abci:0.1.0:bafybeif2vvmgj6zz7yqwsha4ug57rsrp3p3ogz4jhelmm6qf6tx2rtgeu4
 - valory/dynamic_nft_abci:0.1.0:bafybeihti5xfo5lknjsfk7mku6xo7vm5y2o4icujwpfvux5pmd44zuyc5u
 - valory/registration_abci:0.1.0:bafybeibafy7qmcvvzaykimy3mbqdwtcuajmbghqilaa7zwkh6wla33cfce
 - valory/reset_pause_abci:0.1.0:bafybeialcwck7fahrr23jckv5qjwg3cdq4ai2ihyjsofnbj44jzyl4cjmm
