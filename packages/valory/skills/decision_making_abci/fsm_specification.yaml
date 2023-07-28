@@ -1,0 +1,41 @@
+alphabet_in:
+- DAILY_ORBIS
+- DAILY_TWEET
+- DONE
+- LLM
+- NEXT_CENTAUR
+- NO_MAJORITY
+- READ_CENTAURS
+- ROUND_TIMEOUT
+- SCHEDULED_TWEET
+- UPDATE_CENTAURS
+default_start_state: DecisionMakingRound
+final_states:
+- FinishedDecisionMakingDoneRound
+- FinishedDecisionMakingLLMRound
+- FinishedDecisionMakingReadCentaursRound
+- FinishedDecisionMakingUpdateCentaurRound
+- FinishedDecisionMakingWriteOrbisRound
+- FinishedDecisionMakingWriteTwitterRound
+label: DecisionMakingAbciApp
+start_states:
+- DecisionMakingRound
+states:
+- DecisionMakingRound
+- FinishedDecisionMakingDoneRound
+- FinishedDecisionMakingLLMRound
+- FinishedDecisionMakingReadCentaursRound
+- FinishedDecisionMakingUpdateCentaurRound
+- FinishedDecisionMakingWriteOrbisRound
+- FinishedDecisionMakingWriteTwitterRound
+transition_func:
+    (DecisionMakingRound, DAILY_ORBIS): FinishedDecisionMakingWriteOrbisRound
+    (DecisionMakingRound, DAILY_TWEET): FinishedDecisionMakingWriteTwitterRound
+    (DecisionMakingRound, DONE): FinishedDecisionMakingDoneRound
+    (DecisionMakingRound, LLM): FinishedDecisionMakingLLMRound
+    (DecisionMakingRound, NEXT_CENTAUR): DecisionMakingRound
+    (DecisionMakingRound, NO_MAJORITY): DecisionMakingRound
+    (DecisionMakingRound, READ_CENTAURS): FinishedDecisionMakingReadCentaursRound
+    (DecisionMakingRound, ROUND_TIMEOUT): DecisionMakingRound
+    (DecisionMakingRound, SCHEDULED_TWEET): FinishedDecisionMakingWriteTwitterRound
+    (DecisionMakingRound, UPDATE_CENTAURS): FinishedDecisionMakingUpdateCentaurRound

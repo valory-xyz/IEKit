@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package aea.valory.llm.v1_0_0;
+
+message LlmMessage{
+
+  // Performatives and contents
+  message Request_Performative{
+    string prompt_template = 1;
+    map<string, string> prompt_values = 2;
+  }
+
+  message Response_Performative{
+    string value = 1;
+  }
+
+
+  oneof performative{
+    Request_Performative request = 5;
+    Response_Performative response = 6;
+  }
+}

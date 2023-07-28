@@ -1,0 +1,28 @@
+alphabet_in:
+- API_ERROR
+- CONTINUE
+- DONE
+- NO_MAJORITY
+- ROUND_TIMEOUT
+default_start_state: RandomnessTwitterRound
+final_states:
+- FinishedTwitterWriteRound
+label: TwitterWriteAbciApp
+start_states:
+- RandomnessTwitterRound
+states:
+- FinishedTwitterWriteRound
+- RandomnessTwitterRound
+- SelectKeeperTwitterRound
+- TwitterWriteRound
+transition_func:
+    (RandomnessTwitterRound, DONE): SelectKeeperTwitterRound
+    (RandomnessTwitterRound, NO_MAJORITY): RandomnessTwitterRound
+    (RandomnessTwitterRound, ROUND_TIMEOUT): RandomnessTwitterRound
+    (SelectKeeperTwitterRound, DONE): TwitterWriteRound
+    (SelectKeeperTwitterRound, NO_MAJORITY): RandomnessTwitterRound
+    (SelectKeeperTwitterRound, ROUND_TIMEOUT): RandomnessTwitterRound
+    (TwitterWriteRound, API_ERROR): RandomnessTwitterRound
+    (TwitterWriteRound, CONTINUE): TwitterWriteRound
+    (TwitterWriteRound, DONE): FinishedTwitterWriteRound
+    (TwitterWriteRound, ROUND_TIMEOUT): RandomnessTwitterRound

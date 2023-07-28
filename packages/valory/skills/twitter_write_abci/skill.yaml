@@ -1,0 +1,161 @@
+name: twitter_write_abci
+author: valory
+version: 0.1.0
+type: skill
+description: An abci skill that reads mentions from the Twitter API and assigns scores
+  to the users.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeifmfivpoooso45mltpffcv3vvonhrtycv443aqpzm6cetrkwopsdi
+  behaviours.py: bafybeid377rzt47onp6ra76wpzv7ma6cvvqhysk67dvvxkwwc4yrpspwga
+  dialogues.py: bafybeicbuuhc6u3oih6yeziqs7dqi2tebmahdgpc6sd5fzgqyjek6qhwty
+  fsm_specification.yaml: bafybeif77zpgvvwjxxpeakzbi5ftsjejlsryeyjhkzddpvqkcq6wrxzufy
+  handlers.py: bafybeibofqqb5dvfugwjzuwmm5ktcumwzdak43uyfvythrdrfhk7wcacne
+  models.py: bafybeidfipifkwti4lut4uzlyfy5rflxgszresbe2qprfn4enokte4x5v4
+  payloads.py: bafybeidpewmdpyumwuufkymibgeviivymrieh7sjkctdwizahn45nbuniq
+  rounds.py: bafybeidgrbo3wawml7rdguea5oviyocn2s6zgp52wsicjrsziw7olff3ka
+  tests/__init__.py: bafybeigh6rf2j2zt66rq7buojs7zsgxguv2pmav2p4lfi3xx5ayseexp2y
+  tests/test_behaviours.py: bafybeiejh5bbrt5ln66lrlckdtdmlbqxibif6bw723asf2kcjeknjnrvye
+  tests/test_dialogues.py: bafybeihcg2g7e53foxtikjidybhck6nvh7246ic3sgjlc6nr7gnmmsalna
+  tests/test_handlers.py: bafybeie6vov5jknpaqtkukh42lidfn3wigvw3q3lyxf6rexcdd4la7coka
+  tests/test_models.py: bafybeianlpj6dbpluowz64ydwvgr2stvurron4slc6tmdlxelrhlntf5nm
+  tests/test_payloads.py: bafybeietwilb3bgj6dvic435iz7cjwsirbgk42pyddhg6ihorqcl7sbhma
+  tests/test_rounds.py: bafybeia7j34hsmnygib4ser27yin2mktk5vrvlloozvtvoqtlzoz2ugaoq
+fingerprint_ignore_patterns: []
+connections:
+- valory/twitter:0.1.0:bafybeibndxp3l35osve5pj255waemunlzaacwtasyazjmcmrx7qo5wcrni
+contracts: []
+protocols:
+- valory/twitter:0.1.0:bafybeib4eyf7qbs7kdntqzhwqsaaj4o2mzcokcztaza6qgwt7sbxgkqu2m
+skills:
+- valory/abstract_round_abci:0.1.0:bafybeiaseziuvbzh3trjggl5hx2tv3fduqrpiwiyksudaf6nvuxmwrg74i
+behaviours:
+  main:
+    args: {}
+    class_name: TwitterWriteRoundBehaviour
+handlers:
+  abci:
+    args: {}
+    class_name: ABCIRoundHandler
+  contract_api:
+    args: {}
+    class_name: ContractApiHandler
+  http:
+    args: {}
+    class_name: HttpHandler
+  ledger_api:
+    args: {}
+    class_name: LedgerApiHandler
+  signing:
+    args: {}
+    class_name: SigningHandler
+  tendermint:
+    args: {}
+    class_name: TendermintHandler
+  twitter:
+    args: {}
+    class_name: TwitterHandler
+models:
+  abci_dialogues:
+    args: {}
+    class_name: AbciDialogues
+  benchmark_tool:
+    args:
+      log_dir: /logs
+    class_name: BenchmarkTool
+  contract_api_dialogues:
+    args: {}
+    class_name: ContractApiDialogues
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+  ledger_api_dialogues:
+    args: {}
+    class_name: LedgerApiDialogues
+  params:
+    args:
+      cleanup_history_depth: 1
+      cleanup_history_depth_current: null
+      drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
+      finalize_timeout: 60.0
+      genesis_config:
+        chain_id: chain-c4daS1
+        consensus_params:
+          block:
+            max_bytes: '22020096'
+            max_gas: '-1'
+            time_iota_ms: '1000'
+          evidence:
+            max_age_duration: '172800000000000'
+            max_age_num_blocks: '100000'
+            max_bytes: '1048576'
+          validator:
+            pub_key_types:
+            - ed25519
+          version: {}
+        genesis_time: '2022-05-20T16:00:21.735122717Z'
+        voting_power: '10'
+      history_check_timeout: 1205
+      keeper_allowed_retries: 3
+      keeper_timeout: 30.0
+      max_attempts: 10
+      max_healthcheck: 120
+      multisend_address: '0x0000000000000000000000000000000000000000'
+      on_chain_service_id: null
+      request_retry_delay: 1.0
+      request_timeout: 10.0
+      reset_pause_duration: 10
+      reset_tendermint_after: 2
+      retry_attempts: 400
+      retry_timeout: 3
+      round_timeout_seconds: 30.0
+      service_id: score_read
+      service_registry_address: null
+      setup:
+        all_participants: []
+        safe_contract_address: '0x0000000000000000000000000000000000000000'
+        consensus_threshold: null
+      share_tm_config_on_startup: false
+      sleep_time: 1
+      tendermint_check_sleep_delay: 3
+      tendermint_com_url: http://localhost:8080
+      tendermint_max_retries: 5
+      tendermint_p2p_url: localhost:26656
+      tendermint_url: http://localhost:26657
+      termination_sleep: 900
+      twitter_api_base: https://api.twitter.com/
+      tx_timeout: 10.0
+      use_termination: false
+      validate_timeout: 1205
+    class_name: Params
+  randomness_api:
+    args:
+      api_id: cloudflare
+      headers: {}
+      method: GET
+      parameters: {}
+      response_key: null
+      response_type: dict
+      retries: 5
+      url: https://drand.cloudflare.com/public/latest
+    class_name: RandomnessApi
+  requests:
+    args: {}
+    class_name: Requests
+  signing_dialogues:
+    args: {}
+    class_name: SigningDialogues
+  state:
+    args: {}
+    class_name: SharedState
+  tendermint_dialogues:
+    args: {}
+    class_name: TendermintDialogues
+  twitter_dialogues:
+    args: {}
+    class_name: TwitterDialogues
+dependencies:
+  web3:
+    version: ==5.31.4
+is_abstract: true
