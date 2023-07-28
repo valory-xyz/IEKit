@@ -7,12 +7,12 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
-  behaviours.py: bafybeifp3ycbgedwpfzhjcahld7ynzfzz6ag7nkhwmbb2yv4l6pulnd6ca
-  composition.py: bafybeiggdn7ofm3qrruad6gzdk3gncyq4yha5hg2o7kslhxstvunzta6pq
-  dialogues.py: bafybeigpwuzku3we7axmxeamg7vn656maww6emuztau5pg3ebsoquyfdqm
+  behaviours.py: bafybeihviyo3wdao3evum5ocvcryi7mnft57zbugdfguji2vd65l4ns6x4
+  composition.py: bafybeietqyp7zmapnggkzpjgavl4k42bc6wikfkxfyeku6d3bpwureissq
+  dialogues.py: bafybeid5wj7frspgfnrerpaamfiyqw25i6uwtnmn5o5xplpjxu2eku3w7a
   fsm_specification.yaml: bafybeicwm554rdmzvh5m55qabt57yz6xnt4whxjqwh5ypudk6hu4zn2pp4
-  handlers.py: bafybeiaqgaev2nfhuihhuxxxxtuiggin5zcpwn7ik7lok2n6ywi6dqy2ta
-  models.py: bafybeidzns3tvzqb5a7jurl2ed3ncjfcg2l5h4mxqgl7b26yuwfm3sw3ly
+  handlers.py: bafybeibkogrq2qarzop5fv6hepto5yg276rdlh2xnc2uqbs5ax4syjiwyu
+  models.py: bafybeidbdoyw5xc4h6vsey7g7in3ejypgmk5wsg4fz5j25sh652pajlwxm
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
   tests/test_behaviours.py: bafybeifkazsevd6vsfaapulouxepez3rl24y3rxgja5zhmj7s323zdjlmq
   tests/test_dialogues.py: bafybeieaos2byphju6i6xvytppqqcuqqvnpilnflsy73l3wqazzjttbg7m
@@ -33,9 +33,9 @@ skills:
 - valory/reset_pause_abci:0.1.0:bafybeialcwck7fahrr23jckv5qjwg3cdq4ai2ihyjsofnbj44jzyl4cjmm
 - valory/termination_abci:0.1.0:bafybeifqsogqiar4yook5bu3j6z66dbdcizey7dr3e5oxeocdjijvfbaja
 - valory/transaction_settlement_abci:0.1.0:bafybeiacwr7p4nhhufoey7uz2jqkegrlykdrmc7mm3rzkvh2mslu66gyle
-- valory/decision_making_abci:0.1.0:bafybeifibr2qzb7zg3bnhlb52g2behtgturiamx62uvyycpaw5tjhdgxfq
-- valory/llm_abci:0.1.0:bafybeiaoltmtqgp7ltmxwhvfl7sbuutpuvn5ooyezsya7f4xyykor6cbui
-- valory/twitter_write_abci:0.1.0:bafybeigehghgik7u5ebht5y4btz3tuhknr4wpeu7lnf5gpsfgji3uhec4a
+- valory/decision_making_abci:0.1.0:bafybeibodidt3aeamle5s2f3qdbmam2vqup52msf5hqscub4ctnpqtm2da
+- valory/llm_abci:0.1.0:bafybeihmbmhcfddhmugo6443lso6ayau35ayn2qa77bltvd7zs2gyvylne
+- valory/twitter_write_abci:0.1.0:bafybeicuieib63w5mc5drlnpraqh3wvudd6y7p2n2c23tm3jh6wmqvgkwq
 behaviours:
   main:
     args: {}
