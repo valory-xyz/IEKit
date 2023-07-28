@@ -25,7 +25,6 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiaseziuvbzh3trjggl5hx2tv3fduqrpiwiyksudaf6nvuxmwrg74i
 - valory/ceramic_read_abci:0.1.0:bafybeidqeol6ne7mjdzpjrg2bb3hrp2msk5vco6pybro6iudgt7k2wbiyq
-- valory/path_switch_abci:0.1.0:bafybeihp6z2jyk2loc7l5s5m5d32psltsx7xzapsqtma7rew6r6n3gvkaa
 - valory/generic_scoring_abci:0.1.0:bafybeif7ldswh2r5ujuppup36hbknctqgm7fl4uxvudifqsultqu2ucf5y
 - valory/twitter_scoring_abci:0.1.0:bafybeiacpacuncevjnt67cppzlgtao426ynxidginjyol3lyxdaimctbjq
 - valory/ceramic_write_abci:0.1.0:bafybeif2vvmgj6zz7yqwsha4ug57rsrp3p3ogz4jhelmm6qf6tx2rtgeu4
@@ -34,6 +33,9 @@ skills:
 - valory/reset_pause_abci:0.1.0:bafybeialcwck7fahrr23jckv5qjwg3cdq4ai2ihyjsofnbj44jzyl4cjmm
 - valory/termination_abci:0.1.0:bafybeifqsogqiar4yook5bu3j6z66dbdcizey7dr3e5oxeocdjijvfbaja
 - valory/transaction_settlement_abci:0.1.0:bafybeiacwr7p4nhhufoey7uz2jqkegrlykdrmc7mm3rzkvh2mslu66gyle
+- valory/decision_making_abci:0.1.0:bafybeifibr2qzb7zg3bnhlb52g2behtgturiamx62uvyycpaw5tjhdgxfq
+- valory/llm_abci:0.1.0:bafybeiaoltmtqgp7ltmxwhvfl7sbuutpuvn5ooyezsya7f4xyykor6cbui
+- valory/twitter_write_abci:0.1.0:bafybeigehghgik7u5ebht5y4btz3tuhknr4wpeu7lnf5gpsfgji3uhec4a
 behaviours:
   main:
     args: {}

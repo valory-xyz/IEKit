@@ -49,6 +49,7 @@ class Event(Enum):
     DAILY_TWEET = "daily_tweet"
     DAILY_ORBIS = "daily_orbis"
     SCHEDULED_TWEET = "scheduled_tweet"
+    SCORE = "score"
     UPDATE_CENTAURS = "update_centaurs"
     NEXT_CENTAUR = "next_centaur"
     DONE = "done"
@@ -146,6 +147,7 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
             # since this round receives the event via payload
             # Event.NO_MAJORITY, Event.DONE, Event.UPDATE_CENTAURS, Event.READ_CENTAURS,
             # Event.SCHEDULED_TWEET, Event.LLM, Event.DAILY_ORBIS, Event.DAILY_TWEET, Event.NEXT_CENTAUR
+            # Event.SCORE
 
             payload = json.loads(self.most_voted_payload)
             event = Event(payload["event"])
@@ -184,6 +186,10 @@ class FinishedDecisionMakingUpdateCentaurRound(DegenerateRound):
     """FinishedDecisionMakingUpdateCentaurRound"""
 
 
+class FinishedDecisionMakingScoreRound(DegenerateRound):
+    """FinishedDecisionMakingScoreRound"""
+
+
 class FinishedDecisionMakingDoneRound(DegenerateRound):
     """FinishedDecisionMakingDoneRound"""
 
@@ -201,6 +207,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.SCHEDULED_TWEET: FinishedDecisionMakingWriteTwitterRound,
             Event.DAILY_ORBIS: FinishedDecisionMakingWriteOrbisRound,
             Event.UPDATE_CENTAURS: FinishedDecisionMakingUpdateCentaurRound,
+            Event.SCORE: FinishedDecisionMakingScoreRound,
             Event.NEXT_CENTAUR: DecisionMakingRound,
             Event.DONE: FinishedDecisionMakingDoneRound,
             Event.NO_MAJORITY: DecisionMakingRound,
@@ -210,6 +217,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingLLMRound: {},
         FinishedDecisionMakingWriteTwitterRound: {},
         FinishedDecisionMakingWriteOrbisRound: {},
+        FinishedDecisionMakingScoreRound: {},
         FinishedDecisionMakingUpdateCentaurRound: {},
         FinishedDecisionMakingDoneRound: {},
     }
@@ -218,6 +226,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingLLMRound,
         FinishedDecisionMakingWriteTwitterRound,
         FinishedDecisionMakingWriteOrbisRound,
+        FinishedDecisionMakingScoreRound,
         FinishedDecisionMakingUpdateCentaurRound,
         FinishedDecisionMakingDoneRound,
     }
@@ -233,6 +242,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingLLMRound: {"llm_prompt_templates", "llm_values"},
         FinishedDecisionMakingWriteTwitterRound: {"write_data"},
         FinishedDecisionMakingWriteOrbisRound: {"write_data"},
+        FinishedDecisionMakingScoreRound: set(),
         FinishedDecisionMakingUpdateCentaurRound: set(),
         FinishedDecisionMakingDoneRound: set(),
     }
