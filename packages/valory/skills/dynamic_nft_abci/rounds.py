@@ -104,10 +104,7 @@ class TokenTrackRound(CollectSameUntilThresholdRound):
                     get_name(SynchronizedData.pending_write): pending_write,
                 }
             )
-            return (
-                synchronized_data,
-                Event.DONE
-            )
+            return (synchronized_data, Event.DONE)
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
         ):

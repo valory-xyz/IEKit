@@ -80,6 +80,7 @@ RandomnessApi = CeramicWriteRandomnessApi
 MARGIN = 5
 MULTIPLIER = 2
 
+
 class RandomnessApi(ApiSpecs):
     """A model that wraps ApiSpecs for randomness api specifications."""
 
