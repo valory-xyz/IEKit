@@ -144,10 +144,6 @@ class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
             "value": "stream_id_e2e",
         },
         {
-            "dotted_path": f"{__param_args_prefix}.default_read_target_property",
-            "value": "ceramic_db",
-        },
-        {
             "dotted_path": f"{__param_args_prefix}.default_write_target_property",
             "value": "ceramic_db",
         },

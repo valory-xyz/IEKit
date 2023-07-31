@@ -88,7 +88,7 @@ class ReadManualPointsPreparation(TaskPreparation):
         """Preparations before running the task"""
         updates = {
             "read_stream_id": self.params.manual_points_stream_id,
-            "read_target_property": self.params.manual_points_target_property,
+            "read_target_property": "score_data",
         }
         return updates, self.task_event
 
