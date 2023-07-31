@@ -7,19 +7,20 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
-  behaviours.py: bafybeihnm7246kergqi73twejecxu5rwtllqzhtmrlxivtovzixkpzr7hy
+  behaviours.py: bafybeiecgeionwiwb7xmrxyuypmkltpz7kqnl4dnpfind5niocdrcbytca
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
   fsm_specification.yaml: bafybeigjrwvgqw4qhjsthulgcx7ei4e5y23bmvyejhuzte3tqpucobayjy
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
-  models.py: bafybeiabdvmoojfj64xfomcsmej3ullzss7fgi4zztyqqno6i3mduhsski
+  models.py: bafybeictln7abrfqkm42euj2ldb2aqh3j3vuz45gltlepldzucgqgjy3va
   payloads.py: bafybeif5bomwy74bwnphsk6bty6qb6efugvjnnopsz7qjunpe6gtgjaxya
-  rounds.py: bafybeiadltxsgshhnvx6oe6kgxu357kyjekb5sb3rbdtmykjn35fljddwm
+  rounds.py: bafybeiem4jq43ufl2otrn572qhlr2hrixajrw6ommnasdbo4v2likksxhe
   tasks/finished_pipeline_preparation.py: bafybeifvwzvnw3d2lxlk4p5hd6j2tcxr7bwjewm667ubssoqyfsk4xafd4
   tasks/llm_preparation.py: bafybeigi7i5yp7w5hi5mcbzuzdfbfm4j5etsvplbhb2pdjcb3jfcy6qzrq
-  tasks/read_stream_preparation.py: bafybeidrxcmerepge4b2m6vdjibjzkfpppvlux2ja3unymerf65lsqtg7i
+  tasks/read_stream_preparation.py: bafybeibmhdkfxpvrkyapuisvtz25dwg4zgpfovfktli7wcyh6spvajpsmq
+  tasks/score_preparations.py: bafybeieiesjkyjbcvqut3l6nlzcwpidibsmo3mz7j6p54lbqzspfcf3ram
   tasks/task_preparations.py: bafybeieqd2jhzmmjomzmcw72iptogrb6koche6dqmtcuz6lqktaxvi3dxe
   tasks/twitter_preparation.py: bafybeianz2bixo7c2q7hxb6xpe6ui6y3tnms7xvyxeticd2bgp3u4m3p6u
-  tasks/write_stream_preparation.py: bafybeigpx4r3bnaakxorypabqkj65zcrmkrfcyv3vv5archccjatoycfdi
+  tasks/write_stream_preparation.py: bafybeifl4j7s575ts6x4msntymkempwguj4yypmxy2xjmffknn7qhkzfo4
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
   tests/centaur_configs.py: bafybeidwiu7wsbh5luehpf4uwff35eupet7qq4cnhhs2p3pqbxxkydwoim
   tests/test_behaviours.py: bafybeigddwn7uts6zb46lpk4j7eetp6sniwtclfzngkgws52yomue4cdvy
@@ -84,6 +85,8 @@ models:
     args:
       centaur_id_to_secrets: '{}'
       centaurs_stream_id: dummy_centaurs_stream_id
+      manual_points_stream_id: manual_points_stream_id
+      ceramic_db_stream_id: ceramic_db_stream_id
       ceramic_did_str: z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
@@ -113,8 +116,6 @@ models:
       max_attempts: 10
       max_healthcheck: 120
       on_chain_service_id: null
-      post_hour_utc: 12
-      post_wait_mins: 30
       prompt_template: 'Using the information in the text below, craft an engaging
         and relevant post that highlights key insights or facts from the text. The
         post should be limited to 280 characters and should include a call to action.

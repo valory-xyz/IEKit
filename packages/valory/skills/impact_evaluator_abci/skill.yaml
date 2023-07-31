@@ -7,12 +7,12 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
-  behaviours.py: bafybeihviyo3wdao3evum5ocvcryi7mnft57zbugdfguji2vd65l4ns6x4
-  composition.py: bafybeietqyp7zmapnggkzpjgavl4k42bc6wikfkxfyeku6d3bpwureissq
-  dialogues.py: bafybeid5wj7frspgfnrerpaamfiyqw25i6uwtnmn5o5xplpjxu2eku3w7a
+  behaviours.py: bafybeifhoufesr4r4re65mxjadqasjymvz6tkc25xn5yyn473yunhjiufe
+  composition.py: bafybeibncfujadicauvkvzxda5yk4e26vhvi5lnun6p7t6b3llv3whslqe
+  dialogues.py: bafybeigjknz4qqynbsltjje46gidg4rftsqw6ybjwegz24wetmycutpzh4
   fsm_specification.yaml: bafybeicwm554rdmzvh5m55qabt57yz6xnt4whxjqwh5ypudk6hu4zn2pp4
-  handlers.py: bafybeibkogrq2qarzop5fv6hepto5yg276rdlh2xnc2uqbs5ax4syjiwyu
-  models.py: bafybeidbdoyw5xc4h6vsey7g7in3ejypgmk5wsg4fz5j25sh652pajlwxm
+  handlers.py: bafybeidkli6fphcmdgwsys4lkyf3fx6fbawet4nt2pnixfypzijhg6b3ze
+  models.py: bafybeicufmgzkyjucrnjeymzcbnlg2rukqwury36eodsogil7lkk7mu5xq
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
   tests/test_behaviours.py: bafybeifkazsevd6vsfaapulouxepez3rl24y3rxgja5zhmj7s323zdjlmq
   tests/test_dialogues.py: bafybeieaos2byphju6i6xvytppqqcuqqvnpilnflsy73l3wqazzjttbg7m
@@ -28,12 +28,12 @@ skills:
 - valory/generic_scoring_abci:0.1.0:bafybeif7ldswh2r5ujuppup36hbknctqgm7fl4uxvudifqsultqu2ucf5y
 - valory/twitter_scoring_abci:0.1.0:bafybeiacpacuncevjnt67cppzlgtao426ynxidginjyol3lyxdaimctbjq
 - valory/ceramic_write_abci:0.1.0:bafybeif2vvmgj6zz7yqwsha4ug57rsrp3p3ogz4jhelmm6qf6tx2rtgeu4
-- valory/dynamic_nft_abci:0.1.0:bafybeihti5xfo5lknjsfk7mku6xo7vm5y2o4icujwpfvux5pmd44zuyc5u
+- valory/dynamic_nft_abci:0.1.0:bafybeighjqh3dipzg7s52kydawk2q3zrorgb3uwc2fdnvpmdiqkq57lube
 - valory/registration_abci:0.1.0:bafybeibafy7qmcvvzaykimy3mbqdwtcuajmbghqilaa7zwkh6wla33cfce
 - valory/reset_pause_abci:0.1.0:bafybeialcwck7fahrr23jckv5qjwg3cdq4ai2ihyjsofnbj44jzyl4cjmm
 - valory/termination_abci:0.1.0:bafybeifqsogqiar4yook5bu3j6z66dbdcizey7dr3e5oxeocdjijvfbaja
 - valory/transaction_settlement_abci:0.1.0:bafybeiacwr7p4nhhufoey7uz2jqkegrlykdrmc7mm3rzkvh2mslu66gyle
-- valory/decision_making_abci:0.1.0:bafybeibodidt3aeamle5s2f3qdbmam2vqup52msf5hqscub4ctnpqtm2da
+- valory/decision_making_abci:0.1.0:bafybeie34vh5zwk6bosc6gqqoyalvafs4zhis7bwf3mpjrtclpa42e2rlm
 - valory/llm_abci:0.1.0:bafybeihmbmhcfddhmugo6443lso6ayau35ayn2qa77bltvd7zs2gyvylne
 - valory/twitter_write_abci:0.1.0:bafybeicuieib63w5mc5drlnpraqh3wvudd6y7p2n2c23tm3jh6wmqvgkwq
 behaviours:
@@ -86,16 +86,17 @@ models:
     args:
       broadcast_to_server: false
       history_end: null
+      centaurs_stream_id: dummy_centaurs_stream_id
+      manual_points_stream_id: manual_points_stream_id
+      ceramic_db_stream_id: ceramic_db_stream_id
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
+      ceramic_api_create_endpoint: api/v0/streams
       ceramic_api_commit_endpoint: api/v0/commits
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
       ceramic_did_seed: '0101010101010101010101010101010101010101010101010101010101010101'
       ceramic_did_str: z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX
-      default_read_stream_id: default_read_stream_id
-      default_write_stream_id: default_write_stream_id
       default_read_target_property: default_read_target_property
       default_write_target_property: default_write_target_property
-      manual_points_stream_id: manual_points_stream_id
       manual_points_target_property: score_data
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
@@ -167,6 +168,7 @@ models:
       validate_timeout: 1205
       finalize_timeout: 60.0
       history_check_timeout: 1205
+      centaur_id_to_secrets: '{}'
     class_name: Params
   randomness_api:
     args:

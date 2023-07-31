@@ -57,8 +57,6 @@ class Params(BaseParams):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the parameters object."""
 
-        self.post_hour_utc = self._ensure("post_hour_utc", kwargs, int)
-        self.post_wait_mins = self._ensure("post_wait_mins", kwargs, int)
         self.prompt_template = DEFAULT_PROMPT
         self.shortener_prompt_template = SHORTENER_PROMPT
         self.centaurs_stream_id = self._ensure("centaurs_stream_id", kwargs, str)
