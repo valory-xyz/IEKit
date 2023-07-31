@@ -87,12 +87,18 @@ test:
 	-rfE packages/valory/skills/dynamic_nft_abci \
 	-rfE packages/valory/skills/ceramic_write_abci \
 	-rfE packages/valory/skills/impact_evaluator_abci \
+	-rfE packages/valory/skills/decision_making_abci \
+	-rfE packages/valory/skills/llm_abci \
+	-rfE packages/valory/skills/twitter_write_abci \
 	--cov=packages.valory.skills.ceramic_read_abci \
 	--cov=packages.valory.skills.generic_scoring_abci \
 	--cov=packages.valory.skills.twitter_scoring_abci \
 	--cov=packages.valory.skills.dynamic_nft_abci \
 	--cov=packages.valory.skills.ceramic_write_abci \
 	--cov=packages.valory.skills.impact_evaluator_abci \
+	--cov=packages.valory.skills.decision_making_abci \
+	--cov=packages.valory.skills.llm_abci \
+	--cov=packages.valory.skills.twitter_write_abci \
 	--cov-report=xml --cov-report=term --cov-report=term-missing --cov-config=.coveragerc
 	find . -name ".coverage*" -not -name ".coveragerc" -exec rm -fr "{}" \;
 
@@ -121,11 +127,15 @@ new_env: clean
 fix-abci-app-specs:
 	export PYTHONPATH=${PYTHONPATH}:${PWD}
 	autonomy analyse fsm-specs --update --app-class CeramicReadAbciApp --package packages/valory/skills/ceramic_read_abci/ || (echo "Failed to check ceramic_read_abci abci consistency" && exit 1)
-	autonomy analyse fsm-specs --update --app-class TwitterScoringAbciApp --package packages/valory/skills/twitter_scoring_abci/ || (echo "Failed to check twitter_scoring_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class CeramicWriteAbciApp --package packages/valory/skills/ceramic_write_abci/ || (echo "Failed to check ceramic_write_abci abci consistency" && exit 1)
+	autonomy analyse fsm-specs --update --app-class DecisionMakingAbciApp --package packages/valory/skills/decision_making_abci/ || (echo "Failed to check decision_making_abci abci consistency" && exit 1)
+	autonomy analyse fsm-specs --update --app-class GenericScoringAbciApp --package packages/valory/skills/generic_scoring_abci/ || (echo "Failed to check generic_scoring_abci abci consistency" && exit 1)
+	autonomy analyse fsm-specs --update --app-class TwitterScoringAbciApp --package packages/valory/skills/twitter_scoring_abci/ || (echo "Failed to check twitter_scoring_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class DynamicNFTAbciApp --package packages/valory/skills/dynamic_nft_abci/ || (echo "Failed to check dynamic_nft_abci abci consistency" && exit 1)
+	autonomy analyse fsm-specs --update --app-class LLMAbciApp --package packages/valory/skills/llm_abci/ || (echo "Failed to check llm_abci abci consistency" && exit 1)
+	autonomy analyse fsm-specs --update --app-class TwitterWriteAbciApp --package packages/valory/skills/twitter_write_abci/ || (echo "Failed to check twitter_write_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class ImpactEvaluatorSkillAbciApp --package packages/valory/skills/impact_evaluator_abci/ || (echo "Failed to check impact_evaluator_abci abci consistency" && exit 1)
-	autonomy analyse fsm-specs --update --app-class GenericScoringSkillAbciApp --package packages/valory/skills/generic_scoring_abci/ || (echo "Failed to check generic_scoring_abci abci consistency" && exit 1)
+
 
 .PHONY: all-linters
 all-linters:
