@@ -199,6 +199,18 @@ class FinishedDecisionMakingUpdateCentaurRound(DegenerateRound):
     """FinishedDecisionMakingUpdateCentaurRound"""
 
 
+class FinishedDecisionMakingReadContributeDBRound(DegenerateRound):
+    """FinishedDecisionMakingReadContributeDBRound"""
+
+
+class FinishedDecisionMakingWriteContributeDBRound(DegenerateRound):
+    """FinishedDecisionMakingWriteContributeDBRound"""
+
+
+class FinishedDecisionMakingReadManualPointsRound(DegenerateRound):
+    """FinishedDecisionMakingReadManualPointsRound"""
+
+
 class FinishedDecisionMakingScoreRound(DegenerateRound):
     """FinishedDecisionMakingScoreRound"""
 
@@ -221,6 +233,9 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.DAILY_ORBIS: FinishedDecisionMakingWriteOrbisRound,
             Event.UPDATE_CENTAURS: FinishedDecisionMakingUpdateCentaurRound,
             Event.SCORE: FinishedDecisionMakingScoreRound,
+            Event.READ_CONTRIBUTE_DB: FinishedDecisionMakingReadContributeDBRound,
+            Event.WRITE_CONTRIBUTE_DB: FinishedDecisionMakingWriteContributeDBRound,
+            Event.READ_MANUAL_POINTS: FinishedDecisionMakingReadManualPointsRound,
             Event.NEXT_CENTAUR: DecisionMakingRound,
             Event.DONE: FinishedDecisionMakingDoneRound,
             Event.NO_MAJORITY: DecisionMakingRound,
@@ -233,6 +248,9 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingScoreRound: {},
         FinishedDecisionMakingUpdateCentaurRound: {},
         FinishedDecisionMakingDoneRound: {},
+        FinishedDecisionMakingReadContributeDBRound: {},
+        FinishedDecisionMakingWriteContributeDBRound: {},
+        FinishedDecisionMakingReadManualPointsRound: {},
     }
     final_states: Set[AppState] = {
         FinishedDecisionMakingReadCentaursRound,
@@ -242,6 +260,9 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingScoreRound,
         FinishedDecisionMakingUpdateCentaurRound,
         FinishedDecisionMakingDoneRound,
+        FinishedDecisionMakingReadContributeDBRound,
+        FinishedDecisionMakingWriteContributeDBRound,
+        FinishedDecisionMakingReadManualPointsRound,
     }
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
@@ -258,4 +279,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingScoreRound: set(),
         FinishedDecisionMakingUpdateCentaurRound: set(),
         FinishedDecisionMakingDoneRound: set(),
+        FinishedDecisionMakingReadContributeDBRound: set(),
+        FinishedDecisionMakingWriteContributeDBRound: set(),
+        FinishedDecisionMakingReadManualPointsRound: set(),
     }

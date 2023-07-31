@@ -1,13 +1,13 @@
 {
     "dev": {
-        "agent/valory/impact_evaluator/0.1.0": "bafybeidgojpkavqtdobouiaoct3rsbhukpbpm7yrchrinaxhlt7wtpnrra",
+        "agent/valory/impact_evaluator/0.1.0": "bafybeihmrf5kx42qxmhy6asupzv3zntqw2h6myfqugdw4jcqchuft352e4",
         "contract/valory/dynamic_contribution/0.1.0": "bafybeiaapvt7o4s5zpkxjcaplbzw7bhgeeqwtsddzjxmg6bfth6ytlvdiq",
-        "service/valory/impact_evaluator/0.1.0": "bafybeidjugzlb4weniq4jpkipvygpw3aq365znzk4hhrl5yfysvtwhxeuy",
+        "service/valory/impact_evaluator/0.1.0": "bafybeieclnsd3qwyl7hewhakjasl2yihli4qurw3znxdxoqjfz3yg37kgq",
         "skill/valory/dynamic_nft_abci/0.1.0": "bafybeighjqh3dipzg7s52kydawk2q3zrorgb3uwc2fdnvpmdiqkq57lube",
         "skill/valory/twitter_scoring_abci/0.1.0": "bafybeiacpacuncevjnt67cppzlgtao426ynxidginjyol3lyxdaimctbjq",
         "skill/valory/ceramic_read_abci/0.1.0": "bafybeidqeol6ne7mjdzpjrg2bb3hrp2msk5vco6pybro6iudgt7k2wbiyq",
         "skill/valory/ceramic_write_abci/0.1.0": "bafybeif2vvmgj6zz7yqwsha4ug57rsrp3p3ogz4jhelmm6qf6tx2rtgeu4",
-        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeiea4dtgw2uk4mag7jpoatp7clowjqjyn3bc7dvlzp35jbtmkkjxcm",
+        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeibwporptnvc4q5fpg25vl4rffcxwgvpxwenqcnvtdmkgaw3a5bcvi",
         "skill/valory/generic_scoring_abci/0.1.0": "bafybeif7ldswh2r5ujuppup36hbknctqgm7fl4uxvudifqsultqu2ucf5y",
         "protocol/valory/twitter/0.1.0": "bafybeib4eyf7qbs7kdntqzhwqsaaj4o2mzcokcztaza6qgwt7sbxgkqu2m",
         "protocol/valory/llm/1.0.0": "bafybeigqybmg75vsxexmp57hkms7lkp7iwpf54r7wpygizxryvrhfqqpb4",
@@ -15,7 +15,7 @@
         "connection/valory/openai/0.1.0": "bafybeiczft4se4jitvgufcjdys6qxaisuapwgm6ge7emgcnftzuqu6i23e",
         "skill/valory/twitter_write_abci/0.1.0": "bafybeicuieib63w5mc5drlnpraqh3wvudd6y7p2n2c23tm3jh6wmqvgkwq",
         "skill/valory/llm_abci/0.1.0": "bafybeihmbmhcfddhmugo6443lso6ayau35ayn2qa77bltvd7zs2gyvylne",
-        "skill/valory/decision_making_abci/0.1.0": "bafybeie34vh5zwk6bosc6gqqoyalvafs4zhis7bwf3mpjrtclpa42e2rlm"
+        "skill/valory/decision_making_abci/0.1.0": "bafybeifkq4jf3oqolcyegmc5xva5jhkrusvbhs3ly5dr3x4ekb6ma5rxay"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeifuxs7gdg2okbn7uofymenjlmnih2wxwkym44lsgwmklgwuckxm2m",
