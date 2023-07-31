@@ -177,7 +177,7 @@ class TestTokenTrackRound(BaseDynamicNFTRoundTestClass):
                         get_dummy_token_track_payload_serialized()
                     )["last_update_time"],
                 },
-                event=Event.WRITE,
+                event=Event.DONE,
                 most_voted_payload=get_dummy_token_track_payload_serialized(),
                 synchronized_data_attr_checks=[
                     lambda _synchronized_data: _synchronized_data.token_id_to_points,

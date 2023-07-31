@@ -42,12 +42,12 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeiamr3cwetayz6lr72buhq6iviabtboj4hhpq47tlumimxolvvqjcy
 - valory/abstract_round_abci:0.1.0:bafybeiaseziuvbzh3trjggl5hx2tv3fduqrpiwiyksudaf6nvuxmwrg74i
-- valory/impact_evaluator_abci:0.1.0:bafybeiav6iujsp2cj6c3tiaikuopk4hosemwbsxkabmpywkg2xl576yjfe
+- valory/impact_evaluator_abci:0.1.0:bafybeic3bvgzdwgmgu7chjuouizobc5r5efxu756xtkmiry5f2l7ik5wre
 - valory/generic_scoring_abci:0.1.0:bafybeif7ldswh2r5ujuppup36hbknctqgm7fl4uxvudifqsultqu2ucf5y
 - valory/twitter_scoring_abci:0.1.0:bafybeiacpacuncevjnt67cppzlgtao426ynxidginjyol3lyxdaimctbjq
 - valory/ceramic_read_abci:0.1.0:bafybeidqeol6ne7mjdzpjrg2bb3hrp2msk5vco6pybro6iudgt7k2wbiyq
 - valory/ceramic_write_abci:0.1.0:bafybeif2vvmgj6zz7yqwsha4ug57rsrp3p3ogz4jhelmm6qf6tx2rtgeu4
-- valory/dynamic_nft_abci:0.1.0:bafybeifdwbl6x4doyhl7ctqbuqnxuwbl7cfgtysjb6npoxfmarz26jajim
+- valory/dynamic_nft_abci:0.1.0:bafybeify46c4rib3wnwpfchp5e42ztrppalywgv6cgcyroe5ok6ejxmzli
 - valory/registration_abci:0.1.0:bafybeibafy7qmcvvzaykimy3mbqdwtcuajmbghqilaa7zwkh6wla33cfce
 - valory/reset_pause_abci:0.1.0:bafybeialcwck7fahrr23jckv5qjwg3cdq4ai2ihyjsofnbj44jzyl4cjmm
 - valory/termination_abci:0.1.0:bafybeifqsogqiar4yook5bu3j6z66dbdcizey7dr3e5oxeocdjijvfbaja
