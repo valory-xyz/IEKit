@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeibjvgpor2sr4voqotsahehdlcmxkrf4hst2dmuvcvsrnlrkh7jniq
+agent: valory/impact_evaluator:0.1.0:bafybeiemfdd6jx6ttrtxl624323qh65g2355knf3cegrikwsm3osyksc34
 number_of_agents: 4
 deployment:
   agent:
@@ -94,7 +94,7 @@ extra:
         tendermint_com_url: ${TENDERMINT_COM_URL:str:http://localhost:8080}
         tendermint_max_retries: 5
         tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
-        tendermint_p2p_url: ${TENDERMINT_P2P_URL_0:str:node0:26656}
+        tendermint_p2p_url: ${TENDERMINT_P2P_URL_0:str:impactevaluator_tm_0:26656}
         token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
         whitelist_api_key: null
         whitelist_endpoint: http://localhost
@@ -157,7 +157,7 @@ extra:
         tendermint_com_url: ${TENDERMINT_COM_URL:str:http://localhost:8080}
         tendermint_max_retries: 5
         tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
-        tendermint_p2p_url: ${TENDERMINT_P2P_URL_1:str:node1:26656}
+        tendermint_p2p_url: ${TENDERMINT_P2P_URL_1:str:impactevaluator_tm_1:26656}
         token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
         whitelist_api_key: null
         whitelist_endpoint: http://localhost
@@ -220,7 +220,7 @@ extra:
         tendermint_com_url: ${TENDERMINT_COM_URL:str:http://localhost:8080}
         tendermint_max_retries: 5
         tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
-        tendermint_p2p_url: ${TENDERMINT_P2P_URL_2:str:node2:26656}
+        tendermint_p2p_url: ${TENDERMINT_P2P_URL_2:str:impactevaluator_tm_2:26656}
         token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
         whitelist_api_key: null
         whitelist_endpoint: http://localhost
@@ -285,7 +285,7 @@ extra:
         tendermint_com_url: ${TENDERMINT_COM_URL:str:http://localhost:8080}
         tendermint_max_retries: 5
         tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
-        tendermint_p2p_url: ${TENDERMINT_P2P_URL_3:str:node3:26656}
+        tendermint_p2p_url: ${TENDERMINT_P2P_URL_3:str:impactevaluator_tm_3:26656}
         token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
         whitelist_api_key: null
         whitelist_endpoint: http://localhost
