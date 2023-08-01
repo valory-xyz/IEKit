@@ -3,7 +3,7 @@
 ## 0.2.8 (2023-06-26)
 
 - Fixes `web3` dependency #63
-- Bumps frameworks to `open-autonomy-0.10.7` and `open-aea-1.35.0` #62
+- Bumps frameworks to `open-autonomy-0.10.9` and `open-aea-1.37.0` #62
 - Prepares for minting the service #61
 - Fixes olas links #60
 

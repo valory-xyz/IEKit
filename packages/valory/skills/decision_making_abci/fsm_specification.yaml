@@ -1,0 +1,57 @@
+alphabet_in:
+- DAILY_ORBIS
+- DAILY_TWEET
+- DONE
+- LLM
+- NEXT_CENTAUR
+- NO_MAJORITY
+- READ_CENTAURS
+- READ_CONTRIBUTE_DB
+- READ_MANUAL_POINTS
+- ROUND_TIMEOUT
+- SCHEDULED_TWEET
+- SCORE
+- UPDATE_CENTAURS
+- WRITE_CONTRIBUTE_DB
+default_start_state: DecisionMakingRound
+final_states:
+- FinishedDecisionMakingDoneRound
+- FinishedDecisionMakingLLMRound
+- FinishedDecisionMakingReadCentaursRound
+- FinishedDecisionMakingReadContributeDBRound
+- FinishedDecisionMakingReadManualPointsRound
+- FinishedDecisionMakingScoreRound
+- FinishedDecisionMakingUpdateCentaurRound
+- FinishedDecisionMakingWriteContributeDBRound
+- FinishedDecisionMakingWriteOrbisRound
+- FinishedDecisionMakingWriteTwitterRound
+label: DecisionMakingAbciApp
+start_states:
+- DecisionMakingRound
+states:
+- DecisionMakingRound
+- FinishedDecisionMakingDoneRound
+- FinishedDecisionMakingLLMRound
+- FinishedDecisionMakingReadCentaursRound
+- FinishedDecisionMakingReadContributeDBRound
+- FinishedDecisionMakingReadManualPointsRound
+- FinishedDecisionMakingScoreRound
+- FinishedDecisionMakingUpdateCentaurRound
+- FinishedDecisionMakingWriteContributeDBRound
+- FinishedDecisionMakingWriteOrbisRound
+- FinishedDecisionMakingWriteTwitterRound
+transition_func:
+    (DecisionMakingRound, DAILY_ORBIS): FinishedDecisionMakingWriteOrbisRound
+    (DecisionMakingRound, DAILY_TWEET): FinishedDecisionMakingWriteTwitterRound
+    (DecisionMakingRound, DONE): FinishedDecisionMakingDoneRound
+    (DecisionMakingRound, LLM): FinishedDecisionMakingLLMRound
+    (DecisionMakingRound, NEXT_CENTAUR): DecisionMakingRound
+    (DecisionMakingRound, NO_MAJORITY): DecisionMakingRound
+    (DecisionMakingRound, READ_CENTAURS): FinishedDecisionMakingReadCentaursRound
+    (DecisionMakingRound, READ_CONTRIBUTE_DB): FinishedDecisionMakingReadContributeDBRound
+    (DecisionMakingRound, READ_MANUAL_POINTS): FinishedDecisionMakingReadManualPointsRound
+    (DecisionMakingRound, ROUND_TIMEOUT): DecisionMakingRound
+    (DecisionMakingRound, SCHEDULED_TWEET): FinishedDecisionMakingWriteTwitterRound
+    (DecisionMakingRound, SCORE): FinishedDecisionMakingScoreRound
+    (DecisionMakingRound, UPDATE_CENTAURS): FinishedDecisionMakingUpdateCentaurRound
+    (DecisionMakingRound, WRITE_CONTRIBUTE_DB): FinishedDecisionMakingWriteContributeDBRound

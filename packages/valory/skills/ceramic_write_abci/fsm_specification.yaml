@@ -2,15 +2,21 @@ alphabet_in:
 - API_ERROR
 - DID_NOT_SEND
 - DONE
+- DONE_CONTINUE
+- DONE_FINISHED
+- MAX_RETRIES_ERROR
 - NO_MAJORITY
 - ROUND_TIMEOUT
+- VERIFICATION_ERROR
 default_start_state: RandomnessRound
 final_states:
+- FinishedMaxRetriesRound
 - FinishedVerificationRound
 label: CeramicWriteAbciApp
 start_states:
 - RandomnessRound
 states:
+- FinishedMaxRetriesRound
 - FinishedVerificationRound
 - RandomnessRound
 - SelectKeeperRound
@@ -26,8 +32,10 @@ transition_func:
     (StreamWriteRound, API_ERROR): RandomnessRound
     (StreamWriteRound, DID_NOT_SEND): RandomnessRound
     (StreamWriteRound, DONE): VerificationRound
+    (StreamWriteRound, MAX_RETRIES_ERROR): FinishedMaxRetriesRound
     (StreamWriteRound, ROUND_TIMEOUT): RandomnessRound
-    (VerificationRound, API_ERROR): RandomnessRound
-    (VerificationRound, DONE): FinishedVerificationRound
+    (VerificationRound, DONE_CONTINUE): StreamWriteRound
+    (VerificationRound, DONE_FINISHED): FinishedVerificationRound
     (VerificationRound, NO_MAJORITY): RandomnessRound
     (VerificationRound, ROUND_TIMEOUT): RandomnessRound
+    (VerificationRound, VERIFICATION_ERROR): RandomnessRound

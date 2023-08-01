@@ -30,6 +30,9 @@ from packages.valory.skills.ceramic_read_abci.behaviours import (
 from packages.valory.skills.ceramic_write_abci.behaviours import (
     CeramicWriteRoundBehaviour,
 )
+from packages.valory.skills.decision_making_abci.behaviours import (
+    DecisionMakingRoundBehaviour,
+)
 from packages.valory.skills.dynamic_nft_abci.behaviours import DynamicNFTRoundBehaviour
 from packages.valory.skills.generic_scoring_abci.behaviours import (
     GenericScoringRoundBehaviour,
@@ -37,7 +40,7 @@ from packages.valory.skills.generic_scoring_abci.behaviours import (
 from packages.valory.skills.impact_evaluator_abci.composition import (
     ImpactEvaluatorSkillAbciApp,
 )
-from packages.valory.skills.path_switch_abci.behaviours import PathSwitchRoundBehaviour
+from packages.valory.skills.llm_abci.behaviours import LLMRoundBehaviour
 from packages.valory.skills.registration_abci.behaviours import (
     AgentRegistrationRoundBehaviour,
     RegistrationStartupBehaviour,
@@ -55,6 +58,9 @@ from packages.valory.skills.transaction_settlement_abci.behaviours import (
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
     TwitterScoringRoundBehaviour,
 )
+from packages.valory.skills.twitter_write_abci.behaviours import (
+    TwitterWriteRoundBehaviour,
+)
 
 
 class ImpactEvaluatorConsensusBehaviour(AbstractRoundBehaviour):
@@ -65,11 +71,13 @@ class ImpactEvaluatorConsensusBehaviour(AbstractRoundBehaviour):
     behaviours: Set[Type[BaseBehaviour]] = {
         *AgentRegistrationRoundBehaviour.behaviours,
         *CeramicReadRoundBehaviour.behaviours,
-        *PathSwitchRoundBehaviour.behaviours,
         *GenericScoringRoundBehaviour.behaviours,
         *TwitterScoringRoundBehaviour.behaviours,
         *DynamicNFTRoundBehaviour.behaviours,
         *CeramicWriteRoundBehaviour.behaviours,
+        *DecisionMakingRoundBehaviour.behaviours,
+        *LLMRoundBehaviour.behaviours,
+        *TwitterWriteRoundBehaviour.behaviours,
         *ResetPauseABCIConsensusBehaviour.behaviours,
         *TransactionSettlementRoundBehaviour.behaviours,
         *TerminationAbciBehaviours.behaviours,

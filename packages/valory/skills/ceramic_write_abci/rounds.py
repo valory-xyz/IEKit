@@ -19,6 +19,7 @@
 
 """This package contains the rounds of CeramicWriteAbciApp."""
 
+import json
 from enum import Enum
 from typing import Dict, FrozenSet, Optional, Set, Tuple, cast
 
@@ -46,9 +47,13 @@ class Event(Enum):
 
     API_ERROR = "api_error"
     DONE = "done"
+    DONE_FINISHED = "done_finished"
+    DONE_CONTINUE = "done_continue"
     DID_NOT_SEND = "did_not_send"
     ROUND_TIMEOUT = "round_timeout"
     NO_MAJORITY = "no_majority"
+    VERIFICATION_ERROR = "verification_error"
+    MAX_RETRIES_ERROR = "max_retries_error"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -65,19 +70,29 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(int, round_)
 
     @property
-    def write_stream_id(self) -> Optional[str]:
+    def write_data(self) -> list:
         """Get the write_stream_id."""
-        return self.db.get("write_stream_id", None)
+        return cast(list, self.db.get_strict("write_data"))
 
     @property
-    def write_target_property(self) -> Optional[str]:
-        """Get the write_target_property."""
-        return self.db.get("write_target_property", None)
+    def write_index(self) -> int:
+        """Get the write_index."""
+        return cast(int, self.db.get("write_index", 0))
 
     @property
-    def pending_write(self) -> bool:
-        """Checks whether there are changes pending to be written to Ceramic."""
-        return cast(bool, self.db.get("pending_write", False))
+    def stream_id_to_verify(self) -> str:
+        """Get the stream_id_to_verify."""
+        return cast(str, self.db.get_strict("stream_id_to_verify"))
+
+    @property
+    def write_results(self) -> list:
+        """Get the write_results."""
+        return cast(list, self.db.get("write_results", []))
+
+    @property
+    def api_retries(self) -> int:
+        """Get the api_retries."""
+        return cast(int, self.db.get("api_retries", 0))
 
 
 class RandomnessRound(CollectSameUntilThresholdRound):
@@ -108,11 +123,10 @@ class SelectKeeperRound(CollectSameUntilThresholdRound):
 class StreamWriteRound(OnlyKeeperSendsRound):
     """StreamWriteRound"""
 
+    MAX_RETRIES_PAYLOAD = "MAX_RETRIES_PAYLOAD"
+
     payload_class = StreamWritePayload
     synchronized_data_class = SynchronizedData
-
-    ERROR_PAYLOAD = "error"
-    SUCCCESS_PAYLOAD = "success"
 
     def end_block(
         self,
@@ -126,10 +140,36 @@ class StreamWriteRound(OnlyKeeperSendsRound):
         if self.keeper_payload is None:  # pragma: no cover
             return self.synchronized_data, Event.DID_NOT_SEND
 
-        if cast(StreamWritePayload, self.keeper_payload).content == self.ERROR_PAYLOAD:
-            return self.synchronized_data, Event.API_ERROR
+        if (
+            cast(StreamWritePayload, self.keeper_payload).content
+            == StreamWriteRound.MAX_RETRIES_PAYLOAD
+        ):
+            return self.synchronized_data, Event.MAX_RETRIES_ERROR
 
-        return self.synchronized_data, Event.DONE
+        keeper_payload = json.loads(
+            cast(StreamWritePayload, self.keeper_payload).content
+        )
+
+        if not keeper_payload["success"]:
+            api_retries = cast(SynchronizedData, self.synchronized_data).api_retries
+            synchronized_data = self.synchronized_data.update(
+                synchronized_data_class=SynchronizedData,
+                **{
+                    get_name(SynchronizedData.api_retries): api_retries + 1,
+                }
+            )
+            return synchronized_data, Event.API_ERROR
+
+        synchronized_data = self.synchronized_data.update(
+            synchronized_data_class=SynchronizedData,
+            **{
+                get_name(SynchronizedData.stream_id_to_verify): keeper_payload[
+                    "stream_id_to_verify"
+                ],
+            }
+        )
+
+        return synchronized_data, Event.DONE
 
 
 class VerificationRound(CollectSameUntilThresholdRound):
@@ -146,16 +186,36 @@ class VerificationRound(CollectSameUntilThresholdRound):
         if self.threshold_reached:
 
             if self.most_voted_payload == self.ERROR_PAYLOAD:
-                return self.synchronized_data, Event.API_ERROR
+                return self.synchronized_data, Event.VERIFICATION_ERROR
 
-            synchronized_data = self.synchronized_data.update(
-                synchronized_data_class=SynchronizedData,
-                **{
-                    get_name(SynchronizedData.pending_write): False,
-                }
+            synchronized_data = cast(SynchronizedData, self.synchronized_data)
+            next_write_index = synchronized_data.write_index + 1
+
+            write_results = synchronized_data.write_results
+            write_results.append(
+                {"stream_id": synchronized_data.stream_id_to_verify, "verified": True}
             )
 
-            return synchronized_data, Event.DONE
+            # Check if we need to continue writing
+            if next_write_index < len(synchronized_data.write_data):
+                synchronized_data = synchronized_data.update(
+                    synchronized_data_class=SynchronizedData,
+                    **{
+                        get_name(SynchronizedData.write_index): next_write_index,
+                        get_name(SynchronizedData.write_results): write_results,
+                    }
+                )
+                return synchronized_data, Event.DONE_CONTINUE
+            else:
+                # We have finished writing
+                synchronized_data = synchronized_data.update(
+                    synchronized_data_class=SynchronizedData,
+                    **{
+                        get_name(SynchronizedData.write_index): 0,  # reset the index
+                        get_name(SynchronizedData.write_results): write_results,
+                    }
+                )
+                return synchronized_data, Event.DONE_FINISHED
 
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
@@ -166,6 +226,10 @@ class VerificationRound(CollectSameUntilThresholdRound):
 
 class FinishedVerificationRound(DegenerateRound):
     """FinishedVerificationRound"""
+
+
+class FinishedMaxRetriesRound(DegenerateRound):
+    """FinishedMaxRetriesRound"""
 
 
 class CeramicWriteAbciApp(AbciApp[Event]):
@@ -189,27 +253,27 @@ class CeramicWriteAbciApp(AbciApp[Event]):
             Event.DID_NOT_SEND: RandomnessRound,
             Event.DONE: VerificationRound,
             Event.ROUND_TIMEOUT: RandomnessRound,
+            Event.MAX_RETRIES_ERROR: FinishedMaxRetriesRound,
         },
         VerificationRound: {
-            Event.API_ERROR: RandomnessRound,
-            Event.DONE: FinishedVerificationRound,
+            Event.VERIFICATION_ERROR: RandomnessRound,
+            Event.DONE_CONTINUE: StreamWriteRound,
+            Event.DONE_FINISHED: FinishedVerificationRound,
             Event.NO_MAJORITY: RandomnessRound,
             Event.ROUND_TIMEOUT: RandomnessRound,
         },
         FinishedVerificationRound: {},
+        FinishedMaxRetriesRound: {},
     }
-    final_states: Set[AppState] = {FinishedVerificationRound}
+    final_states: Set[AppState] = {FinishedVerificationRound, FinishedMaxRetriesRound}
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: FrozenSet[str] = frozenset(
-        [
-            "pending_write",
-        ]
-    )
+    cross_period_persisted_keys: FrozenSet[str] = frozenset()
     db_pre_conditions: Dict[AppState, Set[str]] = {
         RandomnessRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedVerificationRound: set(),
+        FinishedMaxRetriesRound: set(),
     }

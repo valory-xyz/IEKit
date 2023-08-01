@@ -19,6 +19,7 @@
 
 """This module contains the shared state for the abci skill of ImpactEvaluatorSkillAbciApp."""
 
+from packages.valory.skills.abstract_round_abci.models import ApiSpecs
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
 )
@@ -37,6 +38,12 @@ from packages.valory.skills.ceramic_write_abci.models import (
     RandomnessApi as CeramicWriteRandomnessApi,
 )
 from packages.valory.skills.ceramic_write_abci.rounds import Event as CeramicWriteEvent
+from packages.valory.skills.decision_making_abci.models import (
+    Params as DecisionMakingAbciParams,
+)
+from packages.valory.skills.decision_making_abci.rounds import (
+    Event as DecisionMakingEvent,
+)
 from packages.valory.skills.dynamic_nft_abci.models import (
     Params as DynamicNFTAbciParams,
 )
@@ -47,10 +54,8 @@ from packages.valory.skills.generic_scoring_abci.rounds import (
 from packages.valory.skills.impact_evaluator_abci.composition import (
     ImpactEvaluatorSkillAbciApp,
 )
-from packages.valory.skills.path_switch_abci.models import (
-    Params as PathSwitchAbciParams,
-)
-from packages.valory.skills.path_switch_abci.rounds import Event as PathSwitchEvent
+from packages.valory.skills.llm_abci.models import Params as LLMAbciParams
+from packages.valory.skills.llm_abci.rounds import Event as LLMEvent
 from packages.valory.skills.reset_pause_abci.rounds import Event as ResetPauseEvent
 from packages.valory.skills.termination_abci.models import TerminationParams
 from packages.valory.skills.twitter_scoring_abci.models import (
@@ -65,7 +70,8 @@ CeramicReadParams = CeramicReadAbciParams
 CeramicWriteParams = CeramicWriteAbciParams
 DynamicNFTParams = DynamicNFTAbciParams
 TwitterScoringParams = TwitterScoringAbciParams
-PathSwitchParams = PathSwitchAbciParams
+LLMParams = LLMAbciParams
+DecisionMakingParams = DecisionMakingAbciParams
 
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
@@ -73,6 +79,10 @@ RandomnessApi = CeramicWriteRandomnessApi
 
 MARGIN = 5
 MULTIPLIER = 2
+
+
+class RandomnessApi(ApiSpecs):
+    """A model that wraps ApiSpecs for randomness api specifications."""
 
 
 class SharedState(BaseSharedState):
@@ -93,9 +103,6 @@ class SharedState(BaseSharedState):
             TwitterScoringEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
-            PathSwitchEvent.ROUND_TIMEOUT
-        ] = self.context.params.round_timeout_seconds
-        ImpactEvaluatorSkillAbciApp.event_to_timeout[
             GenericScoringEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds
         ImpactEvaluatorSkillAbciApp.event_to_timeout[DynamicNFTEvent.ROUND_TIMEOUT] = (
@@ -107,6 +114,12 @@ class SharedState(BaseSharedState):
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             ResetPauseEvent.RESET_AND_PAUSE_TIMEOUT
         ] = (self.context.params.reset_pause_duration + MARGIN)
+        ImpactEvaluatorSkillAbciApp.event_to_timeout[LLMEvent.ROUND_TIMEOUT] = (
+            self.context.params.round_timeout_seconds * MULTIPLIER
+        )
+        ImpactEvaluatorSkillAbciApp.event_to_timeout[
+            DecisionMakingEvent.ROUND_TIMEOUT
+        ] = self.context.params.round_timeout_seconds
 
 
 class Params(
@@ -114,7 +127,7 @@ class Params(
     TwitterScoringParams,
     CeramicWriteParams,
     DynamicNFTParams,
-    PathSwitchParams,
+    DecisionMakingParams,
     TerminationParams,
 ):
     """A model to represent params for multiple abci apps."""

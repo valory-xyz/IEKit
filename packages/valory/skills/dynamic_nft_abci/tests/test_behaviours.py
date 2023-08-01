@@ -46,7 +46,7 @@ from packages.valory.skills.dynamic_nft_abci.behaviours import (
 from packages.valory.skills.dynamic_nft_abci.models import SharedState
 from packages.valory.skills.dynamic_nft_abci.rounds import (
     Event,
-    FinishedTokenTrackWriteRound,
+    FinishedTokenTrackRound,
     SynchronizedData,
     TokenTrackRound,
 )
@@ -97,7 +97,7 @@ class BaseDynamicNFTTest(FSMBehaviourBaseCase):
     behaviour_class: Type[DynamicNFTBaseBehaviour]
     next_behaviour_class: Type[DynamicNFTBaseBehaviour]
     synchronized_data: SynchronizedData
-    done_event = Event.WRITE
+    done_event = Event.DONE
 
     def fast_forward(self, data: Optional[Dict[str, Any]] = None) -> None:
         """Fast-forward on initialization"""
@@ -131,7 +131,7 @@ class TestTokenTrackBehaviour(BaseDynamicNFTTest):
 
     behaviour_class = TokenTrackBehaviour
     next_behaviour_class = make_degenerate_behaviour(  # type: ignore
-        FinishedTokenTrackWriteRound
+        FinishedTokenTrackRound
     )
 
     def _mock_dynamic_contribution_contract_request(
@@ -162,7 +162,7 @@ class TestTokenTrackBehaviour(BaseDynamicNFTTest):
                 BehaviourTestCase(
                     "Happy path",
                     initial_data=dict(ceramic_db=DUMMY_CERAMIC_DB),
-                    event=Event.WRITE,
+                    event=Event.DONE,
                 ),
                 {
                     "mock_response_data": dict(

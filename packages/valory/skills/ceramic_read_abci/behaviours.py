@@ -85,9 +85,6 @@ class CeramicReadBaseBehaviour(BaseBehaviour, ABC):
         previous_cid_str = api_data["commits"][-1]["cid"]
 
         # Rebuild the current data
-        self.context.logger.info(
-            f"Bulding stream data from commits:\n'{api_data['commits']!r}'"
-        )
         data = build_data_from_commits(api_data["commits"])
 
         self.context.logger.info(f"Got data from Ceramic API: {data}")

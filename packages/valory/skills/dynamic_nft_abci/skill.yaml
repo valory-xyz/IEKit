@@ -10,19 +10,19 @@ fingerprint:
   behaviours.py: bafybeifvzua5ftti42czon4gwly7heunxagpk3p5xsomfyr32ronhq7coe
   ceramic_db.py: bafybeiem2xntdgeiv5uyco3vokxuktld5xgv2e5mcgncodadhoxrgwxs4y
   dialogues.py: bafybeiabtq2to7x6bbbnxzrvupz5rky4b6k73y2lw5dmclb6xx74nuzxe4
-  fsm_specification.yaml: bafybeigpbfd5kqhnwcqixtzgab3uuufoq3wmtopnpixmeqzeu3xdghbi7e
+  fsm_specification.yaml: bafybeibkm4iniyjt7ofqredclpvvudtfjbmuatccnblygvqnfucsuymbxy
   handlers.py: bafybeihmieccjgdm26ngpvovm2xkuc42qh72kzzqjuqccu6pf5pn2qmofi
   models.py: bafybeianeimox27xwxbm5yq6go3ygf3oa2cbuv6h4y64oyjo3m2ua23sxq
   payloads.py: bafybeiggpj2qmh73nlr2rscisscxovf7bfrczlut7k33jujvutzgszjcwi
-  rounds.py: bafybeie4qfh6rskveundgqnx3xljir5urcnxabkceelngha5lsyzdttxzi
+  rounds.py: bafybeie66w2czx57wcfhek5cqw5ecnhkqxr3ycdlnyqkrfk6sljgvkv3xq
   tests/__init__.py: bafybeidxte5jeugotf25yogfbsoivyokeqffrvzo7lqgspm4kzrgbhvc3u
-  tests/test_behaviours.py: bafybeia4nnatpwcbjfpsq35kepdv5h5jjfpbznz2dajzuuirm7l7sns66i
+  tests/test_behaviours.py: bafybeibojamjtso4gc5zxuvssqwdhigpaeixz2f4s7jkeiwxi5g5vvhaqm
   tests/test_ceramic_db.py: bafybeidrwi47vkffgrvcti37dnlvelcgz32q6snkml65mm2fcuwo6payku
   tests/test_dialogues.py: bafybeigybvptoehtw2o2jbudvyxggo5yr4pyqic7m732sha4xtaaxnfdpe
   tests/test_handlers.py: bafybeibroylesvqhz6az25kpkvnc3mpou6hjrk4f33sh65jz6vhpszeve4
   tests/test_models.py: bafybeietgyqb5rsbnzqgzcsgm2pu2qcadu7rr7akxscfmegtghc5aguz44
   tests/test_payloads.py: bafybeifpwaozt6s56uctvfmkdmcuxqawmvhu5skgyfu3ekegqd3iz7v2nm
-  tests/test_rounds.py: bafybeihf6sf4a42z55yq2gqmmrz7v4icqxgycgtwjacdbefkehj7v6yniq
+  tests/test_rounds.py: bafybeiboqeikz3tewoovcprjtq423tvzd5fl5eprmzfu52tabtq32ylxj4
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihp5umafxzx45aad5pj7s3343se2wjkgnbirt4pybrape22swm6de

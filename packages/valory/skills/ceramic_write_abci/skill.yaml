@@ -7,22 +7,22 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeic3je64koagffola4n4khlbp4jdfhonyl6dwmodwz4r4oglnbwyma
-  behaviours.py: bafybeiad3h2c4fqyalo2vsyby37k27h5j43nugzhnbo26rb4tcb6kg7qyi
+  behaviours.py: bafybeibfifxhwtjbt2w5f2hnchyavvdv7xtaetxil6664zoq5q3h5cjefu
   ceramic/__init__.py: bafybeias4e3s6p5qtx6mmmcwkcd6kvbdnudy7sxai7d2suk75aazzdzdie
-  ceramic/payloads.py: bafybeicr75fitoucqknzu6vzic4jjb3w3pw655klbi36kwt4haplkg2dsy
+  ceramic/payloads.py: bafybeietnwexzspvfd25mddb2dhso6m4szavap45d3jrxbmhdfkkeb7hvm
   dialogues.py: bafybeifvrclkqpnl3dw46zwareemio6vgrqm4c5f3wfgv6rp267fcbyf5e
-  fsm_specification.yaml: bafybeiht5zkrrfhtwe4fjehygwfoymnzguhic2kataztdi473qmuujdr5e
+  fsm_specification.yaml: bafybeigrqblzg5xzgep5gi24z2ie7i3t7mplkim73chvmkpotd3rzk6bem
   handlers.py: bafybeib3aiosxhbyudcxtybdrvsmn6bvnl4ao3fwf2uc7lkidpnhvnucam
-  models.py: bafybeidlmrfijagsqx2dfxfnw4rxcdcmmmh2t4winwiaxuo3kd2bepvy7m
+  models.py: bafybeiachs7l57urr7qanqw6kugkarhtrol5w6rmk53pqzz6hciq3zznyu
   payloads.py: bafybeig63ibt5qa5sa4nw37gly3lvf4wwtps7vgr2zbvpp5zz6hzm66edq
-  rounds.py: bafybeiatujm3hwtcp6yypufxh67eyeyqds6n7tzpshgz4dmjogaod7t3du
+  rounds.py: bafybeidfandv3ywplalo6ftkvig3nhimgohmaa3xpj35phc6pde374oaci
   tests/__init__.py: bafybeigknrv5xw52pmcscrsxhtpibey5jbr26dss7o5eofery6ktd6w42e
-  tests/test_behaviours.py: bafybeiddh4wyk3q243sqjkmdfxposblvxrggb6fujuacdqmwxlizxykk4q
+  tests/test_behaviours.py: bafybeibmelmxw4tgx46oqdhfi7xx4sadqgn5q3mrxhlzfnuyeqts3otiwm
   tests/test_dialogues.py: bafybeibvhslg6mwhvmeffhoho5olnmr56ohvx63onv63aryhaidizk3jou
   tests/test_handlers.py: bafybeih6yobt7ihsp32n6nliq3ourwfmgpc7lvb672timj7cqx4wg4n5ba
   tests/test_models.py: bafybeihqwbnrtarzos5tak2ywurtbel6fxodpupyk677aipdemaxlgs7qi
   tests/test_payloads.py: bafybeicbuestgyhvx6obesc25tcupca3oqracjo2oevl5x3bfrf7sj3eay
-  tests/test_rounds.py: bafybeic7el2uhn63buev5rrjohcmhjb56hmcpsbm44tptkbtmlxhxm2zcm
+  tests/test_rounds.py: bafybeihlixubo4fanc5qq4vqwuzbfvjrkyziejwxucbce3auga26rb37me
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
@@ -80,12 +80,9 @@ models:
       multisend_address: '0x0000000000000000000000000000000000000000'
       termination_sleep: 900
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
+      ceramic_api_create_endpoint: api/v0/streams
       ceramic_api_commit_endpoint: api/v0/commits
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
-      ceramic_did_seed: '0101010101010101010101010101010101010101010101010101010101010101'
-      ceramic_did_str: z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX
-      default_write_stream_id: default_write_stream_id
-      default_write_property_name: default_write_property_name
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31

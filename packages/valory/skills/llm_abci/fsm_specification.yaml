@@ -1,0 +1,29 @@
+alphabet_in:
+- DID_NOT_SEND
+- DONE
+- DONE_CONTINUE
+- DONE_FINISHED
+- NO_MAJORITY
+- ROUND_TIMEOUT
+default_start_state: LLMRandomnessRound
+final_states:
+- FinishedLLMRound
+label: LLMAbciApp
+start_states:
+- LLMRandomnessRound
+states:
+- FinishedLLMRound
+- LLMRandomnessRound
+- LLMRound
+- LLMSelectKeeperRound
+transition_func:
+    (LLMRandomnessRound, DONE): LLMSelectKeeperRound
+    (LLMRandomnessRound, NO_MAJORITY): LLMRandomnessRound
+    (LLMRandomnessRound, ROUND_TIMEOUT): LLMRandomnessRound
+    (LLMRound, DID_NOT_SEND): LLMRandomnessRound
+    (LLMRound, DONE_CONTINUE): LLMRound
+    (LLMRound, DONE_FINISHED): FinishedLLMRound
+    (LLMRound, ROUND_TIMEOUT): LLMRandomnessRound
+    (LLMSelectKeeperRound, DONE): LLMRound
+    (LLMSelectKeeperRound, NO_MAJORITY): LLMRandomnessRound
+    (LLMSelectKeeperRound, ROUND_TIMEOUT): LLMRandomnessRound

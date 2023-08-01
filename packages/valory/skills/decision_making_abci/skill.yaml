@@ -1,0 +1,165 @@
+name: decision_making_abci
+author: valory
+version: 0.1.0
+type: skill
+description: An abci skill that implements the decision logic of the centaur.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
+  behaviours.py: bafybeiecgeionwiwb7xmrxyuypmkltpz7kqnl4dnpfind5niocdrcbytca
+  dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
+  fsm_specification.yaml: bafybeib3knchqkllaz5n5f5mkprr5g6uz5seiulodrowcr4zsfo3fujm2m
+  handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
+  models.py: bafybeictln7abrfqkm42euj2ldb2aqh3j3vuz45gltlepldzucgqgjy3va
+  payloads.py: bafybeif5bomwy74bwnphsk6bty6qb6efugvjnnopsz7qjunpe6gtgjaxya
+  rounds.py: bafybeigfbbgq2cybku6vyc3i4qpqyd3yau6pfstgninnfsntpijjio6zqu
+  tasks/finished_pipeline_preparation.py: bafybeifvwzvnw3d2lxlk4p5hd6j2tcxr7bwjewm667ubssoqyfsk4xafd4
+  tasks/llm_preparation.py: bafybeigi7i5yp7w5hi5mcbzuzdfbfm4j5etsvplbhb2pdjcb3jfcy6qzrq
+  tasks/read_stream_preparation.py: bafybeiespz6kzkzvrjjf3d6ffwse3rufuyrrab3axvg64pxw4jj6zzhwny
+  tasks/score_preparations.py: bafybeieiesjkyjbcvqut3l6nlzcwpidibsmo3mz7j6p54lbqzspfcf3ram
+  tasks/task_preparations.py: bafybeieqd2jhzmmjomzmcw72iptogrb6koche6dqmtcuz6lqktaxvi3dxe
+  tasks/twitter_preparation.py: bafybeianz2bixo7c2q7hxb6xpe6ui6y3tnms7xvyxeticd2bgp3u4m3p6u
+  tasks/write_stream_preparation.py: bafybeifl4j7s575ts6x4msntymkempwguj4yypmxy2xjmffknn7qhkzfo4
+  tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
+  tests/centaur_configs.py: bafybeidwiu7wsbh5luehpf4uwff35eupet7qq4cnhhs2p3pqbxxkydwoim
+  tests/test_behaviours.py: bafybeigddwn7uts6zb46lpk4j7eetp6sniwtclfzngkgws52yomue4cdvy
+  tests/test_dialogues.py: bafybeihxzcyy7xvg4lte4bv5hy2h4mozdzwvyaa36feu3oxv67jfvsyuoi
+  tests/test_handlers.py: bafybeie6q3l6zyf356uvhldobhiir5ang5ybmi7lcao3556n3bnlpfqhfm
+  tests/test_models.py: bafybeiazl2mfe3iwydtdkur3h2w7ir4iszext2666fzqnnhsr6xq2lhw3i
+  tests/test_payloads.py: bafybeifn75r2n6qvfkyfb2cc7kuxxf7myxvhh5tmd7s5d7jks6ohvewwzi
+  tests/test_rounds.py: bafybeieqe73cdz3yr5hboucjkglmvy337t6cxo46ck7iwfxtkjqyo752a4
+fingerprint_ignore_patterns: []
+connections: []
+contracts: []
+protocols: []
+skills:
+- valory/abstract_round_abci:0.1.0:bafybeiaseziuvbzh3trjggl5hx2tv3fduqrpiwiyksudaf6nvuxmwrg74i
+behaviours:
+  main:
+    args: {}
+    class_name: DecisionMakingRoundBehaviour
+handlers:
+  abci:
+    args: {}
+    class_name: ABCIHandler
+  contract_api:
+    args: {}
+    class_name: ContractApiHandler
+  http:
+    args: {}
+    class_name: HttpHandler
+  ipfs:
+    args: {}
+    class_name: IpfsHandler
+  ledger_api:
+    args: {}
+    class_name: LedgerApiHandler
+  signing:
+    args: {}
+    class_name: SigningHandler
+  tendermint:
+    args: {}
+    class_name: TendermintHandler
+models:
+  abci_dialogues:
+    args: {}
+    class_name: AbciDialogues
+  benchmark_tool:
+    args:
+      log_dir: /logs
+    class_name: BenchmarkTool
+  contract_api_dialogues:
+    args: {}
+    class_name: ContractApiDialogues
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+  ipfs_dialogues:
+    args: {}
+    class_name: IpfsDialogues
+  ledger_api_dialogues:
+    args: {}
+    class_name: LedgerApiDialogues
+  params:
+    args:
+      centaur_id_to_secrets: '{}'
+      centaurs_stream_id: dummy_centaurs_stream_id
+      manual_points_stream_id: manual_points_stream_id
+      ceramic_db_stream_id: ceramic_db_stream_id
+      ceramic_did_str: z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX
+      cleanup_history_depth: 1
+      cleanup_history_depth_current: null
+      drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
+      finalize_timeout: 60.0
+      genesis_config:
+        chain_id: chain-c4daS1
+        consensus_params:
+          block:
+            max_bytes: '22020096'
+            max_gas: '-1'
+            time_iota_ms: '1000'
+          evidence:
+            max_age_duration: '172800000000000'
+            max_age_num_blocks: '100000'
+            max_bytes: '1048576'
+          validator:
+            pub_key_types:
+            - ed25519
+          version: {}
+        genesis_time: '2022-05-20T16:00:21.735122717Z'
+        voting_power: '10'
+      history_check_timeout: 1205
+      ipfs_domain_name: null
+      keeper_allowed_retries: 3
+      keeper_timeout: 30.0
+      max_attempts: 10
+      max_healthcheck: 120
+      on_chain_service_id: null
+      prompt_template: 'Using the information in the text below, craft an engaging
+        and relevant post that highlights key insights or facts from the text. The
+        post should be limited to 280 characters and should include a call to action.
+        IMPORTANT: under absolutely no circumstances use hashtags #. The end of the
+        post should include this sentence: "This post was automatically generated
+        by the {name} Centaur: https://www.launchcentaurs.com/centaur/{id}". Text:
+        {memory}'
+      request_retry_delay: 1.0
+      request_timeout: 10.0
+      reset_pause_duration: 10
+      reset_tendermint_after: 2
+      retry_attempts: 400
+      retry_timeout: 3
+      round_timeout_seconds: 30.0
+      service_id: decision_making
+      service_registry_address: null
+      setup:
+        all_participants: []
+        safe_contract_address: '0x0000000000000000000000000000000000000000'
+        consensus_threshold: null
+      share_tm_config_on_startup: false
+      sleep_time: 1
+      tendermint_check_sleep_delay: 3
+      tendermint_com_url: http://localhost:8080
+      tendermint_max_retries: 5
+      tendermint_p2p_url: localhost:26656
+      tendermint_url: http://localhost:26657
+      tx_timeout: 10.0
+      use_termination: false
+      validate_timeout: 1205
+    class_name: Params
+  requests:
+    args: {}
+    class_name: Requests
+  signing_dialogues:
+    args: {}
+    class_name: SigningDialogues
+  state:
+    args: {}
+    class_name: SharedState
+  tendermint_dialogues:
+    args: {}
+    class_name: TendermintDialogues
+dependencies:
+  twitter_text_parser:
+    version: ==3.0.0
+is_abstract: true

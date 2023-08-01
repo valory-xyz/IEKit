@@ -19,6 +19,7 @@
 
 """This package contains the tests for rounds of ScoreRead."""
 
+import json
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, Hashable, List, Mapping, Optional, Union, cast
 from unittest import mock
@@ -266,12 +267,16 @@ class TestStreamWriteRound(BaseOnlyKeeperSendsRoundTest):
         "payload_str, exit_event",
         (
             (
-                StreamWriteRound.ERROR_PAYLOAD,
+                json.dumps({"success": False}),
                 Event.API_ERROR,
             ),
             (
-                StreamWriteRound.SUCCCESS_PAYLOAD,
+                json.dumps({"success": True, "stream_id_to_verify": "dummy_stream_id"}),
                 Event.DONE,
+            ),
+            (
+                "MAX_RETRIES_PAYLOAD",
+                Event.MAX_RETRIES_ERROR,
             ),
         ),
     )
@@ -323,8 +328,11 @@ class TestVerificationRound(BaseCeramicWriteRoundTest):
         "test_case",
         (
             RoundTestCase(
-                name="Happy path",
-                initial_data={},
+                name="Happy path - finished",
+                initial_data={
+                    "stream_id_to_verify": "dummy_stream_id",
+                    "write_data": [],
+                },
                 payloads=get_payloads(
                     payload_cls=VerificationPayload,
                     data=get_dummy_ceramic_write_payload_serialized(),
@@ -332,19 +340,39 @@ class TestVerificationRound(BaseCeramicWriteRoundTest):
                 final_data={
                     "most_voted_api_data": get_dummy_ceramic_write_payload_serialized(),
                 },
-                event=Event.DONE,
+                event=Event.DONE_FINISHED,
+                most_voted_payload=get_dummy_ceramic_write_payload_serialized(),
+                synchronized_data_attr_checks=[],
+            ),
+            RoundTestCase(
+                name="Happy path - continue",
+                initial_data={
+                    "stream_id_to_verify": "dummy_stream_id",
+                    "write_data": [0, 1],
+                },
+                payloads=get_payloads(
+                    payload_cls=VerificationPayload,
+                    data=get_dummy_ceramic_write_payload_serialized(),
+                ),
+                final_data={
+                    "most_voted_api_data": get_dummy_ceramic_write_payload_serialized(),
+                },
+                event=Event.DONE_CONTINUE,
                 most_voted_payload=get_dummy_ceramic_write_payload_serialized(),
                 synchronized_data_attr_checks=[],
             ),
             RoundTestCase(
                 name="API error",
-                initial_data={},
+                initial_data={
+                    "stream_id_to_verify": "dummy_stream_id",
+                    "write_data": [],
+                },
                 payloads=get_payloads(
                     payload_cls=VerificationPayload,
                     data=get_dummy_ceramic_write_payload_serialized(api_error=True),
                 ),
                 final_data={},
-                event=Event.API_ERROR,
+                event=Event.VERIFICATION_ERROR,
                 most_voted_payload=get_dummy_ceramic_write_payload_serialized(
                     api_error=True
                 ),

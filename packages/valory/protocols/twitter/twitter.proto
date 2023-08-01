@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package aea.valory.twitter.v1_0_0;
+
+message TwitterMessage{
+
+  // Performatives and contents
+  message Create_Tweet_Performative{
+    string text = 1;
+  }
+
+  message Tweet_Created_Performative{
+    string tweet_id = 1;
+  }
+
+  message Error_Performative{
+    string message = 1;
+  }
+
+
+  oneof performative{
+    Create_Tweet_Performative create_tweet = 5;
+    Error_Performative error = 6;
+    Tweet_Created_Performative tweet_created = 7;
+  }
+}

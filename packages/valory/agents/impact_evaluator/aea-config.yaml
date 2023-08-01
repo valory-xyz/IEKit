@@ -12,7 +12,7 @@ fingerprint:
   tests/helpers/data/json_server/data.json: bafybeiennke2pehckrrp62zh3fwlrdn4xeyp5ecwsykfwdzuohpnq2awbu
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeidfsamzdrqqkdra4ektollyfkhiyb2iqymy6djavgewon2cb23vwu
-  tests/test_impact_evaluator.py: bafybeigkilhkgoiqlbmn6ujjjbxxqlqyz5etgtomypdtvy2ydkpsfxq65y
+  tests/test_impact_evaluator.py: bafybeiefoh5iedrxlmav4leht2gwjor7wxfexg2euqfjcub77kaiag4kti
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihp5umafxzx45aad5pj7s3343se2wjkgnbirt4pybrape22swm6de
@@ -20,26 +20,41 @@ connections:
 - valory/http_client:0.23.0:bafybeieoeuy4brzimtnubmokwirhrx27ezls6cdnl5qik4rkykfle3nn2y
 - valory/ledger:0.19.0:bafybeiejc7g7ebv3cleiqb4f4h4pspcu6vtr54332szwlqiabfs3sfdh44
 - valory/p2p_libp2p_client:0.1.0:bafybeihdnfdth3qgltefgrem7xyi4b3ejzaz67xglm2hbma2rfvpl2annq
+- valory/openai:0.1.0:bafybeiczft4se4jitvgufcjdys6qxaisuapwgm6ge7emgcnftzuqu6i23e
+- valory/twitter:0.1.0:bafybeibndxp3l35osve5pj255waemunlzaacwtasyazjmcmrx7qo5wcrni
 contracts:
 - valory/dynamic_contribution:0.1.0:bafybeiaapvt7o4s5zpkxjcaplbzw7bhgeeqwtsddzjxmg6bfth6ytlvdiq
+- valory/gnosis_safe:0.1.0:bafybeic3ajabs7sl6qgkzy452szlsdeitj746kdzfd7k4m4ixtxw4g33qi
+- valory/gnosis_safe_proxy_factory:0.1.0:bafybeigbtbgzqlt4tufgymtjsyxiqvivxmtc4csx43hmo5nexmdfcxm6bi
+- valory/multisend:0.1.0:bafybeict2k3vf3c4fvzosaq5kku2ivtzsskbomrujmmoicut7eg52onnje
+- valory/service_registry:0.1.0:bafybeiae7nr5fqn6ckt3ehol27qfd4o5ljzx6kk5k32lgtrvj3mtb62ufm
 protocols:
 - open_aea/signing:1.0.0:bafybeifuxs7gdg2okbn7uofymenjlmnih2wxwkym44lsgwmklgwuckxm2m
+- valory/abci:0.1.0:bafybeigootsvqpk6th5xpdtzanxum3earifrrezfyhylfrit7yvqdrtgpe
+- valory/acn:1.1.0:bafybeiapa5ilsobggnspoqhspftwolrx52udrwmaxdxgrk26heuvl4oooa
 - valory/contract_api:1.0.0:bafybeiasywsvax45qmugus5kxogejj66c5taen27h4voriodz7rgushtqa
 - valory/http:1.0.0:bafybeia5bxdua2i6chw6pg47bvoljzcpuqxzy4rdrorbdmcbnwmnfdobtu
+- valory/ipfs:0.1.0:bafybeibjzhsengtxfofqpxy6syamplevp35obemwfp4c5lhag3v2bvgysa
+- valory/ledger_api:1.0.0:bafybeigsvceac33asd6ecbqev34meyyjwu3rangenv6xp5rkxyz4krvcby
+- valory/llm:1.0.0:bafybeigqybmg75vsxexmp57hkms7lkp7iwpf54r7wpygizxryvrhfqqpb4
+- valory/tendermint:0.1.0:bafybeidjqmwvgi4rqgp65tbkhmi45fwn2odr5ecezw6q47hwitsgyw4jpa
+- valory/twitter:0.1.0:bafybeib4eyf7qbs7kdntqzhwqsaaj4o2mzcokcztaza6qgwt7sbxgkqu2m
 skills:
 - valory/abstract_abci:0.1.0:bafybeiamr3cwetayz6lr72buhq6iviabtboj4hhpq47tlumimxolvvqjcy
 - valory/abstract_round_abci:0.1.0:bafybeiaseziuvbzh3trjggl5hx2tv3fduqrpiwiyksudaf6nvuxmwrg74i
-- valory/impact_evaluator_abci:0.1.0:bafybeicqw7lnhhm6g6quhkr4ujni3lmbib6hexmnuzj7edryjxj7xgrjfa
-- valory/path_switch_abci:0.1.0:bafybeihp6z2jyk2loc7l5s5m5d32psltsx7xzapsqtma7rew6r6n3gvkaa
+- valory/impact_evaluator_abci:0.1.0:bafybeic3bvgzdwgmgu7chjuouizobc5r5efxu756xtkmiry5f2l7ik5wre
 - valory/generic_scoring_abci:0.1.0:bafybeif7ldswh2r5ujuppup36hbknctqgm7fl4uxvudifqsultqu2ucf5y
 - valory/twitter_scoring_abci:0.1.0:bafybeiacpacuncevjnt67cppzlgtao426ynxidginjyol3lyxdaimctbjq
-- valory/ceramic_read_abci:0.1.0:bafybeiabpzbhx7uoj53hflvtwsthlbfxmiyszjdcdsz4qcl4gibwpurwha
-- valory/ceramic_write_abci:0.1.0:bafybeig62z3ytev3w36ms2eemxdqndvwlmcvlh6utt56eyi5ydvks6id3a
-- valory/dynamic_nft_abci:0.1.0:bafybeihti5xfo5lknjsfk7mku6xo7vm5y2o4icujwpfvux5pmd44zuyc5u
+- valory/ceramic_read_abci:0.1.0:bafybeidqeol6ne7mjdzpjrg2bb3hrp2msk5vco6pybro6iudgt7k2wbiyq
+- valory/ceramic_write_abci:0.1.0:bafybeif2vvmgj6zz7yqwsha4ug57rsrp3p3ogz4jhelmm6qf6tx2rtgeu4
+- valory/dynamic_nft_abci:0.1.0:bafybeify46c4rib3wnwpfchp5e42ztrppalywgv6cgcyroe5ok6ejxmzli
 - valory/registration_abci:0.1.0:bafybeibafy7qmcvvzaykimy3mbqdwtcuajmbghqilaa7zwkh6wla33cfce
 - valory/reset_pause_abci:0.1.0:bafybeialcwck7fahrr23jckv5qjwg3cdq4ai2ihyjsofnbj44jzyl4cjmm
 - valory/termination_abci:0.1.0:bafybeifqsogqiar4yook5bu3j6z66dbdcizey7dr3e5oxeocdjijvfbaja
 - valory/transaction_settlement_abci:0.1.0:bafybeiacwr7p4nhhufoey7uz2jqkegrlykdrmc7mm3rzkvh2mslu66gyle
+- valory/twitter_write_abci:0.1.0:bafybeicuieib63w5mc5drlnpraqh3wvudd6y7p2n2c23tm3jh6wmqvgkwq
+- valory/decision_making_abci:0.1.0:bafybeigeqzgjlqrbqqkfq2hd65dbhv6xprovzfkxgy6qr5aumomqfky4de
+- valory/llm_abci:0.1.0:bafybeihmbmhcfddhmugo6443lso6ayau35ayn2qa77bltvd7zs2gyvylne
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -117,17 +132,16 @@ models:
     args:
       broadcast_to_server: false
       history_end: null
+      centaurs_stream_id: ${str:kjzl6cwe1jw146h5momfk1vwzjq9vtg2ic4c1h5893usybetw3x338gu0ui2iih}
+      manual_points_stream_id: ${str:manual_points_stream_id}
+      ceramic_db_stream_id: ${str:ceramic_db_stream_id}
       ceramic_api_base: ${str:https://ceramic-clay.3boxlabs.com/}
+      ceramic_api_create_endpoint: api/v0/streams
       ceramic_api_commit_endpoint: ${str:api/v0/commits}
       ceramic_api_read_endpoint: ${str:api/v0/commits/{stream_id}}
       ceramic_did_seed: ${str:0101010101010101010101010101010101010101010101010101010101010101}
       ceramic_did_str: ${str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
-      default_read_stream_id: ${str:default_read_stream_id}
-      default_write_stream_id: ${str:default_write_stream_id}
-      default_read_target_property: ${str:default_read_target_property}
       default_write_target_property: ${str:default_write_target_property}
-      manual_points_stream_id: ${str:manual_points_stream_id}
-      manual_points_target_property: ${str:score_data}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -168,7 +182,7 @@ models:
       service_id: impact_evaluator
       service_registry_address: ${str:null}
       setup:
-        all_participants: ${list:[]}
+        all_participants: ${list:["0x10E867Ac2Fb0Aa156ca81eF440a5cdf373bE1AaC"]}
         safe_contract_address: ${str:0x0000000000000000000000000000000000000000}
         consensus_threshold: ${int:null}
       share_tm_config_on_startup: ${bool:false}
@@ -195,6 +209,7 @@ models:
       validate_timeout: 1205
       finalize_timeout: 60.0
       history_check_timeout: 1205
+      centaur_id_to_secrets: ${str:{}}
 ---
 public_id: fetchai/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
 type: connection
