@@ -7,12 +7,12 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
-  behaviours.py: bafybeifp3ycbgedwpfzhjcahld7ynzfzz6ag7nkhwmbb2yv4l6pulnd6ca
-  composition.py: bafybeiggdn7ofm3qrruad6gzdk3gncyq4yha5hg2o7kslhxstvunzta6pq
-  dialogues.py: bafybeigpwuzku3we7axmxeamg7vn656maww6emuztau5pg3ebsoquyfdqm
-  fsm_specification.yaml: bafybeicwm554rdmzvh5m55qabt57yz6xnt4whxjqwh5ypudk6hu4zn2pp4
-  handlers.py: bafybeiaqgaev2nfhuihhuxxxxtuiggin5zcpwn7ik7lok2n6ywi6dqy2ta
-  models.py: bafybeidzns3tvzqb5a7jurl2ed3ncjfcg2l5h4mxqgl7b26yuwfm3sw3ly
+  behaviours.py: bafybeifhoufesr4r4re65mxjadqasjymvz6tkc25xn5yyn473yunhjiufe
+  composition.py: bafybeifzm5nsheazkrro7rvjahrqel5ky6zliuq53kdqvtk72vkghvfyom
+  dialogues.py: bafybeigjknz4qqynbsltjje46gidg4rftsqw6ybjwegz24wetmycutpzh4
+  fsm_specification.yaml: bafybeiczmrqtpec5g5ucobnzsbssypar3k2gjjmpnffugnmz5cw25sgs4m
+  handlers.py: bafybeidkli6fphcmdgwsys4lkyf3fx6fbawet4nt2pnixfypzijhg6b3ze
+  models.py: bafybeicufmgzkyjucrnjeymzcbnlg2rukqwury36eodsogil7lkk7mu5xq
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
   tests/test_behaviours.py: bafybeifkazsevd6vsfaapulouxepez3rl24y3rxgja5zhmj7s323zdjlmq
   tests/test_dialogues.py: bafybeieaos2byphju6i6xvytppqqcuqqvnpilnflsy73l3wqazzjttbg7m
@@ -23,17 +23,19 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiac62ennpw54gns2quk4g3yoaili2mb72nj6c52czobz5dcwj4mwi
-- valory/ceramic_read_abci:0.1.0:bafybeia4lpblkwvngmlmemr3ihkccsyshwqig4yas6lbi574uxpemk6fzm
-- valory/path_switch_abci:0.1.0:bafybeifsvlsqclv4otiq6foaafvlxqy2k63uojsjgvmoiouizphthfc5yy
-- valory/generic_scoring_abci:0.1.0:bafybeihg67ylttj3mka6bv6h5ezglrmuvzow2pwptaqdz4kaki5lkacmku
-- valory/twitter_scoring_abci:0.1.0:bafybeigi7b6s64o3k3v4f46fsfknis4oazjfa45haozns7kwo3axxt6hrq
-- valory/ceramic_write_abci:0.1.0:bafybeib5sci3o2xzsxpnzes4yolxuzzcijfs5bqb6hwaym5howdlwkxqx4
-- valory/dynamic_nft_abci:0.1.0:bafybeicz2ctm3ymgvsbbd37w7deed2h5pgqy5sky3kt27zfbdmcntnbvdm
-- valory/registration_abci:0.1.0:bafybeib6fsfur5jnflcveidnaeylneybwazewufzwa5twnwovdqgwtwsxm
-- valory/reset_pause_abci:0.1.0:bafybeibqz7y3i4aepuprhijwdydkcsbqjtpeea6gdzpp5fgc6abrvjz25a
-- valory/termination_abci:0.1.0:bafybeieb3gnvjxxsh73g67m7rivzknwb63xu4qeagpkv7f4mqz33ecikem
-- valory/transaction_settlement_abci:0.1.0:bafybeihdpac4ayfgop3ixflimlb3zzyeejlpqtljfptdak6tc7aq4u5fzi
+- valory/abstract_round_abci:0.1.0:bafybeiaseziuvbzh3trjggl5hx2tv3fduqrpiwiyksudaf6nvuxmwrg74i
+- valory/ceramic_read_abci:0.1.0:bafybeidqeol6ne7mjdzpjrg2bb3hrp2msk5vco6pybro6iudgt7k2wbiyq
+- valory/generic_scoring_abci:0.1.0:bafybeif7ldswh2r5ujuppup36hbknctqgm7fl4uxvudifqsultqu2ucf5y
+- valory/twitter_scoring_abci:0.1.0:bafybeiacpacuncevjnt67cppzlgtao426ynxidginjyol3lyxdaimctbjq
+- valory/ceramic_write_abci:0.1.0:bafybeif2vvmgj6zz7yqwsha4ug57rsrp3p3ogz4jhelmm6qf6tx2rtgeu4
+- valory/dynamic_nft_abci:0.1.0:bafybeify46c4rib3wnwpfchp5e42ztrppalywgv6cgcyroe5ok6ejxmzli
+- valory/registration_abci:0.1.0:bafybeibafy7qmcvvzaykimy3mbqdwtcuajmbghqilaa7zwkh6wla33cfce
+- valory/reset_pause_abci:0.1.0:bafybeialcwck7fahrr23jckv5qjwg3cdq4ai2ihyjsofnbj44jzyl4cjmm
+- valory/termination_abci:0.1.0:bafybeifqsogqiar4yook5bu3j6z66dbdcizey7dr3e5oxeocdjijvfbaja
+- valory/transaction_settlement_abci:0.1.0:bafybeiacwr7p4nhhufoey7uz2jqkegrlykdrmc7mm3rzkvh2mslu66gyle
+- valory/decision_making_abci:0.1.0:bafybeigeqzgjlqrbqqkfq2hd65dbhv6xprovzfkxgy6qr5aumomqfky4de
+- valory/llm_abci:0.1.0:bafybeihmbmhcfddhmugo6443lso6ayau35ayn2qa77bltvd7zs2gyvylne
+- valory/twitter_write_abci:0.1.0:bafybeicuieib63w5mc5drlnpraqh3wvudd6y7p2n2c23tm3jh6wmqvgkwq
 behaviours:
   main:
     args: {}
@@ -84,17 +86,17 @@ models:
     args:
       broadcast_to_server: false
       history_end: null
+      centaurs_stream_id: dummy_centaurs_stream_id
+      manual_points_stream_id: manual_points_stream_id
+      ceramic_db_stream_id: ceramic_db_stream_id
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
+      ceramic_api_create_endpoint: api/v0/streams
       ceramic_api_commit_endpoint: api/v0/commits
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
       ceramic_did_seed: '0101010101010101010101010101010101010101010101010101010101010101'
       ceramic_did_str: z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX
-      default_read_stream_id: default_read_stream_id
-      default_write_stream_id: default_write_stream_id
       default_read_target_property: default_read_target_property
       default_write_target_property: default_write_target_property
-      manual_points_stream_id: manual_points_stream_id
-      manual_points_target_property: score_data
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -165,6 +167,7 @@ models:
       validate_timeout: 1205
       finalize_timeout: 60.0
       history_check_timeout: 1205
+      centaur_id_to_secrets: '{}'
     class_name: Params
   randomness_api:
     args:
@@ -189,6 +192,9 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
+  twitter_dialogues:
+    args: {}
+    class_name: TwitterDialogues
 dependencies:
   open-aea-cli-ipfs:
     version: <2.0.0,>=1.27.0

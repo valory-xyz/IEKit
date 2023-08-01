@@ -22,4 +22,8 @@ cf730c42226587eb9a74c96986605f95f71772ce:packages/valory/skills/path_switch_abci
 d47f7de20573d541505169665c2ae779ea57a4b0:packages/valory/services/impact_evaluator/service.yaml:generic-api-key:65
 d47f7de20573d541505169665c2ae779ea57a4b0:packages/valory/services/impact_evaluator/service.yaml:generic-api-key:125
 d47f7de20573d541505169665c2ae779ea57a4b0:packages/valory/services/impact_evaluator/service.yaml:generic-api-key:185
+d47f7de20573d541505169665c2ae779ea57a4b0:packages/valory/services/impact_evaluator/service.yaml:generic-api-key:245e271cd3303d407521c714253870de451f8617150:packages/valory/skills/decision_making_abci/skill.yaml:generic-api-key:90
+e271cd3303d407521c714253870de451f8617150:packages/valory/skills/llm_abci/skill.yaml:generic-api-key:88
+e271cd3303d407521c714253870de451f8617150:packages/valory/skills/twitter_write_abci/skill.yaml:generic-api-key:80
+e271cd3303d407521c714253870de451f8617150:packages/valory/skills/decision_making_abci/skill.yaml:generic-api-key:90
 d47f7de20573d541505169665c2ae779ea57a4b0:packages/valory/services/impact_evaluator/service.yaml:generic-api-key:245

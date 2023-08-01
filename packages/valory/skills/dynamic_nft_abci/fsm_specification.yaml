@@ -1,23 +1,19 @@
 alphabet_in:
 - CONTRACT_ERROR
+- DONE
 - NO_MAJORITY
-- NO_WRITE
 - ROUND_TIMEOUT
-- WRITE
 default_start_state: TokenTrackRound
 final_states:
-- FinishedTokenTrackNoWriteRound
-- FinishedTokenTrackWriteRound
+- FinishedTokenTrackRound
 label: DynamicNFTAbciApp
 start_states:
 - TokenTrackRound
 states:
-- FinishedTokenTrackNoWriteRound
-- FinishedTokenTrackWriteRound
+- FinishedTokenTrackRound
 - TokenTrackRound
 transition_func:
     (TokenTrackRound, CONTRACT_ERROR): TokenTrackRound
+    (TokenTrackRound, DONE): FinishedTokenTrackRound
     (TokenTrackRound, NO_MAJORITY): TokenTrackRound
-    (TokenTrackRound, NO_WRITE): FinishedTokenTrackNoWriteRound
     (TokenTrackRound, ROUND_TIMEOUT): TokenTrackRound
-    (TokenTrackRound, WRITE): FinishedTokenTrackWriteRound

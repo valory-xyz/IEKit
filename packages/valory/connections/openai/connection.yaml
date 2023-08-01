@@ -1,0 +1,28 @@
+name: openai
+author: valory
+version: 0.1.0
+type: connection
+description: The openai connection provides a wrapper around OpenAI SDK.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeiagnziswj5tll4yzx63u4hvat4yieoaaqt5b67chvvqxg5th5mxz4
+  connection.py: bafybeidysp7xf4moegqyqi4hryqzrgx6dhqgvzop5ve46mzxdxdxufmrcm
+  readme.md: bafybeibqbvpfn6i2w7vxk2m65gizd2hcofu7mdzp2yusx7uupelztme724
+fingerprint_ignore_patterns: []
+connections: []
+protocols:
+- valory/llm:1.0.0:bafybeigqybmg75vsxexmp57hkms7lkp7iwpf54r7wpygizxryvrhfqqpb4
+class_name: OpenaiConnection
+config:
+  engine: text-davinci-003
+  max_tokens: 500
+  openai_api_key: null
+  temperature: 0.7
+excluded_protocols: []
+restricted_to_protocols: []
+dependencies:
+  openai:
+    version: ==0.27.2
+is_abstract: false
+cert_requests: []

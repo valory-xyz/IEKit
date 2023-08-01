@@ -1,0 +1,283 @@
+# -*- coding: utf-8 -*-
+# ------------------------------------------------------------------------------
+#
+#   Copyright 2023 Valory AG
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+# ------------------------------------------------------------------------------
+
+"""This package contains round behaviours of DecisionMakingAbciApp."""
+
+import json
+from abc import ABC
+from datetime import datetime, timezone
+from typing import Generator, Set, Type, cast
+
+from packages.valory.skills.abstract_round_abci.base import AbstractRound
+from packages.valory.skills.abstract_round_abci.behaviours import (
+    AbstractRoundBehaviour,
+    BaseBehaviour,
+)
+from packages.valory.skills.decision_making_abci.models import Params, SharedState
+from packages.valory.skills.decision_making_abci.rounds import (
+    DecisionMakingAbciApp,
+    DecisionMakingPayload,
+    DecisionMakingRound,
+    Event,
+    SynchronizedData,
+)
+from packages.valory.skills.decision_making_abci.tasks.finished_pipeline_preparation import (
+    FinishedPipelinePreparation,
+)
+from packages.valory.skills.decision_making_abci.tasks.llm_preparation import (
+    LLMPreparation,
+)
+from packages.valory.skills.decision_making_abci.tasks.read_stream_preparation import (
+    ReadCentaursPreparation,
+    ReadContributeDBPreparation,
+    ReadManualPointsPreparation,
+)
+from packages.valory.skills.decision_making_abci.tasks.score_preparations import (
+    ScorePreparation,
+)
+from packages.valory.skills.decision_making_abci.tasks.twitter_preparation import (
+    DailyTweetPreparation,
+    ScheduledTweetPreparation,
+)
+from packages.valory.skills.decision_making_abci.tasks.write_stream_preparation import (
+    DailyOrbisPreparation,
+    UpdateCentaursPreparation,
+    WriteContributeDBPreparation,
+)
+
+
+# Task FSM
+previous_event_to_task_preparation_cls = {
+    None: {
+        "prev": None,
+        "next": ReadCentaursPreparation,
+    },
+    Event.READ_CENTAURS.value: {
+        "prev": ReadCentaursPreparation,
+        "next": LLMPreparation,
+    },
+    Event.LLM.value: {
+        "prev": LLMPreparation,
+        "next": DailyTweetPreparation,
+    },
+    Event.DAILY_TWEET.value: {
+        "prev": DailyTweetPreparation,
+        "next": DailyOrbisPreparation,
+    },
+    Event.DAILY_ORBIS.value: {
+        "prev": DailyOrbisPreparation,
+        "next": ScheduledTweetPreparation,
+    },
+    Event.SCHEDULED_TWEET.value: {
+        "prev": ScheduledTweetPreparation,
+        "next": UpdateCentaursPreparation,
+    },
+    Event.UPDATE_CENTAURS.value: {
+        "prev": UpdateCentaursPreparation,
+        "next": ReadContributeDBPreparation,
+    },
+    Event.READ_CONTRIBUTE_DB.value: {
+        "prev": ReadContributeDBPreparation,
+        "next": ReadManualPointsPreparation,
+    },
+    Event.READ_MANUAL_POINTS.value: {
+        "prev": ReadManualPointsPreparation,
+        "next": ScorePreparation,
+    },
+    Event.SCORE.value: {
+        "prev": ScorePreparation,
+        "next": WriteContributeDBPreparation,
+    },
+    Event.WRITE_CONTRIBUTE_DB.value: {
+        "prev": WriteContributeDBPreparation,
+        "next": FinishedPipelinePreparation,
+    },
+    Event.NEXT_CENTAUR.value: {
+        "prev": None,
+        "next": LLMPreparation,
+    },
+}
+
+
+class DecisionMakingBaseBehaviour(BaseBehaviour, ABC):
+    """Base behaviour for the decision_making_abci skill."""
+
+    @property
+    def synchronized_data(self) -> SynchronizedData:
+        """Return the synchronized data."""
+        return cast(SynchronizedData, super().synchronized_data)
+
+    @property
+    def params(self) -> Params:
+        """Return the params."""
+        return cast(Params, super().params)
+
+    @property
+    def local_state(self) -> SharedState:
+        """Return the state."""
+        return cast(SharedState, self.context.state)
+
+
+class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
+    """DecisionMakingBehaviour"""
+
+    matching_round: Type[AbstractRound] = DecisionMakingRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            updates, event = self.get_updates_and_event()
+            payload_content = json.dumps(
+                {"updates": updates, "event": event}, sort_keys=True
+            )
+            sender = self.context.agent_address
+            payload = DecisionMakingPayload(sender=sender, content=payload_content)
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
+
+    def get_updates_and_event(self):
+        """Get the updates and event"""
+
+        now_utc = self._get_utc_time()
+
+        # Get the previous and next task preparations
+        previous_decision_event = self.synchronized_data.previous_decision_event
+
+        event_list = list(
+            previous_event_to_task_preparation_cls.keys()
+        )  # since python 3.7, dict keys preserve order
+
+        previous_task_skipped = False
+
+        # Loop until we reach a non-skipped task
+        while True:
+            task_preparation_clss = previous_event_to_task_preparation_cls[
+                previous_decision_event
+            ]
+            previous_task_preparation_cls = task_preparation_clss["prev"]
+            next_task_preparation_cls = task_preparation_clss["next"]
+            self.context.logger.info(
+                f"Previous task = {previous_task_preparation_cls.__name__ if previous_task_preparation_cls else None}, Next task = {next_task_preparation_cls.__name__}"
+            )
+
+            # Init events and updates
+            post_event = None
+            post_updates = {}
+            pre_event = None
+            pre_updates = {}
+
+            # Process post task
+            if not previous_task_skipped:
+                previous_task_preparation = (
+                    previous_task_preparation_cls(
+                        self.synchronized_data,
+                        self.params,
+                        self.context.logger,
+                        now_utc,
+                    )
+                    if previous_task_preparation_cls
+                    else None
+                )
+
+                if previous_task_preparation:
+                    post_updates, post_event = previous_task_preparation.post_task()
+                    self.context.logger.info(
+                        f"Post task updates = {post_updates}, post event = {post_event}"
+                    )
+
+                # If the post task returns an event, do not proceed with the pre task:
+                if post_event:
+                    return post_updates, post_event
+
+            # Process pre task
+            next_task_preparation = (
+                next_task_preparation_cls(
+                    self.synchronized_data.update(  # use an updated version of the data
+                        synchronized_data_class=SynchronizedData,
+                        **post_updates,
+                    ),
+                    self.params,
+                    self.context.logger,
+                    now_utc,
+                )
+                if next_task_preparation_cls
+                else None
+            )
+
+            if next_task_preparation:
+                pre_updates, pre_event = next_task_preparation.pre_task()
+                self.context.logger.info(
+                    f"Pre task updates = {pre_updates}, pre event = {pre_event}"
+                )
+
+            if pre_event:
+                if set(post_updates.keys()).intersection(set(pre_updates.keys())):
+                    raise ValueError(
+                        f"Common keys between post_updates [{post_updates}] and pre_updates [{pre_updates}]"
+                    )
+                return {**post_updates, **pre_updates}, pre_event
+
+            # If not event has been triggered, we skip the task
+            self.context.logger.info(
+                f"Skipping the {next_task_preparation_cls.__name__} task"
+            )
+            # Get the next task
+            if previous_decision_event != Event.NEXT_CENTAUR.value:
+                # Regular case: we just get the next task in the list
+                previous_decision_event_index = (
+                    event_list.index(previous_decision_event) + 1
+                ) % len(event_list)
+                previous_decision_event = event_list[previous_decision_event_index]
+            else:
+                # Special case: after NEXT_CENTAUR, we don't want to jump into the first task (READ_CENTAURS),
+                # because the data has been already read at the beginning. Also, if we reached this point
+                # it means we are skipping the LLM task (it comes after a NEXT_CENTAUR event). In this case,
+                # we can directly skip to SCHEDULED_TWEET because skipping LLM means skipping DailyTwitter and DailyOrbis.
+                # Therefore, we act as if the previous task was DailyOrbis.
+                previous_decision_event = Event.DAILY_ORBIS.value
+
+            previous_task_skipped = True
+
+    def _get_utc_time(self):
+        """Check if it is process time"""
+        now_utc = self.local_state.round_sequence.last_round_transition_timestamp
+
+        # Tendermint timestamps are expected to be UTC, but for some reason
+        # we are getting local time. We replace the hour and timezone.
+        # TODO: this hour replacement could be problematic in some time zones
+        now_utc = now_utc.replace(
+            hour=datetime.now(timezone.utc).hour, tzinfo=timezone.utc
+        )
+        now_utc_str = now_utc.strftime("%Y-%m-%d %H:%M:%S %Z")
+        self.context.logger.info(f"Now [UTC]: {now_utc_str}")
+
+        return now_utc
+
+
+class DecisionMakingRoundBehaviour(AbstractRoundBehaviour):
+    """DecisionMakingRoundBehaviour"""
+
+    initial_behaviour_cls = DecisionMakingBehaviour
+    abci_app_cls = DecisionMakingAbciApp  # type: ignore
+    behaviours: Set[Type[BaseBehaviour]] = [DecisionMakingBehaviour]

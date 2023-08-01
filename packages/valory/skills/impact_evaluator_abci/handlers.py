@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the handlers for the skill of AutonomousFundAbciApp."""
+"""This module contains the handlers for the skill of ImpactEvaluatorAbciApp."""
 
 from packages.valory.skills.abstract_round_abci.handlers import (
     ABCIRoundHandler as BaseABCIRoundHandler,
@@ -40,6 +40,10 @@ from packages.valory.skills.abstract_round_abci.handlers import (
 from packages.valory.skills.dynamic_nft_abci.handlers import (
     HttpHandler as BaseHttpHandler,
 )
+from packages.valory.skills.llm_abci.handlers import LlmHandler as BaseLlmHandler
+from packages.valory.skills.twitter_write_abci.handlers import (
+    TwitterHandler as BaseTwitterHandler,
+)
 
 
 ABCIRoundHandler = BaseABCIRoundHandler
@@ -49,3 +53,5 @@ LedgerApiHandler = BaseLedgerApiHandler
 ContractApiHandler = BaseContractApiHandler
 TendermintHandler = BaseTendermintHandler
 IpfsHandler = BaseIpfsHandler
+TwitterHandler = BaseTwitterHandler
+LlmHandler = BaseLlmHandler

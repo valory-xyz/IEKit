@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeia2ylrldfnfsrbm2mmdhdj3munhnw7sqs4hipaodmkbg7jyzrgpli
+agent: valory/impact_evaluator:0.1.0:bafybeibjvgpor2sr4voqotsahehdlcmxkrf4hst2dmuvcvsrnlrkh7jniq
 number_of_agents: 4
 deployment:
   agent:
@@ -59,17 +59,15 @@ extra:
         genesis_config: *id002
         broadcast_to_server: false
         history_end: null
+        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:dummy_centaurs_stream_id}
+        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
+        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:ceramic_db_stream_id}
         ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
+        ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
         ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
         ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
         ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
         ceramic_did_str: ${CERAMIC_DID_STR:str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
-        default_read_stream_id: ${DEFAULT_READ_STREAM_ID:str:default_read_stream_id}
-        default_write_stream_id: ${DEFAULT_WRITE_STREAM_ID:str:default_write_stream_id}
-        default_read_target_property: ${DEFAULT_READ_TARGET_PROPERTY:str:default_read_target_property}
-        default_write_target_property: ${DEFAULT_WRITE_TARGET_PROPERTY:str:default_write_target_property}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
-        manual_points_target_property: ${MANUAL_POINTS_TARGET_PROPERTY:str:score_data}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -112,6 +110,7 @@ extra:
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
+        centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
 1:
   models:
     benchmark_tool:
@@ -123,17 +122,15 @@ extra:
         genesis_config: *id002
         broadcast_to_server: false
         history_end: null
+        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:dummy_centaurs_stream_id}
+        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
+        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:ceramic_db_stream_id}
         ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
+        ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
         ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
         ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
         ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
         ceramic_did_str: ${CERAMIC_DID_STR:str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
-        default_read_stream_id: ${DEFAULT_READ_STREAM_ID:str:default_read_stream_id}
-        default_write_stream_id: ${DEFAULT_WRITE_STREAM_ID:str:default_write_stream_id}
-        default_read_target_property: ${DEFAULT_READ_TARGET_PROPERTY:str:default_read_target_property}
-        default_write_target_property: ${DEFAULT_WRITE_TARGET_PROPERTY:str:default_write_target_property}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
-        manual_points_target_property: ${MANUAL_POINTS_TARGET_PROPERTY:str:score_data}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -176,6 +173,7 @@ extra:
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
+        centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
 2:
   models:
     benchmark_tool:
@@ -187,17 +185,15 @@ extra:
         genesis_config: *id002
         broadcast_to_server: false
         history_end: null
+        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:dummy_centaurs_stream_id}
+        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
+        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:ceramic_db_stream_id}
         ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
+        ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
         ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
         ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
         ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
         ceramic_did_str: ${CERAMIC_DID_STR:str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
-        default_read_stream_id: ${DEFAULT_READ_STREAM_ID:str:default_read_stream_id}
-        default_write_stream_id: ${DEFAULT_WRITE_STREAM_ID:str:default_write_stream_id}
-        default_read_target_property: ${DEFAULT_READ_TARGET_PROPERTY:str:default_read_target_property}
-        default_write_target_property: ${DEFAULT_WRITE_TARGET_PROPERTY:str:default_write_target_property}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
-        manual_points_target_property: ${MANUAL_POINTS_TARGET_PROPERTY:str:score_data}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -240,6 +236,7 @@ extra:
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
+        centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
 3:
   models:
     benchmark_tool:
@@ -251,17 +248,15 @@ extra:
         genesis_config: *id002
         broadcast_to_server: false
         history_end: null
+        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:dummy_centaurs_stream_id}
+        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
+        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:ceramic_db_stream_id}
         ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
+        ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
         ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
         ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
         ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
         ceramic_did_str: ${CERAMIC_DID_STR:str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
-        default_read_stream_id: ${DEFAULT_READ_STREAM_ID:str:default_read_stream_id}
-        default_write_stream_id: ${DEFAULT_WRITE_STREAM_ID:str:default_write_stream_id}
-        default_read_target_property: ${DEFAULT_READ_TARGET_PROPERTY:str:default_read_target_property}
-        default_write_target_property: ${DEFAULT_WRITE_TARGET_PROPERTY:str:default_write_target_property}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
-        manual_points_target_property: ${MANUAL_POINTS_TARGET_PROPERTY:str:score_data}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -308,6 +303,7 @@ extra:
         validate_timeout: 1205
         finalize_timeout: 60.0
         history_check_timeout: 1205
+        centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
 ---
 public_id: valory/ledger:0.19.0
 type: connection

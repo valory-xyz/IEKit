@@ -21,6 +21,7 @@
 
 import hashlib
 import json
+import os
 from base64 import b64decode, b64encode, urlsafe_b64decode, urlsafe_b64encode
 
 import dag_cbor
@@ -62,6 +63,12 @@ def create_digest(digest: bytearray, code: int = SHA2_256_CODE) -> bytearray:
 def base64UrlEncode(data):
     """Base64 encoding"""
     return urlsafe_b64encode(data).rstrip(b"=")
+
+
+def get_unique_string() -> str:
+    """Creates the unique string"""
+    random_bytes = os.urandom(12)
+    return b64encode(random_bytes).decode("utf-8")
 
 
 def sign_ed25519(payload: dict, did: str, seed: str):
@@ -165,6 +172,56 @@ def encode_and_sign_payload(payload: dict, did: str, did_seed: str) -> dict:
     )
 
     return linked_block, link, payload_cid.decode("utf-8"), signature_data
+
+
+def build_genesis_payload(did, did_seed, data, extra_metadata=None):
+    """Build a genesis payload"""
+    if not extra_metadata:
+        extra_metadata = {}
+
+    genesis_data = {
+        "header": {
+            "controllers": [did],
+            "unique": get_unique_string(),
+            **extra_metadata,
+        },
+    }
+
+    if data:
+        genesis_data["data"] = data
+
+    # Encode and sign the data
+    linked_block, link, payload_cid, signature_data = encode_and_sign_payload(
+        genesis_data, did, did_seed
+    )
+
+    # Build the payload
+    genesis_payload = {
+        "type": 0,
+        "opts": {
+            "anchor": True,
+            "publish": True,
+            "sync": 0,
+            "syncTimeoutSeconds": 0,
+            "pin": True,
+            "asDID": {"_client": {}, "_resolver": {"registry": {}}, "_id": did},
+        },
+        "genesis": {
+            "jws": {
+                "payload": payload_cid,
+                "signatures": [
+                    {
+                        "protected": signature_data["protected"],
+                        "signature": signature_data["signature"],
+                    }
+                ],
+                "link": link,
+            },
+            "linkedBlock": linked_block,
+        },
+    }
+
+    return genesis_payload
 
 
 def build_commit_payload(

@@ -63,7 +63,6 @@ from packages.valory.skills.ceramic_write_abci.rounds import (
 )
 from packages.valory.skills.dynamic_nft_abci.rounds import TokenTrackRound
 from packages.valory.skills.generic_scoring_abci.rounds import GenericScoringRound
-from packages.valory.skills.path_switch_abci.rounds import PathSwitchRound
 from packages.valory.skills.registration_abci.rounds import RegistrationStartupRound
 from packages.valory.skills.reset_pause_abci.rounds import ResetAndPauseRound
 from packages.valory.skills.twitter_scoring_abci.rounds import TwitterScoringRound
@@ -72,7 +71,6 @@ from packages.valory.skills.twitter_scoring_abci.rounds import TwitterScoringRou
 HAPPY_PATH: Tuple[RoundChecks, ...] = (
     RoundChecks(RegistrationStartupRound.auto_round_id(), n_periods=1),
     RoundChecks(StreamReadRound.auto_round_id(), n_periods=3),
-    RoundChecks(PathSwitchRound.auto_round_id(), n_periods=3),
     RoundChecks(GenericScoringRound.auto_round_id(), n_periods=2),
     RoundChecks(TwitterScoringRound.auto_round_id(), n_periods=2),
     RoundChecks(TokenTrackRound.auto_round_id(), success_event="WRITE", n_periods=2),
@@ -144,10 +142,6 @@ class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
         {
             "dotted_path": f"{__param_args_prefix}.default_write_stream_id",
             "value": "stream_id_e2e",
-        },
-        {
-            "dotted_path": f"{__param_args_prefix}.default_read_target_property",
-            "value": "ceramic_db",
         },
         {
             "dotted_path": f"{__param_args_prefix}.default_write_target_property",
