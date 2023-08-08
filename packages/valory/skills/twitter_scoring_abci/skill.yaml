@@ -8,22 +8,23 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
-  behaviours.py: bafybeiccddk4hkiteiehm62tyxena2mnogltfob772drwrrpdn34rtdqpa
+  behaviours.py: bafybeifdcf4aonbsvhfqvj6x4ylwe63qv5p6bociuvsafch7jzykfngusm
   ceramic_db.py: bafybeiem2xntdgeiv5uyco3vokxuktld5xgv2e5mcgncodadhoxrgwxs4y
-  dialogues.py: bafybeicuan3wwjyc5ea5law7oa2jgzqqlas4widsb5gtzu32gxb57bgkzy
-  fsm_specification.yaml: bafybeidl2gyqgogiy6kgin7vtpqwmw7mrbknv23v27gweqikfvf2ikz72e
+  dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
+  fsm_specification.yaml: bafybeiehwxfhb4o7wooijcbegedkjyw7d2rjlusx66wx7ftdoywmm6v5vm
   handlers.py: bafybeich5zejyjlh7tqfh345r3ds5m75h5w64oqh4q5dtevpj4lkina4ku
   models.py: bafybeia3qlccegbbh4kd4s7oaad72ppeolqb2noavbjyk2mcqahkwlt3vm
-  payloads.py: bafybeifu7fzhpugvvvouwlimjosffrkljjp3uqxgw7xptq5kgzcq6tco4u
-  rounds.py: bafybeickwmfzylkmee3nglzqp2s4mpr7hjwvt5hhclndijgiogqjuf5xra
+  payloads.py: bafybeiapqgm3uscsl2gghy6fe22jceta4d5suujdlux233c37fyqydjp5i
+  prompts.py: bafybeieiuqn427bgwfnzynxf3vtqfpvmqqscs5tyw4oibfofwropifotke
+  rounds.py: bafybeifzfxc3r2e2vclah7lwb2rvw6qj6estsogcuee7wphizf6dzwtzui
   tests/__init__.py: bafybeidwzzd4ejsyf3aryd5kmrvd63h7ajgqyrxphmfaacvpjnneacejay
-  tests/test_behaviours.py: bafybeidkt4dczz47e47d55akolhg5t52y5s36q3w3hsyog6l4z2oqyi4wy
+  tests/test_behaviours.py: bafybeic5gj24sjcljdmww34j4z24essfwrfmtvgva3lap4xipu6tes3mwq
   tests/test_ceramic_db.py: bafybeia3l32c5y6gx4guiqy3cs4w45myd47m4buw627awpqqnif275kgpu
   tests/test_dialogues.py: bafybeiheyq7klonzb7rnjub2i22h7bmsnoimn2pq4j7ofikt3yovstvgt4
   tests/test_handlers.py: bafybeigevirvi3saepukke2zmp334btgsdxhj55o2vawj3hqam63miirg4
   tests/test_models.py: bafybeihaiirqmcsshghztl5lvqjzem6y6rdeefhtiycrhh45v7cuwnmdz4
-  tests/test_payloads.py: bafybeiefzupwoomqauat6xljzedoe2ai5oyyi2zywkmoxwbeszn2gnloby
-  tests/test_rounds.py: bafybeiet4jjujkp7oioyioxvccb37bac34d7iv2fkjxlpa2nfji4eli7s4
+  tests/test_payloads.py: bafybeidb2kirgunyeurkii3fuk2jsaaypvqt72qvxfsmmuc57l3hmsk3ta
+  tests/test_rounds.py: bafybeibl5jst7rub3vboojyw2unpcakjywczgrttju6qa64sjh7oe5yjpe
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []

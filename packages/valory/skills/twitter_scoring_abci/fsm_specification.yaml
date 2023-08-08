@@ -3,6 +3,7 @@ alphabet_in:
 - DONE
 - NO_MAJORITY
 - ROUND_TIMEOUT
+- SKIP
 default_start_state: TwitterCollectionRound
 final_states:
 - FinishedTwitterCollectionRound
@@ -10,10 +11,19 @@ label: TwitterScoringAbciApp
 start_states:
 - TwitterCollectionRound
 states:
+- DBUpdateRound
 - FinishedTwitterCollectionRound
+- TweetEvaluationRound
 - TwitterCollectionRound
 transition_func:
+    (DBUpdateRound, DONE): FinishedTwitterCollectionRound
+    (DBUpdateRound, NO_MAJORITY): DBUpdateRound
+    (DBUpdateRound, ROUND_TIMEOUT): DBUpdateRound
+    (TweetEvaluationRound, DONE): DBUpdateRound
+    (TweetEvaluationRound, NO_MAJORITY): TweetEvaluationRound
+    (TweetEvaluationRound, ROUND_TIMEOUT): TweetEvaluationRound
     (TwitterCollectionRound, API_ERROR): TwitterCollectionRound
-    (TwitterCollectionRound, DONE): FinishedTwitterCollectionRound
+    (TwitterCollectionRound, DONE): TweetEvaluationRound
     (TwitterCollectionRound, NO_MAJORITY): TwitterCollectionRound
     (TwitterCollectionRound, ROUND_TIMEOUT): TwitterCollectionRound
+    (TwitterCollectionRound, SKIP): FinishedTwitterCollectionRound

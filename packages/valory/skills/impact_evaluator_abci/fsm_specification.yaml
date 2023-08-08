@@ -19,6 +19,7 @@ alphabet_in:
 - ROUND_TIMEOUT
 - SCHEDULED_TWEET
 - SCORE
+- SKIP
 - UPDATE_CENTAURS
 - VERIFICATION_ERROR
 - WRITE_CONTRIBUTE_DB
@@ -29,6 +30,7 @@ start_states:
 - RegistrationRound
 - RegistrationStartupRound
 states:
+- DBUpdateRound
 - DecisionMakingRound
 - GenericScoringRound
 - LLMRandomnessRound
@@ -44,10 +46,14 @@ states:
 - StreamReadRound
 - StreamWriteRound
 - TokenTrackRound
+- TweetEvaluationRound
 - TwitterCollectionRound
 - TwitterWriteRound
 - VerificationRound
 transition_func:
+    (DBUpdateRound, DONE): TokenTrackRound
+    (DBUpdateRound, NO_MAJORITY): DBUpdateRound
+    (DBUpdateRound, ROUND_TIMEOUT): DBUpdateRound
     (DecisionMakingRound, DAILY_ORBIS): RandomnessRound
     (DecisionMakingRound, DAILY_TWEET): RandomnessTwitterRound
     (DecisionMakingRound, DONE): ResetAndPauseRound
@@ -106,10 +112,14 @@ transition_func:
     (TokenTrackRound, DONE): DecisionMakingRound
     (TokenTrackRound, NO_MAJORITY): TokenTrackRound
     (TokenTrackRound, ROUND_TIMEOUT): TokenTrackRound
+    (TweetEvaluationRound, DONE): DBUpdateRound
+    (TweetEvaluationRound, NO_MAJORITY): TweetEvaluationRound
+    (TweetEvaluationRound, ROUND_TIMEOUT): TweetEvaluationRound
     (TwitterCollectionRound, API_ERROR): TwitterCollectionRound
-    (TwitterCollectionRound, DONE): TokenTrackRound
+    (TwitterCollectionRound, DONE): TweetEvaluationRound
     (TwitterCollectionRound, NO_MAJORITY): TwitterCollectionRound
     (TwitterCollectionRound, ROUND_TIMEOUT): TwitterCollectionRound
+    (TwitterCollectionRound, SKIP): TokenTrackRound
     (TwitterWriteRound, API_ERROR): RandomnessTwitterRound
     (TwitterWriteRound, CONTINUE): TwitterWriteRound
     (TwitterWriteRound, DONE): DecisionMakingRound
