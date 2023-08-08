@@ -20,32 +20,51 @@
 """This package contains round behaviours of TwitterScoringAbciApp."""
 
 import json
+import re
 from abc import ABC
-from typing import Dict, Generator, Tuple, Set, Type, cast, Optional
+from typing import Dict, Generator, Optional, Set, Tuple, Type, cast
 
+from web3 import Web3
 
-
+from packages.valory.connections.openai.connection import (
+    PUBLIC_ID as LLM_CONNECTION_PUBLIC_ID,
+)
+from packages.valory.protocols.llm.message import LlmMessage
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
+from packages.valory.skills.abstract_round_abci.models import Requests
 from packages.valory.skills.twitter_scoring_abci.ceramic_db import CeramicDB
-from packages.valory.skills.twitter_scoring_abci.models import Params
-from packages.valory.skills.twitter_scoring_abci.payloads import TwitterScoringPayload
-from packages.valory.skills.twitter_scoring_abci.rounds import (
-    SynchronizedData,
-    TwitterScoringAbciApp,
-    TwitterScoringRound,
+from packages.valory.skills.twitter_scoring_abci.dialogues import (
+    LlmDialogue,
+    LlmDialogues,
 )
-import re
-from web3 import Web3
+from packages.valory.skills.twitter_scoring_abci.models import Params
+from packages.valory.skills.twitter_scoring_abci.payloads import (
+    DBUpdatePayload,
+    TweetEvaluationPayload,
+    TwitterCollectionPayload,
+)
+from packages.valory.skills.twitter_scoring_abci.prompts import tweet_evaluation_prompt
+from packages.valory.skills.twitter_scoring_abci.rounds import (
+    DBUpdateRound,
+    SynchronizedData,
+    TweetEvaluationRound,
+    TwitterCollectionRound,
+    TwitterScoringAbciApp,
+)
+
 
 ADDRESS_REGEX = r"0x[a-fA-F0-9]{40}"
 TAGLINE = "I'm linking my wallet to @Autonolas Contribute:"
 DEFAULT_TWEET_POINTS = 100
+TWEET_QUALITY_TO_POINTS = {"LOW": 1, "AVERAGE": 2, "HIGH": 3}
+TWEET_RELATIONSHIP_TO_POINTS = {"LOW": 100, "AVERAGE": 200, "HIGH": 300}
 
-class ScoreReadBaseBehaviour(BaseBehaviour, ABC):
+
+class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
     """Base behaviour for the common apps' skill."""
 
     @property
@@ -59,16 +78,16 @@ class ScoreReadBaseBehaviour(BaseBehaviour, ABC):
         return cast(Params, super().params)
 
 
-class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
-    """TwitterScoringBehaviour"""
+class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
+    """TwitterCollectionBehaviour"""
 
-    matching_round: Type[AbstractRound] = TwitterScoringRound
+    matching_round: Type[AbstractRound] = TwitterCollectionRound
 
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            payload_data = TwitterScoringRound.ERROR_PAYLOAD
+            payload_data = TwitterCollectionRound.ERROR_PAYLOAD
 
             # Get mentions from Twitter
             tweets, latest_mention_tweet_id = yield from self._get_twitter_mentions()
@@ -76,27 +95,26 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
             # Get hashtags from Twitter
             # We use latest_mention_tweet_id here to keep search parity between mentions and hashtags
-            if tweets != TwitterScoringRound.ERROR_PAYLOAD and latest_mention_tweet_id:
-                tweets = yield from self._get_twitter_hashtag_search(tweets, latest_mention_tweet_id)
+            if (
+                tweets != TwitterCollectionRound.ERROR_PAYLOAD
+                and latest_mention_tweet_id
+            ):
+                tweets = yield from self._get_twitter_hashtag_search(
+                    tweets, latest_mention_tweet_id
+                )
 
             if (
-                tweets != TwitterScoringRound.ERROR_PAYLOAD and latest_mention_tweet_id
+                tweets != TwitterCollectionRound.ERROR_PAYLOAD
+                and latest_mention_tweet_id
             ):
-                self.context.logger.info(
-                    f"Retrieved new tweets: {list(tweets.keys())}"
-                )
-                pending_write = (
-                    self.synchronized_data.pending_write
-                    or tweets
-                )
-                # Calculate the new Ceramic content
+                self.context.logger.info(f"Retrieved new tweets: {list(tweets.keys())}")
                 payload_data = {
-                    "ceramic_db": self.update_ceramic_db(tweets, latest_mention_tweet_id),
-                    "pending_write": pending_write,
+                    "tweets": tweets,
+                    "latest_mention_tweet_id": latest_mention_tweet_id,
                 }
 
             sender = self.context.agent_address
-            payload = TwitterScoringPayload(
+            payload = TwitterCollectionPayload(
                 sender=sender, content=json.dumps(payload_data, sort_keys=True)
             )
 
@@ -106,7 +124,9 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
         self.set_done()
 
-    def _get_twitter_mentions(self) -> Generator[None, None, Tuple[Dict, Optional[int]]]:
+    def _get_twitter_mentions(
+        self,
+    ) -> Generator[None, None, Tuple[Dict, Optional[int]]]:
         """Get Twitter mentions"""
 
         api_base = self.params.twitter_api_base
@@ -154,7 +174,7 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 self.context.logger.error(
                     f"Error retrieving mentions from Twitter [{response.status_code}]"
                 )
-                return TwitterScoringRound.ERROR_PAYLOAD, None
+                return TwitterCollectionRound.ERROR_PAYLOAD, None
 
             api_data = json.loads(response.body)
 
@@ -163,7 +183,7 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 self.context.logger.error(
                     f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
                 )
-                return TwitterScoringRound.ERROR_PAYLOAD, None
+                return TwitterCollectionRound.ERROR_PAYLOAD, None
 
             # Check if there are no more results
             if (
@@ -177,13 +197,13 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 self.context.logger.error(
                     f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
                 )
-                return TwitterScoringRound.ERROR_PAYLOAD, None
+                return TwitterCollectionRound.ERROR_PAYLOAD, None
 
             if "includes" not in api_data or "users" not in api_data["includes"]:
                 self.context.logger.error(
                     f"Twitter API response does not contain the required 'includes/users' field: {api_data!r}"
                 )
-                return TwitterScoringRound.ERROR_PAYLOAD, None
+                return TwitterCollectionRound.ERROR_PAYLOAD, None
 
             # Add the retrieved tweets
             for tweet in api_data["data"]:
@@ -205,8 +225,9 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
         return tweets, latest_tweet_id
 
-
-    def _get_twitter_hashtag_search(self, tweets: dict, until_id: int) -> Generator[None, None, Dict]:
+    def _get_twitter_hashtag_search(
+        self, tweets: dict, until_id: int
+    ) -> Generator[None, None, Dict]:
         """Get registrations from Twitter"""
 
         api_base = self.params.twitter_api_base
@@ -256,7 +277,7 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 self.context.logger.error(
                     f"Error retrieving mentions from Twitter [{response.status_code}]"
                 )
-                return TwitterScoringRound.ERROR_PAYLOAD
+                return TwitterCollectionRound.ERROR_PAYLOAD
 
             api_data = json.loads(response.body)
 
@@ -265,7 +286,7 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 self.context.logger.error(
                     f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
                 )
-                return TwitterScoringRound.ERROR_PAYLOAD
+                return TwitterCollectionRound.ERROR_PAYLOAD
 
             # Check if there are no more results
             if (
@@ -279,13 +300,13 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 self.context.logger.error(
                     f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
                 )
-                return TwitterScoringRound.ERROR_PAYLOAD
+                return TwitterCollectionRound.ERROR_PAYLOAD
 
             if "includes" not in api_data or "users" not in api_data["includes"]:
                 self.context.logger.error(
                     f"Twitter API response does not contain the required 'includes/users' field: {api_data!r}"
                 )
-                return TwitterScoringRound.ERROR_PAYLOAD
+                return TwitterCollectionRound.ERROR_PAYLOAD
 
             # Add the retrieved tweets
             for tweet in api_data["data"]:
@@ -306,8 +327,127 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
         return tweets
 
-    def update_ceramic_db(self, tweets: Dict, latest_mention_tweet_id: int) -> Dict:
+
+class TweetEvaluationBehaviour(TwitterScoringBaseBehaviour):
+    """TweetEvaluationBehaviour"""
+
+    matching_round: Type[AbstractRound] = TweetEvaluationRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            tweet_id_to_points = {}
+            for tweet_id, tweet in self.synchronized_data.tweets.items():
+                tweet_id_to_points[tweet_id] = yield from self.evaluate_tweet(
+                    tweet["text"]
+                )
+
+            sender = self.context.agent_address
+            payload = TweetEvaluationPayload(
+                sender=sender, content=json.dumps(tweet_id_to_points, sort_keys=True)
+            )
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
+
+    def evaluate_tweet(self, text: str) -> Generator[None, None, int]:
+        """Evaluate the tweet through a LLM."""
+
+        llm_dialogues = cast(LlmDialogues, self.context.llm_dialogues)
+
+        # llm request message
+        request_llm_message, llm_dialogue = llm_dialogues.create(
+            counterparty=str(LLM_CONNECTION_PUBLIC_ID),
+            performative=LlmMessage.Performative.REQUEST,
+            prompt_template=tweet_evaluation_prompt,
+            prompt_values={"user_text": text},
+        )
+        request_llm_message = cast(LlmMessage, request_llm_message)
+        llm_dialogue = cast(LlmDialogue, llm_dialogue)
+        llm_response_message = yield from self._do_request(
+            request_llm_message, llm_dialogue
+        )
+        data = llm_response_message.value
+
+        self.context.logger.info(f"Got tweet evaluation: {data}")
+
+        points = DEFAULT_TWEET_POINTS
+        try:
+            data = json.loads(data)
+            quality = data["quality"]
+            relationship = data["relationship"]
+            if (
+                quality not in TWEET_QUALITY_TO_POINTS
+                or relationship not in TWEET_RELATIONSHIP_TO_POINTS
+            ):
+                self.context.logger.error("Evaluation data is not valid")
+            else:
+                points = (
+                    TWEET_QUALITY_TO_POINTS[quality]
+                    * TWEET_RELATIONSHIP_TO_POINTS[relationship]
+                )
+        except:
+            self.context.logger.error("Evaluation data is not valid")
+
+        return points
+
+    def _do_request(
+        self,
+        llm_message: LlmMessage,
+        llm_dialogue: LlmDialogue,
+        timeout: Optional[float] = None,
+    ) -> Generator[None, None, LlmMessage]:
+        """
+        Do a request and wait the response, asynchronously.
+
+        :param llm_message: The request message
+        :param llm_dialogue: the HTTP dialogue associated to the request
+        :param timeout: seconds to wait for the reply.
+        :yield: LLMMessage object
+        :return: the response message
+        """
+        self.context.outbox.put_message(message=llm_message)
+        request_nonce = self._get_request_nonce_from_dialogue(llm_dialogue)
+        cast(Requests, self.context.requests).request_id_to_callback[
+            request_nonce
+        ] = self.get_callback_request()
+        # notify caller by propagating potential timeout exception.
+        response = yield from self.wait_for_message(timeout=timeout)
+        return response
+
+
+class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
+    """DBUpdateBehaviour"""
+
+    matching_round: Type[AbstractRound] = DBUpdateRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+
+            ceramic_db = self.update_ceramic_db()
+
+            sender = self.context.agent_address
+            payload = DBUpdatePayload(
+                sender=sender, content=json.dumps(ceramic_db, sort_keys=True)
+            )
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
+
+    def update_ceramic_db(self) -> Dict:
         """Calculate the new content of the DB"""
+
+        tweets = self.synchronized_data.tweets
+        latest_mention_tweet_id = self.synchronized_data.tweets
 
         # Instantiate the db
         ceramic_db = CeramicDB(self.synchronized_data.ceramic_db, self.context.logger)
@@ -317,7 +457,7 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
             author_id = tweet["author_id"]
             twitter_name = tweet["username"]
-            new_points = self.evaluate_tweet(tweet["text"])
+            new_points = tweet["points"]
             wallet_address = get_registration(tweet["text"])
 
             # User data to update
@@ -328,9 +468,7 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 user_data["wallet_address"] = wallet_address
 
             # For existing users, all existing user data is replaced except points, which are added
-            ceramic_db.update_or_create_user(
-                "twitter_id", author_id, user_data
-            )
+            ceramic_db.update_or_create_user("twitter_id", author_id, user_data)
 
         # If a user has first contributed to one module (i.e. twitter) without registering a wallet,
         # and later he/she contributes to another module, it could happen that we have two different
@@ -348,14 +486,6 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
         return ceramic_db.data
 
-    def evaluate_tweet(self, text: str) -> int:
-        """"Evaluate the tweet"""
-
-        points = DEFAULT_TWEET_POINTS
-
-
-        return points
-
 
 def get_registration(text: str) -> Optional[str]:
     """Check if the tweet is a registration and return the wallet address"""
@@ -370,11 +500,14 @@ def get_registration(text: str) -> Optional[str]:
 
     return wallet_address
 
-class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
-    """TwitterScoringRoundBehaviour"""
 
-    initial_behaviour_cls = TwitterScoringBehaviour
+class TwitterCollectionRoundBehaviour(AbstractRoundBehaviour):
+    """TwitterCollectionRoundBehaviour"""
+
+    initial_behaviour_cls = TwitterCollectionBehaviour
     abci_app_cls = TwitterScoringAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
-        TwitterScoringBehaviour,
+        TwitterCollectionBehaviour,
+        TweetEvaluationBehaviour,
+        DBUpdateBehaviour,
     ]

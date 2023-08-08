@@ -89,6 +89,14 @@ dependencies:
     version: ==1.37.0
 default_connection: null
 ---
+public_id: valory/openai:0.1.0
+type: connection
+config:
+  engine: ${str:text-davinci-003}
+  max_tokens: ${int:500}
+  openai_api_key: ${str:null}
+  temperature: ${float:0.7}
+---
 public_id: valory/abci:0.1.0
 type: connection
 config:

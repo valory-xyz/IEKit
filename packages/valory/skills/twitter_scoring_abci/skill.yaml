@@ -33,7 +33,7 @@ skills:
 behaviours:
   main:
     args: {}
-    class_name: TwitterScoringRoundBehaviour
+    class_name: TwitterCollectionRoundBehaviour
 handlers:
   abci:
     args: {}

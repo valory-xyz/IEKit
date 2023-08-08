@@ -3,17 +3,17 @@ alphabet_in:
 - DONE
 - NO_MAJORITY
 - ROUND_TIMEOUT
-default_start_state: TwitterScoringRound
+default_start_state: TwitterCollectionRound
 final_states:
-- FinishedTwitterScoringRound
+- FinishedTwitterCollectionRound
 label: TwitterScoringAbciApp
 start_states:
-- TwitterScoringRound
+- TwitterCollectionRound
 states:
-- FinishedTwitterScoringRound
-- TwitterScoringRound
+- FinishedTwitterCollectionRound
+- TwitterCollectionRound
 transition_func:
-    (TwitterScoringRound, API_ERROR): TwitterScoringRound
-    (TwitterScoringRound, DONE): FinishedTwitterScoringRound
-    (TwitterScoringRound, NO_MAJORITY): TwitterScoringRound
-    (TwitterScoringRound, ROUND_TIMEOUT): TwitterScoringRound
+    (TwitterCollectionRound, API_ERROR): TwitterCollectionRound
+    (TwitterCollectionRound, DONE): FinishedTwitterCollectionRound
+    (TwitterCollectionRound, NO_MAJORITY): TwitterCollectionRound
+    (TwitterCollectionRound, ROUND_TIMEOUT): TwitterCollectionRound

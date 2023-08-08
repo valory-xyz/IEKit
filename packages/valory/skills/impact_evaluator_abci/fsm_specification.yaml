@@ -44,7 +44,7 @@ states:
 - StreamReadRound
 - StreamWriteRound
 - TokenTrackRound
-- TwitterScoringRound
+- TwitterCollectionRound
 - TwitterWriteRound
 - VerificationRound
 transition_func:
@@ -62,7 +62,7 @@ transition_func:
     (DecisionMakingRound, SCORE): GenericScoringRound
     (DecisionMakingRound, UPDATE_CENTAURS): RandomnessRound
     (DecisionMakingRound, WRITE_CONTRIBUTE_DB): RandomnessRound
-    (GenericScoringRound, DONE): TwitterScoringRound
+    (GenericScoringRound, DONE): TwitterCollectionRound
     (GenericScoringRound, NO_MAJORITY): GenericScoringRound
     (GenericScoringRound, ROUND_TIMEOUT): GenericScoringRound
     (LLMRandomnessRound, DONE): LLMSelectKeeperRound
@@ -106,10 +106,10 @@ transition_func:
     (TokenTrackRound, DONE): DecisionMakingRound
     (TokenTrackRound, NO_MAJORITY): TokenTrackRound
     (TokenTrackRound, ROUND_TIMEOUT): TokenTrackRound
-    (TwitterScoringRound, API_ERROR): TwitterScoringRound
-    (TwitterScoringRound, DONE): TokenTrackRound
-    (TwitterScoringRound, NO_MAJORITY): TwitterScoringRound
-    (TwitterScoringRound, ROUND_TIMEOUT): TwitterScoringRound
+    (TwitterCollectionRound, API_ERROR): TwitterCollectionRound
+    (TwitterCollectionRound, DONE): TokenTrackRound
+    (TwitterCollectionRound, NO_MAJORITY): TwitterCollectionRound
+    (TwitterCollectionRound, ROUND_TIMEOUT): TwitterCollectionRound
     (TwitterWriteRound, API_ERROR): RandomnessTwitterRound
     (TwitterWriteRound, CONTINUE): TwitterWriteRound
     (TwitterWriteRound, DONE): DecisionMakingRound

@@ -40,11 +40,13 @@ from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
     BaseCollectSameUntilThresholdRoundTest,
     CollectSameUntilThresholdRound,
 )
-from packages.valory.skills.twitter_scoring_abci.payloads import TwitterScoringPayload
+from packages.valory.skills.twitter_scoring_abci.payloads import (
+    TwitterCollectionPayload,
+)
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     Event,
     SynchronizedData,
-    TwitterScoringRound,
+    TwitterCollectionRound,
 )
 
 
@@ -124,10 +126,10 @@ class BaseScoreReadRoundTest(BaseCollectSameUntilThresholdRoundTest):
         )
 
 
-class TestTwitterScoringRound(BaseScoreReadRoundTest):
-    """Tests for TwitterScoringRound."""
+class TestTwitterCollectionRound(BaseScoreReadRoundTest):
+    """Tests for TwitterCollectionRound."""
 
-    round_class = TwitterScoringRound
+    round_class = TwitterCollectionRound
 
     @pytest.mark.parametrize(
         "test_case",
@@ -136,7 +138,7 @@ class TestTwitterScoringRound(BaseScoreReadRoundTest):
                 name="Happy path",
                 initial_data={"ceramic_db": {}},
                 payloads=get_payloads(
-                    payload_cls=TwitterScoringPayload,
+                    payload_cls=TwitterCollectionPayload,
                     data=get_dummy_twitter_scoring_payload_serialized(),
                 ),
                 final_data={
@@ -154,7 +156,7 @@ class TestTwitterScoringRound(BaseScoreReadRoundTest):
                 name="API error",
                 initial_data={},
                 payloads=get_payloads(
-                    payload_cls=TwitterScoringPayload,
+                    payload_cls=TwitterCollectionPayload,
                     data=get_dummy_twitter_scoring_payload_serialized(api_error=True),
                 ),
                 final_data={},
@@ -170,7 +172,7 @@ class TestTwitterScoringRound(BaseScoreReadRoundTest):
                     "api_retries": 2,
                 },
                 payloads=get_payloads(
-                    payload_cls=TwitterScoringPayload,
+                    payload_cls=TwitterCollectionPayload,
                     data=get_dummy_twitter_scoring_payload_serialized(api_error=True),
                 ),
                 final_data={},

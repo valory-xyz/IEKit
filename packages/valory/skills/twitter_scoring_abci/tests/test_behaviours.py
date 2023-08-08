@@ -34,14 +34,14 @@ from packages.valory.skills.abstract_round_abci.test_tools.base import (
     FSMBehaviourBaseCase,
 )
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
-    ScoreReadBaseBehaviour,
     TAGLINE,
-    TwitterScoringBehaviour,
-    TwitterScoringRoundBehaviour,
+    TwitterCollectionBehaviour,
+    TwitterCollectionRoundBehaviour,
+    TwitterScoringBaseBehaviour,
 )
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     Event,
-    FinishedTwitterScoringRound,
+    FinishedTwitterCollectionRound,
     SynchronizedData,
 )
 
@@ -248,7 +248,7 @@ class BehaviourTestCase:
     name: str
     initial_data: Dict[str, Any]
     event: Event
-    next_behaviour_class: Optional[Type[ScoreReadBaseBehaviour]] = None
+    next_behaviour_class: Optional[Type[TwitterScoringBaseBehaviour]] = None
 
 
 class BaseBehaviourTest(FSMBehaviourBaseCase):
@@ -256,9 +256,9 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
 
     path_to_skill = Path(__file__).parent.parent
 
-    behaviour: TwitterScoringRoundBehaviour
-    behaviour_class: Type[ScoreReadBaseBehaviour]
-    next_behaviour_class: Type[ScoreReadBaseBehaviour]
+    behaviour: TwitterCollectionRoundBehaviour
+    behaviour_class: Type[TwitterScoringBaseBehaviour]
+    next_behaviour_class: Type[TwitterScoringBaseBehaviour]
     synchronized_data: SynchronizedData
     done_event = Event.DONE
 
@@ -289,11 +289,11 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
         )
 
 
-class TestTwitterScoringBehaviour(BaseBehaviourTest):
+class TestTwitterCollectionBehaviour(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
-    behaviour_class = TwitterScoringBehaviour
-    next_behaviour_class = make_degenerate_behaviour(FinishedTwitterScoringRound)
+    behaviour_class = TwitterCollectionBehaviour
+    next_behaviour_class = make_degenerate_behaviour(FinishedTwitterCollectionRound)
 
     @pytest.mark.parametrize(
         "test_case, kwargs",
@@ -420,11 +420,11 @@ class TestTwitterScoringBehaviour(BaseBehaviourTest):
         self.complete(test_case.event)
 
 
-class TestTwitterScoringBehaviourAPIError(BaseBehaviourTest):
+class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
-    behaviour_class = TwitterScoringBehaviour
-    next_behaviour_class = TwitterScoringBehaviour
+    behaviour_class = TwitterCollectionBehaviour
+    next_behaviour_class = TwitterCollectionBehaviour
 
     @pytest.mark.parametrize(
         "test_case, kwargs",

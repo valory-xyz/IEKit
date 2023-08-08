@@ -56,7 +56,7 @@ from packages.valory.skills.transaction_settlement_abci.behaviours import (
     TransactionSettlementRoundBehaviour,
 )
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
-    TwitterScoringRoundBehaviour,
+    TwitterCollectionRoundBehaviour,
 )
 from packages.valory.skills.twitter_write_abci.behaviours import (
     TwitterWriteRoundBehaviour,
@@ -72,7 +72,7 @@ class ImpactEvaluatorConsensusBehaviour(AbstractRoundBehaviour):
         *AgentRegistrationRoundBehaviour.behaviours,
         *CeramicReadRoundBehaviour.behaviours,
         *GenericScoringRoundBehaviour.behaviours,
-        *TwitterScoringRoundBehaviour.behaviours,
+        *TwitterCollectionRoundBehaviour.behaviours,
         *DynamicNFTRoundBehaviour.behaviours,
         *CeramicWriteRoundBehaviour.behaviours,
         *DecisionMakingRoundBehaviour.behaviours,

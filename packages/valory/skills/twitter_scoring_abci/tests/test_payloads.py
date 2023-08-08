@@ -25,7 +25,9 @@ from typing import Hashable
 import pytest
 
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
-from packages.valory.skills.twitter_scoring_abci.payloads import TwitterScoringPayload
+from packages.valory.skills.twitter_scoring_abci.payloads import (
+    TwitterCollectionPayload,
+)
 
 
 @dataclass
@@ -40,7 +42,7 @@ class PayloadTestCase:
     "test_case",
     [
         PayloadTestCase(
-            payload_cls=TwitterScoringPayload,
+            payload_cls=TwitterCollectionPayload,
             content="payload_test_content",
         ),
     ],

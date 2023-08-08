@@ -28,12 +28,15 @@ from packages.valory.skills.abstract_round_abci.base import (
     AbciAppTransitionFunction,
     AppState,
     BaseSynchronizedData,
+    CollectNonEmptyUntilThresholdRound,
     CollectSameUntilThresholdRound,
     DegenerateRound,
     EventToTimeout,
     get_name,
 )
-from packages.valory.skills.twitter_scoring_abci.payloads import TwitterScoringPayload
+from packages.valory.skills.twitter_scoring_abci.payloads import (
+    TwitterCollectionPayload,
+)
 
 
 MAX_API_RETRIES = 3
@@ -46,6 +49,7 @@ class Event(Enum):
     NO_MAJORITY = "no_majority"
     ROUND_TIMEOUT = "round_timeout"
     API_ERROR = "api_error"
+    SKIP = "skip"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -70,11 +74,21 @@ class SynchronizedData(BaseSynchronizedData):
         """Gets the number of API retries."""
         return cast(int, self.db.get("api_retries", 0))
 
+    @property
+    def tweets(self) -> dict:
+        """Get the tweets."""
+        return cast(dict, self.db.get_strict("tweets"))
 
-class TwitterScoringRound(CollectSameUntilThresholdRound):
-    """TwitterScoringRound"""
+    @property
+    def latest_mention_tweet_id(self) -> dict:
+        """Get the latest_mention_tweet_id."""
+        return cast(dict, self.db.get_strict("latest_mention_tweet_id"))
 
-    payload_class = TwitterScoringPayload
+
+class TwitterCollectionRound(CollectSameUntilThresholdRound):
+    """TwitterCollectionRound"""
+
+    payload_class = TwitterCollectionPayload
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = {"error": "true"}
@@ -90,7 +104,7 @@ class TwitterScoringRound(CollectSameUntilThresholdRound):
                 )
 
                 if api_retries >= MAX_API_RETRIES:
-                    return self.synchronized_data, Event.DONE
+                    return self.synchronized_data, Event.SKIP
 
                 synchronized_data = self.synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
@@ -102,11 +116,18 @@ class TwitterScoringRound(CollectSameUntilThresholdRound):
 
             payload = json.loads(self.most_voted_payload)
 
+            tweets = payload["tweets"]
+
+            if not tweets:
+                return self.synchronized_data, Event.SKIP
+
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    get_name(SynchronizedData.ceramic_db): payload["ceramic_db"],
-                    get_name(SynchronizedData.pending_write): payload["pending_write"],
+                    get_name(SynchronizedData.tweets): tweets,
+                    get_name(SynchronizedData.latest_mention_tweet_id): payload[
+                        "latest_mention_tweet_id"
+                    ],
                 }
             )
             return synchronized_data, Event.DONE
@@ -117,25 +138,100 @@ class TwitterScoringRound(CollectSameUntilThresholdRound):
         return None
 
 
-class FinishedTwitterScoringRound(DegenerateRound):
-    """FinishedTwitterScoringRound"""
+class TweetEvaluationRound(CollectNonEmptyUntilThresholdRound):
+    """TweetEvaluationRound"""
+
+    payload_class = TwitterCollectionPayload
+    synchronized_data_class = SynchronizedData
+
+    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
+        """Process the end of the block."""
+        if self.collection_threshold_reached:
+            self.block_confirmations += 1
+        if (
+            self.collection_threshold_reached
+            and self.block_confirmations > self.required_block_confirmations
+        ):
+            non_empty_values = self._get_non_empty_values()
+
+            tweets = cast(SynchronizedData, self.synchronized_data).tweets
+
+            # Calculate points average
+            for tweet in tweets:
+                tweet_id = tweet["id"]
+                tweet_points = [value[tweet_id] for value in non_empty_values.values()]
+                tweet["points"] = int(sum(tweet_points) / len(non_empty_values))
+
+            synchronized_data = self.synchronized_data.update(
+                synchronized_data_class=SynchronizedData,
+                **{
+                    get_name(SynchronizedData.tweets): tweets,
+                }
+            )
+
+            if all([len(tu) == 0 for tu in non_empty_values]):
+                return self.synchronized_data, self.none_event
+            return synchronized_data, Event.DONE
+        return None
+
+
+class DBUpdateRound(CollectSameUntilThresholdRound):
+    """DBUpdateRound"""
+
+    payload_class = TwitterCollectionPayload
+    synchronized_data_class = SynchronizedData
+
+    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
+        """Process the end of the block."""
+        if self.threshold_reached:
+
+            payload = json.loads(self.most_voted_payload)
+
+            synchronized_data = self.synchronized_data.update(
+                synchronized_data_class=SynchronizedData,
+                **{
+                    get_name(SynchronizedData.ceramic_db): payload,
+                    get_name(SynchronizedData.pending_write): True,
+                }
+            )
+            return synchronized_data, Event.DONE
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
+        return None
+
+
+class FinishedTwitterCollectionRound(DegenerateRound):
+    """FinishedTwitterCollectionRound"""
 
 
 class TwitterScoringAbciApp(AbciApp[Event]):
     """TwitterScoringAbciApp"""
 
-    initial_round_cls: AppState = TwitterScoringRound
-    initial_states: Set[AppState] = {TwitterScoringRound}
+    initial_round_cls: AppState = TwitterCollectionRound
+    initial_states: Set[AppState] = {TwitterCollectionRound}
     transition_function: AbciAppTransitionFunction = {
-        TwitterScoringRound: {
-            Event.DONE: FinishedTwitterScoringRound,
-            Event.NO_MAJORITY: TwitterScoringRound,
-            Event.ROUND_TIMEOUT: TwitterScoringRound,
-            Event.API_ERROR: TwitterScoringRound,
+        TwitterCollectionRound: {
+            Event.DONE: TweetEvaluationRound,
+            Event.API_ERROR: TwitterCollectionRound,
+            Event.SKIP: FinishedTwitterCollectionRound,
+            Event.NO_MAJORITY: TwitterCollectionRound,
+            Event.ROUND_TIMEOUT: TwitterCollectionRound,
         },
-        FinishedTwitterScoringRound: {},
+        TweetEvaluationRound: {
+            Event.DONE: DBUpdateRound,
+            Event.NO_MAJORITY: TweetEvaluationRound,
+            Event.ROUND_TIMEOUT: TweetEvaluationRound,
+        },
+        DBUpdateRound: {
+            Event.DONE: FinishedTwitterCollectionRound,
+            Event.NO_MAJORITY: DBUpdateRound,
+            Event.ROUND_TIMEOUT: DBUpdateRound,
+        },
+        FinishedTwitterCollectionRound: {},
     }
-    final_states: Set[AppState] = {FinishedTwitterScoringRound}
+    final_states: Set[AppState] = {FinishedTwitterCollectionRound}
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
@@ -146,10 +242,12 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         ]
     )
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        TwitterScoringRound: set(),
+        TwitterCollectionRound: set(),
+        TweetEvaluationRound: set(),
+        DBUpdateRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedTwitterScoringRound: {
+        FinishedTwitterCollectionRound: {
             get_name(SynchronizedData.ceramic_db),
         },
     }

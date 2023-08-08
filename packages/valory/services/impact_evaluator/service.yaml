@@ -329,3 +329,30 @@ cert_requests:
   not_before: '2022-01-01'
   public_key: ${ACN_NODE_PUBLIC_KEY:str:02d3a830c9d6ea1ae91936951430dee11f4662f33118b02190693be835359a9d77}
   save_path: .certs/acn_cosmos_11000.txt
+---
+public_id: valory/openai:0.1.0
+type: connection
+0:
+  config:
+    engine: ${ENGINE:str:text-davinci-003}
+    max_tokens: ${MAX_TOKENS:int:500}
+    openai_api_key: ${OPENAI_API_KEY_0:str:null}
+    temperature: ${TEMPERATURE:float:0.7}
+1:
+  config:
+    engine: ${ENGINE:str:text-davinci-003}
+    max_tokens: ${MAX_TOKENS:int:500}
+    openai_api_key: ${OPENAI_API_KEY_1:str:null}
+    temperature: ${TEMPERATURE:float:0.7}
+2:
+  config:
+    engine: ${ENGINE:str:text-davinci-003}
+    max_tokens: ${MAX_TOKENS:int:500}
+    openai_api_key: ${OPENAI_API_KEY_2:str:null}
+    temperature: ${TEMPERATURE:float:0.7}
+3:
+  config:
+    engine: ${ENGINE:str:text-davinci-003}
+    max_tokens: ${MAX_TOKENS:int:500}
+    openai_api_key: ${OPENAI_API_KEY_3:str:null}
+    temperature: ${TEMPERATURE:float:0.7}
