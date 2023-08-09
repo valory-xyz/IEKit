@@ -155,14 +155,19 @@ class TweetEvaluationRound(CollectNonEmptyUntilThresholdRound):
             and self.block_confirmations > self.required_block_confirmations
         ):
             non_empty_values = self._get_non_empty_values()
+            print(non_empty_values)
 
             tweets = cast(SynchronizedData, self.synchronized_data).tweets
 
             # Calculate points average
-            for tweet in tweets:
-                tweet_id = tweet["id"]
-                tweet_points = [value[tweet_id] for value in non_empty_values.values()]
-                tweet["points"] = int(sum(tweet_points) / len(non_empty_values))
+            for tweet_id in tweets.keys():
+                tweet_points = [
+                    json.loads(value[0])[tweet_id]
+                    for value in non_empty_values.values()
+                ]
+                tweets[tweet_id]["points"] = int(
+                    sum(tweet_points) / len(non_empty_values)
+                )
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,

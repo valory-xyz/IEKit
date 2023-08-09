@@ -379,8 +379,8 @@ class TweetEvaluationBehaviour(TwitterScoringBaseBehaviour):
         request_llm_message, llm_dialogue = llm_dialogues.create(
             counterparty=str(LLM_CONNECTION_PUBLIC_ID),
             performative=LlmMessage.Performative.REQUEST,
-            prompt_template=tweet_evaluation_prompt,
-            prompt_values={"user_text": text},
+            prompt_template=tweet_evaluation_prompt.replace("{user_text}", text),
+            prompt_values={},
         )
         request_llm_message = cast(LlmMessage, request_llm_message)
         llm_dialogue = cast(LlmDialogue, llm_dialogue)
@@ -393,7 +393,7 @@ class TweetEvaluationBehaviour(TwitterScoringBaseBehaviour):
 
         points = DEFAULT_TWEET_POINTS
         try:
-            data = json.loads(data)
+            data = parse_evaluation(data)
             quality = data["quality"]
             relationship = data["relationship"]
             if (
@@ -435,6 +435,14 @@ class TweetEvaluationBehaviour(TwitterScoringBaseBehaviour):
         # notify caller by propagating potential timeout exception.
         response = yield from self.wait_for_message(timeout=timeout)
         return response
+
+
+def parse_evaluation(data: str) -> Dict:
+    """Parse the data from the LLM"""
+    start = data.find("{")
+    end = data.find("}")
+    sub_string = data[start : end + 1]
+    return json.loads(sub_string)
 
 
 class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
