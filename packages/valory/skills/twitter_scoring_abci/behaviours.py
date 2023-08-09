@@ -87,27 +87,30 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            payload_data = TwitterCollectionRound.ERROR_PAYLOAD
 
             # Get mentions from Twitter
             tweets, latest_mention_tweet_id = yield from self._get_twitter_mentions()
-            self.context.logger.info(f"Retrieved new mentions from Twitter: {tweets}")
 
             # Get hashtags from Twitter
-            # We use latest_mention_tweet_id here to keep search parity between mentions and hashtags
-            if (
-                tweets != TwitterCollectionRound.ERROR_PAYLOAD
-                and latest_mention_tweet_id
-            ):
-                tweets = yield from self._get_twitter_hashtag_search(
-                    tweets, latest_mention_tweet_id
-                )
+            if tweets != TwitterCollectionRound.ERROR_PAYLOAD:
+                (
+                    tweets,
+                    latest_hashtag_tweet_id,
+                ) = yield from self._get_twitter_hashtag_search(tweets)
 
-            if (
-                tweets != TwitterCollectionRound.ERROR_PAYLOAD
-                and latest_mention_tweet_id
-            ):
-                self.context.logger.info(f"Retrieved new tweets: {list(tweets.keys())}")
+                # Keep the max latest_tweet_id
+                valid_latest_ids = [
+                    i for i in (latest_mention_tweet_id, latest_hashtag_tweet_id) if i
+                ]
+                if valid_latest_ids:
+                    latest_mention_tweet_id = max(valid_latest_ids)
+
+            if tweets == TwitterCollectionRound.ERROR_PAYLOAD:
+                payload_data = TwitterCollectionRound.ERROR_PAYLOAD
+            else:
+                self.context.logger.info(
+                    f"Retrieved new tweets [until_id={latest_mention_tweet_id}]: {list(tweets.keys())}"
+                )
                 payload_data = {
                     "tweets": tweets,
                     "latest_mention_tweet_id": latest_mention_tweet_id,
@@ -223,11 +226,15 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
 
             break
 
+        self.context.logger.info(
+            f"Got {len(tweets)} new mentions until tweet_id={latest_tweet_id}"
+        )
+
         return tweets, latest_tweet_id
 
     def _get_twitter_hashtag_search(
-        self, tweets: dict, until_id: int
-    ) -> Generator[None, None, Dict]:
+        self, tweets: dict
+    ) -> Generator[None, None, Tuple[Dict, Optional[int]]]:
         """Get registrations from Twitter"""
 
         api_base = self.params.twitter_api_base
@@ -247,8 +254,6 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
             "{since_id}", str(next_tweet_id)
         )
 
-        api_args += f"&until_id={until_id}"
-
         api_url = api_base + api_endpoint + api_args
 
         headers = dict(Authorization=f"Bearer {self.params.twitter_api_bearer_token}")
@@ -256,6 +261,8 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
         self.context.logger.info(f"Retrieving hashes from Twitter API [{api_url}]")
 
         next_token = None
+        latest_tweet_id = None
+        retrieved_tweets = 0
 
         # Pagination loop: we read a max of <twitter_max_pages> pages each period
         # Each page contains 100 tweets. The default value for twitter_max_pages is 10
@@ -277,7 +284,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                 self.context.logger.error(
                     f"Error retrieving mentions from Twitter [{response.status_code}]"
                 )
-                return TwitterCollectionRound.ERROR_PAYLOAD
+                return TwitterCollectionRound.ERROR_PAYLOAD, None
 
             api_data = json.loads(response.body)
 
@@ -286,7 +293,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                 self.context.logger.error(
                     f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
                 )
-                return TwitterCollectionRound.ERROR_PAYLOAD
+                return TwitterCollectionRound.ERROR_PAYLOAD, None
 
             # Check if there are no more results
             if (
@@ -300,16 +307,17 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                 self.context.logger.error(
                     f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
                 )
-                return TwitterCollectionRound.ERROR_PAYLOAD
+                return TwitterCollectionRound.ERROR_PAYLOAD, None
 
             if "includes" not in api_data or "users" not in api_data["includes"]:
                 self.context.logger.error(
                     f"Twitter API response does not contain the required 'includes/users' field: {api_data!r}"
                 )
-                return TwitterCollectionRound.ERROR_PAYLOAD
+                return TwitterCollectionRound.ERROR_PAYLOAD, None
 
             # Add the retrieved tweets
             for tweet in api_data["data"]:
+                retrieved_tweets += 1
                 if tweet["id"] not in tweets:  # avoids duplicated tweets
                     tweets[tweet["id"]] = tweet
 
@@ -319,13 +327,19 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                             tweets[tweet["id"]]["username"] = user["username"]
                             break
 
+            latest_tweet_id = int(api_data["meta"]["newest_id"])
+
             if "next_token" in api_data["meta"]:
                 next_token = api_data["meta"]["next_token"]
                 continue
 
             break
 
-        return tweets
+        self.context.logger.info(
+            f"Got {retrieved_tweets} new hashtag tweets until tweet_id={latest_tweet_id}"
+        )
+
+        return tweets, latest_tweet_id
 
 
 class TweetEvaluationBehaviour(TwitterScoringBaseBehaviour):
