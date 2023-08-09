@@ -36,8 +36,8 @@ from packages.valory.skills.abstract_round_abci.test_tools.base import (
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
     TAGLINE,
     TwitterCollectionBehaviour,
-    TwitterCollectionRoundBehaviour,
     TwitterScoringBaseBehaviour,
+    TwitterScoringRoundBehaviour,
 )
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     Event,
@@ -256,7 +256,7 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
 
     path_to_skill = Path(__file__).parent.parent
 
-    behaviour: TwitterCollectionRoundBehaviour
+    behaviour: TwitterScoringRoundBehaviour
     behaviour_class: Type[TwitterScoringBaseBehaviour]
     next_behaviour_class: Type[TwitterScoringBaseBehaviour]
     synchronized_data: SynchronizedData

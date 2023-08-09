@@ -1,13 +1,13 @@
 {
     "dev": {
-        "agent/valory/impact_evaluator/0.1.0": "bafybeigxr2nsyecbghrwsrzx2c3d6ccpg23wn6pv22szu7lasw4qvsolre",
+        "agent/valory/impact_evaluator/0.1.0": "bafybeigd6p2ima2bkgg4xysqxpejspqh2pscr3mpuovpdvbwcoshghb64a",
         "contract/valory/dynamic_contribution/0.1.0": "bafybeiaapvt7o4s5zpkxjcaplbzw7bhgeeqwtsddzjxmg6bfth6ytlvdiq",
-        "service/valory/impact_evaluator/0.1.0": "bafybeibwmciv75lpljos3iuijkxng4kua2hmmy5r6dqvhxbc2uulidnpeu",
+        "service/valory/impact_evaluator/0.1.0": "bafybeidcbwtm3ymntcs4ugeqmskqdv2flj4fwsrg3kzoinqwbm5p7gi4cq",
         "skill/valory/dynamic_nft_abci/0.1.0": "bafybeibwmanjrwrfb27g2ettgj6vzls5wfp5rm27bmw2wru3sfuvmzfx5y",
-        "skill/valory/twitter_scoring_abci/0.1.0": "bafybeifk4khdej7ak7pyu53n66n6kjveqaakyvcmfwpjky2hh5vvo64tqa",
+        "skill/valory/twitter_scoring_abci/0.1.0": "bafybeie7c27cwyjyrot5bflf3ogliwzgkg3tahvj65ht575bs3o4hvftga",
         "skill/valory/ceramic_read_abci/0.1.0": "bafybeib36m6fi5swu43s3amtbk7w5rfie2gvzgw3xhxd7yfnka4kpcegme",
         "skill/valory/ceramic_write_abci/0.1.0": "bafybeifdjb2iisvtgwo44xoddhrbgqehbis6tbjdktuhh6ehwm5bnuee74",
-        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeihexmv4m4vyw4lsoaqv7ivrdlu22qz2kzyxa2nftarf2om6gei76i",
+        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeicqm54nsbqzzqcnsmdacxwlxi6jz3n4ukrsbcwppbcwmhtgjr2m24",
         "skill/valory/generic_scoring_abci/0.1.0": "bafybeiatrunjluw3u6yxdctdq6ombmshuxauw2bhtuzqbqwi2rmxop5una",
         "protocol/valory/twitter/0.1.0": "bafybeib4eyf7qbs7kdntqzhwqsaaj4o2mzcokcztaza6qgwt7sbxgkqu2m",
         "protocol/valory/llm/1.0.0": "bafybeigqybmg75vsxexmp57hkms7lkp7iwpf54r7wpygizxryvrhfqqpb4",

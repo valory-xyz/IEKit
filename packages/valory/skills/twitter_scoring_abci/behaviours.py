@@ -501,8 +501,8 @@ def get_registration(text: str) -> Optional[str]:
     return wallet_address
 
 
-class TwitterCollectionRoundBehaviour(AbstractRoundBehaviour):
-    """TwitterCollectionRoundBehaviour"""
+class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
+    """TwitterScoringRoundBehaviour"""
 
     initial_behaviour_cls = TwitterCollectionBehaviour
     abci_app_cls = TwitterScoringAbciApp  # type: ignore

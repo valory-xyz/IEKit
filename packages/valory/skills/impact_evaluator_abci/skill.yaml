@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
-  behaviours.py: bafybeickyuqzsu7nbyp47nwdw3aubwncqjbumb3gyxxi7obigeurcrf7sq
+  behaviours.py: bafybeifhoufesr4r4re65mxjadqasjymvz6tkc25xn5yyn473yunhjiufe
   composition.py: bafybeicmyrwwzclkxto5n7fw6bmiwxupmetiadighlkms3x4zcfcreevoy
   dialogues.py: bafybeigjknz4qqynbsltjje46gidg4rftsqw6ybjwegz24wetmycutpzh4
   fsm_specification.yaml: bafybeiahcmi7rgvcmn7b33vzh2x4o53k4zlyuk6hqfijeznnoe3rywrzh4
@@ -26,7 +26,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeibqpzbklnljvtc67yon4ciijxj75d7vazm7rurcvbbfnk6jtudukm
 - valory/ceramic_read_abci:0.1.0:bafybeib36m6fi5swu43s3amtbk7w5rfie2gvzgw3xhxd7yfnka4kpcegme
 - valory/generic_scoring_abci:0.1.0:bafybeiatrunjluw3u6yxdctdq6ombmshuxauw2bhtuzqbqwi2rmxop5una
-- valory/twitter_scoring_abci:0.1.0:bafybeifk4khdej7ak7pyu53n66n6kjveqaakyvcmfwpjky2hh5vvo64tqa
+- valory/twitter_scoring_abci:0.1.0:bafybeie7c27cwyjyrot5bflf3ogliwzgkg3tahvj65ht575bs3o4hvftga
 - valory/ceramic_write_abci:0.1.0:bafybeifdjb2iisvtgwo44xoddhrbgqehbis6tbjdktuhh6ehwm5bnuee74
 - valory/dynamic_nft_abci:0.1.0:bafybeibwmanjrwrfb27g2ettgj6vzls5wfp5rm27bmw2wru3sfuvmzfx5y
 - valory/registration_abci:0.1.0:bafybeia25gpusnkakb2dp4heqkwtuftbc2apppq3i4bds6sphltsovgzvi

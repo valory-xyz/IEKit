@@ -8,7 +8,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
-  behaviours.py: bafybeian24imyfjotd3qjakbgteoeyacgbsryo7ximux6vzyep424l5nwu
+  behaviours.py: bafybeiewor4udpvdl4p5brx6behitybfli4nqrq2dzwobd6pftnu6xtlhu
   ceramic_db.py: bafybeiem2xntdgeiv5uyco3vokxuktld5xgv2e5mcgncodadhoxrgwxs4y
   dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
   fsm_specification.yaml: bafybeiftbrcjeqy2322ub5oihkrsmohgp4qpkuokfoirt4rg4ymwu5wrei
@@ -18,7 +18,7 @@ fingerprint:
   prompts.py: bafybeieiuqn427bgwfnzynxf3vtqfpvmqqscs5tyw4oibfofwropifotke
   rounds.py: bafybeihrnheh4lywkectdyupolks2n7ye332r6zfszozka74mmypea7v2u
   tests/__init__.py: bafybeidwzzd4ejsyf3aryd5kmrvd63h7ajgqyrxphmfaacvpjnneacejay
-  tests/test_behaviours.py: bafybeiehxv2ydhee2oc2qmdv3fqb5cybdeqnm265rgkverw3fyz3es3ghe
+  tests/test_behaviours.py: bafybeidsft6rqwscx7ggxb3sz5pfdnc2nssnztampqulveu4cgsp62g6zu
   tests/test_ceramic_db.py: bafybeia3l32c5y6gx4guiqy3cs4w45myd47m4buw627awpqqnif275kgpu
   tests/test_dialogues.py: bafybeiheyq7klonzb7rnjub2i22h7bmsnoimn2pq4j7ofikt3yovstvgt4
   tests/test_handlers.py: bafybeigevirvi3saepukke2zmp334btgsdxhj55o2vawj3hqam63miirg4
@@ -34,7 +34,7 @@ skills:
 behaviours:
   main:
     args: {}
-    class_name: TwitterCollectionRoundBehaviour
+    class_name: TwitterScoringRoundBehaviour
 handlers:
   abci:
     args: {}
