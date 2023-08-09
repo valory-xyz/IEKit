@@ -472,7 +472,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         """Calculate the new content of the DB"""
 
         tweets = self.synchronized_data.tweets
-        latest_mention_tweet_id = self.synchronized_data.tweets
+        latest_mention_tweet_id = self.synchronized_data.latest_mention_tweet_id
 
         # Instantiate the db
         ceramic_db = CeramicDB(self.synchronized_data.ceramic_db, self.context.logger)
@@ -490,6 +490,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
             # If this is a registration
             if wallet_address:
+                self.context.logger.info(
+                    f"Detected a Twitter registration for @{twitter_name}: {wallet_address}. Tweet: {tweet['text']}"
+                )
                 user_data["wallet_address"] = wallet_address
 
             # For existing users, all existing user data is replaced except points, which are added

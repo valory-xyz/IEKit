@@ -26,7 +26,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeibqpzbklnljvtc67yon4ciijxj75d7vazm7rurcvbbfnk6jtudukm
 - valory/ceramic_read_abci:0.1.0:bafybeib36m6fi5swu43s3amtbk7w5rfie2gvzgw3xhxd7yfnka4kpcegme
 - valory/generic_scoring_abci:0.1.0:bafybeiatrunjluw3u6yxdctdq6ombmshuxauw2bhtuzqbqwi2rmxop5una
-- valory/twitter_scoring_abci:0.1.0:bafybeifryxmokxz3i7e6pva7ajwymdxnxjkpfvzpgwxuo4oyemuihj7xlm
+- valory/twitter_scoring_abci:0.1.0:bafybeihu4piz7dfwfkmig5hlvxkdvelzwnku37d7ljvuypeggl7rnm22o4
 - valory/ceramic_write_abci:0.1.0:bafybeifdjb2iisvtgwo44xoddhrbgqehbis6tbjdktuhh6ehwm5bnuee74
 - valory/dynamic_nft_abci:0.1.0:bafybeibwmanjrwrfb27g2ettgj6vzls5wfp5rm27bmw2wru3sfuvmzfx5y
 - valory/registration_abci:0.1.0:bafybeia25gpusnkakb2dp4heqkwtuftbc2apppq3i4bds6sphltsovgzvi
@@ -65,6 +65,9 @@ handlers:
   tendermint:
     args: {}
     class_name: TendermintHandler
+  twitter:
+    args: {}
+    class_name: TwitterHandler
 models:
   abci_dialogues:
     args: {}

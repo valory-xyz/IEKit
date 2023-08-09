@@ -112,7 +112,7 @@ class TwitterCollectionRound(CollectSameUntilThresholdRound):
                     synchronized_data_class=SynchronizedData,
                     **{
                         get_name(SynchronizedData.api_retries): api_retries,
-                    }
+                    },
                 )
                 return synchronized_data, Event.API_ERROR
 
@@ -130,7 +130,7 @@ class TwitterCollectionRound(CollectSameUntilThresholdRound):
                     get_name(SynchronizedData.latest_mention_tweet_id): payload[
                         "latest_mention_tweet_id"
                     ],
-                }
+                },
             )
             return synchronized_data, Event.DONE
         if not self.is_majority_possible(
@@ -155,8 +155,6 @@ class TweetEvaluationRound(CollectNonEmptyUntilThresholdRound):
             and self.block_confirmations > self.required_block_confirmations
         ):
             non_empty_values = self._get_non_empty_values()
-            print(non_empty_values)
-
             tweets = cast(SynchronizedData, self.synchronized_data).tweets
 
             # Calculate points average
@@ -165,15 +163,15 @@ class TweetEvaluationRound(CollectNonEmptyUntilThresholdRound):
                     json.loads(value[0])[tweet_id]
                     for value in non_empty_values.values()
                 ]
-                tweets[tweet_id]["points"] = int(
-                    sum(tweet_points) / len(non_empty_values)
-                )
+                average = int(sum(tweet_points) / len(non_empty_values))
+                tweets[tweet_id]["points"] = average
+                print(f"Tweet {tweet_id} has been awarded {average} points")
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
                     get_name(SynchronizedData.tweets): tweets,
-                }
+                },
             )
 
             if all([len(tu) == 0 for tu in non_empty_values]):
@@ -199,7 +197,7 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
                 **{
                     get_name(SynchronizedData.ceramic_db): payload,
                     get_name(SynchronizedData.pending_write): True,
-                }
+                },
             )
             return synchronized_data, Event.DONE
         if not self.is_majority_possible(

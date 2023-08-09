@@ -31,7 +31,7 @@ In order to run a local demo service based on the IEKit:
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeidzl6kyrh52bvt322nbkzdf5mw4xdo3lszru6pmhi5brrqqufj7ie --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeibeuf3d5asgdgra7jeml56rspfwr5s5gat7ukj3mcyzxlz3aevz6e --service
     ```
 
 3. Build the Docker image of the service agents
@@ -125,18 +125,12 @@ In order to run a local demo service based on the IEKit:
 7. Check that the service is running. Open a separate terminal and execute the command below. You should see the service transitioning along different states.
 
     ```bash
-    docker logs -f abci0 | grep -E 'Entered|round is done'
+    docker logs -f impactevaluator_abci_0 | grep -E 'Entered|round is done'
     ```
 
 8. You can try some examples on how to curl the service endpoints from inside one of the agent containers. For example:
 
     ```bash
-    # Enter one of the agent containers
-    docker exec -it <container_id> /bin/bash
-
-    # Install curl and jq if they are not present
-    sudo apt install -y curl jq
-
     # Get the metadata for the token with id=1
     curl localhost:8000/1 | jq
 
