@@ -13,7 +13,7 @@ fingerprint:
   dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
   fsm_specification.yaml: bafybeiftbrcjeqy2322ub5oihkrsmohgp4qpkuokfoirt4rg4ymwu5wrei
   handlers.py: bafybeich5zejyjlh7tqfh345r3ds5m75h5w64oqh4q5dtevpj4lkina4ku
-  models.py: bafybeia3qlccegbbh4kd4s7oaad72ppeolqb2noavbjyk2mcqahkwlt3vm
+  models.py: bafybeieuk72ydi47dg7iempfasj44abouikb5lifzzjboz5aytnpzv7r7a
   payloads.py: bafybeiapqgm3uscsl2gghy6fe22jceta4d5suujdlux233c37fyqydjp5i
   prompts.py: bafybeieiuqn427bgwfnzynxf3vtqfpvmqqscs5tyw4oibfofwropifotke
   rounds.py: bafybeihrnheh4lywkectdyupolks2n7ye332r6zfszozka74mmypea7v2u
@@ -26,9 +26,11 @@ fingerprint:
   tests/test_payloads.py: bafybeidb2kirgunyeurkii3fuk2jsaaypvqt72qvxfsmmuc57l3hmsk3ta
   tests/test_rounds.py: bafybeibl5jst7rub3vboojyw2unpcakjywczgrttju6qa64sjh7oe5yjpe
 fingerprint_ignore_patterns: []
-connections: []
+connections:
+- valory/openai:0.1.0:bafybeiczft4se4jitvgufcjdys6qxaisuapwgm6ge7emgcnftzuqu6i23e
 contracts: []
-protocols: []
+protocols:
+- valory/llm:1.0.0:bafybeigqybmg75vsxexmp57hkms7lkp7iwpf54r7wpygizxryvrhfqqpb4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeibqpzbklnljvtc67yon4ciijxj75d7vazm7rurcvbbfnk6jtudukm
 behaviours:
@@ -127,7 +129,6 @@ models:
       twitter_api_bearer_token: <default_bearer_token>
       twitter_mentions_endpoint: 2/users/1450081635559428107/mentions?
       twitter_mentions_args: tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
-      twitter_mention_points: 200
       twitter_max_pages: 10
       twitter_search_endpoint: 2/tweets/search/recent?
       twitter_search_args: query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
