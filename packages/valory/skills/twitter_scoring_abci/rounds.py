@@ -35,6 +35,8 @@ from packages.valory.skills.abstract_round_abci.base import (
     get_name,
 )
 from packages.valory.skills.twitter_scoring_abci.payloads import (
+    DBUpdatePayload,
+    TweetEvaluationPayload,
     TwitterCollectionPayload,
 )
 
@@ -141,7 +143,7 @@ class TwitterCollectionRound(CollectSameUntilThresholdRound):
 class TweetEvaluationRound(CollectNonEmptyUntilThresholdRound):
     """TweetEvaluationRound"""
 
-    payload_class = TwitterCollectionPayload
+    payload_class = TweetEvaluationPayload
     synchronized_data_class = SynchronizedData
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
@@ -178,7 +180,7 @@ class TweetEvaluationRound(CollectNonEmptyUntilThresholdRound):
 class DBUpdateRound(CollectSameUntilThresholdRound):
     """DBUpdateRound"""
 
-    payload_class = TwitterCollectionPayload
+    payload_class = DBUpdatePayload
     synchronized_data_class = SynchronizedData
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:

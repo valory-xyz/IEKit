@@ -389,7 +389,7 @@ class TweetEvaluationBehaviour(TwitterScoringBaseBehaviour):
         )
         data = llm_response_message.value
 
-        self.context.logger.info(f"Got tweet evaluation: {data}")
+        self.context.logger.info(f"Got tweet evaluation: {repr(data)}")
 
         points = DEFAULT_TWEET_POINTS
         try:
@@ -400,15 +400,16 @@ class TweetEvaluationBehaviour(TwitterScoringBaseBehaviour):
                 quality not in TWEET_QUALITY_TO_POINTS
                 or relationship not in TWEET_RELATIONSHIP_TO_POINTS
             ):
-                self.context.logger.error("Evaluation data is not valid")
+                self.context.logger.error("Evaluation data is not valid: key not valid")
             else:
                 points = (
                     TWEET_QUALITY_TO_POINTS[quality]
                     * TWEET_RELATIONSHIP_TO_POINTS[relationship]
                 )
-        except Exception:
-            self.context.logger.error("Evaluation data is not valid")
+        except Exception as e:
+            self.context.logger.error(f"Evaluation data is not valid: exception {e}")
 
+        self.context.logger.info(f"Points: {points}")
         return points
 
     def _do_request(
