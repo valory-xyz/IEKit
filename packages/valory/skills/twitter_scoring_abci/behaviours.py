@@ -371,6 +371,8 @@ class TweetEvaluationBehaviour(TwitterScoringBaseBehaviour):
     def evaluate_tweet(self, text: str) -> Generator[None, None, int]:
         """Evaluate the tweet through a LLM."""
 
+        self.context.logger.info(f"Evaluating tweet: {text}")
+
         llm_dialogues = cast(LlmDialogues, self.context.llm_dialogues)
 
         # llm request message
