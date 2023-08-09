@@ -41,7 +41,7 @@ from packages.valory.skills.twitter_scoring_abci.behaviours import (
 )
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     Event,
-    FinishedTwitterCollectionRound,
+    FinishedTwitterScoringRound,
     SynchronizedData,
 )
 
@@ -293,7 +293,7 @@ class TestTwitterCollectionBehaviour(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
     behaviour_class = TwitterCollectionBehaviour
-    next_behaviour_class = make_degenerate_behaviour(FinishedTwitterCollectionRound)
+    next_behaviour_class = make_degenerate_behaviour(FinishedTwitterScoringRound)
 
     @pytest.mark.parametrize(
         "test_case, kwargs",

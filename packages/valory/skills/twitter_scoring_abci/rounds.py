@@ -202,8 +202,8 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
         return None
 
 
-class FinishedTwitterCollectionRound(DegenerateRound):
-    """FinishedTwitterCollectionRound"""
+class FinishedTwitterScoringRound(DegenerateRound):
+    """FinishedTwitterScoringRound"""
 
 
 class TwitterScoringAbciApp(AbciApp[Event]):
@@ -215,7 +215,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         TwitterCollectionRound: {
             Event.DONE: TweetEvaluationRound,
             Event.API_ERROR: TwitterCollectionRound,
-            Event.SKIP: FinishedTwitterCollectionRound,
+            Event.SKIP: FinishedTwitterScoringRound,
             Event.NO_MAJORITY: TwitterCollectionRound,
             Event.ROUND_TIMEOUT: TwitterCollectionRound,
         },
@@ -224,13 +224,13 @@ class TwitterScoringAbciApp(AbciApp[Event]):
             Event.ROUND_TIMEOUT: TweetEvaluationRound,
         },
         DBUpdateRound: {
-            Event.DONE: FinishedTwitterCollectionRound,
+            Event.DONE: FinishedTwitterScoringRound,
             Event.NO_MAJORITY: DBUpdateRound,
             Event.ROUND_TIMEOUT: DBUpdateRound,
         },
-        FinishedTwitterCollectionRound: {},
+        FinishedTwitterScoringRound: {},
     }
-    final_states: Set[AppState] = {FinishedTwitterCollectionRound}
+    final_states: Set[AppState] = {FinishedTwitterScoringRound}
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
@@ -246,7 +246,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         DBUpdateRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedTwitterCollectionRound: {
+        FinishedTwitterScoringRound: {
             get_name(SynchronizedData.ceramic_db),
         },
     }
