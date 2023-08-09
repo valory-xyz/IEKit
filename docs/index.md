@@ -86,7 +86,7 @@ In order to run a local demo service based on the IEKit:
         EARLIEST_BLOCK_TO_MONITOR=16097553
         CERAMIC_DID_SEED=<ceramic_seed_did>
         CERAMIC_DID_STR=<ceramic_did_string>
-        CERAMIC_API_BASE=https://ceramic-valory.hirenodes.io/
+        CERAMIC_API_BASE=<ceramic_node_endpoint>
         CENTAURS_STREAM_ID=<centaurs_stream_id>
         CERAMIC_DB_STREAM_ID=<main_db_stream_id>
         MANUAL_POINTS_STREAM_ID=<generic_scores_stream_id>
