@@ -83,14 +83,14 @@ def get_payloads(
     }
 
 
-def get_dummy_twitter_scoring_payload_serialized(api_error: bool = False) -> str:
+def get_dummy_twitter_collection_payload_serialized(api_error: bool = False) -> str:
     """Dummy twitter observation payload"""
     if api_error:
         return json.dumps({"error": "true"})
     return json.dumps(
         {
-            "ceramic_db": {"dummy": "data"},
-            "pending_write": False,
+            "tweets": {"my_tweet": {}},
+            "latest_mention_tweet_id": False,
         },
         sort_keys=True,
     )
@@ -139,15 +139,15 @@ class TestTwitterCollectionRound(BaseScoreReadRoundTest):
                 initial_data={"ceramic_db": {}},
                 payloads=get_payloads(
                     payload_cls=TwitterCollectionPayload,
-                    data=get_dummy_twitter_scoring_payload_serialized(),
+                    data=get_dummy_twitter_collection_payload_serialized(),
                 ),
                 final_data={
-                    "ceramic_db": json.loads(
-                        get_dummy_twitter_scoring_payload_serialized()
-                    )["ceramic_db"],
+                    "tweets": json.loads(
+                        get_dummy_twitter_collection_payload_serialized()
+                    )["tweets"],
                 },
                 event=Event.DONE,
-                most_voted_payload=get_dummy_twitter_scoring_payload_serialized(),
+                most_voted_payload=get_dummy_twitter_collection_payload_serialized(),
                 synchronized_data_attr_checks=[
                     lambda _synchronized_data: _synchronized_data.ceramic_db,
                 ],
@@ -157,11 +157,11 @@ class TestTwitterCollectionRound(BaseScoreReadRoundTest):
                 initial_data={},
                 payloads=get_payloads(
                     payload_cls=TwitterCollectionPayload,
-                    data=get_dummy_twitter_scoring_payload_serialized(api_error=True),
+                    data=get_dummy_twitter_collection_payload_serialized(api_error=True),
                 ),
                 final_data={},
                 event=Event.API_ERROR,
-                most_voted_payload=get_dummy_twitter_scoring_payload_serialized(
+                most_voted_payload=get_dummy_twitter_collection_payload_serialized(
                     api_error=True
                 ),
                 synchronized_data_attr_checks=[],
@@ -173,11 +173,11 @@ class TestTwitterCollectionRound(BaseScoreReadRoundTest):
                 },
                 payloads=get_payloads(
                     payload_cls=TwitterCollectionPayload,
-                    data=get_dummy_twitter_scoring_payload_serialized(api_error=True),
+                    data=get_dummy_twitter_collection_payload_serialized(api_error=True),
                 ),
                 final_data={},
-                event=Event.DONE,
-                most_voted_payload=get_dummy_twitter_scoring_payload_serialized(
+                event=Event.SKIP,
+                most_voted_payload=get_dummy_twitter_collection_payload_serialized(
                     api_error=True
                 ),
                 synchronized_data_attr_checks=[],

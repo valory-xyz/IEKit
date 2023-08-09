@@ -38,6 +38,7 @@ from packages.valory.skills.twitter_scoring_abci.behaviours import (
     TwitterCollectionBehaviour,
     TwitterScoringBaseBehaviour,
     TwitterScoringRoundBehaviour,
+    TweetEvaluationBehaviour
 )
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     Event,
@@ -53,10 +54,10 @@ TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?quer
 
 DUMMY_MENTIONS_RESPONSE = {
     "data": [
-        {"author_id": "1286010187325812739", "text": "dummy_text"},
-        {"author_id": "1286010187325812739", "text": "dummy_text"},
-        {"author_id": "1286010187325812738", "text": "dummy_text"},
-        {"author_id": "1286010187325812737", "text": "dummy_text"},
+        {"author_id": "1286010187325812739", "text": "dummy_text", "id": "1"},
+        {"author_id": "1286010187325812739", "text": "dummy_text", "id": "2"},
+        {"author_id": "1286010187325812738", "text": "dummy_text", "id": "3"},
+        {"author_id": "1286010187325812737", "text": "dummy_text", "id": "4"},
     ],
     "includes": {
         "users": [
@@ -71,10 +72,10 @@ DUMMY_MENTIONS_RESPONSE = {
 
 DUMMY_MENTIONS_RESPONSE_COUNT_ZERO = {
     "data": [
-        {"author_id": "1286010187325812739", "text": "dummy_text"},
-        {"author_id": "1286010187325812739", "text": "dummy_text"},
-        {"author_id": "1286010187325812738", "text": "dummy_text"},
-        {"author_id": "1286010187325812737", "text": "dummy_text"},
+        {"author_id": "1286010187325812739", "text": "dummy_text", "id": "1"},
+        {"author_id": "1286010187325812739", "text": "dummy_text", "id": "2"},
+        {"author_id": "1286010187325812738", "text": "dummy_text", "id": "3"},
+        {"author_id": "1286010187325812737", "text": "dummy_text", "id": "4"},
     ],
     "includes": {
         "users": [
@@ -93,10 +94,10 @@ DUMMY_MENTIONS_RESPONSE_MISSING_DATA = {
 
 DUMMY_MENTIONS_RESPONSE_MISSING_INCLUDES = {
     "data": [
-        {"author_id": "1286010187325812739", "text": "dummy_text"},
-        {"author_id": "1286010187325812739", "text": "dummy_text"},
-        {"author_id": "1286010187325812738", "text": "dummy_text"},
-        {"author_id": "1286010187325812737", "text": "dummy_text"},
+        {"author_id": "1286010187325812739", "text": "dummy_text", "id": "1"},
+        {"author_id": "1286010187325812739", "text": "dummy_text", "id": "2"},
+        {"author_id": "1286010187325812738", "text": "dummy_text", "id": "3"},
+        {"author_id": "1286010187325812737", "text": "dummy_text", "id": "4"},
     ],
     "meta": {"result_count": 4, "newest_id": "1", "oldest_id": "0"},
 }
@@ -105,10 +106,10 @@ DUMMY_MENTIONS_RESPONSE_MISSING_META = {}
 
 DUMMY_MENTIONS_RESPONSE_MULTIPAGE = {
     "data": [
-        {"author_id": "1286010187325812739", "text": "dummy_text"},
-        {"author_id": "1286010187325812739", "text": "dummy_text"},
-        {"author_id": "1286010187325812738", "text": "dummy_text"},
-        {"author_id": "1286010187325812737", "text": "dummy_text"},
+        {"author_id": "1286010187325812739", "text": "dummy_text", "id": "1"},
+        {"author_id": "1286010187325812739", "text": "dummy_text", "id": "2"},
+        {"author_id": "1286010187325812738", "text": "dummy_text", "id": "3"},
+        {"author_id": "1286010187325812737", "text": "dummy_text", "id": "4"},
     ],
     "includes": {
         "users": [
@@ -145,6 +146,7 @@ DUMMY_REGISTRATIONS_RESPONSE = {
         {
             "author_id": "1286010187325812739",
             "text": f"{TAGLINE} {ZERO_ADDRESS}",
+            "id": "10"
         },
     ],
     "includes": {
@@ -163,6 +165,7 @@ DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE = {
         {
             "author_id": "1286010187325812739",
             "text": f"dummy_text #olas {ZERO_ADDRESS}",
+            "id": "10"
         },
     ],
     "includes": {
@@ -186,6 +189,7 @@ DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE_2 = {
         {
             "author_id": "1286010187325812739",
             "text": f"{TAGLINE} {ZERO_ADDRESS}",
+            "id": "10"
         },
     ],
     "includes": {
@@ -204,6 +208,7 @@ DUMMY_REGISTRATIONS_RESPONSE_COUNT_ZERO = {
         {
             "author_id": "1286010187325812739",
             "text": f"dummy_text #olas {ZERO_ADDRESS}",
+            "id": "10"
         },
     ],
     "meta": {"result_count": 0, "newest_id": "1", "oldest_id": "0"},
@@ -214,6 +219,7 @@ DUMMY_REGISTRATIONS_RESPONSE_MISSING_META = {
         {
             "author_id": "1286010187325812739",
             "text": f"dummy_text #olas {ZERO_ADDRESS}",
+            "id": "10"
         },
     ]
 }
@@ -224,10 +230,10 @@ DUMMY_REGISTRATIONS_RESPONSE_MISSING_DATA = {
 
 DUMMY_HASHTAGS_RESPONSE = {
     "data": [
-        {"author_id": "1286010187325812739", "text": "dummy_text"},
-        {"author_id": "1286010187325812739", "text": "dummy_text"},
-        {"author_id": "1286010187325812738", "text": "dummy_text"},
-        {"author_id": "1286010187325812737", "text": "dummy_text"},
+        {"author_id": "1286010187325812739", "text": "dummy_text", "id": "1"},
+        {"author_id": "1286010187325812739", "text": "dummy_text", "id": "2"},
+        {"author_id": "1286010187325812738", "text": "dummy_text", "id": "3"},
+        {"author_id": "1286010187325812737", "text": "dummy_text", "id": "4"},
     ],
     "includes": {
         "users": [
@@ -293,7 +299,7 @@ class TestTwitterCollectionBehaviour(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
     behaviour_class = TwitterCollectionBehaviour
-    next_behaviour_class = make_degenerate_behaviour(FinishedTwitterScoringRound)
+    next_behaviour_class = TweetEvaluationBehaviour
 
     @pytest.mark.parametrize(
         "test_case, kwargs",
@@ -436,14 +442,14 @@ class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
+                    "urls": [TWITTER_MENTIONS_URL],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE,
                         ),
                         json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
-                    "status_codes": [404, 200],
+                    "status_codes": [404],
                 },
             ),
             (
@@ -470,14 +476,14 @@ class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
+                    "urls": [TWITTER_MENTIONS_URL],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_DATA,
                         ),
                         json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
-                    "status_codes": [200, 200],
+                    "status_codes": [200],
                 },
             ),
             (
@@ -506,14 +512,14 @@ class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
+                    "urls": [TWITTER_MENTIONS_URL],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_META,
                         ),
                         json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
-                    "status_codes": [200, 200],
+                    "status_codes": [200],
                 },
             ),
             (
@@ -540,14 +546,14 @@ class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
+                    "urls": [TWITTER_MENTIONS_URL],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_INCLUDES,
                         ),
                         json.dumps({}),
                     ],
-                    "status_codes": [200, 200],
+                    "status_codes": [200],
                 },
             ),
         ],
