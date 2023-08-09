@@ -157,7 +157,9 @@ class TestTwitterCollectionRound(BaseScoreReadRoundTest):
                 initial_data={},
                 payloads=get_payloads(
                     payload_cls=TwitterCollectionPayload,
-                    data=get_dummy_twitter_collection_payload_serialized(api_error=True),
+                    data=get_dummy_twitter_collection_payload_serialized(
+                        api_error=True
+                    ),
                 ),
                 final_data={},
                 event=Event.API_ERROR,
@@ -173,7 +175,9 @@ class TestTwitterCollectionRound(BaseScoreReadRoundTest):
                 },
                 payloads=get_payloads(
                     payload_cls=TwitterCollectionPayload,
-                    data=get_dummy_twitter_collection_payload_serialized(api_error=True),
+                    data=get_dummy_twitter_collection_payload_serialized(
+                        api_error=True
+                    ),
                 ),
                 final_data={},
                 event=Event.SKIP,

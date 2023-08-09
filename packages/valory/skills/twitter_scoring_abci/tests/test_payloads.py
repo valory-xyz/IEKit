@@ -26,9 +26,9 @@ import pytest
 
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 from packages.valory.skills.twitter_scoring_abci.payloads import (
-    TwitterCollectionPayload,
     DBUpdatePayload,
-    TweetEvaluationPayload
+    TweetEvaluationPayload,
+    TwitterCollectionPayload,
 )
 
 

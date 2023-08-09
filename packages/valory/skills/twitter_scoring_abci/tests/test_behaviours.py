@@ -27,24 +27,17 @@ from typing import Any, Dict, Optional, Type
 import pytest
 
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
-from packages.valory.skills.abstract_round_abci.behaviours import (
-    make_degenerate_behaviour,
-)
 from packages.valory.skills.abstract_round_abci.test_tools.base import (
     FSMBehaviourBaseCase,
 )
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
     TAGLINE,
+    TweetEvaluationBehaviour,
     TwitterCollectionBehaviour,
     TwitterScoringBaseBehaviour,
     TwitterScoringRoundBehaviour,
-    TweetEvaluationBehaviour
 )
-from packages.valory.skills.twitter_scoring_abci.rounds import (
-    Event,
-    FinishedTwitterScoringRound,
-    SynchronizedData,
-)
+from packages.valory.skills.twitter_scoring_abci.rounds import Event, SynchronizedData
 
 
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
@@ -146,7 +139,7 @@ DUMMY_REGISTRATIONS_RESPONSE = {
         {
             "author_id": "1286010187325812739",
             "text": f"{TAGLINE} {ZERO_ADDRESS}",
-            "id": "10"
+            "id": "10",
         },
     ],
     "includes": {
@@ -165,7 +158,7 @@ DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE = {
         {
             "author_id": "1286010187325812739",
             "text": f"dummy_text #olas {ZERO_ADDRESS}",
-            "id": "10"
+            "id": "10",
         },
     ],
     "includes": {
@@ -189,7 +182,7 @@ DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE_2 = {
         {
             "author_id": "1286010187325812739",
             "text": f"{TAGLINE} {ZERO_ADDRESS}",
-            "id": "10"
+            "id": "10",
         },
     ],
     "includes": {
@@ -208,7 +201,7 @@ DUMMY_REGISTRATIONS_RESPONSE_COUNT_ZERO = {
         {
             "author_id": "1286010187325812739",
             "text": f"dummy_text #olas {ZERO_ADDRESS}",
-            "id": "10"
+            "id": "10",
         },
     ],
     "meta": {"result_count": 0, "newest_id": "1", "oldest_id": "0"},
@@ -219,7 +212,7 @@ DUMMY_REGISTRATIONS_RESPONSE_MISSING_META = {
         {
             "author_id": "1286010187325812739",
             "text": f"dummy_text #olas {ZERO_ADDRESS}",
-            "id": "10"
+            "id": "10",
         },
     ]
 }
