@@ -70,10 +70,10 @@ Valory: valory.xyz autonolas.network
 
 You should only respond in JSON format as described below
 Response Format:
-{
+{{
     "quality": "quality",
     "relationship": "relationship"
-}
+}}
 Ensure the response can be parsed by Python json.loads
 
 User text:

@@ -12,10 +12,10 @@ fingerprint:
   ceramic_db.py: bafybeiem2xntdgeiv5uyco3vokxuktld5xgv2e5mcgncodadhoxrgwxs4y
   dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
   fsm_specification.yaml: bafybeiftbrcjeqy2322ub5oihkrsmohgp4qpkuokfoirt4rg4ymwu5wrei
-  handlers.py: bafybeich5zejyjlh7tqfh345r3ds5m75h5w64oqh4q5dtevpj4lkina4ku
+  handlers.py: bafybeid3nqvcyotqj5g5hlgrz57nf7vpjysmgvsxe3p7644f4z5dcwqn6u
   models.py: bafybeieuk72ydi47dg7iempfasj44abouikb5lifzzjboz5aytnpzv7r7a
   payloads.py: bafybeiapqgm3uscsl2gghy6fe22jceta4d5suujdlux233c37fyqydjp5i
-  prompts.py: bafybeieiuqn427bgwfnzynxf3vtqfpvmqqscs5tyw4oibfofwropifotke
+  prompts.py: bafybeibryp37fchwdifjllbqdwwhf622ubyyawckjirbokhh2idpbbnmqu
   rounds.py: bafybeihrnheh4lywkectdyupolks2n7ye332r6zfszozka74mmypea7v2u
   tests/__init__.py: bafybeidwzzd4ejsyf3aryd5kmrvd63h7ajgqyrxphmfaacvpjnneacejay
   tests/test_behaviours.py: bafybeidsft6rqwscx7ggxb3sz5pfdnc2nssnztampqulveu4cgsp62g6zu
@@ -50,6 +50,9 @@ handlers:
   ledger_api:
     args: {}
     class_name: LedgerApiHandler
+  llm:
+    args: {}
+    class_name: LlmHandler
   signing:
     args: {}
     class_name: SigningHandler

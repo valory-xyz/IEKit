@@ -31,7 +31,7 @@ In order to run a local demo service based on the IEKit:
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeiaoxtvoow7hxrwriwo3ra4fcnpq4tscarnyavzokdwoncdycr2fxq --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeifbgwvga3agjm2eyirmyh3v5v6ahxiglperwhczi2xgu2b4g6ge64 --service
     ```
 
 3. Build the Docker image of the service agents
@@ -91,7 +91,10 @@ In order to run a local demo service based on the IEKit:
         CERAMIC_DB_STREAM_ID=<main_db_stream_id>
         MANUAL_POINTS_STREAM_ID=<generic_scores_stream_id>
         CENTAUR_ID_TO_SECRETS='{"your_centaur_id":{"orbis":{"context":"orbis_context_stream_id","did_seed":"your_did_seed","did_str":"your_did_str"},"twitter":{"consumer_key":"your_consumer_key","consumer_secret":"your_consumer_secret","access_token":"your_access_token","access_secret":"your_access_secret"}}}'
-        OPENAI_API_KEY=<openai_api_key>
+        OPENAI_API_KEY_0=<openai_api_key>
+        OPENAI_API_KEY_1=<openai_api_key>
+        OPENAI_API_KEY_2=<openai_api_key>
+        OPENAI_API_KEY_3=<openai_api_key>
         TWITTER_API_BEARER_TOKEN=<twitter_api_token>
         RESET_PAUSE_DURATION=30
         ALL_PARTICIPANTS='["0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65","0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc","0x976EA74026E726554dB657fA54763abd0C3a0aa9","0x14dC79964da2C08b23698B3D3cc7Ca32193d9955"]'
