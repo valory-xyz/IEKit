@@ -20,7 +20,6 @@ transition_func:
     (DBUpdateRound, NO_MAJORITY): DBUpdateRound
     (DBUpdateRound, ROUND_TIMEOUT): DBUpdateRound
     (TweetEvaluationRound, DONE): DBUpdateRound
-    (TweetEvaluationRound, NO_MAJORITY): TweetEvaluationRound
     (TweetEvaluationRound, ROUND_TIMEOUT): TweetEvaluationRound
     (TwitterCollectionRound, API_ERROR): TwitterCollectionRound
     (TwitterCollectionRound, DONE): TweetEvaluationRound

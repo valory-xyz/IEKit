@@ -113,7 +113,6 @@ transition_func:
     (TokenTrackRound, NO_MAJORITY): TokenTrackRound
     (TokenTrackRound, ROUND_TIMEOUT): TokenTrackRound
     (TweetEvaluationRound, DONE): DBUpdateRound
-    (TweetEvaluationRound, NO_MAJORITY): TweetEvaluationRound
     (TweetEvaluationRound, ROUND_TIMEOUT): TweetEvaluationRound
     (TwitterCollectionRound, API_ERROR): TwitterCollectionRound
     (TwitterCollectionRound, DONE): TweetEvaluationRound

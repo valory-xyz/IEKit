@@ -221,7 +221,6 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         },
         TweetEvaluationRound: {
             Event.DONE: DBUpdateRound,
-            Event.NO_MAJORITY: TweetEvaluationRound,
             Event.ROUND_TIMEOUT: TweetEvaluationRound,
         },
         DBUpdateRound: {

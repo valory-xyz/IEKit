@@ -390,7 +390,7 @@ class TweetEvaluationBehaviour(TwitterScoringBaseBehaviour):
                     TWEET_QUALITY_TO_POINTS[quality]
                     * TWEET_RELATIONSHIP_TO_POINTS[relationship]
                 )
-        except:
+        except Exception:
             self.context.logger.error("Evaluation data is not valid")
 
         return points
