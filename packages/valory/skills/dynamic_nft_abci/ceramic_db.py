@@ -64,7 +64,7 @@ class CeramicDB:
 
         self.logger = logger
         if self.logger:
-            self.logger.info(f"DB: created new db")
+            self.logger.info("DB: created new db")
 
     def create_user(self, user_data):
         """Create a new user"""
