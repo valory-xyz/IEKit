@@ -71,7 +71,7 @@ class CeramicDB:
         fields = self.USER_FIELDS.union(user_data.keys())
 
         new_user = {
-            field: user_data.get(field, 0 if field == "points" else None)
+            field: user_data.get(field, 0 if field in ("points", "current_period_points") else None)
             for field in fields
         }
 
@@ -154,6 +154,10 @@ class CeramicDB:
                     # Points must be added
                     if field == "points":
                         values = [sum(values)]
+
+                    # We just keep the max current_period_points
+                    if field == "current_period_points":
+                        values = [max(values)]
 
                     # Check whether all values are the same
                     if len(values) > 1:
