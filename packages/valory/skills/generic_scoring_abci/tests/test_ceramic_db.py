@@ -34,7 +34,7 @@ DEFAULT_DATA = {
     "wallet_address": None,
     "discord_id": None,
     "discord_handle": None,
-    "current_period_points": 0
+    "current_period_points": 0,
 }
 
 
@@ -96,13 +96,13 @@ def test_merge_by_wallet():
         "twitter_id": "dummy_twitter_id",
         "wallet_address": "dummy_address",
         "points": 10,
-        "current_period_points": 20
+        "current_period_points": 20,
     }
     user_b = {
         "discord_id": "dummy_discord_id",
         "wallet_address": "dummy_address",
         "points": 10,
-        "current_period_points": 15
+        "current_period_points": 15,
     }
     db.create_user(user_a)
     db.create_user(user_b)
@@ -116,7 +116,7 @@ def test_merge_by_wallet():
         "token_id": None,
         "twitter_handle": None,
         "discord_handle": None,
-        "current_period_points": 20
+        "current_period_points": 20,
     }
 
 

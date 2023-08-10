@@ -71,7 +71,9 @@ class CeramicDB:
         fields = self.USER_FIELDS.union(user_data.keys())
 
         new_user = {
-            field: user_data.get(field, 0 if field in ("points", "current_period_points") else None)
+            field: user_data.get(
+                field, 0 if field in ("points", "current_period_points") else None
+            )
             for field in fields
         }
 
