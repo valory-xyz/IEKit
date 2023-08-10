@@ -22,7 +22,7 @@
 import json
 from enum import Enum
 from typing import Dict, FrozenSet, Optional, Set, Tuple, cast
-
+import statistics
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
@@ -163,9 +163,9 @@ class TweetEvaluationRound(CollectNonEmptyUntilThresholdRound):
                     json.loads(value[0])[tweet_id]
                     for value in non_empty_values.values()
                 ]
-                average = int(sum(tweet_points) / len(non_empty_values))
-                tweets[tweet_id]["points"] = average
-                print(f"Tweet {tweet_id} has been awarded {average} points")
+                median = statistics.median(tweet_points)
+                tweets[tweet_id]["points"] = median
+                print(f"Tweet {tweet_id} has been awarded {median} points")
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
