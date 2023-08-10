@@ -164,7 +164,7 @@ class TweetEvaluationRound(CollectNonEmptyUntilThresholdRound):
                     json.loads(value[0])[tweet_id]
                     for value in non_empty_values.values()
                 ]
-                median = statistics.median(tweet_points)
+                median = int(statistics.median(tweet_points))
                 tweets[tweet_id]["points"] = median
                 print(f"Tweet {tweet_id} has been awarded {median} points")
 

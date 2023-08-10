@@ -42,9 +42,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeih3bwx5apteinnoxts7sqmjlskntdbo7vvnmdbs5noo2pv76by7fu
 - valory/abstract_round_abci:0.1.0:bafybeibqpzbklnljvtc67yon4ciijxj75d7vazm7rurcvbbfnk6jtudukm
-- valory/impact_evaluator_abci:0.1.0:bafybeiekanstkrkpqdcwsrg5jtg4pirizzivu3u3m66pcgqmgx43yxedzu
+- valory/impact_evaluator_abci:0.1.0:bafybeic7jzf537vhfiavg5cugfxfuejiux2iaqm6wt5ppqlxdyxu6ccz5e
 - valory/generic_scoring_abci:0.1.0:bafybeih7s3cnfr2lwbrbdhp2tjayjnqjlaakbdvurs5faxq4ctjkj4rgki
-- valory/twitter_scoring_abci:0.1.0:bafybeiejp5kp3yttntukfiwjbvah5kvldxruugrhsmigmtrfdlkxqumgui
+- valory/twitter_scoring_abci:0.1.0:bafybeibb2uz6hndycjn6xuqcqtnuzzgkd2a2nhljxanscuavj26k3k3fka
 - valory/ceramic_read_abci:0.1.0:bafybeib36m6fi5swu43s3amtbk7w5rfie2gvzgw3xhxd7yfnka4kpcegme
 - valory/ceramic_write_abci:0.1.0:bafybeifdjb2iisvtgwo44xoddhrbgqehbis6tbjdktuhh6ehwm5bnuee74
 - valory/dynamic_nft_abci:0.1.0:bafybeibqbmo6erzdc7x4lroezhtzrxtpcmbjdxcraazxxxpvjfcgdrmwsi

@@ -530,9 +530,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
             # User data to update
             user_data = {
-                "points": new_points,
+                "points": int(new_points),
                 "twitter_handle": twitter_name,
-                "current_period_points": current_period_points,
+                "current_period_points": int(current_period_points),
             }
 
             # If this is a registration
