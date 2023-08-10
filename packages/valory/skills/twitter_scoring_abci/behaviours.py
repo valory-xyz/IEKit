@@ -22,8 +22,9 @@
 import json
 import re
 from abc import ABC
-from typing import Dict, Generator, Optional, Set, Tuple, Type, cast
 from datetime import datetime
+from typing import Dict, Generator, Optional, Set, Tuple, Type, cast
+
 from web3 import Web3
 
 from packages.valory.connections.openai.connection import (
@@ -488,7 +489,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         if is_period_changed:
             self.context.logger.info("Scoring period has changed")
         period_reset_users = set()
-        max_points_per_period = ceramic_db.data["module_data"]["twitter"]["max_points_per_period"]
+        max_points_per_period = ceramic_db.data["module_data"]["twitter"][
+            "max_points_per_period"
+        ]
 
         # Update data
         for tweet in tweets.values():
@@ -515,14 +518,20 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                     current_period_points = user["current_period_points"]
 
             if current_period_points + new_points > max_points_per_period:
-                self.context.logger.info(f"User {author_id} has surpassed the max points per period: new_points={new_points} current_period_points={current_period_points}, max_points_per_period={max_points_per_period}")
+                self.context.logger.info(
+                    f"User {author_id} has surpassed the max points per period: new_points={new_points} current_period_points={current_period_points}, max_points_per_period={max_points_per_period}"
+                )
                 new_points = max_points_per_period - current_period_points
                 self.context.logger.info(f"Updated points for this tweet: {new_points}")
 
             current_period_points += new_points
 
             # User data to update
-            user_data = {"points": new_points, "twitter_handle": twitter_name, "current_period_points": current_period_points}
+            user_data = {
+                "points": new_points,
+                "twitter_handle": twitter_name,
+                "current_period_points": current_period_points,
+            }
 
             # If this is a registration
             if wallet_address:

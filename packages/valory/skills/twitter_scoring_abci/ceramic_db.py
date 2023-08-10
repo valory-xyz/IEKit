@@ -39,7 +39,10 @@ class CeramicDB:
     }
 
     def __init__(
-        self, data: Optional[Dict] = None, logger: Optional[Any] = None, max_points_per_period: int = 5000
+        self,
+        data: Optional[Dict] = None,
+        logger: Optional[Any] = None,
+        max_points_per_period: int = 5000,
     ) -> None:
         """Create a database"""
         self.data = (
@@ -48,7 +51,10 @@ class CeramicDB:
             else {
                 "users": [],
                 "module_data": {
-                    "twitter": {"latest_mention_tweet_id": 0, "max_points_per_period": max_points_per_period},
+                    "twitter": {
+                        "latest_mention_tweet_id": 0,
+                        "max_points_per_period": max_points_per_period,
+                    },
                     "dynamic_nft": {},
                     "generic": {"latest_update_id": 0},
                 },

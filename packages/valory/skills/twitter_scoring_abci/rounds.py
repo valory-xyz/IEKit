@@ -20,9 +20,10 @@
 """This package contains the rounds of TwitterScoringAbciApp."""
 
 import json
+import statistics
 from enum import Enum
 from typing import Dict, FrozenSet, Optional, Set, Tuple, cast
-import statistics
+
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
