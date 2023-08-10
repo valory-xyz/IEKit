@@ -8,7 +8,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
-  behaviours.py: bafybeiagszpultdlmq264gui4zrmxpw67twfdxlusqbe4ce3pkzj77mc7y
+  behaviours.py: bafybeibbyneeup7elxcd5exunwlw7n244c2qikykbby7ehj4qauvsgfqym
   ceramic_db.py: bafybeicwkoucm5tc3nzgsoqzozpy6mbfntmtzbw3hu2eqrwwqrfshenqoy
   dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
   fsm_specification.yaml: bafybeiftbrcjeqy2322ub5oihkrsmohgp4qpkuokfoirt4rg4ymwu5wrei

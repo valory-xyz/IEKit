@@ -487,7 +487,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         current_period = ceramic_db.data["module_data"]["twitter"]["current_period"]
         is_period_changed = today != current_period
         if is_period_changed:
-            self.context.logger.info("Scoring period has changed")
+            self.context.logger.info(
+                f"Scoring period has changed from {current_period} to {today}"
+            )
         period_reset_users = set()
         max_points_per_period = ceramic_db.data["module_data"]["twitter"][
             "max_points_per_period"
