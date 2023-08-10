@@ -54,6 +54,7 @@ class CeramicDB:
                     "twitter": {
                         "latest_mention_tweet_id": 0,
                         "max_points_per_period": max_points_per_period,
+                        "current_period": "1970-01-01"
                     },
                     "dynamic_nft": {},
                     "generic": {"latest_update_id": 0},
