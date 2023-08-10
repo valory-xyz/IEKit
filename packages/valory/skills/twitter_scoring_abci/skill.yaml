@@ -8,18 +8,18 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
-  behaviours.py: bafybeia5nl7dha26hsvzzvdktykzriuznqpqnbwreyetzefadalvnpkeuy
-  ceramic_db.py: bafybeicwkoucm5tc3nzgsoqzozpy6mbfntmtzbw3hu2eqrwwqrfshenqoy
+  behaviours.py: bafybeig5z25wxs7o5u575bxktea5aiqi6vtqqh5jvplrbrnufk6e4rt5oe
+  ceramic_db.py: bafybeicusdonrdq6kirgkpdqmi3a6kmeal4nctnm5ozjqf5s5se6jpitjm
   dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
   fsm_specification.yaml: bafybeiftbrcjeqy2322ub5oihkrsmohgp4qpkuokfoirt4rg4ymwu5wrei
   handlers.py: bafybeid3nqvcyotqj5g5hlgrz57nf7vpjysmgvsxe3p7644f4z5dcwqn6u
-  models.py: bafybeieuk72ydi47dg7iempfasj44abouikb5lifzzjboz5aytnpzv7r7a
+  models.py: bafybeidobpsgt2vb2vccmo26umewq56mqthv4tfsneucotogsp2gbhoxiq
   payloads.py: bafybeiapqgm3uscsl2gghy6fe22jceta4d5suujdlux233c37fyqydjp5i
   prompts.py: bafybeieiuqn427bgwfnzynxf3vtqfpvmqqscs5tyw4oibfofwropifotke
   rounds.py: bafybeidizfljfi3wyplejx44hqjqns7ewvowx44on3whkfyq4mfq36rzfm
   tests/__init__.py: bafybeidwzzd4ejsyf3aryd5kmrvd63h7ajgqyrxphmfaacvpjnneacejay
   tests/test_behaviours.py: bafybeidhcwz3gwjbwlktbgkafps3wjiyuipewtxa3hponqafgkecwb76we
-  tests/test_ceramic_db.py: bafybeihjsdurxfsxaezvmp6ttmoz2wlvu4h5vndtilkejkugu3g5q2bcb4
+  tests/test_ceramic_db.py: bafybeif2v7btjphbqabq6qdmfeyweg765seon74acg5vrrvznivzg2prey
   tests/test_dialogues.py: bafybeiheyq7klonzb7rnjub2i22h7bmsnoimn2pq4j7ofikt3yovstvgt4
   tests/test_handlers.py: bafybeigevirvi3saepukke2zmp334btgsdxhj55o2vawj3hqam63miirg4
   tests/test_models.py: bafybeihaiirqmcsshghztl5lvqjzem6y6rdeefhtiycrhh45v7cuwnmdz4
