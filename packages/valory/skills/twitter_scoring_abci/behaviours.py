@@ -23,7 +23,7 @@ import json
 import re
 from abc import ABC
 from typing import Dict, Generator, Optional, Set, Tuple, Type, cast
-
+from datetime import datetime
 from web3 import Web3
 
 from packages.valory.connections.openai.connection import (
@@ -41,7 +41,7 @@ from packages.valory.skills.twitter_scoring_abci.dialogues import (
     LlmDialogue,
     LlmDialogues,
 )
-from packages.valory.skills.twitter_scoring_abci.models import Params
+from packages.valory.skills.twitter_scoring_abci.models import Params, SharedState
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
     TweetEvaluationPayload,
@@ -477,7 +477,20 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         # Instantiate the db
         ceramic_db = CeramicDB(self.synchronized_data.ceramic_db, self.context.logger)
 
-        # Evaluate tweets
+        # Have we changed scoring period?
+        now = cast(
+            SharedState, self.context.state
+        ).round_sequence.last_round_transition_timestamp.timestamp()
+
+        today = datetime.fromtimestamp(now).strftime("%Y-%m-%d")
+        current_period = ceramic_db.data["module_data"]["twitter"]["current_period"]
+        is_period_changed = today != current_period
+        if is_period_changed:
+            self.context.logger.info("Scoring period has changed")
+        period_reset_users = set()
+        max_points_per_period = ceramic_db.data["module_data"]["twitter"]["max_points_per_period"]
+
+        # Update data
         for tweet in tweets.values():
 
             author_id = tweet["author_id"]
@@ -485,8 +498,31 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             new_points = tweet["points"]
             wallet_address = get_registration(tweet["text"])
 
+            # Check this user's point limit per period
+            user, _ = ceramic_db.get_user_by_field("twitter_id", tweet["author_id"])
+
+            if not user:
+                # New user
+                period_reset_users.add(tweet["author_id"])
+                current_period_points = 0
+            else:
+                if is_period_changed and user["twitter_id"] not in period_reset_users:
+                    # Existing user, not reset yet
+                    period_reset_users.add(user["twitter_id"])
+                    current_period_points = 0
+                else:
+                    # Existing user, already reset
+                    current_period_points = user["current_period_points"]
+
+            if current_period_points + new_points > max_points_per_period:
+                self.context.logger.info(f"User {author_id} has surpassed the max points per period: new_points={new_points} current_period_points={current_period_points}, max_points_per_period={max_points_per_period}")
+                new_points = max_points_per_period - current_period_points
+                self.context.logger.info(f"Updated points for this tweet: {new_points}")
+
+            current_period_points += new_points
+
             # User data to update
-            user_data = {"points": new_points, "twitter_handle": twitter_name}
+            user_data = {"points": new_points, "twitter_handle": twitter_name, "current_period_points": current_period_points}
 
             # If this is a registration
             if wallet_address:
@@ -507,6 +543,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         ceramic_db.data["module_data"]["twitter"]["latest_mention_tweet_id"] = str(
             latest_mention_tweet_id
         )
+
+        # Update the current_period
+        ceramic_db.data["module_data"]["twitter"]["current_period"] = today
 
         self.context.logger.info(
             f"The ceramic_db will be updated to: {ceramic_db.data!r}"
