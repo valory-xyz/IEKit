@@ -217,6 +217,7 @@ models:
       finalize_timeout: 60.0
       history_check_timeout: 1205
       centaur_id_to_secrets: ${str:{}}
+      max_points_per_period: ${int:5000}
 ---
 public_id: fetchai/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
 type: connection

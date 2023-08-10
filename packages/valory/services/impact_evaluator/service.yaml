@@ -110,6 +110,7 @@ extra:
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
+        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
 1:
   models:
     benchmark_tool:
@@ -172,6 +173,7 @@ extra:
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
+        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
 2:
   models:
     benchmark_tool:
@@ -234,6 +236,7 @@ extra:
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
+        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
 3:
   models:
     benchmark_tool:
@@ -300,6 +303,7 @@ extra:
         finalize_timeout: 60.0
         history_check_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
+        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
 ---
 public_id: valory/ledger:0.19.0
 type: connection

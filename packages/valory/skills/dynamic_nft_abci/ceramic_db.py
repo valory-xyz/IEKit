@@ -42,7 +42,6 @@ class CeramicDB:
         self,
         data: Optional[Dict] = None,
         logger: Optional[Any] = None,
-        max_points_per_period: int = 5000,
     ) -> None:
         """Create a database"""
         self.data = (
@@ -53,7 +52,6 @@ class CeramicDB:
                 "module_data": {
                     "twitter": {
                         "latest_mention_tweet_id": 0,
-                        "max_points_per_period": max_points_per_period,
                         "current_period": "1970-01-01",
                     },
                     "dynamic_nft": {},

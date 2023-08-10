@@ -491,9 +491,6 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 f"Scoring period has changed from {current_period} to {today}"
             )
         period_reset_users = set()
-        max_points_per_period = ceramic_db.data["module_data"]["twitter"][
-            "max_points_per_period"
-        ]
 
         # Update data
         for tweet in tweets.values():
@@ -519,11 +516,11 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                     # Existing user, already reset
                     current_period_points = user["current_period_points"]
 
-            if current_period_points + new_points > max_points_per_period:
+            if current_period_points + new_points > self.params.max_points_per_period:
                 self.context.logger.info(
-                    f"User {author_id} has surpassed the max points per period: new_points={new_points} current_period_points={current_period_points}, max_points_per_period={max_points_per_period}"
+                    f"User {author_id} has surpassed the max points per period: new_points={new_points} current_period_points={current_period_points}, max_points_per_period={self.params.max_points_per_period}"
                 )
-                new_points = max_points_per_period - current_period_points
+                new_points = self.params.max_points_per_period - current_period_points
                 self.context.logger.info(f"Updated points for this tweet: {new_points}")
 
             current_period_points += new_points

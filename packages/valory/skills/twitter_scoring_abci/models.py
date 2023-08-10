@@ -56,6 +56,7 @@ class Params(BaseParams):
             "twitter_search_endpoint", kwargs, str
         )
         self.twitter_search_args = self._ensure("twitter_search_args", kwargs, str)
+        self.max_points_per_period = self._ensure("max_points_per_period", kwargs, int)
         super().__init__(*args, **kwargs)
 
 

@@ -168,6 +168,7 @@ models:
       twitter_max_pages: 10
       twitter_search_endpoint: 2/tweets/search/recent?
       twitter_search_args: query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
+      max_points_per_period: 5000
       tx_timeout: 10.0
       whitelist_api_key: null
       whitelist_endpoint: http://localhost
