@@ -185,7 +185,7 @@ class OpenaiConnection(BaseSyncConnection):
     def _get_response(self, prompt_template: str, prompt_values: Dict[str, str]):
         """Get response from openai."""
         # Format the prompt using input variables and prompt_values
-        formatted_prompt = prompt_template.format(**prompt_values)
+        formatted_prompt = prompt_template.format(**prompt_values) if prompt_values else prompt_template
 
         # Call the OpenAI API
         response = openai.Completion.create(

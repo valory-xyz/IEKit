@@ -22,30 +22,50 @@
 import json
 import re
 from abc import ABC
-from typing import Dict, Generator, List, Set, Type, cast
+from datetime import datetime
+from typing import Dict, Generator, Optional, Set, Tuple, Type, cast
 
 from web3 import Web3
 
+from packages.valory.connections.openai.connection import (
+    PUBLIC_ID as LLM_CONNECTION_PUBLIC_ID,
+)
+from packages.valory.protocols.llm.message import LlmMessage
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
+from packages.valory.skills.abstract_round_abci.models import Requests
 from packages.valory.skills.twitter_scoring_abci.ceramic_db import CeramicDB
-from packages.valory.skills.twitter_scoring_abci.models import Params
-from packages.valory.skills.twitter_scoring_abci.payloads import TwitterScoringPayload
+from packages.valory.skills.twitter_scoring_abci.dialogues import (
+    LlmDialogue,
+    LlmDialogues,
+)
+from packages.valory.skills.twitter_scoring_abci.models import Params, SharedState
+from packages.valory.skills.twitter_scoring_abci.payloads import (
+    DBUpdatePayload,
+    TweetEvaluationPayload,
+    TwitterCollectionPayload,
+)
+from packages.valory.skills.twitter_scoring_abci.prompts import tweet_evaluation_prompt
 from packages.valory.skills.twitter_scoring_abci.rounds import (
+    DBUpdateRound,
     SynchronizedData,
+    TweetEvaluationRound,
+    TwitterCollectionRound,
     TwitterScoringAbciApp,
-    TwitterScoringRound,
 )
 
 
 ADDRESS_REGEX = r"0x[a-fA-F0-9]{40}"
 TAGLINE = "I'm linking my wallet to @Autonolas Contribute:"
+DEFAULT_TWEET_POINTS = 100
+TWEET_QUALITY_TO_POINTS = {"LOW": 1, "AVERAGE": 2, "HIGH": 3}
+TWEET_RELATIONSHIP_TO_POINTS = {"LOW": 100, "AVERAGE": 200, "HIGH": 300}
 
 
-class ScoreReadBaseBehaviour(BaseBehaviour, ABC):
+class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
     """Base behaviour for the common apps' skill."""
 
     @property
@@ -59,62 +79,46 @@ class ScoreReadBaseBehaviour(BaseBehaviour, ABC):
         return cast(Params, super().params)
 
 
-class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
-    """TwitterScoringBehaviour"""
+class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
+    """TwitterCollectionBehaviour"""
 
-    matching_round: Type[AbstractRound] = TwitterScoringRound
+    matching_round: Type[AbstractRound] = TwitterCollectionRound
 
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            payload_data = TwitterScoringRound.ERROR_PAYLOAD
 
             # Get mentions from Twitter
-            mentions = yield from self._get_twitter_mentions()
-            self.context.logger.info(f"Retrieved new mentions from Twitter: {mentions}")
+            tweets, latest_mention_tweet_id = yield from self._get_twitter_mentions()
 
             # Get hashtags from Twitter
-            hashtag_data = yield from self._get_twitter_hashtag_search()
+            if tweets != TwitterCollectionRound.ERROR_PAYLOAD:
+                (
+                    tweets,
+                    latest_hashtag_tweet_id,
+                ) = yield from self._get_twitter_hashtag_search(tweets)
 
-            # Check for errors and merge data
-            if (
-                mentions != TwitterScoringRound.ERROR_PAYLOAD
-                and hashtag_data != TwitterScoringRound.ERROR_PAYLOAD
-            ):
-                # Build registrations
-                wallet_to_users = self._get_twitter_registrations(
-                    hashtag_data["tweets_hashtag"]
-                )
+                # Keep the max latest_tweet_id
+                valid_latest_ids = [
+                    i for i in (latest_mention_tweet_id, latest_hashtag_tweet_id) if i
+                ]
+                if valid_latest_ids:
+                    latest_mention_tweet_id = max(valid_latest_ids)
+
+            if tweets == TwitterCollectionRound.ERROR_PAYLOAD:
+                payload_data = TwitterCollectionRound.ERROR_PAYLOAD
+            else:
                 self.context.logger.info(
-                    f"Retrieved recent registrations from Twitter: {wallet_to_users}"
+                    f"Retrieved new tweets [until_id={latest_mention_tweet_id}]: {list(tweets.keys())}"
                 )
-                api_data = mentions
-                api_data["wallet_to_users"] = wallet_to_users
-                api_data["user_to_hashtags"] = self._count_tweets(
-                    hashtag_data["tweets_hashtag"]
-                )
-                api_data["id_to_usernames_hashtag"] = hashtag_data[
-                    "id_to_usernames_hashtag"
-                ]
-                api_data["latest_hashtag_tweet_id"] = hashtag_data[
-                    "latest_hashtag_tweet_id"
-                ]
-                pending_write = (
-                    self.synchronized_data.pending_write
-                    or api_data["user_to_mentions"]
-                    or api_data["id_to_usernames"]
-                    or api_data["wallet_to_users"]
-                    or api_data["user_to_hashtags"]
-                )
-                # Calculate the new Ceramic content
                 payload_data = {
-                    "ceramic_db": self.update_ceramic_db(api_data),
-                    "pending_write": pending_write,
+                    "tweets": tweets,
+                    "latest_mention_tweet_id": latest_mention_tweet_id,
                 }
 
             sender = self.context.agent_address
-            payload = TwitterScoringPayload(
+            payload = TwitterCollectionPayload(
                 sender=sender, content=json.dumps(payload_data, sort_keys=True)
             )
 
@@ -124,7 +128,9 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
         self.set_done()
 
-    def _get_twitter_mentions(self) -> Generator[None, None, Dict]:
+    def _get_twitter_mentions(
+        self,
+    ) -> Generator[None, None, Tuple[Dict, Optional[int]]]:
         """Get Twitter mentions"""
 
         api_base = self.params.twitter_api_base
@@ -148,10 +154,9 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
         self.context.logger.info(f"Retrieving mentions from Twitter API [{api_url}]")
 
-        mentions = []
-        user_data = []
+        tweets = {}
         next_token = None
-        latest_mention_tweet_id = None
+        latest_tweet_id = None
 
         # Pagination loop: we read a max of <twitter_max_pages> pages each period
         # Each page contains 100 tweets. The default value for twitter_max_pages is 10
@@ -173,7 +178,7 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 self.context.logger.error(
                     f"Error retrieving mentions from Twitter [{response.status_code}]"
                 )
-                return TwitterScoringRound.ERROR_PAYLOAD
+                return TwitterCollectionRound.ERROR_PAYLOAD, None
 
             api_data = json.loads(response.body)
 
@@ -182,7 +187,7 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 self.context.logger.error(
                     f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
                 )
-                return TwitterScoringRound.ERROR_PAYLOAD
+                return TwitterCollectionRound.ERROR_PAYLOAD, None
 
             # Check if there are no more results
             if (
@@ -196,17 +201,25 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 self.context.logger.error(
                     f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
                 )
-                return TwitterScoringRound.ERROR_PAYLOAD
+                return TwitterCollectionRound.ERROR_PAYLOAD, None
 
             if "includes" not in api_data or "users" not in api_data["includes"]:
                 self.context.logger.error(
                     f"Twitter API response does not contain the required 'includes/users' field: {api_data!r}"
                 )
-                return TwitterScoringRound.ERROR_PAYLOAD
+                return TwitterCollectionRound.ERROR_PAYLOAD, None
 
-            mentions += api_data["data"]
-            user_data += api_data["includes"]["users"]
-            latest_mention_tweet_id = api_data["meta"]["newest_id"]
+            # Add the retrieved tweets
+            for tweet in api_data["data"]:
+                tweets[tweet["id"]] = tweet
+
+                # Set the author handle
+                for user in api_data["includes"]["users"]:
+                    if user["id"] == tweet["author_id"]:
+                        tweets[tweet["id"]]["username"] = user["username"]
+                        break
+
+            latest_tweet_id = int(api_data["meta"]["newest_id"])
 
             if "next_token" in api_data["meta"]:
                 next_token = api_data["meta"]["next_token"]
@@ -214,45 +227,15 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
             break
 
-        user_to_mentions = self._count_tweets(mentions)
-        id_to_usernames = self._get_id_to_usernames(user_data)
+        self.context.logger.info(
+            f"Got {len(tweets)} new mentions until tweet_id={latest_tweet_id}"
+        )
 
-        return {
-            "user_to_mentions": user_to_mentions,
-            "id_to_usernames": id_to_usernames,
-            "latest_mention_tweet_id": latest_mention_tweet_id or next_tweet_id,
-        }
+        return tweets, latest_tweet_id
 
-    def _count_tweets(self, tweets: List) -> Dict:
-        """Process Twitter API data"""
-
-        user_to_tweets: Dict[str, int] = {}
-
-        for tweet in tweets:
-            author = tweet["author_id"]
-            if author not in user_to_tweets:
-                user_to_tweets[author] = 1
-            else:
-                user_to_tweets[author] = user_to_tweets[author] + 1
-
-        return user_to_tweets
-
-    def _get_id_to_usernames(self, user_data: List) -> Dict:
-        """Process Twitter user data"""
-        return {i["id"]: "@" + i["username"] for i in user_data}
-
-    def _get_twitter_registrations(self, tweets: List) -> Dict[str, str]:
-        """Process Twitter user data"""
-        result = {}
-        for tweet in tweets:
-            address_match = re.search(ADDRESS_REGEX, tweet["text"])
-            tagline_match = re.search(TAGLINE, tweet["text"], re.IGNORECASE)
-            if address_match and tagline_match:
-                wallet_address = Web3.toChecksumAddress(address_match.group())
-                result[wallet_address] = tweet["author_id"]
-        return result
-
-    def _get_twitter_hashtag_search(self) -> Generator[None, None, Dict]:
+    def _get_twitter_hashtag_search(
+        self, tweets: dict
+    ) -> Generator[None, None, Tuple[Dict, Optional[int]]]:
         """Get registrations from Twitter"""
 
         api_base = self.params.twitter_api_base
@@ -278,10 +261,9 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
         self.context.logger.info(f"Retrieving hashes from Twitter API [{api_url}]")
 
-        hashtag_tweets = []
-        user_data = []
         next_token = None
-        latest_hashtag_tweet_id = None
+        latest_tweet_id = None
+        retrieved_tweets = 0
 
         # Pagination loop: we read a max of <twitter_max_pages> pages each period
         # Each page contains 100 tweets. The default value for twitter_max_pages is 10
@@ -303,7 +285,7 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 self.context.logger.error(
                     f"Error retrieving mentions from Twitter [{response.status_code}]"
                 )
-                return TwitterScoringRound.ERROR_PAYLOAD
+                return TwitterCollectionRound.ERROR_PAYLOAD, None
 
             api_data = json.loads(response.body)
 
@@ -312,7 +294,7 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 self.context.logger.error(
                     f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
                 )
-                return TwitterScoringRound.ERROR_PAYLOAD
+                return TwitterCollectionRound.ERROR_PAYLOAD, None
 
             # Check if there are no more results
             if (
@@ -326,17 +308,27 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
                 self.context.logger.error(
                     f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
                 )
-                return TwitterScoringRound.ERROR_PAYLOAD
+                return TwitterCollectionRound.ERROR_PAYLOAD, None
 
             if "includes" not in api_data or "users" not in api_data["includes"]:
                 self.context.logger.error(
                     f"Twitter API response does not contain the required 'includes/users' field: {api_data!r}"
                 )
-                return TwitterScoringRound.ERROR_PAYLOAD
+                return TwitterCollectionRound.ERROR_PAYLOAD, None
 
-            hashtag_tweets += api_data["data"]
-            user_data += api_data["includes"]["users"]
-            latest_hashtag_tweet_id = api_data["meta"]["newest_id"]
+            # Add the retrieved tweets
+            for tweet in api_data["data"]:
+                retrieved_tweets += 1
+                if tweet["id"] not in tweets:  # avoids duplicated tweets
+                    tweets[tweet["id"]] = tweet
+
+                    # Set the author handle
+                    for user in api_data["includes"]["users"]:
+                        if user["id"] == tweet["author_id"]:
+                            tweets[tweet["id"]]["username"] = user["username"]
+                            break
+
+            latest_tweet_id = int(api_data["meta"]["newest_id"])
 
             if "next_token" in api_data["meta"]:
                 next_token = api_data["meta"]["next_token"]
@@ -344,68 +336,224 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
 
             break
 
-        self.context.logger.info(f"Got Tweets including the hashtag : {hashtag_tweets}")
+        self.context.logger.info(
+            f"Got {retrieved_tweets} new hashtag tweets until tweet_id={latest_tweet_id}"
+        )
 
-        id_to_usernames = self._get_id_to_usernames(user_data)
+        return tweets, latest_tweet_id
 
-        return {
-            "tweets_hashtag": hashtag_tweets,
-            "id_to_usernames_hashtag": id_to_usernames,
-            "latest_hashtag_tweet_id": latest_hashtag_tweet_id or next_tweet_id,
-        }
 
-    def update_ceramic_db(self, api_data: Dict) -> Dict:
+class TweetEvaluationBehaviour(TwitterScoringBaseBehaviour):
+    """TweetEvaluationBehaviour"""
+
+    matching_round: Type[AbstractRound] = TweetEvaluationRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            tweet_id_to_points = {}
+            for tweet_id, tweet in self.synchronized_data.tweets.items():
+                tweet_id_to_points[tweet_id] = yield from self.evaluate_tweet(
+                    tweet["text"]
+                )
+
+            sender = self.context.agent_address
+            payload = TweetEvaluationPayload(
+                sender=sender, content=json.dumps(tweet_id_to_points, sort_keys=True)
+            )
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
+
+    def evaluate_tweet(self, text: str) -> Generator[None, None, int]:
+        """Evaluate the tweet through a LLM."""
+
+        self.context.logger.info(f"Evaluating tweet: {text}")
+
+        llm_dialogues = cast(LlmDialogues, self.context.llm_dialogues)
+
+        # llm request message
+        request_llm_message, llm_dialogue = llm_dialogues.create(
+            counterparty=str(LLM_CONNECTION_PUBLIC_ID),
+            performative=LlmMessage.Performative.REQUEST,
+            prompt_template=tweet_evaluation_prompt.replace("{user_text}", text),
+            prompt_values={},
+        )
+        request_llm_message = cast(LlmMessage, request_llm_message)
+        llm_dialogue = cast(LlmDialogue, llm_dialogue)
+        llm_response_message = yield from self._do_request(
+            request_llm_message, llm_dialogue
+        )
+        data = llm_response_message.value
+
+        self.context.logger.info(f"Got tweet evaluation: {repr(data)}")
+
+        points = DEFAULT_TWEET_POINTS
+        try:
+            data = parse_evaluation(data)
+            quality = data["quality"]
+            relationship = data["relationship"]
+            if (
+                quality not in TWEET_QUALITY_TO_POINTS
+                or relationship not in TWEET_RELATIONSHIP_TO_POINTS
+            ):
+                self.context.logger.error("Evaluation data is not valid: key not valid")
+            else:
+                points = (
+                    TWEET_QUALITY_TO_POINTS[quality]
+                    * TWEET_RELATIONSHIP_TO_POINTS[relationship]
+                )
+        except Exception as e:
+            self.context.logger.error(f"Evaluation data is not valid: exception {e}")
+
+        self.context.logger.info(f"Points: {points}")
+        return points
+
+    def _do_request(
+        self,
+        llm_message: LlmMessage,
+        llm_dialogue: LlmDialogue,
+        timeout: Optional[float] = None,
+    ) -> Generator[None, None, LlmMessage]:
+        """
+        Do a request and wait the response, asynchronously.
+
+        :param llm_message: The request message
+        :param llm_dialogue: the HTTP dialogue associated to the request
+        :param timeout: seconds to wait for the reply.
+        :yield: LLMMessage object
+        :return: the response message
+        """
+        self.context.outbox.put_message(message=llm_message)
+        request_nonce = self._get_request_nonce_from_dialogue(llm_dialogue)
+        cast(Requests, self.context.requests).request_id_to_callback[
+            request_nonce
+        ] = self.get_callback_request()
+        # notify caller by propagating potential timeout exception.
+        response = yield from self.wait_for_message(timeout=timeout)
+        return response
+
+
+def parse_evaluation(data: str) -> Dict:
+    """Parse the data from the LLM"""
+    start = data.find("{")
+    end = data.find("}")
+    sub_string = data[start : end + 1]
+    return json.loads(sub_string)
+
+
+class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
+    """DBUpdateBehaviour"""
+
+    matching_round: Type[AbstractRound] = DBUpdateRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+
+            ceramic_db = self.update_ceramic_db()
+
+            sender = self.context.agent_address
+            payload = DBUpdatePayload(
+                sender=sender, content=json.dumps(ceramic_db, sort_keys=True)
+            )
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
+
+    def update_ceramic_db(self) -> Dict:
         """Calculate the new content of the DB"""
+
+        tweets = self.synchronized_data.tweets
+        latest_mention_tweet_id = self.synchronized_data.latest_mention_tweet_id
 
         # Instantiate the db
         ceramic_db = CeramicDB(self.synchronized_data.ceramic_db, self.context.logger)
 
-        # Add the new mention points
-        for twitter_id, mentions in api_data["user_to_mentions"].items():
-            new_points = self.params.twitter_mention_points * mentions
-            ceramic_db.update_or_create_user(
-                "twitter_id", twitter_id, {"points": new_points}
-            )
+        # Have we changed scoring period?
+        now = cast(
+            SharedState, self.context.state
+        ).round_sequence.last_round_transition_timestamp.timestamp()
 
-        # id_to_usernames
-        for twitter_id, twitter_name in api_data["id_to_usernames"].items():
-            ceramic_db.update_or_create_user(
-                "twitter_id", twitter_id, {"twitter_handle": twitter_name}
+        today = datetime.fromtimestamp(now).strftime("%Y-%m-%d")
+        current_period = ceramic_db.data["module_data"]["twitter"]["current_period"]
+        is_period_changed = today != current_period
+        if is_period_changed:
+            self.context.logger.info(
+                f"Scoring period has changed from {current_period} to {today}"
             )
+        period_reset_users = set()
 
-        # Add the new hashtag points
-        for twitter_id, mentions in api_data["user_to_hashtags"].items():
-            new_points = self.params.twitter_mention_points * mentions
-            ceramic_db.update_or_create_user(
-                "twitter_id", twitter_id, {"points": new_points}
-            )
+        # Update data
+        for tweet in tweets.values():
 
-        # id_to_usernames_hashtags
-        for twitter_id, twitter_name in api_data["id_to_usernames_hashtag"].items():
-            ceramic_db.update_or_create_user(
-                "twitter_id", twitter_id, {"twitter_handle": twitter_name}
-            )
+            author_id = tweet["author_id"]
+            twitter_name = tweet["username"]
+            new_points = tweet["points"]
+            wallet_address = get_registration(tweet["text"])
 
-        # wallet_to_users
-        for wallet_address, twitter_id in api_data["wallet_to_users"].items():
-            ceramic_db.update_or_create_user(
-                "twitter_id", twitter_id, {"wallet_address": wallet_address}
-            )
+            # Check this user's point limit per period
+            user, _ = ceramic_db.get_user_by_field("twitter_id", tweet["author_id"])
+
+            if not user:
+                # New user
+                period_reset_users.add(tweet["author_id"])
+                current_period_points = 0
+            else:
+                if is_period_changed and user["twitter_id"] not in period_reset_users:
+                    # Existing user, not reset yet
+                    period_reset_users.add(user["twitter_id"])
+                    current_period_points = 0
+                else:
+                    # Existing user, already reset
+                    current_period_points = user["current_period_points"]
+
+            if current_period_points + new_points > self.params.max_points_per_period:
+                self.context.logger.info(
+                    f"User {author_id} has surpassed the max points per period: new_points={new_points} current_period_points={current_period_points}, max_points_per_period={self.params.max_points_per_period}"
+                )
+                new_points = self.params.max_points_per_period - current_period_points
+                self.context.logger.info(f"Updated points for this tweet: {new_points}")
+
+            current_period_points += new_points
+
+            # User data to update
+            user_data = {
+                "points": int(new_points),
+                "twitter_handle": twitter_name,
+                "current_period_points": int(current_period_points),
+            }
+
+            # If this is a registration
+            if wallet_address:
+                self.context.logger.info(
+                    f"Detected a Twitter registration for @{twitter_name}: {wallet_address}. Tweet: {tweet['text']}"
+                )
+                user_data["wallet_address"] = wallet_address
+
+            # For existing users, all existing user data is replaced except points, which are added
+            ceramic_db.update_or_create_user("twitter_id", author_id, user_data)
 
         # If a user has first contributed to one module (i.e. twitter) without registering a wallet,
         # and later he/she contributes to another module, it could happen that we have two different
         # entries on the database
         ceramic_db.merge_by_wallet()
 
-        # latest_mention_tweet_id and latest_hashtag_tweet_id
-        latest_id = max(
-            int(api_data["latest_mention_tweet_id"]),
-            int(api_data["latest_hashtag_tweet_id"]),
+        # Update the latest_mention_tweet_id
+        ceramic_db.data["module_data"]["twitter"]["latest_mention_tweet_id"] = str(
+            latest_mention_tweet_id
         )
 
-        ceramic_db.data["module_data"]["twitter"]["latest_mention_tweet_id"] = str(
-            latest_id
-        )
+        # Update the current_period
+        ceramic_db.data["module_data"]["twitter"]["current_period"] = today
 
         self.context.logger.info(
             f"The ceramic_db will be updated to: {ceramic_db.data!r}"
@@ -414,11 +562,27 @@ class TwitterScoringBehaviour(ScoreReadBaseBehaviour):
         return ceramic_db.data
 
 
+def get_registration(text: str) -> Optional[str]:
+    """Check if the tweet is a registration and return the wallet address"""
+
+    wallet_address = None
+
+    address_match = re.search(ADDRESS_REGEX, text)
+    tagline_match = re.search(TAGLINE, text, re.IGNORECASE)
+
+    if address_match and tagline_match:
+        wallet_address = Web3.toChecksumAddress(address_match.group())
+
+    return wallet_address
+
+
 class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
     """TwitterScoringRoundBehaviour"""
 
-    initial_behaviour_cls = TwitterScoringBehaviour
+    initial_behaviour_cls = TwitterCollectionBehaviour
     abci_app_cls = TwitterScoringAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
-        TwitterScoringBehaviour,
+        TwitterCollectionBehaviour,
+        TweetEvaluationBehaviour,
+        DBUpdateBehaviour,
     ]

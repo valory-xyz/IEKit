@@ -65,14 +65,14 @@ from packages.valory.skills.dynamic_nft_abci.rounds import TokenTrackRound
 from packages.valory.skills.generic_scoring_abci.rounds import GenericScoringRound
 from packages.valory.skills.registration_abci.rounds import RegistrationStartupRound
 from packages.valory.skills.reset_pause_abci.rounds import ResetAndPauseRound
-from packages.valory.skills.twitter_scoring_abci.rounds import TwitterScoringRound
+from packages.valory.skills.twitter_scoring_abci.rounds import TwitterCollectionRound
 
 
 HAPPY_PATH: Tuple[RoundChecks, ...] = (
     RoundChecks(RegistrationStartupRound.auto_round_id(), n_periods=1),
     RoundChecks(StreamReadRound.auto_round_id(), n_periods=3),
     RoundChecks(GenericScoringRound.auto_round_id(), n_periods=2),
-    RoundChecks(TwitterScoringRound.auto_round_id(), n_periods=2),
+    RoundChecks(TwitterCollectionRound.auto_round_id(), n_periods=2),
     RoundChecks(TokenTrackRound.auto_round_id(), success_event="WRITE", n_periods=2),
     RoundChecks(RandomnessRound.auto_round_id(), n_periods=2),
     RoundChecks(SelectKeeperRound.auto_round_id(), n_periods=2),
@@ -136,20 +136,16 @@ class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
             "value": '{"0": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm", "100": "bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q", "50000": "bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4", "100000": "bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy", "150000": "bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}',
         },
         {
-            "dotted_path": f"{__param_args_prefix}.default_read_stream_id",
+            "dotted_path": f"{__param_args_prefix}.ceramic_db_stream_id",
             "value": "stream_id_e2e",
-        },
-        {
-            "dotted_path": f"{__param_args_prefix}.default_write_stream_id",
-            "value": "stream_id_e2e",
-        },
-        {
-            "dotted_path": f"{__param_args_prefix}.default_write_target_property",
-            "value": "ceramic_db",
         },
         {
             "dotted_path": f"{__param_args_prefix}.manual_points_stream_id",
             "value": "manual_points_stream_id",
+        },
+        {
+            "dotted_path": f"{__param_args_prefix}.centaurs_stream_id",
+            "value": "centaurs_stream_id",
         },
     ]
 

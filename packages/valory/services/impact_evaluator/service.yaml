@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeiemfdd6jx6ttrtxl624323qh65g2355knf3cegrikwsm3osyksc34
+agent: valory/impact_evaluator:0.1.0:bafybeib7cj46qgc7xxnoc2tqhy5yp3cbtbnhdolgc4psoi5oni32a6wxeq
 number_of_agents: 4
 deployment:
   agent:
@@ -80,7 +80,7 @@ extra:
         termination_sleep: ${TERMINATION_SLEEP:int:900}
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
         on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
-        reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:30}
+        reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:300}
         retry_attempts: 400
         retry_timeout: 3
         request_retry_delay: 1.0
@@ -104,13 +104,13 @@ extra:
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
         twitter_max_pages: 10
-        twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
+        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
 1:
   models:
     benchmark_tool:
@@ -143,7 +143,7 @@ extra:
         termination_sleep: ${TERMINATION_SLEEP:int:900}
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
         on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
-        reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:30}
+        reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:300}
         retry_attempts: 400
         retry_timeout: 3
         request_retry_delay: 1.0
@@ -167,13 +167,13 @@ extra:
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
         twitter_max_pages: 10
-        twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
+        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
 2:
   models:
     benchmark_tool:
@@ -206,7 +206,7 @@ extra:
         termination_sleep: ${TERMINATION_SLEEP:int:900}
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
         on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
-        reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:30}
+        reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:300}
         retry_attempts: 400
         retry_timeout: 3
         request_retry_delay: 1.0
@@ -230,13 +230,13 @@ extra:
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
         twitter_max_pages: 10
-        twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
+        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
 3:
   models:
     benchmark_tool:
@@ -271,7 +271,7 @@ extra:
         keeper_allowed_retries: 3
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
         on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
-        reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:30}
+        reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:300}
         retry_attempts: 400
         retry_timeout: 3
         request_retry_delay: 1.0
@@ -295,7 +295,6 @@ extra:
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
         twitter_max_pages: 10
-        twitter_mention_points: ${TWITTER_MENTION_POINTS:int:200}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
         tx_timeout: 10.0
@@ -304,6 +303,7 @@ extra:
         finalize_timeout: 60.0
         history_check_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
+        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
 ---
 public_id: valory/ledger:0.19.0
 type: connection
@@ -329,3 +329,30 @@ cert_requests:
   not_before: '2022-01-01'
   public_key: ${ACN_NODE_PUBLIC_KEY:str:02d3a830c9d6ea1ae91936951430dee11f4662f33118b02190693be835359a9d77}
   save_path: .certs/acn_cosmos_11000.txt
+---
+public_id: valory/openai:0.1.0
+type: connection
+0:
+  config:
+    engine: ${ENGINE:str:text-davinci-003}
+    max_tokens: ${MAX_TOKENS:int:500}
+    openai_api_key: ${OPENAI_API_KEY_0:str:null}
+    temperature: ${TEMPERATURE:float:0.7}
+1:
+  config:
+    engine: ${ENGINE:str:text-davinci-003}
+    max_tokens: ${MAX_TOKENS:int:500}
+    openai_api_key: ${OPENAI_API_KEY_1:str:null}
+    temperature: ${TEMPERATURE:float:0.7}
+2:
+  config:
+    engine: ${ENGINE:str:text-davinci-003}
+    max_tokens: ${MAX_TOKENS:int:500}
+    openai_api_key: ${OPENAI_API_KEY_2:str:null}
+    temperature: ${TEMPERATURE:float:0.7}
+3:
+  config:
+    engine: ${ENGINE:str:text-davinci-003}
+    max_tokens: ${MAX_TOKENS:int:500}
+    openai_api_key: ${OPENAI_API_KEY_3:str:null}
+    temperature: ${TEMPERATURE:float:0.7}

@@ -8,9 +8,9 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
   behaviours.py: bafybeifhoufesr4r4re65mxjadqasjymvz6tkc25xn5yyn473yunhjiufe
-  composition.py: bafybeifzm5nsheazkrro7rvjahrqel5ky6zliuq53kdqvtk72vkghvfyom
+  composition.py: bafybeicmyrwwzclkxto5n7fw6bmiwxupmetiadighlkms3x4zcfcreevoy
   dialogues.py: bafybeigjknz4qqynbsltjje46gidg4rftsqw6ybjwegz24wetmycutpzh4
-  fsm_specification.yaml: bafybeiczmrqtpec5g5ucobnzsbssypar3k2gjjmpnffugnmz5cw25sgs4m
+  fsm_specification.yaml: bafybeiahcmi7rgvcmn7b33vzh2x4o53k4zlyuk6hqfijeznnoe3rywrzh4
   handlers.py: bafybeidkli6fphcmdgwsys4lkyf3fx6fbawet4nt2pnixfypzijhg6b3ze
   models.py: bafybeicufmgzkyjucrnjeymzcbnlg2rukqwury36eodsogil7lkk7mu5xq
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
@@ -25,16 +25,16 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeibqpzbklnljvtc67yon4ciijxj75d7vazm7rurcvbbfnk6jtudukm
 - valory/ceramic_read_abci:0.1.0:bafybeib36m6fi5swu43s3amtbk7w5rfie2gvzgw3xhxd7yfnka4kpcegme
-- valory/generic_scoring_abci:0.1.0:bafybeiatrunjluw3u6yxdctdq6ombmshuxauw2bhtuzqbqwi2rmxop5una
-- valory/twitter_scoring_abci:0.1.0:bafybeidjbh4c6ueqvy23equb4ksr2qr4336hkqxvsayy7sx7367duczkbq
+- valory/generic_scoring_abci:0.1.0:bafybeihvp34ya2eamhf6skntsm4votudv4qzqftuk2mmhtvcprysjbykrq
+- valory/twitter_scoring_abci:0.1.0:bafybeibipxhqi57vud7cidz5zktigngzubwuu76lysdkioo6rpdjpedluq
 - valory/ceramic_write_abci:0.1.0:bafybeifdjb2iisvtgwo44xoddhrbgqehbis6tbjdktuhh6ehwm5bnuee74
-- valory/dynamic_nft_abci:0.1.0:bafybeibwmanjrwrfb27g2ettgj6vzls5wfp5rm27bmw2wru3sfuvmzfx5y
+- valory/dynamic_nft_abci:0.1.0:bafybeifmdn4czg4wr3wclafrpxsqv3s3zptawj3zju5wly3vke7ucjfeea
 - valory/registration_abci:0.1.0:bafybeia25gpusnkakb2dp4heqkwtuftbc2apppq3i4bds6sphltsovgzvi
 - valory/reset_pause_abci:0.1.0:bafybeigzvwbzktclahjbsyiwqnj6poree4iveon5pric6s5ixb6wrhkdhq
 - valory/termination_abci:0.1.0:bafybeibcdgnarxyyqexncpfewcemraryywtwueuv7qthsjuean5l77lp2e
 - valory/transaction_settlement_abci:0.1.0:bafybeiepus7qsa47gt7dyk32gaqsoae6whjoxfnplttulxrvmcauyerrdm
 - valory/decision_making_abci:0.1.0:bafybeidsdxav536hl4z2agz3rgjgo7zsbkljpim7zoc7totdstvn25z5iu
-- valory/llm_abci:0.1.0:bafybeid7gr7roljcahdm5clru2hyqbdjapf4ybyd4x32bxw2gsq5rm6cja
+- valory/llm_abci:0.1.0:bafybeiaju3kesnlhw4v5fcl4w456bjqpm6pe7nheneuz22rsacytpf62eq
 - valory/twitter_write_abci:0.1.0:bafybeihetoyomiod2lcq4mejbpd7j77a3uyz5gj5g5qo2wo6lbj7xwrqei
 behaviours:
   main:
@@ -56,12 +56,18 @@ handlers:
   ledger_api:
     args: {}
     class_name: LedgerApiHandler
+  llm:
+    args: {}
+    class_name: LlmHandler
   signing:
     args: {}
     class_name: SigningHandler
   tendermint:
     args: {}
     class_name: TendermintHandler
+  twitter:
+    args: {}
+    class_name: TwitterHandler
 models:
   abci_dialogues:
     args: {}
@@ -82,6 +88,9 @@ models:
   ledger_api_dialogues:
     args: {}
     class_name: LedgerApiDialogues
+  llm_dialogues:
+    args: {}
+    class_name: LlmDialogues
   params:
     args:
       broadcast_to_server: false
@@ -156,10 +165,10 @@ models:
       twitter_api_bearer_token: <default_bearer_token>
       twitter_mentions_endpoint: 2/users/1450081635559428107/mentions?
       twitter_mentions_args: tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
-      twitter_mention_points: 200
       twitter_max_pages: 10
       twitter_search_endpoint: 2/tweets/search/recent?
       twitter_search_args: query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
+      max_points_per_period: 5000
       tx_timeout: 10.0
       whitelist_api_key: null
       whitelist_endpoint: http://localhost

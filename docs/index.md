@@ -31,7 +31,7 @@ In order to run a local demo service based on the IEKit:
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeigbm6u7rl3fspzccrfj2ri7aemyynlumkwi5sbbwfs2ubqkvmxvni --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeihc2w3xjdrpuzqhe4gbqvocg74zhpugcqk76xp5xlam6z5moslrni --service
     ```
 
 3. Build the Docker image of the service agents
@@ -83,16 +83,20 @@ In order to run a local demo service based on the IEKit:
         ```bash
         ETHEREUM_LEDGER_RPC=https://goerli.infura.io/v3/<infura_api_key>
         DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS=0x7C3B976434faE9986050B26089649D9f63314BD8
+        EARLIEST_BLOCK_TO_MONITOR=16097553
         CERAMIC_DID_SEED=<ceramic_seed_did>
         CERAMIC_DID_STR=<ceramic_did_string>
-        DEFAULT_READ_STREAM_ID=<main_database_stream>
-        DEFAULT_WRITE_STREAM_ID=<main_database_stream>
-        DEFAULT_READ_TARGET_PROPERTY=ceramic_db
-        DEFAULT_WRITE_TARGET_PROPERTY=ceramic_db
-        MANUAL_POINTS_STREAM_ID=<generic_scores_stream>
+        CERAMIC_API_BASE=<ceramic_node_endpoint>
+        CENTAURS_STREAM_ID=<centaurs_stream_id>
+        CERAMIC_DB_STREAM_ID=<main_db_stream_id>
+        MANUAL_POINTS_STREAM_ID=<generic_scores_stream_id>
+        CENTAUR_ID_TO_SECRETS='{"your_centaur_id":{"orbis":{"context":"orbis_context_stream_id","did_seed":"your_did_seed","did_str":"your_did_str"},"twitter":{"consumer_key":"your_consumer_key","consumer_secret":"your_consumer_secret","access_token":"your_access_token","access_secret":"your_access_secret"}}}'
+        OPENAI_API_KEY_0=<openai_api_key>
+        OPENAI_API_KEY_1=<openai_api_key>
+        OPENAI_API_KEY_2=<openai_api_key>
+        OPENAI_API_KEY_3=<openai_api_key>
         TWITTER_API_BEARER_TOKEN=<twitter_api_token>
-        TWITTER_MENTION_POINTS=300
-        RESET_PAUSE_DURATION=10
+        RESET_PAUSE_DURATION=30
         ALL_PARTICIPANTS='["0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65","0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc","0x976EA74026E726554dB657fA54763abd0C3a0aa9","0x14dC79964da2C08b23698B3D3cc7Ca32193d9955"]'
         POINTS_TO_IMAGE_HASHES='{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
         ```
@@ -121,18 +125,12 @@ In order to run a local demo service based on the IEKit:
 7. Check that the service is running. Open a separate terminal and execute the command below. You should see the service transitioning along different states.
 
     ```bash
-    docker logs -f abci0 | grep -E 'Entered|round is done'
+    docker logs -f impactevaluator_abci_0 | grep -E 'Entered|round is done'
     ```
 
 8. You can try some examples on how to curl the service endpoints from inside one of the agent containers. For example:
 
     ```bash
-    # Enter one of the agent containers
-    docker exec -it <container_id> /bin/bash
-
-    # Install curl and jq if they are not present
-    sudo apt install -y curl jq
-
     # Get the metadata for the token with id=1
     curl localhost:8000/1 | jq
 

@@ -8,26 +8,29 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
-  behaviours.py: bafybeiccddk4hkiteiehm62tyxena2mnogltfob772drwrrpdn34rtdqpa
-  ceramic_db.py: bafybeiem2xntdgeiv5uyco3vokxuktld5xgv2e5mcgncodadhoxrgwxs4y
-  dialogues.py: bafybeicuan3wwjyc5ea5law7oa2jgzqqlas4widsb5gtzu32gxb57bgkzy
-  fsm_specification.yaml: bafybeidl2gyqgogiy6kgin7vtpqwmw7mrbknv23v27gweqikfvf2ikz72e
-  handlers.py: bafybeich5zejyjlh7tqfh345r3ds5m75h5w64oqh4q5dtevpj4lkina4ku
-  models.py: bafybeia3qlccegbbh4kd4s7oaad72ppeolqb2noavbjyk2mcqahkwlt3vm
-  payloads.py: bafybeifu7fzhpugvvvouwlimjosffrkljjp3uqxgw7xptq5kgzcq6tco4u
-  rounds.py: bafybeickwmfzylkmee3nglzqp2s4mpr7hjwvt5hhclndijgiogqjuf5xra
+  behaviours.py: bafybeig5z25wxs7o5u575bxktea5aiqi6vtqqh5jvplrbrnufk6e4rt5oe
+  ceramic_db.py: bafybeicusdonrdq6kirgkpdqmi3a6kmeal4nctnm5ozjqf5s5se6jpitjm
+  dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
+  fsm_specification.yaml: bafybeiftbrcjeqy2322ub5oihkrsmohgp4qpkuokfoirt4rg4ymwu5wrei
+  handlers.py: bafybeid3nqvcyotqj5g5hlgrz57nf7vpjysmgvsxe3p7644f4z5dcwqn6u
+  models.py: bafybeidobpsgt2vb2vccmo26umewq56mqthv4tfsneucotogsp2gbhoxiq
+  payloads.py: bafybeiapqgm3uscsl2gghy6fe22jceta4d5suujdlux233c37fyqydjp5i
+  prompts.py: bafybeieiuqn427bgwfnzynxf3vtqfpvmqqscs5tyw4oibfofwropifotke
+  rounds.py: bafybeidizfljfi3wyplejx44hqjqns7ewvowx44on3whkfyq4mfq36rzfm
   tests/__init__.py: bafybeidwzzd4ejsyf3aryd5kmrvd63h7ajgqyrxphmfaacvpjnneacejay
-  tests/test_behaviours.py: bafybeidkt4dczz47e47d55akolhg5t52y5s36q3w3hsyog6l4z2oqyi4wy
-  tests/test_ceramic_db.py: bafybeia3l32c5y6gx4guiqy3cs4w45myd47m4buw627awpqqnif275kgpu
+  tests/test_behaviours.py: bafybeidhcwz3gwjbwlktbgkafps3wjiyuipewtxa3hponqafgkecwb76we
+  tests/test_ceramic_db.py: bafybeif2v7btjphbqabq6qdmfeyweg765seon74acg5vrrvznivzg2prey
   tests/test_dialogues.py: bafybeiheyq7klonzb7rnjub2i22h7bmsnoimn2pq4j7ofikt3yovstvgt4
   tests/test_handlers.py: bafybeigevirvi3saepukke2zmp334btgsdxhj55o2vawj3hqam63miirg4
   tests/test_models.py: bafybeihaiirqmcsshghztl5lvqjzem6y6rdeefhtiycrhh45v7cuwnmdz4
-  tests/test_payloads.py: bafybeiefzupwoomqauat6xljzedoe2ai5oyyi2zywkmoxwbeszn2gnloby
-  tests/test_rounds.py: bafybeiet4jjujkp7oioyioxvccb37bac34d7iv2fkjxlpa2nfji4eli7s4
+  tests/test_payloads.py: bafybeigw2hvezl72maasvxkctqhm4sywzoytwksmijrhxaits45dxot3ia
+  tests/test_rounds.py: bafybeifcdicfgzkowzjmxcmpwkq6acivintmgiw7z5izatedmu3tdwhq7e
 fingerprint_ignore_patterns: []
-connections: []
+connections:
+- valory/openai:0.1.0:bafybeib5vnrxnbj3o2olle2n5tp6nzml4ghsghh2rnj2l2ilbvproj35jq
 contracts: []
-protocols: []
+protocols:
+- valory/llm:1.0.0:bafybeigqybmg75vsxexmp57hkms7lkp7iwpf54r7wpygizxryvrhfqqpb4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeibqpzbklnljvtc67yon4ciijxj75d7vazm7rurcvbbfnk6jtudukm
 behaviours:
@@ -47,6 +50,9 @@ handlers:
   ledger_api:
     args: {}
     class_name: LedgerApiHandler
+  llm:
+    args: {}
+    class_name: LlmHandler
   signing:
     args: {}
     class_name: SigningHandler
@@ -70,6 +76,9 @@ models:
   ledger_api_dialogues:
     args: {}
     class_name: LedgerApiDialogues
+  llm_dialogues:
+    args: {}
+    class_name: LlmDialogues
   params:
     args:
       multisend_address: '0x0000000000000000000000000000000000000000'
@@ -126,10 +135,10 @@ models:
       twitter_api_bearer_token: <default_bearer_token>
       twitter_mentions_endpoint: 2/users/1450081635559428107/mentions?
       twitter_mentions_args: tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
-      twitter_mention_points: 200
       twitter_max_pages: 10
       twitter_search_endpoint: 2/tweets/search/recent?
       twitter_search_args: query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
+      max_points_per_period: 5000
       validate_timeout: 1205
       use_termination: false
     class_name: Params

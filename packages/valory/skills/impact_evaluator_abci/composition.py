@@ -51,7 +51,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     DecisionMakingAbci.FinishedDecisionMakingReadManualPointsRound: CeramicReadAbci.StreamReadRound,
     DecisionMakingAbci.FinishedDecisionMakingScoreRound: GenericScoringAbci.GenericScoringRound,
     DecisionMakingAbci.FinishedDecisionMakingDoneRound: ResetAndPauseAbci.ResetAndPauseRound,
-    GenericScoringAbci.FinishedGenericScoringRound: TwitterScoringAbci.TwitterScoringRound,
+    GenericScoringAbci.FinishedGenericScoringRound: TwitterScoringAbci.TwitterCollectionRound,
     TwitterScoringAbci.FinishedTwitterScoringRound: DynamicNFTAbci.TokenTrackRound,
     DynamicNFTAbci.FinishedTokenTrackRound: DecisionMakingAbci.DecisionMakingRound,
     LLMAbciApp.FinishedLLMRound: DecisionMakingAbci.DecisionMakingRound,

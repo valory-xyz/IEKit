@@ -35,10 +35,13 @@ class CeramicDB:
         "wallet_address",
         "token_id",
         "points",
+        "current_period_points",
     }
 
     def __init__(
-        self, data: Optional[Dict] = None, logger: Optional[Any] = None
+        self,
+        data: Optional[Dict] = None,
+        logger: Optional[Any] = None,
     ) -> None:
         """Create a database"""
         self.data = (
@@ -47,7 +50,10 @@ class CeramicDB:
             else {
                 "users": [],
                 "module_data": {
-                    "twitter": {"latest_mention_tweet_id": 0},
+                    "twitter": {
+                        "latest_mention_tweet_id": 0,
+                        "current_period": "1970-01-01",
+                    },
                     "dynamic_nft": {},
                     "generic": {"latest_update_id": 0},
                 },
@@ -56,7 +62,7 @@ class CeramicDB:
 
         self.logger = logger
         if self.logger:
-            self.logger.info(f"DB: created new db: {self.data}")
+            self.logger.info("DB: created new db")
 
     def create_user(self, user_data):
         """Create a new user"""
@@ -64,7 +70,9 @@ class CeramicDB:
         fields = self.USER_FIELDS.union(user_data.keys())
 
         new_user = {
-            field: user_data.get(field, 0 if field == "points" else None)
+            field: user_data.get(
+                field, 0 if field in ("points", "current_period_points") else None
+            )
             for field in fields
         }
 
@@ -147,6 +155,10 @@ class CeramicDB:
                     # Points must be added
                     if field == "points":
                         values = [sum(values)]
+
+                    # We just keep the max current_period_points
+                    if field == "current_period_points":
+                        values = [max(values)]
 
                     # Check whether all values are the same
                     if len(values) > 1:
