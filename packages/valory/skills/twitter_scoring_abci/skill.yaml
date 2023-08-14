@@ -13,7 +13,7 @@ fingerprint:
   dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
   fsm_specification.yaml: bafybeiedr7ojvlyriotk6za7fnt4ptnhxklehznn3selyprbehj7tb4kem
   handlers.py: bafybeid3nqvcyotqj5g5hlgrz57nf7vpjysmgvsxe3p7644f4z5dcwqn6u
-  models.py: bafybeidobpsgt2vb2vccmo26umewq56mqthv4tfsneucotogsp2gbhoxiq
+  models.py: bafybeifvmpurh6w4ml27u4kvcjdsh62ldmx3oy5hrfzbqa4ifikvnxzh7m
   payloads.py: bafybeiapqgm3uscsl2gghy6fe22jceta4d5suujdlux233c37fyqydjp5i
   prompts.py: bafybeieiuqn427bgwfnzynxf3vtqfpvmqqscs5tyw4oibfofwropifotke
   rounds.py: bafybeidfkps2sqegmbqqskimxkzmq3c3sme3zgsbdxkoyjlccvyqaooi4u
@@ -117,6 +117,7 @@ models:
       retry_attempts: 400
       retry_timeout: 3
       round_timeout_seconds: 30.0
+      tweet_evaluation_round_timeout: 600.0
       service_id: score_read
       service_registry_address: null
       setup:
