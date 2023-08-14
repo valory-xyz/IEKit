@@ -103,6 +103,9 @@ class SharedState(BaseSharedState):
             TwitterScoringEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
+            TwitterScoringEvent.TWEET_EVALUATION_ROUND_TIMEOUT
+        ] = self.context.params.tweet_evaluation_round_timeout
+        ImpactEvaluatorSkillAbciApp.event_to_timeout[
             GenericScoringEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds
         ImpactEvaluatorSkillAbciApp.event_to_timeout[DynamicNFTEvent.ROUND_TIMEOUT] = (

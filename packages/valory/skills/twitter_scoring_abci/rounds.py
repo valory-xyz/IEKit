@@ -51,6 +51,7 @@ class Event(Enum):
     DONE = "done"
     NO_MAJORITY = "no_majority"
     ROUND_TIMEOUT = "round_timeout"
+    TWEET_EVALUATION_ROUND_TIMEOUT = "tweet_evaluation_round_timeout"
     API_ERROR = "api_error"
     SKIP = "skip"
 
@@ -227,7 +228,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         },
         TweetEvaluationRound: {
             Event.DONE: DBUpdateRound,
-            Event.ROUND_TIMEOUT: TweetEvaluationRound,
+            Event.TWEET_EVALUATION_ROUND_TIMEOUT: TweetEvaluationRound,
         },
         DBUpdateRound: {
             Event.DONE: FinishedTwitterScoringRound,
@@ -239,6 +240,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
     final_states: Set[AppState] = {FinishedTwitterScoringRound}
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
+        Event.TWEET_EVALUATION_ROUND_TIMEOUT: 600.0,
     }
     cross_period_persisted_keys: FrozenSet[str] = frozenset(
         [
