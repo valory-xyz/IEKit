@@ -57,6 +57,9 @@ class Params(BaseParams):
         )
         self.twitter_search_args = self._ensure("twitter_search_args", kwargs, str)
         self.max_points_per_period = self._ensure("max_points_per_period", kwargs, int)
+        self.tweet_evaluation_round_timeout = self._ensure(
+            "tweet_evaluation_round_timeout", kwargs, float
+        )
         super().__init__(*args, **kwargs)
 
 
