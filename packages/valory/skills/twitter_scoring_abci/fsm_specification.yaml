@@ -4,6 +4,7 @@ alphabet_in:
 - NO_MAJORITY
 - ROUND_TIMEOUT
 - SKIP
+- TWEET_EVALUATION_ROUND_TIMEOUT
 default_start_state: TwitterCollectionRound
 final_states:
 - FinishedTwitterScoringRound
@@ -20,7 +21,7 @@ transition_func:
     (DBUpdateRound, NO_MAJORITY): DBUpdateRound
     (DBUpdateRound, ROUND_TIMEOUT): DBUpdateRound
     (TweetEvaluationRound, DONE): DBUpdateRound
-    (TweetEvaluationRound, ROUND_TIMEOUT): TweetEvaluationRound
+    (TweetEvaluationRound, TWEET_EVALUATION_ROUND_TIMEOUT): TweetEvaluationRound
     (TwitterCollectionRound, API_ERROR): TwitterCollectionRound
     (TwitterCollectionRound, DONE): TweetEvaluationRound
     (TwitterCollectionRound, NO_MAJORITY): TwitterCollectionRound

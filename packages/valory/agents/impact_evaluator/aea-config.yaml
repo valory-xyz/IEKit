@@ -42,9 +42,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeih3bwx5apteinnoxts7sqmjlskntdbo7vvnmdbs5noo2pv76by7fu
 - valory/abstract_round_abci:0.1.0:bafybeibqpzbklnljvtc67yon4ciijxj75d7vazm7rurcvbbfnk6jtudukm
-- valory/impact_evaluator_abci:0.1.0:bafybeigtpinsr2btj2gqymwqnulfq6wlqpnuuflwfolz24kcnaegdl7wh4
+- valory/impact_evaluator_abci:0.1.0:bafybeihizpowyt764cag4swoteh4ouovfweydzwsenx3vmyvp7d4vvzjqi
 - valory/generic_scoring_abci:0.1.0:bafybeihvp34ya2eamhf6skntsm4votudv4qzqftuk2mmhtvcprysjbykrq
-- valory/twitter_scoring_abci:0.1.0:bafybeibipxhqi57vud7cidz5zktigngzubwuu76lysdkioo6rpdjpedluq
+- valory/twitter_scoring_abci:0.1.0:bafybeiaj3fopdvwqrvr2fiuyyjmmu3urudmv5fswuoty2jhsmyfvw43cde
 - valory/ceramic_read_abci:0.1.0:bafybeib36m6fi5swu43s3amtbk7w5rfie2gvzgw3xhxd7yfnka4kpcegme
 - valory/ceramic_write_abci:0.1.0:bafybeifdjb2iisvtgwo44xoddhrbgqehbis6tbjdktuhh6ehwm5bnuee74
 - valory/dynamic_nft_abci:0.1.0:bafybeifmdn4czg4wr3wclafrpxsqv3s3zptawj3zju5wly3vke7ucjfeea
@@ -187,6 +187,7 @@ models:
       request_retry_delay: 1.0
       request_timeout: 10.0
       round_timeout_seconds: 30.0
+      tweet_evaluation_round_timeout: ${float:600.0}
       service_id: impact_evaluator
       service_registry_address: ${str:null}
       setup:

@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeib7cj46qgc7xxnoc2tqhy5yp3cbtbnhdolgc4psoi5oni32a6wxeq
+agent: valory/impact_evaluator:0.1.0:bafybeicqakhjh3e3dvh64bdnr23mlc7ynozhnu2gvrmvcx5qqpuchw276e
 number_of_agents: 4
 deployment:
   agent:
@@ -86,6 +86,7 @@ extra:
         request_retry_delay: 1.0
         request_timeout: 10.0
         round_timeout_seconds: 30.0
+        tweet_evaluation_round_timeout: ${TWEET_EVALUATION_ROUND_TIMEOUT:float:600.0}
         service_id: impact_evaluator
         service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:null}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
@@ -149,6 +150,7 @@ extra:
         request_retry_delay: 1.0
         request_timeout: 10.0
         round_timeout_seconds: 30.0
+        tweet_evaluation_round_timeout: ${TWEET_EVALUATION_ROUND_TIMEOUT:float:600.0}
         service_id: impact_evaluator
         service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:null}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
@@ -212,6 +214,7 @@ extra:
         request_retry_delay: 1.0
         request_timeout: 10.0
         round_timeout_seconds: 30.0
+        tweet_evaluation_round_timeout: ${TWEET_EVALUATION_ROUND_TIMEOUT:float:600.0}
         service_id: impact_evaluator
         service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:null}
         share_tm_config_on_startup: ${USE_ACN:bool:false}
@@ -277,6 +280,7 @@ extra:
         request_retry_delay: 1.0
         request_timeout: 10.0
         round_timeout_seconds: 30.0
+        tweet_evaluation_round_timeout: ${TWEET_EVALUATION_ROUND_TIMEOUT:float:600.0}
         service_id: impact_evaluator
         service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:null}
         share_tm_config_on_startup: ${USE_ACN:bool:false}

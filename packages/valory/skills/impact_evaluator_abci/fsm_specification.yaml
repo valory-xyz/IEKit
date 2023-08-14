@@ -20,6 +20,7 @@ alphabet_in:
 - SCHEDULED_TWEET
 - SCORE
 - SKIP
+- TWEET_EVALUATION_ROUND_TIMEOUT
 - UPDATE_CENTAURS
 - VERIFICATION_ERROR
 - WRITE_CONTRIBUTE_DB
@@ -113,7 +114,7 @@ transition_func:
     (TokenTrackRound, NO_MAJORITY): TokenTrackRound
     (TokenTrackRound, ROUND_TIMEOUT): TokenTrackRound
     (TweetEvaluationRound, DONE): DBUpdateRound
-    (TweetEvaluationRound, ROUND_TIMEOUT): TweetEvaluationRound
+    (TweetEvaluationRound, TWEET_EVALUATION_ROUND_TIMEOUT): TweetEvaluationRound
     (TwitterCollectionRound, API_ERROR): TwitterCollectionRound
     (TwitterCollectionRound, DONE): TweetEvaluationRound
     (TwitterCollectionRound, NO_MAJORITY): TwitterCollectionRound
