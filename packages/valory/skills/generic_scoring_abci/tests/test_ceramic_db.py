@@ -18,12 +18,13 @@
 # ------------------------------------------------------------------------------
 
 """This package contains the tests for Ceramic DB."""
-
+import logging
 from copy import copy
 
-import pytest
-
 from packages.valory.skills.generic_scoring_abci.ceramic_db import CeramicDB
+
+
+_dummy_logger = logging.getLogger("dummy")
 
 
 DEFAULT_DATA = {
@@ -123,12 +124,15 @@ def test_merge_by_wallet():
     }
 
 
-def test_merge_by_wallet_raises():
+def test_merge_by_wallet_duplicate_field():
     """Test CeramicDB"""
-    db = CeramicDB()
+    db = CeramicDB(logger=_dummy_logger)
     user_a = {"twitter_id": "dummy_twitter_id", "wallet_address": "dummy_address"}
     user_b = {"twitter_id": "dummy_twitter_id_2", "wallet_address": "dummy_address"}
     db.create_user(user_a)
     db.create_user(user_b)
-    with pytest.raises(ValueError):
-        db.merge_by_wallet()
+    assert db.data["users"][0] == {
+        **DEFAULT_DATA,
+        "twitter_id": "dummy_twitter_id",
+        "wallet_address": "dummy_address",
+    }
