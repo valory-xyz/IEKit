@@ -156,6 +156,6 @@ models:
     args: {}
     class_name: TwitterDialogues
 dependencies:
-  web3:
-    version: ==5.31.4
+  open-aea-web3:
+    version: ==6.0.1
 is_abstract: true
