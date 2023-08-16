@@ -42,12 +42,12 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeih3bwx5apteinnoxts7sqmjlskntdbo7vvnmdbs5noo2pv76by7fu
 - valory/abstract_round_abci:0.1.0:bafybeibqpzbklnljvtc67yon4ciijxj75d7vazm7rurcvbbfnk6jtudukm
-- valory/impact_evaluator_abci:0.1.0:bafybeigtmwb2zuqwar5zrsxi2s7qbwtbgq2mjsf45c6ut2riwrtog5pnfy
-- valory/generic_scoring_abci:0.1.0:bafybeihvp34ya2eamhf6skntsm4votudv4qzqftuk2mmhtvcprysjbykrq
-- valory/twitter_scoring_abci:0.1.0:bafybeidmtguinvt3tqzyukuc254r4venohof6p36kaer6huwp3ceeoalau
+- valory/impact_evaluator_abci:0.1.0:bafybeihszieavzu67bjvla5e2mp43hd4nslghtwsh3qheovcaxuhgj4bdm
+- valory/generic_scoring_abci:0.1.0:bafybeifah4ticlbuj74e4ukgepagrznvadaiy3nns2foiltiilw3osoaja
+- valory/twitter_scoring_abci:0.1.0:bafybeibxxtsdkpsn5z3dsy72ur6vpvz6krgvxvcecdkdrsl3e6nmviyh7y
 - valory/ceramic_read_abci:0.1.0:bafybeib36m6fi5swu43s3amtbk7w5rfie2gvzgw3xhxd7yfnka4kpcegme
 - valory/ceramic_write_abci:0.1.0:bafybeifdjb2iisvtgwo44xoddhrbgqehbis6tbjdktuhh6ehwm5bnuee74
-- valory/dynamic_nft_abci:0.1.0:bafybeifmdn4czg4wr3wclafrpxsqv3s3zptawj3zju5wly3vke7ucjfeea
+- valory/dynamic_nft_abci:0.1.0:bafybeicsfah3cixavzyp2o4k7cm3zrnth2ky232honjgcklmw4dlreivti
 - valory/registration_abci:0.1.0:bafybeia25gpusnkakb2dp4heqkwtuftbc2apppq3i4bds6sphltsovgzvi
 - valory/reset_pause_abci:0.1.0:bafybeigzvwbzktclahjbsyiwqnj6poree4iveon5pric6s5ixb6wrhkdhq
 - valory/termination_abci:0.1.0:bafybeibcdgnarxyyqexncpfewcemraryywtwueuv7qthsjuean5l77lp2e

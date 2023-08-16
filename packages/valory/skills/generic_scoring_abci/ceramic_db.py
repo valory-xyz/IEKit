@@ -170,9 +170,11 @@ class CeramicDB:
 
                     # Raise on multiple different valid values
                     if len(values) > 1:
-                        raise ValueError(
+                        self.logger.warning(
                             f"DB: multiple valid values found for {field} [{values}] while merging users: {users}"
                         )
+                        # sort the values to make the result deterministic
+                        values = sorted(values)
                     merged_user[field] = values[0] if values else None
                 merged_user["wallet_address"] = wallet_address
 
