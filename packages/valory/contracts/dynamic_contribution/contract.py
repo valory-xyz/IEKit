@@ -119,7 +119,7 @@ class DynamicContributionContract(Contract):
         for i in range(len(ranges) - 1):
             from_block = ranges[i]
             to_block = ranges[i + 1]
-            entries += factory_contract.events.Transfer.create_Filter(
+            entries += factory_contract.events.Transfer.create_filter(
                 fromBlock=from_block,  # exclusive
                 toBlock=to_block,  # inclusive
                 argument_filters={"from": from_address},
