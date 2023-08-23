@@ -27,7 +27,7 @@ fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihp5umafxzx45aad5pj7s3343se2wjkgnbirt4pybrape22swm6de
 contracts:
-- valory/dynamic_contribution:0.1.0:bafybeib37fa5pwtfqv27a7eibmdnz74u5don4ezwqefuqusfuwph7mzdxu
+- valory/dynamic_contribution:0.1.0:bafybeie76ynpueo3hh2ujzcfgpqcsbyqwa4pdcc6g44a4he6bueyb4tqiy
 protocols:
 - valory/contract_api:1.0.0:bafybeiasywsvax45qmugus5kxogejj66c5taen27h4voriodz7rgushtqa
 - valory/http:1.0.0:bafybeia5bxdua2i6chw6pg47bvoljzcpuqxzy4rdrorbdmcbnwmnfdobtu
