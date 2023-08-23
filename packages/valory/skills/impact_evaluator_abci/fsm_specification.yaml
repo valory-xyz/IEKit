@@ -92,8 +92,8 @@ transition_func:
     (RegistrationRound, NO_MAJORITY): RegistrationRound
     (RegistrationStartupRound, DONE): DecisionMakingRound
     (ResetAndPauseRound, DONE): DecisionMakingRound
-    (ResetAndPauseRound, NO_MAJORITY): RegistrationRound
-    (ResetAndPauseRound, RESET_AND_PAUSE_TIMEOUT): RegistrationRound
+    (ResetAndPauseRound, NO_MAJORITY): ResetAndPauseRound
+    (ResetAndPauseRound, RESET_AND_PAUSE_TIMEOUT): ResetAndPauseRound
     (SelectKeeperRound, DONE): StreamWriteRound
     (SelectKeeperRound, NO_MAJORITY): RandomnessRound
     (SelectKeeperRound, ROUND_TIMEOUT): RandomnessRound
