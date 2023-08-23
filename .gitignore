@@ -42,3 +42,5 @@ ethereum_private_key.txt
 impact_evaluator
 !packages/valory/agents/impact_evaluator
 !packages/valory/services/impact_evaluator
+
+temp/

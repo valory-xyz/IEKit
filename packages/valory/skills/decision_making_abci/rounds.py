@@ -165,11 +165,22 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
             payload = json.loads(self.most_voted_payload)
             event = Event(payload["event"])
             synchronized_data = cast(SynchronizedData, self.synchronized_data)
-
-            synchronized_data = synchronized_data.update(
-                synchronized_data_class=SynchronizedData,
-                **{**payload["updates"], "previous_decision_event": event.value}
-            )
+            if event == Event.DONE:
+                synchronized_data = synchronized_data.update(
+                    synchronized_data_class=SynchronizedData,
+                    **{
+                        **payload["updates"],
+                        "previous_decision_event": event.value,
+                        "ceramic_db": dict(),
+                        "score_data": dict(),
+                        "centaurs_data": list(),
+                    }
+                )
+            else:
+                synchronized_data = synchronized_data.update(
+                    synchronized_data_class=SynchronizedData,
+                    **{**payload["updates"], "previous_decision_event": event.value}
+                )
             return synchronized_data, event
 
         if not self.is_majority_possible(
