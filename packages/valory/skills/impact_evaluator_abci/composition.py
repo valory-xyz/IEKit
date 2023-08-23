@@ -60,7 +60,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     CeramicWriteAbci.FinishedVerificationRound: DecisionMakingAbci.DecisionMakingRound,
     CeramicWriteAbci.FinishedMaxRetriesRound: DecisionMakingAbci.DecisionMakingRound,
     ResetAndPauseAbci.FinishedResetAndPauseRound: DecisionMakingAbci.DecisionMakingRound,
-    ResetAndPauseAbci.FinishedResetAndPauseErrorRound: RegistrationAbci.RegistrationRound,
+    ResetAndPauseAbci.FinishedResetAndPauseErrorRound: ResetAndPauseAbci.ResetAndPauseRound,
 }
 
 ImpactEvaluatorSkillAbciApp = chain(
