@@ -571,7 +571,7 @@ def get_registration(text: str) -> Optional[str]:
     tagline_match = re.search(TAGLINE, text, re.IGNORECASE)
 
     if address_match and tagline_match:
-        wallet_address = Web3.toChecksumAddress(address_match.group())
+        wallet_address = Web3.to_checksum_address(address_match.group())
 
     return wallet_address
 
