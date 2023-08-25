@@ -95,11 +95,20 @@ class OpenAICallCheckRound(CollectSameUntilThresholdRound):
 
     payload_class = OpenAICallCheckPayload
     synchronized_data_class = SynchronizedData
-    none_event = Event.API_ERROR
-    done_event = Event.DONE
-    no_majority_event = Event.NO_MAJORITY
 
     CALLS_REMAINING = "CALLS_REMAINING"
+
+    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
+        """Process the end of the block."""
+        if self.threshold_reached:
+            if self.most_voted_payload == self.CALLS_REMAINING:
+                return self.synchronized_data, Event.DONE
+            return self.synchronized_data, Event.API_ERROR
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
+        return None
 
 
 class TwitterCollectionRound(CollectSameUntilThresholdRound):
