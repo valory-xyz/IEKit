@@ -26,7 +26,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeigxjcci53vwytymzlhr37436yvenh7jup4astrn7dgyixo24aq2pq
 - valory/ceramic_read_abci:0.1.0:bafybeidruvxgpbggchuvlnssuswdxuoz2ep6sjvzzqjeyckybb6gpjx3ia
 - valory/generic_scoring_abci:0.1.0:bafybeiemmcnduhdj427kgafkxcbn2rfhaihabtpda34yqnks7utm3g4xiq
-- valory/twitter_scoring_abci:0.1.0:bafybeifjxconut3a6cv3mbjawn656ab2thuweji6azu2ea23ibqzv3izhq
+- valory/twitter_scoring_abci:0.1.0:bafybeif63wgrs2ckqwfpfpfkrhrmhuykapqobmvry4a2dpfkpytnm4raam
 - valory/ceramic_write_abci:0.1.0:bafybeigtkv57h5suaqqpjfknimfegbidovxna7cok7znsgzrfb4nftqvay
 - valory/dynamic_nft_abci:0.1.0:bafybeie5vfscnjpvuwqe5vk7i2rzzlqciojswdg7uh34fjnuk3bspca5zq
 - valory/registration_abci:0.1.0:bafybeibc4kczqbh23sc6tufrzn3axmhp3vjav7fa3u6cnpvolrbbc2fd7i
@@ -169,6 +169,8 @@ models:
       twitter_max_pages: 10
       twitter_search_endpoint: 2/tweets/search/recent?
       twitter_search_args: query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
+      openai_call_window_size: 3600.0
+      openai_calls_allowed_in_window: 100
       max_points_per_period: 5000
       tx_timeout: 10.0
       whitelist_api_key: null

@@ -139,7 +139,7 @@ models:
       twitter_max_pages: 10
       twitter_search_endpoint: 2/tweets/search/recent?
       twitter_search_args: query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
-      openai_call_window_size: 3600
+      openai_call_window_size: 3600.0
       openai_calls_allowed_in_window: 100
       max_points_per_period: 5000
       validate_timeout: 1205
