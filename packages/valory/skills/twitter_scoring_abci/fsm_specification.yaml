@@ -5,21 +5,27 @@ alphabet_in:
 - ROUND_TIMEOUT
 - SKIP
 - TWEET_EVALUATION_ROUND_TIMEOUT
-default_start_state: TwitterCollectionRound
+default_start_state: OpenAICallCheckRound
 final_states:
 - FinishedTwitterScoringRound
+- FinishedTwitterScoringWithAPIErrorRound
 label: TwitterScoringAbciApp
 start_states:
-- TwitterCollectionRound
+- OpenAICallCheckRound
 states:
 - DBUpdateRound
 - FinishedTwitterScoringRound
+- FinishedTwitterScoringWithAPIErrorRound
+- OpenAICallCheckRound
 - TweetEvaluationRound
 - TwitterCollectionRound
 transition_func:
     (DBUpdateRound, DONE): FinishedTwitterScoringRound
     (DBUpdateRound, NO_MAJORITY): DBUpdateRound
     (DBUpdateRound, ROUND_TIMEOUT): DBUpdateRound
+    (OpenAICallCheckRound, API_ERROR): FinishedTwitterScoringWithAPIErrorRound
+    (OpenAICallCheckRound, DONE): TwitterCollectionRound
+    (OpenAICallCheckRound, NO_MAJORITY): OpenAICallCheckRound
     (TweetEvaluationRound, DONE): DBUpdateRound
     (TweetEvaluationRound, TWEET_EVALUATION_ROUND_TIMEOUT): TweetEvaluationRound
     (TwitterCollectionRound, API_ERROR): TwitterCollectionRound

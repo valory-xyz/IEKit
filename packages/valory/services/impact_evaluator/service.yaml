@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeiaa2f7rmpnzwaltyoryuyv3rylt6agrewgmsidwdgpwd7iyituazi
+agent: valory/impact_evaluator:0.1.0:bafybeigsgfcmbomxcmcjxc73hvg655exy4cpishl3cu7a7jpjntn43bncu
 number_of_agents: 4
 deployment:
   agent:
@@ -112,6 +112,8 @@ extra:
         validate_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
+        openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
+        openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
 1:
   models:
     benchmark_tool:
@@ -176,6 +178,8 @@ extra:
         validate_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
+        openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
+        openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
 2:
   models:
     benchmark_tool:
@@ -240,6 +244,8 @@ extra:
         validate_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
+        openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
+        openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
 3:
   models:
     benchmark_tool:
@@ -308,6 +314,8 @@ extra:
         history_check_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
+        openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
+        openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
 ---
 public_id: valory/ledger:0.19.0
 type: connection

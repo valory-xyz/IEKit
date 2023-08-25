@@ -42,15 +42,21 @@ from packages.valory.skills.twitter_scoring_abci.dialogues import (
     LlmDialogue,
     LlmDialogues,
 )
-from packages.valory.skills.twitter_scoring_abci.models import Params, SharedState
+from packages.valory.skills.twitter_scoring_abci.models import (
+    OpenAICalls,
+    Params,
+    SharedState,
+)
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
+    OpenAICallCheckPayload,
     TweetEvaluationPayload,
     TwitterCollectionPayload,
 )
 from packages.valory.skills.twitter_scoring_abci.prompts import tweet_evaluation_prompt
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     DBUpdateRound,
+    OpenAICallCheckRound,
     SynchronizedData,
     TweetEvaluationRound,
     TwitterCollectionRound,
@@ -77,6 +83,39 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
     def params(self) -> Params:
         """Return the params."""
         return cast(Params, super().params)
+
+    @property
+    def openai_calls(self) -> OpenAICalls:
+        """Return the params."""
+        return self.params.openai_calls
+
+
+class OpenAICallCheckBehaviour(TwitterScoringBaseBehaviour):
+    """TwitterCollectionBehaviour"""
+
+    matching_round: Type[AbstractRound] = OpenAICallCheckRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            current_time = cast(
+                SharedState, self.context.state
+            ).round_sequence.last_round_transition_timestamp.timestamp()
+            # Reset the window if the window expired before checking
+            self.openai_calls.reset(current_time=current_time)
+            if self.openai_calls.max_tweets_reached():
+                content = None
+            else:
+                content = OpenAICallCheckRound.CALLS_REMAINING
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(
+                payload=OpenAICallCheckPayload(
+                    sender=self.context.agent_address,
+                    content=content,
+                )
+            )
+            yield from self.wait_until_round_end()
+        self.set_done()
 
 
 class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
@@ -389,7 +428,7 @@ class TweetEvaluationBehaviour(TwitterScoringBaseBehaviour):
             request_llm_message, llm_dialogue
         )
         data = llm_response_message.value
-
+        self.openai_calls.increase_call_count()
         self.context.logger.info(f"Got tweet evaluation: {repr(data)}")
 
         points = DEFAULT_TWEET_POINTS
@@ -582,6 +621,7 @@ class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
     initial_behaviour_cls = TwitterCollectionBehaviour
     abci_app_cls = TwitterScoringAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
+        OpenAICallCheckBehaviour,
         TwitterCollectionBehaviour,
         TweetEvaluationBehaviour,
         DBUpdateBehaviour,
