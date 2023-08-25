@@ -103,7 +103,7 @@ class OpenAICallCheckBehaviour(TwitterScoringBaseBehaviour):
             ).round_sequence.last_round_transition_timestamp.timestamp()
             # Reset the window if the window expired before checking
             self.openai_calls.reset(current_time=current_time)
-            if self.openai_calls.max_tweets_reached():
+            if self.openai_calls.max_calls_reache():
                 content = None
             else:
                 content = OpenAICallCheckRound.CALLS_REMAINING
