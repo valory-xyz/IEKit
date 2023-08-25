@@ -98,6 +98,8 @@ class OpenAICallCheckRound(CollectSameUntilThresholdRound):
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
 
+    CALLS_REMAINING = "CALLS_REMAINING"
+
 
 class TwitterCollectionRound(CollectSameUntilThresholdRound):
     """TwitterCollectionRound"""
