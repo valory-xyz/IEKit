@@ -612,6 +612,7 @@ class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
     initial_behaviour_cls = TwitterCollectionBehaviour
     abci_app_cls = TwitterScoringAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
+        OpenAICallCheckBehaviour,
         TwitterCollectionBehaviour,
         TweetEvaluationBehaviour,
         DBUpdateBehaviour,

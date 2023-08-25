@@ -247,6 +247,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
     transition_function: AbciAppTransitionFunction = {
         OpenAICallCheckRound: {
             Event.DONE: TwitterCollectionRound,
+            Event.NO_MAJORITY: OpenAICallCheckRound,
             Event.API_ERROR: FinishedTwitterScoringWithAPIErrorRound,
         },
         TwitterCollectionRound: {
@@ -266,8 +267,12 @@ class TwitterScoringAbciApp(AbciApp[Event]):
             Event.ROUND_TIMEOUT: DBUpdateRound,
         },
         FinishedTwitterScoringRound: {},
+        FinishedTwitterScoringWithAPIErrorRound: {},
     }
-    final_states: Set[AppState] = {FinishedTwitterScoringRound}
+    final_states: Set[AppState] = {
+        FinishedTwitterScoringRound,
+        FinishedTwitterScoringWithAPIErrorRound,
+    }
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
         Event.TWEET_EVALUATION_ROUND_TIMEOUT: 600.0,
@@ -279,6 +284,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         ]
     )
     db_pre_conditions: Dict[AppState, Set[str]] = {
+        OpenAICallCheckRound: set(),
         TwitterCollectionRound: set(),
         TweetEvaluationRound: set(),
         DBUpdateRound: set(),
@@ -287,4 +293,5 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         FinishedTwitterScoringRound: {
             get_name(SynchronizedData.ceramic_db),
         },
+        FinishedTwitterScoringWithAPIErrorRound: set(),
     }

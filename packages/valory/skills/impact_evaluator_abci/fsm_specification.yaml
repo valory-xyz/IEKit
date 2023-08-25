@@ -37,6 +37,7 @@ states:
 - LLMRandomnessRound
 - LLMRound
 - LLMSelectKeeperRound
+- OpenAICallCheckRound
 - RandomnessRound
 - RandomnessTwitterRound
 - RegistrationRound
@@ -69,7 +70,7 @@ transition_func:
     (DecisionMakingRound, SCORE): GenericScoringRound
     (DecisionMakingRound, UPDATE_CENTAURS): RandomnessRound
     (DecisionMakingRound, WRITE_CONTRIBUTE_DB): RandomnessRound
-    (GenericScoringRound, DONE): TwitterCollectionRound
+    (GenericScoringRound, DONE): OpenAICallCheckRound
     (GenericScoringRound, NO_MAJORITY): GenericScoringRound
     (GenericScoringRound, ROUND_TIMEOUT): GenericScoringRound
     (LLMRandomnessRound, DONE): LLMSelectKeeperRound
@@ -82,6 +83,9 @@ transition_func:
     (LLMSelectKeeperRound, DONE): LLMRound
     (LLMSelectKeeperRound, NO_MAJORITY): LLMRandomnessRound
     (LLMSelectKeeperRound, ROUND_TIMEOUT): LLMRandomnessRound
+    (OpenAICallCheckRound, API_ERROR): TokenTrackRound
+    (OpenAICallCheckRound, DONE): TwitterCollectionRound
+    (OpenAICallCheckRound, NO_MAJORITY): OpenAICallCheckRound
     (RandomnessRound, DONE): SelectKeeperRound
     (RandomnessRound, NO_MAJORITY): RandomnessRound
     (RandomnessRound, ROUND_TIMEOUT): RandomnessRound
