@@ -42,7 +42,11 @@ from packages.valory.skills.twitter_scoring_abci.dialogues import (
     LlmDialogue,
     LlmDialogues,
 )
-from packages.valory.skills.twitter_scoring_abci.models import Params, SharedState
+from packages.valory.skills.twitter_scoring_abci.models import (
+    OpenAICalls,
+    Params,
+    SharedState,
+)
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
     OpenAICallCheckPayload,
@@ -80,6 +84,11 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
         """Return the params."""
         return cast(Params, super().params)
 
+    @property
+    def openai_calls(self) -> OpenAICalls:
+        """Return the params."""
+        return cast(OpenAICalls, self.shared_state.openai_calls)
+
 
 class OpenAICallCheckBehaviour(TwitterScoringBaseBehaviour):
     """TwitterCollectionBehaviour"""
@@ -93,8 +102,8 @@ class OpenAICallCheckBehaviour(TwitterScoringBaseBehaviour):
                 SharedState, self.context.state
             ).round_sequence.last_round_transition_timestamp.timestamp()
             # Reset the window if the window expired before checking
-            self.params.openai_calls.reset(current_time=current_time)
-            if self.params.openai_calls.max_tweets_reached():
+            self.openai_calls.reset(current_time=current_time)
+            if self.openai_calls.max_tweets_reached():
                 content = OpenAICallCheckRound.API_CALL_EXCEEDED
             else:
                 content = OpenAICallCheckRound.API_CALL_REMAINING
@@ -419,7 +428,7 @@ class TweetEvaluationBehaviour(TwitterScoringBaseBehaviour):
             request_llm_message, llm_dialogue
         )
         data = llm_response_message.value
-        self.params.openai_calls.increase_call_count()
+        self.openai_calls.increase_call_count()
         self.context.logger.info(f"Got tweet evaluation: {repr(data)}")
 
         points = DEFAULT_TWEET_POINTS

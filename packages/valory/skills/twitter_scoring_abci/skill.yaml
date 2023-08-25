@@ -8,12 +8,12 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
-  behaviours.py: bafybeihvja2sfky3riuaydbqiqzbelv2qvyma4krfi7l4p6mm2fnf2zswi
+  behaviours.py: bafybeia34uq6bljemgpegkbhwwpyzh6jn7jipmitwainnjfv3cbc423le4
   ceramic_db.py: bafybeicusdonrdq6kirgkpdqmi3a6kmeal4nctnm5ozjqf5s5se6jpitjm
   dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
   fsm_specification.yaml: bafybeietfinv3lvmyon3bk5f4gu2qf4hjlrqogfiombqnncyme5qrpbffa
   handlers.py: bafybeid3nqvcyotqj5g5hlgrz57nf7vpjysmgvsxe3p7644f4z5dcwqn6u
-  models.py: bafybeigpjxkhgsu7c542bp2n6opbl5oybtg2vxu4xhkonalsogq4edmzbe
+  models.py: bafybeieaqsnkdxiwthaloz4i4siutdkz4gvbddaoddfm25ebwcsen6ol54
   payloads.py: bafybeigqmoljkexbkldybrk63aqpcnfxftys4lfttl4zyzrpds7seqerw4
   prompts.py: bafybeieiuqn427bgwfnzynxf3vtqfpvmqqscs5tyw4oibfofwropifotke
   rounds.py: bafybeiecex2d3jtej5lshwcrc7zih73dap2dbmgbxw6blywlgggwry5n3i

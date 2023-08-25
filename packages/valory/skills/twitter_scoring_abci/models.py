@@ -20,7 +20,9 @@
 """This module contains the shared state for the abci skill of TwitterScoringAbciApp."""
 
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, cast
+
+from aea.skills.base import SkillContext
 
 from packages.valory.skills.abstract_round_abci.models import BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
@@ -37,6 +39,18 @@ class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
 
     abci_app_cls = TwitterScoringAbciApp
+
+    def __init__(self, *args: Any, skill_context: SkillContext, **kwargs: Any) -> None:
+        """Initialize object."""
+        super().__init__(*args, skill_context=skill_context, **kwargs)
+        self.openai_calls = OpenAICalls(
+            openai_call_window_size=cast(
+                "Params", self.context.params
+            ).openai_call_window_size,
+            openai_calls_allowed_in_window=cast(
+                "Params", self.context.params
+            ).openai_calls_allowed_in_window,
+        )
 
 
 class OpenAICalls:
@@ -59,7 +73,7 @@ class OpenAICalls:
 
     def has_window_expired(self, current_time: float) -> bool:
         """Increase tweet count."""
-        return current_time > (self._tweet_window_start + self._call_window_size)
+        return current_time > (self._call_window_start + self._call_window_size)
 
     def max_calls_reached(self) -> bool:
         """Increase tweet count."""
@@ -70,13 +84,11 @@ class OpenAICalls:
         if not self.has_window_expired(current_time=current_time):
             return
         self._tweets_made_in_window = 0
-        self._tweet_window_start = current_time
+        self._call_window_start = current_time
 
 
 class Params(BaseParams):
     """Parameters."""
-
-    _current_tweet_window_start: Optional[float]
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the parameters object."""
@@ -97,15 +109,12 @@ class Params(BaseParams):
         self.tweet_evaluation_round_timeout = self._ensure(
             "tweet_evaluation_round_timeout", kwargs, float
         )
-        self.openai_calls = OpenAICalls(
-            openai_call_window_size=self._ensure(
-                "openai_call_window_size", kwargs, float
-            ),
-            openai_calls_allowed_in_window=self._ensure(
-                "openai_calls_allowed_in_window", kwargs, int
-            ),
+        self.openai_call_window_size = self._ensure(
+            "openai_call_window_size", kwargs, float
         )
-
+        self.openai_calls_allowed_in_window = self._ensure(
+            "openai_calls_allowed_in_window", kwargs, int
+        )
         super().__init__(*args, **kwargs)
 
 
