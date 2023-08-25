@@ -104,9 +104,9 @@ class OpenAICallCheckBehaviour(TwitterScoringBaseBehaviour):
             # Reset the window if the window expired before checking
             self.openai_calls.reset(current_time=current_time)
             if self.openai_calls.max_tweets_reached():
-                content = OpenAICallCheckRound.API_CALL_EXCEEDED
+                content = None
             else:
-                content = OpenAICallCheckRound.API_CALL_REMAINING
+                content = OpenAICallCheckRound.CALLS_REMAINING
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(
                 payload=OpenAICallCheckPayload(

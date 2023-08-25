@@ -20,6 +20,7 @@
 """This module contains the transaction payloads of the TwitterScoringAbciApp."""
 
 from dataclasses import dataclass
+from typing import Optional
 
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
@@ -49,4 +50,4 @@ class DBUpdatePayload(BaseTxPayload):
 class OpenAICallCheckPayload(BaseTxPayload):
     """Represent a transaction payload for the DBUpdateRound."""
 
-    content: str
+    content: Optional[str]
