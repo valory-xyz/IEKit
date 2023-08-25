@@ -37,6 +37,7 @@ from packages.valory.skills.abstract_round_abci.base import (
 )
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
+    OpenAICallCheckPayload,
     TweetEvaluationPayload,
     TwitterCollectionPayload,
 )
@@ -92,7 +93,7 @@ class SynchronizedData(BaseSynchronizedData):
 class OpenAICallCheckRound(CollectSameUntilThresholdRound):
     """OpenAICallCheckRound"""
 
-    payload_class = TwitterCollectionPayload
+    payload_class = OpenAICallCheckPayload
     synchronized_data_class = SynchronizedData
     none_event = Event.API_ERROR
     done_event = Event.DONE
