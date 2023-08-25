@@ -89,6 +89,28 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(dict, self.db.get_strict("latest_mention_tweet_id"))
 
 
+class OpenAICallCheckRound(CollectSameUntilThresholdRound):
+    """OpenAICallCheckRound"""
+
+    payload_class = TwitterCollectionPayload
+    synchronized_data_class = SynchronizedData
+
+    API_CALL_EXCEEDED = "API_CALLS_EXCEEDED"
+    API_CALL_REMAINING = "API_CALL_REMAINING"
+
+    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
+        """Process the end of the block."""
+        if self.threshold_reached:
+            if self.most_voted_payload == self.API_CALL_EXCEEDED:
+                return self.synchronized_data, Event.API_ERROR
+            return self.synchronized_data, Event.DONE
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
+        return None
+
+
 class TwitterCollectionRound(CollectSameUntilThresholdRound):
     """TwitterCollectionRound"""
 
@@ -213,12 +235,20 @@ class FinishedTwitterScoringRound(DegenerateRound):
     """FinishedTwitterScoringRound"""
 
 
+class FinishedTwitterScoringWithAPIErrorRound(DegenerateRound):
+    """FinishedTwitterScoringRound"""
+
+
 class TwitterScoringAbciApp(AbciApp[Event]):
     """TwitterScoringAbciApp"""
 
-    initial_round_cls: AppState = TwitterCollectionRound
-    initial_states: Set[AppState] = {TwitterCollectionRound}
+    initial_round_cls: AppState = OpenAICallCheckRound
+    initial_states: Set[AppState] = {OpenAICallCheckRound}
     transition_function: AbciAppTransitionFunction = {
+        OpenAICallCheckRound: {
+            Event.DONE: TwitterCollectionRound,
+            Event.API_ERROR: FinishedTwitterScoringWithAPIErrorRound,
+        },
         TwitterCollectionRound: {
             Event.DONE: TweetEvaluationRound,
             Event.API_ERROR: TwitterCollectionRound,
