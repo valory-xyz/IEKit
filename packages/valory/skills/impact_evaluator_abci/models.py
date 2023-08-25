@@ -19,10 +19,6 @@
 
 """This module contains the shared state for the abci skill of ImpactEvaluatorSkillAbciApp."""
 
-from typing import Any, cast
-
-from aea.skills.base import SkillContext
-
 from packages.valory.skills.abstract_round_abci.models import ApiSpecs
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
@@ -62,7 +58,6 @@ from packages.valory.skills.llm_abci.models import Params as LLMAbciParams
 from packages.valory.skills.llm_abci.rounds import Event as LLMEvent
 from packages.valory.skills.reset_pause_abci.rounds import Event as ResetPauseEvent
 from packages.valory.skills.termination_abci.models import TerminationParams
-from packages.valory.skills.twitter_scoring_abci.models import OpenAICalls
 from packages.valory.skills.twitter_scoring_abci.models import (
     Params as TwitterScoringAbciParams,
 )
@@ -94,18 +89,6 @@ class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
 
     abci_app_cls = ImpactEvaluatorSkillAbciApp
-
-    def __init__(self, *args: Any, skill_context: SkillContext, **kwargs: Any) -> None:
-        """Initialize object."""
-        super().__init__(*args, skill_context=skill_context, **kwargs)
-        self.openai_calls = OpenAICalls(
-            openai_call_window_size=cast(
-                "Params", self.context.params
-            ).openai_call_window_size,
-            openai_calls_allowed_in_window=cast(
-                "Params", self.context.params
-            ).openai_calls_allowed_in_window,
-        )
 
     def setup(self) -> None:
         """Set up."""

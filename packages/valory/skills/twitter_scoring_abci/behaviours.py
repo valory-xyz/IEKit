@@ -87,7 +87,7 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
     @property
     def openai_calls(self) -> OpenAICalls:
         """Return the params."""
-        return cast(OpenAICalls, self.shared_state.openai_calls)
+        return self.params.openai_calls
 
 
 class OpenAICallCheckBehaviour(TwitterScoringBaseBehaviour):

@@ -20,9 +20,7 @@
 """This module contains the shared state for the abci skill of TwitterScoringAbciApp."""
 
 from datetime import datetime
-from typing import Any, cast
-
-from aea.skills.base import SkillContext
+from typing import Any
 
 from packages.valory.skills.abstract_round_abci.models import BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
@@ -39,18 +37,6 @@ class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
 
     abci_app_cls = TwitterScoringAbciApp
-
-    def __init__(self, *args: Any, skill_context: SkillContext, **kwargs: Any) -> None:
-        """Initialize object."""
-        super().__init__(*args, skill_context=skill_context, **kwargs)
-        self.openai_calls = OpenAICalls(
-            openai_call_window_size=cast(
-                "Params", self.context.params
-            ).openai_call_window_size,
-            openai_calls_allowed_in_window=cast(
-                "Params", self.context.params
-            ).openai_calls_allowed_in_window,
-        )
 
 
 class OpenAICalls:
@@ -114,6 +100,10 @@ class Params(BaseParams):
         )
         self.openai_calls_allowed_in_window = self._ensure(
             "openai_calls_allowed_in_window", kwargs, int
+        )
+        self.openai_calls = OpenAICalls(
+            openai_call_window_size=self.openai_call_window_size,
+            openai_calls_allowed_in_window=self.openai_calls_allowed_in_window,
         )
         super().__init__(*args, **kwargs)
 
