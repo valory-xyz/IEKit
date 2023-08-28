@@ -69,7 +69,7 @@ class OpenAICalls:
         """Reset the window if required.."""
         if not self.has_window_expired(current_time=current_time):
             return
-        self._tweets_made_in_window = 0
+        self._calls_made_in_window = 0
         self._call_window_start = current_time
 
 
