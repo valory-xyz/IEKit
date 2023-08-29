@@ -345,11 +345,12 @@ class TestTwitterCollectionBehaviour(BaseBehaviourTest):
                 {
                     "request_urls": [
                         TWITTER_MENTIONS_URL.format(max_results=80),
-                        TWITTER_MENTIONS_URL.format(max_results=80)
-                        + "&pagination_token=dummy_next_token",
-                        TWITTER_REGISTRATIONS_URL.format(max_results=72),
-                        TWITTER_REGISTRATIONS_URL.format(max_results=72)
-                        + "&pagination_token=dummy_next_token",
+                        # skipped temporarily since we're not fetching more then one page atm
+                        # TWITTER_MENTIONS_URL.format(max_results=80) # noqa: E800
+                        # + "&pagination_token=dummy_next_token", # noqa: E800
+                        TWITTER_REGISTRATIONS_URL.format(max_results=76),
+                        # TWITTER_REGISTRATIONS_URL.format(max_results=72) # noqa: E800
+                        # + "&pagination_token=dummy_next_token", # noqa: E800
                     ],
                     "request_headers": [
                         "Authorization: Bearer <default_bearer_token>\r\n",
