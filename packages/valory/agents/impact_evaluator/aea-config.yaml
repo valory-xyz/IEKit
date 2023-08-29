@@ -42,9 +42,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeicg7dv7cff34nv2k2z47c4yp4kddsxp3wozonzow6tnvfvwndz3cy
 - valory/abstract_round_abci:0.1.0:bafybeigxjcci53vwytymzlhr37436yvenh7jup4astrn7dgyixo24aq2pq
-- valory/impact_evaluator_abci:0.1.0:bafybeihs6tj3yymmj36yedpbzcbf7u6snzc5vp7bime6uscdriwghcgciq
+- valory/impact_evaluator_abci:0.1.0:bafybeiaqivlyn7fnja3unbapoq3baz5tdwgzlzcvhu4buqiefui3ia7jvq
 - valory/generic_scoring_abci:0.1.0:bafybeiemmcnduhdj427kgafkxcbn2rfhaihabtpda34yqnks7utm3g4xiq
-- valory/twitter_scoring_abci:0.1.0:bafybeiglg5s4qr3stu6zqbthb7ka23x2v2ys6g4kmd4ggqzlwjlebsxx5q
+- valory/twitter_scoring_abci:0.1.0:bafybeigwzodc4of4xeyfcygfdmvy4tdpwmf6hmhvjc37jycicwnu4ypcvu
 - valory/ceramic_read_abci:0.1.0:bafybeidruvxgpbggchuvlnssuswdxuoz2ep6sjvzzqjeyckybb6gpjx3ia
 - valory/ceramic_write_abci:0.1.0:bafybeigtkv57h5suaqqpjfknimfegbidovxna7cok7znsgzrfb4nftqvay
 - valory/dynamic_nft_abci:0.1.0:bafybeie5vfscnjpvuwqe5vk7i2rzzlqciojswdg7uh34fjnuk3bspca5zq
@@ -209,11 +209,13 @@ models:
       twitter_api_bearer_token: ${str:<default_bearer_token>}
       twitter_mentions_endpoint: ${str:2/users/1450081635559428107/mentions?}
       twitter_mentions_args: ${str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
-      twitter_max_pages: 10
+      twitter_max_pages: 1
       twitter_search_endpoint: ${str:2/tweets/search/recent?}
       twitter_search_args: ${str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
       openai_call_window_size: ${float:3600.0}
       openai_calls_allowed_in_window: ${int:100}
+      twitter_call_window_size: ${float:86400.0}
+      twitter_calls_allowed_in_window: ${int:2}
       tx_timeout: 10.0
       use_termination: ${bool:false}
       validate_timeout: 1205

@@ -47,7 +47,7 @@ class DBUpdatePayload(BaseTxPayload):
 
 
 @dataclass(frozen=True)
-class OpenAICallCheckPayload(BaseTxPayload):
-    """Represent a transaction payload for the DBUpdateRound."""
+class APICallCheckPayload(BaseTxPayload):
+    """Represent a transaction payload for the OpenAICallCheckRound."""
 
     content: Optional[str]

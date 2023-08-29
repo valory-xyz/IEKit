@@ -43,13 +43,13 @@ from packages.valory.skills.twitter_scoring_abci.dialogues import (
     LlmDialogues,
 )
 from packages.valory.skills.twitter_scoring_abci.models import (
-    OpenAICalls,
+    ApiCallTracker,
     Params,
     SharedState,
 )
 from packages.valory.skills.twitter_scoring_abci.payloads import (
+    APICallCheckPayload,
     DBUpdatePayload,
-    OpenAICallCheckPayload,
     TweetEvaluationPayload,
     TwitterCollectionPayload,
 )
@@ -85,9 +85,14 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
         return cast(Params, super().params)
 
     @property
-    def openai_calls(self) -> OpenAICalls:
+    def openai_calls(self) -> ApiCallTracker:
         """Return the params."""
         return self.params.openai_calls
+
+    @property
+    def twitter_calls(self) -> ApiCallTracker:
+        """Return the params."""
+        return self.params.twitter_calls
 
 
 class OpenAICallCheckBehaviour(TwitterScoringBaseBehaviour):
@@ -109,7 +114,7 @@ class OpenAICallCheckBehaviour(TwitterScoringBaseBehaviour):
                 content = OpenAICallCheckRound.CALLS_REMAINING
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(
-                payload=OpenAICallCheckPayload(
+                payload=APICallCheckPayload(
                     sender=self.context.agent_address,
                     content=content,
                 )
@@ -200,9 +205,15 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
         # Pagination loop: we read a max of <twitter_max_pages> pages each period
         # Each page contains 100 tweets. The default value for twitter_max_pages is 10
         for _ in range(self.params.twitter_max_pages):
+            current_time = cast(
+                SharedState, self.context.state
+            ).round_sequence.last_round_transition_timestamp.timestamp()
+            # Reset if the window expired before checking
+            self.twitter_calls.reset(current_time=current_time)
+            if self.twitter_calls.max_calls_reached():
+                break
 
             url = api_url
-
             # Add the pagination token if it exists
             if next_token:
                 url += f"&pagination_token={next_token}"
@@ -211,6 +222,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
             response = yield from self.get_http_response(
                 method="GET", url=url, headers=headers
             )
+            self.twitter_calls.increase_call_count()
 
             # Check response status
             if response.status_code != 200:
@@ -265,11 +277,12 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                 continue
 
             break
-
+        # Check if any tweet was collected or not
+        if latest_tweet_id is None:
+            return TwitterCollectionRound.ERROR_PAYLOAD, None
         self.context.logger.info(
             f"Got {len(tweets)} new mentions until tweet_id={latest_tweet_id}"
         )
-
         return tweets, latest_tweet_id
 
     def _get_twitter_hashtag_search(
@@ -307,9 +320,15 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
         # Pagination loop: we read a max of <twitter_max_pages> pages each period
         # Each page contains 100 tweets. The default value for twitter_max_pages is 10
         for _ in range(self.params.twitter_max_pages):
+            current_time = cast(
+                SharedState, self.context.state
+            ).round_sequence.last_round_transition_timestamp.timestamp()
+            # Reset if the window expired before checking
+            self.twitter_calls.reset(current_time=current_time)
+            if self.twitter_calls.max_calls_reached():
+                break
 
             url = api_url
-
             # Add the pagination token if it exists
             if next_token:
                 url += f"&pagination_token={next_token}"
@@ -318,7 +337,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
             response = yield from self.get_http_response(
                 method="GET", url=url, headers=headers
             )
-
+            self.twitter_calls.increase_call_count()
             # Check response status
             if response.status_code != 200:
                 self.context.logger.error(
@@ -374,11 +393,12 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                 continue
 
             break
-
+        # Check if any tweet was collected or not
+        if latest_tweet_id is None:
+            return TwitterCollectionRound.ERROR_PAYLOAD, None
         self.context.logger.info(
             f"Got {retrieved_tweets} new hashtag tweets until tweet_id={latest_tweet_id}"
         )
-
         return tweets, latest_tweet_id
 
 

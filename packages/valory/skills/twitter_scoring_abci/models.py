@@ -39,18 +39,18 @@ class SharedState(BaseSharedState):
     abci_app_cls = TwitterScoringAbciApp
 
 
-class OpenAICalls:
+class ApiCallTracker:
     """OpenAI call window."""
 
     def __init__(
         self,
-        openai_call_window_size: float,
-        openai_calls_allowed_in_window: int,
+        call_window_size: float,
+        calls_allowed_in_window: int,
     ) -> None:
         """Initialize object."""
         self._calls_made_in_window = 0
-        self._calls_allowed_in_window = openai_calls_allowed_in_window
-        self._call_window_size = openai_call_window_size
+        self._calls_allowed_in_window = calls_allowed_in_window
+        self._call_window_size = call_window_size
         self._call_window_start = datetime.now().timestamp()
 
     def increase_call_count(self) -> None:
@@ -101,9 +101,19 @@ class Params(BaseParams):
         self.openai_calls_allowed_in_window = self._ensure(
             "openai_calls_allowed_in_window", kwargs, int
         )
-        self.openai_calls = OpenAICalls(
-            openai_call_window_size=self.openai_call_window_size,
-            openai_calls_allowed_in_window=self.openai_calls_allowed_in_window,
+        self.twitter_call_window_size = self._ensure(
+            "twitter_call_window_size", kwargs, float
+        )
+        self.twitter_calls_allowed_in_window = self._ensure(
+            "twitter_calls_allowed_in_window", kwargs, int
+        )
+        self.openai_calls = ApiCallTracker(
+            call_window_size=self.openai_call_window_size,
+            calls_allowed_in_window=self.openai_calls_allowed_in_window,
+        )
+        self.twitter_calls = ApiCallTracker(
+            call_window_size=self.twitter_call_window_size,
+            calls_allowed_in_window=self.twitter_calls_allowed_in_window,
         )
         super().__init__(*args, **kwargs)
 

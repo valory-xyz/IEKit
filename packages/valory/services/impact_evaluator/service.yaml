@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeiegs5dd3xcg7o7jcvc6nbfxzk6rabeow37fgaekfxupkuxcuy3iue
+agent: valory/impact_evaluator:0.1.0:bafybeicddipgxkzfqtrcr6jf4lg53o2ogvemtdzmtesrr5eoqqhfn4nuum
 number_of_agents: 4
 deployment:
   agent:
@@ -104,7 +104,7 @@ extra:
         twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
-        twitter_max_pages: 10
+        twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
         tx_timeout: 10.0
@@ -114,6 +114,8 @@ extra:
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
         openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
         openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
+        twitter_call_window_size: ${TWITTER_CALL_WINDOW_SIZE:float:8}6400.0
+        twitter_calls_allowed_in_window: ${TWITTER_CALLS_ALLOWED_IN_WINDOW:int:2}
 1:
   models:
     benchmark_tool:
@@ -170,7 +172,7 @@ extra:
         twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
-        twitter_max_pages: 10
+        twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
         tx_timeout: 10.0
@@ -180,6 +182,8 @@ extra:
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
         openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
         openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
+        twitter_call_window_size: ${TWITTER_CALL_WINDOW_SIZE:float:8}6400.0
+        twitter_calls_allowed_in_window: ${TWITTER_CALLS_ALLOWED_IN_WINDOW:int:2}
 2:
   models:
     benchmark_tool:
@@ -236,7 +240,7 @@ extra:
         twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
-        twitter_max_pages: 10
+        twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
         tx_timeout: 10.0
@@ -246,6 +250,8 @@ extra:
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
         openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
         openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
+        twitter_call_window_size: ${TWITTER_CALL_WINDOW_SIZE:float:8}6400.0
+        twitter_calls_allowed_in_window: ${TWITTER_CALLS_ALLOWED_IN_WINDOW:int:2}
 3:
   models:
     benchmark_tool:
@@ -304,7 +310,7 @@ extra:
         twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
-        twitter_max_pages: 10
+        twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}}
         tx_timeout: 10.0
@@ -316,6 +322,8 @@ extra:
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
         openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
         openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
+        twitter_call_window_size: ${TWITTER_CALL_WINDOW_SIZE:float:8}6400.0
+        twitter_calls_allowed_in_window: ${TWITTER_CALLS_ALLOWED_IN_WINDOW:int:2}
 ---
 public_id: valory/ledger:0.19.0
 type: connection

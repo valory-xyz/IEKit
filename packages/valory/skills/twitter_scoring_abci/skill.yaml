@@ -8,15 +8,15 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
-  behaviours.py: bafybeicigoxxxmruc6s7lc2bezpnvr5pperqtdmk67mivtskkq2ot3h6lq
+  behaviours.py: bafybeih7pzyclaxsmgl5wesrgc5nq3g2jj67kcyavrrbssdkackwbahiwq
   ceramic_db.py: bafybeicusdonrdq6kirgkpdqmi3a6kmeal4nctnm5ozjqf5s5se6jpitjm
   dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
   fsm_specification.yaml: bafybeietfinv3lvmyon3bk5f4gu2qf4hjlrqogfiombqnncyme5qrpbffa
   handlers.py: bafybeid3nqvcyotqj5g5hlgrz57nf7vpjysmgvsxe3p7644f4z5dcwqn6u
-  models.py: bafybeib6fkn4xt5lkmijtbdoukulhvuremqy6omuify5dng4zz4ei4d66y
-  payloads.py: bafybeic2fwq4n37ciytg7smpns35kww4tvg7kpcy3tmzkrtegjdpqb63iq
+  models.py: bafybeihryhigjjzonbuzouctkudsc2wg4cvqaa237hsgwezzpwqdkmuote
+  payloads.py: bafybeiaqie6yd4yy4kvhvvajlvsexljo5akqsp74lyhwxzbyohndndqb54
   prompts.py: bafybeieiuqn427bgwfnzynxf3vtqfpvmqqscs5tyw4oibfofwropifotke
-  rounds.py: bafybeid6glqdtuw3jgk2scmyf7lbwx3g5cijx47elss72ts7jcwkbmeww4
+  rounds.py: bafybeicyzebquw7hop2434j4xw54nl5hroxriw2t7mz7kd7ur2of4igl6y
   tests/__init__.py: bafybeidwzzd4ejsyf3aryd5kmrvd63h7ajgqyrxphmfaacvpjnneacejay
   tests/test_behaviours.py: bafybeidhcwz3gwjbwlktbgkafps3wjiyuipewtxa3hponqafgkecwb76we
   tests/test_ceramic_db.py: bafybeif2v7btjphbqabq6qdmfeyweg765seon74acg5vrrvznivzg2prey
@@ -136,11 +136,13 @@ models:
       twitter_api_bearer_token: <default_bearer_token>
       twitter_mentions_endpoint: 2/users/1450081635559428107/mentions?
       twitter_mentions_args: tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
-      twitter_max_pages: 10
+      twitter_max_pages: 1
       twitter_search_endpoint: 2/tweets/search/recent?
       twitter_search_args: query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
       openai_call_window_size: 3600.0
       openai_calls_allowed_in_window: 100
+      twitter_call_window_size: 86400.0
+      twitter_calls_allowed_in_window: 2
       max_points_per_period: 5000
       validate_timeout: 1205
       use_termination: false
