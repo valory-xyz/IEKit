@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeic66pxt4t7pcblkvuutd32cc3phpctaoupgszf372w73xrgo6yhf4
+agent: valory/impact_evaluator:0.1.0:bafybeig4ibfxsl7juetih4cunl5cq3oxhjv7yhc3gdnccyyra33gw74lpy
 number_of_agents: 4
 deployment:
   agent:
@@ -104,7 +104,7 @@ extra:
         twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
-        twitter_max_pages: 10
+        twitter_max_pages: 1
         max_tweet_pulls_allowed: 80
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
@@ -171,7 +171,7 @@ extra:
         twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
-        twitter_max_pages: 10
+        twitter_max_pages: 1
         max_tweet_pulls_allowed: 80
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
@@ -238,7 +238,7 @@ extra:
         twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
-        twitter_max_pages: 10
+        twitter_max_pages: 1
         max_tweet_pulls_allowed: 80
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
@@ -307,7 +307,7 @@ extra:
         twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
-        twitter_max_pages: 10
+        twitter_max_pages: 1
         max_tweet_pulls_allowed: 80
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
