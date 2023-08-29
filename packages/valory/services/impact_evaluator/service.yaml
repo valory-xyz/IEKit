@@ -114,7 +114,7 @@ extra:
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
         openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
         openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
-        twitter_call_window_size: ${TWITTER_CALL_WINDOW_SIZE:float:8}6400.0
+        twitter_call_window_size: ${TWITTER_CALL_WINDOW_SIZE:float:86400.0}
         twitter_calls_allowed_in_window: ${TWITTER_CALLS_ALLOWED_IN_WINDOW:int:2}
 1:
   models:
@@ -182,7 +182,7 @@ extra:
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
         openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
         openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
-        twitter_call_window_size: ${TWITTER_CALL_WINDOW_SIZE:float:8}6400.0
+        twitter_call_window_size: ${TWITTER_CALL_WINDOW_SIZE:float:86400.0}
         twitter_calls_allowed_in_window: ${TWITTER_CALLS_ALLOWED_IN_WINDOW:int:2}
 2:
   models:
@@ -250,7 +250,7 @@ extra:
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
         openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
         openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
-        twitter_call_window_size: ${TWITTER_CALL_WINDOW_SIZE:float:8}6400.0
+        twitter_call_window_size: ${TWITTER_CALL_WINDOW_SIZE:float:86400.0}
         twitter_calls_allowed_in_window: ${TWITTER_CALLS_ALLOWED_IN_WINDOW:int:2}
 3:
   models:
@@ -322,7 +322,7 @@ extra:
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
         openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
         openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
-        twitter_call_window_size: ${TWITTER_CALL_WINDOW_SIZE:float:8}6400.0
+        twitter_call_window_size: ${TWITTER_CALL_WINDOW_SIZE:float:86400.0}
         twitter_calls_allowed_in_window: ${TWITTER_CALLS_ALLOWED_IN_WINDOW:int:2}
 ---
 public_id: valory/ledger:0.19.0
