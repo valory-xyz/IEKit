@@ -95,6 +95,9 @@ class Params(BaseParams):
         self.tweet_evaluation_round_timeout = self._ensure(
             "tweet_evaluation_round_timeout", kwargs, float
         )
+        self.max_tweet_pulls_allowed = self._ensure(
+            "max_tweet_pulls_allowed", kwargs, int
+        )
         self.openai_call_window_size = self._ensure(
             "openai_call_window_size", kwargs, float
         )
