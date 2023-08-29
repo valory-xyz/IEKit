@@ -169,7 +169,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                 last_tweet_pull_window_reset,
             ) = self._check_daily_limit()
             if has_limit_reached:
-                payload = TwitterCollectionRound.ERROR_PAYLOAD
+                payload_data = TwitterCollectionRound.ERROR_PAYLOAD
             else:
                 # Get mentions from Twitter
                 (
