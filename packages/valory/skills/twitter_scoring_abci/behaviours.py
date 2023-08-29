@@ -169,6 +169,9 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                 last_tweet_pull_window_reset,
             ) = self._check_daily_limit()
             if has_limit_reached:
+                self.context.logger.info(
+                    "Cannot retrieve tweets, max number of tweets reached for today"
+                )
                 payload_data = TwitterCollectionRound.ERROR_PAYLOAD
             else:
                 # Get mentions from Twitter
@@ -179,7 +182,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                 ) = yield from self._get_twitter_mentions(
                     number_of_tweets_pulled_today=number_of_tweets_pulled_today
                 )
-
+                tweets_1 = {}
                 # Get hashtags from Twitter
                 if tweets_0 != TwitterCollectionRound.ERROR_PAYLOAD:
                     (
@@ -246,6 +249,9 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
             self.params.max_tweet_pulls_allowed - number_of_tweets_pulled_today
         )
         if number_of_tweets_remaining_today <= 0:
+            self.context.logger.info(
+                "Cannot retrieve twitter mentions, max number of tweets reached for today"
+            )
             return (
                 TwitterCollectionRound.ERROR_PAYLOAD,
                 None,
@@ -380,6 +386,9 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
             self.params.max_tweet_pulls_allowed - number_of_tweets_pulled_today
         )
         if number_of_tweets_remaining_today <= 0:
+            self.context.logger.info(
+                "Cannot retrieve hashtag mentions, max number of tweets reached for today"
+            )
             return (
                 TwitterCollectionRound.ERROR_PAYLOAD,
                 None,
