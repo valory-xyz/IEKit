@@ -210,7 +210,6 @@ models:
       twitter_mentions_endpoint: ${str:2/users/1450081635559428107/mentions?}
       twitter_mentions_args: ${str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
       twitter_max_pages: 1
-      twitter_max_results_per_query: ${int:80}
       max_tweet_pulls_allowed: $int:80}
       twitter_search_endpoint: ${str:2/tweets/search/recent?}
       twitter_search_args: ${str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
