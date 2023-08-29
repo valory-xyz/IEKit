@@ -259,7 +259,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
         api_args = self.params.twitter_mentions_args.replace(
             "{since_id}", str(next_tweet_id)
         )
-        api_args = self.params.twitter_mentions_args.replace(
+        api_args = api_args.replace(
             "{max_results}", str(number_of_tweets_remaining_today)
         )
         api_url = api_base + api_endpoint + api_args
@@ -394,7 +394,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
         api_args = self.params.twitter_search_args.replace(
             "{since_id}", str(next_tweet_id)
         )
-        api_args = self.params.twitter_mentions_args.replace(
+        api_args = api_args.replace(
             "{max_results}", str(number_of_tweets_remaining_today)
         )
         api_url = api_base + api_endpoint + api_args

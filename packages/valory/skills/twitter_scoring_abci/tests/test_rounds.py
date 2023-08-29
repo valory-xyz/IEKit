@@ -91,6 +91,8 @@ def get_dummy_twitter_collection_payload_serialized(api_error: bool = False) -> 
         {
             "tweets": {"my_tweet": {}},
             "latest_mention_tweet_id": False,
+            "number_of_tweets_pulled_today": 0,
+            "last_tweet_pull_window_reset": 0,
         },
         sort_keys=True,
     )

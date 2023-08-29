@@ -21,6 +21,7 @@
 
 import json
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Optional, Type
 
@@ -42,8 +43,8 @@ from packages.valory.skills.twitter_scoring_abci.rounds import Event, Synchroniz
 
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
-TWITTER_MENTIONS_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=100&since_id=0"
-TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=100&since_id=0"
+TWITTER_MENTIONS_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id=0"
+TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results={max_results}&since_id=0"
 
 DUMMY_MENTIONS_RESPONSE = {
     "data": [
@@ -270,6 +271,9 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
             self.behaviour_class.auto_behaviour_id(),
             SynchronizedData(AbciAppDB(setup_data=AbciAppDB.data_to_lists(data))),
         )
+        self.skill.skill_context.state.round_sequence._last_round_transition_timestamp = (
+            datetime.now()
+        )
         assert (
             self.behaviour.current_behaviour.auto_behaviour_id()  # type: ignore
             == self.behaviour_class.auto_behaviour_id()
@@ -305,8 +309,8 @@ class TestTwitterCollectionBehaviour(BaseBehaviourTest):
                 ),
                 {
                     "request_urls": [
-                        TWITTER_MENTIONS_URL,
-                        TWITTER_REGISTRATIONS_URL,
+                        TWITTER_MENTIONS_URL.format(max_results=80),
+                        TWITTER_REGISTRATIONS_URL.format(max_results=76),
                     ],
                     "request_headers": [
                         "Authorization: Bearer <default_bearer_token>\r\n",
@@ -340,10 +344,11 @@ class TestTwitterCollectionBehaviour(BaseBehaviourTest):
                 ),
                 {
                     "request_urls": [
-                        TWITTER_MENTIONS_URL,
-                        TWITTER_MENTIONS_URL + "&pagination_token=dummy_next_token",
-                        TWITTER_REGISTRATIONS_URL,
-                        TWITTER_REGISTRATIONS_URL
+                        TWITTER_MENTIONS_URL.format(max_results=80),
+                        TWITTER_MENTIONS_URL.format(max_results=80)
+                        + "&pagination_token=dummy_next_token",
+                        TWITTER_REGISTRATIONS_URL.format(max_results=72),
+                        TWITTER_REGISTRATIONS_URL.format(max_results=72)
                         + "&pagination_token=dummy_next_token",
                     ],
                     "request_headers": [
@@ -377,7 +382,10 @@ class TestTwitterCollectionBehaviour(BaseBehaviourTest):
                     event=Event.DONE,
                 ),
                 {
-                    "request_urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
+                    "request_urls": [
+                        TWITTER_MENTIONS_URL.format(max_results=80),
+                        TWITTER_REGISTRATIONS_URL.format(max_results=80),
+                    ],
                     "request_headers": [
                         "Authorization: Bearer <default_bearer_token>\r\n",
                         "Authorization: Bearer <default_bearer_token>\r\n",
@@ -435,7 +443,7 @@ class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL],
+                    "urls": [TWITTER_MENTIONS_URL.format(max_results=80)],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE,
@@ -452,7 +460,10 @@ class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
+                    "urls": [
+                        TWITTER_MENTIONS_URL.format(max_results=80),
+                        TWITTER_REGISTRATIONS_URL.format(max_results=76),
+                    ],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE,
@@ -469,7 +480,7 @@ class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL],
+                    "urls": [TWITTER_MENTIONS_URL.format(max_results=80)],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_DATA,
@@ -486,7 +497,10 @@ class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
+                    "urls": [
+                        TWITTER_MENTIONS_URL.format(max_results=80),
+                        TWITTER_REGISTRATIONS_URL.format(max_results=76),
+                    ],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE,
@@ -505,7 +519,7 @@ class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL],
+                    "urls": [TWITTER_MENTIONS_URL.format(max_results=80)],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_META,
@@ -522,7 +536,10 @@ class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL, TWITTER_REGISTRATIONS_URL],
+                    "urls": [
+                        TWITTER_MENTIONS_URL.format(max_results=80),
+                        TWITTER_REGISTRATIONS_URL.format(max_results=76),
+                    ],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE,
@@ -539,7 +556,7 @@ class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL],
+                    "urls": [TWITTER_MENTIONS_URL.format(max_results=80)],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_INCLUDES,
