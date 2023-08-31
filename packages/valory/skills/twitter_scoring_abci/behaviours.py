@@ -168,6 +168,10 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                 number_of_tweets_pulled_today,
                 last_tweet_pull_window_reset,
             ) = self._check_daily_limit()
+
+            latest_mention_tweet_id = None
+            latest_hashtag_tweet_id = None
+
             if has_limit_reached:
                 self.context.logger.info(
                     "Cannot retrieve tweets, max number of tweets reached for today"
@@ -176,43 +180,35 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
             else:
                 # Get mentions from Twitter
                 (
-                    tweets_0,
+                    tweets_mentions,
                     latest_mention_tweet_id,
                     number_of_tweets_pulled_today,
                 ) = yield from self._get_twitter_mentions(
                     number_of_tweets_pulled_today=number_of_tweets_pulled_today
                 )
-                tweets_1 = {}
+
                 # Get hashtags from Twitter
-                if tweets_0 != TwitterCollectionRound.ERROR_PAYLOAD:
+                tweets_hashtags = TwitterCollectionRound.ERROR_PAYLOAD  # initialize
+                if tweets_mentions != TwitterCollectionRound.ERROR_PAYLOAD:
                     (
-                        tweets_1,
+                        tweets_hashtags,
                         latest_hashtag_tweet_id,
                         number_of_tweets_pulled_today,
                     ) = yield from self._get_twitter_hashtag_search(
                         number_of_tweets_pulled_today=number_of_tweets_pulled_today,
                     )
-                    # Keep the max latest_tweet_id
-                    valid_latest_ids = [
-                        i
-                        for i in (latest_mention_tweet_id, latest_hashtag_tweet_id)
-                        if i
-                    ]
-                    if valid_latest_ids:
-                        latest_mention_tweet_id = max(valid_latest_ids)
-                    if tweets_1 == TwitterCollectionRound.ERROR_PAYLOAD:
-                        tweets_1 = {}
 
-                if tweets_0 == TwitterCollectionRound.ERROR_PAYLOAD:
+                if tweets_mentions == TwitterCollectionRound.ERROR_PAYLOAD or tweets_hashtags == TwitterCollectionRound.ERROR_PAYLOAD:
                     payload_data = TwitterCollectionRound.ERROR_PAYLOAD
                 else:
-                    tweets = {**tweets_0, **tweets_1}
+                    tweets = {**tweets_mentions, **tweets_hashtags}
                     self.context.logger.info(
                         f"Retrieved new tweets [until_id={latest_mention_tweet_id}]: {list(tweets.keys())}"
                     )
                     payload_data = {
                         "tweets": tweets,
                         "latest_mention_tweet_id": latest_mention_tweet_id,
+                        "latest_hashtag_tweet_id": latest_hashtag_tweet_id,
                         "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
                         "last_tweet_pull_window_reset": last_tweet_pull_window_reset,
                     }
@@ -270,7 +266,9 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
         api_url = api_base + api_endpoint + api_args
         headers = dict(Authorization=f"Bearer {self.params.twitter_api_bearer_token}")
 
-        self.context.logger.info(f"Retrieving mentions from Twitter API [{api_url}]")
+        self.context.logger.info(
+            f"Retrieving mentions from Twitter API [{api_url}]\nBearer token {self.params.twitter_api_bearer_token[:5]}*******{self.params.twitter_api_bearer_token[-5:]}"
+        )
 
         tweets = {}
         next_token = None
@@ -292,7 +290,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
             # Check response status
             if response.status_code != 200:
                 self.context.logger.error(
-                    f"Error retrieving mentions from Twitter [{response.status_code}]"
+                    f"Error retrieving mentions from Twitter [{response.status_code}]: {response.body}"
                 )
                 return (
                     TwitterCollectionRound.ERROR_PAYLOAD,
@@ -376,7 +374,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
         try:
             latest_hashtag_tweet_id = int(
                 self.synchronized_data.ceramic_db["module_data"]["twitter"][
-                    "latest_mention_tweet_id"
+                    "latest_hashtag_tweet_id"
                 ]
             )
         except KeyError:

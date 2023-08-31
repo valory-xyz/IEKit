@@ -90,13 +90,18 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(dict, self.db.get_strict("latest_mention_tweet_id"))
 
     @property
+    def latest_hashtag_tweet_id(self) -> dict:
+        """Get the latest_hashtag_tweet_id."""
+        return cast(dict, self.db.get_strict("latest_hashtag_tweet_id"))
+
+    @property
     def number_of_tweets_pulled_today(self) -> dict:
-        """Get the latest_mention_tweet_id."""
+        """Get the number_of_tweets_pulled_today."""
         return cast(dict, self.db.get_strict("number_of_tweets_pulled_today"))
 
     @property
     def last_tweet_pull_window_reset(self) -> dict:
-        """Get the latest_mention_tweet_id."""
+        """Get the last_tweet_pull_window_reset."""
         return cast(dict, self.db.get_strict("last_tweet_pull_window_reset"))
 
 
@@ -157,20 +162,29 @@ class TwitterCollectionRound(CollectSameUntilThresholdRound):
             if not tweets:
                 return self.synchronized_data, Event.SKIP
 
+            updates = {
+                get_name(SynchronizedData.tweets): tweets,
+                get_name(SynchronizedData.number_of_tweets_pulled_today): payload[
+                    "number_of_tweets_pulled_today"
+                ],
+                get_name(SynchronizedData.last_tweet_pull_window_reset): payload[
+                    "last_tweet_pull_window_reset"
+                ],
+            }
+
+            if payload["latest_mention_tweet_id"]:
+                updates[get_name(SynchronizedData.latest_mention_tweet_id)] = payload[
+                    "latest_mention_tweet_id"
+                ]
+
+            if payload["latest_hashtag_tweet_id"]:
+                updates[get_name(SynchronizedData.latest_hashtag_tweet_id)] = payload[
+                    "latest_hashtag_tweet_id"
+                ]
+
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
-                **{
-                    get_name(SynchronizedData.tweets): tweets,
-                    get_name(SynchronizedData.latest_mention_tweet_id): payload[
-                        "latest_mention_tweet_id"
-                    ],
-                    get_name(SynchronizedData.number_of_tweets_pulled_today): payload[
-                        "number_of_tweets_pulled_today"
-                    ],
-                    get_name(SynchronizedData.last_tweet_pull_window_reset): payload[
-                        "last_tweet_pull_window_reset"
-                    ],
-                },
+                **updates,
             )
             return synchronized_data, Event.DONE
         if not self.is_majority_possible(

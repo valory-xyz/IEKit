@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeianmf6g3sq3bqdmlmyjzfad6xoo6fotmhgyribrej632ye3ybpuhq
+agent: valory/impact_evaluator:0.1.0:bafybeiesdk2lqm2ehztq54zpj4pqmpy54tuqsndl4fl3yxyrdxhgj6mrxu
 number_of_agents: 4
 deployment:
   agent:
@@ -103,11 +103,10 @@ extra:
         twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
         twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
-        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
-        twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
-        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
+        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=10&since_id={since_id}}
+        twitter_max_pages: 10
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=10&since_id={since_id}}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
@@ -170,11 +169,10 @@ extra:
         twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
         twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
-        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
-        twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
-        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
+        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=10&since_id={since_id}}
+        twitter_max_pages: 10
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=10&since_id={since_id}}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
@@ -237,11 +235,10 @@ extra:
         twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
         twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
-        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
-        twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
-        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
+        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=10&since_id={since_id}}
+        twitter_max_pages: 10
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=10&since_id={since_id}}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
@@ -306,11 +303,10 @@ extra:
         twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
         twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
-        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
-        twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
-        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
+        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=10&since_id={since_id}}
+        twitter_max_pages: 10
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=10&since_id={since_id}}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
