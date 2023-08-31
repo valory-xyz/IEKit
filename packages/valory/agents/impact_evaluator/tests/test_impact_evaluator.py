@@ -65,14 +65,16 @@ from packages.valory.skills.dynamic_nft_abci.rounds import TokenTrackRound
 from packages.valory.skills.generic_scoring_abci.rounds import GenericScoringRound
 from packages.valory.skills.registration_abci.rounds import RegistrationStartupRound
 from packages.valory.skills.reset_pause_abci.rounds import ResetAndPauseRound
-from packages.valory.skills.twitter_scoring_abci.rounds import TwitterCollectionRound
+from packages.valory.skills.twitter_scoring_abci.rounds import (
+    TwitterMentionsCollectionRound,
+)
 
 
 HAPPY_PATH: Tuple[RoundChecks, ...] = (
     RoundChecks(RegistrationStartupRound.auto_round_id(), n_periods=1),
     RoundChecks(StreamReadRound.auto_round_id(), n_periods=3),
     RoundChecks(GenericScoringRound.auto_round_id(), n_periods=2),
-    RoundChecks(TwitterCollectionRound.auto_round_id(), n_periods=2),
+    RoundChecks(TwitterMentionsCollectionRound.auto_round_id(), n_periods=2),
     RoundChecks(TokenTrackRound.auto_round_id(), success_event="WRITE", n_periods=2),
     RoundChecks(RandomnessRound.auto_round_id(), n_periods=2),
     RoundChecks(SelectKeeperRound.auto_round_id(), n_periods=2),

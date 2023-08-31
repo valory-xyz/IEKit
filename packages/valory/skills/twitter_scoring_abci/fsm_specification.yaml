@@ -18,18 +18,18 @@ states:
 - FinishedTwitterScoringWithAPIErrorRound
 - OpenAICallCheckRound
 - TweetEvaluationRound
-- TwitterCollectionRound
+- TwitterMentionsCollectionRound
 transition_func:
     (DBUpdateRound, DONE): FinishedTwitterScoringRound
     (DBUpdateRound, NO_MAJORITY): DBUpdateRound
     (DBUpdateRound, ROUND_TIMEOUT): DBUpdateRound
     (OpenAICallCheckRound, API_ERROR): FinishedTwitterScoringWithAPIErrorRound
-    (OpenAICallCheckRound, DONE): TwitterCollectionRound
+    (OpenAICallCheckRound, DONE): TwitterMentionsCollectionRound
     (OpenAICallCheckRound, NO_MAJORITY): OpenAICallCheckRound
     (TweetEvaluationRound, DONE): DBUpdateRound
     (TweetEvaluationRound, TWEET_EVALUATION_ROUND_TIMEOUT): TweetEvaluationRound
-    (TwitterCollectionRound, API_ERROR): TwitterCollectionRound
-    (TwitterCollectionRound, DONE): TweetEvaluationRound
-    (TwitterCollectionRound, NO_MAJORITY): TwitterCollectionRound
-    (TwitterCollectionRound, ROUND_TIMEOUT): TwitterCollectionRound
-    (TwitterCollectionRound, SKIP): FinishedTwitterScoringRound
+    (TwitterMentionsCollectionRound, API_ERROR): TwitterMentionsCollectionRound
+    (TwitterMentionsCollectionRound, DONE): TweetEvaluationRound
+    (TwitterMentionsCollectionRound, NO_MAJORITY): TwitterMentionsCollectionRound
+    (TwitterMentionsCollectionRound, ROUND_TIMEOUT): TwitterMentionsCollectionRound
+    (TwitterMentionsCollectionRound, SKIP): FinishedTwitterScoringRound

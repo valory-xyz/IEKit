@@ -26,8 +26,15 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 
 @dataclass(frozen=True)
-class TwitterCollectionPayload(BaseTxPayload):
-    """Represent a transaction payload for the TwitterCollectionRound."""
+class TwitterMentionsCollectionPayload(BaseTxPayload):
+    """Represent a transaction payload for the TwitterMentionsCollectionRound."""
+
+    content: str
+
+
+@dataclass(frozen=True)
+class TwitterHashtagsCollectionPayload(BaseTxPayload):
+    """Represent a transaction payload for the TwitterHashtagsCollectionRound."""
 
     content: str
 
@@ -48,6 +55,13 @@ class DBUpdatePayload(BaseTxPayload):
 
 @dataclass(frozen=True)
 class OpenAICallCheckPayload(BaseTxPayload):
-    """Represent a transaction payload for the DBUpdateRound."""
+    """Represent a transaction payload for the OpenAICallCheckRound."""
 
     content: Optional[str]
+
+
+@dataclass(frozen=True)
+class TwitterDecisionMakingPayload(BaseTxPayload):
+    """Represent a transaction payload for the TwitterDecisionMakingRound."""
+
+    event: Optional[str]

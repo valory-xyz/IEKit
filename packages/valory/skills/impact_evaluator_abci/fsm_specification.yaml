@@ -49,7 +49,7 @@ states:
 - StreamWriteRound
 - TokenTrackRound
 - TweetEvaluationRound
-- TwitterCollectionRound
+- TwitterMentionsCollectionRound
 - TwitterWriteRound
 - VerificationRound
 transition_func:
@@ -84,7 +84,7 @@ transition_func:
     (LLMSelectKeeperRound, NO_MAJORITY): LLMRandomnessRound
     (LLMSelectKeeperRound, ROUND_TIMEOUT): LLMRandomnessRound
     (OpenAICallCheckRound, API_ERROR): TokenTrackRound
-    (OpenAICallCheckRound, DONE): TwitterCollectionRound
+    (OpenAICallCheckRound, DONE): TwitterMentionsCollectionRound
     (OpenAICallCheckRound, NO_MAJORITY): OpenAICallCheckRound
     (RandomnessRound, DONE): SelectKeeperRound
     (RandomnessRound, NO_MAJORITY): RandomnessRound
@@ -119,11 +119,11 @@ transition_func:
     (TokenTrackRound, ROUND_TIMEOUT): TokenTrackRound
     (TweetEvaluationRound, DONE): DBUpdateRound
     (TweetEvaluationRound, TWEET_EVALUATION_ROUND_TIMEOUT): TweetEvaluationRound
-    (TwitterCollectionRound, API_ERROR): TwitterCollectionRound
-    (TwitterCollectionRound, DONE): TweetEvaluationRound
-    (TwitterCollectionRound, NO_MAJORITY): TwitterCollectionRound
-    (TwitterCollectionRound, ROUND_TIMEOUT): TwitterCollectionRound
-    (TwitterCollectionRound, SKIP): TokenTrackRound
+    (TwitterMentionsCollectionRound, API_ERROR): TwitterMentionsCollectionRound
+    (TwitterMentionsCollectionRound, DONE): TweetEvaluationRound
+    (TwitterMentionsCollectionRound, NO_MAJORITY): TwitterMentionsCollectionRound
+    (TwitterMentionsCollectionRound, ROUND_TIMEOUT): TwitterMentionsCollectionRound
+    (TwitterMentionsCollectionRound, SKIP): TokenTrackRound
     (TwitterWriteRound, API_ERROR): RandomnessTwitterRound
     (TwitterWriteRound, CONTINUE): TwitterWriteRound
     (TwitterWriteRound, DONE): DecisionMakingRound

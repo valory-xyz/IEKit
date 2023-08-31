@@ -34,7 +34,7 @@ from packages.valory.skills.abstract_round_abci.test_tools.base import (
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
     TAGLINE,
     TweetEvaluationBehaviour,
-    TwitterCollectionBehaviour,
+    TwitterMentionsCollectionBehaviour,
     TwitterScoringBaseBehaviour,
     TwitterScoringRoundBehaviour,
 )
@@ -295,7 +295,7 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
 class TestTwitterCollectionBehaviour(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
-    behaviour_class = TwitterCollectionBehaviour
+    behaviour_class = TwitterMentionsCollectionBehaviour
     next_behaviour_class = TweetEvaluationBehaviour
 
     @pytest.mark.parametrize(
@@ -431,8 +431,8 @@ class TestTwitterCollectionBehaviour(BaseBehaviourTest):
 class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
-    behaviour_class = TwitterCollectionBehaviour
-    next_behaviour_class = TwitterCollectionBehaviour
+    behaviour_class = TwitterMentionsCollectionBehaviour
+    next_behaviour_class = TwitterMentionsCollectionBehaviour
 
     @pytest.mark.parametrize(
         "test_case, kwargs",

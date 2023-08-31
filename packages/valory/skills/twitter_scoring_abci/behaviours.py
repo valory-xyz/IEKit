@@ -51,15 +51,20 @@ from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
     OpenAICallCheckPayload,
     TweetEvaluationPayload,
-    TwitterCollectionPayload,
+    TwitterDecisionMakingPayload,
+    TwitterHashtagsCollectionPayload,
+    TwitterMentionsCollectionPayload,
 )
 from packages.valory.skills.twitter_scoring_abci.prompts import tweet_evaluation_prompt
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     DBUpdateRound,
+    Event,
     OpenAICallCheckRound,
     SynchronizedData,
     TweetEvaluationRound,
-    TwitterCollectionRound,
+    TwitterDecisionMakingRound,
+    TwitterHashtagsCollectionRound,
+    TwitterMentionsCollectionRound,
     TwitterScoringAbciApp,
 )
 
@@ -89,40 +94,6 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
     def openai_calls(self) -> OpenAICalls:
         """Return the params."""
         return self.params.openai_calls
-
-
-class OpenAICallCheckBehaviour(TwitterScoringBaseBehaviour):
-    """TwitterCollectionBehaviour"""
-
-    matching_round: Type[AbstractRound] = OpenAICallCheckRound
-
-    def async_act(self) -> Generator:
-        """Do the act, supporting asynchronous execution."""
-        with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            current_time = cast(
-                SharedState, self.context.state
-            ).round_sequence.last_round_transition_timestamp.timestamp()
-            # Reset the window if the window expired before checking
-            self.openai_calls.reset(current_time=current_time)
-            if self.openai_calls.max_calls_reached():
-                content = None
-            else:
-                content = OpenAICallCheckRound.CALLS_REMAINING
-        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
-            yield from self.send_a2a_transaction(
-                payload=OpenAICallCheckPayload(
-                    sender=self.context.agent_address,
-                    content=content,
-                )
-            )
-            yield from self.wait_until_round_end()
-        self.set_done()
-
-
-class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
-    """TwitterCollectionBehaviour"""
-
-    matching_round: Type[AbstractRound] = TwitterCollectionRound
 
     def _check_daily_limit(self) -> Tuple:
         """Check if the daily limit has exceeded or not"""
@@ -158,6 +129,89 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
         # Window has not expired and we have not reached the max number of tweets
         return False, number_of_tweets_pulled_today, last_tweet_pull_window_reset
 
+
+class TwitterDecisionMakingBehaviour(TwitterScoringBaseBehaviour):
+    """TwitterDecisionMakingBehaviour"""
+
+    matching_round: Type[AbstractRound] = TwitterDecisionMakingRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            event = self.get_next_event()
+            self.context.logger.info(f"Next event: {event}")
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(
+                payload=TwitterDecisionMakingPayload(
+                    sender=self.context.agent_address,
+                    event=event,
+                )
+            )
+            yield from self.wait_until_round_end()
+        self.set_done()
+
+    def get_next_event(self) -> str:
+        """Decide what is the next round"""
+
+        performed_tasks = self.synchronized_data.performed_twitter_tasks
+
+        self.context.logger.info(f"Permormed tasks: {performed_tasks}")
+
+        if Event.OPENAI_CALL_CHECK.value not in performed_tasks:
+            return Event.OPENAI_CALL_CHECK.value
+
+        if performed_tasks[Event.OPENAI_CALL_CHECK.value] == Event.NO_ALLOWANCE.value:
+            return Event.DONE_SKIP.value
+
+        if Event.RETRIEVE_HASHTAGS.value not in performed_tasks:
+            return Event.RETRIEVE_HASHTAGS.value
+
+        if Event.RETRIEVE_MENTIONS.value not in performed_tasks:
+            return Event.RETRIEVE_MENTIONS.value
+
+        if Event.EVALUATE.value not in performed_tasks:
+            return Event.EVALUATE.value
+
+        if Event.DB_UPDATE.value not in performed_tasks:
+            return Event.DB_UPDATE.value
+
+        return Event.DONE.value
+
+
+class OpenAICallCheckBehaviour(TwitterScoringBaseBehaviour):
+    """TwitterMentionsCollectionBehaviour"""
+
+    matching_round: Type[AbstractRound] = OpenAICallCheckRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            current_time = cast(
+                SharedState, self.context.state
+            ).round_sequence.last_round_transition_timestamp.timestamp()
+            # Reset the window if the window expired before checking
+            self.openai_calls.reset(current_time=current_time)
+            if self.openai_calls.max_calls_reached():
+                content = None
+            else:
+                content = OpenAICallCheckRound.CALLS_REMAINING
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(
+                payload=OpenAICallCheckPayload(
+                    sender=self.context.agent_address,
+                    content=content,
+                )
+            )
+            yield from self.wait_until_round_end()
+        self.set_done()
+
+
+class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
+    """TwitterMentionsCollectionBehaviour"""
+
+    matching_round: Type[AbstractRound] = TwitterMentionsCollectionRound
+
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
 
@@ -169,52 +223,36 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                 last_tweet_pull_window_reset,
             ) = self._check_daily_limit()
 
-            latest_mention_tweet_id = None
-            latest_hashtag_tweet_id = None
-
             if has_limit_reached:
                 self.context.logger.info(
                     "Cannot retrieve tweets, max number of tweets reached for today"
                 )
-                payload_data = TwitterCollectionRound.ERROR_PAYLOAD
+                payload_data = TwitterMentionsCollectionRound.ERROR_PAYLOAD
             else:
                 # Get mentions from Twitter
                 (
-                    tweets_mentions,
+                    tweets,
                     latest_mention_tweet_id,
                     number_of_tweets_pulled_today,
                 ) = yield from self._get_twitter_mentions(
                     number_of_tweets_pulled_today=number_of_tweets_pulled_today
                 )
 
-                # Get hashtags from Twitter
-                tweets_hashtags = TwitterCollectionRound.ERROR_PAYLOAD  # initialize
-                if tweets_mentions != TwitterCollectionRound.ERROR_PAYLOAD:
-                    (
-                        tweets_hashtags,
-                        latest_hashtag_tweet_id,
-                        number_of_tweets_pulled_today,
-                    ) = yield from self._get_twitter_hashtag_search(
-                        number_of_tweets_pulled_today=number_of_tweets_pulled_today,
-                    )
-
-                if tweets_mentions == TwitterCollectionRound.ERROR_PAYLOAD or tweets_hashtags == TwitterCollectionRound.ERROR_PAYLOAD:
-                    payload_data = TwitterCollectionRound.ERROR_PAYLOAD
+                if tweets == TwitterMentionsCollectionRound.ERROR_PAYLOAD:
+                    payload_data = TwitterMentionsCollectionRound.ERROR_PAYLOAD
                 else:
-                    tweets = {**tweets_mentions, **tweets_hashtags}
                     self.context.logger.info(
-                        f"Retrieved new tweets [until_id={latest_mention_tweet_id}]: {list(tweets.keys())}"
+                        f"Retrieved new mentions [until_id={latest_mention_tweet_id}]: {list(tweets.keys())}"
                     )
                     payload_data = {
                         "tweets": tweets,
                         "latest_mention_tweet_id": latest_mention_tweet_id,
-                        "latest_hashtag_tweet_id": latest_hashtag_tweet_id,
                         "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
                         "last_tweet_pull_window_reset": last_tweet_pull_window_reset,
                     }
 
             sender = self.context.agent_address
-            payload = TwitterCollectionPayload(
+            payload = TwitterMentionsCollectionPayload(
                 sender=sender, content=json.dumps(payload_data, sort_keys=True)
             )
 
@@ -249,7 +287,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                 "Cannot retrieve twitter mentions, max number of tweets reached for today"
             )
             return (
-                TwitterCollectionRound.ERROR_PAYLOAD,
+                TwitterMentionsCollectionRound.ERROR_PAYLOAD,
                 None,
                 number_of_tweets_pulled_today,
             )
@@ -293,7 +331,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                     f"Error retrieving mentions from Twitter [{response.status_code}]: {response.body}"
                 )
                 return (
-                    TwitterCollectionRound.ERROR_PAYLOAD,
+                    TwitterMentionsCollectionRound.ERROR_PAYLOAD,
                     None,
                     number_of_tweets_pulled_today,
                 )
@@ -306,7 +344,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                     f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
                 )
                 return (
-                    TwitterCollectionRound.ERROR_PAYLOAD,
+                    TwitterMentionsCollectionRound.ERROR_PAYLOAD,
                     None,
                     number_of_tweets_pulled_today,
                 )
@@ -324,7 +362,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                     f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
                 )
                 return (
-                    TwitterCollectionRound.ERROR_PAYLOAD,
+                    TwitterMentionsCollectionRound.ERROR_PAYLOAD,
                     None,
                     number_of_tweets_pulled_today,
                 )
@@ -334,7 +372,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                     f"Twitter API response does not contain the required 'includes/users' field: {api_data!r}"
                 )
                 return (
-                    TwitterCollectionRound.ERROR_PAYLOAD,
+                    TwitterMentionsCollectionRound.ERROR_PAYLOAD,
                     None,
                     number_of_tweets_pulled_today,
                 )
@@ -363,6 +401,62 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
 
         return tweets, latest_tweet_id, number_of_tweets_pulled_today
 
+
+class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
+    """TwitterHashtagsCollectionBehaviour"""
+
+    matching_round: Type[AbstractRound] = TwitterHashtagsCollectionRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+
+            (
+                has_limit_reached,
+                number_of_tweets_pulled_today,
+                last_tweet_pull_window_reset,
+            ) = self._check_daily_limit()
+
+            if has_limit_reached:
+                self.context.logger.info(
+                    "Cannot retrieve tweets, max number of tweets reached for today"
+                )
+                payload_data = TwitterMentionsCollectionRound.ERROR_PAYLOAD
+            else:
+                # Get hashtags from Twitter
+                (
+                    tweets,
+                    latest_hashtag_tweet_id,
+                    number_of_tweets_pulled_today,
+                ) = yield from self._get_twitter_hashtag_search(
+                    number_of_tweets_pulled_today=number_of_tweets_pulled_today
+                )
+
+                if tweets == TwitterMentionsCollectionRound.ERROR_PAYLOAD:
+                    payload_data = TwitterMentionsCollectionRound.ERROR_PAYLOAD
+                else:
+                    self.context.logger.info(
+                        f"Retrieved new hashtags [until_id={latest_hashtag_tweet_id}]: {list(tweets.keys())}"
+                    )
+                    payload_data = {
+                        "tweets": tweets,
+                        "latest_hashtag_tweet_id": latest_hashtag_tweet_id,
+                        "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
+                        "last_tweet_pull_window_reset": last_tweet_pull_window_reset,
+                    }
+
+            sender = self.context.agent_address
+            payload = TwitterMentionsCollectionPayload(
+                sender=sender, content=json.dumps(payload_data, sort_keys=True)
+            )
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
+
     def _get_twitter_hashtag_search(
         self,
         number_of_tweets_pulled_today: int,
@@ -388,7 +482,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                 "Cannot retrieve hashtag mentions, max number of tweets reached for today"
             )
             return (
-                TwitterCollectionRound.ERROR_PAYLOAD,
+                TwitterMentionsCollectionRound.ERROR_PAYLOAD,
                 None,
                 number_of_tweets_pulled_today,
             )
@@ -432,7 +526,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                     f"Error retrieving mentions from Twitter [{response.status_code}]"
                 )
                 return (
-                    TwitterCollectionRound.ERROR_PAYLOAD,
+                    TwitterMentionsCollectionRound.ERROR_PAYLOAD,
                     None,
                     number_of_tweets_pulled_today,
                 )
@@ -445,7 +539,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                     f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
                 )
                 return (
-                    TwitterCollectionRound.ERROR_PAYLOAD,
+                    TwitterMentionsCollectionRound.ERROR_PAYLOAD,
                     None,
                     number_of_tweets_pulled_today,
                 )
@@ -463,7 +557,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                     f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
                 )
                 return (
-                    TwitterCollectionRound.ERROR_PAYLOAD,
+                    TwitterMentionsCollectionRound.ERROR_PAYLOAD,
                     None,
                     number_of_tweets_pulled_today,
                 )
@@ -473,7 +567,7 @@ class TwitterCollectionBehaviour(TwitterScoringBaseBehaviour):
                     f"Twitter API response does not contain the required 'includes/users' field: {api_data!r}"
                 )
                 return (
-                    TwitterCollectionRound.ERROR_PAYLOAD,
+                    TwitterMentionsCollectionRound.ERROR_PAYLOAD,
                     None,
                     number_of_tweets_pulled_today,
                 )
@@ -516,6 +610,9 @@ class TweetEvaluationBehaviour(TwitterScoringBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             tweet_id_to_points = {}
             for tweet_id, tweet in self.synchronized_data.tweets.items():
+                if "points" in tweet:
+                    # Already scored previously
+                    continue
                 tweet_id_to_points[tweet_id] = yield from self.evaluate_tweet(
                     tweet["text"]
                 )
@@ -636,6 +733,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         tweets = self.synchronized_data.tweets
         latest_mention_tweet_id = self.synchronized_data.latest_mention_tweet_id
+        latest_hashtag_tweet_id = self.synchronized_data.latest_hashtag_tweet_id
         number_of_tweets_pulled_today = (
             self.synchronized_data.number_of_tweets_pulled_today
         )
@@ -715,10 +813,15 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         # entries on the database
         ceramic_db.merge_by_wallet()
 
+        # Update the latest_hashtag_tweet_id
+        ceramic_db.data["module_data"]["twitter"]["latest_hashtag_tweet_id"] = str(
+            latest_hashtag_tweet_id
+        )
         # Update the latest_mention_tweet_id
         ceramic_db.data["module_data"]["twitter"]["latest_mention_tweet_id"] = str(
             latest_mention_tweet_id
         )
+
         # Update the number of tweets made today
         ceramic_db.data["module_data"]["twitter"][
             "number_of_tweets_pulled_today"
@@ -754,11 +857,11 @@ def get_registration(text: str) -> Optional[str]:
 class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
     """TwitterScoringRoundBehaviour"""
 
-    initial_behaviour_cls = TwitterCollectionBehaviour
+    initial_behaviour_cls = TwitterMentionsCollectionBehaviour
     abci_app_cls = TwitterScoringAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
         OpenAICallCheckBehaviour,
-        TwitterCollectionBehaviour,
+        TwitterMentionsCollectionBehaviour,
         TweetEvaluationBehaviour,
         DBUpdateBehaviour,
     ]

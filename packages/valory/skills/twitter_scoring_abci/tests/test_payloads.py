@@ -28,7 +28,7 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
     TweetEvaluationPayload,
-    TwitterCollectionPayload,
+    TwitterMentionsCollectionPayload,
 )
 
 
@@ -44,7 +44,7 @@ class PayloadTestCase:
     "test_case",
     [
         PayloadTestCase(
-            payload_cls=TwitterCollectionPayload,
+            payload_cls=TwitterMentionsCollectionPayload,
             content="payload_test_content",
         ),
         PayloadTestCase(

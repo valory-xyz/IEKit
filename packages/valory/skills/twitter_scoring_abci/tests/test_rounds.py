@@ -41,12 +41,12 @@ from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
     CollectSameUntilThresholdRound,
 )
 from packages.valory.skills.twitter_scoring_abci.payloads import (
-    TwitterCollectionPayload,
+    TwitterMentionsCollectionPayload,
 )
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     Event,
     SynchronizedData,
-    TwitterCollectionRound,
+    TwitterMentionsCollectionRound,
 )
 
 
@@ -129,9 +129,9 @@ class BaseScoreReadRoundTest(BaseCollectSameUntilThresholdRoundTest):
 
 
 class TestTwitterCollectionRound(BaseScoreReadRoundTest):
-    """Tests for TwitterCollectionRound."""
+    """Tests for TwitterMentionsCollectionRound."""
 
-    round_class = TwitterCollectionRound
+    round_class = TwitterMentionsCollectionRound
 
     @pytest.mark.parametrize(
         "test_case",
@@ -140,7 +140,7 @@ class TestTwitterCollectionRound(BaseScoreReadRoundTest):
                 name="Happy path",
                 initial_data={"ceramic_db": {}},
                 payloads=get_payloads(
-                    payload_cls=TwitterCollectionPayload,
+                    payload_cls=TwitterMentionsCollectionPayload,
                     data=get_dummy_twitter_collection_payload_serialized(),
                 ),
                 final_data={
@@ -158,7 +158,7 @@ class TestTwitterCollectionRound(BaseScoreReadRoundTest):
                 name="API error",
                 initial_data={},
                 payloads=get_payloads(
-                    payload_cls=TwitterCollectionPayload,
+                    payload_cls=TwitterMentionsCollectionPayload,
                     data=get_dummy_twitter_collection_payload_serialized(
                         api_error=True
                     ),
@@ -176,7 +176,7 @@ class TestTwitterCollectionRound(BaseScoreReadRoundTest):
                     "api_retries": 2,
                 },
                 payloads=get_payloads(
-                    payload_cls=TwitterCollectionPayload,
+                    payload_cls=TwitterMentionsCollectionPayload,
                     data=get_dummy_twitter_collection_payload_serialized(
                         api_error=True
                     ),
