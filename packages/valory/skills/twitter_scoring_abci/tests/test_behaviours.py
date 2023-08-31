@@ -34,6 +34,8 @@ from packages.valory.skills.abstract_round_abci.test_tools.base import (
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
     TAGLINE,
     TweetEvaluationBehaviour,
+    TwitterDecisionMakingBehaviour,
+    TwitterHashtagsCollectionBehaviour,
     TwitterMentionsCollectionBehaviour,
     TwitterScoringBaseBehaviour,
     TwitterScoringRoundBehaviour,
@@ -262,6 +264,10 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
     synchronized_data: SynchronizedData
     done_event = Event.DONE
 
+    @classmethod
+    def setup_class(cls, **kwargs: Any) -> None:
+        super().setup_class(param_overrides={"twitter_max_pages": 10})
+
     def fast_forward(self, data: Optional[Dict[str, Any]] = None) -> None:
         """Fast-forward on initialization"""
 
@@ -292,11 +298,11 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
         )
 
 
-class TestTwitterCollectionBehaviour(BaseBehaviourTest):
+class TestMentionsCollectionBehaviour(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
     behaviour_class = TwitterMentionsCollectionBehaviour
-    next_behaviour_class = TweetEvaluationBehaviour
+    next_behaviour_class = TwitterDecisionMakingBehaviour
 
     @pytest.mark.parametrize(
         "test_case, kwargs",
@@ -310,27 +316,16 @@ class TestTwitterCollectionBehaviour(BaseBehaviourTest):
                 {
                     "request_urls": [
                         TWITTER_MENTIONS_URL.format(max_results=80),
-                        TWITTER_REGISTRATIONS_URL.format(max_results=76),
                     ],
                     "request_headers": [
                         "Authorization: Bearer <default_bearer_token>\r\n",
-                        "Authorization: Bearer <default_bearer_token>\r\n",
-                        "",
                     ],
                     "response_urls": [
                         "",
-                        "",
-                        "https://www.autonolas.network/whitepaper",
                     ],
                     "response_bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE,
-                        ),
-                        json.dumps(
-                            DUMMY_REGISTRATIONS_RESPONSE,
-                        ),
-                        json.dumps(
-                            {},
                         ),
                     ],
                     "status_code": 200,
@@ -345,20 +340,14 @@ class TestTwitterCollectionBehaviour(BaseBehaviourTest):
                 {
                     "request_urls": [
                         TWITTER_MENTIONS_URL.format(max_results=80),
-                        # skipped temporarily since we're not fetching more then one page atm
-                        # TWITTER_MENTIONS_URL.format(max_results=80) # noqa: E800
-                        # + "&pagination_token=dummy_next_token", # noqa: E800
-                        TWITTER_REGISTRATIONS_URL.format(max_results=76),
-                        # TWITTER_REGISTRATIONS_URL.format(max_results=72) # noqa: E800
-                        # + "&pagination_token=dummy_next_token", # noqa: E800
+                        TWITTER_MENTIONS_URL.format(max_results=80)
+                        + "&pagination_token=dummy_next_token",
                     ],
                     "request_headers": [
                         "Authorization: Bearer <default_bearer_token>\r\n",
                         "Authorization: Bearer <default_bearer_token>\r\n",
-                        "Authorization: Bearer <default_bearer_token>\r\n",
-                        "Authorization: Bearer <default_bearer_token>\r\n",
                     ],
-                    "response_urls": ["", "", "", ""],
+                    "response_urls": ["", ""],
                     "response_bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MULTIPAGE,
@@ -366,6 +355,109 @@ class TestTwitterCollectionBehaviour(BaseBehaviourTest):
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE,
                         ),
+                    ],
+                    "status_code": 200,
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "Happy path, result_count=0",
+                    initial_data=dict(ceramic_db={}),
+                    event=Event.DONE,
+                ),
+                {
+                    "request_urls": [
+                        TWITTER_MENTIONS_URL.format(max_results=80),
+                    ],
+                    "request_headers": [
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                    ],
+                    "response_urls": [""],
+                    "response_bodies": [
+                        json.dumps(
+                            DUMMY_MENTIONS_RESPONSE_COUNT_ZERO,
+                        ),
+                    ],
+                    "status_code": 200,
+                },
+            ),
+        ],
+    )
+    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
+        """Run tests."""
+        self.fast_forward(test_case.initial_data)
+        self.behaviour.act_wrapper()
+        for i in range(len(kwargs.get("request_urls"))):
+            self.mock_http_request(
+                request_kwargs=dict(
+                    method="GET",
+                    headers=kwargs.get("request_headers")[i],
+                    version="",
+                    url=kwargs.get("request_urls")[i],
+                ),
+                response_kwargs=dict(
+                    version="",
+                    status_code=kwargs.get("status_code"),
+                    status_text="",
+                    body=kwargs.get("response_bodies")[i].encode(),
+                    url=kwargs.get("response_urls")[i],
+                ),
+            )
+        self.complete(test_case.event)
+
+
+class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
+    """Tests BinanceObservationBehaviour"""
+
+    behaviour_class = TwitterHashtagsCollectionBehaviour
+    next_behaviour_class = TwitterDecisionMakingBehaviour
+
+    @pytest.mark.parametrize(
+        "test_case, kwargs",
+        [
+            (
+                BehaviourTestCase(
+                    "Happy path",
+                    initial_data=dict(ceramic_db={}),
+                    event=Event.DONE,
+                ),
+                {
+                    "request_urls": [
+                        TWITTER_REGISTRATIONS_URL.format(max_results=80),
+                    ],
+                    "request_headers": [
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                        "",
+                    ],
+                    "response_urls": [
+                        "",
+                    ],
+                    "response_bodies": [
+                        json.dumps(
+                            DUMMY_REGISTRATIONS_RESPONSE,
+                        ),
+                    ],
+                    "status_code": 200,
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "Happy path, multi-page",
+                    initial_data=dict(ceramic_db={}),
+                    event=Event.DONE,
+                ),
+                {
+                    "request_urls": [
+                        TWITTER_REGISTRATIONS_URL.format(max_results=80),
+                        TWITTER_REGISTRATIONS_URL.format(max_results=80)
+                        + "&pagination_token=dummy_next_token",
+                    ],
+                    "request_headers": [
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                        "Authorization: Bearer <default_bearer_token>\r\n",
+                    ],
+                    "response_urls": ["", ""],
+                    "response_bodies": [
                         json.dumps(
                             DUMMY_REGISTRATIONS_RESPONSE_MULTIPAGE,
                         ),
@@ -384,18 +476,13 @@ class TestTwitterCollectionBehaviour(BaseBehaviourTest):
                 ),
                 {
                     "request_urls": [
-                        TWITTER_MENTIONS_URL.format(max_results=80),
                         TWITTER_REGISTRATIONS_URL.format(max_results=80),
                     ],
                     "request_headers": [
                         "Authorization: Bearer <default_bearer_token>\r\n",
-                        "Authorization: Bearer <default_bearer_token>\r\n",
                     ],
                     "response_urls": ["", ""],
                     "response_bodies": [
-                        json.dumps(
-                            DUMMY_MENTIONS_RESPONSE_COUNT_ZERO,
-                        ),
                         json.dumps(
                             DUMMY_REGISTRATIONS_RESPONSE_COUNT_ZERO,
                         ),
@@ -428,7 +515,7 @@ class TestTwitterCollectionBehaviour(BaseBehaviourTest):
         self.complete(test_case.event)
 
 
-class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
+class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
     behaviour_class = TwitterMentionsCollectionBehaviour
@@ -456,26 +543,6 @@ class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
             ),
             (
                 BehaviourTestCase(
-                    "API error registrations: 404",
-                    initial_data=dict(ceramic_db={}),
-                    event=Event.API_ERROR,
-                ),
-                {
-                    "urls": [
-                        TWITTER_MENTIONS_URL.format(max_results=80),
-                        TWITTER_REGISTRATIONS_URL.format(max_results=76),
-                    ],
-                    "bodies": [
-                        json.dumps(
-                            DUMMY_MENTIONS_RESPONSE,
-                        ),
-                        json.dumps(DUMMY_HASHTAGS_RESPONSE),
-                    ],
-                    "status_codes": [200, 404],
-                },
-            ),
-            (
-                BehaviourTestCase(
                     "API error mentions: missing data",
                     initial_data=dict(ceramic_db={}),
                     event=Event.API_ERROR,
@@ -489,28 +556,6 @@ class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
                         json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
                     "status_codes": [200],
-                },
-            ),
-            (
-                BehaviourTestCase(
-                    "API error registrations: missing data",
-                    initial_data=dict(ceramic_db={}),
-                    event=Event.API_ERROR,
-                ),
-                {
-                    "urls": [
-                        TWITTER_MENTIONS_URL.format(max_results=80),
-                        TWITTER_REGISTRATIONS_URL.format(max_results=76),
-                    ],
-                    "bodies": [
-                        json.dumps(
-                            DUMMY_MENTIONS_RESPONSE,
-                        ),
-                        json.dumps(
-                            DUMMY_REGISTRATIONS_RESPONSE_MISSING_DATA,
-                        ),
-                    ],
-                    "status_codes": [200, 200],
                 },
             ),
             (
@@ -532,26 +577,6 @@ class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
             ),
             (
                 BehaviourTestCase(
-                    "API error registrations: missing meta",
-                    initial_data=dict(ceramic_db={}),
-                    event=Event.API_ERROR,
-                ),
-                {
-                    "urls": [
-                        TWITTER_MENTIONS_URL.format(max_results=80),
-                        TWITTER_REGISTRATIONS_URL.format(max_results=76),
-                    ],
-                    "bodies": [
-                        json.dumps(
-                            DUMMY_MENTIONS_RESPONSE,
-                        ),
-                        json.dumps(DUMMY_REGISTRATIONS_RESPONSE_MISSING_META),
-                    ],
-                    "status_codes": [200, 200],
-                },
-            ),
-            (
-                BehaviourTestCase(
                     "API error mentions: missing includes",
                     initial_data=dict(ceramic_db={}),
                     event=Event.API_ERROR,
@@ -563,6 +588,89 @@ class TestTwitterCollectionBehaviourAPIError(BaseBehaviourTest):
                             DUMMY_MENTIONS_RESPONSE_MISSING_INCLUDES,
                         ),
                         json.dumps({}),
+                    ],
+                    "status_codes": [200],
+                },
+            ),
+        ],
+    )
+    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
+        """Run tests."""
+        self.fast_forward(test_case.initial_data)
+        self.behaviour.act_wrapper()
+        for i in range(len(kwargs.get("urls"))):
+            self.mock_http_request(
+                request_kwargs=dict(
+                    method="GET",
+                    headers="Authorization: Bearer <default_bearer_token>\r\n",
+                    version="",
+                    url=kwargs.get("urls")[i],
+                ),
+                response_kwargs=dict(
+                    version="",
+                    status_code=kwargs.get("status_codes")[i],
+                    status_text="",
+                    body=kwargs.get("bodies")[i].encode(),
+                ),
+            )
+        self.complete(test_case.event)
+
+
+class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
+    """Tests BinanceObservationBehaviour"""
+
+    behaviour_class = TwitterHashtagsCollectionBehaviour
+    next_behaviour_class = TwitterHashtagsCollectionBehaviour
+
+    @pytest.mark.parametrize(
+        "test_case, kwargs",
+        [
+            (
+                BehaviourTestCase(
+                    "API error registrations: 404",
+                    initial_data=dict(ceramic_db={}),
+                    event=Event.API_ERROR,
+                ),
+                {
+                    "urls": [
+                        TWITTER_REGISTRATIONS_URL.format(max_results=80),
+                    ],
+                    "bodies": [
+                        json.dumps(DUMMY_HASHTAGS_RESPONSE),
+                    ],
+                    "status_codes": [404],
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "API error registrations: missing data",
+                    initial_data=dict(ceramic_db={}),
+                    event=Event.API_ERROR,
+                ),
+                {
+                    "urls": [
+                        TWITTER_REGISTRATIONS_URL.format(max_results=80),
+                    ],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_REGISTRATIONS_RESPONSE_MISSING_DATA,
+                        ),
+                    ],
+                    "status_codes": [200],
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "API error registrations: missing meta",
+                    initial_data=dict(ceramic_db={}),
+                    event=Event.API_ERROR,
+                ),
+                {
+                    "urls": [
+                        TWITTER_REGISTRATIONS_URL.format(max_results=80),
+                    ],
+                    "bodies": [
+                        json.dumps(DUMMY_REGISTRATIONS_RESPONSE_MISSING_META),
                     ],
                     "status_codes": [200],
                 },

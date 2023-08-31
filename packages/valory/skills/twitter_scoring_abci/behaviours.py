@@ -860,8 +860,10 @@ class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
     initial_behaviour_cls = TwitterMentionsCollectionBehaviour
     abci_app_cls = TwitterScoringAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
+        TwitterDecisionMakingBehaviour,
         OpenAICallCheckBehaviour,
         TwitterMentionsCollectionBehaviour,
+        TwitterHashtagsCollectionBehaviour,
         TweetEvaluationBehaviour,
         DBUpdateBehaviour,
     ]

@@ -64,4 +64,4 @@ class OpenAICallCheckPayload(BaseTxPayload):
 class TwitterDecisionMakingPayload(BaseTxPayload):
     """Represent a transaction payload for the TwitterDecisionMakingRound."""
 
-    event: Optional[str]
+    event: str

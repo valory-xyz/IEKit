@@ -182,7 +182,7 @@ class TestTwitterCollectionRound(BaseScoreReadRoundTest):
                     ),
                 ),
                 final_data={},
-                event=Event.SKIP,
+                event=Event.DONE_MAX_RETRIES,
                 most_voted_payload=get_dummy_twitter_collection_payload_serialized(
                     api_error=True
                 ),

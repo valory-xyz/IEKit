@@ -91,7 +91,7 @@ class SynchronizedData(BaseSynchronizedData):
     @property
     def tweets(self) -> dict:
         """Get the tweets."""
-        return cast(dict, self.db.get_strict("tweets"))
+        return cast(dict, self.db.get("tweets", {}))
 
     @property
     def latest_mention_tweet_id(self) -> dict:
@@ -480,9 +480,9 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         TwitterHashtagsCollectionRound: {
             Event.DONE: TwitterDecisionMakingRound,
             Event.DONE_MAX_RETRIES: TwitterDecisionMakingRound,
-            Event.API_ERROR: TwitterMentionsCollectionRound,
-            Event.NO_MAJORITY: TwitterMentionsCollectionRound,
-            Event.ROUND_TIMEOUT: TwitterMentionsCollectionRound,
+            Event.API_ERROR: TwitterHashtagsCollectionRound,
+            Event.NO_MAJORITY: TwitterHashtagsCollectionRound,
+            Event.ROUND_TIMEOUT: TwitterHashtagsCollectionRound,
         },
         TweetEvaluationRound: {
             Event.DONE: TwitterDecisionMakingRound,
@@ -506,10 +506,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         ["ceramic_db", "pending_write", "tweets"]
     )
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        OpenAICallCheckRound: set(),
-        TwitterMentionsCollectionRound: set(),
-        TweetEvaluationRound: set(),
-        DBUpdateRound: set(),
+        TwitterDecisionMakingRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedTwitterScoringRound: {
