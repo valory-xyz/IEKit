@@ -128,7 +128,7 @@ class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
-            event = Event(self.most_voted_payload.content)
+            event = Event(self.most_voted_payload)
             return self.synchronized_data, event
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants

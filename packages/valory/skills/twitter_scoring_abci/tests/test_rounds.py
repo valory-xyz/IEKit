@@ -37,15 +37,27 @@ import pytest
 
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
+    BaseCollectNonEmptyUntilThresholdRound,
     BaseCollectSameUntilThresholdRoundTest,
+    CollectDifferentUntilThresholdRound,
     CollectSameUntilThresholdRound,
 )
 from packages.valory.skills.twitter_scoring_abci.payloads import (
+    DBUpdatePayload,
+    OpenAICallCheckPayload,
+    TweetEvaluationPayload,
+    TwitterDecisionMakingPayload,
+    TwitterHashtagsCollectionPayload,
     TwitterMentionsCollectionPayload,
 )
 from packages.valory.skills.twitter_scoring_abci.rounds import (
+    DBUpdateRound,
     Event,
+    OpenAICallCheckRound,
     SynchronizedData,
+    TweetEvaluationRound,
+    TwitterDecisionMakingRound,
+    TwitterHashtagsCollectionRound,
     TwitterMentionsCollectionRound,
 )
 
@@ -83,7 +95,7 @@ def get_payloads(
     }
 
 
-def get_dummy_twitter_collection_payload_serialized(api_error: bool = False) -> str:
+def get_dummy_mentions_collection_payload_serialized(api_error: bool = False) -> str:
     """Dummy twitter observation payload"""
     if api_error:
         return json.dumps({"error": "true"})
@@ -91,6 +103,21 @@ def get_dummy_twitter_collection_payload_serialized(api_error: bool = False) -> 
         {
             "tweets": {"my_tweet": {}},
             "latest_mention_tweet_id": False,
+            "number_of_tweets_pulled_today": 0,
+            "last_tweet_pull_window_reset": 0,
+        },
+        sort_keys=True,
+    )
+
+
+def get_dummy_hashtags_collection_payload_serialized(api_error: bool = False) -> str:
+    """Dummy twitter observation payload"""
+    if api_error:
+        return json.dumps({"error": "true"})
+    return json.dumps(
+        {
+            "tweets": {"my_tweet": {}},
+            "latest_hashtag_tweet_id": False,
             "number_of_tweets_pulled_today": 0,
             "last_tweet_pull_window_reset": 0,
         },
@@ -128,7 +155,7 @@ class BaseScoreReadRoundTest(BaseCollectSameUntilThresholdRoundTest):
         )
 
 
-class TestTwitterCollectionRound(BaseScoreReadRoundTest):
+class TestMentionsCollectionRound(BaseScoreReadRoundTest):
     """Tests for TwitterMentionsCollectionRound."""
 
     round_class = TwitterMentionsCollectionRound
@@ -141,15 +168,15 @@ class TestTwitterCollectionRound(BaseScoreReadRoundTest):
                 initial_data={"ceramic_db": {}},
                 payloads=get_payloads(
                     payload_cls=TwitterMentionsCollectionPayload,
-                    data=get_dummy_twitter_collection_payload_serialized(),
+                    data=get_dummy_mentions_collection_payload_serialized(),
                 ),
                 final_data={
                     "tweets": json.loads(
-                        get_dummy_twitter_collection_payload_serialized()
+                        get_dummy_mentions_collection_payload_serialized()
                     )["tweets"],
                 },
                 event=Event.DONE,
-                most_voted_payload=get_dummy_twitter_collection_payload_serialized(),
+                most_voted_payload=get_dummy_mentions_collection_payload_serialized(),
                 synchronized_data_attr_checks=[
                     lambda _synchronized_data: _synchronized_data.ceramic_db,
                 ],
@@ -159,13 +186,13 @@ class TestTwitterCollectionRound(BaseScoreReadRoundTest):
                 initial_data={},
                 payloads=get_payloads(
                     payload_cls=TwitterMentionsCollectionPayload,
-                    data=get_dummy_twitter_collection_payload_serialized(
+                    data=get_dummy_mentions_collection_payload_serialized(
                         api_error=True
                     ),
                 ),
                 final_data={},
                 event=Event.API_ERROR,
-                most_voted_payload=get_dummy_twitter_collection_payload_serialized(
+                most_voted_payload=get_dummy_mentions_collection_payload_serialized(
                     api_error=True
                 ),
                 synchronized_data_attr_checks=[],
@@ -177,16 +204,237 @@ class TestTwitterCollectionRound(BaseScoreReadRoundTest):
                 },
                 payloads=get_payloads(
                     payload_cls=TwitterMentionsCollectionPayload,
-                    data=get_dummy_twitter_collection_payload_serialized(
+                    data=get_dummy_mentions_collection_payload_serialized(
                         api_error=True
                     ),
                 ),
                 final_data={},
                 event=Event.DONE_MAX_RETRIES,
-                most_voted_payload=get_dummy_twitter_collection_payload_serialized(
+                most_voted_payload=get_dummy_mentions_collection_payload_serialized(
                     api_error=True
                 ),
                 synchronized_data_attr_checks=[],
+            ),
+        ),
+    )
+    def test_run(self, test_case: RoundTestCase) -> None:
+        """Run tests."""
+        self.run_test(test_case)
+
+
+class TestHashtagsCollectionRound(BaseScoreReadRoundTest):
+    """Tests for TwitterMentionsCollectionRound."""
+
+    round_class = TwitterHashtagsCollectionRound
+
+    @pytest.mark.parametrize(
+        "test_case",
+        (
+            RoundTestCase(
+                name="Happy path",
+                initial_data={"ceramic_db": {}},
+                payloads=get_payloads(
+                    payload_cls=TwitterHashtagsCollectionPayload,
+                    data=get_dummy_hashtags_collection_payload_serialized(),
+                ),
+                final_data={
+                    "tweets": json.loads(
+                        get_dummy_hashtags_collection_payload_serialized()
+                    )["tweets"],
+                },
+                event=Event.DONE,
+                most_voted_payload=get_dummy_hashtags_collection_payload_serialized(),
+                synchronized_data_attr_checks=[
+                    lambda _synchronized_data: _synchronized_data.ceramic_db,
+                ],
+            ),
+            RoundTestCase(
+                name="API error",
+                initial_data={},
+                payloads=get_payloads(
+                    payload_cls=TwitterHashtagsCollectionPayload,
+                    data=get_dummy_hashtags_collection_payload_serialized(
+                        api_error=True
+                    ),
+                ),
+                final_data={},
+                event=Event.API_ERROR,
+                most_voted_payload=get_dummy_hashtags_collection_payload_serialized(
+                    api_error=True
+                ),
+                synchronized_data_attr_checks=[],
+            ),
+            RoundTestCase(
+                name="API error: max retries",
+                initial_data={
+                    "api_retries": 2,
+                },
+                payloads=get_payloads(
+                    payload_cls=TwitterHashtagsCollectionPayload,
+                    data=get_dummy_hashtags_collection_payload_serialized(
+                        api_error=True
+                    ),
+                ),
+                final_data={},
+                event=Event.DONE_MAX_RETRIES,
+                most_voted_payload=get_dummy_hashtags_collection_payload_serialized(
+                    api_error=True
+                ),
+                synchronized_data_attr_checks=[],
+            ),
+        ),
+    )
+    def test_run(self, test_case: RoundTestCase) -> None:
+        """Run tests."""
+        self.run_test(test_case)
+
+
+class TestDecisionMakingRound(BaseScoreReadRoundTest):
+    """Tests for TwitterDecisionMakingRound."""
+
+    round_class = TwitterDecisionMakingRound
+
+    @pytest.mark.parametrize(
+        "test_case",
+        (
+            RoundTestCase(
+                name="Happy path",
+                initial_data={"ceramic_db": {}},
+                payloads=get_payloads(
+                    payload_cls=TwitterDecisionMakingPayload,
+                    data=Event.OPENAI_CALL_CHECK.value,
+                ),
+                final_data={},
+                event=Event.OPENAI_CALL_CHECK,
+                most_voted_payload=Event.OPENAI_CALL_CHECK.value,
+                synchronized_data_attr_checks=[
+                    lambda _synchronized_data: _synchronized_data.ceramic_db,
+                ],
+            ),
+        ),
+    )
+    def test_run(self, test_case: RoundTestCase) -> None:
+        """Run tests."""
+        self.run_test(test_case)
+
+
+class TestOpenAICallCheckRound(BaseScoreReadRoundTest):
+    """Tests for OpenAICallCheckRound."""
+
+    round_class = OpenAICallCheckRound
+
+    @pytest.mark.parametrize(
+        "test_case",
+        (
+            RoundTestCase(
+                name="Happy path",
+                initial_data={"ceramic_db": {}},
+                payloads=get_payloads(
+                    payload_cls=OpenAICallCheckPayload,
+                    data=OpenAICallCheckRound.CALLS_REMAINING,
+                ),
+                final_data={},
+                event=Event.DONE,
+                most_voted_payload=OpenAICallCheckRound.CALLS_REMAINING,
+                synchronized_data_attr_checks=[
+                    lambda _synchronized_data: _synchronized_data.ceramic_db,
+                ],
+            ),
+            RoundTestCase(
+                name="No allowance",
+                initial_data={"ceramic_db": {}},
+                payloads=get_payloads(
+                    payload_cls=OpenAICallCheckPayload,
+                    data="",
+                ),
+                final_data={},
+                event=Event.NO_ALLOWANCE,
+                most_voted_payload="",
+                synchronized_data_attr_checks=[
+                    lambda _synchronized_data: _synchronized_data.ceramic_db,
+                ],
+            ),
+        ),
+    )
+    def test_run(self, test_case: RoundTestCase) -> None:
+        """Run tests."""
+        self.run_test(test_case)
+
+
+class TestDBUpdateRound(BaseScoreReadRoundTest):
+    """Tests for DBUpdateRound."""
+
+    round_class = DBUpdateRound
+
+    @pytest.mark.parametrize(
+        "test_case",
+        (
+            RoundTestCase(
+                name="Happy path",
+                initial_data={"ceramic_db": {}},
+                payloads=get_payloads(
+                    payload_cls=DBUpdatePayload,
+                    data="{}",
+                ),
+                final_data={},
+                event=Event.DONE,
+                most_voted_payload="{}",
+                synchronized_data_attr_checks=[
+                    lambda _synchronized_data: _synchronized_data.ceramic_db,
+                ],
+            ),
+        ),
+    )
+    def test_run(self, test_case: RoundTestCase) -> None:
+        """Run tests."""
+        self.run_test(test_case)
+
+
+class TestTweetEvaluationRound(BaseCollectNonEmptyUntilThresholdRound):
+    """TweetEvaluationRound"""
+
+    synchronized_data: SynchronizedData
+    _synchronized_data_class = SynchronizedData
+    _event_class = Event
+    round_class = TweetEvaluationRound
+
+    def run_test(self, test_case: RoundTestCase) -> None:
+        """Run the test"""
+
+        self.synchronized_data.update(**test_case.initial_data)
+
+        test_round = self.round_class(
+            synchronized_data=self.synchronized_data,
+        )
+
+        self._complete_run(
+            self._test_round(
+                test_round=cast(CollectDifferentUntilThresholdRound, test_round),
+                round_payloads=test_case.payloads,
+                synchronized_data_update_fn=lambda sync_data, _: sync_data.update(
+                    **test_case.final_data
+                ),
+                synchronized_data_attr_checks=test_case.synchronized_data_attr_checks,
+                exit_event=test_case.event,
+            )
+        )
+
+    @pytest.mark.parametrize(
+        "test_case",
+        (
+            RoundTestCase(
+                name="Happy path",
+                initial_data={"ceramic_db": {}},
+                payloads=get_payloads(
+                    payload_cls=TweetEvaluationPayload,
+                    data="{}",
+                ),
+                final_data={},
+                event=Event.DONE,
+                most_voted_payload="{}",
+                synchronized_data_attr_checks=[
+                    lambda _synchronized_data: _synchronized_data.ceramic_db,
+                ],
             ),
         ),
     )
