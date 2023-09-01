@@ -33,7 +33,6 @@ from packages.valory.skills.abstract_round_abci.test_tools.base import (
 )
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
     TAGLINE,
-    TweetEvaluationBehaviour,
     TwitterDecisionMakingBehaviour,
     TwitterHashtagsCollectionBehaviour,
     TwitterMentionsCollectionBehaviour,
@@ -266,6 +265,7 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
 
     @classmethod
     def setup_class(cls, **kwargs: Any) -> None:
+        """Setup class"""
         super().setup_class(param_overrides={"twitter_max_pages": 10})
 
     def fast_forward(self, data: Optional[Dict[str, Any]] = None) -> None:

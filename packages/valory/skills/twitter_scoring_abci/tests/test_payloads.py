@@ -78,3 +78,15 @@ def test_payloads(test_case: PayloadTestCase) -> None:
     assert payload.sender == "sender"
     assert payload.content == test_case.content
     assert payload.from_json(payload.json) == payload
+
+
+def test_decision_making_payload() -> None:
+    """Tests for TwitterScoringAbciApp payloads"""
+
+    payload = TwitterDecisionMakingPayload(
+        sender="sender",
+        event="event",
+    )
+    assert payload.sender == "sender"
+    assert payload.event == "event"
+    assert payload.from_json(payload.json) == payload

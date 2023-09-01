@@ -129,6 +129,8 @@ class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
         """Process the end of the block."""
         if self.threshold_reached:
             event = Event(self.most_voted_payload)
+            # Reference events to avoid tox -e check-abciapp-specs failures
+            # Event.DONE, Event.DB_UPDATE, Event.RETRIEVE_MENTIONS, Event.RETRIEVE_HASHTAGS, Event.OPENAI_CALL_CHECK, Event.EVALUATE, Event.DONE_SKIP
             return self.synchronized_data, event
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
@@ -154,9 +156,7 @@ class OpenAICallCheckRound(CollectSameUntilThresholdRound):
 
             # Happy path
             if self.most_voted_payload == self.CALLS_REMAINING:
-                performed_twitter_tasks[
-                    Event.OPENAI_CALL_CHECK.value
-                ] = Event.DONE.value
+                performed_twitter_tasks["openai_call_check"] = Event.DONE.value
                 synchronized_data = self.synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
                     **{
@@ -168,9 +168,7 @@ class OpenAICallCheckRound(CollectSameUntilThresholdRound):
                 return synchronized_data, Event.DONE
 
             # No allowance
-            performed_twitter_tasks[
-                Event.OPENAI_CALL_CHECK.value
-            ] = Event.NO_ALLOWANCE.value
+            performed_twitter_tasks["openai_call_check"] = Event.NO_ALLOWANCE.value
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
@@ -213,7 +211,7 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
                 # Max retries
                 if api_retries >= MAX_API_RETRIES:
                     performed_twitter_tasks[
-                        Event.RETRIEVE_MENTIONS.value
+                        "retrieve_mentions"
                     ] = Event.DONE_MAX_RETRIES.value
                     synchronized_data = self.synchronized_data.update(
                         synchronized_data_class=SynchronizedData,
@@ -237,7 +235,7 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
             # Happy path
             payload = json.loads(self.most_voted_payload)
             previous_tweets = cast(SynchronizedData, self.synchronized_data).tweets
-            performed_twitter_tasks[Event.RETRIEVE_MENTIONS.value] = Event.DONE.value
+            performed_twitter_tasks["retrieve_mentions"] = Event.DONE.value
             new_tweets = payload["tweets"]
 
             updates = {
@@ -299,7 +297,7 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
                 # Max retries
                 if api_retries >= MAX_API_RETRIES:
                     performed_twitter_tasks[
-                        Event.RETRIEVE_HASHTAGS.value
+                        "retrieve_hashtags"
                     ] = Event.DONE_MAX_RETRIES.value
                     synchronized_data = self.synchronized_data.update(
                         synchronized_data_class=SynchronizedData,
@@ -323,7 +321,7 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
             # Happy path
             payload = json.loads(self.most_voted_payload)
             previous_tweets = cast(SynchronizedData, self.synchronized_data).tweets
-            performed_twitter_tasks[Event.RETRIEVE_HASHTAGS.value] = Event.DONE.value
+            performed_twitter_tasks["retrieve_hashtags"] = Event.DONE.value
             new_tweets = payload["tweets"]
 
             updates = {
@@ -392,7 +390,7 @@ class TweetEvaluationRound(CollectNonEmptyUntilThresholdRound):
                 tweets[tweet_id]["points"] = median
                 print(f"Tweet {tweet_id} has been awarded {median} points")
 
-            performed_twitter_tasks[Event.EVALUATE.value] = Event.DONE.value
+            performed_twitter_tasks["evaluate"] = Event.DONE.value
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
@@ -423,7 +421,7 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
             performed_twitter_tasks = cast(
                 SynchronizedData, self.synchronized_data
             ).performed_twitter_tasks
-            performed_twitter_tasks[Event.DB_UPDATE.value] = Event.DONE.value
+            performed_twitter_tasks["db_update"] = Event.DONE.value
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
@@ -463,6 +461,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
             Event.DB_UPDATE: DBUpdateRound,
             Event.DONE: FinishedTwitterScoringRound,
             Event.ROUND_TIMEOUT: TwitterDecisionMakingRound,
+            Event.NO_MAJORITY: TwitterDecisionMakingRound,
         },
         OpenAICallCheckRound: {
             Event.DONE: TwitterMentionsCollectionRound,

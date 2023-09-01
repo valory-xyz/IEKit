@@ -447,7 +447,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
                     }
 
             sender = self.context.agent_address
-            payload = TwitterMentionsCollectionPayload(
+            payload = TwitterHashtagsCollectionPayload(
                 sender=sender, content=json.dumps(payload_data, sort_keys=True)
             )
 
