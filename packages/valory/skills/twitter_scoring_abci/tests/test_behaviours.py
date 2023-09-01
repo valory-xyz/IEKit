@@ -28,18 +28,28 @@ from typing import Any, Dict, Optional, Type
 import pytest
 
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
+from packages.valory.skills.abstract_round_abci.behaviour_utils import (
+    make_degenerate_behaviour,
+)
 from packages.valory.skills.abstract_round_abci.test_tools.base import (
     FSMBehaviourBaseCase,
 )
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
+    DBUpdateBehaviour,
+    OpenAICallCheckBehaviour,
     TAGLINE,
+    TweetEvaluationBehaviour,
     TwitterDecisionMakingBehaviour,
     TwitterHashtagsCollectionBehaviour,
     TwitterMentionsCollectionBehaviour,
     TwitterScoringBaseBehaviour,
     TwitterScoringRoundBehaviour,
 )
-from packages.valory.skills.twitter_scoring_abci.rounds import Event, SynchronizedData
+from packages.valory.skills.twitter_scoring_abci.rounds import (
+    Event,
+    FinishedTwitterScoringRound,
+    SynchronizedData,
+)
 
 
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
@@ -696,4 +706,108 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                     body=kwargs.get("bodies")[i].encode(),
                 ),
             )
+        self.complete(test_case.event)
+
+
+class TestTwitterDecisionMakingBehaviour(BaseBehaviourTest):
+    """Tests BinanceObservationBehaviour"""
+
+    behaviour_class = TwitterDecisionMakingBehaviour
+
+    @pytest.mark.parametrize(
+        "test_case, next_behaviour",
+        [
+            (
+                BehaviourTestCase(
+                    "Happy path",
+                    initial_data=dict(performed_twitter_tasks={}),
+                    event=Event.OPENAI_CALL_CHECK,
+                ),
+                OpenAICallCheckBehaviour,
+            ),
+            (
+                BehaviourTestCase(
+                    "Happy path",
+                    initial_data=dict(
+                        performed_twitter_tasks={"openai_call_check": "done"}
+                    ),
+                    event=Event.RETRIEVE_MENTIONS,
+                ),
+                TwitterMentionsCollectionBehaviour,
+            ),
+            (
+                BehaviourTestCase(
+                    "Happy path",
+                    initial_data=dict(
+                        performed_twitter_tasks={"openai_call_check": "no_allowance"}
+                    ),
+                    event=Event.DONE_SKIP,
+                ),
+                make_degenerate_behaviour(FinishedTwitterScoringRound),
+            ),
+            (
+                BehaviourTestCase(
+                    "Happy path",
+                    initial_data=dict(
+                        performed_twitter_tasks={
+                            "openai_call_check": "done",
+                            "retrieve_hashtags": None,
+                        }
+                    ),
+                    event=Event.RETRIEVE_HASHTAGS,
+                ),
+                TwitterHashtagsCollectionBehaviour,
+            ),
+            (
+                BehaviourTestCase(
+                    "Happy path",
+                    initial_data=dict(
+                        performed_twitter_tasks={
+                            "openai_call_check": "done",
+                            "retrieve_hashtags": None,
+                            "retrieve_mentions": None,
+                        }
+                    ),
+                    event=Event.EVALUATE,
+                ),
+                TweetEvaluationBehaviour,
+            ),
+            (
+                BehaviourTestCase(
+                    "Happy path",
+                    initial_data=dict(
+                        performed_twitter_tasks={
+                            "openai_call_check": "done",
+                            "retrieve_hashtags": None,
+                            "retrieve_mentions": None,
+                            "evaluate": None,
+                        }
+                    ),
+                    event=Event.DB_UPDATE,
+                ),
+                DBUpdateBehaviour,
+            ),
+            (
+                BehaviourTestCase(
+                    "Happy path",
+                    initial_data=dict(
+                        performed_twitter_tasks={
+                            "openai_call_check": "done",
+                            "retrieve_hashtags": None,
+                            "retrieve_mentions": None,
+                            "evaluate": None,
+                            "db_update": None,
+                        }
+                    ),
+                    event=Event.DB_UPDATE,
+                ),
+                DBUpdateBehaviour,
+            ),
+        ],
+    )
+    def test_run(self, test_case: BehaviourTestCase, next_behaviour) -> None:
+        """Run tests."""
+        self.next_behaviour_class = next_behaviour
+        self.fast_forward(test_case.initial_data)
+        self.behaviour.act_wrapper()
         self.complete(test_case.event)

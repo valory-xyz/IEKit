@@ -156,7 +156,7 @@ class TwitterDecisionMakingBehaviour(TwitterScoringBaseBehaviour):
 
         performed_tasks = self.synchronized_data.performed_twitter_tasks
 
-        self.context.logger.info(f"Permormed tasks: {performed_tasks}")
+        self.context.logger.info(f"Performed tasks: {performed_tasks}")
 
         if Event.OPENAI_CALL_CHECK.value not in performed_tasks:
             return Event.OPENAI_CALL_CHECK.value
