@@ -743,18 +743,23 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         wallet_address = None
 
-        registered_addresses = [
-            user["wallet_address"]
-            for user in self.synchronized_data.ceramic_db["users"]
-            if user["wallet_address"]
-        ]
-
         address_match = re.search(ADDRESS_REGEX, text)
         tagline_match = re.search(TAGLINE, text, re.IGNORECASE)
 
         if address_match and tagline_match:
             wallet_address = Web3.to_checksum_address(address_match.group())
-            if wallet_address in registered_addresses:
+
+            address_to_twitter_handles = {
+                user["wallet_address"]: user["twitter_handle"]
+                for user in self.synchronized_data.ceramic_db["users"]
+                if user["wallet_address"]
+            }
+
+            # Ignore registration if both address and Twitter handle already exist
+            if (
+                wallet_address in address_to_twitter_handles
+                and address_to_twitter_handles[wallet_address]
+            ):
                 return None
 
         return wallet_address
