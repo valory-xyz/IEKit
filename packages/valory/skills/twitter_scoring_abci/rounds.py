@@ -235,6 +235,7 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
             # Happy path
             payload = json.loads(self.most_voted_payload)
             previous_tweets = cast(SynchronizedData, self.synchronized_data).tweets
+            ceramic_db = cast(SynchronizedData, self.synchronized_data).ceramic_db
             performed_twitter_tasks["retrieve_mentions"] = Event.DONE.value
             new_tweets = payload["tweets"]
 
@@ -258,6 +259,10 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
                 updates[get_name(SynchronizedData.latest_mention_tweet_id)] = payload[
                     "latest_mention_tweet_id"
                 ]
+            else:
+                updates[
+                    get_name(SynchronizedData.latest_mention_tweet_id)
+                ] = ceramic_db["module_data"]["twitter"]["latest_mention_tweet_id"]
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
@@ -321,6 +326,7 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
             # Happy path
             payload = json.loads(self.most_voted_payload)
             previous_tweets = cast(SynchronizedData, self.synchronized_data).tweets
+            ceramic_db = cast(SynchronizedData, self.synchronized_data).ceramic_db
             performed_twitter_tasks["retrieve_hashtags"] = Event.DONE.value
             new_tweets = payload["tweets"]
 
@@ -344,6 +350,10 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
                 updates[get_name(SynchronizedData.latest_hashtag_tweet_id)] = payload[
                     "latest_hashtag_tweet_id"
                 ]
+            else:
+                updates[
+                    get_name(SynchronizedData.latest_hashtag_tweet_id)
+                ] = ceramic_db["module_data"]["twitter"]["latest_hashtag_tweet_id"]
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,

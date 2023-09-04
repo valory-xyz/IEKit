@@ -66,6 +66,11 @@ from packages.valory.skills.generic_scoring_abci.rounds import GenericScoringRou
 from packages.valory.skills.registration_abci.rounds import RegistrationStartupRound
 from packages.valory.skills.reset_pause_abci.rounds import ResetAndPauseRound
 from packages.valory.skills.twitter_scoring_abci.rounds import (
+    DBUpdateRound,
+    OpenAICallCheckRound,
+    TweetEvaluationRound,
+    TwitterDecisionMakingRound,
+    TwitterHashtagsCollectionRound,
     TwitterMentionsCollectionRound,
 )
 
@@ -74,8 +79,23 @@ HAPPY_PATH: Tuple[RoundChecks, ...] = (
     RoundChecks(RegistrationStartupRound.auto_round_id(), n_periods=1),
     RoundChecks(StreamReadRound.auto_round_id(), n_periods=3),
     RoundChecks(GenericScoringRound.auto_round_id(), n_periods=2),
+
+    RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
+    RoundChecks(OpenAICallCheckRound.auto_round_id(), n_periods=2),
+
+    RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
     RoundChecks(TwitterMentionsCollectionRound.auto_round_id(), n_periods=2),
-    RoundChecks(TokenTrackRound.auto_round_id(), success_event="WRITE", n_periods=2),
+
+    RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
+    RoundChecks(TwitterHashtagsCollectionRound.auto_round_id(), n_periods=2),
+
+    RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
+    RoundChecks(TweetEvaluationRound.auto_round_id(), n_periods=2),
+
+    RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
+    RoundChecks(DBUpdateRound.auto_round_id(), n_periods=2),
+
+    RoundChecks(TokenTrackRound.auto_round_id(), n_periods=2),
     RoundChecks(RandomnessRound.auto_round_id(), n_periods=2),
     RoundChecks(SelectKeeperRound.auto_round_id(), n_periods=2),
     RoundChecks(StreamWriteRound.auto_round_id(), n_periods=2),
@@ -86,9 +106,8 @@ HAPPY_PATH: Tuple[RoundChecks, ...] = (
 # strict check log messages of the happy path
 STRICT_CHECK_STRINGS = (
     "Got data from Ceramic API",
-    "Path switch:",
-    "Retrieved new mentions from Twitter",
-    "Retrieved recent registrations from Twitter",
+    "Retrieved new mentions",
+    "Retrieved new hashtags",
     "Got token_id to address data up to block",
     "Data verification successful",
     "Period end",
@@ -109,12 +128,13 @@ class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
 
     agent_package = "valory/impact_evaluator:0.1.0"
     skill_package = "valory/impact_evaluator_abci:0.1.0"
-    wait_to_finish = 180
+    wait_to_finish = 300
     strict_check_strings = STRICT_CHECK_STRINGS
     happy_path = HAPPY_PATH
     package_registry_src_rel = PACKAGES_DIR
 
     __param_args_prefix = f"vendor.valory.skills.{PublicId.from_str(skill_package).name}.models.params.args"
+    __param_args_prefix_openai_conn = f"vendor.valory.connections.{PublicId.from_str('valory/openai:0.1.0').name}.config"
 
     extra_configs = [
         {
@@ -148,6 +168,10 @@ class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
         {
             "dotted_path": f"{__param_args_prefix}.centaurs_stream_id",
             "value": "centaurs_stream_id",
+        },
+        {
+            "dotted_path": f"{__param_args_prefix_openai_conn}.openai_api_key",
+            "value": "dummy_api_key",
         },
     ]
 

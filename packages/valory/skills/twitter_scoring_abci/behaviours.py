@@ -761,6 +761,8 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         # Update data
         for tweet in tweets.values():
 
+            self.context.logger.info(f"Updating db with tweet: {tweet}")
+
             author_id = tweet["author_id"]
             twitter_name = tweet["username"]
             new_points = tweet["points"]
