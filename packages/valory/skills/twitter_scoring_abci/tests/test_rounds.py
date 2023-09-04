@@ -165,7 +165,11 @@ class TestMentionsCollectionRound(BaseScoreReadRoundTest):
         (
             RoundTestCase(
                 name="Happy path",
-                initial_data={"ceramic_db": {}},
+                initial_data={
+                    "ceramic_db": {
+                        "module_data": {"twitter": {"latest_mention_tweet_id": 0}}
+                    }
+                },
                 payloads=get_payloads(
                     payload_cls=TwitterMentionsCollectionPayload,
                     data=get_dummy_mentions_collection_payload_serialized(),
@@ -232,7 +236,11 @@ class TestHashtagsCollectionRound(BaseScoreReadRoundTest):
         (
             RoundTestCase(
                 name="Happy path",
-                initial_data={"ceramic_db": {}},
+                initial_data={
+                    "ceramic_db": {
+                        "module_data": {"twitter": {"latest_hashtag_tweet_id": 0}}
+                    }
+                },
                 payloads=get_payloads(
                     payload_cls=TwitterHashtagsCollectionPayload,
                     data=get_dummy_hashtags_collection_payload_serialized(),

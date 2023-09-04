@@ -24,7 +24,7 @@ fingerprint:
   tests/test_handlers.py: bafybeigevirvi3saepukke2zmp334btgsdxhj55o2vawj3hqam63miirg4
   tests/test_models.py: bafybeihaiirqmcsshghztl5lvqjzem6y6rdeefhtiycrhh45v7cuwnmdz4
   tests/test_payloads.py: bafybeihzltj7fvfl6n3cylfg6jqaqpiwchfimwys4732hurvkjnwmewksy
-  tests/test_rounds.py: bafybeihnsc45rjukbrwtqkshkqdckjrkfcu4u3otxqhukw3duwmat6rdne
+  tests/test_rounds.py: bafybeiajkmlxansdovt2xojnewrgz5jkgjpktd5w5xofy4rqp7tb74il2y
 fingerprint_ignore_patterns: []
 connections:
 - valory/openai:0.1.0:bafybeih7w2xmaecgznuhxpnbxcxjhfla6wlmx3umytindfgk6ibbwqq2lu
