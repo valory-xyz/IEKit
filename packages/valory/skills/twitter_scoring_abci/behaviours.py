@@ -668,7 +668,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             author_id = tweet["author_id"]
             twitter_name = tweet["username"]
             new_points = tweet["points"]
-            wallet_address = get_registration(tweet["text"])
+            wallet_address = self.get_registration(tweet["text"])
 
             # Check this user's point limit per period
             user, _ = ceramic_db.get_user_by_field("twitter_id", tweet["author_id"])
@@ -738,19 +738,26 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         return ceramic_db.data
 
+    def get_registration(self, text: str) -> Optional[str]:
+        """Check if the tweet is a registration and return the wallet address"""
 
-def get_registration(text: str) -> Optional[str]:
-    """Check if the tweet is a registration and return the wallet address"""
+        wallet_address = None
 
-    wallet_address = None
+        registered_addresses = [
+            user["wallet_address"]
+            for user in self.synchronized_data.ceramic_db["users"]
+            if user["wallet_address"]
+        ]
 
-    address_match = re.search(ADDRESS_REGEX, text)
-    tagline_match = re.search(TAGLINE, text, re.IGNORECASE)
+        address_match = re.search(ADDRESS_REGEX, text)
+        tagline_match = re.search(TAGLINE, text, re.IGNORECASE)
 
-    if address_match and tagline_match:
-        wallet_address = Web3.to_checksum_address(address_match.group())
+        if address_match and tagline_match:
+            wallet_address = Web3.to_checksum_address(address_match.group())
+            if wallet_address in registered_addresses:
+                return None
 
-    return wallet_address
+        return wallet_address
 
 
 class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
