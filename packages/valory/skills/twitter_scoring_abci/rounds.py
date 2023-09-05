@@ -23,9 +23,10 @@ import json
 import math
 import statistics
 from enum import Enum
-from typing import Dict, FrozenSet, Optional, Set, Tuple, cast
+from typing import Any, Dict, FrozenSet, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
+    ABCIAppInternalError,
     AbciApp,
     AbciAppTransitionFunction,
     AppState,
@@ -208,15 +209,28 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
     ERROR_PAYLOAD = {"error": "true"}
 
     @property
+    def consensus_threshold(self):
+        return math.ceil(self.synchronized_data.nb_participants / 2)  # half or 1
+
+    @property
     def threshold_reached(
         self,
     ) -> bool:
         """Check if the threshold has been reached."""
         counts = self.payload_values_count.values()
-        consensus_threshold = math.ceil(
-            self.synchronized_data.nb_participants / 2
-        )  # half or 1
-        return any(count >= consensus_threshold for count in counts)
+        return any(count >= self.consensus_threshold for count in counts)
+
+    @property
+    def most_voted_payload_values(
+        self,
+    ) -> Tuple[Any, ...]:
+        """Get the most voted payload values."""
+        most_voted_payload_values, max_votes = self.payload_values_count.most_common()[
+            0
+        ]
+        if max_votes < self.consensus_threshold:
+            raise ABCIAppInternalError("not enough votes")
+        return most_voted_payload_values
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
@@ -308,7 +322,10 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = {"error": "true"}
-    CONSENSUS_THRESHOLD = 2
+
+    @property
+    def consensus_threshold(self):
+        return math.ceil(self.synchronized_data.nb_participants / 2)  # half or 1
 
     @property
     def threshold_reached(
@@ -316,10 +333,19 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
     ) -> bool:
         """Check if the threshold has been reached."""
         counts = self.payload_values_count.values()
-        consensus_threshold = math.ceil(
-            self.synchronized_data.nb_participants / 2
-        )  # half or 1
-        return any(count >= consensus_threshold for count in counts)
+        return any(count >= self.consensus_threshold for count in counts)
+
+    @property
+    def most_voted_payload_values(
+        self,
+    ) -> Tuple[Any, ...]:
+        """Get the most voted payload values."""
+        most_voted_payload_values, max_votes = self.payload_values_count.most_common()[
+            0
+        ]
+        if max_votes < self.consensus_threshold:
+            raise ABCIAppInternalError("not enough votes")
+        return most_voted_payload_values
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
