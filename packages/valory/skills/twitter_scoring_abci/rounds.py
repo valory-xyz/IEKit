@@ -20,6 +20,7 @@
 """This package contains the rounds of TwitterScoringAbciApp."""
 
 import json
+import math
 import statistics
 from enum import Enum
 from typing import Dict, FrozenSet, Optional, Set, Tuple, cast
@@ -205,7 +206,6 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = {"error": "true"}
-    CONSENSUS_THRESHOLD = 2
 
     @property
     def threshold_reached(
@@ -213,7 +213,10 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
     ) -> bool:
         """Check if the threshold has been reached."""
         counts = self.payload_values_count.values()
-        return any(count >= self.CONSENSUS_THRESHOLD for count in counts)
+        consensus_threshold = math.ceil(
+            self.synchronized_data.nb_participants / 2
+        )  # half or 1
+        return any(count >= consensus_threshold for count in counts)
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
@@ -305,6 +308,18 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = {"error": "true"}
+    CONSENSUS_THRESHOLD = 2
+
+    @property
+    def threshold_reached(
+        self,
+    ) -> bool:
+        """Check if the threshold has been reached."""
+        counts = self.payload_values_count.values()
+        consensus_threshold = math.ceil(
+            self.synchronized_data.nb_participants / 2
+        )  # half or 1
+        return any(count >= consensus_threshold for count in counts)
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""

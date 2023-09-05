@@ -20,6 +20,7 @@
 """This package contains round behaviours of TwitterScoringAbciApp."""
 
 import json
+import math
 import random
 import re
 from abc import ABC
@@ -172,6 +173,16 @@ class TwitterSelectKeepersBehaviour(TwitterScoringBaseBehaviour):
 
         # Sorted list of participants who are not blacklisted as keepers
         relevant_set = sorted(list(non_blacklisted))
+
+        needed_keepers = math.ceil(
+            self.synchronized_data.nb_participants / 2
+        )  # half or 1
+
+        # Check if we need random selection
+        if len(relevant_set) <= needed_keepers:
+            keeper_addresses = list(relevant_set)
+            self.context.logger.info(f"Selected new keepers: {keeper_addresses}.")
+            return keeper_addresses
 
         # Random seeding and shuffling of the set
         random.seed(self.synchronized_data.keeper_randomness)
@@ -333,7 +344,7 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
         """Do the non-sender action."""
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             self.context.logger.info(
-                f"Waiting for the keeper to do its keeping: {self.synchronized_data.most_voted_keeper_addresses}"
+                f"Waiting for the keeper to do its keeping: keepers={self.synchronized_data.most_voted_keeper_addresses}, me={self.context.agent_address}"
             )
             yield from self.wait_until_round_end()
         self.set_done()
