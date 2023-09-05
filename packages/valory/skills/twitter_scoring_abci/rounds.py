@@ -42,6 +42,8 @@ from packages.valory.skills.twitter_scoring_abci.payloads import (
     TwitterDecisionMakingPayload,
     TwitterHashtagsCollectionPayload,
     TwitterMentionsCollectionPayload,
+    TwitterRandomnessPayload,
+    TwitterSelectKeeperPayload,
 )
 
 
@@ -64,6 +66,7 @@ class Event(Enum):
     RETRIEVE_MENTIONS = "retrieve_mentions"
     EVALUATE = "evaluate"
     DB_UPDATE = "db_update"
+    SELECT_KEEPERS = "select_keepers"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -117,6 +120,16 @@ class SynchronizedData(BaseSynchronizedData):
     def performed_twitter_tasks(self) -> dict:
         """Get the twitter_tasks."""
         return cast(dict, self.db.get("performed_twitter_tasks", {}))
+
+    @property
+    def most_voted_keeper_addresses(self) -> list:
+        """Get the most_voted_keeper_addresses."""
+        return cast(list, self.db.get_strict("most_voted_keeper_addresses"))
+
+    @property
+    def are_keepers_set(self) -> bool:
+        """Check whether keepers are set."""
+        return self.db.get("most_voted_keeper_addresses", None) is not None
 
 
 class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
@@ -192,6 +205,15 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
     synchronized_data_class = SynchronizedData
 
     ERROR_PAYLOAD = {"error": "true"}
+    CONSENSUS_THRESHOLD = 2
+
+    @property
+    def threshold_reached(
+        self,
+    ) -> bool:
+        """Check if the threshold has been reached."""
+        counts = self.payload_values_count.values()
+        return any(count >= self.CONSENSUS_THRESHOLD for count in counts)
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
@@ -452,6 +474,54 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
         return None
 
 
+class TwitterRandomnessRound(CollectSameUntilThresholdRound):
+    """A round for generating randomness"""
+
+    payload_class = TwitterRandomnessPayload
+    synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    collection_key = get_name(SynchronizedData.participant_to_randomness)
+    selection_key = (
+        get_name(SynchronizedData.most_voted_randomness),
+        get_name(SynchronizedData.most_voted_randomness),
+    )
+
+
+class TwitterSelectKeeperRound(CollectSameUntilThresholdRound):
+    """A round in which a keeper is selected for transaction submission"""
+
+    payload_class = TwitterSelectKeeperPayload
+    synchronized_data_class = SynchronizedData
+
+    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
+        """Process the end of the block."""
+        if self.threshold_reached:
+
+            performed_twitter_tasks = cast(
+                SynchronizedData, self.synchronized_data
+            ).performed_twitter_tasks
+            performed_twitter_tasks["select_keepers"] = Event.DONE.value
+
+            synchronized_data = self.synchronized_data.update(
+                synchronized_data_class=SynchronizedData,
+                **{
+                    get_name(
+                        SynchronizedData.most_voted_keeper_addresses
+                    ): self.most_voted_payload,
+                    get_name(
+                        SynchronizedData.performed_twitter_tasks
+                    ): performed_twitter_tasks,
+                },
+            )
+            return synchronized_data, Event.DONE
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
+        return None
+
+
 class FinishedTwitterScoringRound(DegenerateRound):
     """FinishedTwitterScoringRound"""
 
@@ -465,6 +535,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         TwitterDecisionMakingRound: {
             Event.OPENAI_CALL_CHECK: OpenAICallCheckRound,
             Event.DONE_SKIP: FinishedTwitterScoringRound,
+            Event.SELECT_KEEPERS: TwitterRandomnessRound,
             Event.RETRIEVE_HASHTAGS: TwitterHashtagsCollectionRound,
             Event.RETRIEVE_MENTIONS: TwitterMentionsCollectionRound,
             Event.EVALUATE: TweetEvaluationRound,
@@ -478,6 +549,16 @@ class TwitterScoringAbciApp(AbciApp[Event]):
             Event.NO_ALLOWANCE: TwitterDecisionMakingRound,
             Event.NO_MAJORITY: OpenAICallCheckRound,
             Event.ROUND_TIMEOUT: OpenAICallCheckRound,
+        },
+        TwitterRandomnessRound: {
+            Event.DONE: TwitterDecisionMakingRound,
+            Event.NO_MAJORITY: TwitterRandomnessRound,
+            Event.ROUND_TIMEOUT: TwitterRandomnessRound,
+        },
+        TwitterSelectKeeperRound: {
+            Event.DONE: TwitterDecisionMakingRound,
+            Event.NO_MAJORITY: TwitterRandomnessRound,
+            Event.ROUND_TIMEOUT: TwitterRandomnessRound,
         },
         TwitterMentionsCollectionRound: {
             Event.DONE: TwitterDecisionMakingRound,
