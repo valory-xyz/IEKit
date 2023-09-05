@@ -188,17 +188,22 @@ class OpenaiConnection(BaseSyncConnection):
         formatted_prompt = prompt_template.format(**prompt_values) if prompt_values else prompt_template
 
         # Call the OpenAI API
-        response = openai.Completion.create(
-            engine=self.openai_settings["engine"],
-            prompt=formatted_prompt,
-            max_tokens=self.openai_settings["max_tokens"],
-            n=1,
-            stop=None,
-            temperature=self.openai_settings["temperature"],
-        )
+        try:
+            response = openai.Completion.create(
+                engine=self.openai_settings["engine"],
+                prompt=formatted_prompt,
+                max_tokens=self.openai_settings["max_tokens"],
+                n=1,
+                stop=None,
+                temperature=self.openai_settings["temperature"],
+            )
 
-        # Extract the result from the API response
-        result = response.choices[0].text
+            # Extract the result from the API response
+            result = response.choices[0].text
+
+        except openai.error.AuthenticationError as e:
+            self.logger.error(e)
+            result = "OpenAI authentication error"
 
         return result
 

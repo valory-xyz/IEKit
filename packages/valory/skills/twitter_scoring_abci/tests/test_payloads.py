@@ -27,8 +27,11 @@ import pytest
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
+    OpenAICallCheckPayload,
     TweetEvaluationPayload,
-    TwitterCollectionPayload,
+    TwitterDecisionMakingPayload,
+    TwitterHashtagsCollectionPayload,
+    TwitterMentionsCollectionPayload,
 )
 
 
@@ -44,7 +47,11 @@ class PayloadTestCase:
     "test_case",
     [
         PayloadTestCase(
-            payload_cls=TwitterCollectionPayload,
+            payload_cls=TwitterMentionsCollectionPayload,
+            content="payload_test_content",
+        ),
+        PayloadTestCase(
+            payload_cls=TwitterHashtagsCollectionPayload,
             content="payload_test_content",
         ),
         PayloadTestCase(
@@ -53,6 +60,10 @@ class PayloadTestCase:
         ),
         PayloadTestCase(
             payload_cls=DBUpdatePayload,
+            content="payload_test_content",
+        ),
+        PayloadTestCase(
+            payload_cls=OpenAICallCheckPayload,
             content="payload_test_content",
         ),
     ],
@@ -66,4 +77,16 @@ def test_payloads(test_case: PayloadTestCase) -> None:
     )
     assert payload.sender == "sender"
     assert payload.content == test_case.content
+    assert payload.from_json(payload.json) == payload
+
+
+def test_decision_making_payload() -> None:
+    """Tests for TwitterScoringAbciApp payloads"""
+
+    payload = TwitterDecisionMakingPayload(
+        sender="sender",
+        event="event",
+    )
+    assert payload.sender == "sender"
+    assert payload.event == "event"
     assert payload.from_json(payload.json) == payload
