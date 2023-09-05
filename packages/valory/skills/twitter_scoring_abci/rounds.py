@@ -474,8 +474,8 @@ class TwitterScoringAbciApp(AbciApp[Event]):
             Event.NO_MAJORITY: TwitterDecisionMakingRound,
         },
         OpenAICallCheckRound: {
-            Event.DONE: TwitterMentionsCollectionRound,
-            Event.NO_ALLOWANCE: TwitterMentionsCollectionRound,
+            Event.DONE: TwitterDecisionMakingRound,
+            Event.NO_ALLOWANCE: TwitterDecisionMakingRound,
             Event.NO_MAJORITY: OpenAICallCheckRound,
             Event.ROUND_TIMEOUT: OpenAICallCheckRound,
         },

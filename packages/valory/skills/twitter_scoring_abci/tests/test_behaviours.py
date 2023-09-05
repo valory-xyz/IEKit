@@ -27,6 +27,10 @@ from typing import Any, Dict, Optional, Type
 
 import pytest
 
+from packages.valory.connections.openai.connection import (
+    PUBLIC_ID as LLM_CONNECTION_PUBLIC_ID,
+)
+from packages.valory.protocols.llm.message import LlmMessage
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.valory.skills.abstract_round_abci.behaviour_utils import (
     make_degenerate_behaviour,
@@ -233,6 +237,17 @@ DUMMY_REGISTRATIONS_RESPONSE_MISSING_DATA = {
     "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
 }
 
+DUMMY_REGISTRATIONS_RESPONSE_MISSING_INCLUDES = {
+    "data": [
+        {
+            "author_id": "1286010187325812739",
+            "text": f"{TAGLINE} {ZERO_ADDRESS}",
+            "id": "10",
+        },
+    ],
+    "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
+}
+
 DUMMY_HASHTAGS_RESPONSE = {
     "data": [
         {"author_id": "1286010187325812739", "text": "dummy_text", "id": "1"},
@@ -277,6 +292,7 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
     def setup_class(cls, **kwargs: Any) -> None:
         """Setup class"""
         super().setup_class(param_overrides={"twitter_max_pages": 10})
+        cls.llm_handler = cls._skill.skill_context.handlers.llm
 
     def fast_forward(self, data: Optional[Dict[str, Any]] = None) -> None:
         """Fast-forward on initialization"""
@@ -306,6 +322,41 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
             self.behaviour.current_behaviour.auto_behaviour_id()  # type: ignore
             == self.next_behaviour_class.auto_behaviour_id()
         )
+
+    def mock_llm_request(self, request_kwargs: Dict, response_kwargs: Dict) -> None:
+        """
+        Mock LLM request.
+
+        :param request_kwargs: keyword arguments for request check.
+        :param response_kwargs: keyword arguments for mock response.
+        """
+
+        self.assert_quantity_in_outbox(1)
+        actual_llm_message = self.get_message_from_outbox()
+        assert actual_llm_message is not None, "No message in outbox."  # nosec
+        has_attributes, error_str = self.message_has_attributes(
+            actual_message=actual_llm_message,
+            message_type=LlmMessage,
+            to=str(LLM_CONNECTION_PUBLIC_ID),
+            sender=str(self.skill.skill_context.skill_id),
+            **request_kwargs,
+        )
+
+        assert has_attributes, error_str  # nosec
+        incoming_message = self.build_incoming_message(
+            message_type=LlmMessage,
+            dialogue_reference=(
+                actual_llm_message.dialogue_reference[0],
+                "stub",
+            ),
+            target=actual_llm_message.message_id,
+            message_id=-1,
+            to=str(self.skill.skill_context.skill_id),
+            sender=str(LLM_CONNECTION_PUBLIC_ID),
+            **response_kwargs,
+        )
+        self.llm_handler.handle(incoming_message)
+        self.behaviour.act_wrapper()
 
 
 class TestMentionsCollectionBehaviour(BaseBehaviourTest):
@@ -389,6 +440,25 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
                         ),
                     ],
                     "status_code": 200,
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "API daily limit reached",
+                    initial_data=dict(
+                        ceramic_db={
+                            "module_data": {
+                                "twitter": {
+                                    "number_of_tweets_pulled_today": 10000,
+                                    "last_tweet_pull_window_reset": 1993903085,
+                                }
+                            }
+                        }
+                    ),
+                    event=Event.DONE,
+                ),
+                {
+                    "request_urls": [],
                 },
             ),
         ],
@@ -498,6 +568,25 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                         ),
                     ],
                     "status_code": 200,
+                },
+            ),
+            (
+                BehaviourTestCase(
+                    "API daily limit reached",
+                    initial_data=dict(
+                        ceramic_db={
+                            "module_data": {
+                                "twitter": {
+                                    "number_of_tweets_pulled_today": 10000,
+                                    "last_tweet_pull_window_reset": 1993903085,
+                                }
+                            }
+                        }
+                    ),
+                    event=Event.DONE,
+                ),
+                {
+                    "request_urls": [],
                 },
             ),
         ],
@@ -685,6 +774,23 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                     "status_codes": [200],
                 },
             ),
+            (
+                BehaviourTestCase(
+                    "API error mentions: missing includes",
+                    initial_data=dict(ceramic_db={}),
+                    event=Event.API_ERROR,
+                ),
+                {
+                    "urls": [TWITTER_REGISTRATIONS_URL.format(max_results=80)],
+                    "bodies": [
+                        json.dumps(
+                            DUMMY_REGISTRATIONS_RESPONSE_MISSING_INCLUDES,
+                        ),
+                        json.dumps({}),
+                    ],
+                    "status_codes": [200],
+                },
+            ),
         ],
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
@@ -808,6 +914,127 @@ class TestTwitterDecisionMakingBehaviour(BaseBehaviourTest):
     def test_run(self, test_case: BehaviourTestCase, next_behaviour) -> None:
         """Run tests."""
         self.next_behaviour_class = next_behaviour
+        self.fast_forward(test_case.initial_data)
+        self.behaviour.act_wrapper()
+        self.complete(test_case.event)
+
+
+class TestOpenAICallCheckBehaviour(BaseBehaviourTest):
+    """Tests BinanceObservationBehaviour"""
+
+    behaviour_class = OpenAICallCheckBehaviour
+    next_behaviour_class = TwitterDecisionMakingBehaviour
+
+    @pytest.mark.parametrize(
+        "test_case",
+        (
+            BehaviourTestCase(
+                "Happy path",
+                initial_data=dict(performed_twitter_tasks={}),
+                event=Event.DONE,
+            ),
+        ),
+    )
+    def test_run(self, test_case: BehaviourTestCase) -> None:
+        """Run tests."""
+        self.fast_forward(test_case.initial_data)
+        self.behaviour.act_wrapper()
+        self.complete(test_case.event)
+
+
+class TestTweetEvaluationBehaviour(BaseBehaviourTest):
+    """Tests TweetEvaluationBehaviour"""
+
+    behaviour_class = TweetEvaluationBehaviour
+    next_behaviour_class = TwitterDecisionMakingBehaviour
+
+    @pytest.mark.parametrize(
+        "test_case, kwargs",
+        [
+            (
+                BehaviourTestCase(
+                    "Happy path",
+                    initial_data=dict(tweets={"1": {"text": "dummy text"}}),
+                    event=Event.DONE,
+                ),
+                {},
+            ),
+        ],
+    )
+    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
+        """Run tests."""
+        self.fast_forward(test_case.initial_data)
+        self.behaviour.act_wrapper()
+        self.mock_llm_request(
+            request_kwargs=dict(performative=LlmMessage.Performative.REQUEST),
+            response_kwargs=dict(
+                performative=LlmMessage.Performative.RESPONSE,
+                value='{"quality":"HIGH","relationship":"HIGH"}',
+            ),
+        )
+        self.complete(test_case.event)
+
+
+class TestDBUpdateBehaviour(BaseBehaviourTest):
+    """Tests DBUpdateBehaviour"""
+
+    behaviour_class = DBUpdateBehaviour
+    next_behaviour_class = TwitterDecisionMakingBehaviour
+
+    @pytest.mark.parametrize(
+        "test_case, kwargs",
+        [
+            (
+                BehaviourTestCase(
+                    "Happy path",
+                    initial_data=dict(
+                        tweets={
+                            "1": {
+                                "author_id": "1",
+                                "points": 900,
+                                "username": "dummy",
+                                "text": "dummy text",
+                            },
+                            "2": {
+                                "author_id": "2",
+                                "points": 900,
+                                "username": "dummy_2",
+                                "text": "dummy text",
+                            },
+                            "3": {
+                                "author_id": "3",
+                                "points": 900,
+                                "username": "dummy_3",
+                                "text": "I'm linking my wallet to @Autonolas Contribute: 0x0000000000000000000000000000000000000000",
+                            },
+                            "4": {
+                                "author_id": "1",
+                                "points": 10000,  # too many points during this period
+                                "username": "dummy",
+                                "text": "dummy text",
+                            },
+                        },
+                        latest_mention_tweet_id=1,
+                        latest_hashtag_tweet_id=1,
+                        number_of_tweets_pulled_today=1,
+                        last_tweet_pull_window_reset=1993903085,  # in 10 years
+                        ceramic_db={
+                            "users": [
+                                {"twitter_id": "1", "points": 0, "wallet_address": None}
+                            ],
+                            "module_data": {
+                                "twitter": {"current_period": "2023-09-04"}
+                            },
+                        },
+                    ),
+                    event=Event.DONE,
+                ),
+                {},
+            ),
+        ],
+    )
+    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
+        """Run tests."""
         self.fast_forward(test_case.initial_data)
         self.behaviour.act_wrapper()
         self.complete(test_case.event)
