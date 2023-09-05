@@ -101,22 +101,22 @@ class SynchronizedData(BaseSynchronizedData):
     @property
     def latest_mention_tweet_id(self) -> dict:
         """Get the latest_mention_tweet_id."""
-        return cast(dict, self.db.get_strict("latest_mention_tweet_id"))
+        return cast(dict, self.db.get("latest_mention_tweet_id", None))
 
     @property
     def latest_hashtag_tweet_id(self) -> dict:
         """Get the latest_hashtag_tweet_id."""
-        return cast(dict, self.db.get_strict("latest_hashtag_tweet_id"))
+        return cast(dict, self.db.get("latest_hashtag_tweet_id", None))
 
     @property
     def number_of_tweets_pulled_today(self) -> dict:
         """Get the number_of_tweets_pulled_today."""
-        return cast(dict, self.db.get_strict("number_of_tweets_pulled_today"))
+        return cast(dict, self.db.get("number_of_tweets_pulled_today", None))
 
     @property
     def last_tweet_pull_window_reset(self) -> dict:
         """Get the last_tweet_pull_window_reset."""
-        return cast(dict, self.db.get_strict("last_tweet_pull_window_reset"))
+        return cast(dict, self.db.get("last_tweet_pull_window_reset", None))
 
     @property
     def performed_twitter_tasks(self) -> dict:

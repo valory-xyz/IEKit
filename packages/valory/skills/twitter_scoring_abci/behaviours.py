@@ -899,14 +899,6 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         """Calculate the new content of the DB"""
 
         tweets = self.synchronized_data.tweets
-        latest_mention_tweet_id = self.synchronized_data.latest_mention_tweet_id
-        latest_hashtag_tweet_id = self.synchronized_data.latest_hashtag_tweet_id
-        number_of_tweets_pulled_today = (
-            self.synchronized_data.number_of_tweets_pulled_today
-        )
-        last_tweet_pull_window_reset = (
-            self.synchronized_data.last_tweet_pull_window_reset
-        )
 
         # Instantiate the db
         ceramic_db = CeramicDB(self.synchronized_data.ceramic_db, self.context.logger)
@@ -983,21 +975,35 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         ceramic_db.merge_by_wallet()
 
         # Update the latest_hashtag_tweet_id
-        ceramic_db.data["module_data"]["twitter"]["latest_hashtag_tweet_id"] = str(
-            latest_hashtag_tweet_id
-        )
+        latest_hashtag_tweet_id = self.synchronized_data.latest_hashtag_tweet_id
+        if latest_hashtag_tweet_id:
+            ceramic_db.data["module_data"]["twitter"]["latest_hashtag_tweet_id"] = str(
+                latest_hashtag_tweet_id
+            )
+
         # Update the latest_mention_tweet_id
-        ceramic_db.data["module_data"]["twitter"]["latest_mention_tweet_id"] = str(
-            latest_mention_tweet_id
-        )
+        latest_mention_tweet_id = self.synchronized_data.latest_mention_tweet_id
+        if latest_mention_tweet_id:
+            ceramic_db.data["module_data"]["twitter"]["latest_mention_tweet_id"] = str(
+                latest_mention_tweet_id
+            )
 
         # Update the number of tweets made today
-        ceramic_db.data["module_data"]["twitter"][
-            "number_of_tweets_pulled_today"
-        ] = str(number_of_tweets_pulled_today)
-        ceramic_db.data["module_data"]["twitter"]["last_tweet_pull_window_reset"] = str(
-            last_tweet_pull_window_reset
+        number_of_tweets_pulled_today = (
+            self.synchronized_data.number_of_tweets_pulled_today
         )
+        if number_of_tweets_pulled_today:
+            ceramic_db.data["module_data"]["twitter"][
+                "number_of_tweets_pulled_today"
+            ] = str(number_of_tweets_pulled_today)
+
+        last_tweet_pull_window_reset = (
+            self.synchronized_data.last_tweet_pull_window_reset
+        )
+        if last_tweet_pull_window_reset:
+            ceramic_db.data["module_data"]["twitter"][
+                "last_tweet_pull_window_reset"
+            ] = str(last_tweet_pull_window_reset)
 
         # Update the current_period
         ceramic_db.data["module_data"]["twitter"]["current_period"] = today
