@@ -210,6 +210,7 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
 
     @property
     def consensus_threshold(self):
+        """Consensus threshold"""
         return math.ceil(self.synchronized_data.nb_participants / 2)  # half or 1
 
     @property
@@ -325,6 +326,7 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
 
     @property
     def consensus_threshold(self):
+        """Consensus threshold"""
         return math.ceil(self.synchronized_data.nb_participants / 2)  # half or 1
 
     @property
