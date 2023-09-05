@@ -43,7 +43,7 @@ from packages.valory.skills.twitter_scoring_abci.payloads import (
     TwitterHashtagsCollectionPayload,
     TwitterMentionsCollectionPayload,
     TwitterRandomnessPayload,
-    TwitterSelectKeeperPayload,
+    TwitterSelectKeepersPayload,
 )
 
 
@@ -488,10 +488,10 @@ class TwitterRandomnessRound(CollectSameUntilThresholdRound):
     )
 
 
-class TwitterSelectKeeperRound(CollectSameUntilThresholdRound):
+class TwitterSelectKeepersRound(CollectSameUntilThresholdRound):
     """A round in which a keeper is selected for transaction submission"""
 
-    payload_class = TwitterSelectKeeperPayload
+    payload_class = TwitterSelectKeepersPayload
     synchronized_data_class = SynchronizedData
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
@@ -506,9 +506,9 @@ class TwitterSelectKeeperRound(CollectSameUntilThresholdRound):
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    get_name(
-                        SynchronizedData.most_voted_keeper_addresses
-                    ): self.most_voted_payload,
+                    get_name(SynchronizedData.most_voted_keeper_addresses): json.loads(
+                        self.most_voted_payload
+                    ),
                     get_name(
                         SynchronizedData.performed_twitter_tasks
                     ): performed_twitter_tasks,
@@ -551,11 +551,11 @@ class TwitterScoringAbciApp(AbciApp[Event]):
             Event.ROUND_TIMEOUT: OpenAICallCheckRound,
         },
         TwitterRandomnessRound: {
-            Event.DONE: TwitterDecisionMakingRound,
+            Event.DONE: TwitterSelectKeepersRound,
             Event.NO_MAJORITY: TwitterRandomnessRound,
             Event.ROUND_TIMEOUT: TwitterRandomnessRound,
         },
-        TwitterSelectKeeperRound: {
+        TwitterSelectKeepersRound: {
             Event.DONE: TwitterDecisionMakingRound,
             Event.NO_MAJORITY: TwitterRandomnessRound,
             Event.ROUND_TIMEOUT: TwitterRandomnessRound,

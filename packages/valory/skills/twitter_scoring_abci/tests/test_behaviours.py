@@ -23,7 +23,7 @@ import json
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Optional, Type
+from typing import Any, Dict, Optional, Type, cast
 
 import pytest
 
@@ -33,10 +33,14 @@ from packages.valory.connections.openai.connection import (
 from packages.valory.protocols.llm.message import LlmMessage
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.valory.skills.abstract_round_abci.behaviour_utils import (
+    BaseBehaviour,
     make_degenerate_behaviour,
 )
 from packages.valory.skills.abstract_round_abci.test_tools.base import (
     FSMBehaviourBaseCase,
+)
+from packages.valory.skills.abstract_round_abci.test_tools.common import (
+    BaseRandomnessBehaviourTest,
 )
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
     DBUpdateBehaviour,
@@ -46,8 +50,10 @@ from packages.valory.skills.twitter_scoring_abci.behaviours import (
     TwitterDecisionMakingBehaviour,
     TwitterHashtagsCollectionBehaviour,
     TwitterMentionsCollectionBehaviour,
+    TwitterRandomnessBehaviour,
     TwitterScoringBaseBehaviour,
     TwitterScoringRoundBehaviour,
+    TwitterSelectKeepersBehaviour,
 )
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     Event,
@@ -56,6 +62,7 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
 )
 
 
+PACKAGE_DIR = Path(__file__).parent.parent
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 TWITTER_MENTIONS_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id=0"
@@ -371,7 +378,13 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "Happy path",
-                    initial_data=dict(ceramic_db={}),
+                    initial_data=dict(
+                        ceramic_db={},
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                    ),
                     event=Event.DONE,
                 ),
                 {
@@ -395,7 +408,13 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "Happy path, multi-page",
-                    initial_data=dict(ceramic_db={}),
+                    initial_data=dict(
+                        ceramic_db={},
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                    ),
                     event=Event.DONE,
                 ),
                 {
@@ -423,7 +442,13 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "Happy path, result_count=0",
-                    initial_data=dict(ceramic_db={}),
+                    initial_data=dict(
+                        ceramic_db={},
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                    ),
                     event=Event.DONE,
                 ),
                 {
@@ -453,7 +478,11 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
                                     "last_tweet_pull_window_reset": 1993903085,
                                 }
                             }
-                        }
+                        },
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
                     ),
                     event=Event.DONE,
                 ),
@@ -498,7 +527,13 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "Happy path",
-                    initial_data=dict(ceramic_db={}),
+                    initial_data=dict(
+                        ceramic_db={},
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                    ),
                     event=Event.DONE,
                 ),
                 {
@@ -523,7 +558,13 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "Happy path, multi-page",
-                    initial_data=dict(ceramic_db={}),
+                    initial_data=dict(
+                        ceramic_db={},
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                    ),
                     event=Event.DONE,
                 ),
                 {
@@ -551,7 +592,13 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "Happy path, result_count=0",
-                    initial_data=dict(ceramic_db={}),
+                    initial_data=dict(
+                        ceramic_db={},
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                    ),
                     event=Event.DONE,
                 ),
                 {
@@ -581,7 +628,11 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                                     "last_tweet_pull_window_reset": 1993903085,
                                 }
                             }
-                        }
+                        },
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
                     ),
                     event=Event.DONE,
                 ),
@@ -626,7 +677,13 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "API error mentions: 404",
-                    initial_data=dict(ceramic_db={}),
+                    initial_data=dict(
+                        ceramic_db={},
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                    ),
                     event=Event.API_ERROR,
                 ),
                 {
@@ -643,7 +700,13 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "API error mentions: missing data",
-                    initial_data=dict(ceramic_db={}),
+                    initial_data=dict(
+                        ceramic_db={},
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                    ),
                     event=Event.API_ERROR,
                 ),
                 {
@@ -660,7 +723,13 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "API error mentions: missing meta",
-                    initial_data=dict(ceramic_db={}),
+                    initial_data=dict(
+                        ceramic_db={},
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                    ),
                     event=Event.API_ERROR,
                 ),
                 {
@@ -677,7 +746,13 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "API error mentions: missing includes",
-                    initial_data=dict(ceramic_db={}),
+                    initial_data=dict(
+                        ceramic_db={},
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                    ),
                     event=Event.API_ERROR,
                 ),
                 {
@@ -727,7 +802,13 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "API error registrations: 404",
-                    initial_data=dict(ceramic_db={}),
+                    initial_data=dict(
+                        ceramic_db={},
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                    ),
                     event=Event.API_ERROR,
                 ),
                 {
@@ -743,7 +824,13 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "API error registrations: missing data",
-                    initial_data=dict(ceramic_db={}),
+                    initial_data=dict(
+                        ceramic_db={},
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                    ),
                     event=Event.API_ERROR,
                 ),
                 {
@@ -761,7 +848,13 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "API error registrations: missing meta",
-                    initial_data=dict(ceramic_db={}),
+                    initial_data=dict(
+                        ceramic_db={},
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                    ),
                     event=Event.API_ERROR,
                 ),
                 {
@@ -777,7 +870,13 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "API error mentions: missing includes",
-                    initial_data=dict(ceramic_db={}),
+                    initial_data=dict(
+                        ceramic_db={},
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                    ),
                     event=Event.API_ERROR,
                 ),
                 {
@@ -1038,3 +1137,61 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
         self.fast_forward(test_case.initial_data)
         self.behaviour.act_wrapper()
         self.complete(test_case.event)
+
+
+class TestRandomnessBehaviour(BaseRandomnessBehaviourTest):
+    """Test randomness in operation."""
+
+    path_to_skill = PACKAGE_DIR
+
+    randomness_behaviour_class = TwitterRandomnessBehaviour
+    next_behaviour_class = TwitterSelectKeepersBehaviour
+    done_event = Event.DONE
+
+
+class BaseSelectKeepersBehaviourTest(BaseBehaviourTest):
+    """Test SelectKeepersBehaviour."""
+
+    select_keeper_behaviour_class: Type[BaseBehaviour]
+    next_behaviour_class: Type[BaseBehaviour]
+
+    def test_select_keeper(
+        self,
+    ) -> None:
+        """Test select keeper agent."""
+        participants = [self.skill.skill_context.agent_address, "a_1", "a_2"]
+        self.fast_forward_to_behaviour(
+            behaviour=self.behaviour,
+            behaviour_id=self.select_keeper_behaviour_class.auto_behaviour_id(),
+            synchronized_data=SynchronizedData(
+                AbciAppDB(
+                    setup_data=dict(
+                        participants=[participants],
+                        most_voted_randomness=[
+                            "56cbde9e9bbcbdcaf92f183c678eaa5288581f06b1c9c7f884ce911776727688"
+                        ],
+                        most_voted_keeper_addresses=[["a_1", "a_2"]],
+                    ),
+                )
+            ),
+        )
+        assert (
+            cast(
+                BaseBehaviour,
+                cast(BaseBehaviour, self.behaviour.current_behaviour),
+            ).behaviour_id
+            == self.select_keeper_behaviour_class.auto_behaviour_id()
+        )
+        self.behaviour.act_wrapper()
+        self.mock_a2a_transaction()
+        self._test_done_flag_set()
+        self.end_round(done_event=Event.DONE)
+        behaviour = cast(BaseBehaviour, self.behaviour.current_behaviour)
+        assert behaviour.behaviour_id == self.next_behaviour_class.auto_behaviour_id()
+
+
+class TestTwitterSelectKeepersCeramicBehaviour(BaseSelectKeepersBehaviourTest):
+    """Test SelectKeeperBehaviour."""
+
+    select_keeper_behaviour_class = TwitterSelectKeepersBehaviour
+    next_behaviour_class = TwitterDecisionMakingBehaviour

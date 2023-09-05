@@ -39,7 +39,6 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
 )
 from packages.valory.skills.abstract_round_abci.common import RandomnessBehaviour
 from packages.valory.skills.abstract_round_abci.models import Requests
-from packages.valory.skills.llm_abci.payloads import SelectKeeperPayload
 from packages.valory.skills.twitter_scoring_abci.ceramic_db import CeramicDB
 from packages.valory.skills.twitter_scoring_abci.dialogues import (
     LlmDialogue,
@@ -58,7 +57,7 @@ from packages.valory.skills.twitter_scoring_abci.payloads import (
     TwitterHashtagsCollectionPayload,
     TwitterMentionsCollectionPayload,
     TwitterRandomnessPayload,
-    TwitterSelectKeeperPayload,
+    TwitterSelectKeepersPayload,
 )
 from packages.valory.skills.twitter_scoring_abci.prompts import tweet_evaluation_prompt
 from packages.valory.skills.twitter_scoring_abci.rounds import (
@@ -72,7 +71,7 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     TwitterMentionsCollectionRound,
     TwitterRandomnessRound,
     TwitterScoringAbciApp,
-    TwitterSelectKeeperRound,
+    TwitterSelectKeepersRound,
 )
 
 
@@ -144,11 +143,11 @@ class TwitterRandomnessBehaviour(RandomnessBehaviour):
     payload_class = TwitterRandomnessPayload
 
 
-class TwitterSelectKeeperBehaviour(TwitterScoringBaseBehaviour):
+class TwitterSelectKeepersBehaviour(TwitterScoringBaseBehaviour):
     """Select the keeper agent."""
 
-    matching_round = TwitterSelectKeeperRound
-    payload_class = TwitterSelectKeeperPayload
+    matching_round = TwitterSelectKeepersRound
+    payload_class = TwitterSelectKeepersPayload
 
     def _select_keepers(self) -> List[str]:
         """
@@ -212,8 +211,9 @@ class TwitterSelectKeeperBehaviour(TwitterScoringBaseBehaviour):
         """
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            payload = TwitterSelectKeeperPayload(  # type: ignore
-                self.context.agent_address, self._select_keepers()
+            payload = TwitterSelectKeepersPayload(  # type: ignore
+                self.context.agent_address,
+                json.dumps(self._select_keepers(), sort_keys=True),
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -333,7 +333,7 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
         """Do the non-sender action."""
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             self.context.logger.info(
-                f"Waiting for the keeper to do its keeping: {self.synchronized_data.most_voted_keeper_address}"
+                f"Waiting for the keeper to do its keeping: {self.synchronized_data.most_voted_keeper_addresses}"
             )
             yield from self.wait_until_round_end()
         self.set_done()
@@ -558,7 +558,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
         """Do the non-sender action."""
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             self.context.logger.info(
-                f"Waiting for the keeper to do its keeping: {self.synchronized_data.most_voted_keeper_address}"
+                f"Waiting for the keeper to do its keeping: {self.synchronized_data.most_voted_keeper_addresses}"
             )
             yield from self.wait_until_round_end()
         self.set_done()
@@ -1037,5 +1037,5 @@ class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
         TweetEvaluationBehaviour,
         DBUpdateBehaviour,
         TwitterRandomnessBehaviour,
-        TwitterSelectKeeperBehaviour,
+        TwitterSelectKeepersBehaviour,
     ]

@@ -20,7 +20,7 @@
 """This module contains the transaction payloads of the TwitterScoringAbciApp."""
 
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import Optional
 
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
@@ -76,7 +76,7 @@ class TwitterRandomnessPayload(BaseTxPayload):
 
 
 @dataclass(frozen=True)
-class TwitterSelectKeeperPayload(BaseTxPayload):
+class TwitterSelectKeepersPayload(BaseTxPayload):
     """Represent a transaction payload of type 'select_keeper'."""
 
-    keepers: List[str]
+    keepers: str

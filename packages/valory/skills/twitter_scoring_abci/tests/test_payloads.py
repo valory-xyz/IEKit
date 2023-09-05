@@ -32,6 +32,8 @@ from packages.valory.skills.twitter_scoring_abci.payloads import (
     TwitterDecisionMakingPayload,
     TwitterHashtagsCollectionPayload,
     TwitterMentionsCollectionPayload,
+    TwitterRandomnessPayload,
+    TwitterSelectKeepersPayload,
 )
 
 
@@ -90,3 +92,24 @@ def test_decision_making_payload() -> None:
     assert payload.sender == "sender"
     assert payload.event == "event"
     assert payload.from_json(payload.json) == payload
+
+
+def test_randomness_payload() -> None:
+    """Tests for TwitterScoringAbciApp payloads"""
+
+    payload = TwitterRandomnessPayload(
+        sender="sender",
+        round_id=1,
+        randomness="randomness",
+    )
+    assert payload.sender == "sender"
+    assert payload.round_id == 1
+    assert payload.randomness == "randomness"
+
+
+def test_select_keeper() -> None:
+    """Tests for payloads"""
+
+    payload = TwitterSelectKeepersPayload(sender="sender", keepers="keepers")
+    assert payload.sender == "sender"
+    assert payload.keepers == "keepers"
