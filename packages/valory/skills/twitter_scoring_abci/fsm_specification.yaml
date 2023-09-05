@@ -30,8 +30,8 @@ transition_func:
     (DBUpdateRound, DONE): TwitterDecisionMakingRound
     (DBUpdateRound, NO_MAJORITY): DBUpdateRound
     (DBUpdateRound, ROUND_TIMEOUT): DBUpdateRound
-    (OpenAICallCheckRound, DONE): TwitterMentionsCollectionRound
-    (OpenAICallCheckRound, NO_ALLOWANCE): TwitterMentionsCollectionRound
+    (OpenAICallCheckRound, DONE): TwitterDecisionMakingRound
+    (OpenAICallCheckRound, NO_ALLOWANCE): TwitterDecisionMakingRound
     (OpenAICallCheckRound, NO_MAJORITY): OpenAICallCheckRound
     (OpenAICallCheckRound, ROUND_TIMEOUT): OpenAICallCheckRound
     (TweetEvaluationRound, DONE): TwitterDecisionMakingRound

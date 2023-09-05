@@ -92,8 +92,8 @@ transition_func:
     (LLMSelectKeeperRound, DONE): LLMRound
     (LLMSelectKeeperRound, NO_MAJORITY): LLMRandomnessRound
     (LLMSelectKeeperRound, ROUND_TIMEOUT): LLMRandomnessRound
-    (OpenAICallCheckRound, DONE): TwitterMentionsCollectionRound
-    (OpenAICallCheckRound, NO_ALLOWANCE): TwitterMentionsCollectionRound
+    (OpenAICallCheckRound, DONE): TwitterDecisionMakingRound
+    (OpenAICallCheckRound, NO_ALLOWANCE): TwitterDecisionMakingRound
     (OpenAICallCheckRound, NO_MAJORITY): OpenAICallCheckRound
     (OpenAICallCheckRound, ROUND_TIMEOUT): OpenAICallCheckRound
     (RandomnessRound, DONE): SelectKeeperRound
