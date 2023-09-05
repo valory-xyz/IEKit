@@ -353,6 +353,7 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            self.context.logger.info("I am a keeper")
 
             (
                 has_limit_reached,
@@ -569,7 +570,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
         """Do the non-sender action."""
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             self.context.logger.info(
-                f"Waiting for the keeper to do its keeping: {self.synchronized_data.most_voted_keeper_addresses}"
+                f"Waiting for the keeper to do its keeping: keepers={self.synchronized_data.most_voted_keeper_addresses}, me={self.context.agent_address}"
             )
             yield from self.wait_until_round_end()
         self.set_done()
@@ -578,6 +579,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            self.context.logger.info("I am a keeper")
 
             (
                 has_limit_reached,
