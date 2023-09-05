@@ -144,7 +144,7 @@ class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
         if self.threshold_reached:
             event = Event(self.most_voted_payload)
             # Reference events to avoid tox -e check-abciapp-specs failures
-            # Event.DONE, Event.DB_UPDATE, Event.RETRIEVE_MENTIONS, Event.RETRIEVE_HASHTAGS, Event.OPENAI_CALL_CHECK, Event.EVALUATE, Event.DONE_SKIP
+            # Event.DONE, Event.DB_UPDATE, Event.RETRIEVE_MENTIONS, Event.RETRIEVE_HASHTAGS, Event.OPENAI_CALL_CHECK, Event.EVALUATE, Event.DONE_SKIP, Event.SELECT_KEEPERS
             return self.synchronized_data, event
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
