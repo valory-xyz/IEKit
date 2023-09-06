@@ -72,30 +72,44 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     TwitterDecisionMakingRound,
     TwitterHashtagsCollectionRound,
     TwitterMentionsCollectionRound,
+    TwitterRandomnessRound,
+    TwitterSelectKeepersRound,
 )
 
 
 HAPPY_PATH: Tuple[RoundChecks, ...] = (
+    # Start, read data and generic scoring
     RoundChecks(RegistrationStartupRound.auto_round_id(), n_periods=1),
     RoundChecks(StreamReadRound.auto_round_id(), n_periods=3),
     RoundChecks(GenericScoringRound.auto_round_id(), n_periods=2),
 
+    # Keeper
+    RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
+    RoundChecks(TwitterRandomnessRound.auto_round_id(), n_periods=2),
+    RoundChecks(TwitterSelectKeepersRound.auto_round_id(), n_periods=2),
+
+    # OpenAI check
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
     RoundChecks(OpenAICallCheckRound.auto_round_id(), n_periods=2),
 
+    # Twitter API
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
     RoundChecks(TwitterMentionsCollectionRound.auto_round_id(), n_periods=2),
-
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
     RoundChecks(TwitterHashtagsCollectionRound.auto_round_id(), n_periods=2),
 
+    # Evaluation
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
     RoundChecks(TweetEvaluationRound.auto_round_id(), n_periods=2),
 
+    # DB update
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
     RoundChecks(DBUpdateRound.auto_round_id(), n_periods=2),
 
+    # Check token
     RoundChecks(TokenTrackRound.auto_round_id(), n_periods=2),
+
+    # Write db and reset
     RoundChecks(RandomnessRound.auto_round_id(), n_periods=2),
     RoundChecks(SelectKeeperRound.auto_round_id(), n_periods=2),
     RoundChecks(StreamWriteRound.auto_round_id(), n_periods=2),

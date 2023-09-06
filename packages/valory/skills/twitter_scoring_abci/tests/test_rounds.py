@@ -32,10 +32,15 @@ from typing import (
     Optional,
     cast,
 )
+from unittest import mock
 
 import pytest
 
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
+from packages.valory.skills.abstract_round_abci.base import (
+    AbciAppDB,
+    AbstractRound,
+    BaseTxPayload,
+)
 from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
     BaseCollectNonEmptyUntilThresholdRound,
     BaseCollectSameUntilThresholdRoundTest,
@@ -49,6 +54,8 @@ from packages.valory.skills.twitter_scoring_abci.payloads import (
     TwitterDecisionMakingPayload,
     TwitterHashtagsCollectionPayload,
     TwitterMentionsCollectionPayload,
+    TwitterRandomnessPayload,
+    TwitterSelectKeepersPayload,
 )
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     DBUpdateRound,
@@ -59,6 +66,8 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     TwitterDecisionMakingRound,
     TwitterHashtagsCollectionRound,
     TwitterMentionsCollectionRound,
+    TwitterRandomnessRound,
+    TwitterSelectKeepersRound,
 )
 
 
@@ -449,3 +458,142 @@ class TestTweetEvaluationRound(BaseCollectNonEmptyUntilThresholdRound):
     def test_run(self, test_case: RoundTestCase) -> None:
         """Run tests."""
         self.run_test(test_case)
+
+
+# -----------------------------------------------------------------------
+# Randomness and select keeper tests are ported from Hello World abci app
+# -----------------------------------------------------------------------
+
+RANDOMNESS: str = "d1c29dce46f979f9748210d24bce4eae8be91272f5ca1a6aea2832d3dd676f51"
+
+
+def get_participant_list() -> List[str]:
+    """Participants"""
+    return [f"agent_{i}" for i in range(MAX_PARTICIPANTS)]
+
+
+class BaseRoundTestClass:
+    """Base test class for Rounds."""
+
+    synchronized_data: SynchronizedData
+    participants: List[str]
+
+    @classmethod
+    def setup(
+        cls,
+    ) -> None:
+        """Setup the test class."""
+
+        cls.participants = get_participant_list()
+        cls.synchronized_data = SynchronizedData(
+            AbciAppDB(
+                setup_data=dict(
+                    participants=[cls.participants],
+                    all_participants=[cls.participants],
+                    consensus_threshold=[3],
+                ),
+            )
+        )
+
+    def _test_no_majority_event(self, round_obj: AbstractRound) -> None:
+        """Test the NO_MAJORITY event."""
+        with mock.patch.object(round_obj, "is_majority_possible", return_value=False):
+            result = round_obj.end_block()
+            assert result is not None
+            synchronized_data, event = result
+            assert event == Event.NO_MAJORITY
+
+
+class TestCollectRandomnessRound(BaseRoundTestClass):
+    """Tests for CollectRandomnessRound."""
+
+    def test_run(
+        self,
+    ) -> None:
+        """Run tests."""
+
+        test_round = TwitterRandomnessRound(
+            synchronized_data=self.synchronized_data,
+        )
+        first_payload, *payloads = [
+            TwitterRandomnessPayload(
+                sender=participant, randomness=RANDOMNESS, round_id=0
+            )
+            for participant in self.participants
+        ]
+
+        test_round.process_payload(first_payload)
+        assert test_round.collection[first_payload.sender] == first_payload
+        assert test_round.end_block() is None
+
+        self._test_no_majority_event(test_round)
+
+        for payload in payloads:
+            test_round.process_payload(payload)
+
+        actual_next_behaviour = self.synchronized_data.update(
+            participant_to_randomness=test_round.serialized_collection,
+            most_voted_randomness=test_round.most_voted_payload,
+        )
+
+        res = test_round.end_block()
+        assert res is not None
+        synchronized_data, event = res
+        assert all(
+            [
+                key
+                in cast(SynchronizedData, synchronized_data).participant_to_randomness
+                for key in cast(
+                    SynchronizedData, actual_next_behaviour
+                ).participant_to_randomness
+            ]
+        )
+        assert event == Event.DONE
+
+
+class TestSelectKeeperRound(BaseRoundTestClass):
+    """Tests for SelectKeeperRound."""
+
+    def test_run(
+        self,
+    ) -> None:
+        """Run tests."""
+
+        test_round = TwitterSelectKeepersRound(
+            synchronized_data=self.synchronized_data,
+        )
+
+        first_payload, *payloads = [
+            TwitterSelectKeepersPayload(
+                sender=participant, keepers='["keeper","keeper"]'
+            )
+            for participant in self.participants
+        ]
+
+        test_round.process_payload(first_payload)
+        assert test_round.collection[first_payload.sender] == first_payload
+        assert test_round.end_block() is None
+
+        self._test_no_majority_event(test_round)
+
+        for payload in payloads:
+            test_round.process_payload(payload)
+
+        actual_next_behaviour = self.synchronized_data.update(
+            participant_to_selection=test_round.serialized_collection,
+            most_voted_keeper_address=test_round.most_voted_payload,
+        )
+
+        res = test_round.end_block()
+        assert res is not None
+        synchronized_data, event = res
+        assert all(
+            [
+                key
+                in cast(SynchronizedData, synchronized_data).participant_to_selection
+                for key in cast(
+                    SynchronizedData, actual_next_behaviour
+                ).participant_to_selection
+            ]
+        )
+        assert event == Event.DONE
