@@ -27,6 +27,7 @@ alphabet_in:
 - ROUND_TIMEOUT
 - SCHEDULED_TWEET
 - SCORE
+- SELECT_KEEPERS
 - TWEET_EVALUATION_ROUND_TIMEOUT
 - UPDATE_CENTAURS
 - VERIFICATION_ERROR
@@ -59,6 +60,8 @@ states:
 - TwitterDecisionMakingRound
 - TwitterHashtagsCollectionRound
 - TwitterMentionsCollectionRound
+- TwitterRandomnessRound
+- TwitterSelectKeepersRound
 - TwitterWriteRound
 - VerificationRound
 transition_func:
@@ -138,6 +141,7 @@ transition_func:
     (TwitterDecisionMakingRound, RETRIEVE_HASHTAGS): TwitterHashtagsCollectionRound
     (TwitterDecisionMakingRound, RETRIEVE_MENTIONS): TwitterMentionsCollectionRound
     (TwitterDecisionMakingRound, ROUND_TIMEOUT): TwitterDecisionMakingRound
+    (TwitterDecisionMakingRound, SELECT_KEEPERS): TwitterRandomnessRound
     (TwitterHashtagsCollectionRound, API_ERROR): TwitterHashtagsCollectionRound
     (TwitterHashtagsCollectionRound, DONE): TwitterDecisionMakingRound
     (TwitterHashtagsCollectionRound, DONE_MAX_RETRIES): TwitterDecisionMakingRound
@@ -148,6 +152,12 @@ transition_func:
     (TwitterMentionsCollectionRound, DONE_MAX_RETRIES): TwitterDecisionMakingRound
     (TwitterMentionsCollectionRound, NO_MAJORITY): TwitterMentionsCollectionRound
     (TwitterMentionsCollectionRound, ROUND_TIMEOUT): TwitterMentionsCollectionRound
+    (TwitterRandomnessRound, DONE): TwitterSelectKeepersRound
+    (TwitterRandomnessRound, NO_MAJORITY): TwitterRandomnessRound
+    (TwitterRandomnessRound, ROUND_TIMEOUT): TwitterRandomnessRound
+    (TwitterSelectKeepersRound, DONE): TwitterDecisionMakingRound
+    (TwitterSelectKeepersRound, NO_MAJORITY): TwitterRandomnessRound
+    (TwitterSelectKeepersRound, ROUND_TIMEOUT): TwitterRandomnessRound
     (TwitterWriteRound, API_ERROR): RandomnessTwitterRound
     (TwitterWriteRound, CONTINUE): TwitterWriteRound
     (TwitterWriteRound, DONE): DecisionMakingRound

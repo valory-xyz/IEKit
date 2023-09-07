@@ -20,10 +20,12 @@
 """This package contains round behaviours of TwitterScoringAbciApp."""
 
 import json
+import math
+import random
 import re
 from abc import ABC
 from datetime import datetime
-from typing import Dict, Generator, Optional, Set, Tuple, Type, cast
+from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
 
 from web3 import Web3
 
@@ -36,6 +38,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
+from packages.valory.skills.abstract_round_abci.common import RandomnessBehaviour
 from packages.valory.skills.abstract_round_abci.models import Requests
 from packages.valory.skills.twitter_scoring_abci.ceramic_db import CeramicDB
 from packages.valory.skills.twitter_scoring_abci.dialogues import (
@@ -54,6 +57,8 @@ from packages.valory.skills.twitter_scoring_abci.payloads import (
     TwitterDecisionMakingPayload,
     TwitterHashtagsCollectionPayload,
     TwitterMentionsCollectionPayload,
+    TwitterRandomnessPayload,
+    TwitterSelectKeepersPayload,
 )
 from packages.valory.skills.twitter_scoring_abci.prompts import tweet_evaluation_prompt
 from packages.valory.skills.twitter_scoring_abci.rounds import (
@@ -65,7 +70,9 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     TwitterDecisionMakingRound,
     TwitterHashtagsCollectionRound,
     TwitterMentionsCollectionRound,
+    TwitterRandomnessRound,
     TwitterScoringAbciApp,
+    TwitterSelectKeepersRound,
 )
 
 
@@ -130,6 +137,103 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
         return False, number_of_tweets_pulled_today, last_tweet_pull_window_reset
 
 
+class TwitterRandomnessBehaviour(RandomnessBehaviour):
+    """Retrieve randomness."""
+
+    matching_round = TwitterRandomnessRound
+    payload_class = TwitterRandomnessPayload
+
+
+class TwitterSelectKeepersBehaviour(TwitterScoringBaseBehaviour):
+    """Select the keeper agent."""
+
+    matching_round = TwitterSelectKeepersRound
+    payload_class = TwitterSelectKeepersPayload
+
+    def _select_keepers(self) -> List[str]:
+        """
+        Select new keepers randomly.
+
+        1. Sort the list of participants who are not blacklisted as keepers.
+        2. Randomly shuffle it.
+        3. Pick the first keepers in order.
+        4. If they have already been selected, pick the next ones.
+
+        :return: the selected keepers' addresses.
+        """
+        # Get all the participants who have not been blacklisted as keepers
+        non_blacklisted = (
+            self.synchronized_data.participants
+            - self.synchronized_data.blacklisted_keepers
+        )
+        if not non_blacklisted:
+            raise RuntimeError(
+                "Cannot continue if all the keepers have been blacklisted!"
+            )
+
+        # Sorted list of participants who are not blacklisted as keepers
+        relevant_set = sorted(list(non_blacklisted))
+
+        needed_keepers = math.ceil(
+            self.synchronized_data.nb_participants / 2
+        )  # half or 1
+
+        # Check if we need random selection
+        if len(relevant_set) <= needed_keepers:
+            keeper_addresses = list(relevant_set)
+            self.context.logger.info(f"Selected new keepers: {keeper_addresses}.")
+            return keeper_addresses
+
+        # Random seeding and shuffling of the set
+        random.seed(self.synchronized_data.keeper_randomness)
+        random.shuffle(relevant_set)
+
+        # If the keeper is not set yet, pick the first address
+        keeper_addresses = relevant_set[0:2]
+
+        # If the keepers have been already set, select the next ones.
+        if (
+            self.synchronized_data.are_keepers_set
+            and len(self.synchronized_data.participants) > 2
+        ):
+            old_keeper_index = relevant_set.index(
+                self.synchronized_data.most_voted_keeper_addresses[0]
+            )
+            keeper_addresses = [
+                relevant_set[
+                    (old_keeper_index + 2) % len(relevant_set)
+                ],  # skip the previous 2
+                relevant_set[(old_keeper_index + 3) % len(relevant_set)],
+            ]
+
+        self.context.logger.info(f"Selected new keepers: {keeper_addresses}.")
+
+        return keeper_addresses
+
+    def async_act(self) -> Generator:
+        """
+        Do the action.
+
+        Steps:
+        - Select a keeper randomly.
+        - Send the transaction with the keeper and wait for it to be mined.
+        - Wait until ABCI application transitions to the next round.
+        - Go to the next behaviour state (set done event).
+        """
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            payload = TwitterSelectKeepersPayload(  # type: ignore
+                self.context.agent_address,
+                json.dumps(self._select_keepers(), sort_keys=True),
+            )
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
+
+
 class TwitterDecisionMakingBehaviour(TwitterScoringBaseBehaviour):
     """TwitterDecisionMakingBehaviour"""
 
@@ -163,6 +267,9 @@ class TwitterDecisionMakingBehaviour(TwitterScoringBaseBehaviour):
 
         if performed_tasks[Event.OPENAI_CALL_CHECK.value] == Event.NO_ALLOWANCE.value:
             return Event.DONE_SKIP.value
+
+        if Event.SELECT_KEEPERS.value not in performed_tasks:
+            return Event.SELECT_KEEPERS.value
 
         if Event.RETRIEVE_HASHTAGS.value not in performed_tasks:
             return Event.RETRIEVE_HASHTAGS.value
@@ -212,10 +319,41 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
     matching_round: Type[AbstractRound] = TwitterMentionsCollectionRound
 
-    def async_act(self) -> Generator:
+    def _i_am_not_sending(self) -> bool:
+        """Indicates if the current agent is one of the sender or not."""
+        return (
+            self.context.agent_address
+            not in self.synchronized_data.most_voted_keeper_addresses
+        )
+
+    def async_act(self) -> Generator[None, None, None]:
+        """
+        Do the action.
+
+        Steps:
+        - If the agent is the keeper, then prepare the transaction and send it.
+        - Otherwise, wait until the next round.
+        - If a timeout is hit, set exit A event, otherwise set done event.
+        """
+        if self._i_am_not_sending():
+            yield from self._not_sender_act()
+        else:
+            yield from self._sender_act()
+
+    def _not_sender_act(self) -> Generator:
+        """Do the non-sender action."""
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            self.context.logger.info(
+                f"Waiting for the keeper to do its keeping: keepers={self.synchronized_data.most_voted_keeper_addresses}, me={self.context.agent_address}"
+            )
+            yield from self.wait_until_round_end()
+        self.set_done()
+
+    def _sender_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            self.context.logger.info("I am a keeper")
 
             (
                 has_limit_reached,
@@ -407,10 +545,41 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
     matching_round: Type[AbstractRound] = TwitterHashtagsCollectionRound
 
-    def async_act(self) -> Generator:
+    def _i_am_not_sending(self) -> bool:
+        """Indicates if the current agent is one of the sender or not."""
+        return (
+            self.context.agent_address
+            not in self.synchronized_data.most_voted_keeper_addresses
+        )
+
+    def async_act(self) -> Generator[None, None, None]:
+        """
+        Do the action.
+
+        Steps:
+        - If the agent is the keeper, then prepare the transaction and send it.
+        - Otherwise, wait until the next round.
+        - If a timeout is hit, set exit A event, otherwise set done event.
+        """
+        if self._i_am_not_sending():
+            yield from self._not_sender_act()
+        else:
+            yield from self._sender_act()
+
+    def _not_sender_act(self) -> Generator:
+        """Do the non-sender action."""
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            self.context.logger.info(
+                f"Waiting for the keeper to do its keeping: keepers={self.synchronized_data.most_voted_keeper_addresses}, me={self.context.agent_address}"
+            )
+            yield from self.wait_until_round_end()
+        self.set_done()
+
+    def _sender_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            self.context.logger.info("I am a keeper")
 
             (
                 has_limit_reached,
@@ -732,14 +901,6 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         """Calculate the new content of the DB"""
 
         tweets = self.synchronized_data.tweets
-        latest_mention_tweet_id = self.synchronized_data.latest_mention_tweet_id
-        latest_hashtag_tweet_id = self.synchronized_data.latest_hashtag_tweet_id
-        number_of_tweets_pulled_today = (
-            self.synchronized_data.number_of_tweets_pulled_today
-        )
-        last_tweet_pull_window_reset = (
-            self.synchronized_data.last_tweet_pull_window_reset
-        )
 
         # Instantiate the db
         ceramic_db = CeramicDB(self.synchronized_data.ceramic_db, self.context.logger)
@@ -816,21 +977,35 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         ceramic_db.merge_by_wallet()
 
         # Update the latest_hashtag_tweet_id
-        ceramic_db.data["module_data"]["twitter"]["latest_hashtag_tweet_id"] = str(
-            latest_hashtag_tweet_id
-        )
+        latest_hashtag_tweet_id = self.synchronized_data.latest_hashtag_tweet_id
+        if latest_hashtag_tweet_id:
+            ceramic_db.data["module_data"]["twitter"]["latest_hashtag_tweet_id"] = str(
+                latest_hashtag_tweet_id
+            )
+
         # Update the latest_mention_tweet_id
-        ceramic_db.data["module_data"]["twitter"]["latest_mention_tweet_id"] = str(
-            latest_mention_tweet_id
-        )
+        latest_mention_tweet_id = self.synchronized_data.latest_mention_tweet_id
+        if latest_mention_tweet_id:
+            ceramic_db.data["module_data"]["twitter"]["latest_mention_tweet_id"] = str(
+                latest_mention_tweet_id
+            )
 
         # Update the number of tweets made today
-        ceramic_db.data["module_data"]["twitter"][
-            "number_of_tweets_pulled_today"
-        ] = str(number_of_tweets_pulled_today)
-        ceramic_db.data["module_data"]["twitter"]["last_tweet_pull_window_reset"] = str(
-            last_tweet_pull_window_reset
+        number_of_tweets_pulled_today = (
+            self.synchronized_data.number_of_tweets_pulled_today
         )
+        if number_of_tweets_pulled_today:
+            ceramic_db.data["module_data"]["twitter"][
+                "number_of_tweets_pulled_today"
+            ] = str(number_of_tweets_pulled_today)
+
+        last_tweet_pull_window_reset = (
+            self.synchronized_data.last_tweet_pull_window_reset
+        )
+        if last_tweet_pull_window_reset:
+            ceramic_db.data["module_data"]["twitter"][
+                "last_tweet_pull_window_reset"
+            ] = str(last_tweet_pull_window_reset)
 
         # Update the current_period
         ceramic_db.data["module_data"]["twitter"]["current_period"] = today
@@ -880,4 +1055,6 @@ class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
         TwitterHashtagsCollectionBehaviour,
         TweetEvaluationBehaviour,
         DBUpdateBehaviour,
+        TwitterRandomnessBehaviour,
+        TwitterSelectKeepersBehaviour,
     ]
