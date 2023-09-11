@@ -145,13 +145,13 @@ transition_func:
     (TwitterHashtagsCollectionRound, API_ERROR): TwitterHashtagsCollectionRound
     (TwitterHashtagsCollectionRound, DONE): TwitterDecisionMakingRound
     (TwitterHashtagsCollectionRound, DONE_MAX_RETRIES): TwitterDecisionMakingRound
-    (TwitterHashtagsCollectionRound, NO_MAJORITY): TwitterHashtagsCollectionRound
-    (TwitterHashtagsCollectionRound, ROUND_TIMEOUT): TwitterHashtagsCollectionRound
+    (TwitterHashtagsCollectionRound, NO_MAJORITY): TwitterRandomnessRound
+    (TwitterHashtagsCollectionRound, ROUND_TIMEOUT): TwitterRandomnessRound
     (TwitterMentionsCollectionRound, API_ERROR): TwitterMentionsCollectionRound
     (TwitterMentionsCollectionRound, DONE): TwitterDecisionMakingRound
     (TwitterMentionsCollectionRound, DONE_MAX_RETRIES): TwitterDecisionMakingRound
-    (TwitterMentionsCollectionRound, NO_MAJORITY): TwitterMentionsCollectionRound
-    (TwitterMentionsCollectionRound, ROUND_TIMEOUT): TwitterMentionsCollectionRound
+    (TwitterMentionsCollectionRound, NO_MAJORITY): TwitterRandomnessRound
+    (TwitterMentionsCollectionRound, ROUND_TIMEOUT): TwitterRandomnessRound
     (TwitterRandomnessRound, DONE): TwitterSelectKeepersRound
     (TwitterRandomnessRound, NO_MAJORITY): TwitterRandomnessRound
     (TwitterRandomnessRound, ROUND_TIMEOUT): TwitterRandomnessRound
