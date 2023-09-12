@@ -21,7 +21,7 @@ connections:
 - valory/ledger:0.19.0:bafybeigfoz7d7si7s4jehvloq2zmiiocpbxcaathl3bxkyarxoerxq7g3a
 - valory/p2p_libp2p_client:0.1.0:bafybeihdnfdth3qgltefgrem7xyi4b3ejzaz67xglm2hbma2rfvpl2annq
 - valory/openai:0.1.0:bafybeih7w2xmaecgznuhxpnbxcxjhfla6wlmx3umytindfgk6ibbwqq2lu
-- valory/twitter:0.1.0:bafybeibndxp3l35osve5pj255waemunlzaacwtasyazjmcmrx7qo5wcrni
+- valory/twitter:0.1.0:bafybeiaomtrnfaau4y55oajc77zg67wpm44ws7iflqlkz2dpthevsowlme
 contracts:
 - valory/dynamic_contribution:0.1.0:bafybeie76ynpueo3hh2ujzcfgpqcsbyqwa4pdcc6g44a4he6bueyb4tqiy
 - valory/gnosis_safe:0.1.0:bafybeigvqg4lapdaa23dpc3pv67rdptdhey6e435mxqsw2gb2u74yw4yei
@@ -42,9 +42,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeicg7dv7cff34nv2k2z47c4yp4kddsxp3wozonzow6tnvfvwndz3cy
 - valory/abstract_round_abci:0.1.0:bafybeigxjcci53vwytymzlhr37436yvenh7jup4astrn7dgyixo24aq2pq
-- valory/impact_evaluator_abci:0.1.0:bafybeig5kiim7x6svzbrxsmwjqntlfqbdmaod5n2vjbs7yqwj5sldgi6y4
+- valory/impact_evaluator_abci:0.1.0:bafybeiff332ucpyz27itmc2ug3pcsd5vfemocdg2ikzbivebu4qhqfl24m
 - valory/generic_scoring_abci:0.1.0:bafybeiemmcnduhdj427kgafkxcbn2rfhaihabtpda34yqnks7utm3g4xiq
-- valory/twitter_scoring_abci:0.1.0:bafybeifu7vbznnx42oayoh24malmebchfvbitndzpbmf6xmp7hgq26buyy
+- valory/twitter_scoring_abci:0.1.0:bafybeigxqyksuvrimhl5qvzzvevfr6swca5vux37wqefluyxxqntnhhssu
 - valory/ceramic_read_abci:0.1.0:bafybeidruvxgpbggchuvlnssuswdxuoz2ep6sjvzzqjeyckybb6gpjx3ia
 - valory/ceramic_write_abci:0.1.0:bafybeigtkv57h5suaqqpjfknimfegbidovxna7cok7znsgzrfb4nftqvay
 - valory/dynamic_nft_abci:0.1.0:bafybeie5vfscnjpvuwqe5vk7i2rzzlqciojswdg7uh34fjnuk3bspca5zq
@@ -52,7 +52,7 @@ skills:
 - valory/reset_pause_abci:0.1.0:bafybeid445uy6wwvugf3byzl7r73c7teu6xr5ezxb4h7cxbenghg3copvy
 - valory/termination_abci:0.1.0:bafybeiguy7pkrcptg6c754ioig4mlkr7truccym3fpv6jwpjx2tmpdbzhi
 - valory/transaction_settlement_abci:0.1.0:bafybeidpsnguxizkpihtkqzojr3em7yy7c6qc7gxpbh5vglmwws5wke7bi
-- valory/twitter_write_abci:0.1.0:bafybeih662zzwew4egsm2m6mis5yjwfehhx2lciio5ngnbunolc6nkkyw4
+- valory/twitter_write_abci:0.1.0:bafybeidffe5gpwydbnop6o3gtbtlmvgfeogh3jtufvbizbwvnzq7ior2ci
 - valory/decision_making_abci:0.1.0:bafybeih5nquchsfisp5taaxrpz7j7ur2teymey5tihlw654wrzgpy57bvq
 - valory/llm_abci:0.1.0:bafybeictnqpioilfry2yxkwaaguam5zbo3ygw7slkpn3k36gfvo2cnnyam
 default_ledger: ethereum

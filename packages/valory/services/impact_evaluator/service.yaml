@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeif6lpdpuq2pcocmre4iswp6puraxrlib6b2ydzew2daboei6pduju
+agent: valory/impact_evaluator:0.1.0:bafybeihkdnfnqow7rejl2hqgtlsvg33nsa6ua5gfdrxkuznbypgpxqhbwa
 number_of_agents: 4
 deployment:
   agent:
@@ -80,7 +80,7 @@ extra:
         termination_sleep: ${TERMINATION_SLEEP:int:900}
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
         on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
-        reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:300}
+        reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:30}
         retry_attempts: 400
         retry_timeout: 3
         request_retry_delay: 1.0
@@ -146,7 +146,7 @@ extra:
         termination_sleep: ${TERMINATION_SLEEP:int:900}
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
         on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
-        reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:300}
+        reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:30}
         retry_attempts: 400
         retry_timeout: 3
         request_retry_delay: 1.0
@@ -212,7 +212,7 @@ extra:
         termination_sleep: ${TERMINATION_SLEEP:int:900}
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
         on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
-        reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:300}
+        reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:30}
         retry_attempts: 400
         retry_timeout: 3
         request_retry_delay: 1.0
@@ -280,7 +280,7 @@ extra:
         keeper_allowed_retries: 3
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
         on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
-        reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:300}
+        reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:30}
         retry_attempts: 400
         retry_timeout: 3
         request_retry_delay: 1.0

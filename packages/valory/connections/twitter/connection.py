@@ -180,7 +180,19 @@ class TwitterConnection(BaseSyncConnection):
             )
         )
         try:
-            response = api.create_tweet(text=text)
+            if isinstance(text, list):
+                # Thread
+                previous_tweet_id = None
+                for tweet in text:
+                    if not previous_tweet_id:
+                        response = api.create_tweet(text=tweet)
+                    else:
+                        response = api.create_tweet(text=tweet, in_reply_to_tweet_id=previous_tweet_id)
+                    previous_tweet_id = response.data["id"]
+            else:
+                # Single tweet
+                response = api.create_tweet(text=text)
+
         except TweepyHTTPException as e:
             error = "; ".join(e.api_messages)
             return cast(
