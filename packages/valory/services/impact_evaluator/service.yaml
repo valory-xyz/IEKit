@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeibfkfseqba4yd4enameta3ymnv6bvypuheomkvney5blmvxs54mde
+agent: valory/impact_evaluator:0.1.0:bafybeibvonpqfwhnw42kkvg7omajkgfqgvze5v5xsrrvolenxps55d3ovq
 number_of_agents: 4
 deployment:
   agent:
@@ -114,6 +114,7 @@ extra:
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
         openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
         openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
+        service_endpoint_base: ${SERVICE_ENDPOINT_BASE:str:https://dummy_service.autonolas.tech/}
 1:
   models:
     benchmark_tool:
@@ -180,6 +181,7 @@ extra:
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
         openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
         openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
+        service_endpoint_base: ${SERVICE_ENDPOINT_BASE:str:https://dummy_service.autonolas.tech/}
 2:
   models:
     benchmark_tool:
@@ -246,6 +248,7 @@ extra:
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
         openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
         openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
+        service_endpoint_base: ${SERVICE_ENDPOINT_BASE:str:https://dummy_service.autonolas.tech/}
 3:
   models:
     benchmark_tool:
@@ -316,6 +319,7 @@ extra:
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
         openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
         openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
+        service_endpoint_base: ${SERVICE_ENDPOINT_BASE:str:https://dummy_service.autonolas.tech/}
 ---
 public_id: valory/ledger:0.19.0
 type: connection

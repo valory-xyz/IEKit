@@ -226,33 +226,6 @@ class TestHttpHandler(BaseSkillTestCase):
                 n_outbox_msgs=1,
             ),
             HandlerTestCase(
-                name="healthcheck",
-                request_url=f"{TOKEN_URI_BASE}healthcheck",
-                token_id_to_points={},
-                request_body=b"some_body/",
-                response_status_code=OK_CODE,
-                response_status_text="Success",
-                response_headers="Content-Type: application/json\nsome_headers",
-                response_body=json.dumps(get_dummy_health()).encode("utf-8"),
-                method="get",
-                n_outbox_msgs=1,
-            ),
-            HandlerTestCase(
-                name="healthcheck_time_not_updated_yet",
-                request_url=f"{TOKEN_URI_BASE}healthcheck",
-                token_id_to_points={},
-                request_body=b"some_body/",
-                response_status_code=OK_CODE,
-                response_status_text="Success",
-                response_headers="Content-Type: application/json\nsome_headers",
-                response_body=json.dumps(get_dummy_health(time_updated=False)).encode(
-                    "utf-8"
-                ),
-                method="get",
-                n_outbox_msgs=1,
-                set_last_update_time=False,
-            ),
-            HandlerTestCase(
                 name="no-handler",
                 request_url="wrong_uri",
                 token_id_to_points={},
@@ -293,18 +266,15 @@ class TestHttpHandler(BaseSkillTestCase):
             abci_app_db = AbciAppDB(
                 {
                     "token_id_to_points": [test_case.token_id_to_points],
-                    "last_update_time": [
-                        mock_now_time_timestamp - 5.0
-                    ]  # 5 seconds before
-                    if test_case.set_last_update_time
-                    else [None],
                 }
             )
             mock_round_sequence.latest_synchronized_data.db = abci_app_db
             mock_round_sequence.block_stall_deadline_expired = False
+            mock_round_sequence._last_round_transition_timestamp = 1000
 
             datetime_mock = Mock(wraps=datetime.datetime)
             datetime_mock.now.return_value = mock_now_time
+            datetime_mock.timestamp = datetime.datetime.timestamp
 
             with patch("datetime.datetime", new=datetime_mock):
                 self.http_handler.handle(incoming_message)

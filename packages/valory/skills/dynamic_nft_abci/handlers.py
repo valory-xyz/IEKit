@@ -19,9 +19,9 @@
 
 """This module contains the handlers for the skill of DynamicNFTAbciApp."""
 
-import datetime
 import json
 import re
+from datetime import datetime
 from enum import Enum
 from typing import Callable, Dict, Optional, Tuple, cast
 from urllib.parse import urlparse
@@ -310,7 +310,9 @@ class HttpHandler(BaseHttpHandler):
         """
         seconds_since_last_transition = None
         is_tm_unhealthy = None
-        is_healthy = None
+        is_transitioning_fast = None
+        current_round = None
+        previous_rounds = None
 
         round_sequence = cast(SharedState, self.context.state).round_sequence
 
@@ -324,18 +326,26 @@ class HttpHandler(BaseHttpHandler):
                 round_sequence._last_round_transition_timestamp
             )
 
-            is_healthy = (
+            is_transitioning_fast = (
                 not is_tm_unhealthy
                 and seconds_since_last_transition
                 < 2 * self.context.params.reset_pause_duration
             )
+
+        if round_sequence._abci_app:
+            current_round = round_sequence._abci_app.current_round.round_id
+            previous_rounds = [
+                r.round_id for r in round_sequence._abci_app._previous_rounds[-10:]
+            ]
 
         data = {
             "seconds_since_last_transition": seconds_since_last_transition,
             "is_tm_healthy": not is_tm_unhealthy,
             "period": self.synchronized_data.period_count,
             "reset_pause_duration": self.context.params.reset_pause_duration,
-            "is_healthy": is_healthy,
+            "current_round": current_round,
+            "previous_rounds": previous_rounds,
+            "is_transitioning_fast": is_transitioning_fast,
         }
 
         self._send_ok_response(http_msg, http_dialogue, data)
