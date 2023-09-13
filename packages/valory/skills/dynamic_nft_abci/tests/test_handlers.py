@@ -262,7 +262,6 @@ class TestHttpHandler(BaseSkillTestCase):
             self.http_handler.context.state, "_round_sequence"
         ) as mock_round_sequence:
             mock_now_time = datetime.datetime(2022, 1, 1)
-            mock_now_time_timestamp = mock_now_time.timestamp()
             abci_app_db = AbciAppDB(
                 {
                     "token_id_to_points": [test_case.token_id_to_points],
