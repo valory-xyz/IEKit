@@ -308,39 +308,34 @@ class HttpHandler(BaseHttpHandler):
         :param http_msg: the http message
         :param http_dialogue: the http dialogue
         """
-        last_update_time = self.synchronized_data.last_update_time
+        seconds_since_last_transition = None
+        is_tm_unhealthy = None
+        is_healthy = None
 
-        if last_update_time:
+        round_sequence = cast(SharedState, self.context.state).round_sequence
+
+        if round_sequence._last_round_transition_timestamp:
             is_tm_unhealthy = cast(
                 SharedState, self.context.state
             ).round_sequence.block_stall_deadline_expired
 
-            current_time = datetime.datetime.now().timestamp()
-
-            reset_pause_duration = self.context.params.reset_pause_duration
-
-            seconds_since_last_reset = current_time - last_update_time
-            seconds_until_next_update = (
-                AVERAGE_PERIOD_SECONDS + reset_pause_duration - seconds_since_last_reset
-            )  # this can be negative if we have passed the estimated reset time without resetting
-
-            is_healthy = all(
-                [
-                    seconds_since_last_reset < 2 * reset_pause_duration,
-                    not is_tm_unhealthy,
-                ]
+            current_time = datetime.now().timestamp()
+            seconds_since_last_transition = current_time - datetime.timestamp(
+                round_sequence._last_round_transition_timestamp
             )
 
-        else:
-            seconds_since_last_reset = None
-            is_healthy = None
-            seconds_until_next_update = None
+            is_healthy = (
+                not is_tm_unhealthy
+                and seconds_since_last_transition
+                < 2 * self.context.params.reset_pause_duration
+            )
 
         data = {
-            "seconds_since_last_reset": seconds_since_last_reset,
-            "healthy": is_healthy,
-            "seconds_until_next_update": seconds_until_next_update,
+            "seconds_since_last_transition": seconds_since_last_transition,
+            "is_tm_healthy": not is_tm_unhealthy,
             "period": self.synchronized_data.period_count,
+            "reset_pause_duration": self.context.params.reset_pause_duration,
+            "is_healthy": is_healthy,
         }
 
         self._send_ok_response(http_msg, http_dialogue, data)
