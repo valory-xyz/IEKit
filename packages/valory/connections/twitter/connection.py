@@ -183,15 +183,18 @@ class TwitterConnection(BaseSyncConnection):
             if isinstance(text, list):
                 # Thread
                 previous_tweet_id = None
+                first_tweet_id = None
                 for tweet in text:
                     if not previous_tweet_id:
                         response = api.create_tweet(text=tweet)
+                        first_tweet_id = response.data["id"]
                     else:
                         response = api.create_tweet(text=tweet, in_reply_to_tweet_id=previous_tweet_id)
                     previous_tweet_id = response.data["id"]
             else:
                 # Single tweet
                 response = api.create_tweet(text=text)
+                first_tweet_id = response.data["id"]
 
         except TweepyHTTPException as e:
             error = "; ".join(e.api_messages)
@@ -204,13 +207,12 @@ class TwitterConnection(BaseSyncConnection):
                 ),
             )
 
-        tweet_id = response.data["id"]
         return cast(
             TwitterMessage,
             dialogue.reply(
                 performative=TwitterMessage.Performative.TWEET_CREATED,
                 target_message=message,
-                tweet_id=tweet_id,
+                tweet_id=first_tweet_id,
             ),
         )
 
