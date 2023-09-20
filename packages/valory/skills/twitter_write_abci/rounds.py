@@ -70,8 +70,8 @@ class SynchronizedData(BaseSynchronizedData):
 
     @property
     def tweet_ids(self) -> List[int]:
-        """Checks whether there are changes pending to be written to Ceramic."""
-        return cast(list, self.db.get("tweets", []))
+        """List of posted tweet ids."""
+        return cast(list, self.db.get("tweet_ids", []))
 
 
 class RandomnessTwitterRound(CollectSameUntilThresholdRound):
