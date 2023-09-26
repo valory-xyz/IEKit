@@ -468,9 +468,15 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
             # Check response status
             if response.status_code != HTTP_OK:
-                headers = json.loads(response.headers)
+                headers = [
+                    header.split(": ")
+                    for header in response.headers.split("\r\n")
+                    if header
+                ]
+                header_dict = {key: value for key, value in headers}
+
                 remaining, limit, reset_ts = [
-                    headers.get(header, "?")
+                    header_dict.get(header, "?")
                     for header in [
                         "x-rate-limit-remaining",
                         "x-rate-limit-limit",
@@ -478,7 +484,7 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
                     ]
                 ]
                 reset = (
-                    datetime.fromtimestamp(reset_ts).strftime("%Y-%m-%d %H:%M:%S")
+                    datetime.fromtimestamp(int(reset_ts)).strftime("%Y-%m-%d %H:%M:%S")
                     if reset_ts != "?"
                     else None
                 )
@@ -721,9 +727,15 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
             # Check response status
             if response.status_code != 200:
-                headers = json.loads(response.headers)
+                headers = [
+                    header.split(": ")
+                    for header in response.headers.split("\r\n")
+                    if header
+                ]
+                header_dict = {key: value for key, value in headers}
+
                 remaining, limit, reset_ts = [
-                    headers.get(header, "?")
+                    header_dict.get(header, "?")
                     for header in [
                         "x-rate-limit-remaining",
                         "x-rate-limit-limit",
@@ -731,7 +743,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
                     ]
                 ]
                 reset = (
-                    datetime.fromtimestamp(reset_ts).strftime("%Y-%m-%d %H:%M:%S")
+                    datetime.fromtimestamp(int(reset_ts)).strftime("%Y-%m-%d %H:%M:%S")
                     if reset_ts != "?"
                     else None
                 )

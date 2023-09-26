@@ -694,7 +694,7 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                         ),
                         json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
-                    "headers": ["{}"],
+                    "headers": [""],
                     "status_codes": [404],
                 },
             ),
@@ -820,7 +820,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                     "bodies": [
                         json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
-                    "headers": ["{}"],
+                    "headers": [""],
                     "status_codes": [404],
                 },
             ),
