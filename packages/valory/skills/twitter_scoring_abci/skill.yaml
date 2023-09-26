@@ -8,23 +8,23 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
-  behaviours.py: bafybeia4ygnvr3qtw7o3ory5inwir2rtesnt7kswyftfsjak3bfhrhsaki
+  behaviours.py: bafybeiffmgc4uqr54ocrr2nxfp2elkkica2o5r5fol5rbyrmz64tdduqea
   ceramic_db.py: bafybeicusdonrdq6kirgkpdqmi3a6kmeal4nctnm5ozjqf5s5se6jpitjm
   dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
-  fsm_specification.yaml: bafybeignulsqolfatfv2zo6s3tw5zykqtydojc3kzrwcgovdtf7ofxj3xi
+  fsm_specification.yaml: bafybeie6k4aanmwcrghspbqywdh2srrudtkhnbbhqm3ovcz5k4fa5dybrq
   handlers.py: bafybeid3nqvcyotqj5g5hlgrz57nf7vpjysmgvsxe3p7644f4z5dcwqn6u
   models.py: bafybeiajis7l5sv7b3fofuj3ehxai5d2uy6h6p4kabhrekjwkjs77lopxe
   payloads.py: bafybeibeqiwnua7uewbv5a7epebshjpueuqpcbw6s2y3u62kasdhiijs5i
   prompts.py: bafybeieiuqn427bgwfnzynxf3vtqfpvmqqscs5tyw4oibfofwropifotke
-  rounds.py: bafybeibqzguokmeb4qtcbsamvr4up2tc7utwcc2qz4tkeseb42ega57gju
+  rounds.py: bafybeigtzsvklrwxyah2syrzjruufr6uuninyh6flbrwetcgcb5pl4czra
   tests/__init__.py: bafybeidwzzd4ejsyf3aryd5kmrvd63h7ajgqyrxphmfaacvpjnneacejay
-  tests/test_behaviours.py: bafybeihp46fd44n34bqyyqixm2g3khraouofefe54eatmw2ktw7poqqllq
+  tests/test_behaviours.py: bafybeihc732whmbn74oxtrua3c77gt4py4tpc5v3drdhg2xc2lxtcqie4e
   tests/test_ceramic_db.py: bafybeif2v7btjphbqabq6qdmfeyweg765seon74acg5vrrvznivzg2prey
   tests/test_dialogues.py: bafybeiheyq7klonzb7rnjub2i22h7bmsnoimn2pq4j7ofikt3yovstvgt4
   tests/test_handlers.py: bafybeigevirvi3saepukke2zmp334btgsdxhj55o2vawj3hqam63miirg4
   tests/test_models.py: bafybeihaiirqmcsshghztl5lvqjzem6y6rdeefhtiycrhh45v7cuwnmdz4
   tests/test_payloads.py: bafybeihg7ndxuj4lehpmgpdngpzihhmaiy7u5kaylukneavsklfwki5j6q
-  tests/test_rounds.py: bafybeiel2tiptr7jasfe7yr7raoj5p3s6nh6zdayhtws54nxquvjqktn5a
+  tests/test_rounds.py: bafybeidzgrz3k5lrnldwxcwgrax2n7ez2hltkzqovn4v4jgqzrmwgceunq
 fingerprint_ignore_patterns: []
 connections:
 - valory/openai:0.1.0:bafybeih7w2xmaecgznuhxpnbxcxjhfla6wlmx3umytindfgk6ibbwqq2lu
