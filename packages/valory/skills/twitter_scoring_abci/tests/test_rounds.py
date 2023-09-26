@@ -107,13 +107,14 @@ def get_payloads(
 def get_dummy_mentions_collection_payload_serialized(api_error: bool = False) -> str:
     """Dummy twitter observation payload"""
     if api_error:
-        return json.dumps({"error": "true"})
+        return json.dumps({"error": "generic", "sleep_until": None})
     return json.dumps(
         {
             "tweets": {"my_tweet": {}},
             "latest_mention_tweet_id": False,
             "number_of_tweets_pulled_today": 0,
             "last_tweet_pull_window_reset": 0,
+            "sleep_until": None,
         },
         sort_keys=True,
     )
@@ -122,13 +123,14 @@ def get_dummy_mentions_collection_payload_serialized(api_error: bool = False) ->
 def get_dummy_hashtags_collection_payload_serialized(api_error: bool = False) -> str:
     """Dummy twitter observation payload"""
     if api_error:
-        return json.dumps({"error": "true"})
+        return json.dumps({"error": "generic", "sleep_until": None})
     return json.dumps(
         {
             "tweets": {"my_tweet": {}},
             "latest_hashtag_tweet_id": False,
             "number_of_tweets_pulled_today": 0,
             "last_tweet_pull_window_reset": 0,
+            "sleep_until": None,
         },
         sort_keys=True,
     )
@@ -204,7 +206,7 @@ class TestMentionsCollectionRound(BaseScoreReadRoundTest):
                     ),
                 ),
                 final_data={},
-                event=Event.API_ERROR,
+                event=Event.DONE_MAX_RETRIES,
                 most_voted_payload=get_dummy_mentions_collection_payload_serialized(
                     api_error=True
                 ),
@@ -275,7 +277,7 @@ class TestHashtagsCollectionRound(BaseScoreReadRoundTest):
                     ),
                 ),
                 final_data={},
-                event=Event.API_ERROR,
+                event=Event.DONE_MAX_RETRIES,
                 most_voted_payload=get_dummy_hashtags_collection_payload_serialized(
                     api_error=True
                 ),

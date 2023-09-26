@@ -412,7 +412,7 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
                     cast(SynchronizedData, self.synchronized_data).api_retries + 1
                 )
 
-                # Max retries
+                # Other API errors
                 if api_retries >= MAX_API_RETRIES:
                     performed_twitter_tasks[
                         "retrieve_hashtags"
