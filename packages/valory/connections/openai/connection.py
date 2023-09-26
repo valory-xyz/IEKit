@@ -205,6 +205,10 @@ class OpenaiConnection(BaseSyncConnection):
             self.logger.error(e)
             result = "OpenAI authentication error"
 
+        except openai.error.APIError as e:
+            self.logger.error(e)
+            result = "OpenAI server error"
+
         return result
 
     def on_connect(self) -> None:
