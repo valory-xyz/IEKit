@@ -373,7 +373,7 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
             if has_limit_reached:
                 self.context.logger.info(
-                    "Cannot retrieve tweets, max number of tweets reached for today"
+                    "Cannot retrieve tweets, max number of tweets reached for today or 15-min request amount reached"
                 )
                 payload_data = {
                     "tweets": None,
@@ -632,7 +632,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
             if has_limit_reached:
                 self.context.logger.info(
-                    "Cannot retrieve tweets, max number of tweets reached for today"
+                    "Cannot retrieve tweets, max number of tweets reached for today or 15-min request amount reached"
                 )
                 payload_data = {
                     "tweets": None,
