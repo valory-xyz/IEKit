@@ -838,7 +838,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
         return {
             "tweets": tweets,
-            "latest_mention_tweet_id": latest_tweet_id,
+            "latest_hashtag_tweet_id": latest_tweet_id,
             "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
             "sleep_until": None,  # we reset this on a successful request
         }

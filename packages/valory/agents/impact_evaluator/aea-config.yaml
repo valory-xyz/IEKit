@@ -42,9 +42,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeicg7dv7cff34nv2k2z47c4yp4kddsxp3wozonzow6tnvfvwndz3cy
 - valory/abstract_round_abci:0.1.0:bafybeigxjcci53vwytymzlhr37436yvenh7jup4astrn7dgyixo24aq2pq
-- valory/impact_evaluator_abci:0.1.0:bafybeigbsbub6nuxq6fv5st4d7xj3zf72fkex736iati2b7tohphf3uehi
+- valory/impact_evaluator_abci:0.1.0:bafybeibzlnjmtpf3grgtvohzo6j5smnoeb6xygif6xc7tliffeydkgzjy4
 - valory/generic_scoring_abci:0.1.0:bafybeiemmcnduhdj427kgafkxcbn2rfhaihabtpda34yqnks7utm3g4xiq
-- valory/twitter_scoring_abci:0.1.0:bafybeicckolfebk37wse7ndwwrsttfpr46wmflhi7rdwizyi7734jjnz2y
+- valory/twitter_scoring_abci:0.1.0:bafybeihl6ilierddyjjjmcmb3aqlq3lrzt2ep7zy4ogrbg5iijrs5ymsue
 - valory/ceramic_read_abci:0.1.0:bafybeidruvxgpbggchuvlnssuswdxuoz2ep6sjvzzqjeyckybb6gpjx3ia
 - valory/ceramic_write_abci:0.1.0:bafybeigtkv57h5suaqqpjfknimfegbidovxna7cok7znsgzrfb4nftqvay
 - valory/dynamic_nft_abci:0.1.0:bafybeihlz7mduemlax3pogundno7r6g3p3naexecma42paduagegumhnfy
