@@ -1,0 +1,168 @@
+name: impact_evaluator_local
+author: valory
+version: 0.1.0
+description: A service that tracks community members' contributions, scores them and
+  updates their NFT images autonomously.
+aea_version: '>=1.0.0, <2.0.0'
+license: Apache-2.0
+fingerprint:
+  README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
+fingerprint_ignore_patterns: []
+agent: valory/impact_evaluator:0.1.0:bafybeibbs52dpwshevrit2lhrnomwsjby2rkhlm2p2gt7c3phvlavly3w4
+number_of_agents: 1
+deployment:
+  agent:
+    ports:
+      0:
+        8000: 8000
+      1:
+        8001: 8000
+      2:
+        8002: 8000
+      3:
+        8003: 8000
+---
+public_id: valory/impact_evaluator_abci:0.1.0
+type: skill
+extra:
+  params_args:
+    args:
+      setup: &id001
+        safe_contract_address: ${SAFE_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
+        all_participants: ${ALL_PARTICIPANTS:list:[]}
+        consensus_threshold: null
+      genesis_config: &id002
+        genesis_time: '2022-09-26T00:00:00.000000000Z'
+        chain_id: chain-c4daS1
+        consensus_params:
+          block:
+            max_bytes: '22020096'
+            max_gas: '-1'
+            time_iota_ms: '1000'
+          evidence:
+            max_age_num_blocks: '100000'
+            max_age_duration: '172800000000000'
+            max_bytes: '1048576'
+          validator:
+            pub_key_types:
+            - ed25519
+          version: {}
+        voting_power: '10'
+models:
+  benchmark_tool:
+    args:
+      log_dir: /logs
+  params:
+    args:
+      setup: *id001
+      genesis_config: *id002
+      broadcast_to_server: false
+      history_end: null
+      centaurs_stream_id: ${CENTAURS_STREAM_ID:str:dummy_centaurs_stream_id}
+      manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
+      ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:ceramic_db_stream_id}
+      ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
+      ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
+      ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
+      ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
+      ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
+      ceramic_did_str: ${CERAMIC_DID_STR:str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
+      cleanup_history_depth: 1
+      cleanup_history_depth_current: null
+      drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
+      dynamic_contribution_contract_address: ${DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS:str:0x5FbDB2315678afecb367f032d93F642f64180aa3}
+      earliest_block_to_monitor: ${EARLIEST_BLOCK_TO_MONITOR:int:8053690}
+      keeper_timeout: 30.0
+      max_attempts: 10
+      max_healthcheck: 120
+      multisend_address: ${MULTISEND_ADDRESS:str:0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761}
+      termination_sleep: ${TERMINATION_SLEEP:int:900}
+      reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
+      on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
+      reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:30}
+      retry_attempts: 400
+      retry_timeout: 3
+      request_retry_delay: 1.0
+      request_timeout: 10.0
+      round_timeout_seconds: 30.0
+      tweet_evaluation_round_timeout: ${TWEET_EVALUATION_ROUND_TIMEOUT:float:600.0}
+      service_id: impact_evaluator
+      service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:null}
+      share_tm_config_on_startup: ${USE_ACN:bool:false}
+      sleep_time: 1
+      tendermint_check_sleep_delay: 3
+      tendermint_com_url: ${TENDERMINT_COM_URL:str:http://localhost:8080}
+      tendermint_max_retries: 5
+      tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
+      tendermint_p2p_url: ${TENDERMINT_P2P_URL_0:str:impactevaluator_tm_0:26656}
+      token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
+      whitelist_api_key: null
+      whitelist_endpoint: http://localhost
+      points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:null}
+      twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
+      twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
+      twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
+      twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
+      twitter_max_pages: 10
+      twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
+      twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
+      tx_timeout: 10.0
+      use_termination: ${USE_TERMINATION:bool:false}
+      validate_timeout: 1205
+      centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
+      max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
+      openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
+      openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
+      service_endpoint_base: ${SERVICE_ENDPOINT_BASE:str:https://dummy_service.autonolas.tech/}
+---
+public_id: valory/ledger:0.19.0
+type: connection
+config:
+  ledger_apis:
+    ethereum:
+      address: ${ETHEREUM_LEDGER_RPC:str:http://host.docker.internal:8545}
+      chain_id: ${ETHEREUM_LEDGER_CHAIN_ID:int:31337}
+      poa_chain: ${ETHEREUM_LEDGER_IS_POA_CHAIN:bool:false}
+      default_gas_price_strategy: ${ETHEREUM_LEDGER_PRICING:str:eip1559}
+---
+public_id: valory/p2p_libp2p_client:0.1.0
+type: connection
+config:
+  nodes:
+  - uri: ${ACN_URI:str:acn.staging.autonolas.tech:9005}
+    public_key: ${ACN_NODE_PUBLIC_KEY:str:02d3a830c9d6ea1ae91936951430dee11f4662f33118b02190693be835359a9d77}
+cert_requests:
+- identifier: acn
+  ledger_id: ethereum
+  message_format: '{public_key}'
+  not_after: '2023-01-01'
+  not_before: '2022-01-01'
+  public_key: ${ACN_NODE_PUBLIC_KEY:str:02d3a830c9d6ea1ae91936951430dee11f4662f33118b02190693be835359a9d77}
+  save_path: .certs/acn_cosmos_11000.txt
+---
+public_id: valory/openai:0.1.0
+type: connection
+0:
+  config:
+    engine: ${ENGINE:str:text-davinci-003}
+    max_tokens: ${MAX_TOKENS:int:500}
+    openai_api_key: ${OPENAI_API_KEY_0:str:null}
+    temperature: ${TEMPERATURE:float:0.7}
+1:
+  config:
+    engine: ${ENGINE:str:text-davinci-003}
+    max_tokens: ${MAX_TOKENS:int:500}
+    openai_api_key: ${OPENAI_API_KEY_1:str:null}
+    temperature: ${TEMPERATURE:float:0.7}
+2:
+  config:
+    engine: ${ENGINE:str:text-davinci-003}
+    max_tokens: ${MAX_TOKENS:int:500}
+    openai_api_key: ${OPENAI_API_KEY_2:str:null}
+    temperature: ${TEMPERATURE:float:0.7}
+3:
+  config:
+    engine: ${ENGINE:str:text-davinci-003}
+    max_tokens: ${MAX_TOKENS:int:500}
+    openai_api_key: ${OPENAI_API_KEY_3:str:null}
+    temperature: ${TEMPERATURE:float:0.7}
