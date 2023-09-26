@@ -456,7 +456,7 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
         # Pagination loop: we read a max of <twitter_max_pages> pages each period
         # Each page contains 100 tweets. The default value for twitter_max_pages is 10
         for _ in range(self.params.twitter_max_pages):
-            self.context.info(
+            self.context.logger.info(
                 f"Retrieving a new page. max_pages={self.params.twitter_max_pages}"
             )
             url = api_url
@@ -716,7 +716,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
         # Pagination loop: we read a max of <twitter_max_pages> pages each period
         # Each page contains 100 tweets. The default value for twitter_max_pages is 10
         for _ in range(self.params.twitter_max_pages):
-            self.context.info(
+            self.context.logger.info(
                 f"Retrieving a new page. max_pages={self.params.twitter_max_pages}"
             )
 
