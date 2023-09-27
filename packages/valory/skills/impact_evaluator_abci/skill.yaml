@@ -181,6 +181,11 @@ models:
       finalize_timeout: 60.0
       history_check_timeout: 1205
       centaur_id_to_secrets: '{}'
+      use_slashing: false
+      slash_cooldown_hours: 3
+      slash_threshold_amount: 10000000000000000
+      light_slash_unit_amount: 5000000000000000
+      serious_slash_unit_amount: 8000000000000000
     class_name: Params
   randomness_api:
     args:
