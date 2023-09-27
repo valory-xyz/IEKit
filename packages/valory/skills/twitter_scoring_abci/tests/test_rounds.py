@@ -147,7 +147,7 @@ class BaseScoreReadRoundTest(BaseCollectSameUntilThresholdRoundTest):
         self.synchronized_data.update(**test_case.initial_data)
 
         test_round = self.round_class(
-            synchronized_data=self.synchronized_data,
+            synchronized_data=self.synchronized_data, context=mock.MagicMock()
         )
 
         self._complete_run(
@@ -421,7 +421,7 @@ class TestTweetEvaluationRound(BaseCollectNonEmptyUntilThresholdRound):
         self.synchronized_data.update(**test_case.initial_data)
 
         test_round = self.round_class(
-            synchronized_data=self.synchronized_data,
+            synchronized_data=self.synchronized_data, context=mock.MagicMock()
         )
 
         self._complete_run(
@@ -513,7 +513,7 @@ class TestCollectRandomnessRound(BaseRoundTestClass):
         """Run tests."""
 
         test_round = TwitterRandomnessRound(
-            synchronized_data=self.synchronized_data,
+            synchronized_data=self.synchronized_data, context=mock.MagicMock()
         )
         first_payload, *payloads = [
             TwitterRandomnessPayload(
@@ -560,7 +560,7 @@ class TestSelectKeeperRound(BaseRoundTestClass):
         """Run tests."""
 
         test_round = TwitterSelectKeepersRound(
-            synchronized_data=self.synchronized_data,
+            synchronized_data=self.synchronized_data, context=mock.MagicMock()
         )
 
         first_payload, *payloads = [

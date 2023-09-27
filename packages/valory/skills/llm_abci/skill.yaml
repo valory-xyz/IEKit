@@ -20,7 +20,7 @@ fingerprint:
   tests/test_handlers.py: bafybeib747uxd7uhf2kvw5cmkqa2keusnnbecg63d5xg3z4bobyajf4emq
   tests/test_models.py: bafybeifekfvbabdtqez6ndrsg36jxegonqpe3eep4fkdoimtsiowav7pj4
   tests/test_payloads.py: bafybeigjwkyudyyeehozseu63p4knj2jcx6rrq5x2u4hweirse4holt224
-  tests/test_rounds.py: bafybeib4ft6ajvd66s5yyyowiovqm4kvduilyexd7myice6mbpbgpbx35i
+  tests/test_rounds.py: bafybeicoiykxooup743nzzzfzc3m4uvsab5bljeipgcoo2hke54fcab3xa
 fingerprint_ignore_patterns: []
 connections:
 - valory/openai:0.1.0:bafybeih7w2xmaecgznuhxpnbxcxjhfla6wlmx3umytindfgk6ibbwqq2lu
@@ -136,6 +136,11 @@ models:
       tx_timeout: 10.0
       use_termination: false
       validate_timeout: 1205
+      use_slashing: false
+      slash_cooldown_hours: 3
+      slash_threshold_amount: 10000000000000000
+      light_slash_unit_amount: 5000000000000000
+      serious_slash_unit_amount: 8000000000000000
     class_name: Params
   randomness_api:
     args:
