@@ -22,17 +22,17 @@ fingerprint:
   tests/test_handlers.py: bafybeifrxvoby7wcdiovtbqhct55zj6rrr6wkxudxrhrvvrts327l3akvi
   tests/test_models.py: bafybeietgyqb5rsbnzqgzcsgm2pu2qcadu7rr7akxscfmegtghc5aguz44
   tests/test_payloads.py: bafybeifpwaozt6s56uctvfmkdmcuxqawmvhu5skgyfu3ekegqd3iz7v2nm
-  tests/test_rounds.py: bafybeiboqeikz3tewoovcprjtq423tvzd5fl5eprmzfu52tabtq32ylxj4
+  tests/test_rounds.py: bafybeid5ndadenmeqctrnzir4m7mpv2beqfbi3t66ry2dyozd7rabrezrq
 fingerprint_ignore_patterns: []
 connections:
 - fetchai/http_server:0.22.0:bafybeihp5umafxzx45aad5pj7s3343se2wjkgnbirt4pybrape22swm6de
 contracts:
-- valory/dynamic_contribution:0.1.0:bafybeie76ynpueo3hh2ujzcfgpqcsbyqwa4pdcc6g44a4he6bueyb4tqiy
+- valory/dynamic_contribution:0.1.0:bafybeihjnddpy24wpqtsrf57qdxvku7l5w6sm36u6hkm7i2um7ln664ice
 protocols:
 - valory/contract_api:1.0.0:bafybeiasywsvax45qmugus5kxogejj66c5taen27h4voriodz7rgushtqa
 - valory/http:1.0.0:bafybeia5bxdua2i6chw6pg47bvoljzcpuqxzy4rdrorbdmcbnwmnfdobtu
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeigxjcci53vwytymzlhr37436yvenh7jup4astrn7dgyixo24aq2pq
+- valory/abstract_round_abci:0.1.0:bafybeih2fyfb6kkf7r45pvdk7pyyebr5xloia4xiqxtb3qsrasnstqmepq
 behaviours:
   main:
     args: {}
@@ -140,6 +140,11 @@ models:
       validate_timeout: 1205
       finalize_timeout: 60.0
       history_check_timeout: 1205
+      use_slashing: false
+      slash_cooldown_hours: 3
+      slash_threshold_amount: 10000000000000000
+      light_slash_unit_amount: 5000000000000000
+      serious_slash_unit_amount: 8000000000000000
     class_name: Params
   requests:
     args: {}

@@ -104,7 +104,7 @@ class TestCollectRandomnessRound(BaseRoundTestClass):
         """Run tests."""
 
         test_round = RandomnessTwitterRound(
-            synchronized_data=self.synchronized_data,
+            synchronized_data=self.synchronized_data, context=mock.MagicMock()
         )
         first_payload, *payloads = [
             RandomnessPayload(sender=participant, randomness=RANDOMNESS, round_id=0)
@@ -149,7 +149,7 @@ class TestSelectKeeperRound(BaseRoundTestClass):
         """Run tests."""
 
         test_round = SelectKeeperTwitterRound(
-            synchronized_data=self.synchronized_data,
+            synchronized_data=self.synchronized_data, context=mock.MagicMock()
         )
 
         first_payload, *payloads = [
@@ -242,7 +242,7 @@ class TestStreamWriteRound(BaseOnlyKeeperSendsRoundTest):
         )
 
         test_round = self._round_class(
-            synchronized_data=self.synchronized_data,
+            synchronized_data=self.synchronized_data, context=mock.MagicMock()
         )
 
         self._complete_run(

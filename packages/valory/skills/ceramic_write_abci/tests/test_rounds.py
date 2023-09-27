@@ -119,7 +119,7 @@ class TestCollectRandomnessRound(BaseRoundTestClass):
         """Run tests."""
 
         test_round = RandomnessRound(
-            synchronized_data=self.synchronized_data,
+            synchronized_data=self.synchronized_data, context=mock.MagicMock()
         )
         first_payload, *payloads = [
             RandomnessPayload(sender=participant, randomness=RANDOMNESS, round_id=0)
@@ -164,7 +164,7 @@ class TestSelectKeeperRound(BaseRoundTestClass):
         """Run tests."""
 
         test_round = SelectKeeperRound(
-            synchronized_data=self.synchronized_data,
+            synchronized_data=self.synchronized_data, context=mock.MagicMock()
         )
 
         first_payload, *payloads = [
@@ -239,7 +239,7 @@ class BaseCeramicWriteRoundTest(BaseCollectSameUntilThresholdRoundTest):
         self.synchronized_data.update(**test_case.initial_data)
 
         test_round = self.round_class(
-            synchronized_data=self.synchronized_data,
+            synchronized_data=self.synchronized_data, context=mock.MagicMock()
         )
 
         self._complete_run(
@@ -300,7 +300,7 @@ class TestStreamWriteRound(BaseOnlyKeeperSendsRoundTest):
         )
 
         test_round = self._round_class(
-            synchronized_data=self.synchronized_data,
+            synchronized_data=self.synchronized_data, context=mock.MagicMock()
         )
 
         self._complete_run(
