@@ -82,4 +82,4 @@ class ImpactEvaluatorConsensusBehaviour(AbstractRoundBehaviour):
         *TransactionSettlementRoundBehaviour.behaviours,
         *TerminationAbciBehaviours.behaviours,
     }
-    background_behaviour_cls = BackgroundBehaviour
+    background_behaviour_cls = {BackgroundBehaviour}
