@@ -707,7 +707,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
         api_url = api_base + api_endpoint + api_args
         headers = dict(Authorization=f"Bearer {self.params.twitter_api_bearer_token}")
 
-        self.context.logger.info(f"Retrieving hashes from Twitter API [{api_url}]")
+        self.context.logger.info(f"Retrieving hashtags from Twitter API [{api_url}]")
 
         next_token = None
         latest_tweet_id = None
