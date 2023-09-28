@@ -27,5 +27,5 @@ e271cd3303d407521c714253870de451f8617150:packages/valory/skills/llm_abci/skill.y
 e271cd3303d407521c714253870de451f8617150:packages/valory/skills/twitter_write_abci/skill.yaml:generic-api-key:80
 e271cd3303d407521c714253870de451f8617150:packages/valory/skills/decision_making_abci/skill.yaml:generic-api-key:90
 d47f7de20573d541505169665c2ae779ea57a4b0:packages/valory/services/impact_evaluator/service.yaml:generic-api-key:245
-32259d88007014423881fa2695c363b84c1eb667:packages/valory/skills/mech_interact_abci/skill.yaml:generic-api-key:80
 f91f017c41d644b87699fb06619d5bdb3b568838:packages/valory/services/impact_evaluator_local/service.yaml:generic-api-key:72
+32259d88007014423881fa2695c363b84c1eb667:packages/valory/skills/mech_interact_abci/skill.yaml:generic-api-key:80

@@ -32,6 +32,7 @@ from typing import (
     Optional,
     cast,
 )
+from unittest import mock
 
 import pytest
 
@@ -104,7 +105,7 @@ class TestSynchronizeDelegationsRoundTest(BaseCollectSameUntilThresholdRoundTest
         self.synchronized_data.update(**test_case.initial_data)
 
         test_round = self.round_class(
-            synchronized_data=self.synchronized_data,
+            synchronized_data=self.synchronized_data, context=mock.MagicMock()
         )
 
         self._complete_run(

@@ -24,7 +24,7 @@ fingerprint:
   tests/test_handlers.py: bafybeigevirvi3saepukke2zmp334btgsdxhj55o2vawj3hqam63miirg4
   tests/test_models.py: bafybeihaiirqmcsshghztl5lvqjzem6y6rdeefhtiycrhh45v7cuwnmdz4
   tests/test_payloads.py: bafybeihg7ndxuj4lehpmgpdngpzihhmaiy7u5kaylukneavsklfwki5j6q
-  tests/test_rounds.py: bafybeidzgrz3k5lrnldwxcwgrax2n7ez2hltkzqovn4v4jgqzrmwgceunq
+  tests/test_rounds.py: bafybeih343aghobifj7nss7i5hkuw5i3wyvsa2jodjyrkhplim54c2rb7i
 fingerprint_ignore_patterns: []
 connections:
 - valory/openai:0.1.0:bafybeid7mnghadef3i3nw4rwyqrppsiq25i2iza5upoh5wwcyg374y2jmq
@@ -32,7 +32,7 @@ contracts: []
 protocols:
 - valory/llm:1.0.0:bafybeigqybmg75vsxexmp57hkms7lkp7iwpf54r7wpygizxryvrhfqqpb4
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeigxjcci53vwytymzlhr37436yvenh7jup4astrn7dgyixo24aq2pq
+- valory/abstract_round_abci:0.1.0:bafybeih2fyfb6kkf7r45pvdk7pyyebr5xloia4xiqxtb3qsrasnstqmepq
 behaviours:
   main:
     args: {}
@@ -145,6 +145,11 @@ models:
       max_points_per_period: 5000
       validate_timeout: 1205
       use_termination: false
+      use_slashing: false
+      slash_cooldown_hours: 3
+      slash_threshold_amount: 10000000000000000
+      light_slash_unit_amount: 5000000000000000
+      serious_slash_unit_amount: 8000000000000000
     class_name: Params
   randomness_api:
     args:
