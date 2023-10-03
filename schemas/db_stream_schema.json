@@ -1,0 +1,94 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "definitions": {
+        "user": {
+            "type": "object",
+            "properties": {
+                "points": {
+                    "type": "integer"
+                },
+                "token_id": {
+                    "type": ["string", "null"]
+                },
+                "discord_id": {
+                    "type": ["string", "null"]
+                },
+                "twitter_id": {
+                    "type": ["string", "null"]
+                },
+                "discord_handle": {
+                    "type": ["string", "null"]
+                },
+                "twitter_handle": {
+                    "type": ["string", "null"]
+                },
+                "wallet_address": {
+                    "type": ["string", "null"]
+                },
+                "current_period_points": {
+                    "type": "integer"
+                }
+            },
+            "required": ["points", "token_id", "discord_id", "twitter_id", "discord_handle", "twitter_handle", "wallet_address", "current_period_points"],
+            "additionalProperties": false
+        }
+    },
+    "type": "object",
+    "properties": {
+        "users": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/user"
+            }
+        },
+        "module_data": {
+            "type": "object",
+            "properties": {
+                "generic": {
+                    "type": "object",
+                    "properties": {
+                        "latest_update_id": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["latest_update_id"],
+                    "additionalProperties": false
+                },
+                "twitter": {
+                    "type": "object",
+                    "properties": {
+                        "current_period": {
+                            "type": "string"
+                        },
+                        "latest_hashtag_tweet_id": {
+                            "type": "string"
+                        },
+                        "latest_mention_tweet_id": {
+                            "type": "string"
+                        },
+                        "last_tweet_pull_window_reset": {
+                            "type": "string"
+                        },
+                        "number_of_tweets_pulled_today": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["current_period", "latest_hashtag_tweet_id", "latest_mention_tweet_id", "last_tweet_pull_window_reset", "number_of_tweets_pulled_today"],
+                    "additionalProperties": false
+                },
+                "dynamic_nft": {
+                    "type": "object",
+                    "properties": {
+                        "last_parsed_block": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["last_parsed_block"],
+                    "additionalProperties": false
+                }
+            },
+            "required": ["generic", "twitter", "dynamic_nft"],
+            "additionalProperties": false
+        }
+    }
+}

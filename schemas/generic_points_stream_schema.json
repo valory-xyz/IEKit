@@ -1,0 +1,52 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "definitions": {
+        "user": {
+            "type": "object",
+            "properties": {
+                "points": {
+                    "type": "integer"
+                },
+                "discord_id": {
+                    "type": "string"
+                },
+                "discord_handle": {
+                    "type": "string"
+                },
+                "wallet_address": {
+                    "type": "string"
+                }
+            },
+            "required": ["points", "discord_id", "discord_handle", "wallet_address"],
+            "additionalProperties": false
+        }
+    },
+    "type": "object",
+    "properties": {
+        "users": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/user"
+            }
+        },
+        "module_data": {
+            "type": "object",
+            "properties": {
+                "generic": {
+                    "type": "object",
+                    "properties": {
+                        "latest_update_id": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": ["latest_update_id"],
+                    "additionalProperties": false
+                }
+            },
+            "required": ["generic"],
+            "additionalProperties": false
+        }
+    },
+    "required": ["users", "module_data"],
+    "additionalProperties": false
+}

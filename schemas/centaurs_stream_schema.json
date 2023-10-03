@@ -1,0 +1,251 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "definitions": {
+        "member": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "ownership": {
+                    "type": "integer"
+                }
+            },
+            "required": ["address", "ownership"],
+            "additionalProperties": false
+        },
+        "action": {
+            "type": "object",
+            "properties": {
+                "timestamp": {
+                    "type": ["integer", "number"]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "actorAddress": {
+                    "type": "string"
+                },
+                "commitId": {
+                    "type": "string"
+                },
+                "outputUrl": {
+                    "type": "string"
+                }
+            },
+            "required": ["timestamp", "description", "actorAddress"],
+            "additionalProperties": false
+        },
+        "message": {
+            "type": "object",
+            "properties": {
+                "member": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": ["integer", "number"]
+                }
+            },
+            "required": ["member", "content", "timestamp"],
+            "additionalProperties": false
+        },
+        "daily_tweet_config": {
+            "type": "object",
+            "properties": {
+                "daily": {
+                    "type": "boolean"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "last_run": {
+                    "type": ["integer", "null"]
+                },
+                "run_hour_utc": {
+                    "type": "integer"
+                }
+            },
+            "required": ["daily", "enabled", "last_run", "run_hour_utc"],
+            "additionalProperties": false
+        },
+        "scheduled_tweet_config": {
+            "type": "object",
+            "properties": {
+                "daily": {
+                    "type": "boolean"
+                },
+                "enabled": {
+                    "type": "boolean"
+                }
+            },
+            "required": ["daily", "enabled"],
+            "additionalProperties": false
+        },
+        "daily_orbis_config": {
+            "type": "object",
+            "properties": {
+                "daily": {
+                    "type": "boolean"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "last_run": {
+                    "type": ["integer", "null"]
+                },
+                "run_hour_utc": {
+                    "type": "integer"
+                }
+            },
+            "required": ["daily", "enabled", "last_run", "run_hour_utc"],
+            "additionalProperties": false
+        },
+        "scheduled_tweet_data": {
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": ["string", "array"]
+                },
+                "posted": {
+                    "type": "boolean"
+                },
+                "voters": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "propertyNames": {
+                            "pattern": "^0x[a-fA-F0-9]{40}$"
+                        },
+                        "patternProperties": {
+                            "^0x[a-fA-F0-9]{40}$": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "minProperties": 1,
+                        "maxProperties": 1
+                    }
+                },
+                "proposer": {
+                    "type": "string"
+                },
+                "request_id": {
+                    "type": "string"
+                },
+                "createdDate": {
+                    "type": "number"
+                },
+                "execute": {
+                    "type": "boolean"
+                },
+                "action_id": {
+                    "type": "string"
+                }
+            },
+            "required": ["text", "posted", "voters", "proposer", "request_id", "createdDate", "execute"],
+            "additionalProperties": false
+        },
+        "centaur": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "purpose": {
+                    "type": "string"
+                },
+                "memory": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "actions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/action"
+                    }
+                },
+                "members": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/member"
+                    }
+                },
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/message"
+                    }
+                },
+                "configuration": {
+                    "type": "object",
+                    "properties": {
+                        "plugins": {
+                            "type": "object",
+                            "properties": {
+                                "daily_tweet": {
+                                    "$ref": "#/definitions/daily_tweet_config"
+                                },
+                                "scheduled_tweet": {
+                                    "$ref": "#/definitions/scheduled_tweet_config"
+                                },
+                                "daily_orbis": {
+                                    "$ref": "#/definitions/daily_orbis_config"
+                                }
+                            },
+                            "required": ["daily_tweet", "scheduled_tweet", "daily_orbis"],
+                            "additionalProperties": false
+                        },
+                        "memberWhitelist": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": ["plugins", "memberWhitelist"],
+                    "additionalProperties": false
+                },
+                "plugins_data": {
+                    "type": "object",
+                    "properties": {
+                        "daily_orbis": {
+                            "type": "object"
+                        },
+                        "daily_tweet": {
+                            "type": "object"
+                        },
+                        "scheduled_tweet": {
+                            "type": "object",
+                            "properties": {
+                                "tweets": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/scheduled_tweet_data"
+                                    }
+                                }
+                            },
+                            "required": ["tweets"],
+                            "additionalProperties": false
+                        }
+                    },
+                    "required": ["daily_orbis", "daily_tweet", "scheduled_tweet"],
+                    "additionalProperties": false
+                }
+            },
+            "required": ["id", "name", "purpose", "memory", "actions", "members", "messages", "configuration", "plugins_data"],
+            "additionalProperties": false
+        }
+    },
+    "type": "array",
+    "items": {
+        "$ref": "#/definitions/centaur"
+    }
+}
