@@ -14,6 +14,7 @@ autonomy push-all
 autonomy fetch --local --service valory/impact_evaluator && cd impact_evaluator
 
 # Build the image
+autonomy init --reset --author valory --remote --ipfs --ipfs-node "/dns/registry.autonolas.tech/tcp/443/https"
 autonomy build-image
 
 # Copy the keys and build the deployment
