@@ -25,7 +25,7 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 )
 
 
-TWEET_CONSENSUS_WVEOLAS = 2000000
+TWEET_CONSENSUS_WVEOLAS_WEI = 2e6 * 1e18  # 2M wveOLAS to wei
 
 
 class TwitterPreparation(TaskPreparation):
@@ -222,4 +222,4 @@ class ScheduledTweetPreparation(TwitterPreparation):
     def check_tweet_consensus(self, voters: dict):
         """Check whether users agree on posting"""
         voting_power = sum([int(list(v.values())[0]) for v in voters])
-        return voting_power >= TWEET_CONSENSUS_WVEOLAS
+        return voting_power >= TWEET_CONSENSUS_WVEOLAS_WEI
