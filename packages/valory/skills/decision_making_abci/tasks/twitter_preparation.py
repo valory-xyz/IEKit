@@ -18,7 +18,6 @@
 # ------------------------------------------------------------------------------
 
 """This package contains the logic for task preparations."""
-import math
 
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
