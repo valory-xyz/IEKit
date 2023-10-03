@@ -2,7 +2,7 @@
     "dev": {
         "agent/valory/impact_evaluator/0.1.0": "bafybeid3gcmoma3qrl5qurvjwdqht3kvbkj74wgm7sdrblbs36gyddeg4y",
         "contract/valory/dynamic_contribution/0.1.0": "bafybeihjnddpy24wpqtsrf57qdxvku7l5w6sm36u6hkm7i2um7ln664ice",
-        "service/valory/impact_evaluator/0.1.0": "bafybeih7lo64iyfzmopadnxeqx2vildtiolyl5qtffcu54msbf56bpdbl4",
+        "service/valory/impact_evaluator/0.1.0": "bafybeidlxfxeo3uybf5lxtf6copnlx7jmxw4bip7wows45onlstm4fmnri",
         "skill/valory/dynamic_nft_abci/0.1.0": "bafybeihe7rav55tlymizd5ltiwwvqzqrfqswm5sxsaw6bioal35lecwhny",
         "skill/valory/twitter_scoring_abci/0.1.0": "bafybeidccv4tsye4i45f443p7dkidfpw3ifu4jzi4gk4jiz2cscusondhy",
         "skill/valory/ceramic_read_abci/0.1.0": "bafybeide5tbobzkwfdi7yzw6bsau36h43hdlgbnk2bfqvvhmq3hl3ucjmm",
