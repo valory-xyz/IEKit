@@ -19,7 +19,7 @@ fingerprint:
   tasks/read_stream_preparation.py: bafybeiespz6kzkzvrjjf3d6ffwse3rufuyrrab3axvg64pxw4jj6zzhwny
   tasks/score_preparations.py: bafybeieiesjkyjbcvqut3l6nlzcwpidibsmo3mz7j6p54lbqzspfcf3ram
   tasks/task_preparations.py: bafybeieqd2jhzmmjomzmcw72iptogrb6koche6dqmtcuz6lqktaxvi3dxe
-  tasks/twitter_preparation.py: bafybeianz2bixo7c2q7hxb6xpe6ui6y3tnms7xvyxeticd2bgp3u4m3p6u
+  tasks/twitter_preparation.py: bafybeidxtqohzlcyr3gwr5gzhdgz37t2mfpxshx57vcweakhdpgvt5jzkq
   tasks/write_stream_preparation.py: bafybeifl4j7s575ts6x4msntymkempwguj4yypmxy2xjmffknn7qhkzfo4
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
   tests/centaur_configs.py: bafybeidwiu7wsbh5luehpf4uwff35eupet7qq4cnhhs2p3pqbxxkydwoim
