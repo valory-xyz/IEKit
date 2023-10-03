@@ -20,7 +20,7 @@
 """This module contains the transaction payloads of the MechInteractAbciApp."""
 
 from dataclasses import dataclass
-
+from typing import Optional
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 
@@ -28,7 +28,7 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 class MechRequestPayload(BaseTxPayload):
     """Represent a transaction payload for the MechRequestRound."""
 
-    # TODO: define your attributes
+    price: Optional[int]
 
 
 @dataclass(frozen=True)

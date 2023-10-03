@@ -28,7 +28,10 @@ from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
 from packages.valory.skills.mech_interact_abci.rounds import MechInteractAbciApp
+from packages.valory.skills.abstract_round_abci.models import ApiSpecs
 
+class MechResponseSpecs(ApiSpecs):
+    """A model that wraps ApiSpecs for the Mech's response specifications."""
 
 class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""

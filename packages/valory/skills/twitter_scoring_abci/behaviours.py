@@ -692,7 +692,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
             # Check response status
             if response.status_code != 200:
                 self.context.logger.error(
-                    f"Error retrieving mentions from Twitter [{response.status_code}]"
+                    f"Error retrieving hashtags from Twitter [{response.status_code}]"
                 )
                 return (
                     TwitterMentionsCollectionRound.ERROR_PAYLOAD,

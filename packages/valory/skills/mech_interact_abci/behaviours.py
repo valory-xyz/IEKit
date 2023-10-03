@@ -20,7 +20,7 @@
 """This package contains round behaviours of MechInteractAbciApp."""
 
 from abc import ABC
-from typing import Generator, Set, Type, cast
+from typing import Generator, Set, Type, cast, Tuple
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
@@ -42,7 +42,7 @@ from packages.valory.skills.mech_interact_abci.rounds import (
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from tempfile import mkdtemp
-from typing import Any, Dict, Generator, Optional, cast
+from typing import Any, Dict, Generator, Optional, cast, Union
 from uuid import uuid4
 
 import multibase
@@ -75,7 +75,7 @@ from packages.valory.skills.abstract_round_abci.behaviour_utils import (
     BaseBehaviour,
     TimeoutException,
 )
-
+import json
 from packages.valory.skills.twitter_scoring_abci.rounds import SynchronizedData
 from packages.valory.skills.transaction_settlement_abci.payload_tools import (
     hash_payload_to_hex,
@@ -84,13 +84,17 @@ from packages.valory.skills.transaction_settlement_abci.rounds import TX_HASH_LE
 from hexbytes import HexBytes
 from packages.valory.contracts.multisend.contract import MultiSendOperation
 from packages.valory.skills.mech_interact_abci.rounds import SynchronizedData
-
+from packages.valory.skills.mech_interact_abci.models import (
+    MechResponseSpecs,
+)
 
 WaitableConditionType = Generator[None, None, bool]
 
 METADATA_FILENAME = "metadata.json"
 V1_HEX_PREFIX = "f01"
 Ox = "0x"
+IPFS_HASH_PREFIX = "f01701220"
+ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 # setting the safe gas to 0 means that all available gas will be used
 # which is what we want in most cases
@@ -115,6 +119,27 @@ class MultisendBatch:
     data: HexBytes
     value: int = 0
     operation: MultiSendOperation = MultiSendOperation.CALL
+
+@dataclass
+class MechInteractionResponse:
+    """A structure for the response of a mech interaction task."""
+
+    requestId: int = 0
+    result: Optional[dict] = None
+    error: str = "Unknown"
+
+    def __post_init__(self) -> None:
+        """Parses the nested part of the mech interaction response to a `PredictionResponse`."""
+        if isinstance(self.result, str):
+            self.result = json.loads(self.result)
+
+    @classmethod
+    def incorrect_format(cls, res: Any) -> "MechInteractionResponse":
+        """Return an incorrect format response."""
+        response = cls()
+        response.error = f"The response's format was unexpected: {res}"
+        return response
+
 
 
 class MechInteractBaseBehaviour(BaseBehaviour, ABC):
@@ -428,7 +453,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
             status = yield from self._mech_contract_interact(
                 "get_request_data",
-                "data",
+                "data", # calldata is saved in self.data
                 get_name(MechRequestBehaviour.request_data),
                 request_data=self._v1_hex_truncated,
             )
@@ -497,23 +522,201 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
 
 class MechResponseBehaviour(MechInteractBaseBehaviour):
-    """MechResponseBehaviour"""
+    """A behaviour in which the agents receive the mech response."""
 
-    matching_round: Type[AbstractRound] = MechResponseRound
+    matching_round = MechResponseRound
 
-    # TODO: implement logic required to set payload content for synchronization
+    def __init__(self, **kwargs: Any) -> None:
+        """Initialize Behaviour."""
+        super().__init__(**kwargs)
+        self._from_block: int = 0
+        self._request_id: int = 0
+        self._response_hex: str = ""
+        self._mech_response: Optional[MechInteractionResponse] = None
+
+    @property
+    def from_block(self) -> int:
+        """Get the block number in which the request to the mech was settled."""
+        return self._from_block
+
+    @from_block.setter
+    def from_block(self, from_block: int) -> None:
+        """Set the block number in which the request to the mech was settled."""
+        self._from_block = from_block
+
+    @property
+    def request_id(self) -> int:
+        """Get the request id."""
+        return self._request_id
+
+    @request_id.setter
+    def request_id(self, request_id: Union[str, int]) -> None:
+        """Set the request id."""
+        try:
+            self._request_id = int(request_id)
+        except ValueError:
+            msg = f"Request id {request_id} is not a valid integer!"
+            self.context.logger.error(msg)
+
+    @property
+    def response_hex(self) -> str:
+        """Get the hash of the response data."""
+        return self._response_hex
+
+    @response_hex.setter
+    def response_hex(self, response_hash: bytes) -> None:
+        """Set the hash of the response data."""
+        try:
+            self._response_hex = response_hash.hex()
+        except AttributeError:
+            msg = f"Response hash {response_hash!r} is not valid hex bytes!"
+            self.context.logger.error(msg)
+
+    @property
+    def mech_response_api(self) -> MechResponseSpecs:
+        """Get the mech response api specs."""
+        return self.context.mech_response
+
+    def set_mech_response_specs(self) -> None:
+        """Set the mech's response specs."""
+        full_ipfs_hash = IPFS_HASH_PREFIX + self.response_hex
+        ipfs_link = self.params.ipfs_address + full_ipfs_hash + f"/{self.request_id}"
+        # The url must be dynamically generated as it depends on the ipfs hash
+        self.mech_response_api.__dict__["_frozen"] = False
+        self.mech_response_api.url = ipfs_link
+        self.mech_response_api.__dict__["_frozen"] = True
+
+    @property
+    def mech_response(self) -> MechInteractionResponse:
+        """Get the mech response api specs."""
+        if self._mech_response is None:
+            error = "The mech's response has not been set!"
+            return MechInteractionResponse(error=error)
+        return self._mech_response
+
+    def _get_block_number(self) -> WaitableConditionType:
+        """Get the block number in which the request to the mech was settled."""
+        result = yield from self.contract_interact(
+            performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
+            # we do not need the address to get the block number, but the base method does
+            contract_address=ZERO_ADDRESS,
+            contract_public_id=Mech.contract_id,
+            contract_callable="get_block_number",
+            data_key="number",
+            placeholder=get_name(DecisionReceiveBehaviour.from_block),
+            tx_hash=self.synchronized_data.final_tx_hash,
+        )
+
+        return result
+
+    def _get_request_id(self) -> WaitableConditionType:
+        """Get the request id."""
+        result = yield from self._mech_contract_interact(
+            contract_callable="process_request_event",
+            data_key="requestId",
+            placeholder=get_name(DecisionReceiveBehaviour.request_id),
+            tx_hash=self.synchronized_data.final_tx_hash,
+        )
+        return result
+
+    def _get_response_hash(self) -> WaitableConditionType:
+        """Get the hash of the response data."""
+        self.context.logger.info(
+            f"Filtering the mech's events from block {self.from_block} "
+            f"for a response to our request with id {self.request_id!r}."
+        )
+        result = yield from self._mech_contract_interact(
+            contract_callable="get_response",
+            data_key="data",
+            placeholder=get_name(DecisionReceiveBehaviour.response_hex),
+            request_id=self.request_id,
+            from_block=self.from_block,
+        )
+
+        if result:
+            self.set_mech_response_specs()
+
+        return result
+
+    def _handle_response(
+        self,
+        res: Optional[str],
+    ) -> Optional[Any]:
+        """Handle the response from the IPFS.
+
+        :param res: the response to handle.
+        :return: the response's result, using the given keys. `None` if response is `None` (has failed).
+        """
+        if res is None:
+            msg = f"Could not get the mech's response from {self.mech_response_api.api_id}"
+            self.context.logger.error(msg)
+            self.mech_response_api.increment_retries()
+            return None
+
+        self.context.logger.info(f"Retrieved the mech's response: {res}.")
+        self.mech_response_api.reset_retries()
+        return res
+
+    def _get_response(self) -> WaitableConditionType:
+        """Get the response data from IPFS."""
+        specs = self.mech_response_api.get_spec()
+        res_raw = yield from self.get_http_response(**specs)
+        res = self.mech_response_api.process_response(res_raw)
+        res = self._handle_response(res)
+
+        if self.mech_response_api.is_retries_exceeded():
+            error = "Retries were exceeded while trying to get the mech's response."
+            self._mech_response = MechInteractionResponse(error=error)
+            return True
+
+        if res is None:
+            return False
+
+        try:
+            self._mech_response = MechInteractionResponse(**res)
+        except (ValueError, TypeError):
+            self._mech_response = MechInteractionResponse.incorrect_format(res)
+
+        return True
+
+    def _get_decision(
+        self,
+    ) -> Generator[None, None, Tuple[Optional[int], Optional[float]]]:
+        """Get the vote and it's confidence."""
+        for step in (
+            self._get_block_number,
+            self._get_request_id,
+            self._get_response_hash,
+            self._get_response,
+        ):
+            yield from self.wait_for_condition_with_sleep(step)
+
+        self.context.logger.info(f"Decision has been received:\n{self.mech_response}")
+        if self.mech_response.result is None:
+            self.context.logger.error(
+                f"There was an error on the mech's response: {self.mech_response.error}"
+            )
+            return None, None
+
+        return self.mech_response.result.vote, self.mech_response.result.confidence
+
     def async_act(self) -> Generator:
-        """Do the act, supporting asynchronous execution."""
+        """Do the action."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            sender = self.context.agent_address
-            payload = MechResponsePayload(sender=sender, content=...)
+            vote, confidence = yield from self._get_decision()
+            is_profitable = None
+            if vote is not None and confidence is not None:
+                is_profitable = self._is_profitable(confidence, vote)
+            payload = MechResponsePayload(
+                self.context.agent_address,
+                is_profitable,
+                vote,
+                confidence,
+            )
 
-        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
-            yield from self.send_a2a_transaction(payload)
-            yield from self.wait_until_round_end()
+        yield from self.finish_behaviour(payload)
 
-        self.set_done()
 
 
 class MechInteractRoundBehaviour(AbstractRoundBehaviour):
