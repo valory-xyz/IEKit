@@ -55,8 +55,8 @@ ENABLED_CENTAUR = {
                     "execute": True,
                     "text": "My agreed tweet: execute",
                     "voters": [
-                        "0x6c6766E04eF971367D27E720d1d161a9B495D647",
-                        "0x7885d121ed8Aa3c919AA4d407F197Dc29E33cAf0",
+                        {"0x6c6766E04eF971367D27E720d1d161a9B495D647": 0},
+                        {"0x7885d121ed8Aa3c919AA4d407F197Dc29E33cAf0": 0},
                     ],
                 },
                 {
@@ -65,8 +65,8 @@ ENABLED_CENTAUR = {
                     "execute": False,
                     "text": "My agreed tweet: dont execute",
                     "voters": [
-                        "0x6c6766E04eF971367D27E720d1d161a9B495D647",
-                        "0x7885d121ed8Aa3c919AA4d407F197Dc29E33cAf0",
+                        {"0x6c6766E04eF971367D27E720d1d161a9B495D647": 0},
+                        {"0x7885d121ed8Aa3c919AA4d407F197Dc29E33cAf0": 0},
                     ],
                 },
             ]

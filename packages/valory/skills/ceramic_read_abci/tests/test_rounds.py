@@ -22,6 +22,7 @@
 import json
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, Hashable, List, Mapping, Optional, cast
+from unittest import mock
 
 import pytest
 
@@ -95,7 +96,7 @@ class BaseCeramicReadRoundTest(BaseCollectSameUntilThresholdRoundTest):
         self.synchronized_data.update(**test_case.initial_data)
 
         test_round = self.round_class(
-            synchronized_data=self.synchronized_data,
+            synchronized_data=self.synchronized_data, context=mock.MagicMock()
         )
 
         self._complete_run(

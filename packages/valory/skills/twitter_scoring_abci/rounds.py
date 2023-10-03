@@ -49,7 +49,9 @@ from packages.valory.skills.twitter_scoring_abci.payloads import (
 )
 
 
-MAX_API_RETRIES = 3
+MAX_API_RETRIES = 1
+ERROR_GENERIC = "generic"
+ERROR_API_LIMITS = "too many requests"
 
 
 class Event(Enum):
@@ -58,6 +60,7 @@ class Event(Enum):
     DONE = "done"
     DONE_SKIP = "done_skip"
     DONE_MAX_RETRIES = "done_max_retries"
+    DONE_API_LIMITS = "done_api_limits"
     NO_MAJORITY = "no_majority"
     ROUND_TIMEOUT = "round_timeout"
     TWEET_EVALUATION_ROUND_TIMEOUT = "tweet_evaluation_round_timeout"
@@ -92,6 +95,11 @@ class SynchronizedData(BaseSynchronizedData):
     def api_retries(self) -> int:
         """Gets the number of API retries."""
         return cast(int, self.db.get("api_retries", 0))
+
+    @property
+    def sleep_until(self) -> Optional[int]:
+        """Gets the timestamp of the next Twitter time window for rate limits."""
+        return cast(int, self.db.get("sleep_until", None))
 
     @property
     def tweets(self) -> dict:
@@ -206,8 +214,6 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
     payload_class = TwitterMentionsCollectionPayload
     synchronized_data_class = SynchronizedData
 
-    ERROR_PAYLOAD = {"error": "true"}
-
     @property
     def consensus_threshold(self):
         """Consensus threshold"""
@@ -240,15 +246,35 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
                 SynchronizedData, self.synchronized_data
             ).performed_twitter_tasks
 
-            # Api error
-            if self.most_voted_payload == json.dumps(
-                self.ERROR_PAYLOAD, sort_keys=True
-            ):
+            payload = json.loads(self.most_voted_payload)
+
+            # API error
+            if "error" in payload:
+
+                # API limits
+                if payload["error"] == ERROR_API_LIMITS:
+                    performed_twitter_tasks[
+                        "retrieve_mentions"
+                    ] = Event.DONE_MAX_RETRIES.value
+
+                    synchronized_data = self.synchronized_data.update(
+                        synchronized_data_class=SynchronizedData,
+                        **{
+                            get_name(SynchronizedData.sleep_until): payload[
+                                "sleep_until"
+                            ],
+                            get_name(
+                                SynchronizedData.performed_twitter_tasks
+                            ): performed_twitter_tasks,
+                        },
+                    )
+                    return synchronized_data, Event.DONE_API_LIMITS
+
                 api_retries = (
                     cast(SynchronizedData, self.synchronized_data).api_retries + 1
                 )
 
-                # Max retries
+                # Other API errors
                 if api_retries >= MAX_API_RETRIES:
                     performed_twitter_tasks[
                         "retrieve_mentions"
@@ -260,6 +286,9 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
                             get_name(
                                 SynchronizedData.performed_twitter_tasks
                             ): performed_twitter_tasks,
+                            get_name(SynchronizedData.sleep_until): payload[
+                                "sleep_until"
+                            ],
                         },
                     )
                     return self.synchronized_data, Event.DONE_MAX_RETRIES
@@ -268,12 +297,12 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
                     synchronized_data_class=SynchronizedData,
                     **{
                         get_name(SynchronizedData.api_retries): api_retries,
+                        get_name(SynchronizedData.sleep_until): payload["sleep_until"],
                     },
                 )
                 return synchronized_data, Event.API_ERROR
 
             # Happy path
-            payload = json.loads(self.most_voted_payload)
             previous_tweets = cast(SynchronizedData, self.synchronized_data).tweets
             ceramic_db = cast(SynchronizedData, self.synchronized_data).ceramic_db
             performed_twitter_tasks["retrieve_mentions"] = Event.DONE.value
@@ -293,6 +322,7 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
                 get_name(
                     SynchronizedData.performed_twitter_tasks
                 ): performed_twitter_tasks,
+                get_name(SynchronizedData.sleep_until): payload["sleep_until"],
             }
 
             if payload["latest_mention_tweet_id"]:
@@ -322,8 +352,6 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
     payload_class = TwitterHashtagsCollectionPayload
     synchronized_data_class = SynchronizedData
 
-    ERROR_PAYLOAD = {"error": "true"}
-
     @property
     def consensus_threshold(self):
         """Consensus threshold"""
@@ -356,15 +384,35 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
                 SynchronizedData, self.synchronized_data
             ).performed_twitter_tasks
 
+            payload = json.loads(self.most_voted_payload)
+
             # Api error
-            if self.most_voted_payload == json.dumps(
-                self.ERROR_PAYLOAD, sort_keys=True
-            ):
+            if "error" in payload:
+
+                # API limits
+                if payload["error"] == ERROR_API_LIMITS:
+                    performed_twitter_tasks[
+                        "retrieve_hashtahs"
+                    ] = Event.DONE_MAX_RETRIES.value
+
+                    synchronized_data = self.synchronized_data.update(
+                        synchronized_data_class=SynchronizedData,
+                        **{
+                            get_name(SynchronizedData.sleep_until): payload[
+                                "sleep_until"
+                            ],
+                            get_name(
+                                SynchronizedData.performed_twitter_tasks
+                            ): performed_twitter_tasks,
+                        },
+                    )
+                    return synchronized_data, Event.DONE_API_LIMITS
+
                 api_retries = (
                     cast(SynchronizedData, self.synchronized_data).api_retries + 1
                 )
 
-                # Max retries
+                # Other API errors
                 if api_retries >= MAX_API_RETRIES:
                     performed_twitter_tasks[
                         "retrieve_hashtags"
@@ -376,6 +424,9 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
                             get_name(
                                 SynchronizedData.performed_twitter_tasks
                             ): performed_twitter_tasks,
+                            get_name(SynchronizedData.sleep_until): payload[
+                                "sleep_until"
+                            ],
                         },
                     )
                     return self.synchronized_data, Event.DONE_MAX_RETRIES
@@ -384,12 +435,12 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
                     synchronized_data_class=SynchronizedData,
                     **{
                         get_name(SynchronizedData.api_retries): api_retries,
+                        get_name(SynchronizedData.sleep_until): payload["sleep_until"],
                     },
                 )
                 return synchronized_data, Event.API_ERROR
 
             # Happy path
-            payload = json.loads(self.most_voted_payload)
             previous_tweets = cast(SynchronizedData, self.synchronized_data).tweets
             ceramic_db = cast(SynchronizedData, self.synchronized_data).ceramic_db
             performed_twitter_tasks["retrieve_hashtags"] = Event.DONE.value
@@ -409,6 +460,7 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
                 get_name(
                     SynchronizedData.performed_twitter_tasks
                 ): performed_twitter_tasks,
+                get_name(SynchronizedData.sleep_until): payload["sleep_until"],
             }
 
             if payload["latest_hashtag_tweet_id"]:
@@ -606,6 +658,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         TwitterMentionsCollectionRound: {
             Event.DONE: TwitterDecisionMakingRound,
             Event.DONE_MAX_RETRIES: TwitterDecisionMakingRound,
+            Event.DONE_API_LIMITS: TwitterDecisionMakingRound,
             Event.API_ERROR: TwitterMentionsCollectionRound,
             Event.NO_MAJORITY: TwitterRandomnessRound,
             Event.ROUND_TIMEOUT: TwitterRandomnessRound,
@@ -613,6 +666,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         TwitterHashtagsCollectionRound: {
             Event.DONE: TwitterDecisionMakingRound,
             Event.DONE_MAX_RETRIES: TwitterDecisionMakingRound,
+            Event.DONE_API_LIMITS: TwitterDecisionMakingRound,
             Event.API_ERROR: TwitterHashtagsCollectionRound,
             Event.NO_MAJORITY: TwitterRandomnessRound,
             Event.ROUND_TIMEOUT: TwitterRandomnessRound,
