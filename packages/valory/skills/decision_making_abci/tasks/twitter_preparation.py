@@ -26,6 +26,9 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 )
 
 
+TWEET_CONSENSUS_WVEOLAS = 2000000
+
+
 class TwitterPreparation(TaskPreparation):
     """TwitterPreparation"""
 
@@ -211,13 +214,13 @@ class ScheduledTweetPreparation(TwitterPreparation):
         ]
         agreed_pending_tweets = list(
             filter(
-                lambda t: self.check_tweet_consensus(t, current_centaur["members"]),
+                lambda t: self.check_tweet_consensus(t["voters"]),
                 pending_tweets,
             )
         )
         return agreed_pending_tweets
 
-    def check_tweet_consensus(self, tweet, members):
+    def check_tweet_consensus(self, voters: dict):
         """Check whether users agree on posting"""
-        consensus_threshold = math.ceil(len(members) * 2 / 3)
-        return len(tweet["voters"]) >= consensus_threshold
+        voting_power = sum([int(list(v.values())[0]) for v in voters])
+        return voting_power >= TWEET_CONSENSUS_WVEOLAS
