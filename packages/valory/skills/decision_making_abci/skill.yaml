@@ -22,7 +22,7 @@ fingerprint:
   tasks/twitter_preparation.py: bafybeidxtqohzlcyr3gwr5gzhdgz37t2mfpxshx57vcweakhdpgvt5jzkq
   tasks/write_stream_preparation.py: bafybeifl4j7s575ts6x4msntymkempwguj4yypmxy2xjmffknn7qhkzfo4
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
-  tests/centaur_configs.py: bafybeidwiu7wsbh5luehpf4uwff35eupet7qq4cnhhs2p3pqbxxkydwoim
+  tests/centaur_configs.py: bafybeifgmz5nlpfj4ynpzywbwnnuhz2dxookezwhxmvzlucjbhugv3tgma
   tests/test_behaviours.py: bafybeigddwn7uts6zb46lpk4j7eetp6sniwtclfzngkgws52yomue4cdvy
   tests/test_dialogues.py: bafybeihxzcyy7xvg4lte4bv5hy2h4mozdzwvyaa36feu3oxv67jfvsyuoi
   tests/test_handlers.py: bafybeie6q3l6zyf356uvhldobhiir5ang5ybmi7lcao3556n3bnlpfqhfm
