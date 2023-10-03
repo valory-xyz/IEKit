@@ -10,7 +10,7 @@ fingerprint:
   behaviours.py: bafybeibcqolnjh2e7epjt5npmw3denyxgyyxmugirhn5pdwnw5e4ege3xy
   composition.py: bafybeifjy4sknt45etzud543l54c6dp6vf7nschuvccqhcbt3owfliymae
   dialogues.py: bafybeigjknz4qqynbsltjje46gidg4rftsqw6ybjwegz24wetmycutpzh4
-  fsm_specification.yaml: bafybeiaiqgpoc364mgsrxvztopyfkxxemtp2zky3ivxtqtukkdhizuiy74
+  fsm_specification.yaml: bafybeifpy7qk3psx22xj46izrqznetlgnukanb23ju25q53ydx6sfcctk4
   handlers.py: bafybeidkli6fphcmdgwsys4lkyf3fx6fbawet4nt2pnixfypzijhg6b3ze
   models.py: bafybeifhcshu4iwqvc2fz3auu5ngfykkhvqnroeug52ilrwwc4kowkeg5a
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
@@ -26,7 +26,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeih2fyfb6kkf7r45pvdk7pyyebr5xloia4xiqxtb3qsrasnstqmepq
 - valory/ceramic_read_abci:0.1.0:bafybeide5tbobzkwfdi7yzw6bsau36h43hdlgbnk2bfqvvhmq3hl3ucjmm
 - valory/generic_scoring_abci:0.1.0:bafybeig4hoc5gjiyuwh2ye3mwneegq3s3cghl5j7yokvngacvn7ixwdoga
-- valory/twitter_scoring_abci:0.1.0:bafybeihqrbphxsewa4inkvwriw5r7xttzuxb3ugbbe53vje4rndyeqqhvq
+- valory/twitter_scoring_abci:0.1.0:bafybeidccv4tsye4i45f443p7dkidfpw3ifu4jzi4gk4jiz2cscusondhy
 - valory/ceramic_write_abci:0.1.0:bafybeihnalj6zhl5pbf7x2lkznuhivwj45jzrafbtxatwebrpb7st2v6oa
 - valory/dynamic_nft_abci:0.1.0:bafybeihe7rav55tlymizd5ltiwwvqzqrfqswm5sxsaw6bioal35lecwhny
 - valory/registration_abci:0.1.0:bafybeibndt6vxiwc2edgtaxpjbhwto3eyu33ujz3zmvtygvo2qz7xme5li
@@ -34,7 +34,7 @@ skills:
 - valory/termination_abci:0.1.0:bafybeigqpij2sgrpnilqjljfciixop4fldq5qceixc7534q6af4potdmdm
 - valory/transaction_settlement_abci:0.1.0:bafybeia7rzsbea3ch4gcafyp3z6uvqh4npws2xpdwbkkdbrqqpjops7nui
 - valory/decision_making_abci:0.1.0:bafybeibebj6cjbgi7fxayjgxczp74onzvg7nlx6kvdrmskevkxfbz34dhy
-- valory/llm_abci:0.1.0:bafybeidbojoc4ufx2miwlhubcgitwzyjtzh4mpgoa4ryjxxqwnvhigyd4m
+- valory/llm_abci:0.1.0:bafybeifesvwe5ya7imxefijpawgtd7aje5hhr4oh2bzgfsm2ucjp3lxije
 - valory/twitter_write_abci:0.1.0:bafybeidjumloxy2yvoyymgzuwbua3ks2p66fyybna2qhrz2upzkxzjrznq
 behaviours:
   main:

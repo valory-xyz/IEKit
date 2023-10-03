@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeierwfkn5p4jgiksdsg232z5id7sc66xtuz24m6nejuoj3g2g6yd3i
+agent: valory/impact_evaluator:0.1.0:bafybeid3gcmoma3qrl5qurvjwdqht3kvbkj74wgm7sdrblbs36gyddeg4y
 number_of_agents: 4
 deployment:
   agent:
@@ -28,8 +28,8 @@ extra:
   params_args:
     args:
       setup: &id001
-        safe_contract_address: ${SAFE_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
-        all_participants: ${ALL_PARTICIPANTS:list:[]}
+        safe_contract_address: ${SAFE_CONTRACT_ADDRESS:str:0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A}
+        all_participants: ${ALL_PARTICIPANTS:list:["0xc6D322afc319EC651eF8e194f37cC52f3137c393","0x0b20d156A207EDC2d1D30936b5a7B9F077A0c89e","0x5E0fbDb17A976c653a7ab48146d72F3a59dfab37","0x1d1b64C0d38fbd270813Eea35e6F2652337E1e5f"]}
         consensus_threshold: null
       genesis_config: &id002
         genesis_time: '2022-09-26T00:00:00.000000000Z'
@@ -59,27 +59,27 @@ extra:
         genesis_config: *id002
         broadcast_to_server: false
         history_end: null
-        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:dummy_centaurs_stream_id}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
-        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:ceramic_db_stream_id}
-        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
+        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw147unqobq8fbsnnjl1qodospeuy84cgagdyadeib0xjsvqhbf4ns}
+        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw146k8j9l26rg6gw85mokzwnxm7t1krux0y162sgn3pc1887e3wsr}
+        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
+        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
         ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
         ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
         ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
         ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-        ceramic_did_str: ${CERAMIC_DID_STR:str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
+        ceramic_did_str: ${CERAMIC_DID_STR:str:z6MkoyCcAaqBKvoEi3FumHZ1NtJEwcN73A6sjHjF3RMhBhcc}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
-        dynamic_contribution_contract_address: ${DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS:str:0x5FbDB2315678afecb367f032d93F642f64180aa3}
-        earliest_block_to_monitor: ${EARLIEST_BLOCK_TO_MONITOR:int:8053690}
+        dynamic_contribution_contract_address: ${DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS:str:0x02C26437B292D86c5F4F21bbCcE0771948274f84}
+        earliest_block_to_monitor: ${EARLIEST_BLOCK_TO_MONITOR:int:16097553}
         keeper_timeout: 30.0
         max_attempts: 10
         max_healthcheck: 120
         multisend_address: ${MULTISEND_ADDRESS:str:0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761}
         termination_sleep: ${TERMINATION_SLEEP:int:900}
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
-        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:6}
         reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:30}
         retry_attempts: 400
         retry_timeout: 3
@@ -88,8 +88,8 @@ extra:
         round_timeout_seconds: 30.0
         tweet_evaluation_round_timeout: ${TWEET_EVALUATION_ROUND_TIMEOUT:float:600.0}
         service_id: impact_evaluator
-        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:null}
-        share_tm_config_on_startup: ${USE_ACN:bool:false}
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
+        share_tm_config_on_startup: ${USE_ACN:bool:true}
         sleep_time: 1
         tendermint_check_sleep_delay: 3
         tendermint_com_url: ${TENDERMINT_COM_URL:str:http://localhost:8080}
@@ -99,14 +99,14 @@ extra:
         token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
         whitelist_api_key: null
         whitelist_endpoint: http://localhost
-        points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:null}
+        points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}}
         twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
         twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
-        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=10&since_id={since_id}}
-        twitter_max_pages: 10
+        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
+        twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=10&since_id={since_id}}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
@@ -131,27 +131,27 @@ extra:
         genesis_config: *id002
         broadcast_to_server: false
         history_end: null
-        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:dummy_centaurs_stream_id}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
-        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:ceramic_db_stream_id}
-        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
+        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw147unqobq8fbsnnjl1qodospeuy84cgagdyadeib0xjsvqhbf4ns}
+        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw146k8j9l26rg6gw85mokzwnxm7t1krux0y162sgn3pc1887e3wsr}
+        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
+        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
         ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
         ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
         ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
         ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-        ceramic_did_str: ${CERAMIC_DID_STR:str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
+        ceramic_did_str: ${CERAMIC_DID_STR:str:z6MkoyCcAaqBKvoEi3FumHZ1NtJEwcN73A6sjHjF3RMhBhcc}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
-        dynamic_contribution_contract_address: ${DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS:str:0x5FbDB2315678afecb367f032d93F642f64180aa3}
-        earliest_block_to_monitor: ${EARLIEST_BLOCK_TO_MONITOR:int:8053690}
+        dynamic_contribution_contract_address: ${DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS:str:0x02C26437B292D86c5F4F21bbCcE0771948274f84}
+        earliest_block_to_monitor: ${EARLIEST_BLOCK_TO_MONITOR:int:16097553}
         keeper_timeout: 30.0
         max_attempts: 10
         max_healthcheck: 120
         multisend_address: ${MULTISEND_ADDRESS:str:0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761}
         termination_sleep: ${TERMINATION_SLEEP:int:900}
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
-        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:6}
         reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:30}
         retry_attempts: 400
         retry_timeout: 3
@@ -160,8 +160,8 @@ extra:
         round_timeout_seconds: 30.0
         tweet_evaluation_round_timeout: ${TWEET_EVALUATION_ROUND_TIMEOUT:float:600.0}
         service_id: impact_evaluator
-        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:null}
-        share_tm_config_on_startup: ${USE_ACN:bool:false}
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
+        share_tm_config_on_startup: ${USE_ACN:bool:true}
         sleep_time: 1
         tendermint_check_sleep_delay: 3
         tendermint_com_url: ${TENDERMINT_COM_URL:str:http://localhost:8080}
@@ -171,14 +171,14 @@ extra:
         token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
         whitelist_api_key: null
         whitelist_endpoint: http://localhost
-        points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:null}
+        points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}}
         twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
         twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
-        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=10&since_id={since_id}}
-        twitter_max_pages: 10
+        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
+        twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=10&since_id={since_id}}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
@@ -203,27 +203,27 @@ extra:
         genesis_config: *id002
         broadcast_to_server: false
         history_end: null
-        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:dummy_centaurs_stream_id}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
-        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:ceramic_db_stream_id}
-        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
+        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw147unqobq8fbsnnjl1qodospeuy84cgagdyadeib0xjsvqhbf4ns}
+        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw146k8j9l26rg6gw85mokzwnxm7t1krux0y162sgn3pc1887e3wsr}
+        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
+        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
         ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
         ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
         ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
         ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-        ceramic_did_str: ${CERAMIC_DID_STR:str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
+        ceramic_did_str: ${CERAMIC_DID_STR:str:z6MkoyCcAaqBKvoEi3FumHZ1NtJEwcN73A6sjHjF3RMhBhcc}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
-        dynamic_contribution_contract_address: ${DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS:str:0x5FbDB2315678afecb367f032d93F642f64180aa3}
-        earliest_block_to_monitor: ${EARLIEST_BLOCK_TO_MONITOR:int:8053690}
+        dynamic_contribution_contract_address: ${DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS:str:0x02C26437B292D86c5F4F21bbCcE0771948274f84}
+        earliest_block_to_monitor: ${EARLIEST_BLOCK_TO_MONITOR:int:16097553}
         keeper_timeout: 30.0
         max_attempts: 10
         max_healthcheck: 120
         multisend_address: ${MULTISEND_ADDRESS:str:0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761}
         termination_sleep: ${TERMINATION_SLEEP:int:900}
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
-        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:6}
         reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:30}
         retry_attempts: 400
         retry_timeout: 3
@@ -232,8 +232,8 @@ extra:
         round_timeout_seconds: 30.0
         tweet_evaluation_round_timeout: ${TWEET_EVALUATION_ROUND_TIMEOUT:float:600.0}
         service_id: impact_evaluator
-        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:null}
-        share_tm_config_on_startup: ${USE_ACN:bool:false}
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
+        share_tm_config_on_startup: ${USE_ACN:bool:true}
         sleep_time: 1
         tendermint_check_sleep_delay: 3
         tendermint_com_url: ${TENDERMINT_COM_URL:str:http://localhost:8080}
@@ -243,14 +243,14 @@ extra:
         token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
         whitelist_api_key: null
         whitelist_endpoint: http://localhost
-        points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:null}
+        points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}}
         twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
         twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
-        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=10&since_id={since_id}}
-        twitter_max_pages: 10
+        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
+        twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=10&since_id={since_id}}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
@@ -275,20 +275,20 @@ extra:
         genesis_config: *id002
         broadcast_to_server: false
         history_end: null
-        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:dummy_centaurs_stream_id}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
-        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:ceramic_db_stream_id}
-        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
+        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw147unqobq8fbsnnjl1qodospeuy84cgagdyadeib0xjsvqhbf4ns}
+        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw146k8j9l26rg6gw85mokzwnxm7t1krux0y162sgn3pc1887e3wsr}
+        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
+        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
         ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
         ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
         ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
         ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-        ceramic_did_str: ${CERAMIC_DID_STR:str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
+        ceramic_did_str: ${CERAMIC_DID_STR:str:z6MkoyCcAaqBKvoEi3FumHZ1NtJEwcN73A6sjHjF3RMhBhcc}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
-        dynamic_contribution_contract_address: ${DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS:str:0x5FbDB2315678afecb367f032d93F642f64180aa3}
-        earliest_block_to_monitor: ${EARLIEST_BLOCK_TO_MONITOR:int:8053690}
+        dynamic_contribution_contract_address: ${DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS:str:0x02C26437B292D86c5F4F21bbCcE0771948274f84}
+        earliest_block_to_monitor: ${EARLIEST_BLOCK_TO_MONITOR:int:16097553}
         keeper_timeout: 30.0
         max_attempts: 10
         max_healthcheck: 120
@@ -297,7 +297,7 @@ extra:
         init_fallback_gas: 0
         keeper_allowed_retries: 3
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
-        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:null}
+        on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:6}
         reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:30}
         retry_attempts: 400
         retry_timeout: 3
@@ -306,8 +306,8 @@ extra:
         round_timeout_seconds: 30.0
         tweet_evaluation_round_timeout: ${TWEET_EVALUATION_ROUND_TIMEOUT:float:600.0}
         service_id: impact_evaluator
-        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:null}
-        share_tm_config_on_startup: ${USE_ACN:bool:false}
+        service_registry_address: ${SERVICE_REGISTRY_ADDRESS:str:0x48b6af7B12C71f09e2fC8aF4855De4Ff54e775cA}
+        share_tm_config_on_startup: ${USE_ACN:bool:true}
         sleep_time: 1
         tendermint_check_sleep_delay: 3
         tendermint_com_url: ${TENDERMINT_COM_URL:str:http://localhost:8080}
@@ -317,14 +317,14 @@ extra:
         token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
         whitelist_api_key: null
         whitelist_endpoint: http://localhost
-        points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:null}
+        points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}}
         twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
         twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
-        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=10&since_id={since_id}}
-        twitter_max_pages: 10
+        twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
+        twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=10&since_id={since_id}}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         tx_timeout: 10.0
         use_termination: ${USE_TERMINATION:bool:false}
         validate_timeout: 1205
@@ -347,7 +347,7 @@ config:
   ledger_apis:
     ethereum:
       address: ${ETHEREUM_LEDGER_RPC:str:http://host.docker.internal:8545}
-      chain_id: ${ETHEREUM_LEDGER_CHAIN_ID:int:31337}
+      chain_id: ${ETHEREUM_LEDGER_CHAIN_ID:int:1}
       poa_chain: ${ETHEREUM_LEDGER_IS_POA_CHAIN:bool:false}
       default_gas_price_strategy: ${ETHEREUM_LEDGER_PRICING:str:eip1559}
 ---

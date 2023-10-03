@@ -2,6 +2,7 @@ alphabet_in:
 - API_ERROR
 - DB_UPDATE
 - DONE
+- DONE_API_LIMITS
 - DONE_MAX_RETRIES
 - DONE_SKIP
 - EVALUATE
@@ -51,11 +52,13 @@ transition_func:
     (TwitterDecisionMakingRound, SELECT_KEEPERS): TwitterRandomnessRound
     (TwitterHashtagsCollectionRound, API_ERROR): TwitterHashtagsCollectionRound
     (TwitterHashtagsCollectionRound, DONE): TwitterDecisionMakingRound
+    (TwitterHashtagsCollectionRound, DONE_API_LIMITS): TwitterDecisionMakingRound
     (TwitterHashtagsCollectionRound, DONE_MAX_RETRIES): TwitterDecisionMakingRound
     (TwitterHashtagsCollectionRound, NO_MAJORITY): TwitterRandomnessRound
     (TwitterHashtagsCollectionRound, ROUND_TIMEOUT): TwitterRandomnessRound
     (TwitterMentionsCollectionRound, API_ERROR): TwitterMentionsCollectionRound
     (TwitterMentionsCollectionRound, DONE): TwitterDecisionMakingRound
+    (TwitterMentionsCollectionRound, DONE_API_LIMITS): TwitterDecisionMakingRound
     (TwitterMentionsCollectionRound, DONE_MAX_RETRIES): TwitterDecisionMakingRound
     (TwitterMentionsCollectionRound, NO_MAJORITY): TwitterRandomnessRound
     (TwitterMentionsCollectionRound, ROUND_TIMEOUT): TwitterRandomnessRound

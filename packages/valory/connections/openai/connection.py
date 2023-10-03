@@ -18,26 +18,6 @@
 #
 # ------------------------------------------------------------------------------
 
-
-# -*- coding: utf-8 -*-
-# ------------------------------------------------------------------------------
-#
-#   Copyright 2023 valory
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-#
-# ------------------------------------------------------------------------------
-
 """OpenAI connection and channel."""
 
 from typing import Any, Dict, cast
@@ -55,6 +35,11 @@ from packages.valory.protocols.llm.message import LlmMessage
 
 
 PUBLIC_ID = PublicId.from_str("valory/openai:0.1.0")
+
+ENGINES = {
+    "chat": ["gpt-3.5-turbo", "gpt-4"],
+    "completion": ["text-davinci-002", "text-davinci-003"],
+}
 
 
 class LlmDialogues(BaseLlmDialogues):
@@ -114,7 +99,13 @@ class OpenaiConnection(BaseSyncConnection):
         super().__init__(*args, **kwargs)
         self.openai_settings = {
             setting: self.configuration.config.get(setting)
-            for setting in ("openai_api_key", "engine", "max_tokens", "temperature")
+            for setting in (
+                "openai_api_key",
+                "engine",
+                "max_tokens",
+                "temperature",
+                "request_timeout",
+            )
         }
         openai.api_key = self.openai_settings["openai_api_key"]
         self.dialogues = LlmDialogues(connection_id=PUBLIC_ID)
@@ -160,10 +151,21 @@ class OpenaiConnection(BaseSyncConnection):
             )
             return
 
-        value = self._get_response(
-            prompt_template=llm_message.prompt_template,
-            prompt_values=llm_message.prompt_values,
-        )
+        try:
+            value = self._get_response(
+                prompt_template=llm_message.prompt_template,
+                prompt_values=llm_message.prompt_values,
+            )
+        except openai.error.AuthenticationError as e:
+            self.logger.error(e)
+            value = "OpenAI authentication error"
+        except openai.error.APIError as e:
+            self.logger.error(e)
+            value = "OpenAI server error"
+        except openai.error.RateLimitError as e:
+            self.logger.error(e)
+            value = "OpenAI rate limit error"
+
         response_message = cast(
             LlmMessage,
             dialogue.reply(
@@ -186,26 +188,39 @@ class OpenaiConnection(BaseSyncConnection):
         """Get response from openai."""
         # Format the prompt using input variables and prompt_values
         formatted_prompt = prompt_template.format(**prompt_values) if prompt_values else prompt_template
+        engine = self.openai_settings["engine"]
 
         # Call the OpenAI API
-        try:
-            response = openai.Completion.create(
-                engine=self.openai_settings["engine"],
-                prompt=formatted_prompt,
+        if engine in ENGINES["chat"]:
+            messages = [
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": formatted_prompt},
+            ]
+            response = openai.ChatCompletion.create(
+                model=engine,
+                messages=messages,
+                temperature=self.openai_settings["temperature"],
                 max_tokens=self.openai_settings["max_tokens"],
                 n=1,
+                request_timeout=self.openai_settings["request_timeout"],
                 stop=None,
-                temperature=self.openai_settings["temperature"],
             )
+            output = response.choices[0].message.content
+        elif engine in ENGINES["completion"]:
+            response = openai.Completion.create(
+                engine=engine,
+                prompt=formatted_prompt,
+                temperature=self.openai_settings["temperature"],
+                max_tokens=self.openai_settings["max_tokens"],
+                n=1,
+                request_timeout=self.openai_settings["request_timeout"],
+                stop=None,
+            )
+            output = response.choices[0].text
+        else:
+            raise AttributeError(f"Unrecognized OpenAI engine: {engine}")
 
-            # Extract the result from the API response
-            result = response.choices[0].text
-
-        except openai.error.AuthenticationError as e:
-            self.logger.error(e)
-            result = "OpenAI authentication error"
-
-        return result
+        return output
 
     def on_connect(self) -> None:
         """

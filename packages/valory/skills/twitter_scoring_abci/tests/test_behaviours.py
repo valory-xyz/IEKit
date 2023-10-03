@@ -694,6 +694,7 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                         ),
                         json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
+                    "headers": [""],
                     "status_codes": [404],
                 },
             ),
@@ -785,6 +786,7 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                     status_code=kwargs.get("status_codes")[i],
                     status_text="",
                     body=kwargs.get("bodies")[i].encode(),
+                    headers=kwargs.get("headers", [""])[i],
                 ),
             )
         self.complete(test_case.event)
@@ -818,6 +820,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                     "bodies": [
                         json.dumps(DUMMY_HASHTAGS_RESPONSE),
                     ],
+                    "headers": [""],
                     "status_codes": [404],
                 },
             ),
@@ -909,6 +912,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                     status_code=kwargs.get("status_codes")[i],
                     status_text="",
                     body=kwargs.get("bodies")[i].encode(),
+                    headers=kwargs.get("headers", [""])[i],
                 ),
             )
         self.complete(test_case.event)
