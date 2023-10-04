@@ -25,16 +25,20 @@ from typing import Dict, List, Optional, Set, Tuple, cast
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    AbstractRound,
+    CollectSameUntilThresholdRound,
     AppState,
     BaseSynchronizedData,
     DegenerateRound,
     EventToTimeout,
+    OnlyKeeperSendsRound,
+    get_name
 )
 
 from packages.valory.skills.mech_interact_abci.payloads import (
     MechRequestPayload,
     MechResponsePayload,
+    MechRandomnessPayload,
+    MechSelectKeeperPayload
 )
 
 
@@ -65,56 +69,97 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(str, self.db.get_strict("final_tx_hash"))
 
 
-class MechRequestRound(AbstractRound):
+class MechRequestRound(OnlyKeeperSendsRound):
     """MechRequestRound"""
 
     payload_class = MechRequestPayload
-    payload_attribute = ""  # TODO: update
     synchronized_data_class = SynchronizedData
 
-    # TODO: replace AbstractRound with one of CollectDifferentUntilAllRound,
-    # CollectSameUntilAllRound, CollectSameUntilThresholdRound,
-    # CollectDifferentUntilThresholdRound, OnlyKeeperSendsRound, VotingRound,
-    # from packages/valory/skills/abstract_round_abci/base.py
-    # or implement the methods
-
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
+    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
-        raise NotImplementedError
+        if self.keeper_payload is None:
+            return None
 
-    def check_payload(self, payload: MechRequestPayload) -> None:
-        """Check payload."""
-        raise NotImplementedError
+        mech_requests = cast(
+            SynchronizedData, self.synchronized_data
+        ).mech_requests
 
-    def process_payload(self, payload: MechRequestPayload) -> None:
-        """Process payload."""
-        raise NotImplementedError
+        # Assing the request hash to its corresponding requests
+        for r in mech_requests:
+            if "tx_hash" not in r:
+                r["tx_hash"] = cast(MechRequestPayload, self.keeper_payload).tx_hash  # FIXME: do multi-requests have 1 hash only?
+
+        synchronized_data = self.synchronized_data.update(
+            synchronized_data_class=SynchronizedData,
+            **{
+                get_name(
+                    SynchronizedData.mech_requests
+                ): mech_requests
+            },
+        )
+
+        return synchronized_data, Event.DONE
 
 
-class MechResponseRound(AbstractRound):
+
+class MechResponseRound(CollectSameUntilThresholdRound):
     """MechResponseRound"""
 
     payload_class = MechResponsePayload
-    payload_attribute = ""  # TODO: update
     synchronized_data_class = SynchronizedData
 
-    # TODO: replace AbstractRound with one of CollectDifferentUntilAllRound,
-    # CollectSameUntilAllRound, CollectSameUntilThresholdRound,
-    # CollectDifferentUntilThresholdRound, OnlyKeeperSendsRound, VotingRound,
-    # from packages/valory/skills/abstract_round_abci/base.py
-    # or implement the methods
-
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
+    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
-        raise NotImplementedError
+        if self.threshold_reached:
 
-    def check_payload(self, payload: MechResponsePayload) -> None:
-        """Check payload."""
-        raise NotImplementedError
+            mech_requests = cast(
+                SynchronizedData, self.synchronized_data
+            ).mech_requests
 
-    def process_payload(self, payload: MechResponsePayload) -> None:
-        """Process payload."""
-        raise NotImplementedError
+            # Assing the responses its corresponding requests
+            for r in mech_requests:
+                if "tx_hash" not in r:
+                    r["tx_hash"] = self.most_voted_payload.tx_hash  # FIXME: do multi-requests have 1 hash only?
+
+            synchronized_data = self.synchronized_data.update(
+                synchronized_data_class=SynchronizedData,
+                **{
+                    get_name(
+                        SynchronizedData.mech_requests
+                    ): mech_requests
+                },
+            )
+
+            return synchronized_data, Event.DONE
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
+        return None
+
+
+class MechRandomnessRound(CollectSameUntilThresholdRound):
+    """A round for generating randomness"""
+
+    payload_class = MechRandomnessPayload
+    synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    collection_key = get_name(SynchronizedData.participant_to_randomness)
+    selection_key = (
+        get_name(SynchronizedData.most_voted_randomness),
+        get_name(SynchronizedData.most_voted_randomness),
+    )
+
+class MechSelectKeeperRound(CollectSameUntilThresholdRound):
+    """A round in which a keeper is selected for transaction submission"""
+
+    payload_class = MechSelectKeeperPayload
+    synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    collection_key = get_name(SynchronizedData.participant_to_selection)
+    selection_key = get_name(SynchronizedData.most_voted_keeper_address)
 
 
 class FinishedMechRequestRound(DegenerateRound):
@@ -131,10 +176,19 @@ class MechInteractAbciApp(AbciApp[Event]):
     initial_round_cls: AppState = MechRequestRound
     initial_states: Set[AppState] = {MechResponseRound, MechRequestRound}
     transition_function: AbciAppTransitionFunction = {
+        MechRandomnessRound: {
+            Event.DONE: MechSelectKeeperRound,
+            Event.NO_MAJORITY: MechSelectKeeperRound,
+            Event.ROUND_TIMEOUT: MechSelectKeeperRound
+        },
+        MechSelectKeeperRound: {
+            Event.DONE: MechRequestRound,
+            Event.NO_MAJORITY: MechRandomnessRound,
+            Event.ROUND_TIMEOUT: MechRandomnessRound
+        },
         MechRequestRound: {
             Event.DONE: FinishedMechRequestRound,
-            Event.NO_MAJORITY: MechRequestRound,
-            Event.ROUND_TIMEOUT: MechRequestRound
+            Event.ROUND_TIMEOUT: MechRandomnessRound
         },
         MechResponseRound: {
             Event.DONE: FinishedMechResponseRound,
@@ -146,7 +200,7 @@ class MechInteractAbciApp(AbciApp[Event]):
     }
     final_states: Set[AppState] = {FinishedMechRequestRound, FinishedMechResponseRound}
     event_to_timeout: EventToTimeout = {}
-    cross_period_persisted_keys: Set[str] = []
+    cross_period_persisted_keys: Set[str] = set()
     db_pre_conditions: Dict[AppState, Set[str]] = {
         MechResponseRound: set(),
     	MechRequestRound: set(),

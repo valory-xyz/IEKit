@@ -26,17 +26,21 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-
+from packages.valory.skills.abstract_round_abci.common import RandomnessBehaviour
 from packages.valory.skills.mech_interact_abci.models import Params
 from packages.valory.skills.mech_interact_abci.rounds import (
     SynchronizedData,
     MechInteractAbciApp,
     MechRequestRound,
     MechResponseRound,
+    MechSelectKeeperRound,
+    MechRandomnessRound
 )
-from packages.valory.skills.mech_interact_abci.rounds import (
+from packages.valory.skills.mech_interact_abci.payloads import (
     MechRequestPayload,
     MechResponsePayload,
+    MechRandomnessPayload,
+    MechSelectKeeperPayload,
 )
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -448,6 +452,11 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         """Get the request tx data encoded."""
 
         for request in self.synchronized_data.mech_requests:
+
+            # Skip the request if it has been sent already
+            if "tx_hash" in request:
+                continue
+
             self._metadata = MechMetadata(prompt=request["prompt"], tool=request["tool"])
 
             status = yield from self._mech_contract_interact(
@@ -697,7 +706,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             )
             return None
 
-        return self.mech_response.result["result"]  # TOFIX: which key should we access here?
+        return self.mech_response.result["result"]  # FIXME: which key should we access here?
 
     def async_act(self) -> Generator:
         """Do the action."""
@@ -713,12 +722,28 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
 
 
+class MechRandomnessBehaviour(RandomnessBehaviour):
+    """Retrieve randomness."""
+
+    matching_round = MechRandomnessRound
+    payload_class = MechRandomnessPayload
+
+
+class MechSelectKeepersBehaviour(MechInteractBaseBehaviour):
+    """Select the keeper agent."""
+
+    matching_round = MechSelectKeeperRound
+    payload_class = MechSelectKeeperPayload
+
+
 class MechInteractRoundBehaviour(AbstractRoundBehaviour):
     """MechInteractRoundBehaviour"""
 
     initial_behaviour_cls = MechRequestBehaviour
     abci_app_cls = MechInteractAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
+        MechRandomnessBehaviour,
+        MechSelectKeepersBehaviour,
         MechRequestBehaviour,
         MechResponseBehaviour
     ]

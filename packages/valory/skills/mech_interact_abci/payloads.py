@@ -45,3 +45,17 @@ class MechResponsePayload(BaseTxPayload):
 
     response: Optional[str]
 
+
+@dataclass(frozen=True)
+class MechRandomnessPayload(BaseTxPayload):
+    """Represent a transaction payload of type 'randomness'."""
+
+    round_id: int
+    randomness: str
+
+
+@dataclass(frozen=True)
+class MechSelectKeeperPayload(BaseTxPayload):
+    """Represent a transaction payload of type 'select_keeper'."""
+
+    keepers: str
