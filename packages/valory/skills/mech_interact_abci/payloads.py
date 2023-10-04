@@ -25,7 +25,15 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 
 @dataclass(frozen=True)
-class MechRequestPayload(BaseTxPayload):
+class MultisigTxPayload(BaseTxPayload):
+    """Represents a transaction payload for preparing an on-chain transaction to be sent via the agents' multisig."""
+
+    tx_submitter: Optional[str]
+    tx_hash: Optional[str]
+
+
+@dataclass(frozen=True)
+class MechRequestPayload(MultisigTxPayload):
     """Represent a transaction payload for the MechRequestRound."""
 
     price: Optional[int]
@@ -35,5 +43,5 @@ class MechRequestPayload(BaseTxPayload):
 class MechResponsePayload(BaseTxPayload):
     """Represent a transaction payload for the MechResponseRound."""
 
-    # TODO: define your attributes
+    response: Optional[str]
 

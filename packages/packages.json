@@ -42,6 +42,7 @@
         "skill/valory/transaction_settlement_abci/0.1.0": "bafybeia7rzsbea3ch4gcafyp3z6uvqh4npws2xpdwbkkdbrqqpjops7nui",
         "skill/valory/termination_abci/0.1.0": "bafybeigqpij2sgrpnilqjljfciixop4fldq5qceixc7534q6af4potdmdm",
         "contract/valory/gnosis_safe_proxy_factory/0.1.0": "bafybeid6glyjikjxmefwmhn62cxiofophegjmg2z5vqqsvk6tmyunwc274",
-        "contract/valory/gnosis_safe/0.1.0": "bafybeih6d3vxz3jlgodxm5b2qcwsmansqj4xobuyd6hjnhzremuvd65yrm"
+        "contract/valory/gnosis_safe/0.1.0": "bafybeih6d3vxz3jlgodxm5b2qcwsmansqj4xobuyd6hjnhzremuvd65yrm",
+        "contract/valory/mech/0.1.0": "bafybeiddc6pgurpyja2k64wzsb3jgcvl254s7rplgt5iooftsyfalqlbfq"
     }
 }

@@ -22,7 +22,6 @@
 from abc import ABC
 from typing import Generator, Set, Type, cast, Tuple
 
-from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
@@ -52,7 +51,6 @@ from packages.valory.contracts.gnosis_safe.contract import GnosisSafeContract
 from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.abstract_round_abci.base import get_name
 from packages.valory.skills.abstract_round_abci.io_.store import SupportedFiletype
-from packages.valory.skills.decision_maker_abci.payloads import RequestPayload
 from packages.valory.skills.transaction_settlement_abci.payload_tools import (
     hash_payload_to_hex,
 )
@@ -76,7 +74,7 @@ from packages.valory.skills.abstract_round_abci.behaviour_utils import (
     TimeoutException,
 )
 import json
-from packages.valory.skills.twitter_scoring_abci.rounds import SynchronizedData
+from packages.valory.skills.mech_interact_abci.rounds import SynchronizedData
 from packages.valory.skills.transaction_settlement_abci.payload_tools import (
     hash_payload_to_hex,
 )
@@ -101,6 +99,7 @@ ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 # more info here: https://safe-docs.dev.gnosisdev.com/safe/docs/contracts_tx_execution/
 SAFE_GAS = 0
 
+
 @dataclass
 class MechMetadata:
     """A Mech's metadata."""
@@ -108,7 +107,6 @@ class MechMetadata:
     prompt: str
     tool: str
     nonce: str = field(default_factory=lambda: str(uuid4()))
-
 
 
 @dataclass
@@ -119,6 +117,7 @@ class MultisendBatch:
     data: HexBytes
     value: int = 0
     operation: MultiSendOperation = MultiSendOperation.CALL
+
 
 @dataclass
 class MechInteractionResponse:
@@ -155,7 +154,7 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
     @property
     def synchronized_data(self) -> SynchronizedData:
         """Return the synchronized data."""
-        return SynchronizedData(super().synchronized_data.db)
+        return cast(SynchronizedData, super().synchronized_data)
 
     @property
     def safe_tx_hash(self) -> str:
@@ -516,7 +515,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             mech_tx_hex = yield from self._prepare_safe_tx()
             price = self.price
             agent = self.context.agent_address
-            payload = RequestPayload(agent, tx_submitter, mech_tx_hex, price)
+            payload = MechRequestPayload(agent, tx_submitter, mech_tx_hex, price)
         yield from self.finish_behaviour(payload)
 
 
@@ -603,7 +602,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             contract_public_id=Mech.contract_id,
             contract_callable="get_block_number",
             data_key="number",
-            placeholder=get_name(DecisionReceiveBehaviour.from_block),
+            placeholder=get_name(MechResponseBehaviour.from_block),
             tx_hash=self.synchronized_data.final_tx_hash,
         )
 
@@ -614,7 +613,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         result = yield from self._mech_contract_interact(
             contract_callable="process_request_event",
             data_key="requestId",
-            placeholder=get_name(DecisionReceiveBehaviour.request_id),
+            placeholder=get_name(MechResponseBehaviour.request_id),
             tx_hash=self.synchronized_data.final_tx_hash,
         )
         return result
@@ -628,7 +627,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         result = yield from self._mech_contract_interact(
             contract_callable="get_response",
             data_key="data",
-            placeholder=get_name(DecisionReceiveBehaviour.response_hex),
+            placeholder=get_name(MechResponseBehaviour.response_hex),
             request_id=self.request_id,
             from_block=self.from_block,
         )
@@ -679,10 +678,10 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
         return True
 
-    def _get_decision(
+    def _process_response(
         self,
-    ) -> Generator[None, None, Tuple[Optional[int], Optional[float]]]:
-        """Get the vote and it's confidence."""
+    ) -> Generator[None, None, Optional[str]]:
+        """Get the response."""
         for step in (
             self._get_block_number,
             self._get_request_id,
@@ -691,28 +690,23 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         ):
             yield from self.wait_for_condition_with_sleep(step)
 
-        self.context.logger.info(f"Decision has been received:\n{self.mech_response}")
+        self.context.logger.info(f"Response has been received:\n{self.mech_response}")
         if self.mech_response.result is None:
             self.context.logger.error(
                 f"There was an error on the mech's response: {self.mech_response.error}"
             )
-            return None, None
+            return None
 
-        return self.mech_response.result.vote, self.mech_response.result.confidence
+        return self.mech_response.result["result"]  # TOFIX: which key should we access here?
 
     def async_act(self) -> Generator:
         """Do the action."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            vote, confidence = yield from self._get_decision()
-            is_profitable = None
-            if vote is not None and confidence is not None:
-                is_profitable = self._is_profitable(confidence, vote)
+            response = yield from self._process_response()
             payload = MechResponsePayload(
                 self.context.agent_address,
-                is_profitable,
-                vote,
-                confidence,
+                response,
             )
 
         yield from self.finish_behaviour(payload)

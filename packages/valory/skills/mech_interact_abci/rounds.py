@@ -20,7 +20,7 @@
 """This package contains the rounds of MechInteractAbciApp."""
 
 from enum import Enum
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
@@ -52,6 +52,17 @@ class SynchronizedData(BaseSynchronizedData):
 
     This data is replicated by the tendermint application.
     """
+
+    @property
+    def mech_requests(self) -> list:
+        """Get the mech requests."""
+        return cast(list, self.db.get("mech_requests", []))
+
+
+    @property
+    def final_tx_hash(self) -> str:
+        """Get the verified tx hash."""
+        return cast(str, self.db.get_strict("final_tx_hash"))
 
 
 class MechRequestRound(AbstractRound):
@@ -137,10 +148,10 @@ class MechInteractAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {}
     cross_period_persisted_keys: Set[str] = []
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        MechResponseRound: [],
-    	MechRequestRound: [],
+        MechResponseRound: set(),
+    	MechRequestRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedMechRequestRound: [],
-    	FinishedMechResponseRound: [],
+        FinishedMechRequestRound: set(),
+    	FinishedMechResponseRound: set(),
     }
