@@ -45,3 +45,5 @@ impact_evaluator
 
 temp/
 .1env
+
+packages/valory/contracts/mech/
