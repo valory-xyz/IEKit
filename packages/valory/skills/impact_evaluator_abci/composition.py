@@ -38,6 +38,7 @@ from packages.valory.skills.termination_abci.rounds import (
     Event,
     TerminationAbciApp,
 )
+import packages.valory.skills.mech_interact_abci.rounds as MechInteractAbci
 
 
 # Here we define how the transition between the FSMs should happen
@@ -55,6 +56,9 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     DecisionMakingAbci.FinishedDecisionMakingScoreRound: GenericScoringAbci.GenericScoringRound,
     DecisionMakingAbci.FinishedDecisionMakingDoneRound: ResetAndPauseAbci.ResetAndPauseRound,
     GenericScoringAbci.FinishedGenericScoringRound: TwitterScoringAbci.TwitterDecisionMakingRound,
+    TwitterScoringAbci.FinishedTwitterCollectionRound: MechInteractAbci.MechResponseRound,
+    MechInteractAbci.FinishedMechResponseRound: MechInteractAbci.MechRandomnessRound,
+    MechInteractAbci.FinishedMechRequestRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     TwitterScoringAbci.FinishedTwitterScoringRound: DynamicNFTAbci.TokenTrackRound,
     DynamicNFTAbci.FinishedTokenTrackRound: DecisionMakingAbci.DecisionMakingRound,
     LLMAbciApp.FinishedLLMRound: DecisionMakingAbci.DecisionMakingRound,

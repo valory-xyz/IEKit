@@ -116,10 +116,10 @@ class MechResponseRound(CollectSameUntilThresholdRound):
                 SynchronizedData, self.synchronized_data
             ).mech_requests
 
-            # Assing the responses its corresponding requests
-            for r in mech_requests:
-                if "tx_hash" not in r:
-                    r["tx_hash"] = self.most_voted_payload.tx_hash  # FIXME: do multi-requests have 1 hash only?
+            # Assign the response to its corresponding requests
+            response = self.most_voted_payload.request
+            # FIXME
+            for request in mech_requests:
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
@@ -174,7 +174,7 @@ class MechInteractAbciApp(AbciApp[Event]):
     """MechInteractAbciApp"""
 
     initial_round_cls: AppState = MechRequestRound
-    initial_states: Set[AppState] = {MechResponseRound, MechRequestRound}
+    initial_states: Set[AppState] = {MechResponseRound, MechRandomnessRound}
     transition_function: AbciAppTransitionFunction = {
         MechRandomnessRound: {
             Event.DONE: MechSelectKeeperRound,

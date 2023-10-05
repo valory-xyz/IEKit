@@ -500,7 +500,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         """Prepare the safe transaction for sending a request to mech and return the hex for the tx settlement skill."""
         for step in (
             self._send_metadata_to_ipfs,
-            self._build_request_data,
+            self._build_request_data,  # FIXME: shouldnt we first build the metadata?
             self._build_multisend_data,
             self._build_multisend_safe_tx_hash,
             self._get_price,

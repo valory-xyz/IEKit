@@ -21,7 +21,6 @@
 
 import json
 import math
-import statistics
 from enum import Enum
 from typing import Any, Dict, FrozenSet, Optional, Set, Tuple, cast
 
@@ -31,7 +30,6 @@ from packages.valory.skills.abstract_round_abci.base import (
     AbciAppTransitionFunction,
     AppState,
     BaseSynchronizedData,
-    CollectNonEmptyUntilThresholdRound,
     CollectSameUntilThresholdRound,
     DegenerateRound,
     EventToTimeout,
@@ -39,13 +37,13 @@ from packages.valory.skills.abstract_round_abci.base import (
 )
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
-    OpenAICallCheckPayload,
-    TweetEvaluationPayload,
+    PreMechRequestPayload,
     TwitterDecisionMakingPayload,
     TwitterHashtagsCollectionPayload,
     TwitterMentionsCollectionPayload,
     TwitterRandomnessPayload,
     TwitterSelectKeepersPayload,
+    PostMechRequestPayload
 )
 
 
@@ -58,15 +56,12 @@ class Event(Enum):
     """TwitterScoringAbciApp Events"""
 
     DONE = "done"
-    DONE_SKIP = "done_skip"
     DONE_MAX_RETRIES = "done_max_retries"
     DONE_API_LIMITS = "done_api_limits"
     NO_MAJORITY = "no_majority"
     ROUND_TIMEOUT = "round_timeout"
     TWEET_EVALUATION_ROUND_TIMEOUT = "tweet_evaluation_round_timeout"
     API_ERROR = "api_error"
-    OPENAI_CALL_CHECK = "openai_call_check"
-    NO_ALLOWANCE = "no_allowance"
     RETRIEVE_HASHTAGS = "retrieve_hashtags"
     RETRIEVE_MENTIONS = "retrieve_mentions"
     EVALUATE = "evaluate"
@@ -141,6 +136,11 @@ class SynchronizedData(BaseSynchronizedData):
         """Check whether keepers are set."""
         return self.db.get("most_voted_keeper_addresses", None) is not None
 
+    @property
+    def mech_requests(self) -> list:
+        """Check the mech requests."""
+        return cast(list, self.db.get("mech_requests", []))
+
 
 class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
     """TwitterDecisionMakingRound"""
@@ -153,54 +153,8 @@ class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
         if self.threshold_reached:
             event = Event(self.most_voted_payload)
             # Reference events to avoid tox -e check-abciapp-specs failures
-            # Event.DONE, Event.DB_UPDATE, Event.RETRIEVE_MENTIONS, Event.RETRIEVE_HASHTAGS, Event.OPENAI_CALL_CHECK, Event.EVALUATE, Event.DONE_SKIP, Event.SELECT_KEEPERS
+            # Event.DONE, Event.DB_UPDATE, Event.RETRIEVE_MENTIONS, Event.RETRIEVE_HASHTAGS, Event.EVALUATE, Event.SELECT_KEEPERS
             return self.synchronized_data, event
-        if not self.is_majority_possible(
-            self.collection, self.synchronized_data.nb_participants
-        ):
-            return self.synchronized_data, Event.NO_MAJORITY
-        return None
-
-
-class OpenAICallCheckRound(CollectSameUntilThresholdRound):
-    """OpenAICallCheckRound"""
-
-    payload_class = OpenAICallCheckPayload
-    synchronized_data_class = SynchronizedData
-
-    CALLS_REMAINING = "CALLS_REMAINING"
-
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
-        """Process the end of the block."""
-        if self.threshold_reached:
-            performed_twitter_tasks = cast(
-                SynchronizedData, self.synchronized_data
-            ).performed_twitter_tasks
-
-            # Happy path
-            if self.most_voted_payload == self.CALLS_REMAINING:
-                performed_twitter_tasks["openai_call_check"] = Event.DONE.value
-                synchronized_data = self.synchronized_data.update(
-                    synchronized_data_class=SynchronizedData,
-                    **{
-                        get_name(
-                            SynchronizedData.performed_twitter_tasks
-                        ): performed_twitter_tasks
-                    },
-                )
-                return synchronized_data, Event.DONE
-
-            # No allowance
-            performed_twitter_tasks["openai_call_check"] = Event.NO_ALLOWANCE.value
-            synchronized_data = self.synchronized_data.update(
-                synchronized_data_class=SynchronizedData,
-                **{
-                    get_name(
-                        SynchronizedData.performed_twitter_tasks
-                    ): performed_twitter_tasks
-                },
-            )
-            return synchronized_data, Event.NO_ALLOWANCE
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
         ):
@@ -484,53 +438,73 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
         return None
 
 
-class TweetEvaluationRound(CollectNonEmptyUntilThresholdRound):
-    """TweetEvaluationRound"""
+class PreMechRequestRound(CollectSameUntilThresholdRound):
+    """PreMechRequestRound"""
 
-    payload_class = TweetEvaluationPayload
+    payload_class = PreMechRequestPayload
     synchronized_data_class = SynchronizedData
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
         """Process the end of the block."""
-        if self.collection_threshold_reached:
-            self.block_confirmations += 1
-        if (
-            self.collection_threshold_reached
-            and self.block_confirmations > self.required_block_confirmations
-        ):
-            performed_twitter_tasks = cast(
+        if self.threshold_reached:
+
+            payload = json.loads(self.most_voted_payload)
+            new_mech_requests = payload["mech_requests"]
+
+            mech_requests = cast(
                 SynchronizedData, self.synchronized_data
-            ).performed_twitter_tasks
-            non_empty_values = self._get_non_empty_values()
-            tweets = cast(SynchronizedData, self.synchronized_data).tweets
+            ).mech_requests
 
-            # Calculate points average
-            for tweet_id in tweets.keys():
-                if "points" in tweets[tweet_id]:
-                    # Already scored previously
-                    continue
-                tweet_points = [
-                    json.loads(value[0])[tweet_id]
-                    for value in non_empty_values.values()
-                ]
-                median = int(statistics.median(tweet_points))
-                tweets[tweet_id]["points"] = median
-                print(f"Tweet {tweet_id} has been awarded {median} points")
+            mech_requests = mech_requests.extend(new_mech_requests)
 
-            performed_twitter_tasks["evaluate"] = Event.DONE.value
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    get_name(SynchronizedData.tweets): tweets,
+                    get_name(SynchronizedData.mech_requests): mech_requests,
+                },
+            )
+            return synchronized_data, Event.DONE
+
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
+        return None
+
+
+class PostMechRequestRound(CollectSameUntilThresholdRound):
+    """PostMechRequestRound"""
+
+    payload_class = PostMechRequestPayload
+    synchronized_data_class = SynchronizedData
+
+    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
+        """Process the end of the block."""
+        if self.threshold_reached:
+
+            payload = json.loads(self.most_voted_payload)
+
+            performed_twitter_tasks = cast(
+                SynchronizedData, self.synchronized_data
+            ).performed_twitter_tasks
+            performed_twitter_tasks["evaluate"] = Event.DONE.value
+
+            synchronized_data = self.synchronized_data.update(
+                synchronized_data_class=SynchronizedData,
+                **{
+                    get_name(SynchronizedData.mech_requests): payload["mech_requests"],
+                    get_name(SynchronizedData.tweets): payload["tweets"],
                     get_name(
                         SynchronizedData.performed_twitter_tasks
                     ): performed_twitter_tasks,
                 },
             )
-
-            if all([len(tu) == 0 for tu in non_empty_values]):
-                return self.synchronized_data, self.none_event
             return synchronized_data, Event.DONE
+
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
         return None
 
 
@@ -550,6 +524,12 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
             ).performed_twitter_tasks
             performed_twitter_tasks["db_update"] = Event.DONE.value
 
+            # Clear processed tweets
+            tweets = performed_twitter_tasks = cast(
+                SynchronizedData, self.synchronized_data
+            ).tweets
+            tweets = [t for t in tweets if "points" not in t]
+
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
@@ -558,7 +538,7 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
                     get_name(
                         SynchronizedData.performed_twitter_tasks
                     ): performed_twitter_tasks,
-                    get_name(SynchronizedData.tweets): {},  # clear tweet pool
+                    get_name(SynchronizedData.tweets): tweets,
                 },
             )
             return synchronized_data, Event.DONE
@@ -621,6 +601,10 @@ class FinishedTwitterScoringRound(DegenerateRound):
     """FinishedTwitterScoringRound"""
 
 
+class FinishedTwitterCollectionRound(DegenerateRound):
+    """FinishedTwitterScoringRound"""
+
+
 class TwitterScoringAbciApp(AbciApp[Event]):
     """TwitterScoringAbciApp"""
 
@@ -628,22 +612,14 @@ class TwitterScoringAbciApp(AbciApp[Event]):
     initial_states: Set[AppState] = {TwitterDecisionMakingRound}
     transition_function: AbciAppTransitionFunction = {
         TwitterDecisionMakingRound: {
-            Event.OPENAI_CALL_CHECK: OpenAICallCheckRound,
-            Event.DONE_SKIP: FinishedTwitterScoringRound,
             Event.SELECT_KEEPERS: TwitterRandomnessRound,
             Event.RETRIEVE_HASHTAGS: TwitterHashtagsCollectionRound,
             Event.RETRIEVE_MENTIONS: TwitterMentionsCollectionRound,
-            Event.EVALUATE: TweetEvaluationRound,
+            Event.EVALUATE: PreMechRequestRound,
             Event.DB_UPDATE: DBUpdateRound,
             Event.DONE: FinishedTwitterScoringRound,
             Event.ROUND_TIMEOUT: TwitterDecisionMakingRound,
             Event.NO_MAJORITY: TwitterDecisionMakingRound,
-        },
-        OpenAICallCheckRound: {
-            Event.DONE: TwitterDecisionMakingRound,
-            Event.NO_ALLOWANCE: TwitterDecisionMakingRound,
-            Event.NO_MAJORITY: OpenAICallCheckRound,
-            Event.ROUND_TIMEOUT: OpenAICallCheckRound,
         },
         TwitterRandomnessRound: {
             Event.DONE: TwitterSelectKeepersRound,
@@ -671,9 +647,9 @@ class TwitterScoringAbciApp(AbciApp[Event]):
             Event.NO_MAJORITY: TwitterRandomnessRound,
             Event.ROUND_TIMEOUT: TwitterRandomnessRound,
         },
-        TweetEvaluationRound: {
+        PreMechRequestRound: {
             Event.DONE: TwitterDecisionMakingRound,
-            Event.TWEET_EVALUATION_ROUND_TIMEOUT: TweetEvaluationRound,
+            Event.TWEET_EVALUATION_ROUND_TIMEOUT: PreMechRequestRound,
         },
         DBUpdateRound: {
             Event.DONE: TwitterDecisionMakingRound,

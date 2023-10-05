@@ -68,7 +68,7 @@ from packages.valory.skills.reset_pause_abci.rounds import ResetAndPauseRound
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     DBUpdateRound,
     OpenAICallCheckRound,
-    TweetEvaluationRound,
+    PreMechRequestRound,
     TwitterDecisionMakingRound,
     TwitterHashtagsCollectionRound,
     TwitterMentionsCollectionRound,
@@ -100,7 +100,7 @@ HAPPY_PATH: Tuple[RoundChecks, ...] = (
 
     # Evaluation
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
-    RoundChecks(TweetEvaluationRound.auto_round_id(), n_periods=2),
+    RoundChecks(PreMechRequestRound.auto_round_id(), n_periods=2),
 
     # DB update
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),

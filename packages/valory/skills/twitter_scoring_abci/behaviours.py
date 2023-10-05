@@ -29,22 +29,14 @@ from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
 
 from web3 import Web3
 
-from packages.valory.connections.openai.connection import (
-    PUBLIC_ID as LLM_CONNECTION_PUBLIC_ID,
-)
-from packages.valory.protocols.llm.message import LlmMessage
+
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
 from packages.valory.skills.abstract_round_abci.common import RandomnessBehaviour
-from packages.valory.skills.abstract_round_abci.models import Requests
 from packages.valory.skills.twitter_scoring_abci.ceramic_db import CeramicDB
-from packages.valory.skills.twitter_scoring_abci.dialogues import (
-    LlmDialogue,
-    LlmDialogues,
-)
 from packages.valory.skills.twitter_scoring_abci.models import (
     OpenAICalls,
     Params,
@@ -52,13 +44,13 @@ from packages.valory.skills.twitter_scoring_abci.models import (
 )
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
-    OpenAICallCheckPayload,
-    TweetEvaluationPayload,
+    PreMechRequestPayload,
     TwitterDecisionMakingPayload,
     TwitterHashtagsCollectionPayload,
     TwitterMentionsCollectionPayload,
     TwitterRandomnessPayload,
     TwitterSelectKeepersPayload,
+    PostMechRequestPayload
 )
 from packages.valory.skills.twitter_scoring_abci.prompts import tweet_evaluation_prompt
 from packages.valory.skills.twitter_scoring_abci.rounds import (
@@ -66,15 +58,15 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     ERROR_API_LIMITS,
     ERROR_GENERIC,
     Event,
-    OpenAICallCheckRound,
     SynchronizedData,
-    TweetEvaluationRound,
+    PreMechRequestRound,
     TwitterDecisionMakingRound,
     TwitterHashtagsCollectionRound,
     TwitterMentionsCollectionRound,
     TwitterRandomnessRound,
     TwitterScoringAbciApp,
     TwitterSelectKeepersRound,
+    PostMechRequestRound
 )
 
 
@@ -272,12 +264,6 @@ class TwitterDecisionMakingBehaviour(TwitterScoringBaseBehaviour):
 
         self.context.logger.info(f"Performed tasks: {performed_tasks}")
 
-        if Event.OPENAI_CALL_CHECK.value not in performed_tasks:
-            return Event.OPENAI_CALL_CHECK.value
-
-        if performed_tasks[Event.OPENAI_CALL_CHECK.value] == Event.NO_ALLOWANCE.value:
-            return Event.DONE_SKIP.value
-
         if Event.SELECT_KEEPERS.value not in performed_tasks:
             return Event.SELECT_KEEPERS.value
 
@@ -294,34 +280,6 @@ class TwitterDecisionMakingBehaviour(TwitterScoringBaseBehaviour):
             return Event.DB_UPDATE.value
 
         return Event.DONE.value
-
-
-class OpenAICallCheckBehaviour(TwitterScoringBaseBehaviour):
-    """TwitterMentionsCollectionBehaviour"""
-
-    matching_round: Type[AbstractRound] = OpenAICallCheckRound
-
-    def async_act(self) -> Generator:
-        """Do the act, supporting asynchronous execution."""
-        with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            current_time = cast(
-                SharedState, self.context.state
-            ).round_sequence.last_round_transition_timestamp.timestamp()
-            # Reset the window if the window expired before checking
-            self.openai_calls.reset(current_time=current_time)
-            if self.openai_calls.max_calls_reached():
-                content = None
-            else:
-                content = OpenAICallCheckRound.CALLS_REMAINING
-        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
-            yield from self.send_a2a_transaction(
-                payload=OpenAICallCheckPayload(
-                    sender=self.context.agent_address,
-                    content=content,
-                )
-            )
-            yield from self.wait_until_round_end()
-        self.set_done()
 
 
 class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
@@ -850,27 +808,35 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
         }
 
 
-class TweetEvaluationBehaviour(TwitterScoringBaseBehaviour):
-    """TweetEvaluationBehaviour"""
+class PreMechRequestBehaviour(TwitterScoringBaseBehaviour):
+    """PreMechRequestBehaviour"""
 
-    matching_round: Type[AbstractRound] = TweetEvaluationRound
+    matching_round: Type[AbstractRound] = PreMechRequestRound
 
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            tweet_id_to_points = {}
+            new_mech_requests = []
+
+            mech_requests = self.synchronized_data.mech_requests
+            pending_tweet_ids = [r["tweet_id"] for r in mech_requests]
+
             for tweet_id, tweet in self.synchronized_data.tweets.items():
+
                 if "points" in tweet:
                     # Already scored previously
                     continue
-                tweet_id_to_points[tweet_id] = yield from self.evaluate_tweet(
-                    tweet["text"]
-                )
+
+                if tweet_id in pending_tweet_ids:
+                    # Score already requested
+                    continue
+
+                new_mech_requests.append({"tweet_id": tweet_id, "tool": "openai", "prompt": tweet_evaluation_prompt.replace("{user_text}", tweet["text"])})
 
             sender = self.context.agent_address
-            payload = TweetEvaluationPayload(
-                sender=sender, content=json.dumps(tweet_id_to_points, sort_keys=True)
+            payload = PreMechRequestPayload(
+                sender=sender, content=json.dumps({"mech_requests": new_mech_requests}, sort_keys=True)
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -879,81 +845,41 @@ class TweetEvaluationBehaviour(TwitterScoringBaseBehaviour):
 
         self.set_done()
 
-    def evaluate_tweet(self, text: str) -> Generator[None, None, int]:
-        """Evaluate the tweet through a LLM."""
 
-        self.context.logger.info(f"Evaluating tweet: {text}")
+class PostMechRequestBehaviour(TwitterScoringBaseBehaviour):
+    """PostMechRequestBehaviour"""
 
-        llm_dialogues = cast(LlmDialogues, self.context.llm_dialogues)
+    matching_round: Type[AbstractRound] = PostMechRequestRound
 
-        # llm request message
-        request_llm_message, llm_dialogue = llm_dialogues.create(
-            counterparty=str(LLM_CONNECTION_PUBLIC_ID),
-            performative=LlmMessage.Performative.REQUEST,
-            prompt_template=tweet_evaluation_prompt.replace("{user_text}", text),
-            prompt_values={},
-        )
-        request_llm_message = cast(LlmMessage, request_llm_message)
-        llm_dialogue = cast(LlmDialogue, llm_dialogue)
-        llm_response_message = yield from self._do_request(
-            request_llm_message, llm_dialogue
-        )
-        data = llm_response_message.value
-        self.openai_calls.increase_call_count()
-        self.context.logger.info(f"Got tweet evaluation: {repr(data)}")
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
 
-        points = DEFAULT_TWEET_POINTS
-        try:
-            data = parse_evaluation(data)
-            quality = data["quality"]
-            relationship = data["relationship"]
-            if (
-                quality not in TWEET_QUALITY_TO_POINTS
-                or relationship not in TWEET_RELATIONSHIP_TO_POINTS
-            ):
-                self.context.logger.error("Evaluation data is not valid: key not valid")
-            else:
-                points = (
-                    TWEET_QUALITY_TO_POINTS[quality]
-                    * TWEET_RELATIONSHIP_TO_POINTS[relationship]
-                )
-        except Exception as e:
-            self.context.logger.error(f"Evaluation data is not valid: exception {e}")
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
-        self.context.logger.info(f"Points: {points}")
-        return points
+            # Move the responded requests
+            mech_requests = []
+            tweets = self.synchronized_data.tweets
 
-    def _do_request(
-        self,
-        llm_message: LlmMessage,
-        llm_dialogue: LlmDialogue,
-        timeout: Optional[float] = None,
-    ) -> Generator[None, None, LlmMessage]:
-        """
-        Do a request and wait the response, asynchronously.
+            for request in self.synchronized_data.mech_requests:
 
-        :param llm_message: The request message
-        :param llm_dialogue: the HTTP dialogue associated to the request
-        :param timeout: seconds to wait for the reply.
-        :yield: LLMMessage object
-        :return: the response message
-        """
-        self.context.outbox.put_message(message=llm_message)
-        request_nonce = self._get_request_nonce_from_dialogue(llm_dialogue)
-        cast(Requests, self.context.requests).request_id_to_callback[
-            request_nonce
-        ] = self.get_callback_request()
-        # notify caller by propagating potential timeout exception.
-        response = yield from self.wait_for_message(timeout=timeout)
-        return response
+                # The request has been responded
+                if "points" in request:
+                    tweets[request["tweet_id"]]["points"] = request["points"]
 
+                # The request has not been responded yet. We keep it
+                else:
+                    mech_requests.append(request)
 
-def parse_evaluation(data: str) -> Dict:
-    """Parse the data from the LLM"""
-    start = data.find("{")
-    end = data.find("}")
-    sub_string = data[start : end + 1]
-    return json.loads(sub_string)
+            sender = self.context.agent_address
+            payload = PostMechRequestPayload(
+                sender=sender, content=json.dumps({"mech_requests": mech_requests, "tweets": tweets}, sort_keys=True)
+            )
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
 
 
 class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
@@ -1003,6 +929,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         # Update data
         for tweet in tweets.values():
+
+            if "points" not in tweet:
+                continue
 
             self.context.logger.info(f"Updating db with tweet: {tweet}")
 
@@ -1132,7 +1061,6 @@ class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
     abci_app_cls = TwitterScoringAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
         TwitterDecisionMakingBehaviour,
-        OpenAICallCheckBehaviour,
         TwitterMentionsCollectionBehaviour,
         TwitterHashtagsCollectionBehaviour,
         TweetEvaluationBehaviour,

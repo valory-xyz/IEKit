@@ -40,8 +40,15 @@ class TwitterHashtagsCollectionPayload(BaseTxPayload):
 
 
 @dataclass(frozen=True)
-class TweetEvaluationPayload(BaseTxPayload):
-    """Represent a transaction payload for the TweetEvaluationRound."""
+class PreMechRequestPayload(BaseTxPayload):
+    """Represent a transaction payload for the PreMechRequestRound."""
+
+    content: str
+
+
+@dataclass(frozen=True)
+class PostMechRequestPayload(BaseTxPayload):
+    """Represent a transaction payload for the PostMechRequestRound."""
 
     content: str
 
@@ -51,13 +58,6 @@ class DBUpdatePayload(BaseTxPayload):
     """Represent a transaction payload for the DBUpdateRound."""
 
     content: str
-
-
-@dataclass(frozen=True)
-class OpenAICallCheckPayload(BaseTxPayload):
-    """Represent a transaction payload for the OpenAICallCheckRound."""
-
-    content: Optional[str]
 
 
 @dataclass(frozen=True)

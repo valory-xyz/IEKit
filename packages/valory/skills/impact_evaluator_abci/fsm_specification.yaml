@@ -57,7 +57,7 @@ states:
 - StreamReadRound
 - StreamWriteRound
 - TokenTrackRound
-- TweetEvaluationRound
+- PreMechRequestRound
 - TwitterDecisionMakingRound
 - TwitterHashtagsCollectionRound
 - TwitterMentionsCollectionRound
@@ -131,12 +131,12 @@ transition_func:
     (TokenTrackRound, DONE): DecisionMakingRound
     (TokenTrackRound, NO_MAJORITY): TokenTrackRound
     (TokenTrackRound, ROUND_TIMEOUT): TokenTrackRound
-    (TweetEvaluationRound, DONE): TwitterDecisionMakingRound
-    (TweetEvaluationRound, TWEET_EVALUATION_ROUND_TIMEOUT): TweetEvaluationRound
+    (PreMechRequestRound, DONE): TwitterDecisionMakingRound
+    (PreMechRequestRound, TWEET_EVALUATION_ROUND_TIMEOUT): PreMechRequestRound
     (TwitterDecisionMakingRound, DB_UPDATE): DBUpdateRound
     (TwitterDecisionMakingRound, DONE): TokenTrackRound
     (TwitterDecisionMakingRound, DONE_SKIP): TokenTrackRound
-    (TwitterDecisionMakingRound, EVALUATE): TweetEvaluationRound
+    (TwitterDecisionMakingRound, EVALUATE): PreMechRequestRound
     (TwitterDecisionMakingRound, NO_MAJORITY): TwitterDecisionMakingRound
     (TwitterDecisionMakingRound, OPENAI_CALL_CHECK): OpenAICallCheckRound
     (TwitterDecisionMakingRound, RETRIEVE_HASHTAGS): TwitterHashtagsCollectionRound

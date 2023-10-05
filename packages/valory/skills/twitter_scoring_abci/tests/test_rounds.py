@@ -50,7 +50,7 @@ from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
     OpenAICallCheckPayload,
-    TweetEvaluationPayload,
+    PreMechRequestPayload,
     TwitterDecisionMakingPayload,
     TwitterHashtagsCollectionPayload,
     TwitterMentionsCollectionPayload,
@@ -62,7 +62,7 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     Event,
     OpenAICallCheckRound,
     SynchronizedData,
-    TweetEvaluationRound,
+    PreMechRequestRound,
     TwitterDecisionMakingRound,
     TwitterHashtagsCollectionRound,
     TwitterMentionsCollectionRound,
@@ -409,13 +409,13 @@ class TestDBUpdateRound(BaseScoreReadRoundTest):
         self.run_test(test_case)
 
 
-class TestTweetEvaluationRound(BaseCollectNonEmptyUntilThresholdRound):
-    """TweetEvaluationRound"""
+class TestPreMechRequestRound(BaseCollectNonEmptyUntilThresholdRound):
+    """PreMechRequestRound"""
 
     synchronized_data: SynchronizedData
     _synchronized_data_class = SynchronizedData
     _event_class = Event
-    round_class = TweetEvaluationRound
+    round_class = PreMechRequestRound
 
     def run_test(self, test_case: RoundTestCase) -> None:
         """Run the test"""
@@ -445,7 +445,7 @@ class TestTweetEvaluationRound(BaseCollectNonEmptyUntilThresholdRound):
                 name="Happy path",
                 initial_data={"ceramic_db": {}},
                 payloads=get_payloads(
-                    payload_cls=TweetEvaluationPayload,
+                    payload_cls=PreMechRequestPayload,
                     data="{}",
                 ),
                 final_data={},
