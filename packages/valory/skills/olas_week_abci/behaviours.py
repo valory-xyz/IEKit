@@ -41,10 +41,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
 from packages.valory.skills.abstract_round_abci.common import RandomnessBehaviour
 from packages.valory.skills.abstract_round_abci.models import Requests
 from packages.valory.skills.olas_week_abci.ceramic_db import CeramicDB
-from packages.valory.skills.olas_week_abci.dialogues import (
-    LlmDialogue,
-    LlmDialogues,
-)
+from packages.valory.skills.olas_week_abci.dialogues import LlmDialogue, LlmDialogues
 from packages.valory.skills.olas_week_abci.models import (
     OpenAICalls,
     Params,
@@ -52,9 +49,9 @@ from packages.valory.skills.olas_week_abci.models import (
 )
 from packages.valory.skills.olas_week_abci.payloads import (
     OpenAICallCheckPayload,
+    TweetCollectionPayload,
     TweetEvaluationPayload,
     TwitterDecisionMakingPayload,
-    TweetCollectionPayload,
     TwitterRandomnessPayload,
     TwitterSelectKeepersPayload,
 )

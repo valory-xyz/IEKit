@@ -31,17 +31,17 @@ from packages.valory.skills.abstract_round_abci.base import (
     AbciAppTransitionFunction,
     AppState,
     BaseSynchronizedData,
-    OnlyKeeperSends,
     CollectSameUntilThresholdRound,
     DegenerateRound,
     EventToTimeout,
+    OnlyKeeperSends,
     get_name,
 )
 from packages.valory.skills.olas_week_abci.payloads import (
     OpenAICallCheckPayload,
+    TweetCollectionPayload,
     TweetEvaluationPayload,
     TwitterDecisionMakingPayload,
-    TweetCollectionPayload,
     TwitterRandomnessPayload,
     TwitterSelectKeepersPayload,
 )

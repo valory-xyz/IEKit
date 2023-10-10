@@ -22,9 +22,9 @@ import packages.valory.skills.ceramic_read_abci.rounds as CeramicReadAbci
 import packages.valory.skills.ceramic_write_abci.rounds as CeramicWriteAbci
 import packages.valory.skills.decision_making_abci.rounds as DecisionMakingAbci
 import packages.valory.skills.dynamic_nft_abci.rounds as DynamicNFTAbci
-import packages.valory.skills.olas_week_abci.rounds as WeekInOlasAbci
 import packages.valory.skills.generic_scoring_abci.rounds as GenericScoringAbci
 import packages.valory.skills.llm_abci.rounds as LLMAbciApp
+import packages.valory.skills.olas_week_abci.rounds as WeekInOlasAbci
 import packages.valory.skills.registration_abci.rounds as RegistrationAbci
 import packages.valory.skills.reset_pause_abci.rounds as ResetAndPauseAbci
 import packages.valory.skills.twitter_scoring_abci.rounds as TwitterScoringAbci

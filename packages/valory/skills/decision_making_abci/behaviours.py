@@ -51,13 +51,13 @@ from packages.valory.skills.decision_making_abci.tasks.read_stream_preparation i
 from packages.valory.skills.decision_making_abci.tasks.score_preparations import (
     ScorePreparation,
 )
-from packages.valory.skills.decision_making_abci.tasks.week_in_olas_preparations import (
-    WeekInOlasCreatePreparation,
-)
 from packages.valory.skills.decision_making_abci.tasks.twitter_preparation import (
     DailyTweetPreparation,
     ScheduledTweetPreparation,
-    WeekInOlasWritePreparation
+    WeekInOlasWritePreparation,
+)
+from packages.valory.skills.decision_making_abci.tasks.week_in_olas_preparations import (
+    WeekInOlasCreatePreparation,
 )
 from packages.valory.skills.decision_making_abci.tasks.write_stream_preparation import (
     DailyOrbisPreparation,

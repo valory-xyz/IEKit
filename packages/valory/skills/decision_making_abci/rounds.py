@@ -152,6 +152,7 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the weekly_tweets."""
         return cast(list, self.db.get("weekly_tweets", []))
 
+
 class DecisionMakingRound(CollectSameUntilThresholdRound):
     """DecisionMakingRound"""
 
