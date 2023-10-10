@@ -36,6 +36,7 @@ from packages.valory.skills.abstract_round_abci.base import (
 )
 from packages.valory.skills.dynamic_nft_abci.payloads import TokenTrackPayload
 
+MAX_TOKEN_EVENT_RETRIES = 3
 
 class Event(Enum):
     """DynamicNFTAbciApp Events"""
@@ -73,6 +74,11 @@ class SynchronizedData(BaseSynchronizedData):
         """Checks whether there are changes pending to be written to Ceramic."""
         return cast(bool, self.db.get("pending_write", False))
 
+    @property
+    def token_event_retries(self) -> int:
+        """Get the token id to points mapping."""
+        return cast(int, self.db.get("token_event_retries", 0))
+
 
 class TokenTrackRound(CollectSameUntilThresholdRound):
     """TokenTrackRound"""
@@ -88,6 +94,19 @@ class TokenTrackRound(CollectSameUntilThresholdRound):
             payload = json.loads(self.most_voted_payload)
 
             if payload == TokenTrackRound.ERROR_PAYLOAD:
+
+                token_event_retries = cast(SynchronizedData, self.synchronized_data).token_event_retries + 1
+
+                if token_event_retries >= MAX_TOKEN_EVENT_RETRIES:
+                    return self.synchronized_data, Event.DONE
+
+                synchronized_data = self.synchronized_data.update(
+                    synchronized_data_class=SynchronizedData,
+                    **{
+                        get_name(SynchronizedData.token_event_retries): token_event_retries,
+                    }
+                )
+
                 return self.synchronized_data, Event.CONTRACT_ERROR
 
             token_id_to_points = payload["token_id_to_points"]
@@ -102,6 +121,7 @@ class TokenTrackRound(CollectSameUntilThresholdRound):
                     get_name(SynchronizedData.last_update_time): last_update_time,
                     get_name(SynchronizedData.ceramic_db): ceramic_db,
                     get_name(SynchronizedData.pending_write): pending_write,
+                    get_name(SynchronizedData.token_event_retries): 0,
                 }
             )
             return (synchronized_data, Event.DONE)
