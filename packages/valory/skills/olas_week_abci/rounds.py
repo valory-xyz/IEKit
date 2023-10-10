@@ -34,7 +34,7 @@ from packages.valory.skills.abstract_round_abci.base import (
     CollectSameUntilThresholdRound,
     DegenerateRound,
     EventToTimeout,
-    OnlyKeeperSends,
+    OnlyKeeperSendsRound,
     get_name,
 )
 from packages.valory.skills.olas_week_abci.payloads import (
@@ -324,7 +324,7 @@ class TweetCollectionRound(CollectSameUntilThresholdRound):
         return None
 
 
-class TweetEvaluationRound(OnlyKeeperSends):
+class TweetEvaluationRound(OnlyKeeperSendsRound):
     """TweetEvaluationRound"""
 
     payload_class = TweetEvaluationPayload

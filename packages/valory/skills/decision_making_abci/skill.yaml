@@ -7,19 +7,20 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
-  behaviours.py: bafybeiecgeionwiwb7xmrxyuypmkltpz7kqnl4dnpfind5niocdrcbytca
+  behaviours.py: bafybeid6g2v25st33heykyiceemlhvmd322xcrfrh2uikhqhxpfbaxv7pu
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
   fsm_specification.yaml: bafybeib3knchqkllaz5n5f5mkprr5g6uz5seiulodrowcr4zsfo3fujm2m
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
   models.py: bafybeictln7abrfqkm42euj2ldb2aqh3j3vuz45gltlepldzucgqgjy3va
   payloads.py: bafybeif5bomwy74bwnphsk6bty6qb6efugvjnnopsz7qjunpe6gtgjaxya
-  rounds.py: bafybeiaubhslddudepusvgxmwsy3z4hhzt74gosxgxwk35lymqxyklxgne
+  rounds.py: bafybeihiuif6suybwodq5yryk7dxwdkj2h7l4yfd336s4g3kydrgfwouy4
   tasks/finished_pipeline_preparation.py: bafybeifvwzvnw3d2lxlk4p5hd6j2tcxr7bwjewm667ubssoqyfsk4xafd4
   tasks/llm_preparation.py: bafybeigi7i5yp7w5hi5mcbzuzdfbfm4j5etsvplbhb2pdjcb3jfcy6qzrq
   tasks/read_stream_preparation.py: bafybeiespz6kzkzvrjjf3d6ffwse3rufuyrrab3axvg64pxw4jj6zzhwny
   tasks/score_preparations.py: bafybeieiesjkyjbcvqut3l6nlzcwpidibsmo3mz7j6p54lbqzspfcf3ram
-  tasks/task_preparations.py: bafybeieqd2jhzmmjomzmcw72iptogrb6koche6dqmtcuz6lqktaxvi3dxe
-  tasks/twitter_preparation.py: bafybeieoa5wkhg55w2bdbkwawdz4kh4wmifzgtcmzi3ursi3oaxvpu4mom
+  tasks/task_preparations.py: bafybeiao4zyitjb2nujyhkhjfkd3mq5d4blbcybyfw27hcnc643yzp6ueq
+  tasks/twitter_preparation.py: bafybeiaaokuz5brzy3vuvjk456jae4tbfrdxcakv7zdmqaobegti65dewq
+  tasks/week_in_olas_preparations.py: bafybeiewu2b3dz6nl7lddzikzgc6a7kbg5sllp5pl32b34xchfgednvxpm
   tasks/write_stream_preparation.py: bafybeifl4j7s575ts6x4msntymkempwguj4yypmxy2xjmffknn7qhkzfo4
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
   tests/centaur_configs.py: bafybeifgmz5nlpfj4ynpzywbwnnuhz2dxookezwhxmvzlucjbhugv3tgma

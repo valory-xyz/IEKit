@@ -23,7 +23,7 @@ connections:
 - valory/openai:0.1.0:bafybeibn42k4zebenmjsumkngfxllxbofkwdno2fm65o6zf5y2uihmo2dq
 - valory/twitter:0.1.0:bafybeifm7tpjdd2y5dy5xzuxt3tebyqxmgn56agkqv64nloggqo5cr3sku
 contracts:
-- valory/dynamic_contribution:0.1.0:bafybeihjnddpy24wpqtsrf57qdxvku7l5w6sm36u6hkm7i2um7ln664ice
+- valory/dynamic_contribution:0.1.0:bafybeiht364qavknmnuz7pwkw4zjzrkkugyzymgxrjvtasfcy7eya3nbxa
 - valory/gnosis_safe:0.1.0:bafybeih6d3vxz3jlgodxm5b2qcwsmansqj4xobuyd6hjnhzremuvd65yrm
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeid6glyjikjxmefwmhn62cxiofophegjmg2z5vqqsvk6tmyunwc274
 - valory/multisend:0.1.0:bafybeieg4tywd5lww2vygvpkilg3hcepa4rmhehjuamyvdf6vazt554v6u
@@ -42,18 +42,18 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeigafjci7m7ezwzasav5xqo7v2mbxxn7qb4y7vnuc2wr2irzvn7wsy
 - valory/abstract_round_abci:0.1.0:bafybeih2fyfb6kkf7r45pvdk7pyyebr5xloia4xiqxtb3qsrasnstqmepq
-- valory/impact_evaluator_abci:0.1.0:bafybeiazjmtdnjzsdj7h6nclzhakffembvmo4a4w2qf46cmikwlmvbfzse
+- valory/impact_evaluator_abci:0.1.0:bafybeigc4ok5nr3cltqfttv3rhwo7n2547x7qa5ynjjvzmlaxjwny4jjna
 - valory/generic_scoring_abci:0.1.0:bafybeig4hoc5gjiyuwh2ye3mwneegq3s3cghl5j7yokvngacvn7ixwdoga
 - valory/twitter_scoring_abci:0.1.0:bafybeigw3t32j3kehqx5zuycvwextwzzarsjgadgn2c3mxrzn4usehiv3q
 - valory/ceramic_read_abci:0.1.0:bafybeide5tbobzkwfdi7yzw6bsau36h43hdlgbnk2bfqvvhmq3hl3ucjmm
 - valory/ceramic_write_abci:0.1.0:bafybeihnalj6zhl5pbf7x2lkznuhivwj45jzrafbtxatwebrpb7st2v6oa
-- valory/dynamic_nft_abci:0.1.0:bafybeie4kqdds5hith5xnjqdbrm2j2bkr6h4ty23bdg7rkv7mg5p3qz2ii
+- valory/dynamic_nft_abci:0.1.0:bafybeiexenlxvf32jjlxrow35qlo4xtmi2ezznulczhayux2n2mx27ya6i
 - valory/registration_abci:0.1.0:bafybeibndt6vxiwc2edgtaxpjbhwto3eyu33ujz3zmvtygvo2qz7xme5li
 - valory/reset_pause_abci:0.1.0:bafybeigeoc363gv3wp2rrmk6p2fdxney33nxd3owtpfugzapgruwe4klyu
 - valory/termination_abci:0.1.0:bafybeigqpij2sgrpnilqjljfciixop4fldq5qceixc7534q6af4potdmdm
 - valory/transaction_settlement_abci:0.1.0:bafybeia7rzsbea3ch4gcafyp3z6uvqh4npws2xpdwbkkdbrqqpjops7nui
 - valory/twitter_write_abci:0.1.0:bafybeidjumloxy2yvoyymgzuwbua3ks2p66fyybna2qhrz2upzkxzjrznq
-- valory/decision_making_abci:0.1.0:bafybeigx57k6zwiatveoiyczbhz6xbdtfhhbxg7442tjqyb7ljjfjusn5e
+- valory/decision_making_abci:0.1.0:bafybeifptrzwk6wh2jieyjsioekwwiffep6i7msihw3srjjfrqamfubbu4
 - valory/llm_abci:0.1.0:bafybeifesvwe5ya7imxefijpawgtd7aje5hhr4oh2bzgfsm2ucjp3lxije
 default_ledger: ethereum
 required_ledgers:

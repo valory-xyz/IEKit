@@ -309,4 +309,5 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingReadContributeDBRound: set(),
         FinishedDecisionMakingWriteContributeDBRound: set(),
         FinishedDecisionMakingReadManualPointsRound: set(),
+        FinishedDecisionMakingWeekInOlasRound: set(),
     }
