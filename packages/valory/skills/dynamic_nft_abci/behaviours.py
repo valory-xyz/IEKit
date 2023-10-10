@@ -108,12 +108,14 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
                 ]
             )
         except KeyError:
-            self.context.logger.warning(f"last_parsed_block is not set. Using default earliest_block_to_monitor={self.params.earliest_block_to_monitor}")
+            self.context.logger.warning(
+                f"last_parsed_block is not set. Using default earliest_block_to_monitor={self.params.earliest_block_to_monitor}"
+            )
             from_block = self.params.earliest_block_to_monitor
 
         self.context.logger.info(
             f"Retrieving Transfer events later than block {from_block}"
-            f" for contract at {self.params.dynamic_contribution_contract_address}"
+            f" for contract at {self.params.dynamic_contribution_contract_address}. Retries={self.synchronized_data.token_event_retries}"
         )
         contract_api_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore

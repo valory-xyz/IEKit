@@ -88,6 +88,15 @@ HTTP_OK = 200
 HTTP_TOO_MANY_REQUESTS = 429
 
 
+def extract_headers(header_str: str) -> dict:
+    """Extracts HTTP headers"""
+    header_separator = "\r\n" if "\r\n" in header_str else "\n"
+    headers = [
+        header.split(": ") for header in header_str.split(header_separator) if header
+    ]
+    return {key: value for key, value in headers}
+
+
 class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
     """Base behaviour for the common apps' skill."""
 
@@ -470,13 +479,8 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
             )
 
             # Check response status
-            if response.status_code != HTTP_OK:
-                headers = [
-                    header.split(": ")
-                    for header in response.headers.split("\r\n")
-                    if header
-                ]
-                header_dict = {key: value for key, value in headers}
+            if response.status_code != 200:
+                header_dict = extract_headers(response.headers)
 
                 remaining, limit, reset_ts = [
                     header_dict.get(header, "?")
@@ -733,13 +737,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
             # Check response status
             if response.status_code != 200:
-                header_separator = "\r\n" if "\r\n" in response.headers else "\n"
-                headers = [
-                    header.split(": ")
-                    for header in response.headers.split(header_separator)
-                    if header
-                ]
-                header_dict = {key: value for key, value in headers}
+                header_dict = extract_headers(response.headers)
 
                 remaining, limit, reset_ts = [
                     header_dict.get(header, "?")

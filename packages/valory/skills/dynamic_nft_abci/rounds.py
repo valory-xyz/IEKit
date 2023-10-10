@@ -36,7 +36,9 @@ from packages.valory.skills.abstract_round_abci.base import (
 )
 from packages.valory.skills.dynamic_nft_abci.payloads import TokenTrackPayload
 
+
 MAX_TOKEN_EVENT_RETRIES = 3
+
 
 class Event(Enum):
     """DynamicNFTAbciApp Events"""
@@ -95,7 +97,10 @@ class TokenTrackRound(CollectSameUntilThresholdRound):
 
             if payload == TokenTrackRound.ERROR_PAYLOAD:
 
-                token_event_retries = cast(SynchronizedData, self.synchronized_data).token_event_retries + 1
+                token_event_retries = (
+                    cast(SynchronizedData, self.synchronized_data).token_event_retries
+                    + 1
+                )
 
                 if token_event_retries >= MAX_TOKEN_EVENT_RETRIES:
                     return self.synchronized_data, Event.DONE
@@ -103,7 +108,9 @@ class TokenTrackRound(CollectSameUntilThresholdRound):
                 synchronized_data = self.synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
                     **{
-                        get_name(SynchronizedData.token_event_retries): token_event_retries,
+                        get_name(
+                            SynchronizedData.token_event_retries
+                        ): token_event_retries,
                     }
                 )
 
