@@ -20,6 +20,7 @@
 """This package contains the logic for task preparations."""
 from datetime import datetime, timezone
 
+SECONDS_IN_DAY = 24 * 3600
 
 class TaskPreparation:
     """Represents the work required before and after running a Centaur task"""
@@ -52,7 +53,8 @@ class TaskPreparation:
         if self.task_name in plugins_config:
             plugin_config = plugins_config[self.task_name]
             self.enabled = plugin_config["enabled"]
-            self.daily = plugin_config["daily"]
+            self.daily = plugin_config["daily"] if "daily" in plugin_config else False
+            self.weekly = int(plugin_config["weekly"]) if "weekly" in plugin_config else None
             self.last_run = (
                 datetime.strptime(
                     plugin_config["last_run"], "%Y-%m-%d %H:%M:%S %Z"
@@ -60,7 +62,7 @@ class TaskPreparation:
                 if self.daily and plugin_config["last_run"]
                 else None
             )
-            self.run_hour_utc = plugin_config["run_hour_utc"] if self.daily else None
+            self.run_hour_utc = plugin_config["run_hour_utc"] if self.daily or self.weekly else None
             return
 
         self.set_default_config()
@@ -69,6 +71,7 @@ class TaskPreparation:
         """Set the default configuration"""
         self.enabled = True
         self.daily = False
+        self.weekly = None
         self.last_run = None
         self.run_hour_utc = None
 
@@ -84,6 +87,19 @@ class TaskPreparation:
         if self.daily and self.last_run and self.last_run.day == self.now_utc.day:
             self.logger.info(
                 f"[{self.__class__.__name__}]: task is a daily task and was already ran today"
+            )
+            return False
+
+        # Does the task run every week?
+        if self.weekly and self.weekly != self.now_utc.weekday():
+            self.logger.info(
+                f"[{self.__class__.__name__}]: task is a weekly task but today is not the configured run day: {self.now_utc.weekday()} != {self.weekly}"
+            )
+            return False
+
+        if self.weekly and self.last_run and (self.now_utc - self.last_run).seconds < SECONDS_IN_DAY:
+            self.logger.info(
+                f"[{self.__class__.__name__}]: task is a weekly task and was already ran less than a day ago"
             )
             return False
 

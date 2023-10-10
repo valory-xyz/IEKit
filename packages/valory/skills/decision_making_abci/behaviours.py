@@ -51,9 +51,13 @@ from packages.valory.skills.decision_making_abci.tasks.read_stream_preparation i
 from packages.valory.skills.decision_making_abci.tasks.score_preparations import (
     ScorePreparation,
 )
+from packages.valory.skills.decision_making_abci.tasks.week_in_olas_preparations import (
+    WeekInOlasCreatePreparation,
+)
 from packages.valory.skills.decision_making_abci.tasks.twitter_preparation import (
     DailyTweetPreparation,
     ScheduledTweetPreparation,
+    WeekInOlasWritePreparation
 )
 from packages.valory.skills.decision_making_abci.tasks.write_stream_preparation import (
     DailyOrbisPreparation,
@@ -82,6 +86,14 @@ previous_event_to_task_preparation_cls = {
     },
     Event.DAILY_ORBIS.value: {
         "prev": DailyOrbisPreparation,
+        "next": WeekInOlasCreatePreparation,
+    },
+    Event.WEEK_IN_OLAS_CREATE.value: {
+        "prev": WeekInOlasCreatePreparation,
+        "next": WeekInOlasWritePreparation,
+    },
+    Event.WEEK_IN_OLAS_WRITE.value: {
+        "prev": WeekInOlasWritePreparation,
         "next": ScheduledTweetPreparation,
     },
     Event.SCHEDULED_TWEET.value: {

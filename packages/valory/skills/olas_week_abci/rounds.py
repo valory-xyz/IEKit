@@ -401,8 +401,8 @@ class TwitterSelectKeepersRound(CollectSameUntilThresholdRound):
         return None
 
 
-class FinishedTwitterScoringRound(DegenerateRound):
-    """FinishedTwitterScoringRound"""
+class FinishedWeekInOlasRound(DegenerateRound):
+    """FinishedWeekInOlasRound"""
 
 
 class TwitterScoringAbciApp(AbciApp[Event]):
@@ -413,11 +413,11 @@ class TwitterScoringAbciApp(AbciApp[Event]):
     transition_function: AbciAppTransitionFunction = {
         TwitterDecisionMakingRound: {
             Event.OPENAI_CALL_CHECK: OpenAICallCheckRound,
-            Event.DONE_SKIP: FinishedTwitterScoringRound,
+            Event.DONE_SKIP: FinishedWeekInOlasRound,
             Event.SELECT_KEEPERS: TwitterRandomnessRound,
             Event.RETRIEVE_TWEETS: TweetCollectionRound,
             Event.EVALUATE: TweetEvaluationRound,
-            Event.DONE: FinishedTwitterScoringRound,
+            Event.DONE: FinishedWeekInOlasRound,
             Event.ROUND_TIMEOUT: TwitterDecisionMakingRound,
             Event.NO_MAJORITY: TwitterDecisionMakingRound,
         },
@@ -437,19 +437,11 @@ class TwitterScoringAbciApp(AbciApp[Event]):
             Event.NO_MAJORITY: TwitterRandomnessRound,
             Event.ROUND_TIMEOUT: TwitterRandomnessRound,
         },
-        TwitterMentionsCollectionRound: {
+        TweetCollectionRound: {
             Event.DONE: TwitterDecisionMakingRound,
             Event.DONE_MAX_RETRIES: TwitterDecisionMakingRound,
             Event.DONE_API_LIMITS: TwitterDecisionMakingRound,
-            Event.API_ERROR: TwitterMentionsCollectionRound,
-            Event.NO_MAJORITY: TwitterRandomnessRound,
-            Event.ROUND_TIMEOUT: TwitterRandomnessRound,
-        },
-        TwitterHashtagsCollectionRound: {
-            Event.DONE: TwitterDecisionMakingRound,
-            Event.DONE_MAX_RETRIES: TwitterDecisionMakingRound,
-            Event.DONE_API_LIMITS: TwitterDecisionMakingRound,
-            Event.API_ERROR: TwitterHashtagsCollectionRound,
+            Event.API_ERROR: TweetCollectionRound,
             Event.NO_MAJORITY: TwitterRandomnessRound,
             Event.ROUND_TIMEOUT: TwitterRandomnessRound,
         },
@@ -457,28 +449,23 @@ class TwitterScoringAbciApp(AbciApp[Event]):
             Event.DONE: TwitterDecisionMakingRound,
             Event.TWEET_EVALUATION_ROUND_TIMEOUT: TweetEvaluationRound,
         },
-        DBUpdateRound: {
-            Event.DONE: TwitterDecisionMakingRound,
-            Event.NO_MAJORITY: DBUpdateRound,
-            Event.ROUND_TIMEOUT: DBUpdateRound,
-        },
-        FinishedTwitterScoringRound: {},
+        FinishedWeekInOlasRound: {},
     }
     final_states: Set[AppState] = {
-        FinishedTwitterScoringRound,
+        FinishedWeekInOlasRound,
     }
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
         Event.TWEET_EVALUATION_ROUND_TIMEOUT: 600.0,
     }
     cross_period_persisted_keys: FrozenSet[str] = frozenset(
-        ["ceramic_db", "pending_write", "tweets"]
+        ["ceramic_db", "pending_write", "summary_tweets"]
     )
     db_pre_conditions: Dict[AppState, Set[str]] = {
         TwitterDecisionMakingRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedTwitterScoringRound: {
+        FinishedWeekInOlasRound: {
             get_name(SynchronizedData.ceramic_db),
         },
     }
