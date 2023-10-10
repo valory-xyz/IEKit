@@ -108,6 +108,7 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
                 ]
             )
         except KeyError:
+            self.context.logger.warning(f"last_parsed_block is not set. Using default earliest_block_to_monitor={self.params.earliest_block_to_monitor}")
             from_block = self.params.earliest_block_to_monitor
 
         self.context.logger.info(
