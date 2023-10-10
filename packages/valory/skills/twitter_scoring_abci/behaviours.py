@@ -733,9 +733,10 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
             # Check response status
             if response.status_code != 200:
+                header_separator = "\r\n" if "\r\n" in response.headers else "\n"
                 headers = [
                     header.split(": ")
-                    for header in response.headers.split("\r\n")
+                    for header in response.headers.split(header_separator)
                     if header
                 ]
                 header_dict = {key: value for key, value in headers}
