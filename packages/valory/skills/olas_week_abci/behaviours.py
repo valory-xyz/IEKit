@@ -299,6 +299,9 @@ class OlasWeekDecisionMakingBehaviour(OlasWeekBaseBehaviour):
         if Event.RETRIEVE_TWEETS.value not in performed_tasks:
             return Event.RETRIEVE_TWEETS.value
 
+        if performed_tasks[Event.RETRIEVE_TWEETS.value] == Event.DONE_MAX_RETRIES.value:
+            return Event.DONE_SKIP.value
+
         if Event.EVALUATE.value not in performed_tasks:
             return Event.EVALUATE.value
 
@@ -439,7 +442,7 @@ class OlasWeekTweetCollectionBehaviour(OlasWeekBaseBehaviour):
 
         start_time = datetime.fromtimestamp(now_ts) - timedelta(days=7)
 
-        start_time_str = start_time.strftime("%Y-%m-%dT%H:%M:%S:00Z")
+        start_time_str = start_time.strftime("%Y-%m-%dT%H:%M:%SZ")
 
         # Build the args
         api_args = self.params.twitter_tweets_args.replace(
@@ -572,7 +575,7 @@ class OlasWeekTweetCollectionBehaviour(OlasWeekBaseBehaviour):
         self.context.logger.info(f"Got {len(tweets)} new tweets")
 
         return {
-            "tweets": tweets,
+            "tweets": list(tweets.values()),
             "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
             "sleep_until": None,  # we reset this on a successful request
         }
@@ -583,7 +586,37 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
 
     matching_round: Type[AbstractRound] = OlasWeekEvaluationRound
 
-    def async_act(self) -> Generator:
+    def _i_am_not_sending(self) -> bool:
+        """Indicates if the current agent is one of the sender or not."""
+        return (
+            self.context.agent_address
+            != self.synchronized_data.most_voted_keeper_address
+        )
+
+    def async_act(self) -> Generator[None, None, None]:
+        """
+        Do the action.
+
+        Steps:
+        - If the agent is the keeper, then prepare the transaction and send it.
+        - Otherwise, wait until the next round.
+        - If a timeout is hit, set exit A event, otherwise set done event.
+        """
+        if self._i_am_not_sending():
+            yield from self._not_sender_act()
+        else:
+            yield from self._sender_act()
+
+    def _not_sender_act(self) -> Generator:
+        """Do the non-sender action."""
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            self.context.logger.info(
+                f"Waiting for the keeper to do its keeping: keepers={self.synchronized_data.most_voted_keeper_addresses}, me={self.context.agent_address}"
+            )
+            yield from self.wait_until_round_end()
+        self.set_done()
+
+    def _sender_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
@@ -631,6 +664,7 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
         self.openai_calls.increase_call_count()
         self.context.logger.info(f"Got summary: {repr(data)}")
         summary = parse_summary(data)
+        self.context.logger.info(f"Parsed summary: {summary}")
         return summary
 
     def _do_request(

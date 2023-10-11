@@ -29,7 +29,7 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 class WeekInOlasCreatePreparation(TaskPreparation):
     """WeekInOlasCreatePreparation"""
 
-    task_name = "week_in_olas_create"
+    task_name = "week_in_olas"
     task_event = Event.WEEK_IN_OLAS_CREATE.value
 
     def check_extra_conditions(self):
@@ -43,11 +43,10 @@ class WeekInOlasCreatePreparation(TaskPreparation):
 
     def _post_task(self):
         """Task postprocessing"""
-        updates, event = super()._post_task()
+        centaurs_data = self.synchronized_data.centaurs_data
+        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
 
         # Update the last run time
-        centaurs_data = updates["centaurs_data"]
-        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
         current_centaur["configuration"]["plugins"]["week_in_olas"][
             "last_run"
         ] = self.now_utc.strftime("%Y-%m-%d %H:%M:%S %Z")
@@ -63,8 +62,8 @@ class WeekInOlasCreatePreparation(TaskPreparation):
             "createdDate": self.now_utc.timestamp(),
         }
 
-        current_centaur["plugins_data"]["week_in_olas"]["tweets"].append(thread)
+        current_centaur["plugins_data"]["scheduled_tweet"]["tweets"].append(thread)
 
-        updates["centaurs_data"] = centaurs_data
+        updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
 
-        return updates, event
+        return updates, None

@@ -147,9 +147,9 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(bool, self.db.get("pending_write", False))
 
     @property
-    def weekly_tweets(self) -> list:
-        """Get the weekly_tweets."""
-        return cast(list, self.db.get("weekly_tweets", []))
+    def summary_tweets(self) -> list:
+        """Get the summary_tweets."""
+        return cast(list, self.db.get("summary_tweets", []))
 
 
 class DecisionMakingRound(CollectSameUntilThresholdRound):

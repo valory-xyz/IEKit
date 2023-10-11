@@ -117,7 +117,7 @@ previous_event_to_task_preparation_cls = {
     },
     Event.NEXT_CENTAUR.value: {
         "prev": None,
-        "next": LLMPreparation,
+        "next": ReadContributeDBPreparation,
     },
 }
 

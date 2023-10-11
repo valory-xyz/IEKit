@@ -127,6 +127,11 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(list, self.db.get_strict("most_voted_keeper_addresses"))
 
     @property
+    def most_voted_keeper_address(self) -> list:
+        """Get the most_voted_keeper_address."""
+        return cast(list, self.db.get_strict("most_voted_keeper_address"))
+
+    @property
     def are_keepers_set(self) -> bool:
         """Check whether keepers are set."""
         return self.db.get("most_voted_keeper_addresses", None) is not None
@@ -293,7 +298,7 @@ class OlasWeekTweetCollectionRound(CollectSameUntilThresholdRound):
                 return synchronized_data, Event.API_ERROR
 
             # Happy path
-            weekly_tweets = cast(SynchronizedData, self.synchronized_data).tweets
+            weekly_tweets = payload["tweets"]
             performed_olas_week_tasks["retrieve_tweets"] = Event.DONE.value
 
             updates = {
@@ -333,6 +338,10 @@ class OlasWeekEvaluationRound(OnlyKeeperSendsRound):
         if self.keeper_payload is None:
             return None
 
+        payload = json.loads(
+            cast(OlasWeekEvaluationPayload, self.keeper_payload).content
+        )
+
         performed_olas_week_tasks = cast(
             SynchronizedData, self.synchronized_data
         ).performed_olas_week_tasks
@@ -341,9 +350,7 @@ class OlasWeekEvaluationRound(OnlyKeeperSendsRound):
         synchronized_data = self.synchronized_data.update(
             synchronized_data_class=SynchronizedData,
             **{
-                get_name(SynchronizedData.summary_tweets): self.keeper_payload[
-                    "summary_tweets"
-                ],
+                get_name(SynchronizedData.summary_tweets): payload["summary_tweets"],
                 get_name(
                     SynchronizedData.performed_olas_week_tasks
                 ): performed_olas_week_tasks,
@@ -382,12 +389,15 @@ class OlasWeekSelectKeepersRound(CollectSameUntilThresholdRound):
             ).performed_olas_week_tasks
             performed_olas_week_tasks["select_keepers"] = Event.DONE.value
 
+            keepers = json.loads(self.most_voted_payload)
+
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    get_name(SynchronizedData.most_voted_keeper_addresses): json.loads(
-                        self.most_voted_payload
-                    ),
+                    get_name(SynchronizedData.most_voted_keeper_addresses): keepers,
+                    get_name(SynchronizedData.most_voted_keeper_address): keepers[
+                        0
+                    ],  # we also set this for reusing the keeper
                     get_name(
                         SynchronizedData.performed_olas_week_tasks
                     ): performed_olas_week_tasks,
