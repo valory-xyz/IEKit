@@ -8,14 +8,14 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeibvgxh4baqhxapbbryg7qlglf4czricwqqs34gjs5vwwppg5nuvsq
-  behaviours.py: bafybeiebm4aub3pbqau75bgvmvgjamhfmsqakyrhpqonbqolmseu7pkxpu
+  behaviours.py: bafybeiarpemlqyaakx2ys4bfjej6mnpgmnchhzw46wq5bu4e3fh4hvyqy4
   ceramic_db.py: bafybeicusdonrdq6kirgkpdqmi3a6kmeal4nctnm5ozjqf5s5se6jpitjm
   dialogues.py: bafybeia7zebqkgbubzenskcrgjocgyd2pc3q5yxcjddte4emys32qt6xpm
   fsm_specification.yaml: bafybeienycmc4m3wurhlsuj7hfumrsx5id3qfdn6eisoze4gdzeeojlrbu
   handlers.py: bafybeialoqm2byetvqqrjujhk3qzgdgsrzmhakmzwdop2cr24kswipl6ti
   models.py: bafybeif7kefuddm7gkgiwthozsijijegdul7s6z6pkxlld2rqambrevmc4
   payloads.py: bafybeietg3ceghstjx5bytqv2t377k5pyww3cdq7zg7d7lxhscwmfelai4
-  prompts.py: bafybeidb7kevs5nsboodfipkkygk3biuckqwo2kr47lr37u5tyluvms6cu
+  prompts.py: bafybeicz63x6rhrgm5amjkfsovnqvxqyzicfhhae3orw7jaubme2npnn2a
   rounds.py: bafybeifxarx2mqwj5chtlhbdprew6767uyttmtikodzlquwn4fvwvuraqy
 fingerprint_ignore_patterns: []
 connections:
