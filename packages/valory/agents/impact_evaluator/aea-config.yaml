@@ -42,7 +42,7 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeigafjci7m7ezwzasav5xqo7v2mbxxn7qb4y7vnuc2wr2irzvn7wsy
 - valory/abstract_round_abci:0.1.0:bafybeih2fyfb6kkf7r45pvdk7pyyebr5xloia4xiqxtb3qsrasnstqmepq
-- valory/impact_evaluator_abci:0.1.0:bafybeibz6zzcqka6evovc434q73tmsa2nhj5l4zojk6rfs2hpagkh5qibe
+- valory/impact_evaluator_abci:0.1.0:bafybeieuire3besgw2caakbcptcraenbmsrd7zgbc7poux6xbhekdjuf2m
 - valory/generic_scoring_abci:0.1.0:bafybeig4hoc5gjiyuwh2ye3mwneegq3s3cghl5j7yokvngacvn7ixwdoga
 - valory/twitter_scoring_abci:0.1.0:bafybeigw3t32j3kehqx5zuycvwextwzzarsjgadgn2c3mxrzn4usehiv3q
 - valory/ceramic_read_abci:0.1.0:bafybeide5tbobzkwfdi7yzw6bsau36h43hdlgbnk2bfqvvhmq3hl3ucjmm
@@ -213,6 +213,8 @@ models:
       max_tweet_pulls_allowed: ${int:80}
       twitter_search_endpoint: ${str:2/tweets/search/recent?}
       twitter_search_args: ${str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
+      twitter_tweets_endpoint: ${str:2/users/1450081635559428107/tweets?}
+      twitter_tweets_args: ${str:tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
       openai_call_window_size: ${float:3600.0}
       openai_calls_allowed_in_window: ${int:100}
       tx_timeout: 10.0
