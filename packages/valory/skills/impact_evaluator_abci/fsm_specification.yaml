@@ -34,7 +34,6 @@ alphabet_in:
 - UPDATE_CENTAURS
 - VERIFICATION_ERROR
 - WEEK_IN_OLAS_CREATE
-- WEEK_IN_OLAS_WRITE
 - WRITE_CONTRIBUTE_DB
 default_start_state: RegistrationStartupRound
 final_states: []
@@ -92,7 +91,6 @@ transition_func:
     (DecisionMakingRound, SCORE): GenericScoringRound
     (DecisionMakingRound, UPDATE_CENTAURS): RandomnessRound
     (DecisionMakingRound, WEEK_IN_OLAS_CREATE): OlasWeekDecisionMakingRound
-    (DecisionMakingRound, WEEK_IN_OLAS_WRITE): RandomnessTwitterRound
     (DecisionMakingRound, WRITE_CONTRIBUTE_DB): RandomnessRound
     (GenericScoringRound, DONE): TwitterDecisionMakingRound
     (GenericScoringRound, NO_MAJORITY): GenericScoringRound
