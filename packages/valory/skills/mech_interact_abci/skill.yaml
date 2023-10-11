@@ -2,7 +2,7 @@ name: mech_interact_abci
 author: valory
 version: 0.1.0
 type: skill
-description: The scaffold skill is a scaffold for your own skill implementation.
+description: The mech interact skill can be used to send requests to a mech and receive the responses.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
