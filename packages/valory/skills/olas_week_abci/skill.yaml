@@ -28,7 +28,7 @@ skills:
 behaviours:
   main:
     args: {}
-    class_name: TwitterScoringRoundBehaviour
+    class_name: OlasWeekRoundBehaviour
 handlers:
   abci:
     args: {}

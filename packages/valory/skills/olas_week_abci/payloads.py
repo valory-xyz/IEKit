@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the TwitterScoringAbciApp."""
+"""This module contains the transaction payloads of the WeekInOlasAbciApp."""
 
 from dataclasses import dataclass
 from typing import Optional
@@ -26,21 +26,21 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 
 @dataclass(frozen=True)
-class TwitterDecisionMakingPayload(BaseTxPayload):
-    """Represent a transaction payload for the TwitterDecisionMakingRound."""
+class OlasWeekDecisionMakingPayload(BaseTxPayload):
+    """Represent a transaction payload for the OlasWeekDecisionMakingRound."""
 
     event: str
 
 
 @dataclass(frozen=True)
 class OpenAICallCheckPayload(BaseTxPayload):
-    """Represent a transaction payload for the OpenAICallCheckRound."""
+    """Represent a transaction payload for the OlasWeekOpenAICallCheckRound."""
 
     content: Optional[str]
 
 
 @dataclass(frozen=True)
-class TwitterRandomnessPayload(BaseTxPayload):
+class OlasWeekRandomnessPayload(BaseTxPayload):
     """Represent a transaction payload of type 'randomness'."""
 
     round_id: int
@@ -48,21 +48,21 @@ class TwitterRandomnessPayload(BaseTxPayload):
 
 
 @dataclass(frozen=True)
-class TwitterSelectKeepersPayload(BaseTxPayload):
+class OlasWeekSelectKeepersPayload(BaseTxPayload):
     """Represent a transaction payload of type 'select_keeper'."""
 
     keepers: str
 
 
 @dataclass(frozen=True)
-class TweetCollectionPayload(BaseTxPayload):
-    """Represent a transaction payload for the TweetCollectionRound."""
+class OlasWeekTweetCollectionPayload(BaseTxPayload):
+    """Represent a transaction payload for the OlasWeekTweetCollectionRound."""
 
     content: str
 
 
 @dataclass(frozen=True)
-class TweetEvaluationPayload(BaseTxPayload):
-    """Represent a transaction payload for the TweetEvaluationRound."""
+class OlasWeekEvaluationPayload(BaseTxPayload):
+    """Represent a transaction payload for the OlasWeekEvaluationRound."""
 
     content: str

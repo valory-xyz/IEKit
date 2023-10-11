@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the handlers for the skill of TwitterScoringAbciApp."""
+"""This module contains the handlers for the skill of WeekInOlasAbciApp."""
 
 from typing import Optional
 

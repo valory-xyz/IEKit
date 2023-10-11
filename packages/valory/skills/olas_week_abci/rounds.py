@@ -17,11 +17,10 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains the rounds of TwitterScoringAbciApp."""
+"""This package contains the rounds of WeekInOlasAbciApp."""
 
 import json
 import math
-import statistics
 from enum import Enum
 from typing import Any, Dict, FrozenSet, Optional, Set, Tuple, cast
 
@@ -38,12 +37,12 @@ from packages.valory.skills.abstract_round_abci.base import (
     get_name,
 )
 from packages.valory.skills.olas_week_abci.payloads import (
+    OlasWeekDecisionMakingPayload,
+    OlasWeekEvaluationPayload,
+    OlasWeekRandomnessPayload,
+    OlasWeekSelectKeepersPayload,
+    OlasWeekTweetCollectionPayload,
     OpenAICallCheckPayload,
-    TweetCollectionPayload,
-    TweetEvaluationPayload,
-    TwitterDecisionMakingPayload,
-    TwitterRandomnessPayload,
-    TwitterSelectKeepersPayload,
 )
 
 
@@ -53,7 +52,7 @@ ERROR_API_LIMITS = "too many requests"
 
 
 class Event(Enum):
-    """TwitterScoringAbciApp Events"""
+    """WeekInOlasAbciApp Events"""
 
     DONE = "done"
     DONE_SKIP = "done_skip"
@@ -134,10 +133,10 @@ class SynchronizedData(BaseSynchronizedData):
         return self.db.get("most_voted_keeper_addresses", None) is not None
 
 
-class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
-    """TwitterDecisionMakingRound"""
+class OlasWeekDecisionMakingRound(CollectSameUntilThresholdRound):
+    """OlasWeekDecisionMakingRound"""
 
-    payload_class = TwitterDecisionMakingPayload
+    payload_class = OlasWeekDecisionMakingPayload
     synchronized_data_class = SynchronizedData
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
@@ -154,8 +153,8 @@ class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
         return None
 
 
-class OpenAICallCheckRound(CollectSameUntilThresholdRound):
-    """OpenAICallCheckRound"""
+class OlasWeekOpenAICallCheckRound(CollectSameUntilThresholdRound):
+    """OlasWeekOpenAICallCheckRound"""
 
     payload_class = OpenAICallCheckPayload
     synchronized_data_class = SynchronizedData
@@ -200,10 +199,10 @@ class OpenAICallCheckRound(CollectSameUntilThresholdRound):
         return None
 
 
-class TweetCollectionRound(CollectSameUntilThresholdRound):
+class OlasWeekTweetCollectionRound(CollectSameUntilThresholdRound):
     """TwitterMentionsCollectionRound"""
 
-    payload_class = TweetCollectionPayload
+    payload_class = OlasWeekTweetCollectionPayload
     synchronized_data_class = SynchronizedData
 
     @property
@@ -324,10 +323,10 @@ class TweetCollectionRound(CollectSameUntilThresholdRound):
         return None
 
 
-class TweetEvaluationRound(OnlyKeeperSendsRound):
-    """TweetEvaluationRound"""
+class OlasWeekEvaluationRound(OnlyKeeperSendsRound):
+    """OlasWeekEvaluationRound"""
 
-    payload_class = TweetEvaluationPayload
+    payload_class = OlasWeekEvaluationPayload
     synchronized_data_class = SynchronizedData
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
@@ -353,10 +352,10 @@ class TweetEvaluationRound(OnlyKeeperSendsRound):
         return synchronized_data, Event.DONE
 
 
-class TwitterRandomnessRound(CollectSameUntilThresholdRound):
+class OlasWeekRandomnessRound(CollectSameUntilThresholdRound):
     """A round for generating randomness"""
 
-    payload_class = TwitterRandomnessPayload
+    payload_class = OlasWeekRandomnessPayload
     synchronized_data_class = SynchronizedData
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
@@ -367,10 +366,10 @@ class TwitterRandomnessRound(CollectSameUntilThresholdRound):
     )
 
 
-class TwitterSelectKeepersRound(CollectSameUntilThresholdRound):
+class OlasWeekSelectKeepersRound(CollectSameUntilThresholdRound):
     """A round in which a keeper is selected for transaction submission"""
 
-    payload_class = TwitterSelectKeepersPayload
+    payload_class = OlasWeekSelectKeepersPayload
     synchronized_data_class = SynchronizedData
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
@@ -405,49 +404,49 @@ class FinishedWeekInOlasRound(DegenerateRound):
     """FinishedWeekInOlasRound"""
 
 
-class TwitterScoringAbciApp(AbciApp[Event]):
-    """TwitterScoringAbciApp"""
+class WeekInOlasAbciApp(AbciApp[Event]):
+    """WeekInOlasAbciApp"""
 
-    initial_round_cls: AppState = TwitterDecisionMakingRound
-    initial_states: Set[AppState] = {TwitterDecisionMakingRound}
+    initial_round_cls: AppState = OlasWeekDecisionMakingRound
+    initial_states: Set[AppState] = {OlasWeekDecisionMakingRound}
     transition_function: AbciAppTransitionFunction = {
-        TwitterDecisionMakingRound: {
-            Event.OPENAI_CALL_CHECK: OpenAICallCheckRound,
+        OlasWeekDecisionMakingRound: {
+            Event.OPENAI_CALL_CHECK: OlasWeekOpenAICallCheckRound,
             Event.DONE_SKIP: FinishedWeekInOlasRound,
-            Event.SELECT_KEEPERS: TwitterRandomnessRound,
-            Event.RETRIEVE_TWEETS: TweetCollectionRound,
-            Event.EVALUATE: TweetEvaluationRound,
+            Event.SELECT_KEEPERS: OlasWeekRandomnessRound,
+            Event.RETRIEVE_TWEETS: OlasWeekTweetCollectionRound,
+            Event.EVALUATE: OlasWeekEvaluationRound,
             Event.DONE: FinishedWeekInOlasRound,
-            Event.ROUND_TIMEOUT: TwitterDecisionMakingRound,
-            Event.NO_MAJORITY: TwitterDecisionMakingRound,
+            Event.ROUND_TIMEOUT: OlasWeekDecisionMakingRound,
+            Event.NO_MAJORITY: OlasWeekDecisionMakingRound,
         },
-        OpenAICallCheckRound: {
-            Event.DONE: TwitterDecisionMakingRound,
-            Event.NO_ALLOWANCE: TwitterDecisionMakingRound,
-            Event.NO_MAJORITY: OpenAICallCheckRound,
-            Event.ROUND_TIMEOUT: OpenAICallCheckRound,
+        OlasWeekOpenAICallCheckRound: {
+            Event.DONE: OlasWeekDecisionMakingRound,
+            Event.NO_ALLOWANCE: OlasWeekDecisionMakingRound,
+            Event.NO_MAJORITY: OlasWeekOpenAICallCheckRound,
+            Event.ROUND_TIMEOUT: OlasWeekOpenAICallCheckRound,
         },
-        TwitterRandomnessRound: {
-            Event.DONE: TwitterSelectKeepersRound,
-            Event.NO_MAJORITY: TwitterRandomnessRound,
-            Event.ROUND_TIMEOUT: TwitterRandomnessRound,
+        OlasWeekRandomnessRound: {
+            Event.DONE: OlasWeekSelectKeepersRound,
+            Event.NO_MAJORITY: OlasWeekRandomnessRound,
+            Event.ROUND_TIMEOUT: OlasWeekRandomnessRound,
         },
-        TwitterSelectKeepersRound: {
-            Event.DONE: TwitterDecisionMakingRound,
-            Event.NO_MAJORITY: TwitterRandomnessRound,
-            Event.ROUND_TIMEOUT: TwitterRandomnessRound,
+        OlasWeekSelectKeepersRound: {
+            Event.DONE: OlasWeekDecisionMakingRound,
+            Event.NO_MAJORITY: OlasWeekRandomnessRound,
+            Event.ROUND_TIMEOUT: OlasWeekRandomnessRound,
         },
-        TweetCollectionRound: {
-            Event.DONE: TwitterDecisionMakingRound,
-            Event.DONE_MAX_RETRIES: TwitterDecisionMakingRound,
-            Event.DONE_API_LIMITS: TwitterDecisionMakingRound,
-            Event.API_ERROR: TweetCollectionRound,
-            Event.NO_MAJORITY: TwitterRandomnessRound,
-            Event.ROUND_TIMEOUT: TwitterRandomnessRound,
+        OlasWeekTweetCollectionRound: {
+            Event.DONE: OlasWeekDecisionMakingRound,
+            Event.DONE_MAX_RETRIES: OlasWeekDecisionMakingRound,
+            Event.DONE_API_LIMITS: OlasWeekDecisionMakingRound,
+            Event.API_ERROR: OlasWeekTweetCollectionRound,
+            Event.NO_MAJORITY: OlasWeekRandomnessRound,
+            Event.ROUND_TIMEOUT: OlasWeekRandomnessRound,
         },
-        TweetEvaluationRound: {
-            Event.DONE: TwitterDecisionMakingRound,
-            Event.TWEET_EVALUATION_ROUND_TIMEOUT: TweetEvaluationRound,
+        OlasWeekEvaluationRound: {
+            Event.DONE: OlasWeekDecisionMakingRound,
+            Event.TWEET_EVALUATION_ROUND_TIMEOUT: OlasWeekEvaluationRound,
         },
         FinishedWeekInOlasRound: {},
     }
@@ -462,7 +461,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         ["ceramic_db", "pending_write", "summary_tweets"]
     )
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        TwitterDecisionMakingRound: set(),
+        OlasWeekDecisionMakingRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedWeekInOlasRound: {

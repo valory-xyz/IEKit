@@ -17,17 +17,14 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains round behaviours of TwitterScoringAbciApp."""
+"""This package contains round behaviours of WeekInOlasAbciApp."""
 
 import json
 import math
 import random
-import re
 from abc import ABC
 from datetime import datetime, timedelta
 from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
-
-from web3 import Web3
 
 from packages.valory.connections.openai.connection import (
     PUBLIC_ID as LLM_CONNECTION_PUBLIC_ID,
@@ -48,28 +45,26 @@ from packages.valory.skills.olas_week_abci.models import (
     SharedState,
 )
 from packages.valory.skills.olas_week_abci.payloads import (
+    OlasWeekDecisionMakingPayload,
+    OlasWeekEvaluationPayload,
+    OlasWeekRandomnessPayload,
+    OlasWeekSelectKeepersPayload,
+    OlasWeekTweetCollectionPayload,
     OpenAICallCheckPayload,
-    TweetCollectionPayload,
-    TweetEvaluationPayload,
-    TwitterDecisionMakingPayload,
-    TwitterRandomnessPayload,
-    TwitterSelectKeepersPayload,
 )
 from packages.valory.skills.olas_week_abci.prompts import tweet_summarizer_prompt
 from packages.valory.skills.olas_week_abci.rounds import (
-    DBUpdateRound,
     ERROR_API_LIMITS,
     ERROR_GENERIC,
     Event,
-    OpenAICallCheckRound,
+    OlasWeekDecisionMakingRound,
+    OlasWeekEvaluationRound,
+    OlasWeekOpenAICallCheckRound,
+    OlasWeekRandomnessRound,
+    OlasWeekSelectKeepersRound,
+    OlasWeekTweetCollectionRound,
     SynchronizedData,
-    TweetEvaluationRound,
-    TwitterDecisionMakingRound,
-    TwitterHashtagsCollectionRound,
-    TwitterMentionsCollectionRound,
-    TwitterRandomnessRound,
-    TwitterScoringAbciApp,
-    TwitterSelectKeepersRound,
+    WeekInOlasAbciApp,
 )
 
 
@@ -169,18 +164,18 @@ class OlasWeekBaseBehaviour(BaseBehaviour, ABC):
         return False, number_of_tweets_pulled_today, last_tweet_pull_window_reset
 
 
-class TwitterRandomnessBehaviour(RandomnessBehaviour):
+class OlasWeekRandomnessBehaviour(RandomnessBehaviour):
     """Retrieve randomness."""
 
-    matching_round = TwitterRandomnessRound
-    payload_class = TwitterRandomnessPayload
+    matching_round = OlasWeekRandomnessRound
+    payload_class = OlasWeekRandomnessPayload
 
 
-class TwitterSelectKeepersBehaviour(OlasWeekBaseBehaviour):
+class OlasWeekSelectKeepersBehaviour(OlasWeekBaseBehaviour):
     """Select the keeper agent."""
 
-    matching_round = TwitterSelectKeepersRound
-    payload_class = TwitterSelectKeepersPayload
+    matching_round = OlasWeekSelectKeepersRound
+    payload_class = OlasWeekSelectKeepersPayload
 
     def _select_keepers(self) -> List[str]:
         """
@@ -254,7 +249,7 @@ class TwitterSelectKeepersBehaviour(OlasWeekBaseBehaviour):
         """
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            payload = TwitterSelectKeepersPayload(  # type: ignore
+            payload = OlasWeekSelectKeepersPayload(  # type: ignore
                 self.context.agent_address,
                 json.dumps(self._select_keepers(), sort_keys=True),
             )
@@ -266,10 +261,10 @@ class TwitterSelectKeepersBehaviour(OlasWeekBaseBehaviour):
         self.set_done()
 
 
-class TwitterDecisionMakingBehaviour(OlasWeekBaseBehaviour):
-    """TwitterDecisionMakingBehaviour"""
+class OlasWeekDecisionMakingBehaviour(OlasWeekBaseBehaviour):
+    """OlasWeekDecisionMakingBehaviour"""
 
-    matching_round: Type[AbstractRound] = TwitterDecisionMakingRound
+    matching_round: Type[AbstractRound] = OlasWeekDecisionMakingRound
 
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
@@ -279,7 +274,7 @@ class TwitterDecisionMakingBehaviour(OlasWeekBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(
-                payload=TwitterDecisionMakingPayload(
+                payload=OlasWeekDecisionMakingPayload(
                     sender=self.context.agent_address,
                     event=event,
                 )
@@ -309,16 +304,13 @@ class TwitterDecisionMakingBehaviour(OlasWeekBaseBehaviour):
         if Event.EVALUATE.value not in performed_tasks:
             return Event.EVALUATE.value
 
-        if Event.DB_UPDATE.value not in performed_tasks:
-            return Event.DB_UPDATE.value
-
         return Event.DONE.value
 
 
 class OpenAICallCheckBehaviour(OlasWeekBaseBehaviour):
-    """TweetCollectionBehaviour"""
+    """OlasWeekTweetCollectionBehaviour"""
 
-    matching_round: Type[AbstractRound] = OpenAICallCheckRound
+    matching_round: Type[AbstractRound] = OlasWeekOpenAICallCheckRound
 
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
@@ -331,7 +323,7 @@ class OpenAICallCheckBehaviour(OlasWeekBaseBehaviour):
             if self.openai_calls.max_calls_reached():
                 content = None
             else:
-                content = OpenAICallCheckRound.CALLS_REMAINING
+                content = OlasWeekOpenAICallCheckRound.CALLS_REMAINING
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(
                 payload=OpenAICallCheckPayload(
@@ -343,10 +335,10 @@ class OpenAICallCheckBehaviour(OlasWeekBaseBehaviour):
         self.set_done()
 
 
-class TweetCollectionBehaviour(OlasWeekBaseBehaviour):
-    """TweetCollectionBehaviour"""
+class OlasWeekTweetCollectionBehaviour(OlasWeekBaseBehaviour):
+    """OlasWeekTweetCollectionBehaviour"""
 
-    matching_round: Type[AbstractRound] = TwitterMentionsCollectionRound
+    matching_round: Type[AbstractRound] = OlasWeekTweetCollectionRound
 
     def _i_am_not_sending(self) -> bool:
         """Indicates if the current agent is one of the sender or not."""
@@ -409,7 +401,7 @@ class TweetCollectionBehaviour(OlasWeekBaseBehaviour):
 
             payload_data["last_tweet_pull_window_reset"] = last_tweet_pull_window_reset
             sender = self.context.agent_address
-            payload = TweetCollectionPayload(
+            payload = OlasWeekTweetCollectionPayload(
                 sender=sender, content=json.dumps(payload_data, sort_keys=True)
             )
 
@@ -452,7 +444,7 @@ class TweetCollectionBehaviour(OlasWeekBaseBehaviour):
         start_time_str = start_time.strftime("%Y-%m-%dT%H:%M:%S:00Z")
 
         # Build the args
-        api_args = self.params.twitter_mentions_args.replace(
+        api_args = self.params.twitter_tweets_args.replace(
             "{start_time}", start_time_str
         )
         api_args = api_args.replace(
@@ -590,10 +582,10 @@ class TweetCollectionBehaviour(OlasWeekBaseBehaviour):
         }
 
 
-class TweetEvaluationBehaviour(OlasWeekBaseBehaviour):
-    """TweetEvaluationBehaviour"""
+class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
+    """OlasWeekEvaluationBehaviour"""
 
-    matching_round: Type[AbstractRound] = TweetEvaluationRound
+    matching_round: Type[AbstractRound] = OlasWeekEvaluationRound
 
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
@@ -606,7 +598,7 @@ class TweetEvaluationBehaviour(OlasWeekBaseBehaviour):
             )
 
             sender = self.context.agent_address
-            payload = TweetEvaluationPayload(
+            payload = OlasWeekEvaluationPayload(
                 sender=sender, content=json.dumps({"summary_tweets": summary_tweets}, sort_keys=True)
             )
 
@@ -666,16 +658,16 @@ class TweetEvaluationBehaviour(OlasWeekBaseBehaviour):
         return response
 
 
-class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
-    """TwitterScoringRoundBehaviour"""
+class OlasWeekRoundBehaviour(AbstractRoundBehaviour):
+    """OlasWeekRoundBehaviour"""
 
-    initial_behaviour_cls = TweetCollectionBehaviour
-    abci_app_cls = TwitterScoringAbciApp  # type: ignore
+    initial_behaviour_cls = OlasWeekTweetCollectionBehaviour
+    abci_app_cls = WeekInOlasAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
-        TwitterDecisionMakingBehaviour,
+        OlasWeekDecisionMakingBehaviour,
         OpenAICallCheckBehaviour,
-        TweetCollectionBehaviour,
-        TweetEvaluationBehaviour,
-        TwitterRandomnessBehaviour,
-        TwitterSelectKeepersBehaviour,
+        OlasWeekTweetCollectionBehaviour,
+        OlasWeekEvaluationBehaviour,
+        OlasWeekRandomnessBehaviour,
+        OlasWeekSelectKeepersBehaviour,
     ]

@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the shared state for the abci skill of TwitterScoringAbciApp."""
+"""This module contains the shared state for the abci skill of WeekInOlasAbciApp."""
 
 from datetime import datetime
 from typing import Any
@@ -30,13 +30,13 @@ from packages.valory.skills.abstract_round_abci.models import Requests as BaseRe
 from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
-from packages.valory.skills.olas_week_abci.rounds import TwitterScoringAbciApp
+from packages.valory.skills.olas_week_abci.rounds import WeekInOlasAbciApp
 
 
 class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
 
-    abci_app_cls = TwitterScoringAbciApp
+    abci_app_cls = WeekInOlasAbciApp
 
 
 class RandomnessApi(ApiSpecs):

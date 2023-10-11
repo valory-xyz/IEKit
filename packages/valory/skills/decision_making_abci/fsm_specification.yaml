@@ -12,6 +12,8 @@ alphabet_in:
 - SCHEDULED_TWEET
 - SCORE
 - UPDATE_CENTAURS
+- WEEK_IN_OLAS_CREATE
+- WEEK_IN_OLAS_WRITE
 - WRITE_CONTRIBUTE_DB
 default_start_state: DecisionMakingRound
 final_states:
@@ -22,6 +24,7 @@ final_states:
 - FinishedDecisionMakingReadManualPointsRound
 - FinishedDecisionMakingScoreRound
 - FinishedDecisionMakingUpdateCentaurRound
+- FinishedDecisionMakingWeekInOlasRound
 - FinishedDecisionMakingWriteContributeDBRound
 - FinishedDecisionMakingWriteOrbisRound
 - FinishedDecisionMakingWriteTwitterRound
@@ -37,6 +40,7 @@ states:
 - FinishedDecisionMakingReadManualPointsRound
 - FinishedDecisionMakingScoreRound
 - FinishedDecisionMakingUpdateCentaurRound
+- FinishedDecisionMakingWeekInOlasRound
 - FinishedDecisionMakingWriteContributeDBRound
 - FinishedDecisionMakingWriteOrbisRound
 - FinishedDecisionMakingWriteTwitterRound
@@ -54,4 +58,6 @@ transition_func:
     (DecisionMakingRound, SCHEDULED_TWEET): FinishedDecisionMakingWriteTwitterRound
     (DecisionMakingRound, SCORE): FinishedDecisionMakingScoreRound
     (DecisionMakingRound, UPDATE_CENTAURS): FinishedDecisionMakingUpdateCentaurRound
+    (DecisionMakingRound, WEEK_IN_OLAS_CREATE): FinishedDecisionMakingWeekInOlasRound
+    (DecisionMakingRound, WEEK_IN_OLAS_WRITE): FinishedDecisionMakingWriteTwitterRound
     (DecisionMakingRound, WRITE_CONTRIBUTE_DB): FinishedDecisionMakingWriteContributeDBRound

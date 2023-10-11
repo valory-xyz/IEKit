@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the dialogues of the TwitterScoringAbciApp."""
+"""This module contains the dialogues of the WeekInOlasAbciApp."""
 
 from typing import Any
 

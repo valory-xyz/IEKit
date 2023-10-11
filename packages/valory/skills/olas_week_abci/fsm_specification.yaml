@@ -1,6 +1,5 @@
 alphabet_in:
 - API_ERROR
-- DB_UPDATE
 - DONE
 - DONE_API_LIMITS
 - DONE_MAX_RETRIES
@@ -10,61 +9,47 @@ alphabet_in:
 - NO_MAJORITY
 - OPENAI_CALL_CHECK
 - RETRIEVE_TWEETS
-- RETRIEVE_MENTIONS
 - ROUND_TIMEOUT
 - SELECT_KEEPERS
 - TWEET_EVALUATION_ROUND_TIMEOUT
-default_start_state: TwitterDecisionMakingRound
+default_start_state: OlasWeekDecisionMakingRound
 final_states:
-- FinishedTwitterScoringRound
-label: TwitterScoringAbciApp
+- FinishedWeekInOlasRound
+label: WeekInOlasAbciApp
 start_states:
-- TwitterDecisionMakingRound
+- OlasWeekDecisionMakingRound
 states:
-- DBUpdateRound
-- FinishedTwitterScoringRound
-- OpenAICallCheckRound
-- TweetEvaluationRound
-- TwitterDecisionMakingRound
-- TwitterHashtagsCollectionRound
-- TwitterMentionsCollectionRound
-- TwitterRandomnessRound
-- TwitterSelectKeepersRound
+- FinishedWeekInOlasRound
+- OlasWeekDecisionMakingRound
+- OlasWeekEvaluationRound
+- OlasWeekOpenAICallCheckRound
+- OlasWeekRandomnessRound
+- OlasWeekSelectKeepersRound
+- OlasWeekTweetCollectionRound
 transition_func:
-    (DBUpdateRound, DONE): TwitterDecisionMakingRound
-    (DBUpdateRound, NO_MAJORITY): DBUpdateRound
-    (DBUpdateRound, ROUND_TIMEOUT): DBUpdateRound
-    (OpenAICallCheckRound, DONE): TwitterDecisionMakingRound
-    (OpenAICallCheckRound, NO_ALLOWANCE): TwitterDecisionMakingRound
-    (OpenAICallCheckRound, NO_MAJORITY): OpenAICallCheckRound
-    (OpenAICallCheckRound, ROUND_TIMEOUT): OpenAICallCheckRound
-    (TweetEvaluationRound, DONE): TwitterDecisionMakingRound
-    (TweetEvaluationRound, TWEET_EVALUATION_ROUND_TIMEOUT): TweetEvaluationRound
-    (TwitterDecisionMakingRound, DB_UPDATE): DBUpdateRound
-    (TwitterDecisionMakingRound, DONE): FinishedTwitterScoringRound
-    (TwitterDecisionMakingRound, DONE_SKIP): FinishedTwitterScoringRound
-    (TwitterDecisionMakingRound, EVALUATE): TweetEvaluationRound
-    (TwitterDecisionMakingRound, NO_MAJORITY): TwitterDecisionMakingRound
-    (TwitterDecisionMakingRound, OPENAI_CALL_CHECK): OpenAICallCheckRound
-    (TwitterDecisionMakingRound, RETRIEVE_TWEETS): TwitterHashtagsCollectionRound
-    (TwitterDecisionMakingRound, RETRIEVE_MENTIONS): TwitterMentionsCollectionRound
-    (TwitterDecisionMakingRound, ROUND_TIMEOUT): TwitterDecisionMakingRound
-    (TwitterDecisionMakingRound, SELECT_KEEPERS): TwitterRandomnessRound
-    (TwitterHashtagsCollectionRound, API_ERROR): TwitterHashtagsCollectionRound
-    (TwitterHashtagsCollectionRound, DONE): TwitterDecisionMakingRound
-    (TwitterHashtagsCollectionRound, DONE_API_LIMITS): TwitterDecisionMakingRound
-    (TwitterHashtagsCollectionRound, DONE_MAX_RETRIES): TwitterDecisionMakingRound
-    (TwitterHashtagsCollectionRound, NO_MAJORITY): TwitterRandomnessRound
-    (TwitterHashtagsCollectionRound, ROUND_TIMEOUT): TwitterRandomnessRound
-    (TwitterMentionsCollectionRound, API_ERROR): TwitterMentionsCollectionRound
-    (TwitterMentionsCollectionRound, DONE): TwitterDecisionMakingRound
-    (TwitterMentionsCollectionRound, DONE_API_LIMITS): TwitterDecisionMakingRound
-    (TwitterMentionsCollectionRound, DONE_MAX_RETRIES): TwitterDecisionMakingRound
-    (TwitterMentionsCollectionRound, NO_MAJORITY): TwitterRandomnessRound
-    (TwitterMentionsCollectionRound, ROUND_TIMEOUT): TwitterRandomnessRound
-    (TwitterRandomnessRound, DONE): TwitterSelectKeepersRound
-    (TwitterRandomnessRound, NO_MAJORITY): TwitterRandomnessRound
-    (TwitterRandomnessRound, ROUND_TIMEOUT): TwitterRandomnessRound
-    (TwitterSelectKeepersRound, DONE): TwitterDecisionMakingRound
-    (TwitterSelectKeepersRound, NO_MAJORITY): TwitterRandomnessRound
-    (TwitterSelectKeepersRound, ROUND_TIMEOUT): TwitterRandomnessRound
+    (OlasWeekDecisionMakingRound, DONE): FinishedWeekInOlasRound
+    (OlasWeekDecisionMakingRound, DONE_SKIP): FinishedWeekInOlasRound
+    (OlasWeekDecisionMakingRound, EVALUATE): OlasWeekEvaluationRound
+    (OlasWeekDecisionMakingRound, NO_MAJORITY): OlasWeekDecisionMakingRound
+    (OlasWeekDecisionMakingRound, OPENAI_CALL_CHECK): OlasWeekOpenAICallCheckRound
+    (OlasWeekDecisionMakingRound, RETRIEVE_TWEETS): OlasWeekTweetCollectionRound
+    (OlasWeekDecisionMakingRound, ROUND_TIMEOUT): OlasWeekDecisionMakingRound
+    (OlasWeekDecisionMakingRound, SELECT_KEEPERS): OlasWeekRandomnessRound
+    (OlasWeekEvaluationRound, DONE): OlasWeekDecisionMakingRound
+    (OlasWeekEvaluationRound, TWEET_EVALUATION_ROUND_TIMEOUT): OlasWeekEvaluationRound
+    (OlasWeekOpenAICallCheckRound, DONE): OlasWeekDecisionMakingRound
+    (OlasWeekOpenAICallCheckRound, NO_ALLOWANCE): OlasWeekDecisionMakingRound
+    (OlasWeekOpenAICallCheckRound, NO_MAJORITY): OlasWeekOpenAICallCheckRound
+    (OlasWeekOpenAICallCheckRound, ROUND_TIMEOUT): OlasWeekOpenAICallCheckRound
+    (OlasWeekRandomnessRound, DONE): OlasWeekSelectKeepersRound
+    (OlasWeekRandomnessRound, NO_MAJORITY): OlasWeekRandomnessRound
+    (OlasWeekRandomnessRound, ROUND_TIMEOUT): OlasWeekRandomnessRound
+    (OlasWeekSelectKeepersRound, DONE): OlasWeekDecisionMakingRound
+    (OlasWeekSelectKeepersRound, NO_MAJORITY): OlasWeekRandomnessRound
+    (OlasWeekSelectKeepersRound, ROUND_TIMEOUT): OlasWeekRandomnessRound
+    (OlasWeekTweetCollectionRound, API_ERROR): OlasWeekTweetCollectionRound
+    (OlasWeekTweetCollectionRound, DONE): OlasWeekDecisionMakingRound
+    (OlasWeekTweetCollectionRound, DONE_API_LIMITS): OlasWeekDecisionMakingRound
+    (OlasWeekTweetCollectionRound, DONE_MAX_RETRIES): OlasWeekDecisionMakingRound
+    (OlasWeekTweetCollectionRound, NO_MAJORITY): OlasWeekRandomnessRound
+    (OlasWeekTweetCollectionRound, ROUND_TIMEOUT): OlasWeekRandomnessRound
