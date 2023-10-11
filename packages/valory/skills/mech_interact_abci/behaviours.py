@@ -690,29 +690,12 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         yield from self.finish_behaviour(payload)
 
 
-
-class MechRandomnessBehaviour(RandomnessBehaviour):
-    """Retrieve randomness."""
-
-    matching_round = MechRandomnessRound
-    payload_class = MechRandomnessPayload
-
-
-class MechSelectKeepersBehaviour(MechInteractBaseBehaviour):
-    """Select the keeper agent."""
-
-    matching_round = MechSelectKeeperRound
-    payload_class = MechSelectKeeperPayload
-
-
 class MechInteractRoundBehaviour(AbstractRoundBehaviour):
     """MechInteractRoundBehaviour"""
 
     initial_behaviour_cls = MechRequestBehaviour
     abci_app_cls = MechInteractAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
-        MechRandomnessBehaviour,
-        MechSelectKeepersBehaviour,
         MechRequestBehaviour,
         MechResponseBehaviour
     ]
