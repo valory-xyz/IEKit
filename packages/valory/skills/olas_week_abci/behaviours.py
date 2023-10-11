@@ -416,7 +416,7 @@ class OlasWeekTweetCollectionBehaviour(OlasWeekBaseBehaviour):
         """Get Tweets"""
 
         api_base = self.params.twitter_api_base
-        api_endpoint = self.params.twitter_tweets_args
+        api_endpoint = self.params.twitter_tweets_endpoint
 
         number_of_tweets_remaining_today = (
             self.params.max_tweet_pulls_allowed - number_of_tweets_pulled_today

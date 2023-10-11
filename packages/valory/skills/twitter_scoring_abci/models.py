@@ -82,31 +82,21 @@ class Params(BaseParams):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the parameters object."""
-        self.twitter_api_base = self._ensure("twitter_api_base", kwargs, str)
-        self.twitter_api_bearer_token = self._ensure(
-            "twitter_api_bearer_token", kwargs, str
+        self.twitter_api_base = kwargs.get("twitter_api_base")
+        self.twitter_api_bearer_token = kwargs.get("twitter_api_bearer_token")
+        self.twitter_mentions_endpoint = kwargs.get("twitter_mentions_endpoint")
+        self.twitter_mentions_args = kwargs.get("twitter_mentions_args")
+        self.twitter_max_pages = kwargs.get("twitter_max_pages")
+        self.twitter_search_endpoint = kwargs.get("twitter_search_endpoint")
+        self.twitter_search_args = kwargs.get("twitter_search_args")
+        self.max_points_per_period = kwargs.get("max_points_per_period")
+        self.tweet_evaluation_round_timeout = kwargs.get(
+            "tweet_evaluation_round_timeout"
         )
-        self.twitter_mentions_endpoint = self._ensure(
-            "twitter_mentions_endpoint", kwargs, str
-        )
-        self.twitter_mentions_args = self._ensure("twitter_mentions_args", kwargs, str)
-        self.twitter_max_pages = self._ensure("twitter_max_pages", kwargs, int)
-        self.twitter_search_endpoint = self._ensure(
-            "twitter_search_endpoint", kwargs, str
-        )
-        self.twitter_search_args = self._ensure("twitter_search_args", kwargs, str)
-        self.max_points_per_period = self._ensure("max_points_per_period", kwargs, int)
-        self.tweet_evaluation_round_timeout = self._ensure(
-            "tweet_evaluation_round_timeout", kwargs, float
-        )
-        self.max_tweet_pulls_allowed = self._ensure(
-            "max_tweet_pulls_allowed", kwargs, int
-        )
-        self.openai_call_window_size = self._ensure(
-            "openai_call_window_size", kwargs, float
-        )
-        self.openai_calls_allowed_in_window = self._ensure(
-            "openai_calls_allowed_in_window", kwargs, int
+        self.max_tweet_pulls_allowed = kwargs.get("max_tweet_pulls_allowed")
+        self.openai_call_window_size = kwargs.get("openai_call_window_size")
+        self.openai_calls_allowed_in_window = kwargs.get(
+            "openai_calls_allowed_in_window"
         )
         self.openai_calls = OpenAICalls(
             openai_call_window_size=self.openai_call_window_size,
