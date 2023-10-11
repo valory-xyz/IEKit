@@ -20,42 +20,21 @@
 """This module contains the transaction payloads of the MechInteractAbciApp."""
 
 from dataclasses import dataclass
-from typing import Optional
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 
 @dataclass(frozen=True)
-class MultisigTxPayload(BaseTxPayload):
-    """Represents a transaction payload for preparing an on-chain transaction to be sent via the agents' multisig."""
-
-    tx_submitter: Optional[str]
-    tx_hash: Optional[str]
-
-
-@dataclass(frozen=True)
-class MechRequestPayload(MultisigTxPayload):
+class MechRequestPayload(BaseTxPayload):
     """Represent a transaction payload for the MechRequestRound."""
 
-    price: Optional[int]
+    tx_hash: str
+    price: int
+    mech_requests: str
+    mech_responses: str
 
 
 @dataclass(frozen=True)
 class MechResponsePayload(BaseTxPayload):
     """Represent a transaction payload for the MechResponseRound."""
 
-    response: Optional[str]
-
-
-@dataclass(frozen=True)
-class MechRandomnessPayload(BaseTxPayload):
-    """Represent a transaction payload of type 'randomness'."""
-
-    round_id: int
-    randomness: str
-
-
-@dataclass(frozen=True)
-class MechSelectKeeperPayload(BaseTxPayload):
-    """Represent a transaction payload of type 'select_keeper'."""
-
-    keepers: str
+    mech_responses: str
