@@ -469,7 +469,7 @@ class WeekInOlasAbciApp(AbciApp[Event]):
         Event.TWEET_EVALUATION_ROUND_TIMEOUT: 600.0,
     }
     cross_period_persisted_keys: FrozenSet[str] = frozenset(
-        ["ceramic_db", "pending_write", "summary_tweets"]
+        ["ceramic_db", "pending_write"]
     )
     db_pre_conditions: Dict[AppState, Set[str]] = {
         OlasWeekDecisionMakingRound: set(),

@@ -16,7 +16,7 @@ fingerprint:
   models.py: bafybeihsqzu4n2r5a4wlvcpmpnwkbtp3sr7axry53to5gpxoacqbkhx5cq
   payloads.py: bafybeietg3ceghstjx5bytqv2t377k5pyww3cdq7zg7d7lxhscwmfelai4
   prompts.py: bafybeicz63x6rhrgm5amjkfsovnqvxqyzicfhhae3orw7jaubme2npnn2a
-  rounds.py: bafybeigkjt43nddhjh2qjncnseht3xrktmvvrtoqynxwcwun5ztwi3lmau
+  rounds.py: bafybeihy72ld66pzdamubpuj6obtbnr4tbzsxl4axb36maw4eru6bb66em
 fingerprint_ignore_patterns: []
 connections:
 - valory/openai:0.1.0:bafybeibn42k4zebenmjsumkngfxllxbofkwdno2fm65o6zf5y2uihmo2dq
