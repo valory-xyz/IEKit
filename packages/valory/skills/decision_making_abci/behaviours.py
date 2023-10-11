@@ -69,6 +69,14 @@ from packages.valory.skills.decision_making_abci.tasks.write_stream_preparation 
 previous_event_to_task_preparation_cls = {
     None: {
         "prev": None,
+        "next": ReadContributeDBPreparation,
+    },
+    Event.READ_CONTRIBUTE_DB.value: {
+        "prev": ReadContributeDBPreparation,
+        "next": ReadManualPointsPreparation,
+    },
+    Event.READ_MANUAL_POINTS.value: {
+        "prev": ReadManualPointsPreparation,
         "next": ReadCentaursPreparation,
     },
     Event.READ_CENTAURS.value: {
@@ -97,14 +105,6 @@ previous_event_to_task_preparation_cls = {
     },
     Event.UPDATE_CENTAURS.value: {
         "prev": UpdateCentaursPreparation,
-        "next": ReadContributeDBPreparation,
-    },
-    Event.READ_CONTRIBUTE_DB.value: {
-        "prev": ReadContributeDBPreparation,
-        "next": ReadManualPointsPreparation,
-    },
-    Event.READ_MANUAL_POINTS.value: {
-        "prev": ReadManualPointsPreparation,
         "next": ScorePreparation,
     },
     Event.SCORE.value: {
