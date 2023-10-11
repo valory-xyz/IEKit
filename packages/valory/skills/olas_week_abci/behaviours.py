@@ -306,7 +306,7 @@ class OlasWeekDecisionMakingBehaviour(OlasWeekBaseBehaviour):
         return Event.DONE.value
 
 
-class OpenAICallCheckBehaviour(OlasWeekBaseBehaviour):
+class OlasWeekOpenAICallCheckBehaviour(OlasWeekBaseBehaviour):
     """OlasWeekTweetCollectionBehaviour"""
 
     matching_round: Type[AbstractRound] = OlasWeekOpenAICallCheckRound
@@ -666,7 +666,7 @@ class OlasWeekRoundBehaviour(AbstractRoundBehaviour):
     abci_app_cls = WeekInOlasAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
         OlasWeekDecisionMakingBehaviour,
-        OpenAICallCheckBehaviour,
+        OlasWeekOpenAICallCheckBehaviour,
         OlasWeekTweetCollectionBehaviour,
         OlasWeekEvaluationBehaviour,
         OlasWeekRandomnessBehaviour,

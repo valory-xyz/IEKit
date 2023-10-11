@@ -41,6 +41,7 @@ from packages.valory.skills.impact_evaluator_abci.composition import (
     ImpactEvaluatorSkillAbciApp,
 )
 from packages.valory.skills.llm_abci.behaviours import LLMRoundBehaviour
+from packages.valory.skills.olas_week_abci.behaviours import OlasWeekRoundBehaviour
 from packages.valory.skills.registration_abci.behaviours import (
     AgentRegistrationRoundBehaviour,
     RegistrationStartupBehaviour,
@@ -81,5 +82,6 @@ class ImpactEvaluatorConsensusBehaviour(AbstractRoundBehaviour):
         *ResetPauseABCIConsensusBehaviour.behaviours,
         *TransactionSettlementRoundBehaviour.behaviours,
         *TerminationAbciBehaviours.behaviours,
+        *OlasWeekRoundBehaviour.behaviours,
     }
     background_behaviours_cls = {BackgroundBehaviour}
