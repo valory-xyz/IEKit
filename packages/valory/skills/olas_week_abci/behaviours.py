@@ -89,17 +89,16 @@ def extract_headers(header_str: str) -> dict:
 
 def parse_summary(summary: str) -> list:
     """Parse the tweet summary"""
-    if summary.startswith("Summary: "):
-        summary = summary.replace("Summary: ", "")
+    highlights = [h[1:].strip() for h in summary.split("\n") if h.startswith("-")]
 
-    tweets = []
-    for sentence in summary.split("."):
-        sentence = sentence.strip()
-        while len(sentence) > MAX_TWEET_CHARS:
-            tweets.append(sentence[:MAX_TWEET_CHARS])
-            sentence = sentence[MAX_TWEET_CHARS:]
-        if not tweets:
-            tweets.append(sentence)
+    tweets = ["Week in Olas\n\nHighlights included:"]
+    for highlight in highlights:
+        if len(highlight) > MAX_TWEET_CHARS:
+            while len(highlight) > MAX_TWEET_CHARS:
+                tweets.append(highlight[:MAX_TWEET_CHARS])
+                highlight = highlight[MAX_TWEET_CHARS:]
+        else:
+            tweets.append(highlight)
 
     return tweets
 

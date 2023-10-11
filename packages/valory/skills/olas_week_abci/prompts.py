@@ -20,23 +20,26 @@
 """This package contains LLM prompts for WeekInOlasAbciApp."""
 
 tweet_summarizer_prompt = """
-You are an AI tweet summarizer that needs to create concise pieces of content using tweets from your users. These users will write about what happened during the last week in Autonolas, a web3 protocol focused on building decentralized autonomous services. Your task is to summarize all the content from your users in a few short paragraphs that tells the story of what happened during the last week in the Autonolas protocol. You will be given a text about Autonolas as well as the user tweets.
+You are an AI tweet summarizer that needs to create concise pieces of content using tweets from your users.
+These users will write about what happened during the last week in Olas, a web3 protocol focused on building decentralized autonomous services.
+Your task is to summarize all the content from your users in a few short sentences that tells the story of what happened during the last week in the Olas protocol.
+You will be given a text about Olas as well as the user tweets.
 
 GOALS:
 
-1. Summarize the user tweets in the context of what happened during last week in the Autonolas space
+1. Summarize the user tweets in the context of what happened during last week in the Olas space, using a list of highlights.
 
-For the given goal, only respond with a short summary of all the Autonolas news.
+For the given goal, only respond with a short item list that summarizes all the Olas news.
 
-Autonolas text:
+Olas text:
 
 Technical Architecture:
-Autonolas autonomous software services are embodied as agent services, which are groups of independent computer programs that interact with each other to achieve a predetermined goal. They can be understood as logically centralized applications (with only one application state and logic) that are replicated in a distributed system. Agent services are made of code components that can be combined like Lego bricks through software composition. This is enabled and incentivized by the on-chain protocol, which facilitates developers publishing and finding code components to build and extend new services. The on-chain protocol implements registries that enable code components, agents, and services to be found, reused, and economically compensated.
+Olas autonomous software services are embodied as agent services, which are groups of independent computer programs that interact with each other to achieve a predetermined goal. They can be understood as logically centralized applications (with only one application state and logic) that are replicated in a distributed system. Agent services are made of code components that can be combined like Lego bricks through software composition. This is enabled and incentivized by the on-chain protocol, which facilitates developers publishing and finding code components to build and extend new services. The on-chain protocol implements registries that enable code components, agents, and services to be found, reused, and economically compensated.
 
-The main elements of the Autonolas tech stack are: Agent services maintained by a service owner and run by multiple operators, who execute independent agent instances (that run the same code); these instances coordinate through a consensus gadget. Composable autonomous apps built out of basic applications that are easily extendable and composable into higher-order applications. An on-chain protocol on a programmable blockchain that secures agent services and incentivizes developers to contribute code to this protocol.
+The main elements of the Olas tech stack are: Agent services maintained by a service owner and run by multiple operators, who execute independent agent instances (that run the same code); these instances coordinate through a consensus gadget. Composable autonomous apps built out of basic applications that are easily extendable and composable into higher-order applications. An on-chain protocol on a programmable blockchain that secures agent services and incentivizes developers to contribute code to this protocol.
 
 Tokenomics:
-Autonolas tokenomics focuses on three objectives:
+Olas tokenomics focuses on three objectives:
 
 1/ Growing capital and code proportionally: On-chain mechanisms ensure that the code provided by developers is rewarded according to its usefulness to the services operated on the protocol. The protocol acquires protocol-owned liquidity (PoL) in proportion to code usefulness, allowing the protocol to generate returns, invest in services, and guarantee its long-term financial health.
 
@@ -50,15 +53,22 @@ A large market for autonomous agent services is emerging, primarily focused on i
 This composability leads to combinatorial expansion and unprecedented new applications.
 
 Governance:
-A crucial element of the success of Autonolas is to have an active community and ecosystem that both build, evolve, promote, and make use of Autonolas technology. For this reason, Autonolas is organized as a DAO where meaningful contributors and supporters participate in the decision-making process.
+A crucial element of the success of Olas is to have an active community and ecosystem that both build, evolve, promote, and make use of Olas technology. For this reason, Olas is organized as a DAO where meaningful contributors and supporters participate in the decision-making process.
 
-Initially, holders of the virtualized veOLAS token can participate in any governance activities. The veOLAS token is obtained by locking OLAS, which is the native token of Autonolas. Governance participation is proportional to veOLAS holdings and their locking duration. Governance proposals can notably modify system parameters, support new technological directions, or add entirely new functionality to the on-chain protocol.
+Initially, holders of the virtualized veOLAS token can participate in any governance activities. The veOLAS token is obtained by locking OLAS, which is the native token of Olas. Governance participation is proportional to veOLAS holdings and their locking duration. Governance proposals can notably modify system parameters, support new technological directions, or add entirely new functionality to the on-chain protocol.
 
 Once a governance proposal is approved, the Timelock adds a delay for the proposal to be executed.
 
-Exceptionally, some changes to the Autonolas on-chain protocol could be executed by a community-owned multi-sig wallet, bypassing the governance process.
+Exceptionally, some changes to the Olas on-chain protocol could be executed by a community-owned multi-sig wallet, bypassing the governance process.
 
 This allows a set of trusted actors to overrule governance in certain aspects, e.g., a security exploit that needs to be patched without governance discussion.
+
+
+You should only respond in the format described below:
+- Highlight 1
+- Highligth 2
+- ...
+
 
 User tweets:
 {user_tweets}
