@@ -102,6 +102,7 @@ models:
       keeper_timeout: 30.0
       max_attempts: 10
       max_healthcheck: 120
+      multisend_address: '0x0000000000000000000000000000000000000000'
       on_chain_service_id: null
       request_retry_delay: 1.0
       request_timeout: 10.0
@@ -126,7 +127,22 @@ models:
       tendermint_url: http://localhost:26657
       tx_timeout: 10.0
       validate_timeout: 1205
+      multisend_batch_size: 50
+      mech_agent_address: '0xff82123dfb52ab75c417195c5fdb87630145ae81'
+      ipfs_address: https://gateway.autonolas.tech/ipfs/
     class_name: Params
+  mech_response:
+    args:
+      api_id: mech_response
+      headers:
+        Content-Type: application/json
+      method: GET
+      parameters: { }
+      response_key: result
+      response_type: str
+      retries: 5
+      url: ''
+    class_name: MechResponseSpecs
   requests:
     args: {}
     class_name: Requests

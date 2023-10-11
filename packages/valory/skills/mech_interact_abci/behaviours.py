@@ -104,45 +104,14 @@ ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 SAFE_GAS = 0
 
 
-@dataclass
-class MechMetadata:
-    """A Mech's metadata."""
+class DataclassEncoder(json.JSONEncoder):
+    """A custom JSON encoder for dataclasses."""
 
-    prompt: str
-    tool: str
-    nonce: str = field(default_factory=lambda: str(uuid4()))
-
-
-@dataclass
-class MultisendBatch:
-    """A structure representing a single transaction of a multisend."""
-
-    to: str
-    data: HexBytes
-    value: int = 0
-    operation: MultiSendOperation = MultiSendOperation.CALL
-
-
-@dataclass
-class MechInteractionResponse:
-    """A structure for the response of a mech interaction task."""
-
-    requestId: int = 0
-    result: Optional[dict] = None
-    error: str = "Unknown"
-
-    def __post_init__(self) -> None:
-        """Parses the nested part of the mech interaction response to a `PredictionResponse`."""
-        if isinstance(self.result, str):
-            self.result = json.loads(self.result)
-
-    @classmethod
-    def incorrect_format(cls, res: Any) -> "MechInteractionResponse":
-        """Return an incorrect format response."""
-        response = cls()
-        response.error = f"The response's format was unexpected: {res}"
-        return response
-
+    def default(self, o: Any) -> Any:
+        """The default JSON encoder."""
+        if is_dataclass(o):
+            return asdict(o)
+        return super().default(o)
 
 
 class MechInteractBaseBehaviour(BaseBehaviour, ABC):
