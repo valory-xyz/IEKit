@@ -69,7 +69,6 @@ class Event(Enum):
     EVALUATE = "evaluate"
 
 
-
 class SynchronizedData(BaseSynchronizedData):
     """
     Class to represent the synchronized data.
@@ -342,7 +341,9 @@ class OlasWeekEvaluationRound(OnlyKeeperSendsRound):
         synchronized_data = self.synchronized_data.update(
             synchronized_data_class=SynchronizedData,
             **{
-                get_name(SynchronizedData.summary_tweets): self.keeper_payload["summary_tweets"],
+                get_name(SynchronizedData.summary_tweets): self.keeper_payload[
+                    "summary_tweets"
+                ],
                 get_name(
                     SynchronizedData.performed_olas_week_tasks
                 ): performed_olas_week_tasks,

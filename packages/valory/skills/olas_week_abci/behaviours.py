@@ -37,7 +37,6 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
 )
 from packages.valory.skills.abstract_round_abci.common import RandomnessBehaviour
 from packages.valory.skills.abstract_round_abci.models import Requests
-from packages.valory.skills.olas_week_abci.ceramic_db import CeramicDB
 from packages.valory.skills.olas_week_abci.dialogues import LlmDialogue, LlmDialogues
 from packages.valory.skills.olas_week_abci.models import (
     OpenAICalls,
@@ -439,7 +438,7 @@ class OlasWeekTweetCollectionBehaviour(OlasWeekBaseBehaviour):
             SharedState, self.context.state
         ).round_sequence.last_round_transition_timestamp.timestamp()
 
-        start_time = datetime.fromtimestamp(now_ts) - timedelta(days = 7)
+        start_time = datetime.fromtimestamp(now_ts) - timedelta(days=7)
 
         start_time_str = start_time.strftime("%Y-%m-%dT%H:%M:%S:00Z")
 
@@ -571,9 +570,7 @@ class OlasWeekTweetCollectionBehaviour(OlasWeekBaseBehaviour):
 
             break
 
-        self.context.logger.info(
-            f"Got {len(tweets)} new tweets"
-        )
+        self.context.logger.info(f"Got {len(tweets)} new tweets")
 
         return {
             "tweets": tweets,
@@ -591,15 +588,19 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            text = "\n\n".join([f"tweet_{i}: {tweet}" for i, tweet in enumerate(self.synchronized_data.weekly_tweets)])
-
-            summary_tweets = yield from self.evaluate_summary(
-                text
+            text = "\n\n".join(
+                [
+                    f"tweet_{i}: {tweet}"
+                    for i, tweet in enumerate(self.synchronized_data.weekly_tweets)
+                ]
             )
+
+            summary_tweets = yield from self.evaluate_summary(text)
 
             sender = self.context.agent_address
             payload = OlasWeekEvaluationPayload(
-                sender=sender, content=json.dumps({"summary_tweets": summary_tweets}, sort_keys=True)
+                sender=sender,
+                content=json.dumps({"summary_tweets": summary_tweets}, sort_keys=True),
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
