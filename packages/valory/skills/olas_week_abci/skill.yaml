@@ -8,15 +8,15 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeibvgxh4baqhxapbbryg7qlglf4czricwqqs34gjs5vwwppg5nuvsq
-  behaviours.py: bafybeihxkh6dt5lpc7mm4f7mrxmhe5gqtmorgnndgb2wloqgktikgxsifq
+  behaviours.py: bafybeiddxjurrxij3o6fw47bv4zwov5rturxlstdlajfyqq4g43sxuba7m
   ceramic_db.py: bafybeicusdonrdq6kirgkpdqmi3a6kmeal4nctnm5ozjqf5s5se6jpitjm
-  dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
-  fsm_specification.yaml: bafybeifirjhxaexbtjyqucshncrcz443sd5jvlvnt2lemeem55ups2hyri
-  handlers.py: bafybeid3nqvcyotqj5g5hlgrz57nf7vpjysmgvsxe3p7644f4z5dcwqn6u
-  models.py: bafybeihu3xkh7anfahnjfq354yl4fknlffxpzzthskmoqgiklqmkuz5zme
-  payloads.py: bafybeify23daknhnrwz2dhy7qpyaaloa6raqeq3dsb4hw4ezkcptwj3lji
-  prompts.py: bafybeieye3sswl33fli44fthyvclwurzswiccxyqncuxaqwg4nrauw5cbe
-  rounds.py: bafybeih3qdzcbxborunf6eded7ajxwkc6wq4lllsjfmarid4qtoblbi5di
+  dialogues.py: bafybeia7zebqkgbubzenskcrgjocgyd2pc3q5yxcjddte4emys32qt6xpm
+  fsm_specification.yaml: bafybeienycmc4m3wurhlsuj7hfumrsx5id3qfdn6eisoze4gdzeeojlrbu
+  handlers.py: bafybeialoqm2byetvqqrjujhk3qzgdgsrzmhakmzwdop2cr24kswipl6ti
+  models.py: bafybeif7kefuddm7gkgiwthozsijijegdul7s6z6pkxlld2rqambrevmc4
+  payloads.py: bafybeietg3ceghstjx5bytqv2t377k5pyww3cdq7zg7d7lxhscwmfelai4
+  prompts.py: bafybeidb7kevs5nsboodfipkkygk3biuckqwo2kr47lr37u5tyluvms6cu
+  rounds.py: bafybeihgmejoestbr3l5izuax5kkfjdjoaeqvwguyiyxmvjrp5yqyoqsb4
 fingerprint_ignore_patterns: []
 connections:
 - valory/openai:0.1.0:bafybeibn42k4zebenmjsumkngfxllxbofkwdno2fm65o6zf5y2uihmo2dq
