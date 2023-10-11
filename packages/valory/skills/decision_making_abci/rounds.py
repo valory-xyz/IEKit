@@ -57,7 +57,6 @@ class Event(Enum):
     READ_MANUAL_POINTS = "read_manual_points"
     WRITE_CONTRIBUTE_DB = "write_contribute_db"
     WEEK_IN_OLAS_CREATE = "week_in_olas_create"
-    WEEK_IN_OLAS_WRITE = "week_in_olas_write"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -168,7 +167,7 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
             # Event.NO_MAJORITY, Event.DONE, Event.UPDATE_CENTAURS, Event.READ_CENTAURS,
             # Event.SCHEDULED_TWEET, Event.LLM, Event.DAILY_ORBIS, Event.DAILY_TWEET, Event.NEXT_CENTAUR
             # Event.SCORE, Event.READ_CONTRIBUTE_DB, Event.READ_MANUAL_POINTS, Event.WRITE_CONTRIBUTE_DB
-            # Event.WEEK_IN_OLAS_WRITE, Event.WEEK_IN_OLAS_CREATE
+            # Event.WEEK_IN_OLAS_CREATE
 
             payload = json.loads(self.most_voted_payload)
             event = Event(payload["event"])
@@ -254,7 +253,6 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.DAILY_TWEET: FinishedDecisionMakingWriteTwitterRound,
             Event.SCHEDULED_TWEET: FinishedDecisionMakingWriteTwitterRound,
             Event.WEEK_IN_OLAS_CREATE: FinishedDecisionMakingWeekInOlasRound,
-            Event.WEEK_IN_OLAS_WRITE: FinishedDecisionMakingWriteTwitterRound,
             Event.DAILY_ORBIS: FinishedDecisionMakingWriteOrbisRound,
             Event.UPDATE_CENTAURS: FinishedDecisionMakingUpdateCentaurRound,
             Event.SCORE: FinishedDecisionMakingScoreRound,

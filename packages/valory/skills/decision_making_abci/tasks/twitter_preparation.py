@@ -223,29 +223,3 @@ class ScheduledTweetPreparation(TwitterPreparation):
         """Check whether users agree on posting"""
         voting_power = sum([int(list(v.values())[0]) for v in voters])
         return voting_power >= TWEET_CONSENSUS_WVEOLAS_WEI
-
-
-class WeekInOlasWritePreparation(TwitterPreparation):
-    """WeekInOlasWritePreparation"""
-
-    task_name = "week_in_olas"
-    task_event = Event.WEEK_IN_OLAS_WRITE.value
-
-    def get_tweet(self):
-        """Get the tweet"""
-        return self.synchronized_data.weekly_tweets
-
-    def _post_task(self):
-        """Task postprocessing"""
-        updates, event = super()._post_task()
-
-        # Update the last run time
-        centaurs_data = updates["centaurs_data"]
-        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
-        current_centaur["configuration"]["plugins"]["week_in_olas"][
-            "last_run"
-        ] = self.now_utc.strftime("%Y-%m-%d %H:%M:%S %Z")
-
-        updates["centaurs_data"] = centaurs_data
-
-        return updates, event

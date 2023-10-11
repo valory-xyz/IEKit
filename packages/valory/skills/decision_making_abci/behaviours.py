@@ -54,7 +54,6 @@ from packages.valory.skills.decision_making_abci.tasks.score_preparations import
 from packages.valory.skills.decision_making_abci.tasks.twitter_preparation import (
     DailyTweetPreparation,
     ScheduledTweetPreparation,
-    WeekInOlasWritePreparation,
 )
 from packages.valory.skills.decision_making_abci.tasks.week_in_olas_preparations import (
     WeekInOlasCreatePreparation,
@@ -90,10 +89,6 @@ previous_event_to_task_preparation_cls = {
     },
     Event.WEEK_IN_OLAS_CREATE.value: {
         "prev": WeekInOlasCreatePreparation,
-        "next": WeekInOlasWritePreparation,
-    },
-    Event.WEEK_IN_OLAS_WRITE.value: {
-        "prev": WeekInOlasWritePreparation,
         "next": ScheduledTweetPreparation,
     },
     Event.SCHEDULED_TWEET.value: {

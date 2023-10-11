@@ -18,6 +18,8 @@
 # ------------------------------------------------------------------------------
 
 """This package contains the logic for task preparations."""
+import uuid
+
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
@@ -40,6 +42,29 @@ class WeekInOlasCreatePreparation(TaskPreparation):
         return updates, self.task_event
 
     def _post_task(self):
-        """Preparations after running the task"""
-        updates = {}
-        return updates, None
+        """Task postprocessing"""
+        updates, event = super()._post_task()
+
+        # Update the last run time
+        centaurs_data = updates["centaurs_data"]
+        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
+        current_centaur["configuration"]["plugins"]["week_in_olas"][
+            "last_run"
+        ] = self.now_utc.strftime("%Y-%m-%d %H:%M:%S %Z")
+
+        # Add the new thread to proposed tweets
+        thread = {
+            "text": self.synchronized_data.summary_tweets,
+            "posted": False,
+            "voters": [],
+            "execute": False,
+            "proposer": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",  # safe address
+            "request_id": str(uuid.UUID(int=int(self.now_utc.timestamp()))),
+            "createdDate": self.now_utc.timestamp(),
+        }
+
+        current_centaur["plugins_data"]["week_in_olas"]["tweets"].append(thread)
+
+        updates["centaurs_data"] = centaurs_data
+
+        return updates, event
