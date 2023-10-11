@@ -144,7 +144,7 @@ class OlasWeekDecisionMakingRound(CollectSameUntilThresholdRound):
         if self.threshold_reached:
             event = Event(self.most_voted_payload)
             # Reference events to avoid tox -e check-abciapp-specs failures
-            # Event.DONE, Event.DB_UPDATE, Event.RETRIEVE_MENTIONS, Event.RETRIEVE_TWEETS, Event.OPENAI_CALL_CHECK, Event.EVALUATE, Event.DONE_SKIP, Event.SELECT_KEEPERS
+            # Event.DONE, Event.RETRIEVE_TWEETS, Event.OPENAI_CALL_CHECK, Event.EVALUATE, Event.DONE_SKIP, Event.SELECT_KEEPERS
             return self.synchronized_data, event
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
@@ -200,7 +200,7 @@ class OlasWeekOpenAICallCheckRound(CollectSameUntilThresholdRound):
 
 
 class OlasWeekTweetCollectionRound(CollectSameUntilThresholdRound):
-    """TwitterMentionsCollectionRound"""
+    """OlasWeekTweetCollectionRound"""
 
     payload_class = OlasWeekTweetCollectionPayload
     synchronized_data_class = SynchronizedData
@@ -245,7 +245,7 @@ class OlasWeekTweetCollectionRound(CollectSameUntilThresholdRound):
                 # API limits
                 if payload["error"] == ERROR_API_LIMITS:
                     performed_olas_week_tasks[
-                        "retrieve_mentions"
+                        "retrieve_tweets"
                     ] = Event.DONE_MAX_RETRIES.value
 
                     synchronized_data = self.synchronized_data.update(
@@ -268,7 +268,7 @@ class OlasWeekTweetCollectionRound(CollectSameUntilThresholdRound):
                 # Other API errors
                 if api_retries >= MAX_API_RETRIES:
                     performed_olas_week_tasks[
-                        "retrieve_mentions"
+                        "retrieve_tweets"
                     ] = Event.DONE_MAX_RETRIES.value
                     synchronized_data = self.synchronized_data.update(
                         synchronized_data_class=SynchronizedData,
@@ -295,7 +295,7 @@ class OlasWeekTweetCollectionRound(CollectSameUntilThresholdRound):
 
             # Happy path
             weekly_tweets = cast(SynchronizedData, self.synchronized_data).tweets
-            performed_olas_week_tasks["retrieve_mentions"] = Event.DONE.value
+            performed_olas_week_tasks["retrieve_tweets"] = Event.DONE.value
 
             updates = {
                 get_name(SynchronizedData.weekly_tweets): weekly_tweets,

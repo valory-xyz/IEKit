@@ -2,13 +2,13 @@ name: olas_week_abci
 author: valory
 version: 0.1.0
 type: skill
-description: A skill that reads mentions from the Twitter API and assigns scores to
-  the users.
+description: A skill that weekly tweets from a Twitter account and creates a summary
+  using a LLM.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeibvgxh4baqhxapbbryg7qlglf4czricwqqs34gjs5vwwppg5nuvsq
-  behaviours.py: bafybeiddxjurrxij3o6fw47bv4zwov5rturxlstdlajfyqq4g43sxuba7m
+  behaviours.py: bafybeibyy5z5qschybwbrheivotsw5hto3tv4ofenjqa6xxdz6ehnqqvze
   ceramic_db.py: bafybeicusdonrdq6kirgkpdqmi3a6kmeal4nctnm5ozjqf5s5se6jpitjm
   dialogues.py: bafybeia7zebqkgbubzenskcrgjocgyd2pc3q5yxcjddte4emys32qt6xpm
   fsm_specification.yaml: bafybeienycmc4m3wurhlsuj7hfumrsx5id3qfdn6eisoze4gdzeeojlrbu
@@ -16,7 +16,7 @@ fingerprint:
   models.py: bafybeif7kefuddm7gkgiwthozsijijegdul7s6z6pkxlld2rqambrevmc4
   payloads.py: bafybeietg3ceghstjx5bytqv2t377k5pyww3cdq7zg7d7lxhscwmfelai4
   prompts.py: bafybeidb7kevs5nsboodfipkkygk3biuckqwo2kr47lr37u5tyluvms6cu
-  rounds.py: bafybeihgmejoestbr3l5izuax5kkfjdjoaeqvwguyiyxmvjrp5yqyoqsb4
+  rounds.py: bafybeid2jlyzc3zctvhn55tpvkban7qva34whhpd2h7lnhwmuz6pefm4km
 fingerprint_ignore_patterns: []
 connections:
 - valory/openai:0.1.0:bafybeibn42k4zebenmjsumkngfxllxbofkwdno2fm65o6zf5y2uihmo2dq

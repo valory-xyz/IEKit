@@ -394,8 +394,8 @@ class OlasWeekTweetCollectionBehaviour(OlasWeekBaseBehaviour):
                 }
 
             else:
-                # Get mentions from Twitter
-                payload_data = yield from self._get_twitter_mentions(
+                # Get tweets from Twitter
+                payload_data = yield from self._get_tweets(
                     number_of_tweets_pulled_today=number_of_tweets_pulled_today
                 )
 
@@ -411,11 +411,11 @@ class OlasWeekTweetCollectionBehaviour(OlasWeekBaseBehaviour):
 
         self.set_done()
 
-    def _get_twitter_mentions(
+    def _get_tweets(
         self,
         number_of_tweets_pulled_today: int,
     ) -> Generator[None, None, Dict]:
-        """Get Twitter mentions"""
+        """Get Tweets"""
 
         api_base = self.params.twitter_api_base
         api_endpoint = self.params.twitter_tweets_args
@@ -425,7 +425,7 @@ class OlasWeekTweetCollectionBehaviour(OlasWeekBaseBehaviour):
         )
         if number_of_tweets_remaining_today <= 0:
             self.context.logger.info(
-                "Cannot retrieve twitter mentions, max number of tweets reached for today"
+                "Cannot retrieve tweets, max number of tweets reached for today"
             )
             return {
                 "tweets": None,
@@ -495,7 +495,7 @@ class OlasWeekTweetCollectionBehaviour(OlasWeekBaseBehaviour):
                 )
 
                 self.context.logger.error(
-                    f"Error retrieving mentions from Twitter [{response.status_code}]: {response.body}"
+                    f"Error retrieving tweets from Twitter [{response.status_code}]: {response.body}"
                     f"API limits: {remaining}/{limit}. Window reset: {reset}"
                 )
 

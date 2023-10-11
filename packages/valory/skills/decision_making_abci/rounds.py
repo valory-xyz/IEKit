@@ -168,7 +168,7 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
             # Event.NO_MAJORITY, Event.DONE, Event.UPDATE_CENTAURS, Event.READ_CENTAURS,
             # Event.SCHEDULED_TWEET, Event.LLM, Event.DAILY_ORBIS, Event.DAILY_TWEET, Event.NEXT_CENTAUR
             # Event.SCORE, Event.READ_CONTRIBUTE_DB, Event.READ_MANUAL_POINTS, Event.WRITE_CONTRIBUTE_DB
-            # Event.WEEK_IN_OLAS
+            # Event.WEEK_IN_OLAS_WRITE, Event.WEEK_IN_OLAS_CREATE
 
             payload = json.loads(self.most_voted_payload)
             event = Event(payload["event"])
