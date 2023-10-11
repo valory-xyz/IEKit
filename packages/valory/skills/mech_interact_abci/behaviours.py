@@ -20,29 +20,8 @@
 """This package contains round behaviours of MechInteractAbciApp."""
 
 from abc import ABC
-from typing import Generator, Set, Type, cast, Tuple
-
-from packages.valory.skills.abstract_round_abci.behaviours import (
-    AbstractRoundBehaviour,
-    BaseBehaviour,
-)
-from packages.valory.skills.abstract_round_abci.common import RandomnessBehaviour
-from packages.valory.skills.mech_interact_abci.models import Params
-from packages.valory.skills.mech_interact_abci.rounds import (
-    SynchronizedData,
-    MechInteractAbciApp,
-    MechRequestRound,
-    MechResponseRound,
-    MechSelectKeeperRound,
-    MechRandomnessRound
-)
-from packages.valory.skills.mech_interact_abci.payloads import (
-    MechRequestPayload,
-    MechResponsePayload,
-    MechRandomnessPayload,
-    MechSelectKeeperPayload,
-)
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, is_dataclass
+from datetime import datetime, timedelta
 from pathlib import Path
 from tempfile import mkdtemp
 from typing import Any, Dict, Generator, Optional, cast, Union
@@ -50,20 +29,9 @@ from uuid import uuid4
 
 import multibase
 import multicodec
-from aea.helpers.cid import to_v1
-from packages.valory.contracts.gnosis_safe.contract import GnosisSafeContract
-from packages.valory.protocols.contract_api import ContractApiMessage
-from packages.valory.skills.abstract_round_abci.base import get_name
-from packages.valory.skills.abstract_round_abci.io_.store import SupportedFiletype
-from packages.valory.skills.transaction_settlement_abci.payload_tools import (
-    hash_payload_to_hex,
-)
-import dataclasses
-from abc import ABC
-from datetime import datetime, timedelta
-from typing import Any, Callable, Generator, List, Optional, cast
-
 from aea.configurations.data_types import PublicId
+from aea.helpers.cid import to_v1
+from web3.constants import ADDRESS_ZERO
 
 from packages.valory.contracts.gnosis_safe.contract import (
     GnosisSafeContract,
@@ -73,11 +41,29 @@ from packages.valory.contracts.mech.contract import Mech
 from packages.valory.contracts.multisend.contract import MultiSendContract
 from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
+from packages.valory.skills.abstract_round_abci.base import get_name
 from packages.valory.skills.abstract_round_abci.behaviour_utils import (
     BaseBehaviour,
     TimeoutException,
 )
-import json
+from packages.valory.skills.abstract_round_abci.behaviours import (
+    AbstractRoundBehaviour,
+)
+from packages.valory.skills.abstract_round_abci.io_.store import SupportedFiletype
+from packages.valory.skills.mech_interact_abci.models import (
+    MechResponseSpecs, MechRequest,
+)
+from packages.valory.skills.mech_interact_abci.models import MultisendBatch, MechMetadata, \
+    MechInteractionResponse, MechParams
+from packages.valory.skills.mech_interact_abci.payloads import (
+    MechRequestPayload,
+    MechResponsePayload,
+)
+from packages.valory.skills.mech_interact_abci.rounds import (
+    MechInteractAbciApp,
+    MechRequestRound,
+    MechResponseRound,
+)
 from packages.valory.skills.mech_interact_abci.rounds import SynchronizedData
 from packages.valory.skills.transaction_settlement_abci.payload_tools import (
     hash_payload_to_hex,
@@ -95,8 +81,7 @@ WaitableConditionType = Generator[None, None, bool]
 METADATA_FILENAME = "metadata.json"
 V1_HEX_PREFIX = "f01"
 Ox = "0x"
-IPFS_HASH_PREFIX = "f01701220"
-ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
+IPFS_HASH_PREFIX = f"{V1_HEX_PREFIX}701220"
 
 # setting the safe gas to 0 means that all available gas will be used
 # which is what we want in most cases
@@ -576,7 +561,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         result = yield from self.contract_interact(
             performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
             # we do not need the address to get the block number, but the base method does
-            contract_address=ZERO_ADDRESS,
+            contract_address=ADDRESS_ZERO,
             contract_public_id=Mech.contract_id,
             contract_callable="get_block_number",
             data_key="number",
