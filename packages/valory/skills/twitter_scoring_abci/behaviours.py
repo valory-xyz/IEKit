@@ -1076,7 +1076,6 @@ class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
         TwitterDecisionMakingBehaviour,
         TwitterMentionsCollectionBehaviour,
         TwitterHashtagsCollectionBehaviour,
-        TweetEvaluationBehaviour,
         DBUpdateBehaviour,
         TwitterRandomnessBehaviour,
         TwitterSelectKeepersBehaviour,
