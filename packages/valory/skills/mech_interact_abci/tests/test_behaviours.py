@@ -19,17 +19,16 @@
 
 """This package contains round behaviours of MechInteractAbciApp."""
 
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Hashable, Optional, Type
-from dataclasses import dataclass, field
 
 import pytest
 
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
-from packages.valory.skills.abstract_round_abci.behaviours import (
-    AbstractRoundBehaviour,
-    BaseBehaviour,
-    make_degenerate_behaviour,
+from packages.valory.skills.abstract_round_abci.behaviours import BaseBehaviour
+from packages.valory.skills.abstract_round_abci.test_tools.base import (
+    FSMBehaviourBaseCase,
 )
 from packages.valory.skills.mech_interact_abci.behaviours import (
     MechInteractBaseBehaviour,
@@ -37,20 +36,7 @@ from packages.valory.skills.mech_interact_abci.behaviours import (
     MechRequestBehaviour,
     MechResponseBehaviour,
 )
-from packages.valory.skills.mech_interact_abci.rounds import (
-    SynchronizedData,
-    DegenerateRound,
-    Event,
-    MechInteractAbciApp,
-    FinishedMechRequestRound,
-    FinishedMechResponseRound,
-    MechRequestRound,
-    MechResponseRound,
-)
-
-from packages.valory.skills.abstract_round_abci.test_tools.base import (
-    FSMBehaviourBaseCase,
-)
+from packages.valory.skills.mech_interact_abci.rounds import Event, SynchronizedData
 
 
 @dataclass
@@ -135,4 +121,3 @@ class TestMechResponseBehaviour(BaseMechInteractTest):
         # TODO: mock the necessary calls
         # self.mock_ ...
         self.complete(test_case.event)
-

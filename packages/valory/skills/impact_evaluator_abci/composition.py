@@ -26,9 +26,9 @@ import packages.valory.skills.dynamic_nft_abci.rounds as DynamicNFTAbci
 import packages.valory.skills.generic_scoring_abci.rounds as GenericScoringAbci
 import packages.valory.skills.llm_abci.rounds as LLMAbciApp
 import packages.valory.skills.mech_interact_abci.rounds as MechInteractAbci
-import packages.valory.skills.transaction_settlement_abci.rounds as TxSettlementAbci
 import packages.valory.skills.registration_abci.rounds as RegistrationAbci
 import packages.valory.skills.reset_pause_abci.rounds as ResetAndPauseAbci
+import packages.valory.skills.transaction_settlement_abci.rounds as TxSettlementAbci
 import packages.valory.skills.twitter_scoring_abci.rounds as TwitterScoringAbci
 import packages.valory.skills.twitter_write_abci.rounds as TwitterWriteAbciApp
 from packages.valory.skills.abstract_round_abci.abci_app_chain import (
@@ -58,7 +58,6 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     DecisionMakingAbci.FinishedDecisionMakingScoreRound: GenericScoringAbci.GenericScoringRound,
     DecisionMakingAbci.FinishedDecisionMakingDoneRound: ResetAndPauseAbci.ResetAndPauseRound,
     GenericScoringAbci.FinishedGenericScoringRound: TwitterScoringAbci.TwitterDecisionMakingRound,
-
     # TODO: fix the chaining and the transitioning of the TwitterScoringAbci.
     #  The logic should be as follows:
     #  The app prepares a list of request to the mech
@@ -67,7 +66,6 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     #  TxSettlementAbci.FinishedTransactionSubmissionRound: MechInteractAbci.FinishedMechResponseRound
     #  TxSettlementAbci.FailedRound: based on app logic
     #  MechInteractAbci.FinishedMechResponseRound: based on app logic
-
     TwitterScoringAbci.FinishedTwitterCollectionRound: MechInteractAbci.MechResponseRound,
     MechInteractAbci.FinishedMechResponseRound: MechInteractAbci.MechRandomnessRound,
     MechInteractAbci.FinishedMechRequestRound: TwitterScoringAbci.TwitterDecisionMakingRound,

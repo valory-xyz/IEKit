@@ -20,6 +20,7 @@
 """This module contains the transaction payloads of the MechInteractAbciApp."""
 
 from dataclasses import dataclass
+
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 

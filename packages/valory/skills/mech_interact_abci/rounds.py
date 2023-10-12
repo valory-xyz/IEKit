@@ -21,21 +21,21 @@
 
 import json
 from enum import Enum
-from typing import Dict, List, Set, cast, Mapping
+from typing import Dict, List, Mapping, Set, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    CollectSameUntilThresholdRound,
     AppState,
+    CollectSameUntilThresholdRound,
+    CollectionRound,
     DegenerateRound,
     EventToTimeout,
     get_name,
-    CollectionRound,
 )
 from packages.valory.skills.mech_interact_abci.models import (
-    MechMetadata,
     MechInteractionResponse,
+    MechMetadata,
 )
 from packages.valory.skills.mech_interact_abci.payloads import (
     MechRequestPayload,

@@ -16,3 +16,5 @@
 #   limitations under the License.
 #
 # ------------------------------------------------------------------------------
+
+"""Tests for the mech interact abci skill."""

@@ -308,7 +308,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         )
 
     def _build_multisend_data(
-            self,
+        self,
     ) -> WaitableConditionType:
         """Get the multisend tx."""
         response_msg = yield from self.get_contract_api_response(
@@ -394,7 +394,9 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         ipfs_link = self.params.ipfs_address + v1_file_hash_hex
         self.context.logger.info(f"Prompt uploaded: {ipfs_link}")
         mech_request_data = v1_file_hash_hex[9:]
-        pending_response = MechInteractionResponse(nonce=metadata.nonce, data=mech_request_data)
+        pending_response = MechInteractionResponse(
+            nonce=metadata.nonce, data=mech_request_data
+        )
         self._v1_hex_truncated = Ox + mech_request_data
         self._pending_responses.append(pending_response)
         return True
@@ -440,8 +442,13 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             yield from self._prepare_safe_tx()
-            serialized_data = (json.dumps(data, cls=DataclassEncoder) for data in (self._mech_requests, self._pending_responses))
-            payload = MechRequestPayload(self.context.agent_address, self.tx_hex, self.price, *serialized_data)
+            serialized_data = (
+                json.dumps(data, cls=DataclassEncoder)
+                for data in (self._mech_requests, self._pending_responses)
+            )
+            payload = MechRequestPayload(
+                self.context.agent_address, self.tx_hex, self.price, *serialized_data
+            )
         yield from self.finish_behaviour(payload)
 
 
@@ -457,7 +464,9 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self._requests: List[MechRequest] = []
         self._response_hex: str = ""
         self._mech_responses: List[MechInteractionResponse] = []
-        self._current_mech_response: MechInteractionResponse = MechInteractionResponse(error="The mech's response has not been set!")
+        self._current_mech_response: MechInteractionResponse = MechInteractionResponse(
+            error="The mech's response has not been set!"
+        )
 
     @property
     def from_block(self) -> int:
@@ -626,7 +635,9 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             for step in (self._get_response_hash, self._get_response):
                 yield from self.wait_for_condition_with_sleep(step)
 
-            self.context.logger.info(f"Response has been received:\n{self._current_mech_response}")
+            self.context.logger.info(
+                f"Response has been received:\n{self._current_mech_response}"
+            )
             if self._current_mech_response.result is None:
                 self.context.logger.error(
                     f"There was an error in the mech's response: {self._current_mech_response.error}"
@@ -650,7 +661,4 @@ class MechInteractRoundBehaviour(AbstractRoundBehaviour):
 
     initial_behaviour_cls = MechRequestBehaviour
     abci_app_cls = MechInteractAbciApp  # type: ignore
-    behaviours: Set[Type[BaseBehaviour]] = [
-        MechRequestBehaviour,
-        MechResponseBehaviour
-    ]
+    behaviours: Set[Type[BaseBehaviour]] = [MechRequestBehaviour, MechResponseBehaviour]

@@ -19,7 +19,7 @@
 
 """This module contains the class to connect to a Mech contract."""
 
-from typing import Dict, Optional, cast, List, Any
+from typing import Any, Dict, List, cast
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId
@@ -27,7 +27,8 @@ from aea.contracts.base import Contract
 from aea.crypto.base import LedgerApi
 from aea_ledger_ethereum import EthereumApi
 from eth_typing import HexStr
-from web3.types import TxReceipt, EventData, BlockIdentifier, BlockData
+from web3.types import BlockData, BlockIdentifier, EventData, TxReceipt
+
 
 PUBLIC_ID = PublicId.from_str("valory/mech:0.1.0")
 

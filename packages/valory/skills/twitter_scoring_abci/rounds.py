@@ -37,13 +37,13 @@ from packages.valory.skills.abstract_round_abci.base import (
 )
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
+    PostMechRequestPayload,
     PreMechRequestPayload,
     TwitterDecisionMakingPayload,
     TwitterHashtagsCollectionPayload,
     TwitterMentionsCollectionPayload,
     TwitterRandomnessPayload,
     TwitterSelectKeepersPayload,
-    PostMechRequestPayload
 )
 
 
@@ -451,9 +451,7 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
             payload = json.loads(self.most_voted_payload)
             new_mech_requests = payload["mech_requests"]
 
-            mech_requests = cast(
-                SynchronizedData, self.synchronized_data
-            ).mech_requests
+            mech_requests = cast(SynchronizedData, self.synchronized_data).mech_requests
 
             mech_requests = mech_requests.extend(new_mech_requests)
 

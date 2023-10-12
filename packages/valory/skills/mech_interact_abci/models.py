@@ -20,14 +20,13 @@
 """This module contains the models for the abci skill of MechInteractAbciApp."""
 
 from dataclasses import dataclass
-from typing import Optional, Any
+from typing import Any, Optional
 
 from aea.exceptions import enforce
 from hexbytes import HexBytes
 
 from packages.valory.contracts.multisend.contract import MultiSendOperation
-from packages.valory.skills.abstract_round_abci.models import ApiSpecs
-from packages.valory.skills.abstract_round_abci.models import BaseParams
+from packages.valory.skills.abstract_round_abci.models import ApiSpecs, BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
 )
@@ -36,6 +35,7 @@ from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
 from packages.valory.skills.mech_interact_abci.rounds import MechInteractAbciApp
+
 
 Params = BaseParams
 Requests = BaseRequests
@@ -53,12 +53,16 @@ class SharedState(BaseSharedState):
 
 
 class MechParams(BaseParams):
+    """The mech interact abci skill's parameters."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Set up the mech-interaction parameters."""
         multisend_address = kwargs.get("multisend_address", None)
         enforce(multisend_address is not None, "Multisend address not specified!")
         self.multisend_address: str = multisend_address
-        self.multisend_batch_size: int = self._ensure("multisend_batch_size", kwargs, int)
+        self.multisend_batch_size: int = self._ensure(
+            "multisend_batch_size", kwargs, int
+        )
         self.mech_agent_address: str = self._ensure("mech_agent_address", kwargs, str)
         self._ipfs_address: str = self._ensure("ipfs_address", kwargs, str)
         super().__init__(*args, **kwargs)
