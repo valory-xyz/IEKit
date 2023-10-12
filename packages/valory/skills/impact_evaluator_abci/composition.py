@@ -18,12 +18,15 @@
 # ------------------------------------------------------------------------------
 
 """This package contains round behaviours of ImpactEvaluatorSkillAbciApp."""
+
 import packages.valory.skills.ceramic_read_abci.rounds as CeramicReadAbci
 import packages.valory.skills.ceramic_write_abci.rounds as CeramicWriteAbci
 import packages.valory.skills.decision_making_abci.rounds as DecisionMakingAbci
 import packages.valory.skills.dynamic_nft_abci.rounds as DynamicNFTAbci
 import packages.valory.skills.generic_scoring_abci.rounds as GenericScoringAbci
 import packages.valory.skills.llm_abci.rounds as LLMAbciApp
+import packages.valory.skills.mech_interact_abci.rounds as MechInteractAbci
+import packages.valory.skills.transaction_settlement_abci.rounds as TxSettlementAbci
 import packages.valory.skills.registration_abci.rounds as RegistrationAbci
 import packages.valory.skills.reset_pause_abci.rounds as ResetAndPauseAbci
 import packages.valory.skills.twitter_scoring_abci.rounds as TwitterScoringAbci
@@ -38,7 +41,6 @@ from packages.valory.skills.termination_abci.rounds import (
     Event,
     TerminationAbciApp,
 )
-import packages.valory.skills.mech_interact_abci.rounds as MechInteractAbci
 
 
 # Here we define how the transition between the FSMs should happen
@@ -56,6 +58,16 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     DecisionMakingAbci.FinishedDecisionMakingScoreRound: GenericScoringAbci.GenericScoringRound,
     DecisionMakingAbci.FinishedDecisionMakingDoneRound: ResetAndPauseAbci.ResetAndPauseRound,
     GenericScoringAbci.FinishedGenericScoringRound: TwitterScoringAbci.TwitterDecisionMakingRound,
+
+    # TODO: fix the chaining and the transitioning of the TwitterScoringAbci.
+    #  The logic should be as follows:
+    #  The app prepares a list of request to the mech
+    #  The provided nonce should be a uuid which you can later use to map back to your data.
+    #  MechInteractAbci.FinishedMechRequestRound: TxSettlementAbci.RandomnessTransactionSubmissionRound
+    #  TxSettlementAbci.FinishedTransactionSubmissionRound: MechInteractAbci.FinishedMechResponseRound
+    #  TxSettlementAbci.FailedRound: based on app logic
+    #  MechInteractAbci.FinishedMechResponseRound: based on app logic
+
     TwitterScoringAbci.FinishedTwitterCollectionRound: MechInteractAbci.MechResponseRound,
     MechInteractAbci.FinishedMechResponseRound: MechInteractAbci.MechRandomnessRound,
     MechInteractAbci.FinishedMechRequestRound: TwitterScoringAbci.TwitterDecisionMakingRound,
