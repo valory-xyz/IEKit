@@ -29,7 +29,6 @@ from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
 
 from web3 import Web3
 
-
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
@@ -44,13 +43,13 @@ from packages.valory.skills.twitter_scoring_abci.models import (
 )
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
+    PostMechRequestPayload,
     PreMechRequestPayload,
     TwitterDecisionMakingPayload,
     TwitterHashtagsCollectionPayload,
     TwitterMentionsCollectionPayload,
     TwitterRandomnessPayload,
     TwitterSelectKeepersPayload,
-    PostMechRequestPayload
 )
 from packages.valory.skills.twitter_scoring_abci.prompts import tweet_evaluation_prompt
 from packages.valory.skills.twitter_scoring_abci.rounds import (
@@ -58,15 +57,15 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     ERROR_API_LIMITS,
     ERROR_GENERIC,
     Event,
-    SynchronizedData,
+    PostMechRequestRound,
     PreMechRequestRound,
+    SynchronizedData,
     TwitterDecisionMakingRound,
     TwitterHashtagsCollectionRound,
     TwitterMentionsCollectionRound,
     TwitterRandomnessRound,
     TwitterScoringAbciApp,
     TwitterSelectKeepersRound,
-    PostMechRequestRound
 )
 
 
@@ -832,11 +831,22 @@ class PreMechRequestBehaviour(TwitterScoringBaseBehaviour):
                     # Score already requested
                     continue
 
-                new_mech_requests.append({"tweet_id": tweet_id, "tool": "openai", "prompt": tweet_evaluation_prompt.replace("{user_text}", tweet["text"])})
+                new_mech_requests.append(
+                    {
+                        "tweet_id": tweet_id,
+                        "tool": "openai",
+                        "prompt": tweet_evaluation_prompt.replace(
+                            "{user_text}", tweet["text"]
+                        ),
+                    }
+                )
 
             sender = self.context.agent_address
             payload = PreMechRequestPayload(
-                sender=sender, content=json.dumps({"mech_requests": new_mech_requests}, sort_keys=True)
+                sender=sender,
+                content=json.dumps(
+                    {"mech_requests": new_mech_requests}, sort_keys=True
+                ),
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -872,7 +882,10 @@ class PostMechRequestBehaviour(TwitterScoringBaseBehaviour):
 
             sender = self.context.agent_address
             payload = PostMechRequestPayload(
-                sender=sender, content=json.dumps({"mech_requests": mech_requests, "tweets": tweets}, sort_keys=True)
+                sender=sender,
+                content=json.dumps(
+                    {"mech_requests": mech_requests, "tweets": tweets}, sort_keys=True
+                ),
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -1063,7 +1076,6 @@ class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
         TwitterDecisionMakingBehaviour,
         TwitterMentionsCollectionBehaviour,
         TwitterHashtagsCollectionBehaviour,
-        TweetEvaluationBehaviour,
         DBUpdateBehaviour,
         TwitterRandomnessBehaviour,
         TwitterSelectKeepersBehaviour,

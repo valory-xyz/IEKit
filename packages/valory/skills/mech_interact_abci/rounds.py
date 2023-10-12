@@ -19,38 +19,42 @@
 
 """This package contains the rounds of MechInteractAbciApp."""
 
+import json
 from enum import Enum
-from typing import Dict, List, Optional, Set, Tuple, cast
+from typing import Dict, List, Mapping, Set, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    CollectSameUntilThresholdRound,
     AppState,
-    BaseSynchronizedData,
+    CollectSameUntilThresholdRound,
+    CollectionRound,
     DegenerateRound,
     EventToTimeout,
-    OnlyKeeperSendsRound,
-    get_name
+    get_name,
 )
-
+from packages.valory.skills.mech_interact_abci.models import (
+    MechInteractionResponse,
+    MechMetadata,
+)
 from packages.valory.skills.mech_interact_abci.payloads import (
     MechRequestPayload,
     MechResponsePayload,
-    MechRandomnessPayload,
-    MechSelectKeeperPayload
+)
+from packages.valory.skills.transaction_settlement_abci.rounds import (
+    SynchronizedData as TxSynchronizedData,
 )
 
 
 class Event(Enum):
     """MechInteractAbciApp Events"""
 
-    ROUND_TIMEOUT = "round_timeout"
     DONE = "done"
     NO_MAJORITY = "no_majority"
+    ROUND_TIMEOUT = "round_timeout"
 
 
-class SynchronizedData(BaseSynchronizedData):
+class SynchronizedData(TxSynchronizedData):
     """
     Class to represent the synchronized data.
 
@@ -58,108 +62,64 @@ class SynchronizedData(BaseSynchronizedData):
     """
 
     @property
-    def mech_requests(self) -> list:
-        """Get the mech requests."""
-        return cast(list, self.db.get("mech_requests", []))
-
+    def mech_price(self) -> int:
+        """Get the mech's request price."""
+        return int(self.db.get_strict("mech_price"))
 
     @property
-    def final_tx_hash(self) -> str:
-        """Get the verified tx hash."""
-        return cast(str, self.db.get_strict("final_tx_hash"))
+    def mech_requests(self) -> List[MechMetadata]:
+        """Get the mech requests."""
+        serialized = self.db.get("mech_requests", "[]")
+        requests = json.loads(serialized)
+        return [MechMetadata(**metadata_item) for metadata_item in requests]
+
+    @property
+    def mech_responses(self) -> List[MechInteractionResponse]:
+        """Get the mech responses."""
+        serialized = self.db.get("mech_responses", "[]")
+        responses = json.loads(serialized)
+        return [MechInteractionResponse(**response_item) for response_item in responses]
+
+    @property
+    def participant_to_requests(self) -> Mapping[str, MechRequestPayload]:
+        """Get the `participant_to_requests`."""
+        serialized = self.db.get_strict("participant_to_requests")
+        deserialized = CollectionRound.deserialize_collection(serialized)
+        return cast(Mapping[str, MechRequestPayload], deserialized)
+
+    @property
+    def participant_to_responses(self) -> Mapping[str, MechResponsePayload]:
+        """Get the `participant_to_responses`."""
+        serialized = self.db.get_strict("participant_to_responses")
+        deserialized = CollectionRound.deserialize_collection(serialized)
+        return cast(Mapping[str, MechResponsePayload], deserialized)
 
 
-class MechRequestRound(OnlyKeeperSendsRound):
-    """MechRequestRound"""
+class MechRequestRound(CollectSameUntilThresholdRound):
+    """A round for performing requests to a Mech."""
 
     payload_class = MechRequestPayload
     synchronized_data_class = SynchronizedData
-
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
-        """Process the end of the block."""
-        if self.keeper_payload is None:
-            return None
-
-        mech_requests = cast(
-            SynchronizedData, self.synchronized_data
-        ).mech_requests
-
-        # Assing the request hash to its corresponding requests
-        for r in mech_requests:
-            if "tx_hash" not in r:
-                r["tx_hash"] = cast(MechRequestPayload, self.keeper_payload).tx_hash  # FIXME: do multi-requests have 1 hash only?
-
-        synchronized_data = self.synchronized_data.update(
-            synchronized_data_class=SynchronizedData,
-            **{
-                get_name(
-                    SynchronizedData.mech_requests
-                ): mech_requests
-            },
-        )
-
-        return synchronized_data, Event.DONE
-
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    selection_key = (
+        get_name(SynchronizedData.most_voted_tx_hash),
+        get_name(SynchronizedData.mech_price),
+        get_name(SynchronizedData.mech_requests),
+        get_name(SynchronizedData.mech_responses),
+    )
+    collection_key = get_name(SynchronizedData.participant_to_requests)
 
 
 class MechResponseRound(CollectSameUntilThresholdRound):
-    """MechResponseRound"""
+    """A round for collecting the responses from a Mech."""
 
-    payload_class = MechResponsePayload
-    synchronized_data_class = SynchronizedData
-
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
-        """Process the end of the block."""
-        if self.threshold_reached:
-
-            mech_requests = cast(
-                SynchronizedData, self.synchronized_data
-            ).mech_requests
-
-            # Assign the response to its corresponding requests
-            response = self.most_voted_payload.request
-            # FIXME
-            for request in mech_requests:
-
-            synchronized_data = self.synchronized_data.update(
-                synchronized_data_class=SynchronizedData,
-                **{
-                    get_name(
-                        SynchronizedData.mech_requests
-                    ): mech_requests
-                },
-            )
-
-            return synchronized_data, Event.DONE
-        if not self.is_majority_possible(
-            self.collection, self.synchronized_data.nb_participants
-        ):
-            return self.synchronized_data, Event.NO_MAJORITY
-        return None
-
-
-class MechRandomnessRound(CollectSameUntilThresholdRound):
-    """A round for generating randomness"""
-
-    payload_class = MechRandomnessPayload
+    payload_class = MechRequestPayload
     synchronized_data_class = SynchronizedData
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
-    collection_key = get_name(SynchronizedData.participant_to_randomness)
-    selection_key = (
-        get_name(SynchronizedData.most_voted_randomness),
-        get_name(SynchronizedData.most_voted_randomness),
-    )
-
-class MechSelectKeeperRound(CollectSameUntilThresholdRound):
-    """A round in which a keeper is selected for transaction submission"""
-
-    payload_class = MechSelectKeeperPayload
-    synchronized_data_class = SynchronizedData
-    done_event = Event.DONE
-    no_majority_event = Event.NO_MAJORITY
-    collection_key = get_name(SynchronizedData.participant_to_selection)
-    selection_key = get_name(SynchronizedData.most_voted_keeper_address)
+    selection_key = get_name(SynchronizedData.mech_responses)
+    collection_key = get_name(SynchronizedData.participant_to_responses)
 
 
 class FinishedMechRequestRound(DegenerateRound):
@@ -174,38 +134,32 @@ class MechInteractAbciApp(AbciApp[Event]):
     """MechInteractAbciApp"""
 
     initial_round_cls: AppState = MechRequestRound
-    initial_states: Set[AppState] = {MechResponseRound, MechRandomnessRound}
+    initial_states: Set[AppState] = {MechRequestRound, MechResponseRound}
     transition_function: AbciAppTransitionFunction = {
-        MechRandomnessRound: {
-            Event.DONE: MechSelectKeeperRound,
-            Event.NO_MAJORITY: MechSelectKeeperRound,
-            Event.ROUND_TIMEOUT: MechSelectKeeperRound
-        },
-        MechSelectKeeperRound: {
-            Event.DONE: MechRequestRound,
-            Event.NO_MAJORITY: MechRandomnessRound,
-            Event.ROUND_TIMEOUT: MechRandomnessRound
-        },
         MechRequestRound: {
             Event.DONE: FinishedMechRequestRound,
-            Event.ROUND_TIMEOUT: MechRandomnessRound
+            Event.NO_MAJORITY: MechRequestRound,
+            Event.ROUND_TIMEOUT: MechRequestRound,
         },
         MechResponseRound: {
             Event.DONE: FinishedMechResponseRound,
             Event.NO_MAJORITY: MechResponseRound,
-            Event.ROUND_TIMEOUT: MechResponseRound
+            Event.ROUND_TIMEOUT: MechResponseRound,
         },
         FinishedMechRequestRound: {},
-        FinishedMechResponseRound: {}
+        FinishedMechResponseRound: {},
     }
     final_states: Set[AppState] = {FinishedMechRequestRound, FinishedMechResponseRound}
     event_to_timeout: EventToTimeout = {}
     cross_period_persisted_keys: Set[str] = set()
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        MechResponseRound: set(),
-    	MechRequestRound: set(),
+        MechRequestRound: set(get_name(SynchronizedData.mech_requests)),
+        MechResponseRound: set(get_name(SynchronizedData.final_tx_hash)),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedMechRequestRound: set(),
-    	FinishedMechResponseRound: set(),
+        FinishedMechRequestRound: {
+            get_name(SynchronizedData.final_tx_hash),
+            get_name(SynchronizedData.mech_price),
+        },
+        FinishedMechResponseRound: set(get_name(SynchronizedData.mech_responses)),
     }

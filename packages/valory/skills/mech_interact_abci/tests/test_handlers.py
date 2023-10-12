@@ -24,4 +24,3 @@ import packages.valory.skills.mech_interact_abci.handlers  # noqa
 
 def test_import() -> None:
     """Test that the 'handlers.py' of the MechInteract can be imported."""
-

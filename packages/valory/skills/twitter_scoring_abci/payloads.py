@@ -20,7 +20,6 @@
 """This module contains the transaction payloads of the TwitterScoringAbciApp."""
 
 from dataclasses import dataclass
-from typing import Optional
 
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 

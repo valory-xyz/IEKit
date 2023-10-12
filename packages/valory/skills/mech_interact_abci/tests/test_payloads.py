@@ -19,16 +19,12 @@
 
 """This package contains payload tests for the MechInteractAbciApp."""
 
-from typing import Type, Hashable
 from dataclasses import dataclass
+from typing import Hashable, Type
 
 import pytest
 
-from packages.valory.skills.mech_interact_abci.payloads import (
-    BaseTxPayload,
-    MechRequestPayload,
-    MechResponsePayload,
-)
+from packages.valory.skills.mech_interact_abci.payloads import BaseTxPayload
 
 
 @dataclass
@@ -48,4 +44,3 @@ def test_payloads(test_case: PayloadTestCase) -> None:
     payload = test_case.payload_cls(sender="sender", content=test_case.content)
     assert payload.sender == "sender"
     assert payload.from_json(payload.json) == payload
-

@@ -17,15 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Test the models.py module of the MechInteract."""
-
-from packages.valory.skills.abstract_round_abci.test_tools.base import DummyContext
-from packages.valory.skills.mech_interact_abci.models import SharedState
-
-
-class TestSharedState:
-    """Test SharedState of MechInteract."""
-
-    def test_initialization(self) -> None:
-        """Test initialization."""
-        SharedState(name="", skill_context=DummyContext())
+"""This module contains the support resources for an agent Mech."""
