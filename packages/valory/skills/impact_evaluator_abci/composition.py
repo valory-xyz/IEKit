@@ -101,6 +101,8 @@ ImpactEvaluatorSkillAbciApp = chain(
         DynamicNFTAbci.DynamicNFTAbciApp,
         CeramicWriteAbci.CeramicWriteAbciApp,
         ResetAndPauseAbci.ResetPauseAbciApp,
+        TxSettlementAbci.TransactionSubmissionAbciApp,
+        MechInteractAbci.MechInteractAbciApp,
     ),
     abci_app_transition_mapping,
 ).add_background_app(termination_config)
