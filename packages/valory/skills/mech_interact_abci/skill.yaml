@@ -155,5 +155,10 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
-dependencies: {}
+dependencies:
+  open-aea-web3:
+    version: ==6.0.1
+  hexbytes: {}
+  py-multicodec: {}
+  py-multibase: {}
 is_abstract: false
