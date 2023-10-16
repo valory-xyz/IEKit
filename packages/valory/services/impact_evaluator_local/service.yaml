@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeicrf6rtgehmch3frbypmtoyezgk55wbjd2tmep4se55kk24takkwa
+agent: valory/impact_evaluator:0.1.0:bafybeihirytmmua4677vv5avrzias2vd47hvziogaq2mfucg5lmlqctz24
 number_of_agents: 1
 deployment:
   agent:
@@ -106,6 +106,8 @@ models:
       twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
       twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
       twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
+      twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
+      twitter_tweets_args: ${TWITTER_TWEETS_ARGS:str:tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
       tx_timeout: 10.0
       use_termination: ${USE_TERMINATION:bool:false}
       validate_timeout: 1205

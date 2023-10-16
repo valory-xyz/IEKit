@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the shared state for the abci skill of TwitterScoringAbciApp."""
+"""This module contains the shared state for the abci skill of WeekInOlasAbciApp."""
 
 from datetime import datetime
 from typing import Any
@@ -30,13 +30,13 @@ from packages.valory.skills.abstract_round_abci.models import Requests as BaseRe
 from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
-from packages.valory.skills.twitter_scoring_abci.rounds import TwitterScoringAbciApp
+from packages.valory.skills.olas_week_abci.rounds import WeekInOlasAbciApp
 
 
 class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
 
-    abci_app_cls = TwitterScoringAbciApp
+    abci_app_cls = WeekInOlasAbciApp
 
 
 class RandomnessApi(ApiSpecs):
@@ -84,12 +84,9 @@ class Params(BaseParams):
         """Initialize the parameters object."""
         self.twitter_api_base = kwargs.get("twitter_api_base")
         self.twitter_api_bearer_token = kwargs.get("twitter_api_bearer_token")
-        self.twitter_mentions_endpoint = kwargs.get("twitter_mentions_endpoint")
-        self.twitter_mentions_args = kwargs.get("twitter_mentions_args")
+        self.twitter_tweets_endpoint = kwargs.get("twitter_tweets_endpoint")
+        self.twitter_tweets_args = kwargs.get("twitter_tweets_args")
         self.twitter_max_pages = kwargs.get("twitter_max_pages")
-        self.twitter_search_endpoint = kwargs.get("twitter_search_endpoint")
-        self.twitter_search_args = kwargs.get("twitter_search_args")
-        self.max_points_per_period = kwargs.get("max_points_per_period")
         self.tweet_evaluation_round_timeout = kwargs.get(
             "tweet_evaluation_round_timeout"
         )

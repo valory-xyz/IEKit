@@ -56,6 +56,8 @@ from packages.valory.skills.impact_evaluator_abci.composition import (
 )
 from packages.valory.skills.llm_abci.models import Params as LLMAbciParams
 from packages.valory.skills.llm_abci.rounds import Event as LLMEvent
+from packages.valory.skills.olas_week_abci.models import Params as OlasWeekAbciParams
+from packages.valory.skills.olas_week_abci.rounds import Event as OlasWeekEvent
 from packages.valory.skills.reset_pause_abci.rounds import Event as ResetPauseEvent
 from packages.valory.skills.termination_abci.models import TerminationParams
 from packages.valory.skills.twitter_scoring_abci.models import (
@@ -72,6 +74,7 @@ DynamicNFTParams = DynamicNFTAbciParams
 TwitterScoringParams = TwitterScoringAbciParams
 LLMParams = LLMAbciParams
 DecisionMakingParams = DecisionMakingAbciParams
+OlasWeekParams = OlasWeekAbciParams
 
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
@@ -123,6 +126,9 @@ class SharedState(BaseSharedState):
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             DecisionMakingEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds
+        ImpactEvaluatorSkillAbciApp.event_to_timeout[
+            OlasWeekEvent.ROUND_TIMEOUT
+        ] = self.context.params.round_timeout_seconds
 
 
 class Params(
@@ -132,5 +138,6 @@ class Params(
     DynamicNFTParams,
     DecisionMakingParams,
     TerminationParams,
+    OlasWeekParams,
 ):
     """A model to represent params for multiple abci apps."""

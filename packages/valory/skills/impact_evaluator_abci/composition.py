@@ -25,6 +25,7 @@ import packages.valory.skills.decision_making_abci.rounds as DecisionMakingAbci
 import packages.valory.skills.dynamic_nft_abci.rounds as DynamicNFTAbci
 import packages.valory.skills.generic_scoring_abci.rounds as GenericScoringAbci
 import packages.valory.skills.llm_abci.rounds as LLMAbciApp
+import packages.valory.skills.olas_week_abci.rounds as WeekInOlasAbciApp
 import packages.valory.skills.mech_interact_abci.rounds as MechInteractAbci
 import packages.valory.skills.registration_abci.rounds as RegistrationAbci
 import packages.valory.skills.reset_pause_abci.rounds as ResetAndPauseAbci
@@ -57,6 +58,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     DecisionMakingAbci.FinishedDecisionMakingReadManualPointsRound: CeramicReadAbci.StreamReadRound,
     DecisionMakingAbci.FinishedDecisionMakingScoreRound: GenericScoringAbci.GenericScoringRound,
     DecisionMakingAbci.FinishedDecisionMakingDoneRound: ResetAndPauseAbci.ResetAndPauseRound,
+    DecisionMakingAbci.FinishedDecisionMakingWeekInOlasRound: WeekInOlasAbciApp.OlasWeekDecisionMakingRound,
     GenericScoringAbci.FinishedGenericScoringRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     # TODO: fix the chaining and the transitioning of the TwitterScoringAbci.
     #  The logic should be as follows:
@@ -70,6 +72,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     MechInteractAbci.FinishedMechResponseRound: MechInteractAbci.MechRandomnessRound,
     MechInteractAbci.FinishedMechRequestRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     TwitterScoringAbci.FinishedTwitterScoringRound: DynamicNFTAbci.TokenTrackRound,
+    WeekInOlasAbciApp.FinishedWeekInOlasRound: DecisionMakingAbci.DecisionMakingRound,
     DynamicNFTAbci.FinishedTokenTrackRound: DecisionMakingAbci.DecisionMakingRound,
     LLMAbciApp.FinishedLLMRound: DecisionMakingAbci.DecisionMakingRound,
     TwitterWriteAbciApp.FinishedTwitterWriteRound: DecisionMakingAbci.DecisionMakingRound,
@@ -99,6 +102,7 @@ ImpactEvaluatorSkillAbciApp = chain(
         DynamicNFTAbci.DynamicNFTAbciApp,
         CeramicWriteAbci.CeramicWriteAbciApp,
         ResetAndPauseAbci.ResetPauseAbciApp,
+        WeekInOlasAbciApp.WeekInOlasAbciApp,
         TxSettlementAbci.TransactionSubmissionAbciApp,
         MechInteractAbci.MechInteractAbciApp,
     ),

@@ -1,30 +1,22 @@
-name: twitter_scoring_abci
+name: olas_week_abci
 author: valory
 version: 0.1.0
 type: skill
-description: A skill that reads mentions from the Twitter API and assigns scores to
-  the users.
+description: A skill that weekly tweets from a Twitter account and creates a summary
+  using a LLM.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
-  behaviours.py: bafybeif7x53ygd3jyoghbnxavzhhdhliaa3mcxe5n5uui3aa6vgd6v5t5e
+  __init__.py: bafybeibvgxh4baqhxapbbryg7qlglf4czricwqqs34gjs5vwwppg5nuvsq
+  behaviours.py: bafybeicemkdzirevjo2vkuay4zrb2scfaosrw2wixt2vcmk7ewufjtofla
   ceramic_db.py: bafybeicusdonrdq6kirgkpdqmi3a6kmeal4nctnm5ozjqf5s5se6jpitjm
-  dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
-  fsm_specification.yaml: bafybeie6k4aanmwcrghspbqywdh2srrudtkhnbbhqm3ovcz5k4fa5dybrq
-  handlers.py: bafybeid3nqvcyotqj5g5hlgrz57nf7vpjysmgvsxe3p7644f4z5dcwqn6u
-  models.py: bafybeigag7tmzi7caob46mowxnqhhcpyxqqxhchj4mqyjmgtcglx45dyua
-  payloads.py: bafybeibeqiwnua7uewbv5a7epebshjpueuqpcbw6s2y3u62kasdhiijs5i
-  prompts.py: bafybeieiuqn427bgwfnzynxf3vtqfpvmqqscs5tyw4oibfofwropifotke
-  rounds.py: bafybeigtzsvklrwxyah2syrzjruufr6uuninyh6flbrwetcgcb5pl4czra
-  tests/__init__.py: bafybeidwzzd4ejsyf3aryd5kmrvd63h7ajgqyrxphmfaacvpjnneacejay
-  tests/test_behaviours.py: bafybeihc732whmbn74oxtrua3c77gt4py4tpc5v3drdhg2xc2lxtcqie4e
-  tests/test_ceramic_db.py: bafybeif2v7btjphbqabq6qdmfeyweg765seon74acg5vrrvznivzg2prey
-  tests/test_dialogues.py: bafybeiheyq7klonzb7rnjub2i22h7bmsnoimn2pq4j7ofikt3yovstvgt4
-  tests/test_handlers.py: bafybeigevirvi3saepukke2zmp334btgsdxhj55o2vawj3hqam63miirg4
-  tests/test_models.py: bafybeihaiirqmcsshghztl5lvqjzem6y6rdeefhtiycrhh45v7cuwnmdz4
-  tests/test_payloads.py: bafybeihg7ndxuj4lehpmgpdngpzihhmaiy7u5kaylukneavsklfwki5j6q
-  tests/test_rounds.py: bafybeibbznfio2tgvgzpc4l3jm6jwzd5ifflzgm6aflurllseeolef3ydm
+  dialogues.py: bafybeia7zebqkgbubzenskcrgjocgyd2pc3q5yxcjddte4emys32qt6xpm
+  fsm_specification.yaml: bafybeienycmc4m3wurhlsuj7hfumrsx5id3qfdn6eisoze4gdzeeojlrbu
+  handlers.py: bafybeialoqm2byetvqqrjujhk3qzgdgsrzmhakmzwdop2cr24kswipl6ti
+  models.py: bafybeihsqzu4n2r5a4wlvcpmpnwkbtp3sr7axry53to5gpxoacqbkhx5cq
+  payloads.py: bafybeietg3ceghstjx5bytqv2t377k5pyww3cdq7zg7d7lxhscwmfelai4
+  prompts.py: bafybeicz63x6rhrgm5amjkfsovnqvxqyzicfhhae3orw7jaubme2npnn2a
+  rounds.py: bafybeihy72ld66pzdamubpuj6obtbnr4tbzsxl4axb36maw4eru6bb66em
 fingerprint_ignore_patterns: []
 connections:
 - valory/openai:0.1.0:bafybeibn42k4zebenmjsumkngfxllxbofkwdno2fm65o6zf5y2uihmo2dq
@@ -36,7 +28,7 @@ skills:
 behaviours:
   main:
     args: {}
-    class_name: TwitterScoringRoundBehaviour
+    class_name: OlasWeekRoundBehaviour
 handlers:
   abci:
     args: {}
@@ -134,12 +126,10 @@ models:
       tx_timeout: 10.0
       twitter_api_base: https://api.twitter.com/
       twitter_api_bearer_token: <default_bearer_token>
-      twitter_mentions_endpoint: 2/users/1450081635559428107/mentions?
-      twitter_mentions_args: tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
+      twitter_tweets_endpoint: 2/users/1450081635559428107/tweets?
+      twitter_tweets_args: tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}
       twitter_max_pages: 1
       max_tweet_pulls_allowed: 80
-      twitter_search_endpoint: 2/tweets/search/recent?
-      twitter_search_args: query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
       openai_call_window_size: 3600.0
       openai_calls_allowed_in_window: 100
       max_points_per_period: 5000

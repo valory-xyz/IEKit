@@ -1,0 +1,55 @@
+alphabet_in:
+- API_ERROR
+- DONE
+- DONE_API_LIMITS
+- DONE_MAX_RETRIES
+- DONE_SKIP
+- EVALUATE
+- NO_ALLOWANCE
+- NO_MAJORITY
+- OPENAI_CALL_CHECK
+- RETRIEVE_TWEETS
+- ROUND_TIMEOUT
+- SELECT_KEEPERS
+- TWEET_EVALUATION_ROUND_TIMEOUT
+default_start_state: OlasWeekDecisionMakingRound
+final_states:
+- FinishedWeekInOlasRound
+label: WeekInOlasAbciApp
+start_states:
+- OlasWeekDecisionMakingRound
+states:
+- FinishedWeekInOlasRound
+- OlasWeekDecisionMakingRound
+- OlasWeekEvaluationRound
+- OlasWeekOpenAICallCheckRound
+- OlasWeekRandomnessRound
+- OlasWeekSelectKeepersRound
+- OlasWeekTweetCollectionRound
+transition_func:
+    (OlasWeekDecisionMakingRound, DONE): FinishedWeekInOlasRound
+    (OlasWeekDecisionMakingRound, DONE_SKIP): FinishedWeekInOlasRound
+    (OlasWeekDecisionMakingRound, EVALUATE): OlasWeekEvaluationRound
+    (OlasWeekDecisionMakingRound, NO_MAJORITY): OlasWeekDecisionMakingRound
+    (OlasWeekDecisionMakingRound, OPENAI_CALL_CHECK): OlasWeekOpenAICallCheckRound
+    (OlasWeekDecisionMakingRound, RETRIEVE_TWEETS): OlasWeekTweetCollectionRound
+    (OlasWeekDecisionMakingRound, ROUND_TIMEOUT): OlasWeekDecisionMakingRound
+    (OlasWeekDecisionMakingRound, SELECT_KEEPERS): OlasWeekRandomnessRound
+    (OlasWeekEvaluationRound, DONE): OlasWeekDecisionMakingRound
+    (OlasWeekEvaluationRound, TWEET_EVALUATION_ROUND_TIMEOUT): OlasWeekEvaluationRound
+    (OlasWeekOpenAICallCheckRound, DONE): OlasWeekDecisionMakingRound
+    (OlasWeekOpenAICallCheckRound, NO_ALLOWANCE): OlasWeekDecisionMakingRound
+    (OlasWeekOpenAICallCheckRound, NO_MAJORITY): OlasWeekOpenAICallCheckRound
+    (OlasWeekOpenAICallCheckRound, ROUND_TIMEOUT): OlasWeekOpenAICallCheckRound
+    (OlasWeekRandomnessRound, DONE): OlasWeekSelectKeepersRound
+    (OlasWeekRandomnessRound, NO_MAJORITY): OlasWeekRandomnessRound
+    (OlasWeekRandomnessRound, ROUND_TIMEOUT): OlasWeekRandomnessRound
+    (OlasWeekSelectKeepersRound, DONE): OlasWeekDecisionMakingRound
+    (OlasWeekSelectKeepersRound, NO_MAJORITY): OlasWeekRandomnessRound
+    (OlasWeekSelectKeepersRound, ROUND_TIMEOUT): OlasWeekRandomnessRound
+    (OlasWeekTweetCollectionRound, API_ERROR): OlasWeekTweetCollectionRound
+    (OlasWeekTweetCollectionRound, DONE): OlasWeekDecisionMakingRound
+    (OlasWeekTweetCollectionRound, DONE_API_LIMITS): OlasWeekDecisionMakingRound
+    (OlasWeekTweetCollectionRound, DONE_MAX_RETRIES): OlasWeekDecisionMakingRound
+    (OlasWeekTweetCollectionRound, NO_MAJORITY): OlasWeekRandomnessRound
+    (OlasWeekTweetCollectionRound, ROUND_TIMEOUT): OlasWeekRandomnessRound

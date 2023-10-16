@@ -108,11 +108,14 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
                 ]
             )
         except KeyError:
+            self.context.logger.warning(
+                f"last_parsed_block is not set. Using default earliest_block_to_monitor={self.params.earliest_block_to_monitor}"
+            )
             from_block = self.params.earliest_block_to_monitor
 
         self.context.logger.info(
             f"Retrieving Transfer events later than block {from_block}"
-            f" for contract at {self.params.dynamic_contribution_contract_address}"
+            f" for contract at {self.params.dynamic_contribution_contract_address}. Retries={self.synchronized_data.token_event_retries}"
         )
         contract_api_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
@@ -123,7 +126,9 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
             from_block=from_block,
         )
         if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
-            self.context.logger.info("Error retrieving the token_id to address data")
+            self.context.logger.info(
+                f"Error retrieving the token_id to address data [{contract_api_msg.performative}]"
+            )
             return TokenTrackRound.ERROR_PAYLOAD, from_block
         data = cast(dict, contract_api_msg.state.body["token_id_to_member"])
         last_block = cast(int, contract_api_msg.state.body["last_block"])
