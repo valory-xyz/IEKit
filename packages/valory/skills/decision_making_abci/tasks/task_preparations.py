@@ -21,6 +21,9 @@
 from datetime import datetime, timezone
 
 
+SECONDS_IN_DAY = 24 * 3600
+
+
 class TaskPreparation:
     """Represents the work required before and after running a Centaur task"""
 
@@ -36,6 +39,7 @@ class TaskPreparation:
         self.now_utc = now_utc
         self.set_config()
         self.logger.info(f"Instantiated task {self.__class__.__name__}")
+        self.log_config()
 
     def set_config(self):
         """Set the configuration"""
@@ -52,25 +56,41 @@ class TaskPreparation:
         if self.task_name in plugins_config:
             plugin_config = plugins_config[self.task_name]
             self.enabled = plugin_config["enabled"]
-            self.daily = plugin_config["daily"]
+            self.daily = plugin_config["daily"] if "daily" in plugin_config else False
+            self.weekly = (
+                int(plugin_config["weekly"]) if "weekly" in plugin_config else None
+            )
             self.last_run = (
                 datetime.strptime(
                     plugin_config["last_run"], "%Y-%m-%d %H:%M:%S %Z"
                 ).replace(tzinfo=timezone.utc)
-                if self.daily and plugin_config["last_run"]
+                if (self.daily or (self.weekly is not None))
+                and plugin_config["last_run"]
                 else None
             )
-            self.run_hour_utc = plugin_config["run_hour_utc"] if self.daily else None
+            self.run_hour_utc = (
+                plugin_config["run_hour_utc"]
+                if self.daily or (self.weekly is not None)
+                else None
+            )
             return
 
         self.set_default_config()
 
     def set_default_config(self):
         """Set the default configuration"""
+        self.logger.info("Setting the default configuration")
         self.enabled = True
         self.daily = False
+        self.weekly = None
         self.last_run = None
         self.run_hour_utc = None
+
+    def log_config(self):
+        """Log configuration"""
+        self.logger.info(
+            f"Config: enabled={self.enabled}  daily={self.daily}  weekly={self.weekly}  last_run={self.last_run}  run_hour_utc={self.run_hour_utc}"
+        )
 
     def check_conditions(self):
         """Check wether the task needs to be run"""
@@ -87,8 +107,27 @@ class TaskPreparation:
             )
             return False
 
+        # Does the task run every week?
+        if self.weekly is not None and self.weekly != self.now_utc.weekday():
+            self.logger.info(
+                f"[{self.__class__.__name__}]: task is a weekly task but today is not the configured run day: {self.now_utc.weekday()} != {self.weekly}"
+            )
+            return False
+
+        if (
+            self.weekly is not None
+            and self.last_run
+            and (self.now_utc - self.last_run).seconds < SECONDS_IN_DAY
+        ):
+            self.logger.info(
+                f"[{self.__class__.__name__}]: task is a weekly task and was already ran less than a day ago"
+            )
+            return False
+
         # Does the task run at a specific time?
-        if self.daily and self.now_utc.hour < self.run_hour_utc:
+        if (
+            self.daily or (self.weekly is not None)
+        ) and self.now_utc.hour < self.run_hour_utc:
             self.logger.info(
                 f"[{self.__class__.__name__}]: not time to run yet [{self.now_utc.hour}!={self.run_hour_utc}]"
             )

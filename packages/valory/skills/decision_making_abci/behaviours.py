@@ -55,6 +55,9 @@ from packages.valory.skills.decision_making_abci.tasks.twitter_preparation impor
     DailyTweetPreparation,
     ScheduledTweetPreparation,
 )
+from packages.valory.skills.decision_making_abci.tasks.week_in_olas_preparations import (
+    WeekInOlasCreatePreparation,
+)
 from packages.valory.skills.decision_making_abci.tasks.write_stream_preparation import (
     DailyOrbisPreparation,
     UpdateCentaursPreparation,
@@ -66,6 +69,14 @@ from packages.valory.skills.decision_making_abci.tasks.write_stream_preparation 
 previous_event_to_task_preparation_cls = {
     None: {
         "prev": None,
+        "next": ReadContributeDBPreparation,
+    },
+    Event.READ_CONTRIBUTE_DB.value: {
+        "prev": ReadContributeDBPreparation,
+        "next": ReadManualPointsPreparation,
+    },
+    Event.READ_MANUAL_POINTS.value: {
+        "prev": ReadManualPointsPreparation,
         "next": ReadCentaursPreparation,
     },
     Event.READ_CENTAURS.value: {
@@ -82,6 +93,10 @@ previous_event_to_task_preparation_cls = {
     },
     Event.DAILY_ORBIS.value: {
         "prev": DailyOrbisPreparation,
+        "next": WeekInOlasCreatePreparation,
+    },
+    Event.WEEK_IN_OLAS_CREATE.value: {
+        "prev": WeekInOlasCreatePreparation,
         "next": ScheduledTweetPreparation,
     },
     Event.SCHEDULED_TWEET.value: {
@@ -90,14 +105,6 @@ previous_event_to_task_preparation_cls = {
     },
     Event.UPDATE_CENTAURS.value: {
         "prev": UpdateCentaursPreparation,
-        "next": ReadContributeDBPreparation,
-    },
-    Event.READ_CONTRIBUTE_DB.value: {
-        "prev": ReadContributeDBPreparation,
-        "next": ReadManualPointsPreparation,
-    },
-    Event.READ_MANUAL_POINTS.value: {
-        "prev": ReadManualPointsPreparation,
         "next": ScorePreparation,
     },
     Event.SCORE.value: {
@@ -110,7 +117,7 @@ previous_event_to_task_preparation_cls = {
     },
     Event.NEXT_CENTAUR.value: {
         "prev": None,
-        "next": LLMPreparation,
+        "next": ReadContributeDBPreparation,
     },
 }
 

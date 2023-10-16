@@ -56,6 +56,7 @@ class Event(Enum):
     READ_CONTRIBUTE_DB = "read_contribute_db"
     READ_MANUAL_POINTS = "read_manual_points"
     WRITE_CONTRIBUTE_DB = "write_contribute_db"
+    WEEK_IN_OLAS_CREATE = "week_in_olas_create"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -145,6 +146,11 @@ class SynchronizedData(BaseSynchronizedData):
         """Checks whether there are changes pending to be written to Ceramic."""
         return cast(bool, self.db.get("pending_write", False))
 
+    @property
+    def summary_tweets(self) -> list:
+        """Get the summary_tweets."""
+        return cast(list, self.db.get("summary_tweets", []))
+
 
 class DecisionMakingRound(CollectSameUntilThresholdRound):
     """DecisionMakingRound"""
@@ -161,6 +167,7 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
             # Event.NO_MAJORITY, Event.DONE, Event.UPDATE_CENTAURS, Event.READ_CENTAURS,
             # Event.SCHEDULED_TWEET, Event.LLM, Event.DAILY_ORBIS, Event.DAILY_TWEET, Event.NEXT_CENTAUR
             # Event.SCORE, Event.READ_CONTRIBUTE_DB, Event.READ_MANUAL_POINTS, Event.WRITE_CONTRIBUTE_DB
+            # Event.WEEK_IN_OLAS_CREATE
 
             payload = json.loads(self.most_voted_payload)
             event = Event(payload["event"])
@@ -230,6 +237,10 @@ class FinishedDecisionMakingDoneRound(DegenerateRound):
     """FinishedDecisionMakingDoneRound"""
 
 
+class FinishedDecisionMakingWeekInOlasRound(DegenerateRound):
+    """FinishedDecisionMakingWeekInOlasRound"""
+
+
 class DecisionMakingAbciApp(AbciApp[Event]):
     """DecisionMakingAbciApp"""
 
@@ -241,6 +252,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.LLM: FinishedDecisionMakingLLMRound,
             Event.DAILY_TWEET: FinishedDecisionMakingWriteTwitterRound,
             Event.SCHEDULED_TWEET: FinishedDecisionMakingWriteTwitterRound,
+            Event.WEEK_IN_OLAS_CREATE: FinishedDecisionMakingWeekInOlasRound,
             Event.DAILY_ORBIS: FinishedDecisionMakingWriteOrbisRound,
             Event.UPDATE_CENTAURS: FinishedDecisionMakingUpdateCentaurRound,
             Event.SCORE: FinishedDecisionMakingScoreRound,
@@ -262,6 +274,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingReadContributeDBRound: {},
         FinishedDecisionMakingWriteContributeDBRound: {},
         FinishedDecisionMakingReadManualPointsRound: {},
+        FinishedDecisionMakingWeekInOlasRound: {},
     }
     final_states: Set[AppState] = {
         FinishedDecisionMakingReadCentaursRound,
@@ -274,6 +287,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingReadContributeDBRound,
         FinishedDecisionMakingWriteContributeDBRound,
         FinishedDecisionMakingReadManualPointsRound,
+        FinishedDecisionMakingWeekInOlasRound,
     }
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
@@ -293,4 +307,5 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingReadContributeDBRound: set(),
         FinishedDecisionMakingWriteContributeDBRound: set(),
         FinishedDecisionMakingReadManualPointsRound: set(),
+        FinishedDecisionMakingWeekInOlasRound: set(),
     }

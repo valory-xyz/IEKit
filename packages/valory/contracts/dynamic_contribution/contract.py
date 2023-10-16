@@ -111,7 +111,7 @@ class DynamicContributionContract(Contract):
         # the connection could time out.
         MAX_BLOCKS = 300000
         to_block = (
-            ledger_api.api.eth.get_block_number() if to_block == "latest" else to_block
+            ledger_api.api.eth.get_block_number() - 1 if to_block == "latest" else to_block
         )
         ranges = list(range(from_block, to_block, MAX_BLOCKS)) + [to_block]
 

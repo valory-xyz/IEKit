@@ -103,6 +103,25 @@
             "required": ["daily", "enabled", "last_run", "run_hour_utc"],
             "additionalProperties": false
         },
+        "week_in_olas_config": {
+            "type": "object",
+            "properties": {
+                "weekly": {
+                    "type": "integer"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "last_run": {
+                    "type": ["integer", "null"]
+                },
+                "run_hour_utc": {
+                    "type": "integer"
+                }
+            },
+            "required": ["weekly", "enabled", "last_run", "run_hour_utc"],
+            "additionalProperties": false
+        },
         "scheduled_tweet_data": {
             "type": "object",
             "properties": {
@@ -198,9 +217,12 @@
                                 },
                                 "daily_orbis": {
                                     "$ref": "#/definitions/daily_orbis_config"
+                                },
+                                "week_in_olas": {
+                                    "$ref": "#/definitions/week_in_olas_config"
                                 }
                             },
-                            "required": ["daily_tweet", "scheduled_tweet", "daily_orbis"],
+                            "required": ["daily_tweet", "scheduled_tweet", "daily_orbis", "week_in_olas"],
                             "additionalProperties": false
                         },
                         "memberWhitelist": {
