@@ -661,4 +661,4 @@ class MechInteractRoundBehaviour(AbstractRoundBehaviour):
 
     initial_behaviour_cls = MechRequestBehaviour
     abci_app_cls = MechInteractAbciApp  # type: ignore
-    behaviours: Set[Type[BaseBehaviour]] = [MechRequestBehaviour, MechResponseBehaviour]
+    behaviours: Set[Type[BaseBehaviour]] = {MechRequestBehaviour, MechResponseBehaviour}
