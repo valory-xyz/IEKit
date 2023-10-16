@@ -22,7 +22,7 @@
 import json
 import math
 from enum import Enum
-from typing import Any, Dict, FrozenSet, Optional, Set, Tuple, cast
+from typing import Any, Dict, FrozenSet, List, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     ABCIAppInternalError,
@@ -34,6 +34,10 @@ from packages.valory.skills.abstract_round_abci.base import (
     DegenerateRound,
     EventToTimeout,
     get_name,
+)
+from packages.valory.skills.mech_interact_abci.models import (
+    MechInteractionResponse,
+    MechMetadata,
 )
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
@@ -137,9 +141,18 @@ class SynchronizedData(BaseSynchronizedData):
         return self.db.get("most_voted_keeper_addresses", None) is not None
 
     @property
-    def mech_requests(self) -> list:
-        """Check the mech requests."""
-        return cast(list, self.db.get("mech_requests", []))
+    def mech_requests(self) -> List[MechMetadata]:
+        """Get the mech requests."""
+        serialized = self.db.get("mech_requests", "[]")
+        requests = json.loads(serialized)
+        return [MechMetadata(**metadata_item) for metadata_item in requests]
+
+    @property
+    def mech_responses(self) -> List[MechInteractionResponse]:
+        """Get the mech responses."""
+        serialized = self.db.get("mech_responses", "[]")
+        responses = json.loads(serialized)
+        return [MechInteractionResponse(**response_item) for response_item in responses]
 
 
 class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
@@ -487,14 +500,24 @@ class PostMechRequestRound(CollectSameUntilThresholdRound):
             ).performed_twitter_tasks
             performed_twitter_tasks["evaluate"] = Event.DONE.value
 
+            # Remove already used responses
+            mech_responses = cast(
+                SynchronizedData, self.synchronized_data
+            ).mech_responses
+            mech_responses = [
+                r
+                for r in mech_responses
+                if r.nonce not in payload["responses_to_remove"]
+            ]
+
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    get_name(SynchronizedData.mech_requests): payload["mech_requests"],
                     get_name(SynchronizedData.tweets): payload["tweets"],
                     get_name(
                         SynchronizedData.performed_twitter_tasks
                     ): performed_twitter_tasks,
+                    get_name(SynchronizedData.mech_responses): mech_responses,
                 },
             )
             return synchronized_data, Event.DONE

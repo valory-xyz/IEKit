@@ -35,6 +35,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     BaseBehaviour,
 )
 from packages.valory.skills.abstract_round_abci.common import RandomnessBehaviour
+from packages.valory.skills.mech_interact_abci.models import MechMetadata
 from packages.valory.skills.twitter_scoring_abci.ceramic_db import CeramicDB
 from packages.valory.skills.twitter_scoring_abci.models import (
     OpenAICalls,
@@ -86,6 +87,14 @@ def extract_headers(header_str: str) -> dict:
         header.split(": ") for header in header_str.split(header_separator) if header
     ]
     return {key: value for key, value in headers}
+
+
+def parse_evaluation(data: str) -> Dict:
+    """Parse the data from the LLM"""
+    start = data.find("{")
+    end = data.find("}")
+    sub_string = data[start : end + 1]
+    return json.loads(sub_string)
 
 
 class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
@@ -818,7 +827,7 @@ class PreMechRequestBehaviour(TwitterScoringBaseBehaviour):
             new_mech_requests = []
 
             mech_requests = self.synchronized_data.mech_requests
-            pending_tweet_ids = [r["tweet_id"] for r in mech_requests]
+            pending_tweet_ids = [r.nonce for r in mech_requests]
 
             for tweet_id, tweet in self.synchronized_data.tweets.items():
 
@@ -831,13 +840,13 @@ class PreMechRequestBehaviour(TwitterScoringBaseBehaviour):
                     continue
 
                 new_mech_requests.append(
-                    {
-                        "tweet_id": tweet_id,
-                        "tool": "openai",
-                        "prompt": tweet_evaluation_prompt.replace(
+                    MechMetadata(
+                        nonce=tweet_id,
+                        tool="openai",
+                        prompt=tweet_evaluation_prompt.replace(
                             "{user_text}", tweet["text"]
                         ),
-                    }
+                    )
                 )
 
             sender = self.context.agent_address
@@ -865,25 +874,50 @@ class PostMechRequestBehaviour(TwitterScoringBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
-            # Move the responded requests
-            mech_requests = []
             tweets = self.synchronized_data.tweets
+            responses_to_remove = []
 
-            for request in self.synchronized_data.mech_requests:
+            for response in self.synchronized_data.mech_responses:
 
                 # The request has been responded
-                if "points" in request:
-                    tweets[request["tweet_id"]]["points"] = request["points"]
+                if response.nonce in tweets:
 
-                # The request has not been responded yet. We keep it
-                else:
-                    mech_requests.append(request)
+                    self.context.logger.info(
+                        f"Received tweet evaluation response: {response.nonce} {response.result}"
+                    )
+
+                    responses_to_remove.append(response.nonce)
+
+                    points = DEFAULT_TWEET_POINTS
+                    try:
+                        data = parse_evaluation(response.result)
+                        quality = data["quality"]
+                        relationship = data["relationship"]
+                        if (
+                            quality not in TWEET_QUALITY_TO_POINTS
+                            or relationship not in TWEET_RELATIONSHIP_TO_POINTS
+                        ):
+                            self.context.logger.error(
+                                "Evaluation data is not valid: key not valid"
+                            )
+                        else:
+                            points = (
+                                TWEET_QUALITY_TO_POINTS[quality]
+                                * TWEET_RELATIONSHIP_TO_POINTS[relationship]
+                            )
+                    except Exception as e:
+                        self.context.logger.error(
+                            f"Evaluation data is not valid: exception {e}"
+                        )
+
+                    tweets[response.nonce]["points"] = points
 
             sender = self.context.agent_address
             payload = PostMechRequestPayload(
                 sender=sender,
                 content=json.dumps(
-                    {"mech_requests": mech_requests, "tweets": tweets}, sort_keys=True
+                    {"tweets": tweets, "responses_to_remove": responses_to_remove},
+                    sort_keys=True,
                 ),
             )
 

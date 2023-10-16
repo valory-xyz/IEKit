@@ -151,7 +151,7 @@ class MechInteractAbciApp(AbciApp[Event]):
     }
     final_states: Set[AppState] = {FinishedMechRequestRound, FinishedMechResponseRound}
     event_to_timeout: EventToTimeout = {}
-    cross_period_persisted_keys: Set[str] = set()
+    cross_period_persisted_keys: Set[str] = {get_name(SynchronizedData.mech_responses)}
     db_pre_conditions: Dict[AppState, Set[str]] = {
         MechRequestRound: set(get_name(SynchronizedData.mech_requests)),
         MechResponseRound: set(get_name(SynchronizedData.final_tx_hash)),
