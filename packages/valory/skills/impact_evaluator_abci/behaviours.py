@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """This package contains round behaviours of ContributionSkillAbci."""
+
 from typing import Set, Type
 
 from packages.valory.skills.abstract_round_abci.behaviours import (
@@ -41,7 +42,7 @@ from packages.valory.skills.impact_evaluator_abci.composition import (
     ImpactEvaluatorSkillAbciApp,
 )
 from packages.valory.skills.llm_abci.behaviours import LLMRoundBehaviour
-from packages.valory.skills.mech_interact_abci.behaviours import (
+from packages.valory.skills.mech_interact_abci.behaviours.round_behaviour import (
     MechInteractRoundBehaviour,
 )
 from packages.valory.skills.olas_week_abci.behaviours import OlasWeekRoundBehaviour

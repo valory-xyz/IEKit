@@ -19,115 +19,25 @@
 
 """This package contains the rounds of MechInteractAbciApp."""
 
-import json
-from enum import Enum
-from typing import Dict, List, Mapping, Set, cast
+from typing import Dict, Set
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
     AppState,
-    CollectSameUntilThresholdRound,
-    CollectionRound,
-    DegenerateRound,
     EventToTimeout,
     get_name,
 )
-from packages.valory.skills.mech_interact_abci.models import (
-    MechInteractionResponse,
-    MechMetadata,
+from packages.valory.skills.mech_interact_abci.states.base import (
+    Event,
+    SynchronizedData,
 )
-from packages.valory.skills.mech_interact_abci.payloads import (
-    MechRequestPayload,
-    MechResponsePayload,
+from packages.valory.skills.mech_interact_abci.states.final_states import (
+    FinishedMechRequestRound,
+    FinishedMechResponseRound,
 )
-from packages.valory.skills.transaction_settlement_abci.rounds import (
-    SynchronizedData as TxSynchronizedData,
-)
-
-
-class Event(Enum):
-    """MechInteractAbciApp Events"""
-
-    DONE = "done"
-    NO_MAJORITY = "no_majority"
-    ROUND_TIMEOUT = "round_timeout"
-
-
-class SynchronizedData(TxSynchronizedData):
-    """
-    Class to represent the synchronized data.
-
-    This data is replicated by the tendermint application.
-    """
-
-    @property
-    def mech_price(self) -> int:
-        """Get the mech's request price."""
-        return int(self.db.get_strict("mech_price"))
-
-    @property
-    def mech_requests(self) -> List[MechMetadata]:
-        """Get the mech requests."""
-        serialized = self.db.get("mech_requests", "[]")
-        requests = json.loads(serialized)
-        return [MechMetadata(**metadata_item) for metadata_item in requests]
-
-    @property
-    def mech_responses(self) -> List[MechInteractionResponse]:
-        """Get the mech responses."""
-        serialized = self.db.get("mech_responses", "[]")
-        responses = json.loads(serialized)
-        return [MechInteractionResponse(**response_item) for response_item in responses]
-
-    @property
-    def participant_to_requests(self) -> Mapping[str, MechRequestPayload]:
-        """Get the `participant_to_requests`."""
-        serialized = self.db.get_strict("participant_to_requests")
-        deserialized = CollectionRound.deserialize_collection(serialized)
-        return cast(Mapping[str, MechRequestPayload], deserialized)
-
-    @property
-    def participant_to_responses(self) -> Mapping[str, MechResponsePayload]:
-        """Get the `participant_to_responses`."""
-        serialized = self.db.get_strict("participant_to_responses")
-        deserialized = CollectionRound.deserialize_collection(serialized)
-        return cast(Mapping[str, MechResponsePayload], deserialized)
-
-
-class MechRequestRound(CollectSameUntilThresholdRound):
-    """A round for performing requests to a Mech."""
-
-    payload_class = MechRequestPayload
-    synchronized_data_class = SynchronizedData
-    done_event = Event.DONE
-    no_majority_event = Event.NO_MAJORITY
-    selection_key = (
-        get_name(SynchronizedData.most_voted_tx_hash),
-        get_name(SynchronizedData.mech_price),
-        get_name(SynchronizedData.mech_requests),
-        get_name(SynchronizedData.mech_responses),
-    )
-    collection_key = get_name(SynchronizedData.participant_to_requests)
-
-
-class MechResponseRound(CollectSameUntilThresholdRound):
-    """A round for collecting the responses from a Mech."""
-
-    payload_class = MechRequestPayload
-    synchronized_data_class = SynchronizedData
-    done_event = Event.DONE
-    no_majority_event = Event.NO_MAJORITY
-    selection_key = get_name(SynchronizedData.mech_responses)
-    collection_key = get_name(SynchronizedData.participant_to_responses)
-
-
-class FinishedMechRequestRound(DegenerateRound):
-    """FinishedMechRequestRound"""
-
-
-class FinishedMechResponseRound(DegenerateRound):
-    """FinishedMechResponseRound"""
+from packages.valory.skills.mech_interact_abci.states.request import MechRequestRound
+from packages.valory.skills.mech_interact_abci.states.response import MechResponseRound
 
 
 class MechInteractAbciApp(AbciApp[Event]):

@@ -26,6 +26,9 @@ import packages.valory.skills.dynamic_nft_abci.rounds as DynamicNFTAbci
 import packages.valory.skills.generic_scoring_abci.rounds as GenericScoringAbci
 import packages.valory.skills.llm_abci.rounds as LLMAbciApp
 import packages.valory.skills.mech_interact_abci.rounds as MechInteractAbci
+import packages.valory.skills.mech_interact_abci.states.final_states
+import packages.valory.skills.mech_interact_abci.states.request
+import packages.valory.skills.mech_interact_abci.states.response
 import packages.valory.skills.olas_week_abci.rounds as WeekInOlasAbciApp
 import packages.valory.skills.registration_abci.rounds as RegistrationAbci
 import packages.valory.skills.reset_pause_abci.rounds as ResetAndPauseAbci
@@ -60,11 +63,11 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     DecisionMakingAbci.FinishedDecisionMakingDoneRound: ResetAndPauseAbci.ResetAndPauseRound,
     DecisionMakingAbci.FinishedDecisionMakingWeekInOlasRound: WeekInOlasAbciApp.OlasWeekDecisionMakingRound,
     GenericScoringAbci.FinishedGenericScoringRound: TwitterScoringAbci.TwitterDecisionMakingRound,
-    TwitterScoringAbci.FinishedTwitterCollectionRound: MechInteractAbci.MechResponseRound,
-    MechInteractAbci.FinishedMechResponseRound: MechInteractAbci.MechRequestRound,
-    MechInteractAbci.FinishedMechRequestRound: TxSettlementAbci.RandomnessTransactionSubmissionRound,
-    TxSettlementAbci.FinishedTransactionSubmissionRound: MechInteractAbci.FinishedMechResponseRound,
-    TxSettlementAbci.FailedRound: MechInteractAbci.MechRequestRound,
+    TwitterScoringAbci.FinishedTwitterCollectionRound: packages.valory.skills.mech_interact_abci.states.response.MechResponseRound,
+    packages.valory.skills.mech_interact_abci.states.final_states.FinishedMechResponseRound: packages.valory.skills.mech_interact_abci.states.request.MechRequestRound,
+    packages.valory.skills.mech_interact_abci.states.final_states.FinishedMechRequestRound: TxSettlementAbci.RandomnessTransactionSubmissionRound,
+    TxSettlementAbci.FinishedTransactionSubmissionRound: packages.valory.skills.mech_interact_abci.states.final_states.FinishedMechResponseRound,
+    TxSettlementAbci.FailedRound: packages.valory.skills.mech_interact_abci.states.request.MechRequestRound,
     TwitterScoringAbci.FinishedTwitterScoringRound: DynamicNFTAbci.TokenTrackRound,
     WeekInOlasAbciApp.FinishedWeekInOlasRound: DecisionMakingAbci.DecisionMakingRound,
     DynamicNFTAbci.FinishedTokenTrackRound: DecisionMakingAbci.DecisionMakingRound,
