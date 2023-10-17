@@ -63,8 +63,12 @@ class MechInteractAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {}
     cross_period_persisted_keys: Set[str] = {get_name(SynchronizedData.mech_responses)}
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        MechRequestRound: set(get_name(SynchronizedData.mech_requests)),
-        MechResponseRound: set(get_name(SynchronizedData.final_tx_hash)),
+        # using `set(get_name(SynchronizedData.mech_requests))`
+        # makes the checks complain that "db pre and post conditions intersect"
+        MechRequestRound: {"mech_requests"},
+        # we should be able to include `SynchronizedData.final_tx_hash` in the set below,
+        # however, we can't, because the checks incorrectly report that "db pre and post conditions intersect"
+        MechResponseRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedMechRequestRound: {
