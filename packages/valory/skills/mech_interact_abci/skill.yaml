@@ -182,4 +182,4 @@ dependencies:
   hexbytes: {}
   py-multicodec: {}
   py-multibase: {}
-is_abstract: false
+is_abstract: true
