@@ -186,9 +186,11 @@ transition_func:
     (OlasWeekTweetCollectionRound, NO_MAJORITY): OlasWeekRandomnessRound
     (OlasWeekTweetCollectionRound, ROUND_TIMEOUT): OlasWeekRandomnessRound
     (PostMechRequestRound, DONE): TwitterDecisionMakingRound
-    (PostMechRequestRound, TWEET_EVALUATION_ROUND_TIMEOUT): PreMechRequestRound
+    (PostMechRequestRound, NO_MAJORITY): PostMechRequestRound
+    (PostMechRequestRound, ROUND_TIMEOUT): PreMechRequestRound
     (PreMechRequestRound, DONE): MechResponseRound
-    (PreMechRequestRound, TWEET_EVALUATION_ROUND_TIMEOUT): PreMechRequestRound
+    (PreMechRequestRound, NO_MAJORITY): PreMechRequestRound
+    (PreMechRequestRound, ROUND_TIMEOUT): PreMechRequestRound
     (RandomnessRound, DONE): SelectKeeperRound
     (RandomnessRound, NO_MAJORITY): RandomnessRound
     (RandomnessRound, ROUND_TIMEOUT): RandomnessRound

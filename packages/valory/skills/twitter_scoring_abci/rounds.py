@@ -711,11 +711,13 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         },
         PreMechRequestRound: {
             Event.DONE: FinishedTwitterCollectionRound,
-            Event.TWEET_EVALUATION_ROUND_TIMEOUT: PreMechRequestRound,
+            Event.ROUND_TIMEOUT: PreMechRequestRound,
+            Event.NO_MAJORITY: PreMechRequestRound,
         },
         PostMechRequestRound: {
             Event.DONE: TwitterDecisionMakingRound,
-            Event.TWEET_EVALUATION_ROUND_TIMEOUT: PreMechRequestRound,
+            Event.ROUND_TIMEOUT: PreMechRequestRound,
+            Event.NO_MAJORITY: PostMechRequestRound,
         },
         DBUpdateRound: {
             Event.DONE: TwitterDecisionMakingRound,
