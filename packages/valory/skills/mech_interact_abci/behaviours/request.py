@@ -64,6 +64,7 @@ Ox = "0x"
 # which is what we want in most cases
 # more info here: https://safe-docs.dev.gnosisdev.com/safe/docs/contracts_tx_execution/
 SAFE_GAS = 0
+GNOSIS_CHAIN_ID = 100
 
 
 class MechRequestBehaviour(MechInteractBaseBehaviour):
@@ -157,6 +158,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             contract_id=str(MultiSendContract.contract_id),
             contract_callable="get_tx_data",
             multi_send_txs=self.multi_send_txs,
+            chain_id=GNOSIS_CHAIN_ID,
         )
         expected_performative = ContractApiMessage.Performative.RAW_TRANSACTION
         if response_msg.performative != expected_performative:
@@ -191,6 +193,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             data=self.multisend_data,
             safe_tx_gas=SAFE_GAS,
             operation=SafeOperation.DELEGATE_CALL.value,
+            chain_id=GNOSIS_CHAIN_ID,
         )
 
         if response_msg.performative != ContractApiMessage.Performative.STATE:
