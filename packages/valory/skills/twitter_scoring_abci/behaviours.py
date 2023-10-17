@@ -35,7 +35,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     BaseBehaviour,
 )
 from packages.valory.skills.abstract_round_abci.common import RandomnessBehaviour
-from packages.valory.skills.mech_interact_abci.models import MechMetadata
+from packages.valory.skills.mech_interact_abci.states.base import MechMetadata
 from packages.valory.skills.twitter_scoring_abci.ceramic_db import CeramicDB
 from packages.valory.skills.twitter_scoring_abci.models import (
     OpenAICalls,

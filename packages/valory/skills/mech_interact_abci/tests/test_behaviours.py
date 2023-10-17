@@ -30,13 +30,22 @@ from packages.valory.skills.abstract_round_abci.behaviours import BaseBehaviour
 from packages.valory.skills.abstract_round_abci.test_tools.base import (
     FSMBehaviourBaseCase,
 )
-from packages.valory.skills.mech_interact_abci.behaviours import (
+from packages.valory.skills.mech_interact_abci.behaviours.base import (
     MechInteractBaseBehaviour,
-    MechInteractRoundBehaviour,
+)
+from packages.valory.skills.mech_interact_abci.behaviours.request import (
     MechRequestBehaviour,
+)
+from packages.valory.skills.mech_interact_abci.behaviours.response import (
     MechResponseBehaviour,
 )
-from packages.valory.skills.mech_interact_abci.rounds import Event, SynchronizedData
+from packages.valory.skills.mech_interact_abci.behaviours.round_behaviour import (
+    MechInteractRoundBehaviour,
+)
+from packages.valory.skills.mech_interact_abci.states.base import (
+    Event,
+    SynchronizedData,
+)
 
 
 @dataclass

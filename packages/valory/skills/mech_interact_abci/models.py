@@ -20,7 +20,7 @@
 """This module contains the models for the abci skill of MechInteractAbciApp."""
 
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 
 from aea.exceptions import enforce
 from hexbytes import HexBytes
@@ -76,15 +76,6 @@ class MechParams(BaseParams):
 
 
 @dataclass
-class MechMetadata:
-    """A Mech's metadata."""
-
-    prompt: str
-    tool: str
-    nonce: str
-
-
-@dataclass
 class MultisendBatch:
     """A structure representing a single transaction of a multisend."""
 
@@ -92,28 +83,3 @@ class MultisendBatch:
     data: HexBytes
     value: int = 0
     operation: MultiSendOperation = MultiSendOperation.CALL
-
-
-@dataclass
-class MechRequest:
-    """A Mech's request."""
-
-    data: str = ""
-    requestId: int = 0
-
-
-@dataclass
-class MechInteractionResponse(MechRequest):
-    """A structure for the response of a mech interaction task."""
-
-    nonce: str = ""
-    result: Optional[str] = None
-    error: str = "Unknown"
-
-    def retries_exceeded(self) -> None:
-        """Set an incorrect format response."""
-        self.error = "Retries were exceeded while trying to get the mech's response."
-
-    def incorrect_format(self, res: Any) -> None:
-        """Set an incorrect format response."""
-        self.error = f"The response's format was unexpected: {res}"

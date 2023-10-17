@@ -28,12 +28,12 @@ from packages.valory.skills.abstract_round_abci.base import AbstractRound, BaseT
 from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
     BaseRoundTestClass,
 )
-from packages.valory.skills.mech_interact_abci.rounds import (
+from packages.valory.skills.mech_interact_abci.states.base import (
     Event,
-    MechRequestRound,
-    MechResponseRound,
     SynchronizedData,
 )
+from packages.valory.skills.mech_interact_abci.states.request import MechRequestRound
+from packages.valory.skills.mech_interact_abci.states.response import MechResponseRound
 
 
 @dataclass
