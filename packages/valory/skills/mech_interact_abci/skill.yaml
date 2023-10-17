@@ -2,31 +2,41 @@ name: mech_interact_abci
 author: valory
 version: 0.1.0
 type: skill
-description: The mech interact skill can be used to send requests to a mech and receive the responses.
+description: The mech interact skill can be used to send requests to a mech and receive
+  the responses.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeiesgazt3izfwwuaailwkvp7spvtejseofau6i7s64arqlu2hh42gi
-  behaviours.py: bafybeigk73mtwtk4joxorxqyqyr2l22roilyldbiuckklt2g3gwm22gyoe
+  __init__.py: bafybeidf3nlv5fpvfy4libtscayhirdw64shgmhfmvjiftjmjkmhu7auxq
+  behaviours/__init__.py: bafybeie3zsi6p3yanz5mqwpkdrcgywaqvkit3hdintsb4awnvalgxpxa4i
+  behaviours/base.py: bafybeihysoxxv7tz5ecty3b72fttphz7mt2oprtjsep2plpr6sp5c2ne44
+  behaviours/request.py: bafybeihixxnln7twphsg3ddfasnwv4pp3avkoygdxukqauswjk4m2knqnm
+  behaviours/response.py: bafybeib4obenzersqjqdyvsyc6p6mhypakampo7tn5nafh7xkngtz5gxeq
+  behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
   dialogues.py: bafybeigjmyzd2bx6mgqiet2c223k6wkc5jk7kdkstbhpaxlqxatey26tlm
   fsm_specification.yaml: bafybeigewzgktbsk4bmwwzczc4yuxm3n6trzrpivpgde4ikw5neistw3vm
   handlers.py: bafybeiduy2nwkqdynainuimkjulcv7u2qq6iglkuut3gfurkckydapitg4
-  models.py: bafybeiaxlxujweayio4toybspgv2tulxlbpxmjhn37o2pafeolpbu7b6cm
-  payloads.py: bafybeicaighsgudv2b4awnw4bgyd5k5pnjkv5epbjjsr3kcirjsvxocpum
-  rounds.py: bafybeib5ac47ckkizxlnnogyjfttgercty5v54nc3lntid4mylazcwrrle
-  tests/__init__.py: bafybeic3534aro4pdtsdcuxywzlgkccczx2elhnwisiq3r6okvnrdu4aia
-  tests/test_behaviours.py: bafybeibqpw47gkmhtkom232glr6z6uon6l5r7u7ah7jo4ekn23ymukhx5i
+  models.py: bafybeiagj7iyvpjreoho2gupat76b3ypsnnlarantsyx4ukkntq3fzj25e
+  payloads.py: bafybeif3vbkr2x77bgyg3wsomebbwtdy2hssyu7nkfcz7euymm35a5nd5i
+  rounds.py: bafybeih4xi2thutflpypt6uiut4tmkglcpuxzu6gsmforw7uqfzjrxw2g4
+  states/__init__.py: bafybeie34wx5znr2hxwh3gs2fchmbeuzjcfnraymdvtzjaxaq5zsiw233q
+  states/base.py: bafybeigrbd3ekzmsobtty3oixs2fvn7izzp6h6xohgypnowlyxooooujki
+  states/final_states.py: bafybeibey3gwupo3v2xgow572axzmo3gcsffyvfpqe6vr45scvatqnus6u
+  states/request.py: bafybeib2ty6smuzgy6o6h26ci2ankhmjlgcbq2y2xhk5ynvo5h2iigcsgi
+  states/response.py: bafybeibaxnp2oxwjptoq7qzm6o7ww2qrdj2vnxzg2qt523vz2ftqzx5hyi
+  tests/__init__.py: bafybeifojfnffwlsv6aiku25nwyjwm7h4m45yci3fgmaawpeoyoogzonum
+  tests/test_behaviours.py: bafybeidj7git7zaego7k75eejtxlr3usj6wnnqisu7urqwvalpwh5w7nyq
   tests/test_dialogues.py: bafybeig6uzk7fklieyxapemiobdvv5tyx7hgdkdpl4vnacohgw2ecphdpq
-  tests/test_handlers.py: bafybeiflkujl55yowmwmp2jarixhhxshnuzg3a3d67b5bzl7c7ctk4fo7u
-  tests/test_models.py: bafybeibjkeaazzioecvt2izi3vesygvmimebbwjqpi3han6ks4nth3lmsy
-  tests/test_payloads.py: bafybeiebbpnsh2cyp576d6k34a6ui3x3eidi5hdx6f2fryk3p4ar3bddbm
-  tests/test_rounds.py: bafybeiacbmg5vdvx3q6uprjp6gugtsyfq6amyklkulgx7hmmn3ews273wu
+  tests/test_handlers.py: bafybeidwrmekr5tydmehvkolyksw37sah5js7buy3ca5fxkpgkppmgb3wi
+  tests/test_models.py: bafybeid3cvcttdxlklwvr6tqmiurb2qywvmgr5bnsn62pb5gl5p552eagy
+  tests/test_payloads.py: bafybeiakqhgochfu4ra4hp65hi7jvxtjd7fdub5wqmhlccrc4va26hb7da
+  tests/test_rounds.py: bafybeiauu5adaoxu7yvtrfa6uwdw4sxr5gn2pj7qjh6vowd556iji6vtca
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeigxjcci53vwytymzlhr37436yvenh7jup4astrn7dgyixo24aq2pq
+- valory/abstract_round_abci:0.1.0:bafybeih2fyfb6kkf7r45pvdk7pyyebr5xloia4xiqxtb3qsrasnstqmepq
 behaviours:
   main:
     args: {}
@@ -137,7 +147,7 @@ models:
       headers:
         Content-Type: application/json
       method: GET
-      parameters: { }
+      parameters: {}
       response_key: result
       response_type: str
       retries: 5
