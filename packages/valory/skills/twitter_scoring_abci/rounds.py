@@ -68,7 +68,8 @@ class Event(Enum):
     API_ERROR = "api_error"
     RETRIEVE_HASHTAGS = "retrieve_hashtags"
     RETRIEVE_MENTIONS = "retrieve_mentions"
-    EVALUATE = "evaluate"
+    PRE_MECH = "pre_mech"
+    POST_MECH = "post_mech"
     DB_UPDATE = "db_update"
     SELECT_KEEPERS = "select_keepers"
 
@@ -166,7 +167,8 @@ class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
         if self.threshold_reached:
             event = Event(self.most_voted_payload)
             # Reference events to avoid tox -e check-abciapp-specs failures
-            # Event.DONE, Event.DB_UPDATE, Event.RETRIEVE_MENTIONS, Event.RETRIEVE_HASHTAGS, Event.EVALUATE, Event.SELECT_KEEPERS
+            # Event.DONE, Event.DB_UPDATE, Event.RETRIEVE_MENTIONS, Event.RETRIEVE_HASHTAGS, Event.SELECT_KEEPERS
+            # Event.POST_MECH, Event.PRE_MECH
             return self.synchronized_data, event
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
@@ -465,13 +467,20 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
             new_mech_requests = payload["mech_requests"]
 
             mech_requests = cast(SynchronizedData, self.synchronized_data).mech_requests
-
             mech_requests = mech_requests.extend(new_mech_requests)
+
+            performed_twitter_tasks = cast(
+                SynchronizedData, self.synchronized_data
+            ).performed_twitter_tasks
+            performed_twitter_tasks["pre_mech"] = Event.DONE.value
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
                     get_name(SynchronizedData.mech_requests): mech_requests,
+                    get_name(
+                        SynchronizedData.performed_twitter_tasks
+                    ): performed_twitter_tasks,
                 },
             )
             return synchronized_data, Event.DONE
@@ -498,7 +507,7 @@ class PostMechRequestRound(CollectSameUntilThresholdRound):
             performed_twitter_tasks = cast(
                 SynchronizedData, self.synchronized_data
             ).performed_twitter_tasks
-            performed_twitter_tasks["evaluate"] = Event.DONE.value
+            performed_twitter_tasks["post_mech"] = Event.DONE.value
 
             # Remove already used responses
             mech_responses = cast(
@@ -636,7 +645,8 @@ class TwitterScoringAbciApp(AbciApp[Event]):
             Event.SELECT_KEEPERS: TwitterRandomnessRound,
             Event.RETRIEVE_HASHTAGS: TwitterHashtagsCollectionRound,
             Event.RETRIEVE_MENTIONS: TwitterMentionsCollectionRound,
-            Event.EVALUATE: PreMechRequestRound,
+            Event.PRE_MECH: PreMechRequestRound,
+            Event.POST_MECH: PostMechRequestRound,
             Event.DB_UPDATE: DBUpdateRound,
             Event.DONE: FinishedTwitterScoringRound,
             Event.ROUND_TIMEOUT: TwitterDecisionMakingRound,
@@ -669,6 +679,10 @@ class TwitterScoringAbciApp(AbciApp[Event]):
             Event.ROUND_TIMEOUT: TwitterRandomnessRound,
         },
         PreMechRequestRound: {
+            Event.DONE: FinishedTwitterCollectionRound,
+            Event.TWEET_EVALUATION_ROUND_TIMEOUT: PreMechRequestRound,
+        },
+        PostMechRequestRound: {
             Event.DONE: TwitterDecisionMakingRound,
             Event.TWEET_EVALUATION_ROUND_TIMEOUT: PreMechRequestRound,
         },
@@ -678,9 +692,11 @@ class TwitterScoringAbciApp(AbciApp[Event]):
             Event.ROUND_TIMEOUT: DBUpdateRound,
         },
         FinishedTwitterScoringRound: {},
+        FinishedTwitterCollectionRound: {},
     }
     final_states: Set[AppState] = {
         FinishedTwitterScoringRound,
+        FinishedTwitterCollectionRound,
     }
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
@@ -696,4 +712,5 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         FinishedTwitterScoringRound: {
             get_name(SynchronizedData.ceramic_db),
         },
+        FinishedTwitterCollectionRound: set(),
     }

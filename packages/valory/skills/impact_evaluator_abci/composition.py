@@ -66,7 +66,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     TwitterScoringAbci.FinishedTwitterCollectionRound: packages.valory.skills.mech_interact_abci.states.response.MechResponseRound,
     packages.valory.skills.mech_interact_abci.states.final_states.FinishedMechResponseRound: packages.valory.skills.mech_interact_abci.states.request.MechRequestRound,
     packages.valory.skills.mech_interact_abci.states.final_states.FinishedMechRequestRound: TxSettlementAbci.RandomnessTransactionSubmissionRound,
-    TxSettlementAbci.FinishedTransactionSubmissionRound: packages.valory.skills.mech_interact_abci.states.final_states.FinishedMechResponseRound,
+    TxSettlementAbci.FinishedTransactionSubmissionRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     TxSettlementAbci.FailedRound: packages.valory.skills.mech_interact_abci.states.request.MechRequestRound,
     TwitterScoringAbci.FinishedTwitterScoringRound: DynamicNFTAbci.TokenTrackRound,
     WeekInOlasAbciApp.FinishedWeekInOlasRound: DecisionMakingAbci.DecisionMakingRound,

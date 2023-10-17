@@ -290,8 +290,11 @@ class TwitterDecisionMakingBehaviour(TwitterScoringBaseBehaviour):
         if Event.RETRIEVE_MENTIONS.value not in performed_tasks:
             return Event.RETRIEVE_MENTIONS.value
 
-        if Event.EVALUATE.value not in performed_tasks:
-            return Event.EVALUATE.value
+        if Event.PRE_MECH.value not in performed_tasks:
+            return Event.PRE_MECH.value
+
+        if Event.POST_MECH.value not in performed_tasks:
+            return Event.POST_MECH.value
 
         if Event.DB_UPDATE.value not in performed_tasks:
             return Event.DB_UPDATE.value
