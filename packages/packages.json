@@ -1,14 +1,14 @@
 {
     "dev": {
-        "agent/valory/impact_evaluator/0.1.0": "bafybeigcaeppbii5lqvza7j6oesdw6vxl5sujagzswuijgstfbqzkdy2xu",
+        "agent/valory/impact_evaluator/0.1.0": "bafybeihqdggemgi7otpnryvly52lk77u4vpe6zlio2attliltqd5mr5cle",
         "contract/valory/dynamic_contribution/0.1.0": "bafybeiht364qavknmnuz7pwkw4zjzrkkugyzymgxrjvtasfcy7eya3nbxa",
         "contract/valory/mech/0.1.0": "bafybeigzn7lxj52qvqlcwrwp2hd5j4i7khiz4qybds3wu57lela3tvcmxa",
-        "service/valory/impact_evaluator/0.1.0": "bafybeicupe76r6h2crosvi5dyejm436vlfdzozdhasdwn6gbfc3327z7re",
+        "service/valory/impact_evaluator/0.1.0": "bafybeia4p5frohsf6quiuojy4qex5debagsvjrt547ijfpa6t4oa33pef4",
         "skill/valory/dynamic_nft_abci/0.1.0": "bafybeiexenlxvf32jjlxrow35qlo4xtmi2ezznulczhayux2n2mx27ya6i",
-        "skill/valory/twitter_scoring_abci/0.1.0": "bafybeid7zzrm2xp2xghiz6sti4g5xjolbjfbgbyluvbwjrhrm7cajsrwsm",
+        "skill/valory/twitter_scoring_abci/0.1.0": "bafybeihcwifkxkvoxydrhx2t6w5afyidvkdwxmio57x2khbyegd435kjoe",
         "skill/valory/ceramic_read_abci/0.1.0": "bafybeide5tbobzkwfdi7yzw6bsau36h43hdlgbnk2bfqvvhmq3hl3ucjmm",
         "skill/valory/ceramic_write_abci/0.1.0": "bafybeihnalj6zhl5pbf7x2lkznuhivwj45jzrafbtxatwebrpb7st2v6oa",
-        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeieofqw7t6etyxgoankbhfkodbf3hp6tb5eoud2h5gfasjc7lmr4cy",
+        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeigznxherbv3x4v2ykbvn7vvfuucbp4eqffryfdeacionnmwatmzbe",
         "skill/valory/generic_scoring_abci/0.1.0": "bafybeig4hoc5gjiyuwh2ye3mwneegq3s3cghl5j7yokvngacvn7ixwdoga",
         "protocol/valory/twitter/0.1.0": "bafybeib4eyf7qbs7kdntqzhwqsaaj4o2mzcokcztaza6qgwt7sbxgkqu2m",
         "protocol/valory/llm/1.0.0": "bafybeigqybmg75vsxexmp57hkms7lkp7iwpf54r7wpygizxryvrhfqqpb4",
@@ -17,7 +17,7 @@
         "skill/valory/twitter_write_abci/0.1.0": "bafybeidjumloxy2yvoyymgzuwbua3ks2p66fyybna2qhrz2upzkxzjrznq",
         "skill/valory/llm_abci/0.1.0": "bafybeifesvwe5ya7imxefijpawgtd7aje5hhr4oh2bzgfsm2ucjp3lxije",
         "skill/valory/decision_making_abci/0.1.0": "bafybeicjrztkcvqjnk6odukj3j2dr6ee4j2jaaw5nsga6byjhjyuxhng5m",
-        "service/valory/impact_evaluator_local/0.1.0": "bafybeidlifqeewzhsbwircys3wsuzv2pzn7lustl2to5s7fb2brjbkw2ma",
+        "service/valory/impact_evaluator_local/0.1.0": "bafybeicfttxxlanmkngq7tgfv7za3vimy6ftfu3ve4d33kgagu5czvsm3y",
         "skill/valory/olas_week_abci/0.1.0": "bafybeidegg3yi5qww6q6r24pgjmmbkgconyfnecuohacljvferqqg3tc2e",
         "skill/valory/mech_interact_abci/0.1.0": "bafybeihs73musf6373dpvfpchp3nb27stuo7gmitdfximf33h4ifyjqmde"
     },

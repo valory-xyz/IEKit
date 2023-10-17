@@ -21,6 +21,7 @@
 
 import json
 import math
+from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, FrozenSet, List, Optional, Set, Tuple, cast
 
@@ -34,10 +35,6 @@ from packages.valory.skills.abstract_round_abci.base import (
     DegenerateRound,
     EventToTimeout,
     get_name,
-)
-from packages.valory.skills.mech_interact_abci.states.base import (
-    MechInteractionResponse,
-    MechMetadata,
 )
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
@@ -54,6 +51,40 @@ from packages.valory.skills.twitter_scoring_abci.payloads import (
 MAX_API_RETRIES = 1
 ERROR_GENERIC = "generic"
 ERROR_API_LIMITS = "too many requests"
+
+
+@dataclass
+class MechMetadata:
+    """A Mech's metadata."""
+
+    prompt: str
+    tool: str
+    nonce: str
+
+
+@dataclass
+class MechRequest:
+    """A Mech's request."""
+
+    data: str = ""
+    requestId: int = 0
+
+
+@dataclass
+class MechInteractionResponse(MechRequest):
+    """A structure for the response of a mech interaction task."""
+
+    nonce: str = ""
+    result: Optional[str] = None
+    error: str = "Unknown"
+
+    def retries_exceeded(self) -> None:
+        """Set an incorrect format response."""
+        self.error = "Retries were exceeded while trying to get the mech's response."
+
+    def incorrect_format(self, res: Any) -> None:
+        """Set an incorrect format response."""
+        self.error = f"The response's format was unexpected: {res}"
 
 
 class Event(Enum):
