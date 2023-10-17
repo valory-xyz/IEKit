@@ -33,10 +33,15 @@ fingerprint:
   tests/test_rounds.py: bafybeiauu5adaoxu7yvtrfa6uwdw4sxr5gn2pj7qjh6vowd556iji6vtca
 fingerprint_ignore_patterns: []
 connections: []
-contracts: []
-protocols: []
+contracts:
+- valory/gnosis_safe:0.1.0:bafybeih6d3vxz3jlgodxm5b2qcwsmansqj4xobuyd6hjnhzremuvd65yrm
+- valory/mech:0.1.0:bafybeigzn7lxj52qvqlcwrwp2hd5j4i7khiz4qybds3wu57lela3tvcmxa
+- valory/multisend:0.1.0:bafybeieg4tywd5lww2vygvpkilg3hcepa4rmhehjuamyvdf6vazt554v6u
+protocols:
+- valory/contract_api:1.0.0:bafybeiasywsvax45qmugus5kxogejj66c5taen27h4voriodz7rgushtqa
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeih2fyfb6kkf7r45pvdk7pyyebr5xloia4xiqxtb3qsrasnstqmepq
+- valory/transaction_settlement_abci:0.1.0:bafybeia7rzsbea3ch4gcafyp3z6uvqh4npws2xpdwbkkdbrqqpjops7nui
 behaviours:
   main:
     args: {}
@@ -140,6 +145,12 @@ models:
       multisend_batch_size: 50
       mech_agent_address: '0xff82123dfb52ab75c417195c5fdb87630145ae81'
       ipfs_address: https://gateway.autonolas.tech/ipfs/
+      use_termination: false
+      use_slashing: false
+      slash_cooldown_hours: 3
+      slash_threshold_amount: 10000000000000000
+      light_slash_unit_amount: 5000000000000000
+      serious_slash_unit_amount: 8000000000000000
     class_name: Params
   mech_response:
     args:
