@@ -1,24 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# ------------------------------------------------------------------------------
-#
-#   Copyright 2021-2023 Valory AG
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-#
-# ------------------------------------------------------------------------------
-
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -77,8 +56,8 @@ class TwitterSerializer(Serializer):
         performative_id = msg.performative
         if performative_id == TwitterMessage.Performative.CREATE_TWEET:
             performative = twitter_pb2.TwitterMessage.Create_Tweet_Performative()  # type: ignore
-            data = msg.data
-            performative.data = data
+            text = msg.text
+            performative.text = text
             twitter_msg.create_tweet.CopyFrom(performative)
         elif performative_id == TwitterMessage.Performative.TWEET_CREATED:
             performative = twitter_pb2.TwitterMessage.Tweet_Created_Performative()  # type: ignore
@@ -122,8 +101,8 @@ class TwitterSerializer(Serializer):
         performative_id = TwitterMessage.Performative(str(performative))
         performative_content = dict()  # type: Dict[str, Any]
         if performative_id == TwitterMessage.Performative.CREATE_TWEET:
-            data = twitter_pb.create_tweet.data
-            performative_content["data"] = data
+            text = twitter_pb.create_tweet.text
+            performative_content["text"] = text
         elif performative_id == TwitterMessage.Performative.TWEET_CREATED:
             tweet_id = twitter_pb.tweet_created.tweet_id
             performative_content["tweet_id"] = tweet_id

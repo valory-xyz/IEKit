@@ -1,24 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# ------------------------------------------------------------------------------
-#
-#   Copyright 2021-2023 Valory AG
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-#
-# ------------------------------------------------------------------------------
-
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -76,12 +55,12 @@ class TwitterMessage(Message):
 
     class _SlotsCls:
         __slots__ = (
-            "data",
             "dialogue_reference",
             "message",
             "message_id",
             "performative",
             "target",
+            "text",
             "tweet_id",
         )
 
@@ -140,16 +119,16 @@ class TwitterMessage(Message):
         return cast(int, self.get("target"))
 
     @property
-    def data(self) -> str:
-        """Get the 'data' content from the message."""
-        enforce(self.is_set("data"), "'data' content is not set.")
-        return cast(str, self.get("data"))
-
-    @property
     def message(self) -> str:
         """Get the 'message' content from the message."""
         enforce(self.is_set("message"), "'message' content is not set.")
         return cast(str, self.get("message"))
+
+    @property
+    def text(self) -> str:
+        """Get the 'text' content from the message."""
+        enforce(self.is_set("text"), "'text' content is not set.")
+        return cast(str, self.get("text"))
 
     @property
     def tweet_id(self) -> str:
@@ -206,9 +185,9 @@ class TwitterMessage(Message):
             if self.performative == TwitterMessage.Performative.CREATE_TWEET:
                 expected_nb_of_contents = 1
                 enforce(
-                    isinstance(self.data, str),
-                    "Invalid type for content 'data'. Expected 'str'. Found '{}'.".format(
-                        type(self.data)
+                    isinstance(self.text, str),
+                    "Invalid type for content 'text'. Expected 'str'. Found '{}'.".format(
+                        type(self.text)
                     ),
                 )
             elif self.performative == TwitterMessage.Performative.TWEET_CREATED:
