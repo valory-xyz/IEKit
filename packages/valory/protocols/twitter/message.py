@@ -1,24 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# ------------------------------------------------------------------------------
-#
-#   Copyright 2021-2023 Valory AG
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-#
-# ------------------------------------------------------------------------------
-
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -46,7 +25,7 @@ from typing import Any, Set, Tuple, cast
 
 from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
-from aea.protocols.base import Message
+from aea.protocols.base import Message  # type: ignore
 
 
 _default_logger = logging.getLogger("aea.packages.valory.protocols.twitter.message")
@@ -55,33 +34,31 @@ DEFAULT_BODY_SIZE = 4
 
 
 class TwitterMessage(Message):
-    """A protocol for twitter interactions."""
+    """A protocol for interacting with Twitter."""
 
     protocol_id = PublicId.from_str("valory/twitter:0.1.0")
-    protocol_specification_id = PublicId.from_str("valory/twitter:1.0.0")
+    protocol_specification_id = PublicId.from_str("valory/twitter:0.1.0")
 
     class Performative(Message.Performative):
         """Performatives for the twitter protocol."""
 
-        CREATE_TWEET = "create_tweet"
-        ERROR = "error"
-        TWEET_CREATED = "tweet_created"
+        REQUEST = "request"
+        RESPONSE = "response"
 
         def __str__(self) -> str:
             """Get the string representation."""
             return str(self.value)
 
-    _performatives = {"create_tweet", "error", "tweet_created"}
+    _performatives = {"request", "response"}
     __slots__: Tuple[str, ...] = tuple()
 
     class _SlotsCls:
         __slots__ = (
+            "data",
             "dialogue_reference",
-            "message",
             "message_id",
             "performative",
             "target",
-            "text",
             "tweet_id",
         )
 
@@ -140,16 +117,10 @@ class TwitterMessage(Message):
         return cast(int, self.get("target"))
 
     @property
-    def message(self) -> str:
-        """Get the 'message' content from the message."""
-        enforce(self.is_set("message"), "'message' content is not set.")
-        return cast(str, self.get("message"))
-
-    @property
-    def text(self) -> str:
-        """Get the 'text' content from the message."""
-        enforce(self.is_set("text"), "'text' content is not set.")
-        return cast(str, self.get("text"))
+    def data(self) -> str:
+        """Get the 'data' content from the message."""
+        enforce(self.is_set("data"), "'data' content is not set.")
+        return cast(str, self.get("data"))
 
     @property
     def tweet_id(self) -> str:
@@ -203,28 +174,20 @@ class TwitterMessage(Message):
             # Check correct contents
             actual_nb_of_contents = len(self._body) - DEFAULT_BODY_SIZE
             expected_nb_of_contents = 0
-            if self.performative == TwitterMessage.Performative.CREATE_TWEET:
+            if self.performative == TwitterMessage.Performative.REQUEST:
                 expected_nb_of_contents = 1
                 enforce(
-                    isinstance(self.text, str),
-                    "Invalid type for content 'text'. Expected 'str'. Found '{}'.".format(
-                        type(self.text)
+                    isinstance(self.data, str),
+                    "Invalid type for content 'data'. Expected 'str'. Found '{}'.".format(
+                        type(self.data)
                     ),
                 )
-            elif self.performative == TwitterMessage.Performative.TWEET_CREATED:
+            elif self.performative == TwitterMessage.Performative.RESPONSE:
                 expected_nb_of_contents = 1
                 enforce(
                     isinstance(self.tweet_id, str),
                     "Invalid type for content 'tweet_id'. Expected 'str'. Found '{}'.".format(
                         type(self.tweet_id)
-                    ),
-                )
-            elif self.performative == TwitterMessage.Performative.ERROR:
-                expected_nb_of_contents = 1
-                enforce(
-                    isinstance(self.message, str),
-                    "Invalid type for content 'message'. Expected 'str'. Found '{}'.".format(
-                        type(self.message)
                     ),
                 )
 

@@ -1,24 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# ------------------------------------------------------------------------------
-#
-#   Copyright 2021-2023 Valory AG
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-#
-# ------------------------------------------------------------------------------
-
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -43,12 +22,13 @@
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 from typing import Any, Dict, cast
 
-from aea.mail.base_pb2 import DialogueMessage
-from aea.mail.base_pb2 import Message as ProtobufMessage
-from aea.protocols.base import Message, Serializer
+from aea.mail.base_pb2 import DialogueMessage  # type: ignore
+from aea.mail.base_pb2 import Message as ProtobufMessage  # type: ignore
+from aea.protocols.base import Message  # type: ignore
+from aea.protocols.base import Serializer  # type: ignore
 
-from packages.valory.protocols.llm import llm_pb2
-from packages.valory.protocols.llm.message import LlmMessage
+from packages.valory.protocols.llm import llm_pb2  # type: ignore
+from packages.valory.protocols.llm.message import LlmMessage  # type: ignore
 
 
 class LlmSerializer(Serializer):
@@ -65,7 +45,7 @@ class LlmSerializer(Serializer):
         msg = cast(LlmMessage, msg)
         message_pb = ProtobufMessage()
         dialogue_message_pb = DialogueMessage()
-        llm_msg = llm_pb2.LlmMessage()
+        llm_msg = llm_pb2.LlmMessage()  # type: ignore
 
         dialogue_message_pb.message_id = msg.message_id
         dialogue_reference = msg.dialogue_reference
@@ -104,7 +84,7 @@ class LlmSerializer(Serializer):
         :return: the 'Llm' message.
         """
         message_pb = ProtobufMessage()
-        llm_pb = llm_pb2.LlmMessage()
+        llm_pb = llm_pb2.LlmMessage()  # type: ignore
         message_pb.ParseFromString(obj)
         message_id = message_pb.dialogue_message.message_id
         dialogue_reference = (
