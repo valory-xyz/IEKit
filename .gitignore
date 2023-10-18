@@ -30,7 +30,6 @@ packages/valory/skills/safe_deployment_abci
 packages/valory/skills/transaction_settlement_abci
 packages/valory/skills/termination_abci
 packages/open_aea
-packages/fetchai
 *.pyc
 .vscode/
 .coverage*

@@ -1,20 +1,21 @@
 name: twitter
 author: valory
 version: 0.1.0
-protocol_specification_id: valory/twitter:1.0.0
+protocol_specification_id: valory/twitter:0.1.0
 type: protocol
-description: A protocol for twitter interactions.
+description: A protocol for interacting with Twitter.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeicdojz3mblavk5ree6xx47c6im4uj6zspftaa4fll5hk3qe6ewqaa
+  README.md: bafybeiaagbdeh4zropm6fcvorzv3ca4k6vfu7ya4wicesm4j2qtkoqada4
+  __init__.py: bafybeih5sj6mqcrnmctng5tkyqwdvbvk7usvirvuldd4q5ou6x4xnrh5um
   dialogues.py: bafybeibxkkxvdzxgw5otuu4seej6rptybs7dzc3zbdmlalx6frxw5lsp2u
-  message.py: bafybeicxisvolj2w3ya2texgarfi53npnm24twpqsutd3avlo6w3eysanm
-  serialization.py: bafybeihp4sa7ohk2yyixkjoohod2oayprs55dw2tgby7msmdee6xuwk4y4
+  message.py: bafybeidlcwtwhcuql55loiuguu5j6bum36hz4klzbmnshryrk2jiomfn5u
+  serialization.py: bafybeiahmlp56h6dmkvb7qtmt3f2sofpvnctdp3e6i4zjbitqrwe24dqwi
   tests/test_twitter_dialogues.py: bafybeibu4cmtkmf5iaf54axcny2yaan2dt56dorv5664tg37fnxhsjgpya
   tests/test_twitter_messages.py: bafybeie5eyw2t5n6ck3iu3l6yv543kmk4tpqwb4curjyzyzqdwubghonza
-  twitter.proto: bafybeigicva2k2qybojxc2zd7fzob2ngazwo3vjw462dm6zdjp45k6socq
-  twitter_pb2.py: bafybeiapdaidyeyw72ncdipgpn65xznh2zv2f56dzn4ef5luthmz746moi
+  twitter.proto: bafybeieaepg4kzjpzkbhg7amwfjmk77esizsjedkr524m6pd2cqfzykbgm
+  twitter_pb2.py: bafybeiexfvi6gta5wpk5tdhkpu2p3pq4lp253q22ld5u4kfln7erqz3aay
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

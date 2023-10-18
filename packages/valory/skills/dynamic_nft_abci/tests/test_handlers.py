@@ -31,7 +31,7 @@ import pytest
 from aea.protocols.dialogue.base import DialogueMessage
 from aea.test_tools.test_skill import BaseSkillTestCase
 
-from packages.fetchai.connections.http_server.connection import (
+from packages.valory.connections.http_server.connection import (
     PUBLIC_ID as HTTP_SERVER_PUBLIC_ID,
 )
 from packages.valory.protocols.http.message import HttpMessage
