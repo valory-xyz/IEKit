@@ -8,10 +8,10 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeiemontaaeytd3px2grliu5eaf2gghnt2asqi2uunmmlwrvjmxlxdy
-  __init__.py: bafybeigok4xqrjbpfwxti4jde4gmf2spo5po7lgl3o6ttjrfmv7g5tn42y
-  dialogues.py: bafybeifbrvpw7653j7vb4w5asnshshzn34vxozjqqecpiitv4irv7zqwfa
-  message.py: bafybeiheaobsjsyrbtsk2yyix2rgtlhrw23eykww275w7j6dtwb3knhrhy
-  serialization.py: bafybeicxbkj2bndln2hdhjwkczonjjeweluvspcikj2nvg4sexqvvwgmiu
+  __init__.py: bafybeih5sj6mqcrnmctng5tkyqwdvbvk7usvirvuldd4q5ou6x4xnrh5um
+  dialogues.py: bafybeias63limtgev2htn4432mpus452rliqbdban46ij4na6or3rbjh2u
+  message.py: bafybeichmenrrnv2no7qakye7pllcg4bwn4tfw6hrlegd6susk2ubnntli
+  serialization.py: bafybeibc5gd5m2tmngtbbjqtlwyvxiqgat33kgpasik4fkkn3rwjgclp2a
   tests/test_twitter_dialogues.py: bafybeibu4cmtkmf5iaf54axcny2yaan2dt56dorv5664tg37fnxhsjgpya
   tests/test_twitter_messages.py: bafybeie5eyw2t5n6ck3iu3l6yv543kmk4tpqwb4curjyzyzqdwubghonza
   twitter.proto: bafybeihx4mk22qabkcbc2siysvi7vhiwvfo6dr67wk6ozrkwyoviowj5ty

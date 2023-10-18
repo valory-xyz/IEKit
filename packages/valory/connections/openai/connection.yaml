@@ -12,7 +12,7 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
-- valory/llm:1.0.0:bafybeiham2k5toohvr6cixshoivdsl7c5e5c7xp5zsgqasy3th33riavnu
+- valory/llm:1.0.0:bafybeigdww27sv7uzwkr3gzh73ojtemamcxhv3a5qylrknzv6hfhihs6ba
 class_name: OpenaiConnection
 config:
   engine: text-davinci-003

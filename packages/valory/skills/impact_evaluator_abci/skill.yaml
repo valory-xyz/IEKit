@@ -26,7 +26,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeid7neqpxxe4ualp23gxgrtpf6r5u3myr2mmc4uvwameyqshfdoydq
 - valory/ceramic_read_abci:0.1.0:bafybeiblsnuno2dnm6wzuztz5tqmf4ry7fjg46u6i4jsxxlyl74vv7rw3m
 - valory/generic_scoring_abci:0.1.0:bafybeiby5wi7232fnptkqucxirckvm3c3zfc6koc64katki2evfv3xqrm4
-- valory/twitter_scoring_abci:0.1.0:bafybeifqwwyndwfb73qc5aprlnleehqyemvxeqfrxsc3n4fzabdids6v2e
+- valory/twitter_scoring_abci:0.1.0:bafybeic2jrsdpxpdc722qpiudk5znqwm3gb7tebhvrmmxkjjezxf6truxa
 - valory/ceramic_write_abci:0.1.0:bafybeifw2qrwkwjvdw4mj7iggvbi7ot3ibnal4piotcbvnqak3dj6bxena
 - valory/dynamic_nft_abci:0.1.0:bafybeiee5n3jtisgbab7tfpky7picbrsgxfvilmjld7aq4w3gzng2waneq
 - valory/registration_abci:0.1.0:bafybeidbirkdjus6wbpynmyv6ffb6uevsi3zeuhokiqokuw42o7ar5j7hm
@@ -34,9 +34,9 @@ skills:
 - valory/termination_abci:0.1.0:bafybeieqm46zuccaagnko3qlw6p3nvoohdrfgvpmw467r5lyil2dqrzjsy
 - valory/transaction_settlement_abci:0.1.0:bafybeia6cdxdlqrcwk2maw25fo7dafzd2p3rs7syropvufophk2pitzbwy
 - valory/decision_making_abci:0.1.0:bafybeidhuxtuc5fuvvhjctsjjpfxhpmrovnbkp2vegtyitfkyu7d2kfqbm
-- valory/llm_abci:0.1.0:bafybeihsoejmiox4mphp63ucetaiqz53jkc5urq26veby4nkpjh4xxnate
-- valory/twitter_write_abci:0.1.0:bafybeigksrm4tsoluhlc6okdycgbzh7lga5elegq7ltcrosrmuw55jsi4u
-- valory/olas_week_abci:0.1.0:bafybeianp5gwexl3o32p3trigajaevaucwuotxqxwjboqyadpm77zz2i5q
+- valory/llm_abci:0.1.0:bafybeif76rcl63fswgcnreg2kqind3w2bne6vu23tvej6nwzxuu6hjwroi
+- valory/twitter_write_abci:0.1.0:bafybeihwmiaixcvoiflrflh4xl5em2wctqyr7oxij4wg25smm5z44mwkei
+- valory/olas_week_abci:0.1.0:bafybeie3dcg3c4rhn7effzs4y4vimaqxjdsdbxjgs4xbvbzuklyxvtao7y
 behaviours:
   main:
     args: {}
