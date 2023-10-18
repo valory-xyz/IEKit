@@ -7,7 +7,7 @@ description: A protocol for twitter interactions.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeicdojz3mblavk5ree6xx47c6im4uj6zspftaa4fll5hk3qe6ewqaa
+  __init__.py: bafybeih5sj6mqcrnmctng5tkyqwdvbvk7usvirvuldd4q5ou6x4xnrh5um
   dialogues.py: bafybeibxkkxvdzxgw5otuu4seej6rptybs7dzc3zbdmlalx6frxw5lsp2u
   message.py: bafybeicxisvolj2w3ya2texgarfi53npnm24twpqsutd3avlo6w3eysanm
   serialization.py: bafybeihp4sa7ohk2yyixkjoohod2oayprs55dw2tgby7msmdee6xuwk4y4

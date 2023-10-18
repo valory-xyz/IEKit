@@ -22,12 +22,13 @@ import json
 from typing import Any, Callable, cast
 
 import tweepy
+from tweepy.errors import HTTPException as TweepyHTTPException
+
 from aea.configurations.base import PublicId
 from aea.connections.base import BaseSyncConnection
 from aea.mail.base import Envelope
 from aea.protocols.base import Address, Message
 from aea.protocols.dialogue.base import Dialogue
-from tweepy.errors import HTTPException as TweepyHTTPException
 
 from packages.valory.protocols.twitter.dialogues import TwitterDialogue
 from packages.valory.protocols.twitter.dialogues import (
