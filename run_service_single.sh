@@ -17,7 +17,7 @@ autonomy fetch --local --service valory/impact_evaluator_local && cd impact_eval
 autonomy build-image
 
 # Copy the keys and build the deployment
-cp $KEY_DIR/keys1.json ./keys.json
+cp $KEY_DIR/keys1_gnosis.json ./keys.json
 autonomy deploy build -ltm
 
 # Run the deployment

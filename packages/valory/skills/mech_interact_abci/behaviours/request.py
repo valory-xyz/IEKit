@@ -218,6 +218,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
     def setup(self) -> None:
         """Set up the `MechRequest` behaviour."""
         self._mech_requests = self.synchronized_data.mech_requests
+        self.context.logger.info(f"Processing mech requests: {self._mech_requests}")
 
     def _send_metadata_to_ipfs(
         self,
