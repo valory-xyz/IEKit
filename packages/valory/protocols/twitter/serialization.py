@@ -1,24 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# ------------------------------------------------------------------------------
-#
-#   Copyright 2021-2023 Valory AG
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-#
-# ------------------------------------------------------------------------------
-
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -75,16 +54,21 @@ class TwitterSerializer(Serializer):
         dialogue_message_pb.target = msg.target
 
         performative_id = msg.performative
-        if performative_id == TwitterMessage.Performative.REQUEST:
-            performative = twitter_pb2.TwitterMessage.Request_Performative()  # type: ignore
+        if performative_id == TwitterMessage.Performative.CREATE_TWEET:
+            performative = twitter_pb2.TwitterMessage.Create_Tweet_Performative()  # type: ignore
             data = msg.data
             performative.data = data
-            twitter_msg.request.CopyFrom(performative)
-        elif performative_id == TwitterMessage.Performative.RESPONSE:
-            performative = twitter_pb2.TwitterMessage.Response_Performative()  # type: ignore
+            twitter_msg.create_tweet.CopyFrom(performative)
+        elif performative_id == TwitterMessage.Performative.TWEET_CREATED:
+            performative = twitter_pb2.TwitterMessage.Tweet_Created_Performative()  # type: ignore
             tweet_id = msg.tweet_id
             performative.tweet_id = tweet_id
-            twitter_msg.response.CopyFrom(performative)
+            twitter_msg.tweet_created.CopyFrom(performative)
+        elif performative_id == TwitterMessage.Performative.ERROR:
+            performative = twitter_pb2.TwitterMessage.Error_Performative()  # type: ignore
+            message = msg.message
+            performative.message = message
+            twitter_msg.error.CopyFrom(performative)
         else:
             raise ValueError("Performative not valid: {}".format(performative_id))
 
@@ -116,12 +100,15 @@ class TwitterSerializer(Serializer):
         performative = twitter_pb.WhichOneof("performative")
         performative_id = TwitterMessage.Performative(str(performative))
         performative_content = dict()  # type: Dict[str, Any]
-        if performative_id == TwitterMessage.Performative.REQUEST:
-            data = twitter_pb.request.data
+        if performative_id == TwitterMessage.Performative.CREATE_TWEET:
+            data = twitter_pb.create_tweet.data
             performative_content["data"] = data
-        elif performative_id == TwitterMessage.Performative.RESPONSE:
-            tweet_id = twitter_pb.response.tweet_id
+        elif performative_id == TwitterMessage.Performative.TWEET_CREATED:
+            tweet_id = twitter_pb.tweet_created.tweet_id
             performative_content["tweet_id"] = tweet_id
+        elif performative_id == TwitterMessage.Performative.ERROR:
+            message = twitter_pb.error.message
+            performative_content["message"] = message
         else:
             raise ValueError("Performative not valid: {}.".format(performative_id))
 

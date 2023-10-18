@@ -5,17 +5,22 @@ package aea.valory.twitter.v0_1_0;
 message TwitterMessage{
 
   // Performatives and contents
-  message Request_Performative{
+  message Create_Tweet_Performative{
     string data = 1;
   }
 
-  message Response_Performative{
+  message Tweet_Created_Performative{
     string tweet_id = 1;
+  }
+
+  message Error_Performative{
+    string message = 1;
   }
 
 
   oneof performative{
-    Request_Performative request = 5;
-    Response_Performative response = 6;
+    Create_Tweet_Performative create_tweet = 5;
+    Error_Performative error = 6;
+    Tweet_Created_Performative tweet_created = 7;
   }
 }
