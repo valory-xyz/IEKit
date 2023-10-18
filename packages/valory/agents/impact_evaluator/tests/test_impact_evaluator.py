@@ -190,7 +190,7 @@ class BaseTestEnd2EndImpactEvaluatorNormalExecution(BaseTestEnd2EndExecution):
     ]
 
     http_server_port_config = {
-        "dotted_path": "vendor.fetchai.connections.http_server.config.port",
+        "dotted_path": "vendor.valory.connections.http_server.config.port",
         "value": 8000,
     }
 

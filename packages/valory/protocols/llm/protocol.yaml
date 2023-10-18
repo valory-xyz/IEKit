@@ -8,12 +8,12 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeicetvgjqzw4lgggv2kxwsxshery2mow3becpquk3b4qdb5g6p76tm
-  __init__.py: bafybeihjblrbc5rxy3b5jkv5bnxffkf7pobuy5y2kojnxi5b44wynepaka
+  __init__.py: bafybeihpfshhgdil3vzraagsfrq42cirxvg7ced5duhpe6kbqgo7g7v72m
   dialogues.py: bafybeigspfpqhdvgnwbiahxsc2qlilmzbcxyrffcwoilvnb7hx76uanul4
   llm.proto: bafybeiah7wq6spk7sr2ctwlutj3dn6sq3erbgm6ihja7abl7czoyoanyu4
-  llm_pb2.py: bafybeihagcvaz53kkozrbipqlusn3vd5juse27wqufeccddxp5hqa3uere
-  message.py: bafybeichahp2zsq7qy4pihnoln7cypvhaz26tpvqy7cl4bhmykba7n3lvq
-  serialization.py: bafybeid5pqtwafnq4j3u6wbjjgq2ud3jwlojwetzj6pp4kaicsg7hzr5ri
+  llm_pb2.py: bafybeifwerxjwysdotin5bjglloh2sqbeb7iwitpp2mfrne4fs2q3vj2ta
+  message.py: bafybeidcpa427xs4jagfmt2l72mel5f4vidrb6hnzewnqlicydw64y4ir4
+  serialization.py: bafybeie55m7zgbbbogrgbh5kzymdmipfe2qv7qloclw7bjyqnuswela4wa
   tests/test_llm_dialogues.py: bafybeihnug7m5c6733v6w5kdjpxrhgdcoz2vmg2mqjdle5yxqrvufp52im
   tests/test_llm_messages.py: bafybeidur77uf5moysw2zfborvlpc24fytcncucwsh6gqt3dufj5sl7srq
 fingerprint_ignore_patterns: []
