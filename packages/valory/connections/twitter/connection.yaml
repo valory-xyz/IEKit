@@ -12,7 +12,7 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
-- valory/twitter:0.1.0:bafybeiacgkbunz3zomtypiltvqi3gsy6lqrqbzetyllv36qf26tes4pp6y
+- valory/twitter:0.1.0:bafybeihi54z4klphpinziqchugjlq4jpdbpb7k4wknmgbu3mtusn3hcwdi
 class_name: TwitterConnection
 config:
   access_secret: <access_secret>
