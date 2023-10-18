@@ -176,5 +176,5 @@ models:
     class_name: TendermintDialogues
 dependencies:
   web3:
-    version: ==6.0.1
+    version: '>=6.0.0,<7'
 is_abstract: true
