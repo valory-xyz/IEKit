@@ -35,7 +35,7 @@ fingerprint_ignore_patterns: []
 connections: []
 contracts:
 - valory/gnosis_safe:0.1.0:bafybeibt7arvjzz4ah24omst74f4sfjpzrdef76yti6ml7dopsauhdzeci
-- valory/mech:0.1.0:bafybeigzn7lxj52qvqlcwrwp2hd5j4i7khiz4qybds3wu57lela3tvcmxa
+- valory/mech:0.1.0:bafybeialo27da2p46oc4ynkbdpd2qtlq7iejfaok5t7prkzgtwwfjmstjq
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 protocols:
 - valory/contract_api:1.0.0:bafybeialhbjvwiwcnqq3ysxcyemobcbie7xza66gaofcvla5njezkvhcka
@@ -177,8 +177,8 @@ models:
     args: {}
     class_name: TendermintDialogues
 dependencies:
-  open-aea-web3:
-    version: ==6.0.1
+  web3:
+    version: <7,>=6.0.0
   hexbytes: {}
   py-multicodec: {}
   py-multibase: {}
