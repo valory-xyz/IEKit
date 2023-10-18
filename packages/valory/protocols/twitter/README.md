@@ -17,7 +17,7 @@ aea_version: '>=1.0.0, <2.0.0'
 protocol_specification_id: valory/twitter:0.1.0
 speech_acts:
   create_tweet:
-    data: pt:str
+    text: pt:str
   tweet_created:
     tweet_id: pt:str
   error:

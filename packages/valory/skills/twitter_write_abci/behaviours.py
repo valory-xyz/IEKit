@@ -120,7 +120,7 @@ class TwitterWriteBehaviour(BaseTwitterWriteBehaviour):
             data = self.synchronized_data.write_data[write_index]
             text = data["text"]
             credentials = data["credentials"]
-            self.context.logger.info(f"Creating post with text:{text}")
+            self.context.logger.info(f"Creating post with text: {text}")
             response = yield from self._create_tweet(text=text, credentials=credentials)
             if response.performative == TwitterMessage.Performative.ERROR:
                 self.context.logger.error(
