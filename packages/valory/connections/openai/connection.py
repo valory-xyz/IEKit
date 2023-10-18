@@ -23,7 +23,6 @@
 from typing import Any, Dict, cast
 
 import openai
-
 from aea.configurations.base import PublicId
 from aea.connections.base import BaseSyncConnection
 from aea.mail.base import Envelope

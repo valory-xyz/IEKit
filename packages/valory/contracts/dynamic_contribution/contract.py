@@ -21,13 +21,12 @@
 
 from typing import Any, cast
 
-from aea_ledger_ethereum import EthereumApi
-from web3.types import BlockIdentifier
-
 from aea.common import JSONLike
 from aea.configurations.base import PublicId
 from aea.contracts.base import Contract
 from aea.crypto.base import LedgerApi
+from aea_ledger_ethereum import EthereumApi
+from web3.types import BlockIdentifier
 
 
 class DynamicContributionContract(Contract):

@@ -26,10 +26,9 @@ from typing import Dict, List
 
 import docker
 import requests
+from aea.exceptions import enforce
 from aea_test_autonomy.docker.base import DockerImage
 from docker.models.containers import Container
-
-from aea.exceptions import enforce
 
 from packages.valory.agents.impact_evaluator import PACKAGE_DIR
 from packages.valory.agents.impact_evaluator.tests.helpers.constants import (

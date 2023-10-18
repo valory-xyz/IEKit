@@ -29,7 +29,6 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 import yaml
-
 from aea.cli.packages import get_package_manager
 from aea.configurations.data_types import PackageId
 from aea.helpers.base import IPFS_HASH_REGEX, SIMPLE_ID_REGEX
