@@ -42,7 +42,7 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeigafjci7m7ezwzasav5xqo7v2mbxxn7qb4y7vnuc2wr2irzvn7wsy
 - valory/abstract_round_abci:0.1.0:bafybeih2fyfb6kkf7r45pvdk7pyyebr5xloia4xiqxtb3qsrasnstqmepq
-- valory/impact_evaluator_abci:0.1.0:bafybeibnn77xsbqbqyyze4kemhgbwhngmqm2h3lk2sjlwcv2bqcioqlycm
+- valory/impact_evaluator_abci:0.1.0:bafybeibmddnz5jpawz7275z6qrfqqs4na4xqsmmw7fpwve2ezgi3ytzfym
 - valory/generic_scoring_abci:0.1.0:bafybeig4hoc5gjiyuwh2ye3mwneegq3s3cghl5j7yokvngacvn7ixwdoga
 - valory/twitter_scoring_abci:0.1.0:bafybeibpywh4euzd3i35vmfdc43ic2jaw5m3qvttmfl76pyfitukpkk2am
 - valory/ceramic_read_abci:0.1.0:bafybeide5tbobzkwfdi7yzw6bsau36h43hdlgbnk2bfqvvhmq3hl3ucjmm
@@ -56,7 +56,7 @@ skills:
 - valory/decision_making_abci:0.1.0:bafybeicjrztkcvqjnk6odukj3j2dr6ee4j2jaaw5nsga6byjhjyuxhng5m
 - valory/llm_abci:0.1.0:bafybeifesvwe5ya7imxefijpawgtd7aje5hhr4oh2bzgfsm2ucjp3lxije
 - valory/olas_week_abci:0.1.0:bafybeidegg3yi5qww6q6r24pgjmmbkgconyfnecuohacljvferqqg3tc2e
-- valory/mech_interact_abci:0.1.0:bafybeidn2q33s3dppg67s5wp5tkc7hguwdel6ektybbxf7ol56kx7rum5e
+- valory/mech_interact_abci:0.1.0:bafybeidzhefkwmvswpswd5bid4je2lqtasdtwwbzi7nwacu56rxjo4nqkm
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -114,6 +114,11 @@ config:
     ethereum:
       address: ${str:http://localhost:8545}
       chain_id: ${int:31337}
+      poa_chain: ${bool:false}
+      default_gas_price_strategy: ${str:eip1559}
+    gnosis:
+      address: ${str:http://localhost:8545}
+      chain_id: ${int:1337}
       poa_chain: ${bool:false}
       default_gas_price_strategy: ${str:eip1559}
 ---

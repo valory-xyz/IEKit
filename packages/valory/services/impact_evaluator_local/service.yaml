@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeigbpvle64atuw56f3sa7qowm3jpbqfyhuehhiezvqanddketk2g5e
+agent: valory/impact_evaluator:0.1.0:bafybeidruvnaxycadbycek7wgmu3m27w2lu7cjinsf2esx775kcisvooee
 number_of_agents: 1
 deployment:
   agent:
@@ -126,6 +126,11 @@ config:
       chain_id: ${ETHEREUM_LEDGER_CHAIN_ID:int:31337}
       poa_chain: ${ETHEREUM_LEDGER_IS_POA_CHAIN:bool:false}
       default_gas_price_strategy: ${ETHEREUM_LEDGER_PRICING:str:eip1559}
+    gnosis:
+      address: ${GNOSIS_LEDGER_RPC:str:http://host.docker.internal:8545}
+      chain_id: ${GNOSIS_LEDGER_CHAIN_ID:int:100}
+      poa_chain: ${GNOSIS_LEDGER_IS_POA_CHAIN:bool:false}
+      default_gas_price_strategy: ${GNOSIS_LEDGER_PRICING:str:eip1559}
 ---
 public_id: valory/p2p_libp2p_client:0.1.0
 type: connection

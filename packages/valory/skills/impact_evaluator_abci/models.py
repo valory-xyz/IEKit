@@ -56,6 +56,10 @@ from packages.valory.skills.impact_evaluator_abci.composition import (
 )
 from packages.valory.skills.llm_abci.models import Params as LLMAbciParams
 from packages.valory.skills.llm_abci.rounds import Event as LLMEvent
+from packages.valory.skills.mech_interact_abci.models import (
+    Params as MechInteractAbciParams,
+)
+from packages.valory.skills.mech_interact_abci.rounds import Event as MechInteractEvent
 from packages.valory.skills.olas_week_abci.models import Params as OlasWeekAbciParams
 from packages.valory.skills.olas_week_abci.rounds import Event as OlasWeekEvent
 from packages.valory.skills.reset_pause_abci.rounds import Event as ResetPauseEvent
@@ -75,6 +79,7 @@ TwitterScoringParams = TwitterScoringAbciParams
 LLMParams = LLMAbciParams
 DecisionMakingParams = DecisionMakingAbciParams
 OlasWeekParams = OlasWeekAbciParams
+MechInteractParams = MechInteractAbciParams
 
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
@@ -129,6 +134,9 @@ class SharedState(BaseSharedState):
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             OlasWeekEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds
+        ImpactEvaluatorSkillAbciApp.event_to_timeout[
+            MechInteractEvent.ROUND_TIMEOUT
+        ] = self.context.params.round_timeout_seconds
 
 
 class Params(
@@ -139,5 +147,6 @@ class Params(
     DecisionMakingParams,
     TerminationParams,
     OlasWeekParams,
+    MechInteractParams,
 ):
     """A model to represent params for multiple abci apps."""
