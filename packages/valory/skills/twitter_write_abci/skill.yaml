@@ -24,10 +24,10 @@ fingerprint:
   tests/test_rounds.py: bafybeihmp5cnruopzf2qfxubhlhnrjsauavo2zx5ubdutmubhnnoedpxim
 fingerprint_ignore_patterns: []
 connections:
-- valory/twitter:0.1.0:bafybeif3rpo4sjc2nvn5yizuf36yqlmxxofkyug7japovdpwctpjeyjlfe
+- valory/twitter:0.1.0:bafybeiajxsodecy5rmozsfvgwea2tiuvnamulplcycpehyewtwxwnntgea
 contracts: []
 protocols:
-- valory/twitter:0.1.0:bafybeial36s3ac62nocwt2kqfmftbs7puqboqa6h76swx5zwrnksind55a
+- valory/twitter:0.1.0:bafybeiascqifuxocc5xejesav3auwabynvo5m7dhxvl76s5cye3ndlvorm
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeid7neqpxxe4ualp23gxgrtpf6r5u3myr2mmc4uvwameyqshfdoydq
 behaviours:

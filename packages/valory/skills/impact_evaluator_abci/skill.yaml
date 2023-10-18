@@ -35,7 +35,7 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeia6cdxdlqrcwk2maw25fo7dafzd2p3rs7syropvufophk2pitzbwy
 - valory/decision_making_abci:0.1.0:bafybeidhuxtuc5fuvvhjctsjjpfxhpmrovnbkp2vegtyitfkyu7d2kfqbm
 - valory/llm_abci:0.1.0:bafybeif76rcl63fswgcnreg2kqind3w2bne6vu23tvej6nwzxuu6hjwroi
-- valory/twitter_write_abci:0.1.0:bafybeigocmiyj2btktlqsn72ezs4qfudouno4qk2gsoldl6jyujx2gr5ry
+- valory/twitter_write_abci:0.1.0:bafybeibyisgkohdrzkj6rej3j3b3qsubntwx3vjowxjp6hqiy5s4dfppzi
 - valory/olas_week_abci:0.1.0:bafybeie3dcg3c4rhn7effzs4y4vimaqxjdsdbxjgs4xbvbzuklyxvtao7y
 behaviours:
   main:
