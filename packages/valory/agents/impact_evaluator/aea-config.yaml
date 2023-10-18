@@ -21,7 +21,7 @@ connections:
 - valory/ledger:0.19.0:bafybeigo5vst3zlltkouenwxuzn6c47yr2fbbml6dl2o32rfnsezmalgnu
 - valory/p2p_libp2p_client:0.1.0:bafybeihge56dn3xep2dzomu7rtvbgo4uc2qqh7ljl3fubqdi2lq44gs5lq
 - valory/openai:0.1.0:bafybeicc4cn3tgmyvhhgwa3jdwlpakw2ompaw7q6k55536jxsfvenzi4lm
-- valory/twitter:0.1.0:bafybeig542ufsbxtbx5ot4643257g6lwiv6vptv3oia6ibms7btroe4x4a
+- valory/twitter:0.1.0:bafybeial6pvki6qioonvtvtwagiajwp7uhogbglzkcq73w5w3eavfj4g3y
 contracts:
 - valory/dynamic_contribution:0.1.0:bafybeielsskpznbnk2z3ttwi4otmxgyu3znkarwwsc5c2dtbqlvqrw7z6y
 - valory/gnosis_safe:0.1.0:bafybeibt7arvjzz4ah24omst74f4sfjpzrdef76yti6ml7dopsauhdzeci
@@ -38,11 +38,11 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeige5agrztgzfevyglf7mb4o7pzfttmq4f6zi765y4g2zvftbyowru
 - valory/llm:1.0.0:bafybeif5pqy3gbzmbcuxadm65p5kpweoetn6edcrzlpjalccwowwvs3rvi
 - valory/tendermint:0.1.0:bafybeig6g6twajlwssfbfp5rlnu5mwzuu5kgak5cs4fich7rlkx6whesnu
-- valory/twitter:0.1.0:bafybeiff2rhmfo6dfmhylr7o2yhjnplnyh6mkrmlqaucweqj7qeyzj6vm4
+- valory/twitter:0.1.0:bafybeiacgkbunz3zomtypiltvqi3gsy6lqrqbzetyllv36qf26tes4pp6y
 skills:
 - valory/abstract_abci:0.1.0:bafybeihgemn2gwjc2wyxuh7rttg5pk5gec7dxhet3ih2tmg75vsdbgad7a
 - valory/abstract_round_abci:0.1.0:bafybeid7neqpxxe4ualp23gxgrtpf6r5u3myr2mmc4uvwameyqshfdoydq
-- valory/impact_evaluator_abci:0.1.0:bafybeictmo6lk44dzj6cvokkocamnn45jzoh2svt3raravgz764wchoanq
+- valory/impact_evaluator_abci:0.1.0:bafybeidcec62lwfbf22b6w7rnbrvln37k36sce2r6jdjryukumsyyqjaf4
 - valory/generic_scoring_abci:0.1.0:bafybeiby5wi7232fnptkqucxirckvm3c3zfc6koc64katki2evfv3xqrm4
 - valory/twitter_scoring_abci:0.1.0:bafybeiaj3eyk4q3vhffathsb5xhqyrce4pvw6z7q55p6hktn5bjulzyfqm
 - valory/ceramic_read_abci:0.1.0:bafybeiblsnuno2dnm6wzuztz5tqmf4ry7fjg46u6i4jsxxlyl74vv7rw3m
@@ -52,7 +52,7 @@ skills:
 - valory/reset_pause_abci:0.1.0:bafybeicpxn2khtaesuf4cq6ypwdmdmonlqroj2q2i6cxvpizc2y4cw66pe
 - valory/termination_abci:0.1.0:bafybeieqm46zuccaagnko3qlw6p3nvoohdrfgvpmw467r5lyil2dqrzjsy
 - valory/transaction_settlement_abci:0.1.0:bafybeia6cdxdlqrcwk2maw25fo7dafzd2p3rs7syropvufophk2pitzbwy
-- valory/twitter_write_abci:0.1.0:bafybeica2qikrkpnzmxkjyn433yaehcrgv7ochfzt67idfniu2jexbm4hq
+- valory/twitter_write_abci:0.1.0:bafybeia2fxjjepn7lmt4n6ilqx2s3ztr5sxbmwdov27rgbsho3izhixiji
 - valory/decision_making_abci:0.1.0:bafybeidhuxtuc5fuvvhjctsjjpfxhpmrovnbkp2vegtyitfkyu7d2kfqbm
 - valory/llm_abci:0.1.0:bafybeievx3lamtaoxsoccvy4whugvqsazgwmxxvpae23hgik5y3yxkkjem
 - valory/olas_week_abci:0.1.0:bafybeicves3qwjhkoqjapftitamneb7i626ckm2got2azscsuhcfmzde4q
