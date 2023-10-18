@@ -24,7 +24,7 @@ speech_acts:
     message: pt:str
 ...
 ---
-initiation: [request]
+initiation: [create_tweet]
 reply:
   create_tweet: [tweet_created, error]
   response: []
