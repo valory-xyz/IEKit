@@ -93,7 +93,7 @@ jobs:
           pip install --upgrade setuptools==60.10.0
           # install Protobuf compiler
           wget https://github.com/protocolbuffers/protobuf/releases/download/v24.3/protoc-24.3-linux-x86_64.zip
-          unzip protoc-3.11.4-linux-x86_64.zip -d protoc
+          unzip protoc-24.3-linux-x86_64.zip -d protoc
           sudo mv protoc/bin/protoc /usr/local/bin/protoc
           # install IPFS
           sudo apt-get install -y wget
@@ -166,7 +166,7 @@ jobs:
 
           # install Protobuf compiler
           wget https://github.com/protocolbuffers/protobuf/releases/download/v24.3/protoc-24.3-linux-x86_64.zip
-          unzip protoc-3.11.4-linux-x86_64.zip -d protoc
+          unzip protoc-24.3-linux-x86_64.zip -d protoc
           sudo mv protoc/bin/protoc /usr/local/bin/protoc
 
           # install IPFS
@@ -286,7 +286,7 @@ jobs:
 
           # install Protobuf compiler
           wget https://github.com/protocolbuffers/protobuf/releases/download/v24.3/protoc-24.3-linux-x86_64.zip
-          unzip protoc-3.11.4-linux-x86_64.zip -d protoc
+          unzip protoc-24.3-linux-x86_64.zip -d protoc
           sudo mv protoc/bin/protoc /usr/local/bin/protoc
 
           # install IPFS
