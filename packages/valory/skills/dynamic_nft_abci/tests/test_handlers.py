@@ -28,6 +28,7 @@ from typing import Dict, cast
 from unittest.mock import Mock, patch
 
 import pytest
+
 from aea.protocols.dialogue.base import DialogueMessage
 from aea.test_tools.test_skill import BaseSkillTestCase
 

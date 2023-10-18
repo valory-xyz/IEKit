@@ -25,6 +25,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional, Type, cast
 
 import pytest
+
 from aea.exceptions import AEAActException
 
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB

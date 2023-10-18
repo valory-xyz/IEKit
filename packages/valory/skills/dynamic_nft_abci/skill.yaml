@@ -19,7 +19,7 @@ fingerprint:
   tests/test_behaviours.py: bafybeibojamjtso4gc5zxuvssqwdhigpaeixz2f4s7jkeiwxi5g5vvhaqm
   tests/test_ceramic_db.py: bafybeiaemz76p55aicazhysbgisrjm5sls55jbbnyfbbyye5fpsk6ltxz4
   tests/test_dialogues.py: bafybeigybvptoehtw2o2jbudvyxggo5yr4pyqic7m732sha4xtaaxnfdpe
-  tests/test_handlers.py: bafybeibyhvjmehlie5tzu5sqaizf2k4en3rdmp3dqdh6tf7jsgnzr4jt3e
+  tests/test_handlers.py: bafybeigstd57brwxufhkhidb4dchxtemk2qbt4cavpkf63bekdg5xub3l4
   tests/test_models.py: bafybeietgyqb5rsbnzqgzcsgm2pu2qcadu7rr7akxscfmegtghc5aguz44
   tests/test_payloads.py: bafybeifpwaozt6s56uctvfmkdmcuxqawmvhu5skgyfu3ekegqd3iz7v2nm
   tests/test_rounds.py: bafybeid5ndadenmeqctrnzir4m7mpv2beqfbi3t66ry2dyozd7rabrezrq
@@ -27,7 +27,7 @@ fingerprint_ignore_patterns: []
 connections:
 - valory/http_server:0.22.0:bafybeie3d6tj2kzewced4nnttxdvr7njue2ortvawmwdt67gwf4tcuosom
 contracts:
-- valory/dynamic_contribution:0.1.0:bafybeihlnij4fzrkv3isf2fo6enw25uqac6ksopoh4dlxor7225liseo2i
+- valory/dynamic_contribution:0.1.0:bafybeielsskpznbnk2z3ttwi4otmxgyu3znkarwwsc5c2dtbqlvqrw7z6y
 protocols:
 - valory/contract_api:1.0.0:bafybeialhbjvwiwcnqq3ysxcyemobcbie7xza66gaofcvla5njezkvhcka
 - valory/http:1.0.0:bafybeiejoqgv7finfxo3rcvvovrlj5ccrbgxodjq43uo26ylpowsa3llfe

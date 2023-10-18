@@ -10,9 +10,9 @@ fingerprint:
   tests/helpers/__init__.py: bafybeif7verbag26h6i35gr5rlatxl7veq4drup5ykwdvhgtussf2jreei
   tests/helpers/constants.py: bafybeibbokz7gzdlubnjwxrmh4tqckc7j75hfy3ae6l5a63mrbd4hp6l7u
   tests/helpers/data/json_server/data.json: bafybeiapboptlarlpc2lboj4g2526vev7fwqpr267tb2qn6cevbblpnewe
-  tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
+  tests/helpers/docker.py: bafybeihjgiuroofg7zn4sng4f7mwl2s24hk2ij5ibk4alkzgvxouns6spi
   tests/helpers/fixtures.py: bafybeidfsamzdrqqkdra4ektollyfkhiyb2iqymy6djavgewon2cb23vwu
-  tests/test_impact_evaluator.py: bafybeig2674hoob2mcuugihgdcvrc4zyo46vsa67wrskseode4gatfdcma
+  tests/test_impact_evaluator.py: bafybeiejwkxnd3johulxt4rkj5cvrrvkt6yaxkwyuwvmees3z4jxs5sday
 fingerprint_ignore_patterns: []
 connections:
 - valory/http_server:0.22.0:bafybeie3d6tj2kzewced4nnttxdvr7njue2ortvawmwdt67gwf4tcuosom
@@ -20,10 +20,10 @@ connections:
 - valory/http_client:0.23.0:bafybeifgeqgryx6b3s6eseyzyezygmeitcpt3tkor2eiycozoi6clgdrny
 - valory/ledger:0.19.0:bafybeigo5vst3zlltkouenwxuzn6c47yr2fbbml6dl2o32rfnsezmalgnu
 - valory/p2p_libp2p_client:0.1.0:bafybeihge56dn3xep2dzomu7rtvbgo4uc2qqh7ljl3fubqdi2lq44gs5lq
-- valory/openai:0.1.0:bafybeigiib2l2vji4ehr7jm43bwpzhxe4u2ih4ybwy5zwmkpyjmj3k7u3e
-- valory/twitter:0.1.0:bafybeiejrglaati6hcwaowrnryk57chwczduhgfsps4sdoaiaxrmxbm2mq
+- valory/openai:0.1.0:bafybeie5ofc3il66jjnqdessdyfa62lsms2ynlxndmv3plak2vbrs7wo3q
+- valory/twitter:0.1.0:bafybeidvr7emajqilx2tdr6jednx7h6tgr4vdpuvfegbdos7i64eftjm7u
 contracts:
-- valory/dynamic_contribution:0.1.0:bafybeihlnij4fzrkv3isf2fo6enw25uqac6ksopoh4dlxor7225liseo2i
+- valory/dynamic_contribution:0.1.0:bafybeielsskpznbnk2z3ttwi4otmxgyu3znkarwwsc5c2dtbqlvqrw7z6y
 - valory/gnosis_safe:0.1.0:bafybeibt7arvjzz4ah24omst74f4sfjpzrdef76yti6ml7dopsauhdzeci
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeigxqwbd6wds57ecsfkl2hf4z4vbz5gokex6nutu5zcdpw6irh573y
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
@@ -38,24 +38,24 @@ protocols:
 - valory/ledger_api:1.0.0:bafybeige5agrztgzfevyglf7mb4o7pzfttmq4f6zi765y4g2zvftbyowru
 - valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
 - valory/tendermint:0.1.0:bafybeig6g6twajlwssfbfp5rlnu5mwzuu5kgak5cs4fich7rlkx6whesnu
-- valory/twitter:0.1.0:bafybeibgcm4qgmzpclw4pkikme7e6bsiwdbofuhkraimgfpveptepcxdua
+- valory/twitter:0.1.0:bafybeihsbxc253gmojfbxszx4bjkr3rgjvxg37dfdcdaoyecya4iih6nca
 skills:
 - valory/abstract_abci:0.1.0:bafybeihgemn2gwjc2wyxuh7rttg5pk5gec7dxhet3ih2tmg75vsdbgad7a
 - valory/abstract_round_abci:0.1.0:bafybeid7neqpxxe4ualp23gxgrtpf6r5u3myr2mmc4uvwameyqshfdoydq
-- valory/impact_evaluator_abci:0.1.0:bafybeif4bvpkcf3gexcaasdoaqizoq3t3w3hcfznljbzfq27sxh5r6exti
+- valory/impact_evaluator_abci:0.1.0:bafybeidnmzvoeks3i2gi777ju3a2no5inihtojbuj75623oslav2zfe3sa
 - valory/generic_scoring_abci:0.1.0:bafybeiby5wi7232fnptkqucxirckvm3c3zfc6koc64katki2evfv3xqrm4
-- valory/twitter_scoring_abci:0.1.0:bafybeib7qzyoe65ppchvusasvknsxxl5dduq2cyujtl3ximmeo75d3zqxq
-- valory/ceramic_read_abci:0.1.0:bafybeigeu5wie5qaymzffdgbxshgwor2fmodshyqhno75r3andhl6pwxey
-- valory/ceramic_write_abci:0.1.0:bafybeie3l6hzcbvegmhkkhrh6rbslplt6rlpgdnxrnizqsuddmu2dwtar4
-- valory/dynamic_nft_abci:0.1.0:bafybeicfvceddibkjsnbs6h5t2eivdq4ewvhvqdan3zvjvo2ahvfmzhuji
+- valory/twitter_scoring_abci:0.1.0:bafybeie33kcqtdo5tj2n4snvi2u6lrolpbrevqi72vo237hqu3ht72aqfe
+- valory/ceramic_read_abci:0.1.0:bafybeiblsnuno2dnm6wzuztz5tqmf4ry7fjg46u6i4jsxxlyl74vv7rw3m
+- valory/ceramic_write_abci:0.1.0:bafybeifw2qrwkwjvdw4mj7iggvbi7ot3ibnal4piotcbvnqak3dj6bxena
+- valory/dynamic_nft_abci:0.1.0:bafybeiee5n3jtisgbab7tfpky7picbrsgxfvilmjld7aq4w3gzng2waneq
 - valory/registration_abci:0.1.0:bafybeidbirkdjus6wbpynmyv6ffb6uevsi3zeuhokiqokuw42o7ar5j7hm
 - valory/reset_pause_abci:0.1.0:bafybeicpxn2khtaesuf4cq6ypwdmdmonlqroj2q2i6cxvpizc2y4cw66pe
 - valory/termination_abci:0.1.0:bafybeieqm46zuccaagnko3qlw6p3nvoohdrfgvpmw467r5lyil2dqrzjsy
 - valory/transaction_settlement_abci:0.1.0:bafybeia6cdxdlqrcwk2maw25fo7dafzd2p3rs7syropvufophk2pitzbwy
-- valory/twitter_write_abci:0.1.0:bafybeih6eqhd2gwgpcvjva47wtspoiawjdpjk7ugm66ch3gn2ewhh5lpy4
+- valory/twitter_write_abci:0.1.0:bafybeicq3w3i35iqu6myidza7xqpehw277v4vmfq6llkq7cmqtpqj337o4
 - valory/decision_making_abci:0.1.0:bafybeidhuxtuc5fuvvhjctsjjpfxhpmrovnbkp2vegtyitfkyu7d2kfqbm
-- valory/llm_abci:0.1.0:bafybeib4uwl2adgo6y4oixzkrqc6zabls2aghovupdaprzei57f36apmve
-- valory/olas_week_abci:0.1.0:bafybeiezsqvcqif3fjzbemjd7fa7jlpl4df6znugqhekmgdufrqftmt5n4
+- valory/llm_abci:0.1.0:bafybeibbwyoqkduqxemzhqb43m7lywxckynqeppal7v377wtiykjh5y7vu
+- valory/olas_week_abci:0.1.0:bafybeid3ui7qyk22rkjit4n5w76b7kaugcrtcsulz5b5zzchg44k7evhru
 default_ledger: ethereum
 required_ledgers:
 - ethereum
