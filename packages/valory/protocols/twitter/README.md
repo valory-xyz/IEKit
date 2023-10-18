@@ -16,17 +16,20 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 protocol_specification_id: valory/twitter:0.1.0
 speech_acts:
-  request:
+  create_tweet:
     data: pt:str
-  response:
+  tweet_created:
     tweet_id: pt:str
+  error:
+    message: pt:str
 ...
 ---
 initiation: [request]
 reply:
-  request: [response]
+  create_tweet: [tweet_created, error]
   response: []
-termination: [response]
+  error: []
+termination: [response, error]
 roles: {skill, connection}
 end_states: [successful]
 keep_terminal_state_dialogues: false
