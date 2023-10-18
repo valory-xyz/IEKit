@@ -17,5 +17,5 @@ dependencies:
   open-aea-ledger-ethereum:
     version: ==1.41.0
   web3:
-    version: '>=6.0.0,<7'
+    version: <7,>=6.0.0
 contracts: []
