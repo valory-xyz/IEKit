@@ -12,7 +12,7 @@ fingerprint:
   tests/helpers/data/json_server/data.json: bafybeiapboptlarlpc2lboj4g2526vev7fwqpr267tb2qn6cevbblpnewe
   tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
   tests/helpers/fixtures.py: bafybeidfsamzdrqqkdra4ektollyfkhiyb2iqymy6djavgewon2cb23vwu
-  tests/test_impact_evaluator.py: bafybeig2674hoob2mcuugihgdcvrc4zyo46vsa67wrskseode4gatfdcma
+  tests/test_impact_evaluator.py: bafybeidgaful36usrmehtnfwlqi4jqlvo5intbhgot2y5vwdwv5bdnqw5m
 fingerprint_ignore_patterns: []
 connections:
 - valory/http_server:0.22.0:bafybeie3d6tj2kzewced4nnttxdvr7njue2ortvawmwdt67gwf4tcuosom
@@ -42,9 +42,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeihgemn2gwjc2wyxuh7rttg5pk5gec7dxhet3ih2tmg75vsdbgad7a
 - valory/abstract_round_abci:0.1.0:bafybeid7neqpxxe4ualp23gxgrtpf6r5u3myr2mmc4uvwameyqshfdoydq
-- valory/impact_evaluator_abci:0.1.0:bafybeihen74opdpyk5scfdrhs2em7t37r2nmnacmcxiyngxjsr6otv2xyi
+- valory/impact_evaluator_abci:0.1.0:bafybeib37v73jyl75z7uyfufzs4t7244kwjzo6pvery7guzj5eobt4e7n4
 - valory/generic_scoring_abci:0.1.0:bafybeiby5wi7232fnptkqucxirckvm3c3zfc6koc64katki2evfv3xqrm4
-- valory/twitter_scoring_abci:0.1.0:bafybeibvhl76xhunfclpo4ydsnebegbqngymuyif62w5jhkpf3gkm4fohu
+- valory/twitter_scoring_abci:0.1.0:bafybeid7ub5naxmcndy4k7ggnrs5fdv4hflplgqognkadxvh2jr356vmyi
 - valory/ceramic_read_abci:0.1.0:bafybeigeu5wie5qaymzffdgbxshgwor2fmodshyqhno75r3andhl6pwxey
 - valory/ceramic_write_abci:0.1.0:bafybeie3l6hzcbvegmhkkhrh6rbslplt6rlpgdnxrnizqsuddmu2dwtar4
 - valory/dynamic_nft_abci:0.1.0:bafybeigben7gpf3pcihd5ruktrcbnf3pvvpieb7vkpcy2alvhucwgjomlu
