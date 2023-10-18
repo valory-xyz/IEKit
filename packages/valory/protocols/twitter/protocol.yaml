@@ -15,7 +15,7 @@ fingerprint:
   tests/test_twitter_dialogues.py: bafybeibu4cmtkmf5iaf54axcny2yaan2dt56dorv5664tg37fnxhsjgpya
   tests/test_twitter_messages.py: bafybeie5eyw2t5n6ck3iu3l6yv543kmk4tpqwb4curjyzyzqdwubghonza
   twitter.proto: bafybeieaepg4kzjpzkbhg7amwfjmk77esizsjedkr524m6pd2cqfzykbgm
-  twitter_pb2.py: bafybeifmntf6p6lhlxxpl73f7yvswpulmfnmisehkdsdv6e5bsga3mc3gq
+  twitter_pb2.py: bafybeiexfvi6gta5wpk5tdhkpu2p3pq4lp253q22ld5u4kfln7erqz3aay
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

@@ -23,6 +23,7 @@ from pathlib import Path
 from typing import Tuple
 
 import pytest
+from aea.configurations.data_types import PublicId
 from aea_test_autonomy.base_test_classes.agents import (
     BaseTestEnd2EndExecution,
     RoundChecks,
@@ -42,8 +43,6 @@ from aea_test_autonomy.fixture_helpers import ipfs_domain  # noqa: F401
 from aea_test_autonomy.fixture_helpers import key_pairs  # noqa: F401
 from aea_test_autonomy.fixture_helpers import tendermint  # noqa: F401
 from aea_test_autonomy.fixture_helpers import tendermint_port  # noqa: F401
-
-from aea.configurations.data_types import PublicId
 
 from packages.valory.agents.impact_evaluator.tests.helpers.docker import (
     DEFAULT_JSON_SERVER_ADDR as _DEFAULT_JSON_SERVER_ADDR,

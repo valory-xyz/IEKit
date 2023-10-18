@@ -7,12 +7,12 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiagnziswj5tll4yzx63u4hvat4yieoaaqt5b67chvvqxg5th5mxz4
-  connection.py: bafybeiasbiwduhvs4j257i3p4xgbgukzlirlzpjoe6cggs5u5nutbswimq
+  connection.py: bafybeifkomaatfsg6fetdxhnuxl4dckstmsed3d5c7ve4rbpy2lb43y3vm
   readme.md: bafybeibqbvpfn6i2w7vxk2m65gizd2hcofu7mdzp2yusx7uupelztme724
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
-- valory/llm:1.0.0:bafybeigdww27sv7uzwkr3gzh73ojtemamcxhv3a5qylrknzv6hfhihs6ba
+- valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
 class_name: OpenaiConnection
 config:
   engine: text-davinci-003
