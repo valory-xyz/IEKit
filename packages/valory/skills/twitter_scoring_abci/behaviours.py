@@ -856,7 +856,7 @@ class PreMechRequestBehaviour(TwitterScoringBaseBehaviour):
             payload = PreMechRequestPayload(
                 sender=sender,
                 content=json.dumps(
-                    {"mech_requests": new_mech_requests}, sort_keys=True
+                    {"new_mech_requests": new_mech_requests}, sort_keys=True
                 ),
             )
 

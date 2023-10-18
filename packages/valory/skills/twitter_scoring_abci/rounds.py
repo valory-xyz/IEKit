@@ -103,6 +103,7 @@ class Event(Enum):
     POST_MECH = "post_mech"
     DB_UPDATE = "db_update"
     SELECT_KEEPERS = "select_keepers"
+    SKIP_EVALUATION = "skip_evaluation"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -495,7 +496,11 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
         if self.threshold_reached:
 
             payload = json.loads(self.most_voted_payload)
-            new_mech_requests = payload["mech_requests"]
+            new_mech_requests = payload["new_mech_requests"]
+
+            # Nothing to evaluate (no new tweets)
+            if not new_mech_requests:
+                return self.synchronized_data, Event.SKIP_EVALUATION
 
             mech_requests = cast(SynchronizedData, self.synchronized_data).mech_requests
             mech_requests = mech_requests.extend(new_mech_requests)
@@ -711,6 +716,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         },
         PreMechRequestRound: {
             Event.DONE: FinishedTwitterCollectionRound,
+            Event.SKIP_EVALUATION: FinishedTwitterScoringRound,
             Event.ROUND_TIMEOUT: PreMechRequestRound,
             Event.NO_MAJORITY: PreMechRequestRound,
         },
