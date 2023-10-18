@@ -27,9 +27,9 @@ speech_acts:
 initiation: [create_tweet]
 reply:
   create_tweet: [tweet_created, error]
-  response: []
+  tweet_created: []
   error: []
-termination: [response, error]
+termination: [tweet_created, error]
 roles: {skill, connection}
 end_states: [successful]
 keep_terminal_state_dialogues: false
