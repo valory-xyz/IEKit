@@ -503,10 +503,14 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
                 mech_responses = cast(
                     SynchronizedData, self.synchronized_data
                 ).mech_responses
+                tweets = cast(SynchronizedData, self.synchronized_data).tweets
                 synchronized_data = self.synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
                     **{
-                        get_name(SynchronizedData.mech_responses): mech_responses,
+                        get_name(SynchronizedData.mech_responses): json.dumps(
+                            mech_responses
+                        ),
+                        get_name(SynchronizedData.tweets): tweets,
                     },
                 )
                 return synchronized_data, Event.SKIP_EVALUATION
