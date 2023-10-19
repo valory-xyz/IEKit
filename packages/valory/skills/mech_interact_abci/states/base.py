@@ -120,6 +120,11 @@ class SynchronizedData(TxSynchronizedData):
         deserialized = CollectionRound.deserialize_collection(serialized)
         return cast(Mapping[str, MechResponsePayload], deserialized)
 
+    @property
+    def final_tx_hash(self) -> Optional[str]:
+        """Get the verified tx hash."""
+        return cast(str, self.db.get("final_tx_hash", None))
+
 
 class MechInteractionRound(CollectSameUntilThresholdRound):
     """A base round for the mech interactions."""

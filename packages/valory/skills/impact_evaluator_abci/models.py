@@ -145,8 +145,8 @@ class Params(
     CeramicWriteParams,
     DynamicNFTParams,
     DecisionMakingParams,
-    TerminationParams,
     OlasWeekParams,
     MechInteractParams,
+    TerminationParams,
 ):
     """A model to represent params for multiple abci apps."""

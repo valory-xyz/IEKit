@@ -37,7 +37,6 @@ from packages.valory.skills.abstract_round_abci.models import (
 from packages.valory.skills.mech_interact_abci.rounds import MechInteractAbciApp
 
 
-Params = BaseParams
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
 
@@ -73,6 +72,9 @@ class MechParams(BaseParams):
         if self._ipfs_address.endswith("/"):
             return self._ipfs_address
         return f"{self._ipfs_address}/"
+
+
+Params = MechParams
 
 
 @dataclass

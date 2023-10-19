@@ -24,6 +24,7 @@ import math
 import random
 import re
 from abc import ABC
+from dataclasses import asdict
 from datetime import datetime
 from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
 
@@ -843,14 +844,19 @@ class PreMechRequestBehaviour(TwitterScoringBaseBehaviour):
                     continue
 
                 new_mech_requests.append(
-                    MechMetadata(
-                        nonce=tweet_id,
-                        tool="openai",
-                        prompt=tweet_evaluation_prompt.replace(
-                            "{user_text}", tweet["text"]
-                        ),
+                    asdict(
+                        MechMetadata(
+                            nonce=tweet_id,
+                            tool="openai",
+                            prompt=tweet_evaluation_prompt.replace(
+                                "{user_text}", tweet["text"]
+                            ),
+                        )
                     )
                 )
+
+            if not new_mech_requests:
+                self.context.logger.info("No new mech requests. Skipping evaluation...")
 
             sender = self.context.agent_address
             payload = PreMechRequestPayload(

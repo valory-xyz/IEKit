@@ -240,7 +240,14 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         """Do the action."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            yield from self._process_responses()
+
+            if self.synchronized_data.final_tx_hash:
+                yield from self._process_responses()
+
+            self.context.logger.info(
+                f"Received mech responses: {self.serialized_responses}"
+            )
+
             payload = MechResponsePayload(
                 self.context.agent_address,
                 self.serialized_responses,

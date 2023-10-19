@@ -21,7 +21,7 @@
 
 import json
 import math
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from enum import Enum
 from typing import Any, Dict, FrozenSet, List, Optional, Set, Tuple, cast
 
@@ -388,58 +388,81 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
             payload = json.loads(self.most_voted_payload)
 
             # Api error
-            if "error" in payload:
+            # if "error" in payload:
 
-                # API limits
-                if payload["error"] == ERROR_API_LIMITS:
-                    performed_twitter_tasks[
-                        "retrieve_hashtahs"
-                    ] = Event.DONE_MAX_RETRIES.value
+            #     # API limits
+            #     if payload["error"] == ERROR_API_LIMITS:
+            #         performed_twitter_tasks[
+            #             "retrieve_hashtahs"
+            #         ] = Event.DONE_MAX_RETRIES.value
 
-                    synchronized_data = self.synchronized_data.update(
-                        synchronized_data_class=SynchronizedData,
-                        **{
-                            get_name(SynchronizedData.sleep_until): payload[
-                                "sleep_until"
-                            ],
-                            get_name(
-                                SynchronizedData.performed_twitter_tasks
-                            ): performed_twitter_tasks,
-                        },
-                    )
-                    return synchronized_data, Event.DONE_API_LIMITS
+            #         synchronized_data = self.synchronized_data.update(
+            #             synchronized_data_class=SynchronizedData,
+            #             **{
+            #                 get_name(SynchronizedData.sleep_until): payload[
+            #                     "sleep_until"
+            #                 ],
+            #                 get_name(
+            #                     SynchronizedData.performed_twitter_tasks
+            #                 ): performed_twitter_tasks,
+            #             },
+            #         )
+            #         return synchronized_data, Event.DONE_API_LIMITS
 
-                api_retries = (
-                    cast(SynchronizedData, self.synchronized_data).api_retries + 1
-                )
+            #     api_retries = (
+            #         cast(SynchronizedData, self.synchronized_data).api_retries + 1
+            #     )
 
-                # Other API errors
-                if api_retries >= MAX_API_RETRIES:
-                    performed_twitter_tasks[
-                        "retrieve_hashtags"
-                    ] = Event.DONE_MAX_RETRIES.value
-                    synchronized_data = self.synchronized_data.update(
-                        synchronized_data_class=SynchronizedData,
-                        **{
-                            get_name(SynchronizedData.api_retries): 0,  # reset retries
-                            get_name(
-                                SynchronizedData.performed_twitter_tasks
-                            ): performed_twitter_tasks,
-                            get_name(SynchronizedData.sleep_until): payload[
-                                "sleep_until"
-                            ],
-                        },
-                    )
-                    return self.synchronized_data, Event.DONE_MAX_RETRIES
+            #     # Other API errors
+            #     if api_retries >= MAX_API_RETRIES:
+            #         performed_twitter_tasks[
+            #             "retrieve_hashtags"
+            #         ] = Event.DONE_MAX_RETRIES.value
+            #         synchronized_data = self.synchronized_data.update(
+            #             synchronized_data_class=SynchronizedData,
+            #             **{
+            #                 get_name(SynchronizedData.api_retries): 0,  # reset retries
+            #                 get_name(
+            #                     SynchronizedData.performed_twitter_tasks
+            #                 ): performed_twitter_tasks,
+            #                 get_name(SynchronizedData.sleep_until): payload[
+            #                     "sleep_until"
+            #                 ],
+            #             },
+            #         )
+            #         return self.synchronized_data, Event.DONE_MAX_RETRIES
 
-                synchronized_data = self.synchronized_data.update(
-                    synchronized_data_class=SynchronizedData,
-                    **{
-                        get_name(SynchronizedData.api_retries): api_retries,
-                        get_name(SynchronizedData.sleep_until): payload["sleep_until"],
-                    },
-                )
-                return synchronized_data, Event.API_ERROR
+            #     synchronized_data = self.synchronized_data.update(
+            #         synchronized_data_class=SynchronizedData,
+            #         **{
+            #             get_name(SynchronizedData.api_retries): api_retries,
+            #             get_name(SynchronizedData.sleep_until): payload["sleep_until"],
+            #         },
+            #     )
+            #     return synchronized_data, Event.API_ERROR
+
+            # DELETE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            payload["tweets"] = {
+                "1712852775694893449": {
+                    "edit_history_tweet_ids": ["1712852775694893449"],
+                    "id": "1712852775694893449",
+                    "author_id": "1450081635559428107",
+                    "created_at": "2023-10-13T15:28:19.000Z",
+                    "text": "RT @valoryag: We know that AI agents will be the majority of crypto's next users.\n\nThis latest @MessariCrypto article shows how @Autonolas\u2026",
+                    "username": "autonolas",
+                },
+                "1712808941359600006": {
+                    "edit_history_tweet_ids": ["1712808941359600006"],
+                    "id": "1712808941359600006",
+                    "author_id": "1450081635559428107",
+                    "created_at": "2023-10-13T12:34:08.000Z",
+                    "text": "OLAS token is now tradable on @gnosischain, after work began to implement AIP-1.\n\nThis sets the stage for the next step:\n\nBonding programmes for @gnosischain liquidity pools... https://t.co/0tb9AB0rJz",
+                    "username": "autonolas",
+                },
+            }
+            payload["latest_hashtag_tweet_id"] = "1712852775694893449"
+            print("Adding new fake tweets")
+            ###@@@@@@@@@@@@@@@@@@@@@@@@
 
             # Happy path
             previous_tweets = cast(SynchronizedData, self.synchronized_data).tweets
@@ -515,8 +538,11 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
                 )
                 return synchronized_data, Event.SKIP_EVALUATION
 
-            mech_requests = cast(SynchronizedData, self.synchronized_data).mech_requests
-            mech_requests = mech_requests.extend(new_mech_requests)
+            mech_requests = [
+                asdict(r)
+                for r in cast(SynchronizedData, self.synchronized_data).mech_requests
+            ]
+            mech_requests.extend(new_mech_requests)
 
             performed_twitter_tasks = cast(
                 SynchronizedData, self.synchronized_data
@@ -526,7 +552,7 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    get_name(SynchronizedData.mech_requests): mech_requests,
+                    get_name(SynchronizedData.mech_requests): json.dumps(mech_requests),
                     get_name(
                         SynchronizedData.performed_twitter_tasks
                     ): performed_twitter_tasks,

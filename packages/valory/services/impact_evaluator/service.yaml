@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeif45xrgg4rui2fmohc6owyoaihuvzrhokzm6t4rskclxsbi4dvzjm
+agent: valory/impact_evaluator:0.1.0:bafybeifnjklfwo2v4ykuxmmf24i2ahl7dhzosmbvijmf5ecytcoukgbdwe
 number_of_agents: 4
 deployment:
   agent:
@@ -122,6 +122,9 @@ extra:
         slash_threshold_amount: ${SLASH_THRESHOLD_AMOUNT:int:10000000000000000}
         light_slash_unit_amount: ${LIGHT_SLASH_UNIT_AMOUNT:int:5000000000000000}
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
+        multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
+        mech_agent_address: ${MECH_AGENT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
+        ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
 1:
   models:
     benchmark_tool:
@@ -196,6 +199,9 @@ extra:
         slash_threshold_amount: ${SLASH_THRESHOLD_AMOUNT:int:10000000000000000}
         light_slash_unit_amount: ${LIGHT_SLASH_UNIT_AMOUNT:int:5000000000000000}
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
+        multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
+        mech_agent_address: ${MECH_AGENT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
+        ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
 2:
   models:
     benchmark_tool:
@@ -270,6 +276,9 @@ extra:
         slash_threshold_amount: ${SLASH_THRESHOLD_AMOUNT:int:10000000000000000}
         light_slash_unit_amount: ${LIGHT_SLASH_UNIT_AMOUNT:int:5000000000000000}
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
+        multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
+        mech_agent_address: ${MECH_AGENT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
+        ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
 3:
   models:
     benchmark_tool:
@@ -348,6 +357,9 @@ extra:
         slash_threshold_amount: ${SLASH_THRESHOLD_AMOUNT:int:10000000000000000}
         light_slash_unit_amount: ${LIGHT_SLASH_UNIT_AMOUNT:int:5000000000000000}
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
+        multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
+        mech_agent_address: ${MECH_AGENT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
+        ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
 ---
 public_id: valory/ledger:0.19.0
 type: connection

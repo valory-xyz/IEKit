@@ -96,6 +96,12 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
     ) -> WaitableConditionType:
         """Interact with a contract."""
         contract_id = str(contract_public_id)
+
+        self.context.logger.info(
+            f"Interacting with contract '{contract_id}' at address {contract_address}\n"
+            f"Calling method '{contract_callable}' with parameters: {kwargs}"
+        )
+
         response_msg = yield from self.get_contract_api_response(
             performative,
             contract_address,
@@ -103,6 +109,9 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
             contract_callable,
             **kwargs,
         )
+
+        self.context.logger.info(f"Contract response: {response_msg}")
+
         if response_msg.performative != ContractApiMessage.Performative.RAW_TRANSACTION:
             self.default_error(contract_id, contract_callable, response_msg)
             return False

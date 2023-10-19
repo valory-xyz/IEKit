@@ -252,6 +252,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             "data",
             get_name(MechRequestBehaviour.request_data),
             request_data=self._v1_hex_truncated,
+            chain_id=GNOSIS_CHAIN_ID,
         )
 
         if status:
@@ -267,7 +268,10 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
     def _get_price(self) -> WaitableConditionType:
         """Get the price of the mech request."""
         result = yield from self._mech_contract_interact(
-            "get_price", "price", get_name(MechRequestBehaviour.price)
+            "get_price",
+            "price",
+            get_name(MechRequestBehaviour.price),
+            chain_id=GNOSIS_CHAIN_ID,
         )
         return result
 
@@ -289,6 +293,9 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             serialized_data = (
                 json.dumps(data, cls=DataclassEncoder)
                 for data in (self._mech_requests, self._pending_responses)
+            )
+            self.context.logger.info(
+                f"Preparing mech request:\ntx_hex: {self.tx_hex}\nprice: {self.price}\nserialized_data: {serialized_data}\n"
             )
             payload = MechRequestPayload(
                 self.context.agent_address, self.tx_hex, self.price, *serialized_data
