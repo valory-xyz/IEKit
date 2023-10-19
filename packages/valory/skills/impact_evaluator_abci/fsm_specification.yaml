@@ -42,6 +42,7 @@ alphabet_in:
 - SCHEDULED_TWEET
 - SCORE
 - SELECT_KEEPERS
+- SKIP_EVALUATION
 - SUSPICIOUS_ACTIVITY
 - TWEET_EVALUATION_ROUND_TIMEOUT
 - UPDATE_CENTAURS
@@ -191,6 +192,7 @@ transition_func:
     (PreMechRequestRound, DONE): MechResponseRound
     (PreMechRequestRound, NO_MAJORITY): PreMechRequestRound
     (PreMechRequestRound, ROUND_TIMEOUT): PreMechRequestRound
+    (PreMechRequestRound, SKIP_EVALUATION): TokenTrackRound
     (RandomnessRound, DONE): SelectKeeperRound
     (RandomnessRound, NO_MAJORITY): RandomnessRound
     (RandomnessRound, ROUND_TIMEOUT): RandomnessRound

@@ -11,6 +11,7 @@ alphabet_in:
 - RETRIEVE_MENTIONS
 - ROUND_TIMEOUT
 - SELECT_KEEPERS
+- SKIP_EVALUATION
 default_start_state: TwitterDecisionMakingRound
 final_states:
 - FinishedTwitterCollectionRound
@@ -39,6 +40,7 @@ transition_func:
     (PreMechRequestRound, DONE): FinishedTwitterCollectionRound
     (PreMechRequestRound, NO_MAJORITY): PreMechRequestRound
     (PreMechRequestRound, ROUND_TIMEOUT): PreMechRequestRound
+    (PreMechRequestRound, SKIP_EVALUATION): FinishedTwitterScoringRound
     (TwitterDecisionMakingRound, DB_UPDATE): DBUpdateRound
     (TwitterDecisionMakingRound, DONE): FinishedTwitterScoringRound
     (TwitterDecisionMakingRound, NO_MAJORITY): TwitterDecisionMakingRound
