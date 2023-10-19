@@ -43,6 +43,7 @@ class Mech(Contract):
         cls,
         ledger_api: EthereumApi,
         contract_address: str,
+        **kwargs: Any
     ) -> JSONLike:
         """Get the price of a request."""
         contract_instance = cls.get_instance(ledger_api, contract_address)
@@ -55,6 +56,7 @@ class Mech(Contract):
         ledger_api: LedgerApi,
         contract_address: str,
         request_data: bytes,
+        **kwargs: Any
     ) -> Dict[str, bytes]:
         """Gets the encoded arguments for a request tx, which should only be called via the multisig.
 
@@ -75,6 +77,7 @@ class Mech(Contract):
         expected_logs: int,
         event_name: str,
         *args: Any,
+        **kwargs: Any
     ) -> JSONLike:
         """Process the logs of the given event."""
         ledger_api = cast(EthereumApi, ledger_api)
@@ -106,6 +109,7 @@ class Mech(Contract):
         contract_address: str,
         tx_hash: HexStr,
         expected_logs: int = 1,
+        **kwargs: Any
     ) -> JSONLike:
         """
         Process the request receipt to get the requestId and the given data from the `Request` event's logs.
@@ -128,6 +132,7 @@ class Mech(Contract):
         contract_address: str,
         tx_hash: HexStr,
         expected_logs: int = 1,
+        **kwargs: Any
     ) -> JSONLike:
         """
         Process the request receipt to get the requestId and the delivered data if the `Deliver` event has been emitted.
@@ -148,6 +153,7 @@ class Mech(Contract):
         ledger_api: EthereumApi,
         contract_address: str,
         tx_hash: HexStr,
+        **kwargs: Any
     ) -> JSONLike:
         """Get the number of the block in which the tx of the given hash was settled."""
         receipt: TxReceipt = ledger_api.api.eth.get_transaction_receipt(tx_hash)
@@ -162,6 +168,7 @@ class Mech(Contract):
         request_id: int,
         from_block: BlockIdentifier = "earliest",
         to_block: BlockIdentifier = "latest",
+        **kwargs: Any
     ) -> JSONLike:
         """Filter the `Deliver` events emitted by the contract and get the data of the given `request_id`."""
         ledger_api = cast(EthereumApi, ledger_api)
@@ -198,6 +205,7 @@ class Mech(Contract):
         cls,
         ledger_api: EthereumApi,
         contract_address: str,
+        **kwargs: Any
     ) -> JSONLike:
         """Get the price of a request."""
         contract_instance = cls.get_instance(ledger_api, contract_address)
