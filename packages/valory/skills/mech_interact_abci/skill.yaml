@@ -10,7 +10,7 @@ fingerprint:
   __init__.py: bafybeidf3nlv5fpvfy4libtscayhirdw64shgmhfmvjiftjmjkmhu7auxq
   behaviours/__init__.py: bafybeie3zsi6p3yanz5mqwpkdrcgywaqvkit3hdintsb4awnvalgxpxa4i
   behaviours/base.py: bafybeiehxgssqesxylaqfe2ymknsthxjgjgpee6vbaudvdg6j2zasebks4
-  behaviours/request.py: bafybeibebbesrs5o654mu3soklima7oxygjynhwkd5yizuh3sv5xtqlfim
+  behaviours/request.py: bafybeidy5fpzeqytxaorgxncibcjgfoyfpn4wfnlasggxkiocrio2jseiu
   behaviours/response.py: bafybeialzkiocugrqfvfywysxtynjzjjh6iolf5ys5ovza7ukudjyrhg5y
   behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
   dialogues.py: bafybeigjmyzd2bx6mgqiet2c223k6wkc5jk7kdkstbhpaxlqxatey26tlm
@@ -36,7 +36,7 @@ connections: []
 contracts:
 - valory/gnosis_safe:0.1.0:bafybeibt7arvjzz4ah24omst74f4sfjpzrdef76yti6ml7dopsauhdzeci
 - valory/mech:0.1.0:bafybeigoci5qtno7ds5tadlxg3ipdxaoej4vivv3dygywgd6er24pjytxq
-- valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
+- valory/multisend:0.1.0:bafybeicrj4l6o77x6xtj4zj4pmgfp654vnp3hiew3i4of63w7bxg5mzzsq
 protocols:
 - valory/contract_api:1.0.0:bafybeialhbjvwiwcnqq3ysxcyemobcbie7xza66gaofcvla5njezkvhcka
 skills:

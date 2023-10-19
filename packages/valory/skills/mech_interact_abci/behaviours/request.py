@@ -64,7 +64,7 @@ Ox = "0x"
 # which is what we want in most cases
 # more info here: https://safe-docs.dev.gnosisdev.com/safe/docs/contracts_tx_execution/
 SAFE_GAS = 0
-GNOSIS_CHAIN_ID = 100
+GNOSIS_CHAIN_ID = "gnosis"
 
 
 class MechRequestBehaviour(MechInteractBaseBehaviour):
