@@ -500,7 +500,16 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
 
             # Nothing to evaluate (no new tweets)
             if not new_mech_requests:
-                return self.synchronized_data, Event.SKIP_EVALUATION
+                mech_responses = cast(
+                    SynchronizedData, self.synchronized_data
+                ).mech_responses
+                synchronized_data = self.synchronized_data.update(
+                    synchronized_data_class=SynchronizedData,
+                    **{
+                        get_name(SynchronizedData.mech_responses): mech_responses,
+                    },
+                )
+                return synchronized_data, Event.SKIP_EVALUATION
 
             mech_requests = cast(SynchronizedData, self.synchronized_data).mech_requests
             mech_requests = mech_requests.extend(new_mech_requests)
