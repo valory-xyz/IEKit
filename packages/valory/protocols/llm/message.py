@@ -46,7 +46,7 @@ from typing import Any, Dict, Set, Tuple, cast
 
 from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
-from aea.protocols.base import Message
+from aea.protocols.base import Message  # type: ignore
 
 
 _default_logger = logging.getLogger("aea.packages.valory.protocols.llm.message")

@@ -46,7 +46,7 @@ from typing import Any, Set, Tuple, cast
 
 from aea.configurations.base import PublicId
 from aea.exceptions import AEAEnforceError, enforce
-from aea.protocols.base import Message
+from aea.protocols.base import Message  # type: ignore
 
 
 _default_logger = logging.getLogger("aea.packages.valory.protocols.twitter.message")
@@ -55,10 +55,10 @@ DEFAULT_BODY_SIZE = 4
 
 
 class TwitterMessage(Message):
-    """A protocol for twitter interactions."""
+    """A protocol for interacting with Twitter."""
 
     protocol_id = PublicId.from_str("valory/twitter:0.1.0")
-    protocol_specification_id = PublicId.from_str("valory/twitter:1.0.0")
+    protocol_specification_id = PublicId.from_str("valory/twitter:0.1.0")
 
     class Performative(Message.Performative):
         """Performatives for the twitter protocol."""

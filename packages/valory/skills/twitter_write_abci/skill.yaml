@@ -8,7 +8,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifmfivpoooso45mltpffcv3vvonhrtycv443aqpzm6cetrkwopsdi
-  behaviours.py: bafybeid377rzt47onp6ra76wpzv7ma6cvvqhysk67dvvxkwwc4yrpspwga
+  behaviours.py: bafybeie4m65fzhaltzmf62eyhcdy77vsrvdovgtajmvkupk3lkiuk2oxzq
   dialogues.py: bafybeicbuuhc6u3oih6yeziqs7dqi2tebmahdgpc6sd5fzgqyjek6qhwty
   fsm_specification.yaml: bafybeif77zpgvvwjxxpeakzbi5ftsjejlsryeyjhkzddpvqkcq6wrxzufy
   handlers.py: bafybeibofqqb5dvfugwjzuwmm5ktcumwzdak43uyfvythrdrfhk7wcacne
@@ -24,12 +24,12 @@ fingerprint:
   tests/test_rounds.py: bafybeihmp5cnruopzf2qfxubhlhnrjsauavo2zx5ubdutmubhnnoedpxim
 fingerprint_ignore_patterns: []
 connections:
-- valory/twitter:0.1.0:bafybeifm7tpjdd2y5dy5xzuxt3tebyqxmgn56agkqv64nloggqo5cr3sku
+- valory/twitter:0.1.0:bafybeies2hfmhirfw6vkg5jvdi6wxqddrtyroh5qvzqvduvhv3zlets564
 contracts: []
 protocols:
-- valory/twitter:0.1.0:bafybeib4eyf7qbs7kdntqzhwqsaaj4o2mzcokcztaza6qgwt7sbxgkqu2m
+- valory/twitter:0.1.0:bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeih2fyfb6kkf7r45pvdk7pyyebr5xloia4xiqxtb3qsrasnstqmepq
+- valory/abstract_round_abci:0.1.0:bafybeid7neqpxxe4ualp23gxgrtpf6r5u3myr2mmc4uvwameyqshfdoydq
 behaviours:
   main:
     args: {}
@@ -160,7 +160,5 @@ models:
   twitter_dialogues:
     args: {}
     class_name: TwitterDialogues
-dependencies:
-  open-aea-web3:
-    version: ==6.0.1
+dependencies: {}
 is_abstract: true

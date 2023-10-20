@@ -27,12 +27,12 @@ fingerprint:
   tests/test_rounds.py: bafybeibbznfio2tgvgzpc4l3jm6jwzd5ifflzgm6aflurllseeolef3ydm
 fingerprint_ignore_patterns: []
 connections:
-- valory/openai:0.1.0:bafybeibn42k4zebenmjsumkngfxllxbofkwdno2fm65o6zf5y2uihmo2dq
+- valory/openai:0.1.0:bafybeigiib2l2vji4ehr7jm43bwpzhxe4u2ih4ybwy5zwmkpyjmj3k7u3e
 contracts: []
 protocols:
-- valory/llm:1.0.0:bafybeigqybmg75vsxexmp57hkms7lkp7iwpf54r7wpygizxryvrhfqqpb4
+- valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeih2fyfb6kkf7r45pvdk7pyyebr5xloia4xiqxtb3qsrasnstqmepq
+- valory/abstract_round_abci:0.1.0:bafybeid7neqpxxe4ualp23gxgrtpf6r5u3myr2mmc4uvwameyqshfdoydq
 behaviours:
   main:
     args: {}
@@ -175,6 +175,6 @@ models:
     args: {}
     class_name: TendermintDialogues
 dependencies:
-  open-aea-web3:
-    version: ==6.0.1
+  web3:
+    version: '>=6.0.0,<7'
 is_abstract: true

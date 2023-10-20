@@ -43,12 +43,13 @@
 # pylint: disable=too-many-statements,too-many-locals,no-member,too-few-public-methods,redefined-builtin
 from typing import Any, Dict, cast
 
-from aea.mail.base_pb2 import DialogueMessage
-from aea.mail.base_pb2 import Message as ProtobufMessage
-from aea.protocols.base import Message, Serializer
+from aea.mail.base_pb2 import DialogueMessage  # type: ignore
+from aea.mail.base_pb2 import Message as ProtobufMessage  # type: ignore
+from aea.protocols.base import Message  # type: ignore
+from aea.protocols.base import Serializer  # type: ignore
 
-from packages.valory.protocols.llm import llm_pb2
-from packages.valory.protocols.llm.message import LlmMessage
+from packages.valory.protocols.llm import llm_pb2  # type: ignore
+from packages.valory.protocols.llm.message import LlmMessage  # type: ignore
 
 
 class LlmSerializer(Serializer):
@@ -65,7 +66,7 @@ class LlmSerializer(Serializer):
         msg = cast(LlmMessage, msg)
         message_pb = ProtobufMessage()
         dialogue_message_pb = DialogueMessage()
-        llm_msg = llm_pb2.LlmMessage()
+        llm_msg = llm_pb2.LlmMessage()  # type: ignore
 
         dialogue_message_pb.message_id = msg.message_id
         dialogue_reference = msg.dialogue_reference
@@ -104,7 +105,7 @@ class LlmSerializer(Serializer):
         :return: the 'Llm' message.
         """
         message_pb = ProtobufMessage()
-        llm_pb = llm_pb2.LlmMessage()
+        llm_pb = llm_pb2.LlmMessage()  # type: ignore
         message_pb.ParseFromString(obj)
         message_id = message_pb.dialogue_message.message_id
         dialogue_reference = (
