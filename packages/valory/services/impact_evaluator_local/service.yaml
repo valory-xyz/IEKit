@@ -105,9 +105,9 @@ models:
       twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
       twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
       twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-      twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
+      twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
       twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
-      twitter_tweets_args: ${TWITTER_TWEETS_ARGS:str:tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
+      twitter_tweets_args: ${TWITTER_TWEETS_ARGS:str:tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
       tx_timeout: 10.0
       use_termination: ${USE_TERMINATION:bool:false}
       validate_timeout: 1205
