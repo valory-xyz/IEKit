@@ -20,56 +20,125 @@
 """This package contains LLM prompts for WeekInOlasAbciApp."""
 
 tweet_summarizer_prompt = """
-You are an AI tweet summarizer that needs to create concise pieces of content using tweets from your users.
-These users will write about what happened during the last week in Olas, a web3 protocol focused on building decentralized autonomous services.
-Your task is to summarize all the content from your users in a few short sentences that tells the story of what happened during the last week in the Olas protocol.
-You will be given a text about Olas as well as the user tweets.
+Create a post consisting of 2 lists of concise headlines about the Olas ecosystem this week for each of the tweets in the input section below.
+The first list should be just a list of headlines. The second should be the same list of headlines with their accompanying tweet link.
+Do not hyperlink. Where possible @mention relevant accounts. Each headline should be output in bullet points, using ☴ as the bullet points.
 
-GOALS:
+My input will follow the format:
+week number
+Tweet1 text
+Tweet1 link
+Tweet2 text
+Tweet2 link
+and so on
 
-1. Summarize the user tweets in the context of what happened during last week in the Olas space, using a list of highlights.
+Your response should follow the format:
+"Week [Week number] in Olas
+Highlights included:
+☴[Tweet1 headline]
+☴[Tweet2 headline]
+☴[Tweet3 headline]
+☴[Tweet4 headline]
+☴[Tweet5 headline]
+☴[Tweet6 headline]
+and so on
+☴[Tweet1 headline]
+[Tweet1 link]
+☴[Tweet2 headline]
+[Tweet2 link]
+☴[Tweet3 headline]
+[Tweet3 link]
+☴[Tweet4 headline]
+[Tweet4 link]
+ ☴[Tweet5 headline]
+[Tweet5 link]
+☴[Tweet6 headline]
+[Tweet6 link]
+and so on
+Stay tuned for more in Week [week number +1].. :cohete:"
 
-For the given goal, only respond with a short item list that summarizes all the Olas news.
+Here is an example:
+My input was:
+40
+Community Build Spotlight: Innovation Station :cohete:
+Discover Innovation Station, a double award-winner at
+@ETHGlobal
+, and your portal to easy, fast decentralized app & multi-agent  service creation.
+It is the latest service to receive OLAS top-ups from the ecosystem.
+https://twitter.com/autonolas/status/1709964445781565938
+Olas is a partner in the
+@safe
+ DAATA and AI Hackathon from 9 - 16 Oct.
+Win bounties for projects at the intersection of DATA, AI and AA, including one for Prediction Agents:bola_de_cristal:
+Happy hacking!
+More info: https://safe-global.notion.site/DAATA-and-AI-Hackathon-77a70251b20c41bdb3efe80cfcfebf59
+:apuntando_hacia_la_derecha: Sign up here:
+https://twitter.com/autonolas/status/1709936581505884234
+AIP-1 Approved!
+The OLAS Triple Lock proposal targets pivotal enhancements in bonding, dev rewards, and OLAS staking.
+Immediate next steps: propelling OLAS onto
+@gnosischain
+ to fortify liquidity and prepare for staking.
+https://twitter.com/autonolas/status/1709240423959740440
+1/ $OLAS has the most potential since $ETH.
+It isn't another VC chain, dApp, or memecoin.
+It's the first system that unifies blockchain & AI; two trends set to define the century.
+This thread will get you up to speed on
+@autonolas
+ current and future use cases.
+https://twitter.com/DistilledCrypto/status/1708830436879741341
+Data unions will use and will be enabled by co-owned AI technologies
+@autonolas
+ $OLAS
+This is my own take of a super interesting conversation between
+@LawrenceLundy
+ and
+@shivmalik
+ on the future and viability of data unions.
+https://twitter.com/Valorianxyz/status/1708900741304422633
+This is intended to be an
+@autonolas
+ mega-thread.
+Genesis begins.
+Enjoy!
+$OLAS
+https://twitter.com/PPLSOPTIMISMCEO/status/1708190863631753531
+Attention, Agent Hackers! :mega:
+Join us for an exclusive workshop next week, hosted by The Graph ecosystem (
+@graphprotocol
+).
+:calendario_de_sobremesa: Thursday 12/10
+:reloj_de_alarma: 1pm UTC
+:tachuela_redonda:https://discord.com/events/899649805582737479/1158346575437901874
+Boost your project and overall skills with web3 data querying!
+https://twitter.com/autonolas/status/1710294338435957248"
 
-Olas text:
+Your response should have been:
+"Week 40 in Olas
+Highlights included:
+☴ Innovation Station Spotlight: Double Award-Winner at @ETHGlobal
+☴ Olas Partners with @safe for DAATA and AI Hackathon
+☴ AIP-1 Approved: OLAS to Propel onto @gnosischain
+☴ @DistilledCrypto Highlights the Unique Value of $OLAS
+☴ Data Unions and Co-owned AI Tech: A Conversation Highlight
+☴ @PPLSOPTIMISMCEO Initiates a Mega-thread about @autonolas
+☴ Exclusive @graphprotocol Workshop for Agent Hackers
+☴ Innovation Station Spotlight: Double Award-Winner at @ETHGlobal
+https://twitter.com/autonolas/status/1709964445781565938
+☴ Olas Partners with @safe for DAATA and AI Hackathon
+https://twitter.com/autonolas/status/1709936581505884234
+☴ AIP-1 Approved: OLAS to Propel onto @gnosischain
+https://twitter.com/autonolas/status/1709240423959740440
+☴ @DistilledCrypto Highlights the Unique Value of $OLAS
+https://twitter.com/DistilledCrypto/status/1708830436879741341
+☴ Data Unions and Co-owned AI Tech: A Conversation Highlight
+https://twitter.com/Valorianxyz/status/1708900741304422633
+☴ @PPLSOPTIMISMCEO Initiates a Mega-thread about @autonolas
+https://twitter.com/PPLSOPTIMISMCEO/status/1708190863631753531
+☴ Exclusive @graphprotocol Workshop for Agent Hackers
+https://twitter.com/autonolas/status/1710294338435957248
+Stay tuned for more in Week 41... :cohete:"
 
-Technical Architecture:
-Olas autonomous software services are embodied as agent services, which are groups of independent computer programs that interact with each other to achieve a predetermined goal. They can be understood as logically centralized applications (with only one application state and logic) that are replicated in a distributed system. Agent services are made of code components that can be combined like Lego bricks through software composition. This is enabled and incentivized by the on-chain protocol, which facilitates developers publishing and finding code components to build and extend new services. The on-chain protocol implements registries that enable code components, agents, and services to be found, reused, and economically compensated.
-
-The main elements of the Olas tech stack are: Agent services maintained by a service owner and run by multiple operators, who execute independent agent instances (that run the same code); these instances coordinate through a consensus gadget. Composable autonomous apps built out of basic applications that are easily extendable and composable into higher-order applications. An on-chain protocol on a programmable blockchain that secures agent services and incentivizes developers to contribute code to this protocol.
-
-Tokenomics:
-Olas tokenomics focuses on three objectives:
-
-1/ Growing capital and code proportionally: On-chain mechanisms ensure that the code provided by developers is rewarded according to its usefulness to the services operated on the protocol. The protocol acquires protocol-owned liquidity (PoL) in proportion to code usefulness, allowing the protocol to generate returns, invest in services, and guarantee its long-term financial health.
-
-2/ Enabling intra- and inter-protocol composability: NFTs representing code and services are used to track contributions inside the protocol, accrue rewards, and can be used productively as collateral across DeFi.
-
-3/ Incentivizing the donation of profits from Protocol-owned Services (PoSe): Autonomous services owned by governance of various DAOs, operated by the ecosystem, and developed by agent developers worldwide donate some of their profits to the protocol.
-
-Use Cases for Autonomous Services:
-A large market for autonomous agent services is emerging, primarily focused on improving DAO operations. Autonomous services make DAOs more competitive by providing richer means for transparently coordinating human actors and executing processes with little or no marginal human input. Autonomous services can be composed of three fundamental Lego blocks: Keepers, Oracles, and Bridges.
-
-This composability leads to combinatorial expansion and unprecedented new applications.
-
-Governance:
-A crucial element of the success of Olas is to have an active community and ecosystem that both build, evolve, promote, and make use of Olas technology. For this reason, Olas is organized as a DAO where meaningful contributors and supporters participate in the decision-making process.
-
-Initially, holders of the virtualized veOLAS token can participate in any governance activities. The veOLAS token is obtained by locking OLAS, which is the native token of Olas. Governance participation is proportional to veOLAS holdings and their locking duration. Governance proposals can notably modify system parameters, support new technological directions, or add entirely new functionality to the on-chain protocol.
-
-Once a governance proposal is approved, the Timelock adds a delay for the proposal to be executed.
-
-Exceptionally, some changes to the Olas on-chain protocol could be executed by a community-owned multi-sig wallet, bypassing the governance process.
-
-This allows a set of trusted actors to overrule governance in certain aspects, e.g., a security exploit that needs to be patched without governance discussion.
-
-
-You should only respond in the format described below:
-- Highlight 1
-- Highligth 2
-- ...
-
-
-User tweets:
-{user_tweets}
+Here is my input, please use it to output a response following the instructions above:
+{tweet_text}
 """

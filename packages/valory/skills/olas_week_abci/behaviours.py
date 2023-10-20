@@ -22,6 +22,7 @@
 import json
 import math
 import random
+import re
 from abc import ABC
 from datetime import datetime, timedelta
 from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
@@ -76,6 +77,9 @@ TWEET_RELATIONSHIP_TO_POINTS = {"LOW": 100, "AVERAGE": 200, "HIGH": 300}
 HTTP_OK = 200
 HTTP_TOO_MANY_REQUESTS = 429
 MAX_TWEET_CHARS = 250  # do not use 280 as not every char counts the same
+HIGHLIGHT_REGEX = r"☴.*\n"
+LINK_REGEX = r"https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)"
+HIGHLIGHT_LINK_REGEX = rf"☴.*\n{LINK_REGEX}\n"
 
 
 def extract_headers(header_str: str) -> dict:
@@ -87,20 +91,58 @@ def extract_headers(header_str: str) -> dict:
     return {key: value for key, value in headers}
 
 
-def parse_summary(summary: str) -> list:
-    """Parse the tweet summary"""
-    highlights = [h[1:].strip() for h in summary.split("\n") if h.startswith("-")]
+def build_tweet(highlights: list, header: str = ""):
+    """Build a tweet giving the highlights"""
 
-    tweets = ["Week in Olas\n\nHighlights included:"]
-    for highlight in highlights:
-        if len(highlight) > MAX_TWEET_CHARS:
-            while len(highlight) > MAX_TWEET_CHARS:
-                tweets.append(highlight[:MAX_TWEET_CHARS])
-                highlight = highlight[MAX_TWEET_CHARS:]
-        else:
-            tweets.append(highlight)
+    i = 0
+    tweet = header
 
-    return tweets
+    while len(tweet) <= MAX_TWEET_CHARS:
+
+        if i >= len(highlights):
+            break
+
+        next_highlight = highlights[i]
+        i += 1
+
+        tweet_copy = tweet + next_highlight + "\n"
+
+        # Try the next highlight if this one is too long
+        if len(tweet_copy) > MAX_TWEET_CHARS:
+            continue
+
+        tweet = tweet_copy
+        del highlights[i - 1]
+
+    return tweet.strip(), highlights
+
+
+def build_thread(raw_text: str, week: int) -> list:
+    """Build a twitter thread given a collection of highlights"""
+
+    # Extract highlights
+    all_highlights = [
+        h.strip() for h in re.findall(HIGHLIGHT_REGEX, raw_text, re.MULTILINE)
+    ]
+    highlights_with_links = [
+        h.strip() for h in re.findall(HIGHLIGHT_LINK_REGEX, raw_text, re.MULTILINE)
+    ]
+
+    # Build tweets. Add highlights while the max char count is not exceeded
+    header = f"Week {week} in Olas\n\nHighlights included:\n"
+    first_tweet, all_highlights = build_tweet(all_highlights, header)
+    thread = [first_tweet]
+
+    while all_highlights:
+        tweet, all_highlights = build_tweet(all_highlights)
+        thread.append(tweet)
+
+    # Highlights that include links also have an exclusive tweet
+    return (
+        thread
+        + highlights_with_links
+        + [f"Stay tuned for more in Week {week + 1}... 🚀"]
+    )
 
 
 class OlasWeekBaseBehaviour(BaseBehaviour, ABC):
@@ -663,7 +705,7 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
         data = llm_response_message.value
         self.openai_calls.increase_call_count()
         self.context.logger.info(f"Got summary: {repr(data)}")
-        summary = parse_summary(data)
+        summary = build_thread(data, week_number)
         self.context.logger.info(f"Parsed summary: {summary}")
         return summary
 
