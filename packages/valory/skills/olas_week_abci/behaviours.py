@@ -662,10 +662,15 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            text = "\n\n".join(
+
+            weekly_tweets = self.synchronized_data.weekly_tweets
+
+            link = "https://twitter.com/autonolas/status/tweet_id"
+            text = ("\n\n").join(
                 [
-                    f"tweet_{i}: {tweet}"
-                    for i, tweet in enumerate(self.synchronized_data.weekly_tweets)
+                    tweet["text"] + "\n" + link.replace("tweet_id", tweet["id"])
+                    for tweet in weekly_tweets
+                    if tweet["id"] == tweet["conversation_id"]
                 ]
             )
 
@@ -694,7 +699,7 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
         request_llm_message, llm_dialogue = llm_dialogues.create(
             counterparty=str(LLM_CONNECTION_PUBLIC_ID),
             performative=LlmMessage.Performative.REQUEST,
-            prompt_template=tweet_summarizer_prompt.replace("{user_tweets}", text),
+            prompt_template=tweet_summarizer_prompt.replace("{tweet_text}", text),
             prompt_values={},
         )
         request_llm_message = cast(LlmMessage, request_llm_message)
