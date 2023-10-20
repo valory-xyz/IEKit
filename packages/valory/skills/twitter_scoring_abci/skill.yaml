@@ -18,7 +18,7 @@ fingerprint:
   prompts.py: bafybeieiuqn427bgwfnzynxf3vtqfpvmqqscs5tyw4oibfofwropifotke
   rounds.py: bafybeigtzsvklrwxyah2syrzjruufr6uuninyh6flbrwetcgcb5pl4czra
   tests/__init__.py: bafybeidwzzd4ejsyf3aryd5kmrvd63h7ajgqyrxphmfaacvpjnneacejay
-  tests/test_behaviours.py: bafybeihc732whmbn74oxtrua3c77gt4py4tpc5v3drdhg2xc2lxtcqie4e
+  tests/test_behaviours.py: bafybeidqebjsxtvltilhueyg7oqu3sdoves6kqfnnzu4uurwqhkkdn6qta
   tests/test_ceramic_db.py: bafybeif2v7btjphbqabq6qdmfeyweg765seon74acg5vrrvznivzg2prey
   tests/test_dialogues.py: bafybeiheyq7klonzb7rnjub2i22h7bmsnoimn2pq4j7ofikt3yovstvgt4
   tests/test_handlers.py: bafybeigevirvi3saepukke2zmp334btgsdxhj55o2vawj3hqam63miirg4
@@ -139,7 +139,7 @@ models:
       twitter_max_pages: 1
       max_tweet_pulls_allowed: 80
       twitter_search_endpoint: 2/tweets/search/recent?
-      twitter_search_args: query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
+      twitter_search_args: query=%23olas&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
       openai_call_window_size: 3600.0
       openai_calls_allowed_in_window: 100
       max_points_per_period: 5000
