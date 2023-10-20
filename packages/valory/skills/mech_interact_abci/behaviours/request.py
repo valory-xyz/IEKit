@@ -183,6 +183,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
     def _build_multisend_safe_tx_hash(self) -> WaitableConditionType:
         """Prepares and returns the safe tx hash for a multisend tx."""
+        self.context.logger.info(f"Building multisend safe tx hash: safe={self.synchronized_data.safe_contract_address}")
         response_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
             contract_address=self.synchronized_data.safe_contract_address,

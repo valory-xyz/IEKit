@@ -31,13 +31,13 @@ skills:
 - valory/dynamic_nft_abci:0.1.0:bafybeiahlpnnx7k7b5jatyyeubyqxpqpseifwd55qkj6j3735pk3y3rlaa
 - valory/registration_abci:0.1.0:bafybeidbirkdjus6wbpynmyv6ffb6uevsi3zeuhokiqokuw42o7ar5j7hm
 - valory/reset_pause_abci:0.1.0:bafybeicpxn2khtaesuf4cq6ypwdmdmonlqroj2q2i6cxvpizc2y4cw66pe
-- valory/termination_abci:0.1.0:bafybeidy2ikuswcygwh37bmn52fq63yhptkyi5wgxlyyk5tvgwsmd6t2j4
-- valory/transaction_settlement_abci:0.1.0:bafybeifoikfzqioub6qm74aj23vjazlrrwh2jth6rjwjzn7dqnlbxpkxeu
+- valory/termination_abci:0.1.0:bafybeihwfadj4vjeirxmcee2nmwutpzq2psluvwpb6dnmf7ekucupi35ua
+- valory/transaction_settlement_abci:0.1.0:bafybeifih4ssxrydtkbcztn2ackecegn27hx7r2qe6fkf2brlvec3d3exy
 - valory/decision_making_abci:0.1.0:bafybeidhuxtuc5fuvvhjctsjjpfxhpmrovnbkp2vegtyitfkyu7d2kfqbm
 - valory/llm_abci:0.1.0:bafybeib4uwl2adgo6y4oixzkrqc6zabls2aghovupdaprzei57f36apmve
 - valory/twitter_write_abci:0.1.0:bafybeihyyd7jslzmfmbszhfxjfjrbzcbvu3cvvnfprgtjqsyy7hler72aa
 - valory/olas_week_abci:0.1.0:bafybeiezsqvcqif3fjzbemjd7fa7jlpl4df6znugqhekmgdufrqftmt5n4
-- valory/mech_interact_abci:0.1.0:bafybeifvnncccf6khfrcnwqxod6ahbwp6pe6uiunuaa3j7tfuflevsuq5m
+- valory/mech_interact_abci:0.1.0:bafybeihtkkfsdbobawvsavkbcrqlgrj7ybpzameus6sugnhhxy4wzydhiq
 behaviours:
   main:
     args: {}
