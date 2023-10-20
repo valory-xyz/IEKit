@@ -121,9 +121,9 @@ def build_thread(raw_text: str, week: int) -> list:
     """Build a twitter thread given a collection of highlights"""
 
     # Extract highlights
-    all_highlights = [
-        h.strip() for h in re.findall(HIGHLIGHT_REGEX, raw_text, re.MULTILINE)
-    ]
+    all_highlights = list(
+        set([h.strip() for h in re.findall(HIGHLIGHT_REGEX, raw_text, re.MULTILINE)])
+    )
     highlights_with_links = [
         h.strip() for h in re.findall(HIGHLIGHT_LINK_REGEX, raw_text, re.MULTILINE)
     ]
