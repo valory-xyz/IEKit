@@ -674,7 +674,9 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
                 ]
             )
 
-            summary_tweets = yield from self.evaluate_summary(text)
+            week_number = self.get_week_number()
+
+            summary_tweets = yield from self.evaluate_summary(text, week_number)
 
             sender = self.context.agent_address
             payload = OlasWeekEvaluationPayload(
@@ -688,7 +690,16 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
 
         self.set_done()
 
-    def evaluate_summary(self, text: str) -> Generator[None, None, list]:
+    def get_week_number(self) -> int:
+        """Gets the olas week number"""
+        STARTING_WEEK = 42
+        STARTING_DAY = datetime(year=2023, month=10, day=20)
+        weeks_delta = round((datetime.now() - STARTING_DAY).days / 7.0)
+        return STARTING_WEEK + weeks_delta
+
+    def evaluate_summary(
+        self, text: str, week_number: int
+    ) -> Generator[None, None, list]:
         """Create the tweet summary using a LLM."""
 
         self.context.logger.info(f"Summarizing text: {text}")
