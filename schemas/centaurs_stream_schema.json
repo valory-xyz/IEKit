@@ -62,7 +62,7 @@
                     "type": "boolean"
                 },
                 "last_run": {
-                    "type": ["integer", "null"]
+                    "type": ["integer", "null", "string"]
                 },
                 "run_hour_utc": {
                     "type": "integer"
@@ -94,7 +94,7 @@
                     "type": "boolean"
                 },
                 "last_run": {
-                    "type": ["integer", "null"]
+                    "type": ["integer", "null", "string"]
                 },
                 "run_hour_utc": {
                     "type": "integer"
@@ -113,7 +113,7 @@
                     "type": "boolean"
                 },
                 "last_run": {
-                    "type": ["integer", "null"]
+                    "type": ["integer", "null", "string"]
                 },
                 "run_hour_utc": {
                     "type": "integer"
@@ -133,6 +133,7 @@
                 },
                 "voters": {
                     "type": "array",
+                    "uniqueItems" : true,
                     "items": {
                         "type": "object",
                         "propertyNames": {
