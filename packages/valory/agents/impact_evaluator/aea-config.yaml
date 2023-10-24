@@ -42,9 +42,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeihgemn2gwjc2wyxuh7rttg5pk5gec7dxhet3ih2tmg75vsdbgad7a
 - valory/abstract_round_abci:0.1.0:bafybeid7neqpxxe4ualp23gxgrtpf6r5u3myr2mmc4uvwameyqshfdoydq
-- valory/impact_evaluator_abci:0.1.0:bafybeidjn6ltprebn6lmocls3yct6gpjvam2kyu6gc4lxsymzedsjihxdq
+- valory/impact_evaluator_abci:0.1.0:bafybeibpp6vt3e45bjtglqdrkyw2lke3a43tth52r4cbxuq44inzqk4iye
 - valory/generic_scoring_abci:0.1.0:bafybeiby5wi7232fnptkqucxirckvm3c3zfc6koc64katki2evfv3xqrm4
-- valory/twitter_scoring_abci:0.1.0:bafybeieevdlpn2wmlfysul7rhtbxz6vgzt5vo4soq27kzb632cqjgareoy
+- valory/twitter_scoring_abci:0.1.0:bafybeieipit33tobgu6clw7qfk5trm3nmuwolbfl4xhncvjcniwl3jhykm
 - valory/ceramic_read_abci:0.1.0:bafybeigeu5wie5qaymzffdgbxshgwor2fmodshyqhno75r3andhl6pwxey
 - valory/ceramic_write_abci:0.1.0:bafybeie3l6hzcbvegmhkkhrh6rbslplt6rlpgdnxrnizqsuddmu2dwtar4
 - valory/dynamic_nft_abci:0.1.0:bafybeiahlpnnx7k7b5jatyyeubyqxpqpseifwd55qkj6j3735pk3y3rlaa
@@ -55,8 +55,7 @@ skills:
 - valory/twitter_write_abci:0.1.0:bafybeihyyd7jslzmfmbszhfxjfjrbzcbvu3cvvnfprgtjqsyy7hler72aa
 - valory/decision_making_abci:0.1.0:bafybeidhuxtuc5fuvvhjctsjjpfxhpmrovnbkp2vegtyitfkyu7d2kfqbm
 - valory/llm_abci:0.1.0:bafybeib4uwl2adgo6y4oixzkrqc6zabls2aghovupdaprzei57f36apmve
-- valory/olas_week_abci:0.1.0:bafybeiezsqvcqif3fjzbemjd7fa7jlpl4df6znugqhekmgdufrqftmt5n4
-- valory/mech_interact_abci:0.1.0:bafybeid74gpd7fyswubfcqjh2hvwesx7dmn53dc433irrm6v7rjnjzo4xq
+- valory/olas_week_abci:0.1.0:bafybeihirw3xhmtl3snjznfnb34pjjsujstbbftfis7lmajmdgphywmxeq
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -219,9 +218,9 @@ models:
       twitter_max_pages: ${int:1}
       max_tweet_pulls_allowed: ${int:80}
       twitter_search_endpoint: ${str:2/tweets/search/recent?}
-      twitter_search_args: ${str:query=%23olas&tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
+      twitter_search_args: ${str:query=%23olas&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
       twitter_tweets_endpoint: ${str:2/users/1450081635559428107/tweets?}
-      twitter_tweets_args: ${str:tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
+      twitter_tweets_args: ${str:tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
       openai_call_window_size: ${float:3600.0}
       openai_calls_allowed_in_window: ${int:100}
       tx_timeout: 10.0

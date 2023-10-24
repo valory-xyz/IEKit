@@ -8,14 +8,14 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeibvgxh4baqhxapbbryg7qlglf4czricwqqs34gjs5vwwppg5nuvsq
-  behaviours.py: bafybeicemkdzirevjo2vkuay4zrb2scfaosrw2wixt2vcmk7ewufjtofla
+  behaviours.py: bafybeiaarlx7rjg3z5e5fekqdzm2n7cv42324qw2pokwn7aisvtsilt4zu
   ceramic_db.py: bafybeicusdonrdq6kirgkpdqmi3a6kmeal4nctnm5ozjqf5s5se6jpitjm
   dialogues.py: bafybeia7zebqkgbubzenskcrgjocgyd2pc3q5yxcjddte4emys32qt6xpm
   fsm_specification.yaml: bafybeienycmc4m3wurhlsuj7hfumrsx5id3qfdn6eisoze4gdzeeojlrbu
   handlers.py: bafybeialoqm2byetvqqrjujhk3qzgdgsrzmhakmzwdop2cr24kswipl6ti
   models.py: bafybeihsqzu4n2r5a4wlvcpmpnwkbtp3sr7axry53to5gpxoacqbkhx5cq
   payloads.py: bafybeietg3ceghstjx5bytqv2t377k5pyww3cdq7zg7d7lxhscwmfelai4
-  prompts.py: bafybeicz63x6rhrgm5amjkfsovnqvxqyzicfhhae3orw7jaubme2npnn2a
+  prompts.py: bafybeie2kwqacly3udoz57wfcmjbfkwmaeqbym24pg5plwzp3t65jxsuvq
   rounds.py: bafybeihy72ld66pzdamubpuj6obtbnr4tbzsxl4axb36maw4eru6bb66em
 fingerprint_ignore_patterns: []
 connections:
@@ -127,7 +127,7 @@ models:
       twitter_api_base: https://api.twitter.com/
       twitter_api_bearer_token: <default_bearer_token>
       twitter_tweets_endpoint: 2/users/1450081635559428107/tweets?
-      twitter_tweets_args: tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}
+      twitter_tweets_args: tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}
       twitter_max_pages: 1
       max_tweet_pulls_allowed: 80
       openai_call_window_size: 3600.0
