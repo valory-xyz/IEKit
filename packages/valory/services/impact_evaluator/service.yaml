@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeifvynzt4ff7hjpxmjfsk2voumsatfcws673mp6eust2bitn3aikky
+agent: valory/impact_evaluator:0.1.0:bafybeiaptcpxgtt4arn2scfkho4z7a3tyfhanwi4f26gl2xamyi74nhjz4
 number_of_agents: 4
 deployment:
   agent:
@@ -125,6 +125,7 @@ extra:
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
         mech_agent_address: ${MECH_AGENT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
+        default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
 1:
   models:
     benchmark_tool:
@@ -202,6 +203,7 @@ extra:
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
         mech_agent_address: ${MECH_AGENT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
+        default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
 2:
   models:
     benchmark_tool:
@@ -279,6 +281,7 @@ extra:
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
         mech_agent_address: ${MECH_AGENT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
+        default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
 3:
   models:
     benchmark_tool:
@@ -360,6 +363,7 @@ extra:
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
         mech_agent_address: ${MECH_AGENT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
+        default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
 ---
 public_id: valory/ledger:0.19.0
 type: connection

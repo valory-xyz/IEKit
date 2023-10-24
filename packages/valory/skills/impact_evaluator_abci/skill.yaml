@@ -37,6 +37,7 @@ skills:
 - valory/llm_abci:0.1.0:bafybeiexxp3bglumox6zjtqcuqdowskyha6cciwfreh6qeautiqjffz6gm
 - valory/twitter_write_abci:0.1.0:bafybeidlz6l6ghr4evv5ftn7cgfrmrqvcc3f7vw5dt3kxwofosqkr5bhv4
 - valory/olas_week_abci:0.1.0:bafybeiaqdqs6nq2nuppdxf3u46gojn5yibh4jou55ieiepmc5xg4mgfoty
+- valory/mech_interact_abci:0.1.0:bafybeicqzjuroikgkydicrjkr3jmstmc6v3hprdiqtxsufskqmookrg5na
 behaviours:
   main:
     args: {}
@@ -192,6 +193,7 @@ models:
       multisend_batch_size: 50
       mech_agent_address: '0xff82123dfb52ab75c417195c5fdb87630145ae81'
       ipfs_address: https://gateway.autonolas.tech/ipfs/
+      default_chain_id: ethereum
     class_name: Params
   randomness_api:
     args:
