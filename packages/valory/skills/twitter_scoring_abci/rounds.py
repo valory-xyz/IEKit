@@ -393,7 +393,7 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
             #     # API limits
             #     if payload["error"] == ERROR_API_LIMITS:
             #         performed_twitter_tasks[
-            #             "retrieve_hashtahs"
+            #             "retrieve_hashtags"
             #         ] = Event.DONE_MAX_RETRIES.value
 
             #         synchronized_data = self.synchronized_data.update(
