@@ -38,10 +38,22 @@ from typing import (
     Union,
     cast,
 )
-
+from packages.valory.skills.abstract_round_abci.dialogues import (
+    LedgerApiDialogue,
+    LedgerApiDialogues,
+)
+from packages.valory.skills.abstract_round_abci.base import (
+    LEDGER_API_ADDRESS,
+)
+from packages.valory.skills.abstract_round_abci.models import (
+    Requests,
+)
 from aea.protocols.base import Message
 from web3.types import Nonce, TxData, Wei
-
+from packages.valory.skills.abstract_round_abci.dialogues import (
+    ContractApiDialogue,
+    ContractApiDialogues,
+)
 from packages.open_aea.protocols.signing import SigningMessage
 from packages.open_aea.protocols.signing.custom_types import RawTransaction, Terms
 from packages.valory.contracts.gnosis_safe.contract import GnosisSafeContract
@@ -167,6 +179,70 @@ class TransactionSettlementBaseBehaviour(BaseBehaviour, ABC):
 
         return []
 
+    def _send_transaction_request(
+        self,
+        signing_msg: SigningMessage,
+        use_flashbots: bool = False,
+        target_block_numbers: Optional[List[int]] = None,
+        chain_id: Optional[str] = None
+    ) -> None:
+        """
+        Send transaction request.
+
+        Happy-path full flow of the messages.
+
+        AbstractRoundAbci skill -> (LedgerApiMessage | SEND_SIGNED_TRANSACTION) -> Ledger connection
+        Ledger connection -> (LedgerApiMessage | TRANSACTION_DIGEST) -> AbstractRoundAbci skill
+
+        :param signing_msg: signing message
+        :param use_flashbots: whether to use flashbots for the transaction or not
+        :param target_block_numbers: the target block numbers in case we are using flashbots
+        """
+        ledger_api_dialogues = cast(
+            LedgerApiDialogues, self.context.ledger_api_dialogues
+        )
+
+        create_kwargs: Dict[
+            str, Union[str, SignedTransaction, List[SignedTransaction]]
+        ] = dict(
+            counterparty=LEDGER_API_ADDRESS,
+            performative=LedgerApiMessage.Performative.SEND_SIGNED_TRANSACTION,
+        )
+        if chain_id:
+            create_kwargs["chain_id"] = chain_id
+        if use_flashbots:
+            kwargs = {}
+            if target_block_numbers is not None:
+                kwargs["target_block_numbers"] = target_block_numbers
+            create_kwargs.update(
+                dict(
+                    performative=LedgerApiMessage.Performative.SEND_SIGNED_TRANSACTIONS,
+                    # we do not support sending multiple signed txs and receiving multiple tx hashes yet
+                    signed_transactions=LedgerApiMessage.SignedTransactions(
+                        ledger_id=FLASHBOTS_LEDGER_ID,
+                        signed_transactions=[signing_msg.signed_transaction.body],
+                    ),
+                    kwargs=LedgerApiMessage.Kwargs(kwargs),
+                )
+            )
+        else:
+            create_kwargs.update(
+                dict(
+                    signed_transaction=signing_msg.signed_transaction,
+                )
+            )
+
+        ledger_api_msg, ledger_api_dialogue = ledger_api_dialogues.create(
+            **create_kwargs
+        )
+        ledger_api_dialogue = cast(LedgerApiDialogue, ledger_api_dialogue)
+        request_nonce = self._get_request_nonce_from_dialogue(ledger_api_dialogue)
+        cast(Requests, self.context.requests).request_id_to_callback[
+            request_nonce
+        ] = self.get_callback_request()
+        self.context.outbox.put_message(message=ledger_api_msg)
+        self.context.logger.info("sending transaction to ledger.")
+
     def send_raw_transaction(
         self,
         transaction: RawTransaction,
@@ -206,7 +282,7 @@ class TransactionSettlementBaseBehaviour(BaseBehaviour, ABC):
             nonce="",
         )
         self.context.logger.info(
-            f"Sending signing request for transaction: {transaction}..."
+            f"Sending signing request to ledger '{chain_id}' for transaction: {transaction}..."
         )
         self._send_transaction_signing_request(transaction, terms)
         signature_response = yield from self.wait_for_message()
@@ -222,7 +298,7 @@ class TransactionSettlementBaseBehaviour(BaseBehaviour, ABC):
             f"Received signature response: {signature_response}\n Sending transaction..."
         )
         self._send_transaction_request(
-            signature_response, use_flashbots, target_block_numbers
+            signature_response, use_flashbots, target_block_numbers, chain_id=chain_id
         )
         transaction_digest_msg = yield from self.wait_for_message()
         transaction_digest_msg = cast(LedgerApiMessage, transaction_digest_msg)
@@ -257,6 +333,61 @@ class TransactionSettlementBaseBehaviour(BaseBehaviour, ABC):
         return tx_hash, RPCResponseStatus.SUCCESS
 
 
+    # def get_contract_api_response(
+    #     self,
+    #     performative: ContractApiMessage.Performative,
+    #     contract_address: Optional[str],
+    #     contract_id: str,
+    #     contract_callable: str,
+    #     **kwargs: Any,
+    # ) -> Generator[None, None, ContractApiMessage]:
+    #     """
+    #     Request contract safe transaction hash
+
+    #     Happy-path full flow of the messages.
+
+    #     AbstractRoundAbci skill -> (ContractApiMessage | ContractApiMessage.Performative) -> Ledger connection (contract dispatcher)
+    #     Ledger connection (contract dispatcher) -> (ContractApiMessage | ContractApiMessage.Performative) -> AbstractRoundAbci skill
+
+    #     :param performative: the message performative
+    #     :param contract_address: the contract address
+    #     :param contract_id: the contract id
+    #     :param contract_callable: the callable to call on the contract
+    #     :param kwargs: keyword argument for the contract api request
+    #     :return: the contract api response
+    #     :yields: the contract api response
+    #     """
+    #     contract_api_dialogues = cast(
+    #         ContractApiDialogues, self.context.contract_api_dialogues
+    #     )
+    #     chain_id = kwargs.get("chain_id", None)
+    #     kwargs = {
+    #         "performative": performative,
+    #         "counterparty": LEDGER_API_ADDRESS,
+    #         "ledger_id": self.context.default_ledger_id,
+    #         "contract_id": contract_id,
+    #         "callable": contract_callable,
+    #         "kwargs": ContractApiMessage.Kwargs(kwargs),
+    #     }
+    #     if contract_address is not None:
+    #         kwargs["contract_address"] = contract_address
+    #     contract_api_msg, contract_api_dialogue = contract_api_dialogues.create(
+    #         **kwargs
+    #     )
+    #     contract_api_dialogue = cast(
+    #         ContractApiDialogue,
+    #         contract_api_dialogue,
+    #     )
+    #     contract_api_dialogue.terms = self._get_default_terms()
+    #     request_nonce = self._get_request_nonce_from_dialogue(contract_api_dialogue)
+    #     cast(Requests, self.context.requests).request_id_to_callback[
+    #         request_nonce
+    #     ] = self.get_callback_request()
+    #     self.context.outbox.put_message(message=contract_api_msg)
+    #     response = yield from self.wait_for_message()
+    #     return response
+
+
     def _get_tx_data(
         self, message: ContractApiMessage, use_flashbots: bool
     ) -> Generator[None, None, TxDataType]:
@@ -268,6 +399,8 @@ class TransactionSettlementBaseBehaviour(BaseBehaviour, ABC):
             "blacklisted_keepers": self.synchronized_data.blacklisted_keepers,
             "tx_digest": "",
         }
+
+        self.context.logger.info(f"_get_tx_data: message= {message}\ntx_data={tx_data}")
 
         # Check for errors in the transaction preparation
         if (
@@ -367,6 +500,8 @@ class TransactionSettlementBaseBehaviour(BaseBehaviour, ABC):
             self.synchronized_data.most_voted_tx_hash
         )
 
+        chain_id = self.synchronized_data.get_chain_id(self.params.default_chain_id)
+
         contract_api_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
             contract_address=self.synchronized_data.safe_contract_address,
@@ -383,6 +518,7 @@ class TransactionSettlementBaseBehaviour(BaseBehaviour, ABC):
                 for key, payload in self.synchronized_data.participant_to_signature.items()
             },
             operation=tx_params["operation"],
+            chain_id=chain_id
         )
 
         return contract_api_msg
@@ -414,11 +550,13 @@ class TransactionSettlementBaseBehaviour(BaseBehaviour, ABC):
 
     def _get_safe_nonce(self) -> Generator[None, None, ContractApiMessage]:
         """Get the safe nonce."""
+        chain_id = self.synchronized_data.get_chain_id(self.params.default_chain_id)
         contract_api_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
             contract_address=self.synchronized_data.safe_contract_address,
             contract_id=str(GnosisSafeContract.contract_id),
             contract_callable="get_safe_nonce",
+            chain_id=chain_id
         )
         return contract_api_msg
 
@@ -724,12 +862,14 @@ class CheckTransactionHistoryBehaviour(TransactionSettlementBaseBehaviour):
 
     def _get_revert_reason(self, tx: TxData) -> Generator[None, None, Optional[str]]:
         """Get the revert reason of the given transaction."""
+        chain_id = self.synchronized_data.get_chain_id(self.params.default_chain_id)
         contract_api_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
             contract_address=self.synchronized_data.safe_contract_address,
             contract_id=str(GnosisSafeContract.contract_id),
             contract_callable="revert_reason",
             tx=tx,
+            chain_id=chain_id
         )
 
         if (
@@ -960,7 +1100,8 @@ class FinalizeBehaviour(TransactionSettlementBaseBehaviour):
         tx_params = skill_input_hex_to_payload(
             self.synchronized_data.most_voted_tx_hash
         )
-
+        chain_id = self.synchronized_data.get_chain_id(self.params.default_chain_id)
+        self.context.logger.info(f"_send_safe_transaction chain_id={chain_id}")
         contract_api_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
             contract_address=self.synchronized_data.safe_contract_address,
@@ -983,7 +1124,9 @@ class FinalizeBehaviour(TransactionSettlementBaseBehaviour):
             gas_price=self.params.gas_params.gas_price,
             max_fee_per_gas=self.params.gas_params.max_fee_per_gas,
             max_priority_fee_per_gas=self.params.gas_params.max_priority_fee_per_gas,
+            chain_id=chain_id
         )
+        self.context.logger.info(f"contract_api_msg={contract_api_msg}")
 
         tx_data = yield from self._get_tx_data(
             contract_api_msg, tx_params["use_flashbots"]
