@@ -75,6 +75,9 @@ from packages.valory.skills.transaction_settlement_abci.payload_tools import (
     skill_input_hex_to_payload,
     tx_hist_payload_to_hex,
 )
+from packages.open_aea.protocols.signing.custom_types import (
+    SignedTransaction,
+)
 from packages.valory.skills.transaction_settlement_abci.payloads import (
     CheckTransactionHistoryPayload,
     FinalizationTxPayload,
@@ -209,7 +212,13 @@ class TransactionSettlementBaseBehaviour(BaseBehaviour, ABC):
             performative=LedgerApiMessage.Performative.SEND_SIGNED_TRANSACTION,
         )
         if chain_id:
-            create_kwargs["chain_id"] = chain_id
+            kwargs = {"chain_id": chain_id}
+            create_kwargs.update(
+                dict(
+                    kwargs=LedgerApiMessage.Kwargs(kwargs),
+                )
+            )
+
         if use_flashbots:
             kwargs = {}
             if target_block_numbers is not None:
