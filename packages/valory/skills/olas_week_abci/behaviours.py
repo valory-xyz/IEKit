@@ -27,6 +27,8 @@ from abc import ABC
 from datetime import datetime, timedelta
 from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
 
+from twitter_text import parse_tweet
+
 from packages.valory.connections.openai.connection import (
     PUBLIC_ID as LLM_CONNECTION_PUBLIC_ID,
 )
@@ -76,10 +78,11 @@ TWEET_QUALITY_TO_POINTS = {"LOW": 1, "AVERAGE": 2, "HIGH": 3}
 TWEET_RELATIONSHIP_TO_POINTS = {"LOW": 100, "AVERAGE": 200, "HIGH": 300}
 HTTP_OK = 200
 HTTP_TOO_MANY_REQUESTS = 429
-MAX_TWEET_CHARS = 250  # do not use 280 as not every char counts the same
+MAX_TWEET_CHARS = 280
 HIGHLIGHT_REGEX = r"☴.*\n"
 LINK_REGEX = r"https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)"
 HIGHLIGHT_LINK_REGEX = rf"☴.*\n{LINK_REGEX}\n"
+WEEK_IN_OLAS_REGEX = r".*Week \d+ in Olas.*"
 
 
 def extract_headers(header_str: str) -> dict:
@@ -92,37 +95,36 @@ def extract_headers(header_str: str) -> dict:
 
 
 def build_tweet(highlights: list, header: str = ""):
-    """Build a tweet giving the highlights"""
+    """Build a tweet given the highlights"""
 
-    i = 0
     tweet = header
 
     while len(tweet) <= MAX_TWEET_CHARS:
 
-        if i >= len(highlights):
+        if not highlights:
             break
 
-        next_highlight = highlights[i]
-        i += 1
-
-        tweet_copy = tweet + next_highlight + "\n"
-
-        # Try the next highlight if this one is too long
-        if len(tweet_copy) > MAX_TWEET_CHARS:
-            continue
+        tweet_copy = tweet + highlights[0] + "\n"
+        tweet_len = parse_tweet(tweet_copy).asdict()["weightedLength"]
+        if tweet_len > MAX_TWEET_CHARS:
+            break
 
         tweet = tweet_copy
-        del highlights[i - 1]
+        highlights.pop(0)
 
     return tweet.strip(), highlights
 
 
 def build_thread(raw_text: str, week: int) -> list:
-    """Build a twitter thread given a collection of highlights"""
+    """Build a twitter thread"""
 
     # Extract highlights
+    # Since we need to keep highlight order and sets do not preserve sorting,
+    # we use a dictionary as an intermediate step
     all_highlights = list(
-        set([h.strip() for h in re.findall(HIGHLIGHT_REGEX, raw_text, re.MULTILINE)])
+        {
+            h.strip(): None for h in re.findall(HIGHLIGHT_REGEX, raw_text, re.MULTILINE)
+        }.keys()
     )
     highlights_with_links = [
         h.strip() for h in re.findall(HIGHLIGHT_LINK_REGEX, raw_text, re.MULTILINE)
@@ -664,13 +666,16 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
             weekly_tweets = self.synchronized_data.weekly_tweets
-
             link = "https://twitter.com/autonolas/status/tweet_id"
+
+            # Build the text for the summarization
+            # Exclude replies/threads and tweets from other weeks summaries
             text = ("\n\n").join(
                 [
                     tweet["text"] + "\n" + link.replace("tweet_id", tweet["id"])
                     for tweet in weekly_tweets
                     if tweet["id"] == tweet["conversation_id"]
+                    and not re.match(WEEK_IN_OLAS_REGEX, tweet["text"], re.IGNORECASE)
                 ]
             )
 
