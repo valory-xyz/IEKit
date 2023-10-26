@@ -164,5 +164,7 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
-dependencies: {}
+dependencies:
+  twitter_text_parser:
+    version: ==3.0.0
 is_abstract: true
