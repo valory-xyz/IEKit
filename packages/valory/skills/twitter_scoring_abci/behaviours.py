@@ -830,8 +830,11 @@ class PreMechRequestBehaviour(TwitterScoringBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             new_mech_requests = []
 
-            mech_requests = self.synchronized_data.mech_requests
-            pending_tweet_ids = [r.nonce for r in mech_requests]
+            mech_responses = self.synchronized_data.mech_responses
+            pending_tweet_ids = [r.nonce for r in mech_responses]
+
+            self.context.logger.info(f"PreMech: mech_responses = {mech_responses}")
+            self.context.logger.info(f"pending_tweet_ids = {pending_tweet_ids}")
 
             for tweet_id, tweet in self.synchronized_data.tweets.items():
 
@@ -843,11 +846,13 @@ class PreMechRequestBehaviour(TwitterScoringBaseBehaviour):
                     # Score already requested
                     continue
 
+                self.context.logger.info(f"Adding tweet {tweet_id} to mech requests")
+
                 new_mech_requests.append(
                     asdict(
                         MechMetadata(
                             nonce=tweet_id,
-                            tool="openai",
+                            tool="openai-gpt-3.5-turbo",
                             prompt=tweet_evaluation_prompt.replace(
                                 "{user_text}", tweet["text"]
                             ),
@@ -886,10 +891,12 @@ class PostMechRequestBehaviour(TwitterScoringBaseBehaviour):
             tweets = self.synchronized_data.tweets
             responses_to_remove = []
 
+            self.context.logger.info(f"PostMech: mech_responses = {self.synchronized_data.mech_responses}")
+
             for response in self.synchronized_data.mech_responses:
 
                 # The request has been responded
-                if response.nonce in tweets:
+                if response.nonce in tweets and response.result:
 
                     self.context.logger.info(
                         f"Received tweet evaluation response: {response.nonce} {response.result}"
@@ -920,6 +927,9 @@ class PostMechRequestBehaviour(TwitterScoringBaseBehaviour):
                         )
 
                     tweets[response.nonce]["points"] = points
+                    self.context.logger.info(
+                        f"Tweet {response.nonce} awarded {points} points"
+                    )
 
             sender = self.context.agent_address
             payload = PostMechRequestPayload(
@@ -1075,10 +1085,6 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         # Update the current_period
         ceramic_db.data["module_data"]["twitter"]["current_period"] = today
-
-        self.context.logger.info(
-            f"The ceramic_db will be updated to: {ceramic_db.data!r}"
-        )
 
         return ceramic_db.data
 

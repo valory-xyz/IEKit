@@ -291,7 +291,10 @@ class GnosisSafeContract(Contract):
             safe_version = safe_contract.functions.VERSION().call(
                 block_identifier="latest"
             )
+
         chain_id = ledger_api.api.eth.chain_id
+
+        print(f"\n\nCHAIN_ID get_raw_safe_transaction_hash: {ledger_api.api.eth.chain_id}\n\n")
 
         data_ = HexBytes(data).hex()
 
@@ -416,6 +419,8 @@ class GnosisSafeContract(Contract):
         ledger_api = cast(EthereumApi, ledger_api)
         signatures = cls.get_packed_signatures(owners, signatures_by_owner)
         safe_contract = cls.get_instance(ledger_api, contract_address)
+
+        print(f"\n\nCHAIN_ID get_raw_safe_transaction: {ledger_api.api.eth.chain_id}\n\n")
 
         w3_tx = safe_contract.functions.execTransaction(
             to_address,
@@ -653,6 +658,7 @@ class GnosisSafeContract(Contract):
         """
         safe_contract = cls.get_instance(ledger_api, contract_address)
         safe_nonce = safe_contract.functions.nonce().call(block_identifier="latest")
+        print(f"\n\nCHAIN_ID get_safe_nonce: {ledger_api.api.eth.chain_id}\n\n")
         return dict(safe_nonce=safe_nonce)
 
     @classmethod

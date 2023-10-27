@@ -87,8 +87,6 @@ class CeramicReadBaseBehaviour(BaseBehaviour, ABC):
         # Rebuild the current data
         data = build_data_from_commits(api_data["commits"])
 
-        self.context.logger.info(f"Got data from Ceramic API: {data}")
-
         return {
             "genesis_cid_str": genesis_cid_str,
             "previous_cid_str": previous_cid_str,
@@ -135,7 +133,7 @@ class StreamReadBehaviour(CeramicReadBaseBehaviour):
                     "read_target_property": read_target_property,
                 }
                 self.context.logger.info(
-                    f"Loading data into 'synchronized_data.{read_target_property}': {stream_data['data']}"
+                    f"Loading data into 'synchronized_data.{read_target_property}'"
                 )
 
             # Send the payload

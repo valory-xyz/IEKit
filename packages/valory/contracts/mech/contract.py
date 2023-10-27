@@ -64,6 +64,7 @@ class Mech(Contract):
         :param contract_address: the contract's address
         :param request_data: the request data
         """
+        print(f"\n\nCHAIN_ID get_request_data: {ledger_api.api.eth.chain_id}\n\n")
         contract_instance = cls.get_instance(ledger_api, contract_address)
         encoded_data = contract_instance.encodeABI("request", args=(request_data,))
         return {"data": bytes.fromhex(encoded_data[2:])}

@@ -21,10 +21,9 @@
 
 import json
 import math
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, is_dataclass
 from enum import Enum
 from typing import Any, Dict, FrozenSet, List, Optional, Set, Tuple, cast
-
 from packages.valory.skills.abstract_round_abci.base import (
     ABCIAppInternalError,
     AbciApp,
@@ -51,6 +50,16 @@ from packages.valory.skills.twitter_scoring_abci.payloads import (
 MAX_API_RETRIES = 1
 ERROR_GENERIC = "generic"
 ERROR_API_LIMITS = "too many requests"
+
+
+class DataclassEncoder(json.JSONEncoder):
+    """A custom JSON encoder for dataclasses."""
+
+    def default(self, o: Any) -> Any:
+        """The default JSON encoder."""
+        if is_dataclass(o):
+            return asdict(o)
+        return super().default(o)
 
 
 @dataclass
@@ -448,7 +457,7 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
                     "id": "1712852775694893449",
                     "author_id": "1450081635559428107",
                     "created_at": "2023-10-13T15:28:19.000Z",
-                    "text": "RT @valoryag: We know that AI agents will be the majority of crypto's next users.\n\nThis latest @MessariCrypto article shows how @Autonolas\u2026",
+                    "text": "RT @valoryag: We know that AI agents will be the majority of crypto's next users.\n\nThis latest @MessariCrypto article shows how @Autonolas is core infrastructure for onboarding these AI agents.",
                     "username": "autonolas",
                 },
                 "1712808941359600006": {
@@ -469,6 +478,9 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
             ceramic_db = cast(SynchronizedData, self.synchronized_data).ceramic_db
             performed_twitter_tasks["retrieve_hashtags"] = Event.DONE.value
             new_tweets = payload["tweets"]
+
+            self.context.logger.info(f"my_tweets r_h: {previous_tweets}")
+            self.context.logger.info(f"my_tweets (new_tweets) r_h: {new_tweets}")
 
             updates = {
                 get_name(SynchronizedData.tweets): {
@@ -521,12 +533,16 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
             payload = json.loads(self.most_voted_payload)
             new_mech_requests = payload["new_mech_requests"]
 
-            # Nothing to evaluate (no new tweets)
-            if not new_mech_requests:
-                mech_responses = cast(
-                    SynchronizedData, self.synchronized_data
-                ).mech_responses
+            mech_responses = cast(
+                SynchronizedData, self.synchronized_data
+            ).mech_responses
+
+            # Nothing to evaluate (no new tweets) nor responses to retrieve
+            if not new_mech_requests and not mech_responses:
                 tweets = cast(SynchronizedData, self.synchronized_data).tweets
+
+                self.context.logger.info(f"my_tweets PreMechRequestRound: {tweets}")
+
                 synchronized_data = self.synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
                     **{
@@ -538,12 +554,6 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
                 )
                 return synchronized_data, Event.SKIP_EVALUATION
 
-            mech_requests = [
-                asdict(r)
-                for r in cast(SynchronizedData, self.synchronized_data).mech_requests
-            ]
-            mech_requests.extend(new_mech_requests)
-
             performed_twitter_tasks = cast(
                 SynchronizedData, self.synchronized_data
             ).performed_twitter_tasks
@@ -552,7 +562,7 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    get_name(SynchronizedData.mech_requests): json.dumps(mech_requests),
+                    get_name(SynchronizedData.mech_requests): json.dumps(new_mech_requests),  # delete previous requests
                     get_name(
                         SynchronizedData.performed_twitter_tasks
                     ): performed_twitter_tasks,
@@ -594,6 +604,10 @@ class PostMechRequestRound(CollectSameUntilThresholdRound):
                 if r.nonce not in payload["responses_to_remove"]
             ]
 
+            serialized_responses = json.dumps(mech_responses, cls=DataclassEncoder)
+
+            self.context.logger.info(f"my_tweets PostMechRequestRound: {payload['tweets']}")
+
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
@@ -601,7 +615,7 @@ class PostMechRequestRound(CollectSameUntilThresholdRound):
                     get_name(
                         SynchronizedData.performed_twitter_tasks
                     ): performed_twitter_tasks,
-                    get_name(SynchronizedData.mech_responses): mech_responses,
+                    get_name(SynchronizedData.mech_responses): serialized_responses,
                 },
             )
             return synchronized_data, Event.DONE
@@ -629,11 +643,11 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
             ).performed_twitter_tasks
             performed_twitter_tasks["db_update"] = Event.DONE.value
 
-            # Clear processed tweets
-            tweets = performed_twitter_tasks = cast(
+            # Clear processed tweets that are no longer needed
+            tweets = cast(
                 SynchronizedData, self.synchronized_data
             ).tweets
-            tweets = [t for t in tweets if "points" not in t]
+            tweets = {k: v for k, v in tweets.items() if "points" in v}
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,

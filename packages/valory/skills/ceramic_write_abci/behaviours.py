@@ -103,8 +103,6 @@ class CeramicWriteBaseBehaviour(BaseBehaviour, ABC):
         # Rebuild the current data
         data = build_data_from_commits(api_data["commits"])
 
-        self.context.logger.info(f"Got data from Ceramic API: {data}")
-
         return {
             "genesis_cid_str": genesis_cid_str,
             "previous_cid_str": previous_cid_str,
