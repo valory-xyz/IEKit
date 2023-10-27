@@ -117,7 +117,7 @@ class TaskPreparation:
         if (
             self.weekly is not None
             and self.last_run
-            and (self.now_utc - self.last_run).seconds < SECONDS_IN_DAY
+            and (self.now_utc - self.last_run).total_seconds() < SECONDS_IN_DAY
         ):
             self.logger.info(
                 f"[{self.__class__.__name__}]: task is a weekly task and was already ran less than a day ago"
