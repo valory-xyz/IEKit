@@ -58,6 +58,7 @@ from packages.valory.skills.llm_abci.models import Params as LLMAbciParams
 from packages.valory.skills.llm_abci.rounds import Event as LLMEvent
 from packages.valory.skills.mech_interact_abci.models import (
     Params as MechInteractAbciParams,
+    MechResponseSpecs as BaseMechResponseSpecs
 )
 from packages.valory.skills.mech_interact_abci.rounds import Event as MechInteractEvent
 from packages.valory.skills.olas_week_abci.models import Params as OlasWeekAbciParams
@@ -84,6 +85,7 @@ MechInteractParams = MechInteractAbciParams
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
 RandomnessApi = CeramicWriteRandomnessApi
+MechResponseSpecs = BaseMechResponseSpecs
 
 MARGIN = 5
 MULTIPLIER = 2

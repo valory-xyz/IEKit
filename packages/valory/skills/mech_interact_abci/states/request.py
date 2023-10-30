@@ -24,13 +24,16 @@ from packages.valory.skills.mech_interact_abci.payloads import MechRequestPayloa
 from packages.valory.skills.mech_interact_abci.states.base import (
     MechInteractionRound,
     SynchronizedData,
+    Event
 )
+from typing import Optional, Tuple
 
 
 class MechRequestRound(MechInteractionRound):
     """A round for performing requests to a Mech."""
 
     payload_class = MechRequestPayload
+
     selection_key = (
         get_name(SynchronizedData.most_voted_tx_hash),
         get_name(SynchronizedData.mech_price),
@@ -38,3 +41,4 @@ class MechRequestRound(MechInteractionRound):
         get_name(SynchronizedData.mech_responses),
     )
     collection_key = get_name(SynchronizedData.participant_to_requests)
+    none_event = Event.SKIP_REQUEST

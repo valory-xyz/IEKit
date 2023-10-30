@@ -292,15 +292,24 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         """Do the action."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            yield from self._prepare_safe_tx()
-            serialized_data = (
-                json.dumps(data, cls=DataclassEncoder)
-                for data in (self._mech_requests, self._pending_responses)
-            )
-            self.context.logger.info(
-                f"Preparing mech request:\ntx_hex: {self.tx_hex}\nprice: {self.price}\nserialized_data: {serialized_data}\n"
-            )
-            payload = MechRequestPayload(
-                self.context.agent_address, self.tx_hex, self.price, *serialized_data
-            )
+
+            if not self._mech_requests:
+                payload = MechRequestPayload(
+                    self.context.agent_address, None, None, None, None
+                )
+            else:
+                self.context.logger.info(
+                    f"Preparing mech requests: {self._mech_requests}"
+                )
+                yield from self._prepare_safe_tx()
+                serialized_data = (
+                    json.dumps(data, cls=DataclassEncoder)
+                    for data in (self._mech_requests, self._pending_responses)
+                )
+                self.context.logger.info(
+                    f"Preparing mech request:\ntx_hex: {self.tx_hex}\nprice: {self.price}\nserialized_data: {serialized_data}\n"
+                )
+                payload = MechRequestPayload(
+                    self.context.agent_address, self.tx_hex, self.price, *serialized_data
+                )
         yield from self.finish_behaviour(payload)

@@ -559,6 +559,8 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
             ).performed_twitter_tasks
             performed_twitter_tasks["pre_mech"] = Event.DONE.value
 
+            self.context.logger.info(f"new_mech_requests PreMechRequestRound: {new_mech_requests}")
+
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
