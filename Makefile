@@ -91,6 +91,7 @@ test:
 	-rfE packages/valory/skills/llm_abci \
 	-rfE packages/valory/skills/twitter_write_abci \
 	-rfE packages/valory/skills/olas_week_abci \
+	-rfE packages/valory/skills/mech_interact_abci_abci \
 	--cov=packages.valory.skills.ceramic_read_abci \
 	--cov=packages.valory.skills.generic_scoring_abci \
 	--cov=packages.valory.skills.twitter_scoring_abci \
@@ -101,6 +102,7 @@ test:
 	--cov=packages.valory.skills.llm_abci \
 	--cov=packages.valory.skills.twitter_write_abci \
 	--cov=packages.valory.skills.olas_week_abci \
+	--cov=packages.valory.skills.mech_interact_abci \
 	--cov-report=xml --cov-report=term --cov-report=term-missing --cov-config=.coveragerc
 	find . -name ".coverage*" -not -name ".coveragerc" -exec rm -fr "{}" \;
 
@@ -138,6 +140,7 @@ fix-abci-app-specs:
 	autonomy analyse fsm-specs --update --app-class TwitterWriteAbciApp --package packages/valory/skills/twitter_write_abci/ || (echo "Failed to check twitter_write_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class ImpactEvaluatorSkillAbciApp --package packages/valory/skills/impact_evaluator_abci/ || (echo "Failed to check impact_evaluator_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class WeekInOlasAbciApp --package packages/valory/skills/olas_week_abci/ || (echo "Failed to check olas_week_abci abci consistency" && exit 1)
+	autonomy analyse fsm-specs --update --app-class MechInteractAbciApp --package packages/valory/skills/mech_interact_abci/ || (echo "Failed to check mech_interact_abci abci consistency" && exit 1)
 
 
 .PHONY: all-linters

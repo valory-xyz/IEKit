@@ -43,6 +43,7 @@ alphabet_in:
 - SCORE
 - SELECT_KEEPERS
 - SKIP_EVALUATION
+- SKIP_REQUEST
 - SUSPICIOUS_ACTIVITY
 - TWEET_EVALUATION_ROUND_TIMEOUT
 - UPDATE_CENTAURS
@@ -104,13 +105,13 @@ states:
 transition_func:
     (CheckLateTxHashesRound, CHECK_LATE_ARRIVING_MESSAGE): SynchronizeLateMessagesRound
     (CheckLateTxHashesRound, CHECK_TIMEOUT): CheckLateTxHashesRound
-    (CheckLateTxHashesRound, DONE): TwitterDecisionMakingRound
+    (CheckLateTxHashesRound, DONE): MechResponseRound
     (CheckLateTxHashesRound, NEGATIVE): MechRequestRound
     (CheckLateTxHashesRound, NONE): MechRequestRound
     (CheckLateTxHashesRound, NO_MAJORITY): MechRequestRound
     (CheckTransactionHistoryRound, CHECK_LATE_ARRIVING_MESSAGE): SynchronizeLateMessagesRound
     (CheckTransactionHistoryRound, CHECK_TIMEOUT): CheckTransactionHistoryRound
-    (CheckTransactionHistoryRound, DONE): TwitterDecisionMakingRound
+    (CheckTransactionHistoryRound, DONE): MechResponseRound
     (CheckTransactionHistoryRound, NEGATIVE): SelectKeeperTransactionSubmissionBRound
     (CheckTransactionHistoryRound, NONE): MechRequestRound
     (CheckTransactionHistoryRound, NO_MAJORITY): CheckTransactionHistoryRound
@@ -157,7 +158,8 @@ transition_func:
     (MechRequestRound, DONE): RandomnessTransactionSubmissionRound
     (MechRequestRound, NO_MAJORITY): MechRequestRound
     (MechRequestRound, ROUND_TIMEOUT): MechRequestRound
-    (MechResponseRound, DONE): MechRequestRound
+    (MechRequestRound, SKIP_REQUEST): TwitterDecisionMakingRound
+    (MechResponseRound, DONE): TwitterDecisionMakingRound
     (MechResponseRound, NO_MAJORITY): MechResponseRound
     (MechResponseRound, ROUND_TIMEOUT): MechResponseRound
     (OlasWeekDecisionMakingRound, DONE): DecisionMakingRound
@@ -189,7 +191,7 @@ transition_func:
     (PostMechRequestRound, DONE): TwitterDecisionMakingRound
     (PostMechRequestRound, NO_MAJORITY): PostMechRequestRound
     (PostMechRequestRound, ROUND_TIMEOUT): PreMechRequestRound
-    (PreMechRequestRound, DONE): MechResponseRound
+    (PreMechRequestRound, DONE): MechRequestRound
     (PreMechRequestRound, NO_MAJORITY): PreMechRequestRound
     (PreMechRequestRound, ROUND_TIMEOUT): PreMechRequestRound
     (PreMechRequestRound, SKIP_EVALUATION): TokenTrackRound
@@ -279,7 +281,7 @@ transition_func:
     (TwitterWriteRound, CONTINUE): TwitterWriteRound
     (TwitterWriteRound, DONE): DecisionMakingRound
     (TwitterWriteRound, ROUND_TIMEOUT): RandomnessTwitterRound
-    (ValidateTransactionRound, DONE): TwitterDecisionMakingRound
+    (ValidateTransactionRound, DONE): MechResponseRound
     (ValidateTransactionRound, NEGATIVE): CheckTransactionHistoryRound
     (ValidateTransactionRound, NONE): SelectKeeperTransactionSubmissionBRound
     (ValidateTransactionRound, NO_MAJORITY): ValidateTransactionRound
