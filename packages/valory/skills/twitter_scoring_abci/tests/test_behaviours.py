@@ -27,10 +27,6 @@ from typing import Any, Dict, Optional, Type, cast
 
 import pytest
 
-from packages.valory.connections.openai.connection import (
-    PUBLIC_ID as LLM_CONNECTION_PUBLIC_ID,
-)
-from packages.valory.protocols.llm.message import LlmMessage
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.valory.skills.abstract_round_abci.behaviour_utils import (
     BaseBehaviour,
@@ -58,7 +54,6 @@ from packages.valory.skills.twitter_scoring_abci.behaviours import (
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     DataclassEncoder,
     Event,
-    FinishedTwitterCollectionRound,
     FinishedTwitterScoringRound,
     MechInteractionResponse,
     SynchronizedData,

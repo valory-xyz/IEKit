@@ -26,7 +26,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeigafcnpou65s44g2ccdcgtrjttip6josgabilecyrddrvx43sk46u
 - valory/ceramic_read_abci:0.1.0:bafybeicka6bl5562qgys7udopt63jv3w246wou6cufcs2as4m2jt524ocy
 - valory/generic_scoring_abci:0.1.0:bafybeidwsjq72kubcorgvz4inb7qlpm3isfqekj2nxkbv6lxfqf53mcc4q
-- valory/twitter_scoring_abci:0.1.0:bafybeibi4gwkqf3ow6hxk73hpkxjqdwbvrpz3yrszavr2gfze4fusoofc4
+- valory/twitter_scoring_abci:0.1.0:bafybeifg4yzd4ujcyvemuhvavovkgsgsjejci3eyp5jsjqsvyqllytyov4
 - valory/ceramic_write_abci:0.1.0:bafybeiecs64fod2rgzmkhj6skebiwyca25ee7zwzlhq6zbze4g7ogn35ea
 - valory/dynamic_nft_abci:0.1.0:bafybeicsubv3zl7t3s2eowahcnwvosu7j7e65qwdvgxcnfmm63lfcn7h3q
 - valory/registration_abci:0.1.0:bafybeicttpxr2qj5w4btl3vvld5o6z7myp62yjt54dsqif62zg4afvtomq
