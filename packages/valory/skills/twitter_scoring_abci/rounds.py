@@ -457,9 +457,6 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
             performed_twitter_tasks["retrieve_hashtags"] = Event.DONE.value
             new_tweets = payload["tweets"]
 
-            self.context.logger.info(f"my_tweets r_h: {previous_tweets}")
-            self.context.logger.info(f"my_tweets (new_tweets) r_h: {new_tweets}")
-
             updates = {
                 get_name(SynchronizedData.tweets): {
                     **new_tweets,
@@ -518,8 +515,6 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
             # Nothing to evaluate (no new tweets) nor responses to retrieve
             if not new_mech_requests and not mech_responses:
                 tweets = cast(SynchronizedData, self.synchronized_data).tweets
-
-                self.context.logger.info(f"my_tweets PreMechRequestRound: {tweets}")
 
                 synchronized_data = self.synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
@@ -589,10 +584,6 @@ class PostMechRequestRound(CollectSameUntilThresholdRound):
             ]
 
             serialized_responses = json.dumps(mech_responses, cls=DataclassEncoder)
-
-            self.context.logger.info(
-                f"my_tweets PostMechRequestRound: {payload['tweets']}"
-            )
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
