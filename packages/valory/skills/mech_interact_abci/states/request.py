@@ -19,14 +19,15 @@
 
 """This module contains the request state of the mech interaction abci app."""
 
+from typing import Optional, Tuple
+
 from packages.valory.skills.abstract_round_abci.base import get_name
 from packages.valory.skills.mech_interact_abci.payloads import MechRequestPayload
 from packages.valory.skills.mech_interact_abci.states.base import (
+    Event,
     MechInteractionRound,
     SynchronizedData,
-    Event
 )
-from typing import Optional, Tuple
 
 
 class MechRequestRound(MechInteractionRound):

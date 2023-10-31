@@ -891,7 +891,9 @@ class PostMechRequestBehaviour(TwitterScoringBaseBehaviour):
             tweets = self.synchronized_data.tweets
             responses_to_remove = []
 
-            self.context.logger.info(f"PostMech: mech_responses = {self.synchronized_data.mech_responses}")
+            self.context.logger.info(
+                f"PostMech: mech_responses = {self.synchronized_data.mech_responses}"
+            )
 
             for response in self.synchronized_data.mech_responses:
 

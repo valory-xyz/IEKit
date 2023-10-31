@@ -57,8 +57,10 @@ from packages.valory.skills.impact_evaluator_abci.composition import (
 from packages.valory.skills.llm_abci.models import Params as LLMAbciParams
 from packages.valory.skills.llm_abci.rounds import Event as LLMEvent
 from packages.valory.skills.mech_interact_abci.models import (
+    MechResponseSpecs as BaseMechResponseSpecs,
+)
+from packages.valory.skills.mech_interact_abci.models import (
     Params as MechInteractAbciParams,
-    MechResponseSpecs as BaseMechResponseSpecs
 )
 from packages.valory.skills.mech_interact_abci.rounds import Event as MechInteractEvent
 from packages.valory.skills.olas_week_abci.models import Params as OlasWeekAbciParams

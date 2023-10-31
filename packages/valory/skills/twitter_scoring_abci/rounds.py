@@ -24,6 +24,7 @@ import math
 from dataclasses import asdict, dataclass, is_dataclass
 from enum import Enum
 from typing import Any, Dict, FrozenSet, List, Optional, Set, Tuple, cast
+
 from packages.valory.skills.abstract_round_abci.base import (
     ABCIAppInternalError,
     AbciApp,
@@ -559,12 +560,16 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
             ).performed_twitter_tasks
             performed_twitter_tasks["pre_mech"] = Event.DONE.value
 
-            self.context.logger.info(f"new_mech_requests PreMechRequestRound: {new_mech_requests}")
+            self.context.logger.info(
+                f"new_mech_requests PreMechRequestRound: {new_mech_requests}"
+            )
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    get_name(SynchronizedData.mech_requests): json.dumps(new_mech_requests),  # delete previous requests
+                    get_name(SynchronizedData.mech_requests): json.dumps(
+                        new_mech_requests
+                    ),  # delete previous requests
                     get_name(
                         SynchronizedData.performed_twitter_tasks
                     ): performed_twitter_tasks,
@@ -608,7 +613,9 @@ class PostMechRequestRound(CollectSameUntilThresholdRound):
 
             serialized_responses = json.dumps(mech_responses, cls=DataclassEncoder)
 
-            self.context.logger.info(f"my_tweets PostMechRequestRound: {payload['tweets']}")
+            self.context.logger.info(
+                f"my_tweets PostMechRequestRound: {payload['tweets']}"
+            )
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
@@ -646,9 +653,7 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
             performed_twitter_tasks["db_update"] = Event.DONE.value
 
             # Clear processed tweets that are no longer needed
-            tweets = cast(
-                SynchronizedData, self.synchronized_data
-            ).tweets
+            tweets = cast(SynchronizedData, self.synchronized_data).tweets
             tweets = {k: v for k, v in tweets.items() if "points" in v}
 
             synchronized_data = self.synchronized_data.update(

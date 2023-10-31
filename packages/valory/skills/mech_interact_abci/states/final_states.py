@@ -25,8 +25,10 @@ from packages.valory.skills.abstract_round_abci.base import DegenerateRound
 class FinishedMechRequestRound(DegenerateRound):
     """FinishedMechRequestRound"""
 
+
 class FinishedMechRequestSkipRound(DegenerateRound):
     """FinishedMechRequestSkipRound"""
+
 
 class FinishedMechResponseRound(DegenerateRound):
     """FinishedMechResponseRound"""

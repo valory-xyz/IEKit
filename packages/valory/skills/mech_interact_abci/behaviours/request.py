@@ -310,6 +310,9 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     f"Preparing mech request:\ntx_hex: {self.tx_hex}\nprice: {self.price}\nserialized_data: {serialized_data}\n"
                 )
                 payload = MechRequestPayload(
-                    self.context.agent_address, self.tx_hex, self.price, *serialized_data
+                    self.context.agent_address,
+                    self.tx_hex,
+                    self.price,
+                    *serialized_data,
                 )
         yield from self.finish_behaviour(payload)

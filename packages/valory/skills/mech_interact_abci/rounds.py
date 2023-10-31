@@ -34,8 +34,8 @@ from packages.valory.skills.mech_interact_abci.states.base import (
 )
 from packages.valory.skills.mech_interact_abci.states.final_states import (
     FinishedMechRequestRound,
-    FinishedMechResponseRound,
     FinishedMechRequestSkipRound,
+    FinishedMechResponseRound,
 )
 from packages.valory.skills.mech_interact_abci.states.request import MechRequestRound
 from packages.valory.skills.mech_interact_abci.states.response import MechResponseRound
@@ -62,7 +62,11 @@ class MechInteractAbciApp(AbciApp[Event]):
         FinishedMechResponseRound: {},
         FinishedMechRequestSkipRound: {},
     }
-    final_states: Set[AppState] = {FinishedMechRequestRound, FinishedMechResponseRound, FinishedMechRequestSkipRound}
+    final_states: Set[AppState] = {
+        FinishedMechRequestRound,
+        FinishedMechResponseRound,
+        FinishedMechRequestSkipRound,
+    }
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }

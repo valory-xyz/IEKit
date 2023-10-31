@@ -38,27 +38,20 @@ from typing import (
     Union,
     cast,
 )
-from packages.valory.skills.abstract_round_abci.dialogues import (
-    LedgerApiDialogue,
-    LedgerApiDialogues,
-)
-from packages.valory.skills.abstract_round_abci.base import (
-    LEDGER_API_ADDRESS,
-)
-from packages.valory.skills.abstract_round_abci.models import (
-    Requests,
-)
+
 from aea.protocols.base import Message
 from web3.types import Nonce, TxData, Wei
-from packages.valory.skills.abstract_round_abci.dialogues import (
-    ContractApiDialogue,
-    ContractApiDialogues,
-)
+
 from packages.open_aea.protocols.signing import SigningMessage
-from packages.open_aea.protocols.signing.custom_types import RawTransaction, Terms
+from packages.open_aea.protocols.signing.custom_types import (
+    RawTransaction,
+    SignedTransaction,
+    Terms,
+)
 from packages.valory.contracts.gnosis_safe.contract import GnosisSafeContract
 from packages.valory.protocols.contract_api.message import ContractApiMessage
 from packages.valory.protocols.ledger_api import LedgerApiMessage
+from packages.valory.skills.abstract_round_abci.base import LEDGER_API_ADDRESS
 from packages.valory.skills.abstract_round_abci.behaviour_utils import RPCResponseStatus
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
@@ -68,15 +61,19 @@ from packages.valory.skills.abstract_round_abci.common import (
     RandomnessBehaviour,
     SelectKeeperBehaviour,
 )
+from packages.valory.skills.abstract_round_abci.dialogues import (
+    ContractApiDialogue,
+    ContractApiDialogues,
+    LedgerApiDialogue,
+    LedgerApiDialogues,
+)
+from packages.valory.skills.abstract_round_abci.models import Requests
 from packages.valory.skills.abstract_round_abci.utils import VerifyDrand
 from packages.valory.skills.transaction_settlement_abci.models import TransactionParams
 from packages.valory.skills.transaction_settlement_abci.payload_tools import (
     VerificationStatus,
     skill_input_hex_to_payload,
     tx_hist_payload_to_hex,
-)
-from packages.open_aea.protocols.signing.custom_types import (
-    SignedTransaction,
 )
 from packages.valory.skills.transaction_settlement_abci.payloads import (
     CheckTransactionHistoryPayload,
