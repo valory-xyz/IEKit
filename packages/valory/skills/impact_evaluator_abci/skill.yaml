@@ -26,18 +26,18 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeia3mdn5d7obk2gskzqtmc3yhhdq5q6ynlimaoep54royjvfzwr3pa
 - valory/ceramic_read_abci:0.1.0:bafybeiaow7k36txc2bp7cprwgb2duy5zhut4dkhgsnyby4dkmsbjk2htam
 - valory/generic_scoring_abci:0.1.0:bafybeifyniinxy364ia2yaf72xxfotqcabu6uxhejanpus7gng26bxsy6m
-- valory/twitter_scoring_abci:0.1.0:bafybeigc3mw3wqqrf6rhi4bvvmszdppyaqhakjizkh47yko2u2msk2dvly
+- valory/twitter_scoring_abci:0.1.0:bafybeibojjfmggxjcsaw4qg4my2vg6k5lwogr2qyg3hsmjcdwv2wgtdjsy
 - valory/ceramic_write_abci:0.1.0:bafybeigkbs47pgyovqcqmkjabzkpqtdwglxlfdr3tve3uel5ip4vxt4cwi
 - valory/dynamic_nft_abci:0.1.0:bafybeia7ar3xpwfcm6qh7sfrt7augri5jbsl4fuxj5r3fc5mi3p4cw2tme
 - valory/registration_abci:0.1.0:bafybeignfsunwjbokea2jtzqnl7yiwykxhn4viwx37oa6rapgfoxeine4m
 - valory/reset_pause_abci:0.1.0:bafybeicgnke5pjneorhrhbsf5by42aqut775yh36zgftqc7seg5g6xealu
-- valory/termination_abci:0.1.0:bafybeignrnc4mawygcza6k3s5pv3sttqg24k4pbg3rchfjunsk2tdc2jv4
-- valory/transaction_settlement_abci:0.1.0:bafybeih66sy7fbhx3my37fd3igi5ai36npydoxlmahch4k6ppysgjzmaqu
+- valory/termination_abci:0.1.0:bafybeid6oiq4ycyacdwggcmeivqmxlez5wjtmkb4nt4sibfnti54okxt5m
+- valory/transaction_settlement_abci:0.1.0:bafybeifz2mdnqc2oalhi42obvkusmgakwk2fxlvlqeapbga3eoo5vclvim
 - valory/decision_making_abci:0.1.0:bafybeicxlqgkmthxokldp4jxppgoi6jdhh7onhcfaoxzgst67of3qbervy
 - valory/llm_abci:0.1.0:bafybeiexxp3bglumox6zjtqcuqdowskyha6cciwfreh6qeautiqjffz6gm
 - valory/twitter_write_abci:0.1.0:bafybeidlz6l6ghr4evv5ftn7cgfrmrqvcc3f7vw5dt3kxwofosqkr5bhv4
 - valory/olas_week_abci:0.1.0:bafybeiba7u74qgfjjkakqcxhrsiiwuhllz5x7x7kqbqrq52ssniyuoylz4
-- valory/mech_interact_abci:0.1.0:bafybeifztbazgqaz62c6os3bvmbuevo3o7ocgwzk2xzvitm3notenkxewq
+- valory/mech_interact_abci:0.1.0:bafybeifget4s6qxmbdnbparrkgisjx65ijpe6sybfnomwtruuvyu3ecd3i
 behaviours:
   main:
     args: {}
