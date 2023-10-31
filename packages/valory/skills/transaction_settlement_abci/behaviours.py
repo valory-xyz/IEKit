@@ -338,62 +338,6 @@ class TransactionSettlementBaseBehaviour(BaseBehaviour, ABC):
 
         return tx_hash, RPCResponseStatus.SUCCESS
 
-
-    # def get_contract_api_response(
-    #     self,
-    #     performative: ContractApiMessage.Performative,
-    #     contract_address: Optional[str],
-    #     contract_id: str,
-    #     contract_callable: str,
-    #     **kwargs: Any,
-    # ) -> Generator[None, None, ContractApiMessage]:
-    #     """
-    #     Request contract safe transaction hash
-
-    #     Happy-path full flow of the messages.
-
-    #     AbstractRoundAbci skill -> (ContractApiMessage | ContractApiMessage.Performative) -> Ledger connection (contract dispatcher)
-    #     Ledger connection (contract dispatcher) -> (ContractApiMessage | ContractApiMessage.Performative) -> AbstractRoundAbci skill
-
-    #     :param performative: the message performative
-    #     :param contract_address: the contract address
-    #     :param contract_id: the contract id
-    #     :param contract_callable: the callable to call on the contract
-    #     :param kwargs: keyword argument for the contract api request
-    #     :return: the contract api response
-    #     :yields: the contract api response
-    #     """
-    #     contract_api_dialogues = cast(
-    #         ContractApiDialogues, self.context.contract_api_dialogues
-    #     )
-    #     chain_id = kwargs.get("chain_id", None)
-    #     kwargs = {
-    #         "performative": performative,
-    #         "counterparty": LEDGER_API_ADDRESS,
-    #         "ledger_id": self.context.default_ledger_id,
-    #         "contract_id": contract_id,
-    #         "callable": contract_callable,
-    #         "kwargs": ContractApiMessage.Kwargs(kwargs),
-    #     }
-    #     if contract_address is not None:
-    #         kwargs["contract_address"] = contract_address
-    #     contract_api_msg, contract_api_dialogue = contract_api_dialogues.create(
-    #         **kwargs
-    #     )
-    #     contract_api_dialogue = cast(
-    #         ContractApiDialogue,
-    #         contract_api_dialogue,
-    #     )
-    #     contract_api_dialogue.terms = self._get_default_terms()
-    #     request_nonce = self._get_request_nonce_from_dialogue(contract_api_dialogue)
-    #     cast(Requests, self.context.requests).request_id_to_callback[
-    #         request_nonce
-    #     ] = self.get_callback_request()
-    #     self.context.outbox.put_message(message=contract_api_msg)
-    #     response = yield from self.wait_for_message()
-    #     return response
-
-
     def _get_tx_data(
         self, message: ContractApiMessage, use_flashbots: bool
     ) -> Generator[None, None, TxDataType]:
