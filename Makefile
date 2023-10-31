@@ -91,7 +91,7 @@ test:
 	-rfE packages/valory/skills/llm_abci \
 	-rfE packages/valory/skills/twitter_write_abci \
 	-rfE packages/valory/skills/olas_week_abci \
-	-rfE packages/valory/skills/mech_interact_abci_abci \
+	-rfE packages/valory/skills/mech_interact_abci \
 	--cov=packages.valory.skills.ceramic_read_abci \
 	--cov=packages.valory.skills.generic_scoring_abci \
 	--cov=packages.valory.skills.twitter_scoring_abci \

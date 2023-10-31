@@ -42,14 +42,11 @@ from packages.valory.skills.abstract_round_abci.base import (
     BaseTxPayload,
 )
 from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
-    BaseCollectNonEmptyUntilThresholdRound,
     BaseCollectSameUntilThresholdRoundTest,
-    CollectDifferentUntilThresholdRound,
     CollectSameUntilThresholdRound,
 )
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
-    OpenAICallCheckPayload,
     PreMechRequestPayload,
     TwitterDecisionMakingPayload,
     TwitterHashtagsCollectionPayload,
@@ -60,7 +57,6 @@ from packages.valory.skills.twitter_scoring_abci.payloads import (
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     DBUpdateRound,
     Event,
-    OpenAICallCheckRound,
     PreMechRequestRound,
     SynchronizedData,
     TwitterDecisionMakingRound,
@@ -136,7 +132,7 @@ def get_dummy_hashtags_collection_payload_serialized(api_error: bool = False) ->
     )
 
 
-class BaseScoreReadRoundTest(BaseCollectSameUntilThresholdRoundTest):
+class BaseTwitterScoringRoundTest(BaseCollectSameUntilThresholdRoundTest):
     """Base test class for ScoreRead rounds."""
 
     synchronized_data: SynchronizedData
@@ -166,7 +162,7 @@ class BaseScoreReadRoundTest(BaseCollectSameUntilThresholdRoundTest):
         )
 
 
-class TestMentionsCollectionRound(BaseScoreReadRoundTest):
+class TestMentionsCollectionRound(BaseTwitterScoringRoundTest):
     """Tests for TwitterMentionsCollectionRound."""
 
     round_class = TwitterMentionsCollectionRound
@@ -237,7 +233,7 @@ class TestMentionsCollectionRound(BaseScoreReadRoundTest):
         self.run_test(test_case)
 
 
-class TestHashtagsCollectionRound(BaseScoreReadRoundTest):
+class TestHashtagsCollectionRound(BaseTwitterScoringRoundTest):
     """Tests for TwitterMentionsCollectionRound."""
 
     round_class = TwitterHashtagsCollectionRound
@@ -308,7 +304,7 @@ class TestHashtagsCollectionRound(BaseScoreReadRoundTest):
         self.run_test(test_case)
 
 
-class TestDecisionMakingRound(BaseScoreReadRoundTest):
+class TestDecisionMakingRound(BaseTwitterScoringRoundTest):
     """Tests for TwitterDecisionMakingRound."""
 
     round_class = TwitterDecisionMakingRound
@@ -321,11 +317,11 @@ class TestDecisionMakingRound(BaseScoreReadRoundTest):
                 initial_data={"ceramic_db": {}},
                 payloads=get_payloads(
                     payload_cls=TwitterDecisionMakingPayload,
-                    data=Event.OPENAI_CALL_CHECK.value,
+                    data=Event.RETRIEVE_HASHTAGS.value,
                 ),
                 final_data={},
-                event=Event.OPENAI_CALL_CHECK,
-                most_voted_payload=Event.OPENAI_CALL_CHECK.value,
+                event=Event.RETRIEVE_HASHTAGS,
+                most_voted_payload=Event.RETRIEVE_HASHTAGS.value,
                 synchronized_data_attr_checks=[
                     lambda _synchronized_data: _synchronized_data.ceramic_db,
                 ],
@@ -337,50 +333,7 @@ class TestDecisionMakingRound(BaseScoreReadRoundTest):
         self.run_test(test_case)
 
 
-class TestOpenAICallCheckRound(BaseScoreReadRoundTest):
-    """Tests for OpenAICallCheckRound."""
-
-    round_class = OpenAICallCheckRound
-
-    @pytest.mark.parametrize(
-        "test_case",
-        (
-            RoundTestCase(
-                name="Happy path",
-                initial_data={"ceramic_db": {}},
-                payloads=get_payloads(
-                    payload_cls=OpenAICallCheckPayload,
-                    data=OpenAICallCheckRound.CALLS_REMAINING,
-                ),
-                final_data={},
-                event=Event.DONE,
-                most_voted_payload=OpenAICallCheckRound.CALLS_REMAINING,
-                synchronized_data_attr_checks=[
-                    lambda _synchronized_data: _synchronized_data.ceramic_db,
-                ],
-            ),
-            RoundTestCase(
-                name="No allowance",
-                initial_data={"ceramic_db": {}},
-                payloads=get_payloads(
-                    payload_cls=OpenAICallCheckPayload,
-                    data="",
-                ),
-                final_data={},
-                event=Event.NO_ALLOWANCE,
-                most_voted_payload="",
-                synchronized_data_attr_checks=[
-                    lambda _synchronized_data: _synchronized_data.ceramic_db,
-                ],
-            ),
-        ),
-    )
-    def test_run(self, test_case: RoundTestCase) -> None:
-        """Run tests."""
-        self.run_test(test_case)
-
-
-class TestDBUpdateRound(BaseScoreReadRoundTest):
+class TestDBUpdateRound(BaseTwitterScoringRoundTest):
     """Tests for DBUpdateRound."""
 
     round_class = DBUpdateRound
@@ -409,34 +362,10 @@ class TestDBUpdateRound(BaseScoreReadRoundTest):
         self.run_test(test_case)
 
 
-class TestPreMechRequestRound(BaseCollectNonEmptyUntilThresholdRound):
+class TestPreMechRequestRound(BaseTwitterScoringRoundTest):
     """PreMechRequestRound"""
 
-    synchronized_data: SynchronizedData
-    _synchronized_data_class = SynchronizedData
-    _event_class = Event
     round_class = PreMechRequestRound
-
-    def run_test(self, test_case: RoundTestCase) -> None:
-        """Run the test"""
-
-        self.synchronized_data.update(**test_case.initial_data)
-
-        test_round = self.round_class(
-            synchronized_data=self.synchronized_data, context=mock.MagicMock()
-        )
-
-        self._complete_run(
-            self._test_round(
-                test_round=cast(CollectDifferentUntilThresholdRound, test_round),
-                round_payloads=test_case.payloads,
-                synchronized_data_update_fn=lambda sync_data, _: sync_data.update(
-                    **test_case.final_data
-                ),
-                synchronized_data_attr_checks=test_case.synchronized_data_attr_checks,
-                exit_event=test_case.event,
-            )
-        )
 
     @pytest.mark.parametrize(
         "test_case",
@@ -446,11 +375,25 @@ class TestPreMechRequestRound(BaseCollectNonEmptyUntilThresholdRound):
                 initial_data={"ceramic_db": {}},
                 payloads=get_payloads(
                     payload_cls=PreMechRequestPayload,
-                    data="{}",
+                    data='{"new_mech_requests":[]}',
+                ),
+                final_data={},
+                event=Event.SKIP_EVALUATION,
+                most_voted_payload='{"new_mech_requests":[]}',
+                synchronized_data_attr_checks=[
+                    lambda _synchronized_data: _synchronized_data.ceramic_db,
+                ],
+            ),
+            RoundTestCase(
+                name="Happy path",
+                initial_data={"ceramic_db": {}},
+                payloads=get_payloads(
+                    payload_cls=PreMechRequestPayload,
+                    data='{"new_mech_requests":["dummy_request"]}',
                 ),
                 final_data={},
                 event=Event.DONE,
-                most_voted_payload="{}",
+                most_voted_payload='{"new_mech_requests":["dummy_request"]}',
                 synchronized_data_attr_checks=[
                     lambda _synchronized_data: _synchronized_data.ceramic_db,
                 ],
