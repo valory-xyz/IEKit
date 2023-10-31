@@ -144,7 +144,6 @@ class MultiSendContract(Contract):
         :return: an optional JSON-like object.
         """
         multisend_contract = cls.get_instance(ledger_api, contract_address)
-        print(f"\n\nCHAIN_ID get_raw_safe_transaction: {ledger_api.api.eth.chain_id}\n\n")
         encoded_multisend_data = to_bytes(multi_send_txs)
         return {
             "data": multisend_contract.functions.multiSend(
