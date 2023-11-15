@@ -21,6 +21,7 @@
 import json
 from typing import Any, Callable, cast
 
+import requests
 import tweepy
 from aea.configurations.base import PublicId
 from aea.connections.base import BaseSyncConnection
@@ -103,6 +104,8 @@ class TwitterConnection(BaseSyncConnection):
         self.auth_token = self.configuration.config["auth_token"]
         self.access_secret = self.configuration.config["access_secret"]
         self.access_token = self.configuration.config["access_token"]
+        self.use_staging_api = self.configuration.config["use_staging_api"]
+        self.staging_api = self.configuration.config["staging_api"]
 
         self.dialogues = TwitterDialogues(connection_id=PUBLIC_ID)
 
@@ -169,6 +172,47 @@ class TwitterConnection(BaseSyncConnection):
         text = data["text"]
         credentials = data["credentials"]
 
+        # Call the staging API
+        if self.use_staging_api:
+            url = self.staging_api
+
+            if isinstance(text, list):
+                # Thread
+                first_tweet_id = None
+                for tweet in text:
+                    response = requests.post(
+                        url,
+                        json={
+                            "user_name": "staging_contribute",
+                            "text": text
+                        },
+                        timeout=10
+                    )
+
+                    if not first_tweet_id:
+                        first_tweet_id = response.json()["tweet_id"]
+            else:
+                # Single tweet
+                response = requests.post(
+                    url,
+                    json={
+                        "user_name": "staging_contribute",
+                        "text": text
+                    },
+                    timeout=10
+                )
+                first_tweet_id = response.json()["tweet_id"]
+
+            return cast(
+                TwitterMessage,
+                dialogue.reply(
+                    performative=TwitterMessage.Performative.TWEET_CREATED,
+                    target_message=message,
+                    tweet_id=first_tweet_id,
+                ),
+            )
+
+        # Call the Twitter API
         api = (
             self.api
             if not credentials

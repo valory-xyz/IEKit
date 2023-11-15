@@ -20,6 +20,8 @@ config:
   auth_token: <auth_token>
   consumer_key: <consumer_key>
   consumer_secret: <consumer_secret>
+  use_staging_api: false
+  staging_api: http://host.docker.internal:5000/twitter/create_tweet
 excluded_protocols: []
 restricted_to_protocols: []
 dependencies:

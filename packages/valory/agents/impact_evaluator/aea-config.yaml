@@ -98,6 +98,19 @@ config:
   max_tokens: ${int:500}
   openai_api_key: ${str:null}
   temperature: ${float:0.7}
+  use_staging_api: ${bool:false}
+  staging_api: ${str:http://host.docker.internal:5000/openai}
+---
+public_id: valory/twitter:0.1.0
+type: connection
+config:
+  access_secret: <access_secret>
+  access_token: <access_token>
+  auth_token: <auth_token>
+  consumer_key: <consumer_key>
+  consumer_secret: <consumer_secret>
+  use_staging_api: ${bool:false}
+  staging_api: ${str:http://host.docker.internal:5000/twitter/create_tweet}
 ---
 public_id: valory/abci:0.1.0
 type: connection

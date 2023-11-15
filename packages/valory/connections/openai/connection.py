@@ -23,6 +23,7 @@
 from typing import Any, Dict, cast
 
 import openai
+import requests
 from aea.configurations.base import PublicId
 from aea.connections.base import BaseSyncConnection
 from aea.mail.base import Envelope
@@ -105,6 +106,8 @@ class OpenaiConnection(BaseSyncConnection):
                 "max_tokens",
                 "temperature",
                 "request_timeout",
+                "use_staging_api",
+                "staging_api"
             )
         }
         openai.api_key = self.openai_settings["openai_api_key"]
@@ -186,9 +189,20 @@ class OpenaiConnection(BaseSyncConnection):
 
     def _get_response(self, prompt_template: str, prompt_values: Dict[str, str]):
         """Get response from openai."""
+
         # Format the prompt using input variables and prompt_values
         formatted_prompt = prompt_template.format(**prompt_values) if prompt_values else prompt_template
         engine = self.openai_settings["engine"]
+
+        # Call the staging API
+        if self.openai_settings["use_staging_api"]:
+            url = self.openai_settings["staging_api"]
+            response = requests.post(
+                url,
+                json={"engine": engine, "prompt": formatted_prompt},
+                timeout=self.openai_settings["request_timeout"]
+            )
+            return response.json()["text"]
 
         # Call the OpenAI API
         if engine in ENGINES["chat"]:
