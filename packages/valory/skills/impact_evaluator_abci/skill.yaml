@@ -24,19 +24,19 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeigrqhygo2hl2owisj5rqyh3acdvee773ajije64snlzalcgtaac7q
-- valory/ceramic_read_abci:0.1.0:bafybeiall2unkqofaq7khuphm7aekbp7r42ett5hu5zv3pkbedhyzmathu
-- valory/generic_scoring_abci:0.1.0:bafybeiclx5ackxojolldx5vug2p5hn3jnu5whqyhpth22gcrd67o322cha
-- valory/twitter_scoring_abci:0.1.0:bafybeidomknnbxkuxeywcej3jpr7fhaohouejtjrb7ya7ve3ntnlcfxxbi
-- valory/ceramic_write_abci:0.1.0:bafybeif73tpmbaslwpijsqmrdzb3e5veegaan46tei2fiknnrn2eilhggy
-- valory/dynamic_nft_abci:0.1.0:bafybeibj7qumdbsd7pubut2kmtcpzaxz2ey4v3virs4mldrzmttkt6wo2m
+- valory/ceramic_read_abci:0.1.0:bafybeiatadjva35bvhh4gjmryiamyz45ts6tcayn3z5e42i3izn7cyeohy
+- valory/generic_scoring_abci:0.1.0:bafybeic5x4wwzclrrytcrwmmgoud7fqst4c7sjjlokarinha3pleb4cgo4
+- valory/twitter_scoring_abci:0.1.0:bafybeic6wnvw32g5ubcbz7l4vhjtsdsvferh6n67dfc5wyzm7eib3paw5m
+- valory/ceramic_write_abci:0.1.0:bafybeiabzsdxjgwt2gam5yrwi2dxwoie7sgfxcfp7d3mrf7z5cpt2j7ig4
+- valory/dynamic_nft_abci:0.1.0:bafybeihtk4gucwcpcpwoqh4y6ejdie4swq5hd37zrhsrcz7lyx2hwvx25u
 - valory/registration_abci:0.1.0:bafybeib2whqixp5265d53sa6szkz7woet4awuqr4dekb2hokpgps5codme
 - valory/reset_pause_abci:0.1.0:bafybeiflxcl2dtzayyzzddc4f2astzxunyp66meutornanrgeemicdea5q
-- valory/termination_abci:0.1.0:bafybeifazwrksp756h7z42qqfcgi6lya6wmhbx46l7ghlaooe45gqnju7q
-- valory/transaction_settlement_abci:0.1.0:bafybeigxkdujugzvve2dszkwr5kgfx4uhz2epofo4lorbcnthmzfjegwzi
+- valory/termination_abci:0.1.0:bafybeiay3nj5z5ivet2q6bbonch72pm6jh6j2rqtogw57va6yi6mtvgi2a
+- valory/transaction_settlement_abci:0.1.0:bafybeifrcqowp7etzow2utvvebdr5g6ssotuwi26477br76bwu5c3eh5py
 - valory/decision_making_abci:0.1.0:bafybeifxsrfk7jkoacfk654jjpmwaabkwt4t42tuda4rpdyfbsf5rp4mdy
-- valory/llm_abci:0.1.0:bafybeiap5ar62aj3vzforji33k5wkxngoumdgztutk2i5y3w7avkwx55ua
-- valory/twitter_write_abci:0.1.0:bafybeifzxtqnumlm65f764hwx3zbpzpwesniizprj67cacvlaytiwnz4qy
-- valory/olas_week_abci:0.1.0:bafybeievtrydq4tbscb2vwcrrbe6ilzj2j5isusmv4fy2hdsowce2nncjy
+- valory/llm_abci:0.1.0:bafybeidomeepddz7jtivv23anzjd75ka6nzojo6ypoxw7ho4r3ss22zzi4
+- valory/twitter_write_abci:0.1.0:bafybeibsnfsm5h33x4djh6khk2ztjhuu2ntyyyontbbroof7m7bnxumyy4
+- valory/olas_week_abci:0.1.0:bafybeiayvjzl4iolermxvhjxce4vegsucz67maeoygg3sxk4fnca4zukfe
 behaviours:
   main:
     args: {}
