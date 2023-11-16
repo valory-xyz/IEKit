@@ -27,14 +27,14 @@ pytest = "==7.2.1"
 pytest-asyncio = "==0.20.3"
 pytest-cov = "==4.0.0"
 pytest-randomly = "==3.12.0"
-openapi-core = "==0.13.2"
+openapi-core = "==0.13.4"
 openapi-spec-validator = "==0.2.8"
 open-aea = "==1.41.0.post1"
 open-aea-ledger-ethereum = "==1.41.0.post1"
 open-aea-ledger-cosmos = "==1.41.0.post1"
 open-aea-cli-ipfs = "==1.41.0.post1"
-open-aea-test-autonomy = "==0.13.2"
-open-autonomy = {version = "==0.13.2", extras = [ "all"]}
+open-aea-test-autonomy = "==0.13.4"
+open-autonomy = {version = "==0.13.4", extras = [ "all"]}
 tomte = {version = "==0.2.12", extras = ["cli", "tests"]}
 requests = "==2.28.2"
 openai = "==0.27.2"
@@ -45,6 +45,7 @@ tweepy = "==4.14.0"
 twitter_text_parser = "==3.0.0"
 py-multibase = "==1.0.3"
 py-multicodec = "==0.2.1"
+protobuf = "<4.25.0,>=4.21.6"
 
 [requires]
 python_version = "3.10"
