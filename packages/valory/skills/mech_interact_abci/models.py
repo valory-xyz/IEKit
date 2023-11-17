@@ -62,7 +62,9 @@ class MechParams(BaseParams):
         self.multisend_batch_size: int = self._ensure(
             "multisend_batch_size", kwargs, int
         )
-        self.mech_contract_address: str = self._ensure("mech_contract_address", kwargs, str)
+        self.mech_contract_address: str = self._ensure(
+            "mech_contract_address", kwargs, str
+        )
         self._ipfs_address: str = self._ensure("ipfs_address", kwargs, str)
         super().__init__(*args, **kwargs)
 
