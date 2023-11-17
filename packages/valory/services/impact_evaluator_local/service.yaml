@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeibdsmvudsf74cbmy3xyf3gzibuljilodd7jqe3deocv47zxztqapm
+agent: valory/impact_evaluator:0.1.0:bafybeigpla3ge56wkuihcykfk2gpwlcfsiehtf4su5idutqcofpr672cam
 number_of_agents: 1
 deployment:
   agent:
@@ -117,7 +117,7 @@ models:
       openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
       service_endpoint_base: ${SERVICE_ENDPOINT_BASE:str:https://dummy_service.autonolas.tech/}
       multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
-      mech_agent_address: ${MECH_AGENT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
+      mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
       ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
       default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
 ---

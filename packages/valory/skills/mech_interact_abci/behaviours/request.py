@@ -260,7 +260,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
         if status:
             batch = MultisendBatch(
-                to=self.params.mech_agent_address,
+                to=self.params.mech_contract_address,
                 data=HexBytes(self.request_data),
                 value=self.price,
             )

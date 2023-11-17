@@ -31,12 +31,13 @@ skills:
 - valory/dynamic_nft_abci:0.1.0:bafybeihtk4gucwcpcpwoqh4y6ejdie4swq5hd37zrhsrcz7lyx2hwvx25u
 - valory/registration_abci:0.1.0:bafybeib2whqixp5265d53sa6szkz7woet4awuqr4dekb2hokpgps5codme
 - valory/reset_pause_abci:0.1.0:bafybeiflxcl2dtzayyzzddc4f2astzxunyp66meutornanrgeemicdea5q
-- valory/termination_abci:0.1.0:bafybeiay3nj5z5ivet2q6bbonch72pm6jh6j2rqtogw57va6yi6mtvgi2a
-- valory/transaction_settlement_abci:0.1.0:bafybeifrcqowp7etzow2utvvebdr5g6ssotuwi26477br76bwu5c3eh5py
+- valory/termination_abci:0.1.0:bafybeif2g2lu7qaklxhq6abv6mwuavtspe3nnlg2bvu2ccv5y3jdwmbb7m
+- valory/transaction_settlement_abci:0.1.0:bafybeidsp3nbmsvg6qhdkyu2lxcpyqga3ly6wfbmperxjexoehgnnwxrui
 - valory/decision_making_abci:0.1.0:bafybeifxsrfk7jkoacfk654jjpmwaabkwt4t42tuda4rpdyfbsf5rp4mdy
 - valory/llm_abci:0.1.0:bafybeidomeepddz7jtivv23anzjd75ka6nzojo6ypoxw7ho4r3ss22zzi4
 - valory/twitter_write_abci:0.1.0:bafybeibsnfsm5h33x4djh6khk2ztjhuu2ntyyyontbbroof7m7bnxumyy4
 - valory/olas_week_abci:0.1.0:bafybeiayvjzl4iolermxvhjxce4vegsucz67maeoygg3sxk4fnca4zukfe
+- valory/mech_interact_abci:0.1.0:bafybeifdb5mvyhlmn35rvdcbtf7rwaoxgthi7bttpn6ceyatap5svphmmi
 behaviours:
   main:
     args: {}
@@ -190,7 +191,7 @@ models:
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
       multisend_batch_size: 50
-      mech_agent_address: '0xff82123dfb52ab75c417195c5fdb87630145ae81'
+      mech_contract_address: '0xff82123dfb52ab75c417195c5fdb87630145ae81'
       ipfs_address: https://gateway.autonolas.tech/ipfs/
       default_chain_id: ethereum
     class_name: Params

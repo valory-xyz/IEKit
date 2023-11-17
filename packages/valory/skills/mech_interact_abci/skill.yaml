@@ -34,14 +34,14 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/gnosis_safe:0.1.0:bafybeieehzopx5kuifsbuxafqoplnjf4rurihucrcsv4g3bixjkvo3c3mi
+- valory/gnosis_safe:0.1.0:bafybeieit6ebemvl7z5fns6ovc6pp7kf6vs7acvbu46zya475snotfvmlm
 - valory/mech:0.1.0:bafybeibgiguxj3yp7wgxsynbvhjlqm2aikscyett6pynrsof2kbop6dy24
 - valory/multisend:0.1.0:bafybeicrj4l6o77x6xtj4zj4pmgfp654vnp3hiew3i4of63w7bxg5mzzsq
 protocols:
 - valory/contract_api:1.0.0:bafybeialhbjvwiwcnqq3ysxcyemobcbie7xza66gaofcvla5njezkvhcka
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeigrqhygo2hl2owisj5rqyh3acdvee773ajije64snlzalcgtaac7q
-- valory/transaction_settlement_abci:0.1.0:bafybeifrcqowp7etzow2utvvebdr5g6ssotuwi26477br76bwu5c3eh5py
+- valory/transaction_settlement_abci:0.1.0:bafybeidsp3nbmsvg6qhdkyu2lxcpyqga3ly6wfbmperxjexoehgnnwxrui
 behaviours:
   main:
     args: {}
@@ -143,7 +143,7 @@ models:
       tx_timeout: 10.0
       validate_timeout: 1205
       multisend_batch_size: 50
-      mech_agent_address: '0xff82123dfb52ab75c417195c5fdb87630145ae81'
+      mech_contract_address: '0xff82123dfb52ab75c417195c5fdb87630145ae81'
       ipfs_address: https://gateway.autonolas.tech/ipfs/
       use_termination: false
       use_slashing: false
