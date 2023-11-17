@@ -9,14 +9,14 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeidf3nlv5fpvfy4libtscayhirdw64shgmhfmvjiftjmjkmhu7auxq
   behaviours/__init__.py: bafybeie3zsi6p3yanz5mqwpkdrcgywaqvkit3hdintsb4awnvalgxpxa4i
-  behaviours/base.py: bafybeifb2lef4zqej47lnxukax5i46th6lspsbnznn67isg5jsvksqaeme
-  behaviours/request.py: bafybeiginrg3lmxks6dmebp55wid2h5yofcyi6ow7f3t56gm4mzacbfe2i
+  behaviours/base.py: bafybeiac7bdwweyorjdqrss5n6fwigf6lvlwdlongplkndi53jjkcijaba
+  behaviours/request.py: bafybeidyicl4xhphpp2f4o5n5cmhwir6nei4kv6ikyokhiebskjtzvypm4
   behaviours/response.py: bafybeiaib6iqagg7n2nky2nes3vxxite4asftl6tlo5in6datk52raga7m
   behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
   dialogues.py: bafybeigjmyzd2bx6mgqiet2c223k6wkc5jk7kdkstbhpaxlqxatey26tlm
   fsm_specification.yaml: bafybeiedt2qmjawb2nf5i4byknvdhyd2hn5qvuwcsyifaswxukybdcv7x4
   handlers.py: bafybeiduy2nwkqdynainuimkjulcv7u2qq6iglkuut3gfurkckydapitg4
-  models.py: bafybeiefic3muob67mijgak6i7cd6yuwbhyrdpjphdnlof257zhg276nzu
+  models.py: bafybeibbkgmfzg4fgjwpdjzkklk4wdv2pb7xuq7d4r65f4f524lili6ss4
   payloads.py: bafybeif3vbkr2x77bgyg3wsomebbwtdy2hssyu7nkfcz7euymm35a5nd5i
   rounds.py: bafybeia2nkap3jf2ytnufez5wywirw2yjzqaqmrvehfuydfdwzmzbnbjoy
   states/__init__.py: bafybeie34wx5znr2hxwh3gs2fchmbeuzjcfnraymdvtzjaxaq5zsiw233q
