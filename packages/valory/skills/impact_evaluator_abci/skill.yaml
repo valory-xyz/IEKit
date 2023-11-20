@@ -23,21 +23,21 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeigrqhygo2hl2owisj5rqyh3acdvee773ajije64snlzalcgtaac7q
-- valory/ceramic_read_abci:0.1.0:bafybeiatadjva35bvhh4gjmryiamyz45ts6tcayn3z5e42i3izn7cyeohy
-- valory/generic_scoring_abci:0.1.0:bafybeic5x4wwzclrrytcrwmmgoud7fqst4c7sjjlokarinha3pleb4cgo4
-- valory/twitter_scoring_abci:0.1.0:bafybeia6zyjvd5es2zzcn6dvyv2yywg627tkxqhgnscf4eo7uqohln32qm
-- valory/ceramic_write_abci:0.1.0:bafybeiabzsdxjgwt2gam5yrwi2dxwoie7sgfxcfp7d3mrf7z5cpt2j7ig4
-- valory/dynamic_nft_abci:0.1.0:bafybeihtk4gucwcpcpwoqh4y6ejdie4swq5hd37zrhsrcz7lyx2hwvx25u
-- valory/registration_abci:0.1.0:bafybeib2whqixp5265d53sa6szkz7woet4awuqr4dekb2hokpgps5codme
-- valory/reset_pause_abci:0.1.0:bafybeiflxcl2dtzayyzzddc4f2astzxunyp66meutornanrgeemicdea5q
-- valory/termination_abci:0.1.0:bafybeifazwrksp756h7z42qqfcgi6lya6wmhbx46l7ghlaooe45gqnju7q
-- valory/transaction_settlement_abci:0.1.0:bafybeigxkdujugzvve2dszkwr5kgfx4uhz2epofo4lorbcnthmzfjegwzi
-- valory/decision_making_abci:0.1.0:bafybeifxsrfk7jkoacfk654jjpmwaabkwt4t42tuda4rpdyfbsf5rp4mdy
-- valory/llm_abci:0.1.0:bafybeidomeepddz7jtivv23anzjd75ka6nzojo6ypoxw7ho4r3ss22zzi4
-- valory/twitter_write_abci:0.1.0:bafybeibsnfsm5h33x4djh6khk2ztjhuu2ntyyyontbbroof7m7bnxumyy4
-- valory/olas_week_abci:0.1.0:bafybeiayvjzl4iolermxvhjxce4vegsucz67maeoygg3sxk4fnca4zukfe
-- valory/mech_interact_abci:0.1.0:bafybeifrr2oalavkl72tpwu5ki2f7pcdiugvny6rrehxelcfxd7zddolxm
+- valory/abstract_round_abci:0.1.0:bafybeifcq2nwd6m5tgxooe7436bc6lwo73xcreedmhcwauzhp5jic6jeq4
+- valory/ceramic_read_abci:0.1.0:bafybeibnb6trfkogy5r5h7yz2ny4wwsauapvdocubluipkl7focipvrcdy
+- valory/generic_scoring_abci:0.1.0:bafybeicdndjpctfcnpt2cnekzais5s72s2eevzdizcwhsvks5q7o55rpcy
+- valory/twitter_scoring_abci:0.1.0:bafybeicwoxk6vflj5if4zctyc3o4ja5wcfxpbzjzacvessrkdldnbhp56u
+- valory/ceramic_write_abci:0.1.0:bafybeiaalrd6ln5luanyd4lbpwdzpkbdiytkjok24dekfmze7eikeyevde
+- valory/dynamic_nft_abci:0.1.0:bafybeic6k6xy76wou5zb5ajmhshwdmpgovwvj2w7y3dkhfmuk45lfcthze
+- valory/registration_abci:0.1.0:bafybeig5fb3ibz3tr4kie53venqtajnlhvh7gwt5h45rxwzakwgs6jjsjq
+- valory/reset_pause_abci:0.1.0:bafybeiergfseqtmsphdimzjijxezqyyhigktvqriw2xb4dyujim6s5dr4a
+- valory/termination_abci:0.1.0:bafybeia73cl2vqj2uawt5lnoej3fzlhhum72i2p6ld4bbudd67lxb7f3cu
+- valory/transaction_settlement_abci:0.1.0:bafybeifqase6vqfrakahogdl4h2hpxntug5ckioicfqlw2og5tn6htru3q
+- valory/decision_making_abci:0.1.0:bafybeidoodqo2jqonx6e423wtbsbadh7zg7qrezspfszhprdx5ooeo36ti
+- valory/llm_abci:0.1.0:bafybeihaqg4mua54sjq7o2yaoqdirlrh62pdenidcmbxv5ujhooozgcjwu
+- valory/twitter_write_abci:0.1.0:bafybeifpq2dbisbslo5epreb3p7wolako6dpgnbynmep6kx7pwc7hsmf4a
+- valory/olas_week_abci:0.1.0:bafybeihvsbgee6ye74eo7qynrk4sg6lde2tidorlan6dcpobtkyiy6abci
+- valory/mech_interact_abci:0.1.0:bafybeidsyjnclqrmiokeqns2rstq5hobh6dmoj55xt5yojs3ix4pisgqla
 behaviours:
   main:
     args: {}
