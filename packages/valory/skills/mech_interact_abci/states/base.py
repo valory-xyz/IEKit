@@ -126,6 +126,11 @@ class SynchronizedData(TxSynchronizedData):
         """Get the verified tx hash."""
         return cast(str, self.db.get("final_tx_hash", None))
 
+    @property
+    def chain_id(self) -> Optional[str]:
+        """Get the chain name where to send the transactions."""
+        return cast(str, self.db.get("chain_id", None))
+
 
 class MechInteractionRound(CollectSameUntilThresholdRound):
     """A base round for the mech interactions."""

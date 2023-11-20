@@ -295,7 +295,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
             if not self._mech_requests:
                 payload = MechRequestPayload(
-                    self.context.agent_address, None, None, None, None
+                    self.context.agent_address, None, None, GNOSIS_CHAIN_ID, None, None
                 )
             else:
                 self.context.logger.info(
@@ -313,6 +313,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     self.context.agent_address,
                     self.tx_hex,
                     self.price,
+                    GNOSIS_CHAIN_ID,
                     *serialized_data,
                 )
         yield from self.finish_behaviour(payload)

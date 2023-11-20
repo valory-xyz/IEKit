@@ -30,6 +30,7 @@ class MechRequestPayload(BaseTxPayload):
 
     tx_hash: str
     price: int
+    chain_id: str
     mech_requests: str
     mech_responses: str
 
