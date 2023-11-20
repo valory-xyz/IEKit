@@ -19,11 +19,7 @@
         "service/valory/impact_evaluator_local/0.1.0": "bafybeid2rzehvjlgxytsliozp5sgyuaubmklhxkmssks2bfs2gofseclhi",
         "skill/valory/olas_week_abci/0.1.0": "bafybeiayvjzl4iolermxvhjxce4vegsucz67maeoygg3sxk4fnca4zukfe",
         "skill/valory/mech_interact_abci/0.1.0": "bafybeifj4lmkf2o6ch6qzjbjhnjyebrbrn47kmlsp3ujkzdlkggspktdaq",
-        "contract/valory/mech/0.1.0": "bafybeificbi7fdymopwodxfqevmwhp6k6mj2ttx6x5mphxu4mzs5pbfspm",
-        "contract/valory/multisend/0.1.0": "bafybeicrj4l6o77x6xtj4zj4pmgfp654vnp3hiew3i4of63w7bxg5mzzsq",
-        "skill/valory/termination_abci/0.1.0": "bafybeif2g2lu7qaklxhq6abv6mwuavtspe3nnlg2bvu2ccv5y3jdwmbb7m",
-        "contract/valory/gnosis_safe/0.1.0": "bafybeieit6ebemvl7z5fns6ovc6pp7kf6vs7acvbu46zya475snotfvmlm",
-        "skill/valory/transaction_settlement_abci/0.1.0": "bafybeidsp3nbmsvg6qhdkyu2lxcpyqga3ly6wfbmperxjexoehgnnwxrui"
+        "contract/valory/mech/0.1.0": "bafybeificbi7fdymopwodxfqevmwhp6k6mj2ttx6x5mphxu4mzs5pbfspm"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeie7xyems76v5b4wc2lmaidcujizpxfzjnnwdeokmhje53g7ym25ii",
@@ -45,6 +41,10 @@
         "connection/valory/ledger/0.19.0": "bafybeigdckv3e6bz6kfloz4ucqrsufft6k4jp6bwkbbcvh4fxvgbmzq3dm",
         "connection/valory/p2p_libp2p_client/0.1.0": "bafybeihge56dn3xep2dzomu7rtvbgo4uc2qqh7ljl3fubqdi2lq44gs5lq",
         "connection/valory/http_server/0.22.0": "bafybeie3d6tj2kzewced4nnttxdvr7njue2ortvawmwdt67gwf4tcuosom",
-        "contract/valory/gnosis_safe_proxy_factory/0.1.0": "bafybeigejiv4fkksyjwmr6doo23kfpicfbktuwspbamasyvjusfdyjtrxy"
+        "contract/valory/gnosis_safe_proxy_factory/0.1.0": "bafybeigejiv4fkksyjwmr6doo23kfpicfbktuwspbamasyvjusfdyjtrxy",
+        "contract/valory/multisend/0.1.0": "bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y",
+        "skill/valory/termination_abci/0.1.0": "bafybeifazwrksp756h7z42qqfcgi6lya6wmhbx46l7ghlaooe45gqnju7q",
+        "contract/valory/gnosis_safe/0.1.0": "bafybeifmsjpgbifvk7y462rhfczvjvpigkdniavghhg5utza3hbnffioq4",
+        "skill/valory/transaction_settlement_abci/0.1.0": "bafybeigxkdujugzvve2dszkwr5kgfx4uhz2epofo4lorbcnthmzfjegwzi"
     }
 }
