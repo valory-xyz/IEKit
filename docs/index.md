@@ -74,7 +74,7 @@ In order to run a local demo service based on the IEKit:
 
     2. Create a Ceramic Decentralized Identity (DID) using [Glaze](https://github.com/ceramicstudio/js-glaze).
 
-    3. Using the DID created in the previous step, create two empty Ceramic streams. You can follow [this tutorial](https://developers.ceramic.network/reference/stream-programs/tile-document/). The service will optionally read generic scores from the first one and will write scores to the second one.
+    3. Using the DID created in the previous step, create two empty Ceramic streams. The service will optionally read generic scores from the first one and will write scores to the second one.
 
     4. Create an API key for [Infura](https://www.infura.io/) or your preferred provider.
 
