@@ -34,9 +34,9 @@ skills:
 - valory/termination_abci:0.1.0:bafybeigainmpy37gb33ogbrpggjbkuasodhthh5oz4vbzjdfjozerpf224
 - valory/transaction_settlement_abci:0.1.0:bafybeigk3debp6dswutqsuls2lqfvyj4ghe6kwjc2zfinnsvj6hujynxtq
 - valory/decision_making_abci:0.1.0:bafybeicgesosljwclm7hecqyba663fizzr4m64qivwa6lgzp57dnhuzxby
-- valory/llm_abci:0.1.0:bafybeibs7u74toksvyrf4khmosk4d4jtddf3s2qzfd3uboyiai42jjp5dm
-- valory/twitter_write_abci:0.1.0:bafybeiahavg4ijbakbdnhbmvctcahfalr62lbjlfl4o6dq7jkmspb7nle4
-- valory/olas_week_abci:0.1.0:bafybeihje64bhhiiiep4bhaghc34wqe3r6zgtka7ztvzzoems5ieg4vy4y
+- valory/llm_abci:0.1.0:bafybeibhihrpovqozjofkyfywm2w6hduo2vzwhhfw4a37vkvx32djxdavy
+- valory/twitter_write_abci:0.1.0:bafybeibir25q4i5b3ncslpeifr2zozdxj4xslzvz7o5xhwt6ocszg5pgvm
+- valory/olas_week_abci:0.1.0:bafybeic3mwcdh746cxfcwnfwaaxaz6szibqfg6cmvcmyyrktzz35rpwk5m
 - valory/mech_interact_abci:0.1.0:bafybeifodymmh33fxpulj3mundj33gxq3psbgt3ndkyvyvs5xtaveoiuwa
 behaviours:
   main:
