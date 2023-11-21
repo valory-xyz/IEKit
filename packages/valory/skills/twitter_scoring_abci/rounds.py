@@ -261,7 +261,6 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
 
             # API error
             if "error" in payload:
-
                 # API limits
                 if payload["error"] == ERROR_API_LIMITS:
                     performed_twitter_tasks[
@@ -399,7 +398,6 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
 
             # Api error
             if "error" in payload:
-
                 # API limits
                 if payload["error"] == ERROR_API_LIMITS:
                     performed_twitter_tasks[
@@ -504,7 +502,6 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
         """Process the end of the block."""
         if self.threshold_reached:
-
             payload = json.loads(self.most_voted_payload)
             new_mech_requests = payload["new_mech_requests"]
 
@@ -565,7 +562,6 @@ class PostMechRequestRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
         """Process the end of the block."""
         if self.threshold_reached:
-
             payload = json.loads(self.most_voted_payload)
 
             performed_twitter_tasks = cast(
@@ -613,7 +609,6 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
-
             payload = json.loads(self.most_voted_payload)
             performed_twitter_tasks = cast(
                 SynchronizedData, self.synchronized_data
@@ -666,7 +661,6 @@ class TwitterSelectKeepersRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
-
             performed_twitter_tasks = cast(
                 SynchronizedData, self.synchronized_data
             ).performed_twitter_tasks

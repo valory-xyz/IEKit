@@ -292,7 +292,6 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         """Do the action."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-
             if not self._mech_requests:
                 payload = MechRequestPayload(
                     self.context.agent_address, None, None, GNOSIS_CHAIN_ID, None, None
