@@ -20,7 +20,7 @@ Prepare the environment to build your own IEKit-based service.
     - Python `>=3.8`
     - [Tendermint](https://docs.tendermint.com/v0.34/introduction/install.html) `==0.34.19`
     - [IPFS node](https://docs.ipfs.io/install/command-line/#official-distributions) `==0.6.0`
-    - [Pipenv](https://pipenv.pypa.io/en/latest/installation/) `>=2021.x.xx`
+    - [Pipenv](https://pipenv.pypa.io/en/latest/installation.html) `>=2021.x.xx`
     - [Docker Engine](https://docs.docker.com/engine/install/)
     - [Docker Compose](https://docs.docker.com/compose/install/)
 

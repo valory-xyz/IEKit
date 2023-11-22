@@ -70,7 +70,6 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
         with self.context.benchmark_tool.measure(
             self.behaviour_id,
         ).local():
-
             (
                 new_token_id_to_address,
                 last_parsed_block,

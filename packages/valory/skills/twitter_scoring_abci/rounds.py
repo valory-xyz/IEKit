@@ -261,7 +261,6 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
 
             # API error
             if "error" in payload:
-
                 # API limits
                 if payload["error"] == ERROR_API_LIMITS:
                     performed_twitter_tasks[
@@ -399,7 +398,6 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
 
             # Api error
             if "error" in payload:
-
                 # API limits
                 if payload["error"] == ERROR_API_LIMITS:
                     performed_twitter_tasks[
@@ -457,9 +455,6 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
             performed_twitter_tasks["retrieve_hashtags"] = Event.DONE.value
             new_tweets = payload["tweets"]
 
-            self.context.logger.info(f"my_tweets r_h: {previous_tweets}")
-            self.context.logger.info(f"my_tweets (new_tweets) r_h: {new_tweets}")
-
             updates = {
                 get_name(SynchronizedData.tweets): {
                     **new_tweets,
@@ -507,7 +502,6 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
         """Process the end of the block."""
         if self.threshold_reached:
-
             payload = json.loads(self.most_voted_payload)
             new_mech_requests = payload["new_mech_requests"]
 
@@ -518,8 +512,6 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
             # Nothing to evaluate (no new tweets) nor responses to retrieve
             if not new_mech_requests and not mech_responses:
                 tweets = cast(SynchronizedData, self.synchronized_data).tweets
-
-                self.context.logger.info(f"my_tweets PreMechRequestRound: {tweets}")
 
                 synchronized_data = self.synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
@@ -570,7 +562,6 @@ class PostMechRequestRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
         """Process the end of the block."""
         if self.threshold_reached:
-
             payload = json.loads(self.most_voted_payload)
 
             performed_twitter_tasks = cast(
@@ -589,10 +580,6 @@ class PostMechRequestRound(CollectSameUntilThresholdRound):
             ]
 
             serialized_responses = json.dumps(mech_responses, cls=DataclassEncoder)
-
-            self.context.logger.info(
-                f"my_tweets PostMechRequestRound: {payload['tweets']}"
-            )
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
@@ -622,7 +609,6 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
-
             payload = json.loads(self.most_voted_payload)
             performed_twitter_tasks = cast(
                 SynchronizedData, self.synchronized_data
@@ -675,7 +661,6 @@ class TwitterSelectKeepersRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
-
             performed_twitter_tasks = cast(
                 SynchronizedData, self.synchronized_data
             ).performed_twitter_tasks

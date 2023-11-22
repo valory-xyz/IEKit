@@ -73,7 +73,6 @@ class StreamReadRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
-
             payload = json.loads(self.most_voted_payload)
 
             if payload == self.ERROR_PAYLOAD:

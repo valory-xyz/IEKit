@@ -16,9 +16,9 @@ packages/valory/connections/*
 !packages/valory/connections/twitter
 !packages/valory/connections/openai
 packages/valory/contracts/service_registry
-#packages/valory/contracts/gnosis_safe
+packages/valory/contracts/gnosis_safe
 packages/valory/contracts/gnosis_safe_proxy_factory
-#packages/valory/contracts/multisend
+packages/valory/contracts/multisend
 packages/valory/protocols/*
 !packages/valory/protocols/twitter
 !packages/valory/protocols/llm
@@ -27,8 +27,8 @@ packages/valory/skills/abstract_round_abci
 packages/valory/skills/registration_abci
 packages/valory/skills/reset_pause_abci
 packages/valory/skills/safe_deployment_abci
-#packages/valory/skills/transaction_settlement_abci
-#packages/valory/skills/termination_abci
+packages/valory/skills/transaction_settlement_abci
+packages/valory/skills/termination_abci
 packages/open_aea
 *.pyc
 .vscode/

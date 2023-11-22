@@ -100,7 +100,6 @@ def build_tweet(highlights: list, header: str = ""):
     tweet = header
 
     while len(tweet) <= MAX_TWEET_CHARS:
-
         if not highlights:
             break
 
@@ -664,7 +663,6 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-
             weekly_tweets = self.synchronized_data.weekly_tweets
             link = "https://twitter.com/autonolas/status/tweet_id"
 

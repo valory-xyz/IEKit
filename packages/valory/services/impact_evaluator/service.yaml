@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeifbrtu37w3dh2kffcxv3i2qwbubkvkjqislvkbnoqujkyttpug5vu
+agent: valory/impact_evaluator:0.1.0:bafybeidvjesrs2j7qfs3qy5ehnhxdgc6v4gi2zu52xvvbxpxrxuaq2t2hq
 number_of_agents: 4
 deployment:
   agent:
@@ -123,7 +123,7 @@ extra:
         light_slash_unit_amount: ${LIGHT_SLASH_UNIT_AMOUNT:int:5000000000000000}
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
-        mech_agent_address: ${MECH_AGENT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
+        mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
 1:
@@ -201,7 +201,7 @@ extra:
         light_slash_unit_amount: ${LIGHT_SLASH_UNIT_AMOUNT:int:5000000000000000}
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
-        mech_agent_address: ${MECH_AGENT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
+        mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
 2:
@@ -279,7 +279,7 @@ extra:
         light_slash_unit_amount: ${LIGHT_SLASH_UNIT_AMOUNT:int:5000000000000000}
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
-        mech_agent_address: ${MECH_AGENT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
+        mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
 3:
@@ -361,7 +361,7 @@ extra:
         light_slash_unit_amount: ${LIGHT_SLASH_UNIT_AMOUNT:int:5000000000000000}
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
-        mech_agent_address: ${MECH_AGENT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
+        mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
 ---
@@ -403,21 +403,68 @@ type: connection
     max_tokens: ${MAX_TOKENS:int:1000}
     openai_api_key: ${OPENAI_API_KEY_0:str:null}
     temperature: ${TEMPERATURE:float:0.7}
+    use_staging_api: ${USE_STAGING_API:bool:false}
+    staging_api: ${STAGING_API_OPENAI:str:http://host.docker.internal:5000/openai}
 1:
   config:
     engine: ${ENGINE:str:gpt-4}
     max_tokens: ${MAX_TOKENS:int:1000}
     openai_api_key: ${OPENAI_API_KEY_1:str:null}
     temperature: ${TEMPERATURE:float:0.7}
+    use_staging_api: ${USE_STAGING_API:bool:false}
+    staging_api: ${STAGING_API_OPENAI:str:http://host.docker.internal:5000/openai}
 2:
   config:
     engine: ${ENGINE:str:gpt-4}
     max_tokens: ${MAX_TOKENS:int:1000}
     openai_api_key: ${OPENAI_API_KEY_2:str:null}
     temperature: ${TEMPERATURE:float:0.7}
+    use_staging_api: ${USE_STAGING_API:bool:false}
+    staging_api: ${STAGING_API_OPENAI:str:http://host.docker.internal:5000/openai}
 3:
   config:
     engine: ${ENGINE:str:gpt-4}
     max_tokens: ${MAX_TOKENS:int:1000}
     openai_api_key: ${OPENAI_API_KEY_3:str:null}
     temperature: ${TEMPERATURE:float:0.7}
+    use_staging_api: ${USE_STAGING_API:bool:false}
+    staging_api: ${STAGING_API_OPENAI:str:http://host.docker.internal:5000/openai}
+---
+public_id: valory/twitter:0.1.0
+type: connection
+0:
+  config:
+    access_secret: <access_secret>
+    access_token: <access_token>
+    auth_token: <auth_token>
+    consumer_key: <consumer_key>
+    consumer_secret: <consumer_secret>
+    use_staging_api: ${USE_STAGING_API:bool:false}
+    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
+1:
+  config:
+    access_secret: <access_secret>
+    access_token: <access_token>
+    auth_token: <auth_token>
+    consumer_key: <consumer_key>
+    consumer_secret: <consumer_secret>
+    use_staging_api: ${USE_STAGING_API:bool:false}
+    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
+2:
+  config:
+    access_secret: <access_secret>
+    access_token: <access_token>
+    auth_token: <auth_token>
+    consumer_key: <consumer_key>
+    consumer_secret: <consumer_secret>
+    use_staging_api: ${USE_STAGING_API:bool:false}
+    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
+3:
+  config:
+    access_secret: <access_secret>
+    access_token: <access_token>
+    auth_token: <auth_token>
+    consumer_key: <consumer_key>
+    consumer_secret: <consumer_secret>
+    use_staging_api: ${USE_STAGING_API:bool:false}
+    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}

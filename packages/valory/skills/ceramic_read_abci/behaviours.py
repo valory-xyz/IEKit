@@ -103,7 +103,6 @@ class StreamReadBehaviour(CeramicReadBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-
             # stream_id and read_target_property can be set either in the synchronized_data or as a param. The former has higher priority.
             stream_id = (
                 self.synchronized_data.read_stream_id

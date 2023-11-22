@@ -76,7 +76,6 @@ class GenericScoringRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
-
             payload = json.loads(self.most_voted_payload)
 
             synchronized_data = self.synchronized_data.update(

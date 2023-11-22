@@ -837,7 +837,6 @@ class PreMechRequestBehaviour(TwitterScoringBaseBehaviour):
             self.context.logger.info(f"pending_tweet_ids = {pending_tweet_ids}")
 
             for tweet_id, tweet in self.synchronized_data.tweets.items():
-
                 if "points" in tweet:
                     # Already scored previously
                     continue
@@ -887,7 +886,6 @@ class PostMechRequestBehaviour(TwitterScoringBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-
             tweets = self.synchronized_data.tweets
             responses_to_remove = []
 
@@ -896,10 +894,8 @@ class PostMechRequestBehaviour(TwitterScoringBaseBehaviour):
             )
 
             for response in self.synchronized_data.mech_responses:
-
                 # The request has been responded
                 if response.nonce in tweets and response.result:
-
                     self.context.logger.info(
                         f"Received tweet evaluation response: {response.nonce} {response.result}"
                     )
@@ -958,7 +954,6 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-
             ceramic_db = self.update_ceramic_db()
 
             sender = self.context.agent_address
@@ -996,13 +991,12 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         # Update data
         for tweet in tweets.values():
-
             if "points" not in tweet:
                 continue
 
             self.context.logger.info(f"Updating db with tweet: {tweet}")
 
-            author_id = tweet["author_id"]
+            author_id = str(tweet["author_id"])
             twitter_name = tweet["username"]
             new_points = tweet["points"]
             wallet_address = self.get_registration(tweet["text"])

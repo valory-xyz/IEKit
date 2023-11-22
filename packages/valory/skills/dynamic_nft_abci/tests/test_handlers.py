@@ -282,7 +282,6 @@ class TestHttpHandler(BaseSkillTestCase):
         self.assert_quantity_in_outbox(test_case.n_outbox_msgs)
 
         if test_case.n_outbox_msgs > 0:
-
             mock_logger.assert_any_call(
                 logging.INFO,
                 "Received http request with method={}, url={} and body={!r}".format(
