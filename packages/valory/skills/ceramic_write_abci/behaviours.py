@@ -103,8 +103,6 @@ class CeramicWriteBaseBehaviour(BaseBehaviour, ABC):
         # Rebuild the current data
         data = build_data_from_commits(api_data["commits"])
 
-        self.context.logger.info(f"Got data from Ceramic API: {data}")
-
         return {
             "genesis_cid_str": genesis_cid_str,
             "previous_cid_str": previous_cid_str,
@@ -330,7 +328,6 @@ class VerificationBehaviour(CeramicWriteBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-
             write_index = self.synchronized_data.write_index
             write_data = self.synchronized_data.write_data[write_index]
             stream_id = self.synchronized_data.stream_id_to_verify

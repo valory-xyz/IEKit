@@ -161,7 +161,6 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
-
             # We reference all the events here to prevent the check-abciapp-specs tool from complaining
             # since this round receives the event via payload
             # Event.NO_MAJORITY, Event.DONE, Event.UPDATE_CENTAURS, Event.READ_CENTAURS,

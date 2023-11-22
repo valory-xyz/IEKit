@@ -114,10 +114,6 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
         # entries on the database
         ceramic_db.merge_by_wallet()
 
-        self.context.logger.info(
-            f"The ceramic_db will be updated to: {ceramic_db.data!r}"
-        )
-
         return {"ceramic_db": ceramic_db.data, "pending_write": pending_write}
 
 

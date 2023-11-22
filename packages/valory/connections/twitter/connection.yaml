@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeibxwzkyh7odchnlkeczpguencdjiizm4nezfmi4drybn2zd25xdkq
-  connection.py: bafybeidokslaxwsvqge6sqn2wtmmaag7u3vajunrv2gqeutwmyprgdxcyy
+  connection.py: bafybeih7u4dn4aglafa4bhsl6yfgshckr6ephgjuza6uzwvmbp5whrhk3a
   readme.md: bafybeihg5yfzgqvg5ngy7r2o5tfeqnelx2ffxw4po5hmheqjfhumpmxpoq
 fingerprint_ignore_patterns: []
 connections: []
@@ -20,10 +20,14 @@ config:
   auth_token: <auth_token>
   consumer_key: <consumer_key>
   consumer_secret: <consumer_secret>
+  use_staging_api: false
+  staging_api: http://host.docker.internal:5000/twitter/create_tweet
 excluded_protocols: []
 restricted_to_protocols: []
 dependencies:
   tweepy:
     version: ==4.14.0
+  requests:
+    version: ==2.28.1
 is_abstract: false
 cert_requests: []

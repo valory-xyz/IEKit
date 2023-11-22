@@ -8,31 +8,30 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
-  behaviours.py: bafybeif7x53ygd3jyoghbnxavzhhdhliaa3mcxe5n5uui3aa6vgd6v5t5e
+  behaviours.py: bafybeigsggaqeg4rfw7bz3rronfzr6uu74hfw6geedshc3kqdtc5fcav6i
   ceramic_db.py: bafybeicusdonrdq6kirgkpdqmi3a6kmeal4nctnm5ozjqf5s5se6jpitjm
   dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
-  fsm_specification.yaml: bafybeie6k4aanmwcrghspbqywdh2srrudtkhnbbhqm3ovcz5k4fa5dybrq
+  fsm_specification.yaml: bafybeihbq2olrdqx2x5lcvypxyi44ecog4nntsvw2v6oeab4imvj5nz6ae
   handlers.py: bafybeid3nqvcyotqj5g5hlgrz57nf7vpjysmgvsxe3p7644f4z5dcwqn6u
   models.py: bafybeigag7tmzi7caob46mowxnqhhcpyxqqxhchj4mqyjmgtcglx45dyua
-  payloads.py: bafybeibeqiwnua7uewbv5a7epebshjpueuqpcbw6s2y3u62kasdhiijs5i
+  payloads.py: bafybeidb2qiw26b5fhyxujseibbo2ji5zo54auhyelllsqnj7zn5sbc3pi
   prompts.py: bafybeieiuqn427bgwfnzynxf3vtqfpvmqqscs5tyw4oibfofwropifotke
-  rounds.py: bafybeigtzsvklrwxyah2syrzjruufr6uuninyh6flbrwetcgcb5pl4czra
+  rounds.py: bafybeifmocej2h7fgsmmrf2z76umbdjkajaugxkq7nnb4nzt5hrfzgwbuu
   tests/__init__.py: bafybeidwzzd4ejsyf3aryd5kmrvd63h7ajgqyrxphmfaacvpjnneacejay
-  tests/test_behaviours.py: bafybeidqebjsxtvltilhueyg7oqu3sdoves6kqfnnzu4uurwqhkkdn6qta
+  tests/test_behaviours.py: bafybeictveh7uptkgfrgfoic5vxc3khe4b2jyvpvbiguqk47oq26vrxyry
   tests/test_ceramic_db.py: bafybeif2v7btjphbqabq6qdmfeyweg765seon74acg5vrrvznivzg2prey
   tests/test_dialogues.py: bafybeiheyq7klonzb7rnjub2i22h7bmsnoimn2pq4j7ofikt3yovstvgt4
   tests/test_handlers.py: bafybeigevirvi3saepukke2zmp334btgsdxhj55o2vawj3hqam63miirg4
   tests/test_models.py: bafybeihaiirqmcsshghztl5lvqjzem6y6rdeefhtiycrhh45v7cuwnmdz4
-  tests/test_payloads.py: bafybeihg7ndxuj4lehpmgpdngpzihhmaiy7u5kaylukneavsklfwki5j6q
-  tests/test_rounds.py: bafybeibbznfio2tgvgzpc4l3jm6jwzd5ifflzgm6aflurllseeolef3ydm
+  tests/test_payloads.py: bafybeihoiaic7hmbhgknworqyoaexbxni4ufrsmw2xh56tf7fm2pqo3szi
+  tests/test_rounds.py: bafybeig6hiuu33z3bqodr4mx2gnf6wkdht6q7a6nbp7wkdwpsn4i53eyxi
 fingerprint_ignore_patterns: []
-connections:
-- valory/openai:0.1.0:bafybeigiib2l2vji4ehr7jm43bwpzhxe4u2ih4ybwy5zwmkpyjmj3k7u3e
+connections: []
 contracts: []
 protocols:
 - valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeigrqhygo2hl2owisj5rqyh3acdvee773ajije64snlzalcgtaac7q
+- valory/abstract_round_abci:0.1.0:bafybeidau7loztcfy3mxvoqrv7otbpciemd2wf3lsxyjraq4dcvuvib25e
 behaviours:
   main:
     args: {}
@@ -176,5 +175,5 @@ models:
     class_name: TendermintDialogues
 dependencies:
   web3:
-    version: '>=6.0.0,<7'
+    version: <7,>=6.0.0
 is_abstract: true

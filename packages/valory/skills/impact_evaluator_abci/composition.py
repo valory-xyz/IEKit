@@ -18,15 +18,21 @@
 # ------------------------------------------------------------------------------
 
 """This package contains round behaviours of ImpactEvaluatorSkillAbciApp."""
+
 import packages.valory.skills.ceramic_read_abci.rounds as CeramicReadAbci
 import packages.valory.skills.ceramic_write_abci.rounds as CeramicWriteAbci
 import packages.valory.skills.decision_making_abci.rounds as DecisionMakingAbci
 import packages.valory.skills.dynamic_nft_abci.rounds as DynamicNFTAbci
 import packages.valory.skills.generic_scoring_abci.rounds as GenericScoringAbci
 import packages.valory.skills.llm_abci.rounds as LLMAbciApp
+import packages.valory.skills.mech_interact_abci.rounds as MechInteractAbci
+import packages.valory.skills.mech_interact_abci.states.final_states as MechFinalStates
+import packages.valory.skills.mech_interact_abci.states.request as MechRequestStates
+import packages.valory.skills.mech_interact_abci.states.response as MechResponseStates
 import packages.valory.skills.olas_week_abci.rounds as WeekInOlasAbciApp
 import packages.valory.skills.registration_abci.rounds as RegistrationAbci
 import packages.valory.skills.reset_pause_abci.rounds as ResetAndPauseAbci
+import packages.valory.skills.transaction_settlement_abci.rounds as TxSettlementAbci
 import packages.valory.skills.twitter_scoring_abci.rounds as TwitterScoringAbci
 import packages.valory.skills.twitter_write_abci.rounds as TwitterWriteAbciApp
 from packages.valory.skills.abstract_round_abci.abci_app_chain import (
@@ -57,6 +63,12 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     DecisionMakingAbci.FinishedDecisionMakingDoneRound: ResetAndPauseAbci.ResetAndPauseRound,
     DecisionMakingAbci.FinishedDecisionMakingWeekInOlasRound: WeekInOlasAbciApp.OlasWeekDecisionMakingRound,
     GenericScoringAbci.FinishedGenericScoringRound: TwitterScoringAbci.TwitterDecisionMakingRound,
+    TwitterScoringAbci.FinishedTwitterCollectionRound: MechRequestStates.MechRequestRound,
+    MechFinalStates.FinishedMechRequestRound: TxSettlementAbci.RandomnessTransactionSubmissionRound,
+    TxSettlementAbci.FinishedTransactionSubmissionRound: MechResponseStates.MechResponseRound,
+    TxSettlementAbci.FailedRound: MechRequestStates.MechRequestRound,
+    MechFinalStates.FinishedMechResponseRound: TwitterScoringAbci.TwitterDecisionMakingRound,
+    MechFinalStates.FinishedMechRequestSkipRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     TwitterScoringAbci.FinishedTwitterScoringRound: DynamicNFTAbci.TokenTrackRound,
     WeekInOlasAbciApp.FinishedWeekInOlasRound: DecisionMakingAbci.DecisionMakingRound,
     DynamicNFTAbci.FinishedTokenTrackRound: DecisionMakingAbci.DecisionMakingRound,
@@ -89,6 +101,8 @@ ImpactEvaluatorSkillAbciApp = chain(
         CeramicWriteAbci.CeramicWriteAbciApp,
         ResetAndPauseAbci.ResetPauseAbciApp,
         WeekInOlasAbciApp.WeekInOlasAbciApp,
+        TxSettlementAbci.TransactionSubmissionAbciApp,
+        MechInteractAbci.MechInteractAbciApp,
     ),
     abci_app_transition_mapping,
 ).add_background_app(termination_config)

@@ -67,8 +67,8 @@ from packages.valory.skills.registration_abci.rounds import RegistrationStartupR
 from packages.valory.skills.reset_pause_abci.rounds import ResetAndPauseRound
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     DBUpdateRound,
-    OpenAICallCheckRound,
-    TweetEvaluationRound,
+    PostMechRequestRound,
+    PreMechRequestRound,
     TwitterDecisionMakingRound,
     TwitterHashtagsCollectionRound,
     TwitterMentionsCollectionRound,
@@ -88,19 +88,18 @@ HAPPY_PATH: Tuple[RoundChecks, ...] = (
     RoundChecks(TwitterRandomnessRound.auto_round_id(), n_periods=2),
     RoundChecks(TwitterSelectKeepersRound.auto_round_id(), n_periods=2),
 
-    # OpenAI check
-    RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
-    RoundChecks(OpenAICallCheckRound.auto_round_id(), n_periods=2),
-
     # Twitter API
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
     RoundChecks(TwitterMentionsCollectionRound.auto_round_id(), n_periods=2),
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
     RoundChecks(TwitterHashtagsCollectionRound.auto_round_id(), n_periods=2),
 
-    # Evaluation
+    # Mech evaluation
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
-    RoundChecks(TweetEvaluationRound.auto_round_id(), n_periods=2),
+    RoundChecks(PreMechRequestRound.auto_round_id(), n_periods=2),
+
+    RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
+    RoundChecks(PostMechRequestRound.auto_round_id(), n_periods=2),
 
     # DB update
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),

@@ -27,10 +27,6 @@ from typing import Any, Dict, Optional, Type, cast
 
 import pytest
 
-from packages.valory.connections.openai.connection import (
-    PUBLIC_ID as LLM_CONNECTION_PUBLIC_ID,
-)
-from packages.valory.protocols.llm.message import LlmMessage
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.valory.skills.abstract_round_abci.behaviour_utils import (
     BaseBehaviour,
@@ -44,9 +40,9 @@ from packages.valory.skills.abstract_round_abci.test_tools.common import (
 )
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
     DBUpdateBehaviour,
-    OpenAICallCheckBehaviour,
+    PostMechRequestBehaviour,
+    PreMechRequestBehaviour,
     TAGLINE,
-    TweetEvaluationBehaviour,
     TwitterDecisionMakingBehaviour,
     TwitterHashtagsCollectionBehaviour,
     TwitterMentionsCollectionBehaviour,
@@ -56,8 +52,10 @@ from packages.valory.skills.twitter_scoring_abci.behaviours import (
     TwitterSelectKeepersBehaviour,
 )
 from packages.valory.skills.twitter_scoring_abci.rounds import (
+    DataclassEncoder,
     Event,
     FinishedTwitterScoringRound,
+    MechInteractionResponse,
     SynchronizedData,
 )
 
@@ -329,41 +327,6 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
             self.behaviour.current_behaviour.auto_behaviour_id()  # type: ignore
             == self.next_behaviour_class.auto_behaviour_id()
         )
-
-    def mock_llm_request(self, request_kwargs: Dict, response_kwargs: Dict) -> None:
-        """
-        Mock LLM request.
-
-        :param request_kwargs: keyword arguments for request check.
-        :param response_kwargs: keyword arguments for mock response.
-        """
-
-        self.assert_quantity_in_outbox(1)
-        actual_llm_message = self.get_message_from_outbox()
-        assert actual_llm_message is not None, "No message in outbox."  # nosec
-        has_attributes, error_str = self.message_has_attributes(
-            actual_message=actual_llm_message,
-            message_type=LlmMessage,
-            to=str(LLM_CONNECTION_PUBLIC_ID),
-            sender=str(self.skill.skill_context.skill_id),
-            **request_kwargs,
-        )
-
-        assert has_attributes, error_str  # nosec
-        incoming_message = self.build_incoming_message(
-            message_type=LlmMessage,
-            dialogue_reference=(
-                actual_llm_message.dialogue_reference[0],
-                "stub",
-            ),
-            target=actual_llm_message.message_id,
-            message_id=-1,
-            to=str(self.skill.skill_context.skill_id),
-            sender=str(LLM_CONNECTION_PUBLIC_ID),
-            **response_kwargs,
-        )
-        self.llm_handler.handle(incoming_message)
-        self.behaviour.act_wrapper()
 
 
 class TestMentionsCollectionBehaviour(BaseBehaviourTest):
@@ -930,39 +893,14 @@ class TestTwitterDecisionMakingBehaviour(BaseBehaviourTest):
                 BehaviourTestCase(
                     "Happy path",
                     initial_data=dict(performed_twitter_tasks={}),
-                    event=Event.OPENAI_CALL_CHECK,
+                    event=Event.SELECT_KEEPERS,
                 ),
-                OpenAICallCheckBehaviour,
+                TwitterRandomnessBehaviour,
             ),
             (
                 BehaviourTestCase(
                     "Happy path",
-                    initial_data=dict(
-                        performed_twitter_tasks={"openai_call_check": "done"}
-                    ),
-                    event=Event.RETRIEVE_MENTIONS,
-                ),
-                TwitterMentionsCollectionBehaviour,
-            ),
-            (
-                BehaviourTestCase(
-                    "Happy path",
-                    initial_data=dict(
-                        performed_twitter_tasks={"openai_call_check": "no_allowance"}
-                    ),
-                    event=Event.DONE_SKIP,
-                ),
-                make_degenerate_behaviour(FinishedTwitterScoringRound),
-            ),
-            (
-                BehaviourTestCase(
-                    "Happy path",
-                    initial_data=dict(
-                        performed_twitter_tasks={
-                            "openai_call_check": "done",
-                            "retrieve_hashtags": None,
-                        }
-                    ),
+                    initial_data=dict(performed_twitter_tasks={"select_keepers": None}),
                     event=Event.RETRIEVE_HASHTAGS,
                 ),
                 TwitterHashtagsCollectionBehaviour,
@@ -972,24 +910,53 @@ class TestTwitterDecisionMakingBehaviour(BaseBehaviourTest):
                     "Happy path",
                     initial_data=dict(
                         performed_twitter_tasks={
-                            "openai_call_check": "done",
+                            "select_keepers": None,
                             "retrieve_hashtags": None,
-                            "retrieve_mentions": None,
                         }
                     ),
-                    event=Event.EVALUATE,
+                    event=Event.RETRIEVE_MENTIONS,
                 ),
-                TweetEvaluationBehaviour,
+                TwitterMentionsCollectionBehaviour,
             ),
             (
                 BehaviourTestCase(
                     "Happy path",
                     initial_data=dict(
                         performed_twitter_tasks={
-                            "openai_call_check": "done",
+                            "select_keepers": None,
                             "retrieve_hashtags": None,
                             "retrieve_mentions": None,
-                            "evaluate": None,
+                        }
+                    ),
+                    event=Event.PRE_MECH,
+                ),
+                PreMechRequestBehaviour,
+            ),
+            (
+                BehaviourTestCase(
+                    "Happy path",
+                    initial_data=dict(
+                        performed_twitter_tasks={
+                            "select_keepers": None,
+                            "retrieve_hashtags": None,
+                            "retrieve_mentions": None,
+                            "pre_mech": None,
+                        }
+                    ),
+                    event=Event.POST_MECH,
+                ),
+                PostMechRequestBehaviour,
+            ),
+            (
+                BehaviourTestCase(
+                    "Happy path",
+                    initial_data=dict(
+                        performed_twitter_tasks={
+                            "select_keepers": None,
+                            "retrieve_hashtags": None,
+                            "retrieve_mentions": None,
+                            "pre_mech": None,
+                            "post_mech": None,
                         }
                     ),
                     event=Event.DB_UPDATE,
@@ -1001,16 +968,17 @@ class TestTwitterDecisionMakingBehaviour(BaseBehaviourTest):
                     "Happy path",
                     initial_data=dict(
                         performed_twitter_tasks={
-                            "openai_call_check": "done",
+                            "select_keepers": None,
                             "retrieve_hashtags": None,
                             "retrieve_mentions": None,
-                            "evaluate": None,
+                            "pre_mech": None,
+                            "post_mech": None,
                             "db_update": None,
                         }
                     ),
-                    event=Event.DB_UPDATE,
+                    event=Event.DONE,
                 ),
-                DBUpdateBehaviour,
+                make_degenerate_behaviour(FinishedTwitterScoringRound),
             ),
         ],
     )
@@ -1022,33 +990,10 @@ class TestTwitterDecisionMakingBehaviour(BaseBehaviourTest):
         self.complete(test_case.event)
 
 
-class TestOpenAICallCheckBehaviour(BaseBehaviourTest):
-    """Tests BinanceObservationBehaviour"""
+class TestPostMechRequestBehaviour(BaseBehaviourTest):
+    """Tests PostMechRequestBehaviour"""
 
-    behaviour_class = OpenAICallCheckBehaviour
-    next_behaviour_class = TwitterDecisionMakingBehaviour
-
-    @pytest.mark.parametrize(
-        "test_case",
-        (
-            BehaviourTestCase(
-                "Happy path",
-                initial_data=dict(performed_twitter_tasks={}),
-                event=Event.DONE,
-            ),
-        ),
-    )
-    def test_run(self, test_case: BehaviourTestCase) -> None:
-        """Run tests."""
-        self.fast_forward(test_case.initial_data)
-        self.behaviour.act_wrapper()
-        self.complete(test_case.event)
-
-
-class TestTweetEvaluationBehaviour(BaseBehaviourTest):
-    """Tests TweetEvaluationBehaviour"""
-
-    behaviour_class = TweetEvaluationBehaviour
+    behaviour_class = PostMechRequestBehaviour
     next_behaviour_class = TwitterDecisionMakingBehaviour
 
     @pytest.mark.parametrize(
@@ -1057,7 +1002,18 @@ class TestTweetEvaluationBehaviour(BaseBehaviourTest):
             (
                 BehaviourTestCase(
                     "Happy path",
-                    initial_data=dict(tweets={"1": {"text": "dummy text"}}),
+                    initial_data=dict(
+                        tweets={"1": {"text": "dummy text"}},
+                        mech_responses=json.dumps(
+                            [
+                                MechInteractionResponse(
+                                    nonce="1",
+                                    result='{"quality":"HIGH","relationship":"HIGH"}',
+                                )
+                            ],
+                            cls=DataclassEncoder,
+                        ),
+                    ),
                     event=Event.DONE,
                 ),
                 {},
@@ -1068,13 +1024,6 @@ class TestTweetEvaluationBehaviour(BaseBehaviourTest):
         """Run tests."""
         self.fast_forward(test_case.initial_data)
         self.behaviour.act_wrapper()
-        self.mock_llm_request(
-            request_kwargs=dict(performative=LlmMessage.Performative.REQUEST),
-            response_kwargs=dict(
-                performative=LlmMessage.Performative.RESPONSE,
-                value='{"quality":"HIGH","relationship":"HIGH"}',
-            ),
-        )
         self.complete(test_case.event)
 
 

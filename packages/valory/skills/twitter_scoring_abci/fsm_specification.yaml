@@ -4,27 +4,27 @@ alphabet_in:
 - DONE
 - DONE_API_LIMITS
 - DONE_MAX_RETRIES
-- DONE_SKIP
-- EVALUATE
-- NO_ALLOWANCE
 - NO_MAJORITY
-- OPENAI_CALL_CHECK
+- POST_MECH
+- PRE_MECH
 - RETRIEVE_HASHTAGS
 - RETRIEVE_MENTIONS
 - ROUND_TIMEOUT
 - SELECT_KEEPERS
-- TWEET_EVALUATION_ROUND_TIMEOUT
+- SKIP_EVALUATION
 default_start_state: TwitterDecisionMakingRound
 final_states:
+- FinishedTwitterCollectionRound
 - FinishedTwitterScoringRound
 label: TwitterScoringAbciApp
 start_states:
 - TwitterDecisionMakingRound
 states:
 - DBUpdateRound
+- FinishedTwitterCollectionRound
 - FinishedTwitterScoringRound
-- OpenAICallCheckRound
-- TweetEvaluationRound
+- PostMechRequestRound
+- PreMechRequestRound
 - TwitterDecisionMakingRound
 - TwitterHashtagsCollectionRound
 - TwitterMentionsCollectionRound
@@ -34,18 +34,18 @@ transition_func:
     (DBUpdateRound, DONE): TwitterDecisionMakingRound
     (DBUpdateRound, NO_MAJORITY): DBUpdateRound
     (DBUpdateRound, ROUND_TIMEOUT): DBUpdateRound
-    (OpenAICallCheckRound, DONE): TwitterDecisionMakingRound
-    (OpenAICallCheckRound, NO_ALLOWANCE): TwitterDecisionMakingRound
-    (OpenAICallCheckRound, NO_MAJORITY): OpenAICallCheckRound
-    (OpenAICallCheckRound, ROUND_TIMEOUT): OpenAICallCheckRound
-    (TweetEvaluationRound, DONE): TwitterDecisionMakingRound
-    (TweetEvaluationRound, TWEET_EVALUATION_ROUND_TIMEOUT): TweetEvaluationRound
+    (PostMechRequestRound, DONE): TwitterDecisionMakingRound
+    (PostMechRequestRound, NO_MAJORITY): PostMechRequestRound
+    (PostMechRequestRound, ROUND_TIMEOUT): PreMechRequestRound
+    (PreMechRequestRound, DONE): FinishedTwitterCollectionRound
+    (PreMechRequestRound, NO_MAJORITY): PreMechRequestRound
+    (PreMechRequestRound, ROUND_TIMEOUT): PreMechRequestRound
+    (PreMechRequestRound, SKIP_EVALUATION): FinishedTwitterScoringRound
     (TwitterDecisionMakingRound, DB_UPDATE): DBUpdateRound
     (TwitterDecisionMakingRound, DONE): FinishedTwitterScoringRound
-    (TwitterDecisionMakingRound, DONE_SKIP): FinishedTwitterScoringRound
-    (TwitterDecisionMakingRound, EVALUATE): TweetEvaluationRound
     (TwitterDecisionMakingRound, NO_MAJORITY): TwitterDecisionMakingRound
-    (TwitterDecisionMakingRound, OPENAI_CALL_CHECK): OpenAICallCheckRound
+    (TwitterDecisionMakingRound, POST_MECH): PostMechRequestRound
+    (TwitterDecisionMakingRound, PRE_MECH): PreMechRequestRound
     (TwitterDecisionMakingRound, RETRIEVE_HASHTAGS): TwitterHashtagsCollectionRound
     (TwitterDecisionMakingRound, RETRIEVE_MENTIONS): TwitterMentionsCollectionRound
     (TwitterDecisionMakingRound, ROUND_TIMEOUT): TwitterDecisionMakingRound

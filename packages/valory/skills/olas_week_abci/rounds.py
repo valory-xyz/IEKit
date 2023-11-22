@@ -245,7 +245,6 @@ class OlasWeekTweetCollectionRound(CollectSameUntilThresholdRound):
 
             # API error
             if "error" in payload:
-
                 # API limits
                 if payload["error"] == ERROR_API_LIMITS:
                     performed_olas_week_tasks[
@@ -383,7 +382,6 @@ class OlasWeekSelectKeepersRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
-
             performed_olas_week_tasks = cast(
                 SynchronizedData, self.synchronized_data
             ).performed_olas_week_tasks
