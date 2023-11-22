@@ -96,7 +96,6 @@ class TokenTrackRound(CollectSameUntilThresholdRound):
             payload = json.loads(self.most_voted_payload)
 
             if payload == TokenTrackRound.ERROR_PAYLOAD:
-
                 token_event_retries = (
                     cast(SynchronizedData, self.synchronized_data).token_event_retries
                     + 1

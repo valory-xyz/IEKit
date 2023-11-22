@@ -250,7 +250,6 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         """Do the action."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-
             if self.synchronized_data.final_tx_hash:
                 yield from self._process_responses()
 

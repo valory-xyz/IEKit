@@ -24,14 +24,14 @@ In order to run a local demo service based on the IEKit:
     mkdir your_workspace && cd your_workspace
     touch Pipfile && pipenv --python 3.10 && pipenv shell
 
-    pipenv install open-autonomy[all]==0.13.4
+    pipenv install open-autonomy[all]==0.13.6
     autonomy init --remote --ipfs --reset --author=your_name
     ```
 
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeidm4nmastkjbdod2b2kxm54aqw5rifvchdmla645lavem63cujeue --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeicvfsemgxzd4ae3btk46yeijkrqzlamapg6onjl7ujlnluivpgbi4 --service
     ```
 
 3. Build the Docker image of the service agents
@@ -74,7 +74,7 @@ In order to run a local demo service based on the IEKit:
 
     2. Create a Ceramic Decentralized Identity (DID) using [Glaze](https://github.com/ceramicstudio/js-glaze).
 
-    3. Using the DID created in the previous step, create two empty Ceramic streams. You can follow [this tutorial](https://developers.ceramic.network/reference/stream-programs/tile-document/). The service will optionally read generic scores from the first one and will write scores to the second one.
+    3. Using the DID created in the previous step, create two empty Ceramic streams. The service will optionally read generic scores from the first one and will write scores to the second one.
 
     4. Create an API key for [Infura](https://www.infura.io/) or your preferred provider.
 
