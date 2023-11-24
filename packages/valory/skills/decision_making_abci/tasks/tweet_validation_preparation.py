@@ -22,7 +22,6 @@
 import json
 from typing import Generator, Optional, cast
 
-from aea.exceptions import AEAEnforceError
 from eth_account.account import Account
 from eth_account.messages import (
     _hash_eip191_message,
@@ -36,7 +35,6 @@ from packages.valory.contracts.compatibility_fallback_handler import (
 )
 from packages.valory.contracts.uniswap_v2_erc20.contract import UniswapV2ERC20Contract
 from packages.valory.protocols.contract_api import ContractApiMessage
-from packages.valory.protocols.ledger_api import LedgerApiMessage
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
@@ -88,6 +86,9 @@ def validate_eoa_signature(message_hash, expected_address, signature):
 
 class TweetValidationPreparation(TaskPreparation):
     """TweetValidationPreparation"""
+
+    task_name = "tweet_validation"
+    task_event = Event.TWEET_VALIDATION.value
 
     def check_extra_conditions(self):
         """Validate Twitter credentials for the current centaur"""
@@ -168,7 +169,7 @@ class TweetValidationPreparation(TaskPreparation):
         return tweet
 
     def is_tweet_executable(self, tweet: dict):
-        """ "Check whether a tweet can be published"""
+        """Check whether a tweet can be published"""
 
         # Reject tweets with no execution attempts
         if not tweet["executionAttempts"]:
