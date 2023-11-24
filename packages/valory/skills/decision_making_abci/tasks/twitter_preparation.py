@@ -215,7 +215,6 @@ class ScheduledTweetPreparation(TwitterPreparation):
 
         pending_tweets = []
         for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
-
             if tweet["posted"]:
                 continue
 

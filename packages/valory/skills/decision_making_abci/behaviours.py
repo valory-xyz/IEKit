@@ -51,6 +51,9 @@ from packages.valory.skills.decision_making_abci.tasks.read_stream_preparation i
 from packages.valory.skills.decision_making_abci.tasks.score_preparations import (
     ScorePreparation,
 )
+from packages.valory.skills.decision_making_abci.tasks.tweet_validation_preparation import (
+    TweetValidationPreparation,
+)
 from packages.valory.skills.decision_making_abci.tasks.twitter_preparation import (
     DailyTweetPreparation,
     ScheduledTweetPreparation,
@@ -62,9 +65,6 @@ from packages.valory.skills.decision_making_abci.tasks.write_stream_preparation 
     DailyOrbisPreparation,
     UpdateCentaursPreparation,
     WriteContributeDBPreparation,
-)
-from packages.valory.skills.decision_making_abci.tasks.tweet_validation_preparation import (
-    TweetValidationPreparation,
 )
 
 
@@ -209,14 +209,17 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
                         self.params,
                         self.context.logger,
                         now_utc,
-                        self
+                        self,
                     )
                     if previous_task_preparation_cls
                     else None
                 )
 
                 if previous_task_preparation:
-                    post_updates, post_event = yield from previous_task_preparation.post_task()
+                    (
+                        post_updates,
+                        post_event,
+                    ) = yield from previous_task_preparation.post_task()
                     self.context.logger.info(
                         f"Post task updates = {post_updates}, post event = {post_event}"
                     )
@@ -235,7 +238,7 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
                     self.params,
                     self.context.logger,
                     now_utc,
-                    self
+                    self,
                 )
                 if next_task_preparation_cls
                 else None
