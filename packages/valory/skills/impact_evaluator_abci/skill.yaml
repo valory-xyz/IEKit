@@ -10,7 +10,7 @@ fingerprint:
   behaviours.py: bafybeibdq5p4zi47nsycpcjs7ouw2fjxqjn7hgbd4aalp7yumdhnmlfufq
   composition.py: bafybeidqds5nsbwp56cduwmypcu3j4qvufuo7dbyw2xzqhiqed67ax2qsa
   dialogues.py: bafybeigjknz4qqynbsltjje46gidg4rftsqw6ybjwegz24wetmycutpzh4
-  fsm_specification.yaml: bafybeidk4x4q4qebjp2aqse77xqoemqf6ijdccwrubpncihgg3zgithymm
+  fsm_specification.yaml: bafybeif3utgdqpswivlf2debgfipvvdpabwznpipbc424sjy2w4ojhmrba
   handlers.py: bafybeidkli6fphcmdgwsys4lkyf3fx6fbawet4nt2pnixfypzijhg6b3ze
   models.py: bafybeiaeczqvmcosk4cer4oq5n7cgbihjgtkdspzporymluuefwyb5irnm
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
@@ -33,7 +33,7 @@ skills:
 - valory/reset_pause_abci:0.1.0:bafybeiencz2uytz6fqj5wg7mcunevxjh4xg5gd6pqcgkshgqywhcimweyi
 - valory/termination_abci:0.1.0:bafybeigainmpy37gb33ogbrpggjbkuasodhthh5oz4vbzjdfjozerpf224
 - valory/transaction_settlement_abci:0.1.0:bafybeigk3debp6dswutqsuls2lqfvyj4ghe6kwjc2zfinnsvj6hujynxtq
-- valory/decision_making_abci:0.1.0:bafybeifmrbku2vcgkgi4f36j3mzgj3tq5w4vv2yqivofmb6pkdyedwau5i
+- valory/decision_making_abci:0.1.0:bafybeicjal7cjckxw2fxzed5e5ktssawwmtj7ydldepbcpu45rs356qf3y
 - valory/llm_abci:0.1.0:bafybeibhihrpovqozjofkyfywm2w6hduo2vzwhhfw4a37vkvx32djxdavy
 - valory/twitter_write_abci:0.1.0:bafybeibir25q4i5b3ncslpeifr2zozdxj4xslzvz7o5xhwt6ocszg5pgvm
 - valory/olas_week_abci:0.1.0:bafybeic3mwcdh746cxfcwnfwaaxaz6szibqfg6cmvcmyyrktzz35rpwk5m

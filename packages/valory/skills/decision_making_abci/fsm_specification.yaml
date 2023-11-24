@@ -11,6 +11,7 @@ alphabet_in:
 - ROUND_TIMEOUT
 - SCHEDULED_TWEET
 - SCORE
+- TWEET_VALIDATION
 - UPDATE_CENTAURS
 - WEEK_IN_OLAS_CREATE
 - WRITE_CONTRIBUTE_DB
@@ -56,6 +57,7 @@ transition_func:
     (DecisionMakingRound, ROUND_TIMEOUT): DecisionMakingRound
     (DecisionMakingRound, SCHEDULED_TWEET): FinishedDecisionMakingWriteTwitterRound
     (DecisionMakingRound, SCORE): FinishedDecisionMakingScoreRound
+    (DecisionMakingRound, TWEET_VALIDATION): DecisionMakingRound
     (DecisionMakingRound, UPDATE_CENTAURS): FinishedDecisionMakingUpdateCentaurRound
     (DecisionMakingRound, WEEK_IN_OLAS_CREATE): FinishedDecisionMakingWeekInOlasRound
     (DecisionMakingRound, WRITE_CONTRIBUTE_DB): FinishedDecisionMakingWriteContributeDBRound

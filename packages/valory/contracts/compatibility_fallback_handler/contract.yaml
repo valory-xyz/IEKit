@@ -14,4 +14,6 @@ contracts: []
 class_name: CompatibilityFallbackHandlerContract
 contract_interface_paths:
   ethereum: build/compatibility_fallback_handler.json
-dependencies: {}
+dependencies:
+  open-aea-ledger-ethereum:
+    version: ==1.42

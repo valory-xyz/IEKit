@@ -16,4 +16,6 @@ contracts: []
 class_name: UniswapV2ERC20Contract
 contract_interface_paths:
   ethereum: build/IUniswapV2ERC20.json
-dependencies: {}
+dependencies:
+  open-aea-ledger-ethereum:
+    version: ==1.42

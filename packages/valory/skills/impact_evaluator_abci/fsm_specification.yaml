@@ -46,6 +46,7 @@ alphabet_in:
 - SKIP_REQUEST
 - SUSPICIOUS_ACTIVITY
 - TWEET_EVALUATION_ROUND_TIMEOUT
+- TWEET_VALIDATION
 - UPDATE_CENTAURS
 - VALIDATE_TIMEOUT
 - VERIFICATION_ERROR
@@ -133,6 +134,7 @@ transition_func:
     (DecisionMakingRound, ROUND_TIMEOUT): DecisionMakingRound
     (DecisionMakingRound, SCHEDULED_TWEET): RandomnessTwitterRound
     (DecisionMakingRound, SCORE): GenericScoringRound
+    (DecisionMakingRound, TWEET_VALIDATION): DecisionMakingRound
     (DecisionMakingRound, UPDATE_CENTAURS): RandomnessRound
     (DecisionMakingRound, WEEK_IN_OLAS_CREATE): OlasWeekDecisionMakingRound
     (DecisionMakingRound, WRITE_CONTRIBUTE_DB): RandomnessRound
