@@ -23,9 +23,15 @@ from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
 )
+from typing import Generator, Optional, cast
+from packages.valory.protocols.contract_api import ContractApiMessage
+from packages.valory.contracts.uniswap_v2_erc20.contract import UniswapV2ERC20Contract
+from packages.valory.protocols.contract_api import ContractApiMessage
 
 
 TWEET_CONSENSUS_WVEOLAS_WEI = 2e6 * 1e18  # 2M wveOLAS to wei
+OLAS_ADDRESS_ETHEREUM = "0x0001a500a6b18995b03f44bb040a5ffc28e45cb0"
+OLAS_ADDRESS_GNOSIS = "0xce11e14225575945b8e6dc0d4f2dd4c570f79d9f"
 
 
 class TwitterPreparation(TaskPreparation):
@@ -59,9 +65,11 @@ class TwitterPreparation(TaskPreparation):
             self.synchronized_data.current_centaur_index
         ]
 
+        text = yield from self.get_tweet()
+
         write_data = [
             {
-                "text": self.get_tweet(),
+                "text": text,
                 "credentials": self.params.centaur_id_to_secrets[current_centaur["id"]][
                     "twitter"
                 ],
@@ -167,7 +175,8 @@ class ScheduledTweetPreparation(TwitterPreparation):
 
     def get_tweet(self):
         """Get the tweet"""
-        return self.get_pending_tweets()[0]["text"]
+        pending_tweets = yield from self.get_pending_tweets()
+        return pending_tweets[0]["text"]
 
     def check_extra_conditions(self):
         """Check extra conditions"""
@@ -196,7 +205,8 @@ class ScheduledTweetPreparation(TwitterPreparation):
             ):
                 return False
 
-        if not self.get_pending_tweets():
+        pending_tweets = yield from self.get_pending_tweets()
+        if not pending_tweets:
             return False
 
         return True
@@ -206,20 +216,78 @@ class ScheduledTweetPreparation(TwitterPreparation):
         current_centaur = self.synchronized_data.centaurs_data[
             self.synchronized_data.current_centaur_index
         ]
-        pending_tweets = [
-            t
-            for t in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]
-            if not t["posted"] and t["execute"]
-        ]
-        agreed_pending_tweets = list(
-            filter(
-                lambda t: self.check_tweet_consensus(t["voters"]),
-                pending_tweets,
-            )
-        )
-        return agreed_pending_tweets
 
-    def check_tweet_consensus(self, voters: dict):
+        pending_tweets = []
+        for t in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
+
+            if not t["posted"]:
+                continue
+
+            is_tweet_executable = yield from self.is_tweet_executable(t)
+
+            if not is_tweet_executable:
+                continue
+
+            pending_tweets.append(t)
+
+        return pending_tweets
+
+
+    def is_tweet_executable(self, tweet: dict):
+        """"Check whether a tweet can be published"""
+
+        # Reject tweets with no execution attempts
+        if not tweet["executionAttempts"]:
+            return False
+
+        # Reject already processed tweets
+        if tweet["executionAttempts"][-1]["verified"] in [True, False]:
+            return False
+
+        # At this point, the tweet is awaiting to be published [verified=None]
+
+        # Reject tweet that do not have enough voting power
+        consensus = yield from self.check_tweet_consensus(tweet["voters"])
+        if not consensus:
+            return False
+
+        return True
+
+
+    def check_tweet_consensus(self, tweet: dict):
         """Check whether users agree on posting"""
-        voting_power = sum([int(list(v.values())[0]) for v in voters])
-        return voting_power >= TWEET_CONSENSUS_WVEOLAS_WEI
+        total_voting_power = 0
+
+        for voter in tweet["voters"]:
+            voting_power = yield from self.get_voting_power(voter.keys()[0])
+            total_voting_power += voting_power
+
+        return total_voting_power >= TWEET_CONSENSUS_WVEOLAS_WEI
+
+
+    def get_voting_power(self, address: str) -> Generator[None, None, int]:
+        """Get the given address's balance."""
+        olas_balance_ethereum = yield from self.get_token_balance(OLAS_ADDRESS_ETHEREUM, address, "ethereum") or 0
+        olas_balance_gnosis = yield from self.get_token_balance(OLAS_ADDRESS_GNOSIS, address, "gnosis") or 0
+        return cast(int, olas_balance_ethereum) + cast(int, olas_balance_gnosis)
+
+
+    def get_token_balance(self, token_address, owner_address, chain_id) -> Generator[None, None, Optional[int]]:
+        """Get the given address's balance."""
+        response = yield from self.behaviour.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
+            contract_address=token_address,
+            contract_id=str(UniswapV2ERC20Contract.contract_id),
+            contract_callable="balance_of",
+            owner_address=owner_address,
+            chain_id=chain_id
+        )
+        if response.performative != ContractApiMessage.Performative.STATE:
+            self.behaviour.context.logger.error(
+                f"Couldn't get the balance for address {owner_address}: {response.performative}"
+            )
+            return None
+
+        return response.state.body
+
+

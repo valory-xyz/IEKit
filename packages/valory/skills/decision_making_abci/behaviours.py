@@ -202,13 +202,14 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
                         self.params,
                         self.context.logger,
                         now_utc,
+                        self
                     )
                     if previous_task_preparation_cls
                     else None
                 )
 
                 if previous_task_preparation:
-                    post_updates, post_event = previous_task_preparation.post_task()
+                    post_updates, post_event = yield from previous_task_preparation.post_task()
                     self.context.logger.info(
                         f"Post task updates = {post_updates}, post event = {post_event}"
                     )
@@ -227,13 +228,14 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
                     self.params,
                     self.context.logger,
                     now_utc,
+                    self
                 )
                 if next_task_preparation_cls
                 else None
             )
 
             if next_task_preparation:
-                pre_updates, pre_event = next_task_preparation.pre_task()
+                pre_updates, pre_event = yield from next_task_preparation.pre_task()
                 self.context.logger.info(
                     f"Pre task updates = {pre_updates}, pre event = {pre_event}"
                 )
