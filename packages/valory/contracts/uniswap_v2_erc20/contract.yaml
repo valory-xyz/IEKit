@@ -8,9 +8,9 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeia6ocx66ynigvgpbhimt7zwj7mgehny5mebgbdhljdaeok6dlpgle
   build/IUniswapV2ERC20.json: bafybeid45gy6x5ah5ub5p2obdhph36skpoy5qdhikwwfso7f3655iqnpc4
-  contract.py: bafybeiaa2kap2gue2gcj3mlksx7amj27hyiz5yb6r33b3dcmwoal6gsqjy
+  contract.py: bafybeig72olp457pi5xlmbdlqbcknkoniso2axvno2ofxm74j2bzgh55pe
   tests/__init__.py: bafybeidhkt43jhkhjhdvityruxqesnq4o2hqv673dhnvm5fnnlgiew2uea
-  tests/test_contract.py: bafybeidavlagysgcpw4l54ea6murb7mxtq6i35tle247gbmiquoa3yswka
+  tests/test_contract.py: bafybeiaigkelgbefylll3ez5qdz7g5vp64ikqg5ow3gq5edx3ae43xp7oe
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: UniswapV2ERC20Contract
