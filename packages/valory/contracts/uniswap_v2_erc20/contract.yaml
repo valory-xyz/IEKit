@@ -6,11 +6,11 @@ description: Uniswap V2 ERC20 contract
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeia75xbvf6zogcloppdcu2zrwcl6d46ebj2zmm6dkge6eno3k6ysw4
+  __init__.py: bafybeia6ocx66ynigvgpbhimt7zwj7mgehny5mebgbdhljdaeok6dlpgle
   build/IUniswapV2ERC20.json: bafybeid45gy6x5ah5ub5p2obdhph36skpoy5qdhikwwfso7f3655iqnpc4
-  contract.py: bafybeidxnb72n5xz4fvvxogbk2xk2vz4jvtsqa3berolr34v7cug3snism
-  tests/__init__.py: bafybeigj3ngmfmyy4nw4xipxbqnx4nd42aqidqmmduwpx6hurssjqqkirq
-  tests/test_contract.py: bafybeigaf7kyhuy4qn5dww2r62hffhytab3uhmjummsaiazzvqetvomyi4
+  contract.py: bafybeiaa2kap2gue2gcj3mlksx7amj27hyiz5yb6r33b3dcmwoal6gsqjy
+  tests/__init__.py: bafybeidhkt43jhkhjhdvityruxqesnq4o2hqv673dhnvm5fnnlgiew2uea
+  tests/test_contract.py: bafybeidavlagysgcpw4l54ea6murb7mxtq6i35tle247gbmiquoa3yswka
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: UniswapV2ERC20Contract

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2022 Valory AG
+#   Copyright 2021-2023 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 """This module contains the class to connect to a ERC20 contract."""
 import logging
-from typing import Any, List, Optional, cast
+from typing import Optional
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId
