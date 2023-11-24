@@ -57,6 +57,7 @@ class Event(Enum):
     READ_MANUAL_POINTS = "read_manual_points"
     WRITE_CONTRIBUTE_DB = "write_contribute_db"
     WEEK_IN_OLAS_CREATE = "week_in_olas_create"
+    TWEET_VALIDATION = "tweet_validation"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -250,6 +251,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.READ_CENTAURS: FinishedDecisionMakingReadCentaursRound,
             Event.LLM: FinishedDecisionMakingLLMRound,
             Event.DAILY_TWEET: FinishedDecisionMakingWriteTwitterRound,
+            Event.TWEET_VALIDATION: DecisionMakingRound,
             Event.SCHEDULED_TWEET: FinishedDecisionMakingWriteTwitterRound,
             Event.WEEK_IN_OLAS_CREATE: FinishedDecisionMakingWeekInOlasRound,
             Event.DAILY_ORBIS: FinishedDecisionMakingWriteOrbisRound,

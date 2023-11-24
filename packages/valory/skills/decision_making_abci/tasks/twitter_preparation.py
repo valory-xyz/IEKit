@@ -23,10 +23,6 @@ from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
 )
-from typing import Generator, Optional, cast
-from packages.valory.protocols.contract_api import ContractApiMessage
-from packages.valory.contracts.uniswap_v2_erc20.contract import UniswapV2ERC20Contract
-from packages.valory.protocols.contract_api import ContractApiMessage
 
 
 TWEET_CONSENSUS_WVEOLAS_WEI = 2e6 * 1e18  # 2M wveOLAS to wei
@@ -151,7 +147,7 @@ class ScheduledTweetPreparation(TwitterPreparation):
         # Set the scheduled tweet as posted
         centaurs_data = updates["centaurs_data"]
         current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
-        pending_tweets = self.get_pending_tweets()
+        pending_tweets = yield from self.get_pending_tweets()
         tweet_ids = self.synchronized_data.tweet_ids
         if not pending_tweets:
             return updates, event
@@ -218,76 +214,17 @@ class ScheduledTweetPreparation(TwitterPreparation):
         ]
 
         pending_tweets = []
-        for t in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
+        for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
 
-            if not t["posted"]:
+            if tweet["posted"]:
                 continue
 
-            is_tweet_executable = yield from self.is_tweet_executable(t)
-
-            if not is_tweet_executable:
+            if not tweet["executionAttempts"]:
                 continue
 
-            pending_tweets.append(t)
+            if not tweet["executionAttempts"][-1]["verified"]:
+                continue
+
+            pending_tweets.append(tweet)
 
         return pending_tweets
-
-
-    def is_tweet_executable(self, tweet: dict):
-        """"Check whether a tweet can be published"""
-
-        # Reject tweets with no execution attempts
-        if not tweet["executionAttempts"]:
-            return False
-
-        # Reject already processed tweets
-        if tweet["executionAttempts"][-1]["verified"] in [True, False]:
-            return False
-
-        # At this point, the tweet is awaiting to be published [verified=None]
-
-        # Reject tweet that do not have enough voting power
-        consensus = yield from self.check_tweet_consensus(tweet["voters"])
-        if not consensus:
-            return False
-
-        return True
-
-
-    def check_tweet_consensus(self, tweet: dict):
-        """Check whether users agree on posting"""
-        total_voting_power = 0
-
-        for voter in tweet["voters"]:
-            voting_power = yield from self.get_voting_power(voter.keys()[0])
-            total_voting_power += voting_power
-
-        return total_voting_power >= TWEET_CONSENSUS_WVEOLAS_WEI
-
-
-    def get_voting_power(self, address: str) -> Generator[None, None, int]:
-        """Get the given address's balance."""
-        olas_balance_ethereum = yield from self.get_token_balance(OLAS_ADDRESS_ETHEREUM, address, "ethereum") or 0
-        olas_balance_gnosis = yield from self.get_token_balance(OLAS_ADDRESS_GNOSIS, address, "gnosis") or 0
-        return cast(int, olas_balance_ethereum) + cast(int, olas_balance_gnosis)
-
-
-    def get_token_balance(self, token_address, owner_address, chain_id) -> Generator[None, None, Optional[int]]:
-        """Get the given address's balance."""
-        response = yield from self.behaviour.get_contract_api_response(
-            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
-            contract_address=token_address,
-            contract_id=str(UniswapV2ERC20Contract.contract_id),
-            contract_callable="balance_of",
-            owner_address=owner_address,
-            chain_id=chain_id
-        )
-        if response.performative != ContractApiMessage.Performative.STATE:
-            self.behaviour.context.logger.error(
-                f"Couldn't get the balance for address {owner_address}: {response.performative}"
-            )
-            return None
-
-        return response.state.body
-
-

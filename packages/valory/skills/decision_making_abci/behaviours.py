@@ -63,6 +63,9 @@ from packages.valory.skills.decision_making_abci.tasks.write_stream_preparation 
     UpdateCentaursPreparation,
     WriteContributeDBPreparation,
 )
+from packages.valory.skills.decision_making_abci.tasks.tweet_validation_preparation import (
+    TweetValidationPreparation,
+)
 
 
 # Task FSM
@@ -97,6 +100,10 @@ previous_event_to_task_preparation_cls = {
     },
     Event.WEEK_IN_OLAS_CREATE.value: {
         "prev": WeekInOlasCreatePreparation,
+        "next": TweetValidationPreparation,
+    },
+    Event.TWEET_VALIDATION.value: {
+        "prev": TweetValidationPreparation,
         "next": ScheduledTweetPreparation,
     },
     Event.SCHEDULED_TWEET.value: {
