@@ -122,6 +122,21 @@
             "required": ["weekly", "enabled", "last_run", "run_hour_utc"],
             "additionalProperties": false
         },
+        "executionAttempt": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "dateCreated": {
+                    "type": "string"
+                },
+                "verified": {
+                    "type": ["boolean", "null"]
+                }
+            },
+            "required": ["id", "dateCreated", "verified"]
+        },
         "scheduled_tweet_data": {
             "type": "object",
             "properties": {
@@ -163,9 +178,17 @@
                 },
                 "action_id": {
                     "type": "string"
+                },
+                "executionAttempts": {
+                    "type": "array",
+                    "items": {
+                        "items": {
+                            "$ref": "#/definitions/executionAttempt"
+                        }
+                    }
                 }
             },
-            "required": ["text", "posted", "voters", "proposer", "request_id", "createdDate", "execute"],
+            "required": ["text", "posted", "voters", "proposer", "request_id", "createdDate", "execute", "executionAttempts"],
             "additionalProperties": false
         },
         "centaur": {
