@@ -160,11 +160,10 @@ class TweetValidationPreparation(TaskPreparation):
 
         valid_voters = []
         for v in tweet["voters"]:
-            is_valid = self.validate_signature(message_hash, v.keys()[0], v.values()[0])
             address = list(v.keys())[0]
             signature = list(v.values())[0]
-
             is_valid = self.validate_signature(message_hash, address, signature)
+
             if is_valid:
                 valid_voters.append(v)
         tweet["voters"] = valid_voters
@@ -206,10 +205,10 @@ class TweetValidationPreparation(TaskPreparation):
 
     def get_voting_power(self, address: str):
         """Get the given address's balance."""
-        olas_balance_ethereum = (
+        olas_balance_ethereum = next(
             self.get_token_balance(OLAS_ADDRESS_ETHEREUM, address, "ethereum") or 0
         )
-        olas_balance_gnosis = (
+        olas_balance_gnosis = next(
             self.get_token_balance(OLAS_ADDRESS_GNOSIS, address, "gnosis") or 0
         )
         voting_power = cast(int, olas_balance_ethereum) + cast(int, olas_balance_gnosis)
@@ -307,8 +306,8 @@ class TweetValidationPreparation(TaskPreparation):
 
     def validate_signature(self, message_hash, address, signature):
         """Validate signatures"""
-        is_contract = self.is_contract(address)
+        is_contract = next(self.is_contract(address))
         if is_contract:
-            return self.validate_safe_signature(message_hash, address)
+            return next(self.validate_safe_signature(message_hash, address))
         else:
             return validate_eoa_signature(message_hash, address, signature)
