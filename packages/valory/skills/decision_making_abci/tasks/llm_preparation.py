@@ -53,12 +53,14 @@ class LLMPreparation(TaskPreparation):
                 self.params,
                 self.logger,
                 self.now_utc,
+                self.behaviour,
             ).check_conditions()
             and not DailyOrbisPreparation(
                 self.synchronized_data,
                 self.params,
                 self.logger,
                 self.now_utc,
+                self.behaviour,
             ).check_conditions()
         ):
             return False

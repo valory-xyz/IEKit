@@ -58,6 +58,7 @@ ENABLED_CENTAUR = {
                         {"0x6c6766E04eF971367D27E720d1d161a9B495D647": 0},
                         {"0x7885d121ed8Aa3c919AA4d407F197Dc29E33cAf0": 0},
                     ],
+                    "executionAttempts": [],
                 },
                 {
                     "request_id": "dummy_id_2",
@@ -68,6 +69,7 @@ ENABLED_CENTAUR = {
                         {"0x6c6766E04eF971367D27E720d1d161a9B495D647": 0},
                         {"0x7885d121ed8Aa3c919AA4d407F197Dc29E33cAf0": 0},
                     ],
+                    "executionAttempts": [],
                 },
             ]
         },
