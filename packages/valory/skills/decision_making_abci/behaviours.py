@@ -219,7 +219,8 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
                     (
                         post_updates,
                         post_event,
-                    ) = yield from previous_task_preparation.post_task()
+                    ) = previous_task_preparation.post_task()
+
                     self.context.logger.info(
                         f"Post task updates = {post_updates}, post event = {post_event}"
                     )
@@ -245,7 +246,7 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
             )
 
             if next_task_preparation:
-                pre_updates, pre_event = yield from next_task_preparation.pre_task()
+                pre_updates, pre_event = next_task_preparation.pre_task()
                 self.context.logger.info(
                     f"Pre task updates = {pre_updates}, pre event = {pre_event}"
                 )

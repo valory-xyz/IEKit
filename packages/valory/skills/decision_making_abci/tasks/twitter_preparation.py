@@ -61,7 +61,7 @@ class TwitterPreparation(TaskPreparation):
             self.synchronized_data.current_centaur_index
         ]
 
-        text = yield from self.get_tweet()
+        text = self.get_tweet()
 
         write_data = [
             {
@@ -100,7 +100,6 @@ class TwitterPreparation(TaskPreparation):
             current_centaur["actions"] = twitter_action
 
         updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
-
         return updates, None
 
     def get_tweet(self):
@@ -147,7 +146,7 @@ class ScheduledTweetPreparation(TwitterPreparation):
         # Set the scheduled tweet as posted
         centaurs_data = updates["centaurs_data"]
         current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
-        pending_tweets = yield from self.get_pending_tweets()
+        pending_tweets = self.get_pending_tweets()
         tweet_ids = self.synchronized_data.tweet_ids
         if not pending_tweets:
             return updates, event
@@ -171,7 +170,7 @@ class ScheduledTweetPreparation(TwitterPreparation):
 
     def get_tweet(self):
         """Get the tweet"""
-        pending_tweets = yield from self.get_pending_tweets()
+        pending_tweets = self.get_pending_tweets()
         return pending_tweets[0]["text"]
 
     def check_extra_conditions(self):
@@ -201,7 +200,7 @@ class ScheduledTweetPreparation(TwitterPreparation):
             ):
                 return False
 
-        pending_tweets = yield from self.get_pending_tweets()
+        pending_tweets = self.get_pending_tweets()
         if not pending_tweets:
             return False
 
