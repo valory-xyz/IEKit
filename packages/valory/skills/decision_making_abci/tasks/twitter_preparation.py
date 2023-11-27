@@ -195,8 +195,7 @@ class ScheduledTweetPreparation(TwitterPreparation):
 
         for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
             if not all(
-                field in tweet
-                for field in ["posted", "request_id", "text", "voters"]
+                field in tweet for field in ["posted", "request_id", "text", "voters"]
             ):
                 return False
 
