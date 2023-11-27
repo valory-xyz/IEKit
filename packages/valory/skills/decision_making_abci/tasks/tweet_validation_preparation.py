@@ -125,7 +125,7 @@ class TweetValidationPreparation(TaskPreparation):
         removal_ids = []
         for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
             # Ignore posted tweets
-            if not tweet["posted"]:
+            if tweet["posted"]:
                 continue
 
             # Remove invalid votes and mark tweet for removal if needed
@@ -161,6 +161,10 @@ class TweetValidationPreparation(TaskPreparation):
         valid_voters = []
         for v in tweet["voters"]:
             is_valid = self.validate_signature(message_hash, v.keys()[0], v.values()[0])
+            address = list(v.keys())[0]
+            signature = list(v.values())[0]
+
+            is_valid = self.validate_signature(message_hash, address, signature)
             if is_valid:
                 valid_voters.append(v)
         tweet["voters"] = valid_voters
@@ -180,7 +184,7 @@ class TweetValidationPreparation(TaskPreparation):
         # At this point, the tweet is awaiting to be published [verified=None]
 
         # Reject tweet that do not have enough voting power
-        consensus = self.check_tweet_consensus(tweet["voters"])
+        consensus = self.check_tweet_consensus(tweet)
         if not consensus:
             return False
 
@@ -191,7 +195,8 @@ class TweetValidationPreparation(TaskPreparation):
         total_voting_power = 0
 
         for voter in tweet["voters"]:
-            voting_power = self.get_voting_power(voter.keys()[0])
+            address = list(voter.keys())[0]
+            voting_power = self.get_voting_power(address)
             total_voting_power += voting_power
 
         self.behaviour.context.logger.info(
@@ -250,7 +255,7 @@ class TweetValidationPreparation(TaskPreparation):
             )
             return False
 
-        is_valid = cast(dict, contract_api_msg.state.body["valid"])
+        is_valid = cast(bool, contract_api_msg.state.body["valid"])
 
         return is_valid
 
