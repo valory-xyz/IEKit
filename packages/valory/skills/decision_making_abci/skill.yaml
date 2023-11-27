@@ -19,7 +19,7 @@ fingerprint:
   tasks/read_stream_preparation.py: bafybeiespz6kzkzvrjjf3d6ffwse3rufuyrrab3axvg64pxw4jj6zzhwny
   tasks/score_preparations.py: bafybeieiesjkyjbcvqut3l6nlzcwpidibsmo3mz7j6p54lbqzspfcf3ram
   tasks/task_preparations.py: bafybeiadxqrh2l7v7kgosrxebir5uj57qfuhqdh5ljfdofylbcp3vek2cq
-  tasks/tweet_validation_preparation.py: bafybeiah5jprocj2t4cmjfchq7x4ob5gvkaeutx76rv3apflntab52k26u
+  tasks/tweet_validation_preparation.py: bafybeib75yx2nis5jaiwnf335ifm2qztfjyxszfvnrc3aafztzikdcikca
   tasks/twitter_preparation.py: bafybeibkcp7yhwhsadwla4guypczakm7prw66azhezm6opgyyba4e2xytm
   tasks/week_in_olas_preparations.py: bafybeiakt43xrdglfmsrmhw3i3donzsfrqhgxzygdyi26tehpaeyeoz7n4
   tasks/write_stream_preparation.py: bafybeifl4j7s575ts6x4msntymkempwguj4yypmxy2xjmffknn7qhkzfo4
@@ -33,8 +33,11 @@ fingerprint:
   tests/test_rounds.py: bafybeicgeowr2ohxevcq6wflgt733fb5qi52dhmzzadhwrsmnigg5w2ynu
 fingerprint_ignore_patterns: []
 connections: []
-contracts: []
-protocols: []
+contracts:
+- valory/uniswap_v2_erc20:0.1.0:bafybeibtxm6piivwtxynbvmgksfgip6l3srafpzeb7zizmvxjr3f22f7ve
+- valory/compatibility_fallback_handler:0.1.0:bafybeia6dzd4vvbqqt7poraq4gnomm2aiprmu4edbampck7vpwfz6c5ks4
+protocols:
+- valory/contract_api:1.0.0:bafybeialhbjvwiwcnqq3ysxcyemobcbie7xza66gaofcvla5njezkvhcka
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeidau7loztcfy3mxvoqrv7otbpciemd2wf3lsxyjraq4dcvuvib25e
 behaviours:

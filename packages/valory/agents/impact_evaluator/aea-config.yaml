@@ -28,6 +28,8 @@ contracts:
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeid2dujvxf2aiys65jfbobu7r3p6jgsg3hvjuwtzuwlh2g5elkqg2y
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/service_registry:0.1.0:bafybeicwp7b4wrxcko66cfylhnaiwzdupo75ixlcol73ww6vxapx33gtpi
+- valory/uniswap_v2_erc20:0.1.0:bafybeibtxm6piivwtxynbvmgksfgip6l3srafpzeb7zizmvxjr3f22f7ve
+- valory/compatibility_fallback_handler:0.1.0:bafybeia6dzd4vvbqqt7poraq4gnomm2aiprmu4edbampck7vpwfz6c5ks4
 protocols:
 - open_aea/signing:1.0.0:bafybeie7xyems76v5b4wc2lmaidcujizpxfzjnnwdeokmhje53g7ym25ii
 - valory/abci:0.1.0:bafybeihmzlmmb4pdo3zkhg6ehuyaa4lhw7bfpclln2o2z7v3o6fcep26iu
@@ -42,7 +44,7 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeiazmtcljyffmxzbiiq7aw6dhsgcbahpwixbtjeqoqfrcqw3ypzrf4
 - valory/abstract_round_abci:0.1.0:bafybeidau7loztcfy3mxvoqrv7otbpciemd2wf3lsxyjraq4dcvuvib25e
-- valory/impact_evaluator_abci:0.1.0:bafybeiemkpdgaz4v5cgyillcsm6thzkzsa37wafyn5s7tqtlhrrksp76lu
+- valory/impact_evaluator_abci:0.1.0:bafybeicyny3umvwdnaljr6s3mkd7ffsmwjghekjmk2qeqhuttivrs5gxte
 - valory/generic_scoring_abci:0.1.0:bafybeidwhspcx4634xwtdnz6xlxhonbyo57d5fvpa4wihfqrfopdcgr6ve
 - valory/twitter_scoring_abci:0.1.0:bafybeieojsiu2r4g37d542xlm7tbrvjk2isekcvzzzxg3joriwqgllvh44
 - valory/ceramic_read_abci:0.1.0:bafybeie7t7jk2hq2cjticbfujosfld3dlnbafxdv7owhxnnj4zmtaujpwa
@@ -53,7 +55,7 @@ skills:
 - valory/termination_abci:0.1.0:bafybeigainmpy37gb33ogbrpggjbkuasodhthh5oz4vbzjdfjozerpf224
 - valory/transaction_settlement_abci:0.1.0:bafybeigk3debp6dswutqsuls2lqfvyj4ghe6kwjc2zfinnsvj6hujynxtq
 - valory/twitter_write_abci:0.1.0:bafybeibir25q4i5b3ncslpeifr2zozdxj4xslzvz7o5xhwt6ocszg5pgvm
-- valory/decision_making_abci:0.1.0:bafybeicjal7cjckxw2fxzed5e5ktssawwmtj7ydldepbcpu45rs356qf3y
+- valory/decision_making_abci:0.1.0:bafybeihudlsnfvdrdv55tetouqgets6dlifkwlrmmw4nb75wn3zeyvwcru
 - valory/llm_abci:0.1.0:bafybeibhihrpovqozjofkyfywm2w6hduo2vzwhhfw4a37vkvx32djxdavy
 - valory/olas_week_abci:0.1.0:bafybeic3mwcdh746cxfcwnfwaaxaz6szibqfg6cmvcmyyrktzz35rpwk5m
 - valory/mech_interact_abci:0.1.0:bafybeidaztwmric5nrve77g4tmdarinzw72lmiigzblremlojrandfvoqu

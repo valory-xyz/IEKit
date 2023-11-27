@@ -30,7 +30,7 @@ from eth_account.messages import (
 )
 from eth_utils.exceptions import ValidationError
 
-from packages.valory.contracts.compatibility_fallback_handler import (
+from packages.valory.contracts.compatibility_fallback_handler.contract import (
     CompatibilityFallbackHandlerContract,
 )
 from packages.valory.contracts.uniswap_v2_erc20.contract import UniswapV2ERC20Contract
