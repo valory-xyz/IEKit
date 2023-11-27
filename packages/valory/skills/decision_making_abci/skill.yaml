@@ -35,7 +35,7 @@ fingerprint_ignore_patterns: []
 connections: []
 contracts:
 - valory/uniswap_v2_erc20:0.1.0:bafybeibtxm6piivwtxynbvmgksfgip6l3srafpzeb7zizmvxjr3f22f7ve
-- valory/compatibility_fallback_handler:0.1.0:bafybeia6dzd4vvbqqt7poraq4gnomm2aiprmu4edbampck7vpwfz6c5ks4
+- valory/compatibility_fallback_handler:0.1.0:bafybeibhwblbvyeasnkyvfarnuin2pprfgxk3yu3ovacxpwtg5ltzrhs6m
 protocols:
 - valory/contract_api:1.0.0:bafybeialhbjvwiwcnqq3ysxcyemobcbie7xza66gaofcvla5njezkvhcka
 skills:

@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigyvgpsfdvw2ir5dliybm7oedojjffp5k4jifewhbcce7uk5isyse
-  build/compatibility_fallback_handler.json: bafybeihzgbr4nvhht2ns4s6alktaafmpzfjkozkhnb6ccwkgjp2r7ewqwa
+  build/compatibility_fallback_handler.json: bafybeiaviobfcfldps5ka32eo3sy2fhqn55ivrmevyzmcbjhy26jfiwh2u
   contract.py: bafybeictfg3iqqffo27pd2ncea2ft7u4ikfmcquljfoq74p5sg6goscgai
 fingerprint_ignore_patterns: []
 contracts: []
