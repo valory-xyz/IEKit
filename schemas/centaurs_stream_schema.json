@@ -173,9 +173,6 @@
                 "createdDate": {
                     "type": "number"
                 },
-                "execute": {
-                    "type": "boolean"
-                },
                 "action_id": {
                     "type": "string"
                 },
@@ -188,7 +185,7 @@
                     }
                 }
             },
-            "required": ["text", "posted", "voters", "proposer", "request_id", "createdDate", "execute", "executionAttempts"],
+            "required": ["text", "posted", "voters", "proposer", "request_id", "createdDate", "executionAttempts"],
             "additionalProperties": false
         },
         "centaur": {

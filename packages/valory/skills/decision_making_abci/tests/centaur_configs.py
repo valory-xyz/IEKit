@@ -52,7 +52,6 @@ ENABLED_CENTAUR = {
                 {
                     "request_id": "dummy_id_1",
                     "posted": False,
-                    "execute": True,
                     "text": "My agreed tweet: execute",
                     "voters": [
                         {"0x6c6766E04eF971367D27E720d1d161a9B495D647": 0},
@@ -63,7 +62,6 @@ ENABLED_CENTAUR = {
                 {
                     "request_id": "dummy_id_2",
                     "posted": False,
-                    "execute": False,
                     "text": "My agreed tweet: dont execute",
                     "voters": [
                         {"0x6c6766E04eF971367D27E720d1d161a9B495D647": 0},

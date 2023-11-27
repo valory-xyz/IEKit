@@ -56,7 +56,6 @@ class WeekInOlasCreatePreparation(TaskPreparation):
             "text": self.synchronized_data.summary_tweets,
             "posted": False,
             "voters": [],
-            "execute": False,
             "proposer": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",  # safe address
             "request_id": str(uuid.UUID(int=int(self.now_utc.timestamp()))),
             "createdDate": self.now_utc.timestamp(),
