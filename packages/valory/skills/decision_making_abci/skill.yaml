@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
-  behaviours.py: bafybeiabz4k7tkjihtolz6fo5lihckjkuwcxkh6aideruwyh3texicrffe
+  behaviours.py: bafybeihyre7n4mvopclfm26xs3jnopd7dss426oyriyqgs6eddlgra5oim
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
   fsm_specification.yaml: bafybeietp4zh3uf2ethzmqa64aywu5oabmwbqk3i7vtzom2j3iqu2qaknq
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
@@ -19,7 +19,7 @@ fingerprint:
   tasks/read_stream_preparation.py: bafybeiespz6kzkzvrjjf3d6ffwse3rufuyrrab3axvg64pxw4jj6zzhwny
   tasks/score_preparations.py: bafybeieiesjkyjbcvqut3l6nlzcwpidibsmo3mz7j6p54lbqzspfcf3ram
   tasks/task_preparations.py: bafybeie4yxmbtijk2c4gyjb5h3euuhfddyaysb4aiknufldsbtmpdo5ocu
-  tasks/tweet_validation_preparation.py: bafybeicot6k5anjmrt3gtkbluigleaxlfhw77krn7oofjhyurzz6isutzi
+  tasks/tweet_validation_preparation.py: bafybeidxkvwew7rcod5jpq77todeqt4dagcat2ph6kni5azffqwvydnkt4
   tasks/twitter_preparation.py: bafybeibayt6qq36f5iikxj42qrjv55o4ymshukje4kb4stmhzlrcqqs7bi
   tasks/week_in_olas_preparations.py: bafybeig32zkcyhrjh5d6fljruocgcxop27pk3yrrif5v2gunnoca3gu4cy
   tasks/write_stream_preparation.py: bafybeifl4j7s575ts6x4msntymkempwguj4yypmxy2xjmffknn7qhkzfo4
