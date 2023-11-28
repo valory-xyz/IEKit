@@ -137,6 +137,38 @@
             },
             "required": ["id", "dateCreated", "verified"]
         },
+        "proposer": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "signature": {
+                    "type": "string"
+                },
+                "verified": {
+                    "type": ["boolean", "null"]
+                }
+            },
+            "required": ["address", "signature", "verified"],
+            "additionalItems": false
+        },
+        "voter": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "signature": {
+                    "type": "string"
+                },
+                "votingPower": {
+                    "type": ["number"]
+                }
+            },
+            "required": ["address", "signature", "votingPower"],
+            "additionalItems": false
+        },
         "scheduled_tweet_data": {
             "type": "object",
             "properties": {
@@ -148,24 +180,14 @@
                 },
                 "voters": {
                     "type": "array",
-                    "uniqueItems" : true,
                     "items": {
-                        "type": "object",
-                        "propertyNames": {
-                            "pattern": "^0x[a-fA-F0-9]{40}$"
-                        },
-                        "patternProperties": {
-                            "^0x[a-fA-F0-9]{40}$": {
-                                "type": "string"
-                            }
-                        },
-                        "additionalProperties": false,
-                        "minProperties": 1,
-                        "maxProperties": 1
+                        "items": {
+                            "$ref": "#/definitions/voter"
+                        }
                     }
                 },
                 "proposer": {
-                    "type": "string"
+                    "$ref": "#/definitions/proposer"
                 },
                 "request_id": {
                     "type": "string"
@@ -185,7 +207,7 @@
                     }
                 }
             },
-            "required": ["text", "posted", "voters", "proposer", "request_id", "createdDate", "executionAttempts"],
+            "required": ["request_id", "createdDate", "text", "posted", "proposer", "voters",  "executionAttempts", "action_id"],
             "additionalProperties": false
         },
         "centaur": {
