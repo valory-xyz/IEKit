@@ -165,11 +165,13 @@ class UniswapV2ERC20Contract(Contract):
         """Gets an account's balance."""
         contract_instance = cls.get_instance(ledger_api, contract_address)
 
-        return ledger_api.contract_method_call(
+        balance = ledger_api.contract_method_call(
             contract_instance=contract_instance,
             method_name="balanceOf",
             owner=owner_address,
         )
+
+        return {"balance": balance}
 
     @classmethod
     def get_transaction_transfer_logs(  # type: ignore  # pylint: disable=too-many-arguments,too-many-locals,unused-argument,arguments-differ

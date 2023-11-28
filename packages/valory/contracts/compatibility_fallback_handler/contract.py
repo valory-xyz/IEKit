@@ -63,11 +63,13 @@ class CompatibilityFallbackHandlerContract(Contract):
         return {"valid": result.hex() == MAGIC_VALUE}
 
     @classmethod
-    def get_code(
+    def is_contract(
         cls,
         ledger_api: EthereumApi,
-        address: str,
+        contract_address: str,
+        wallet_address: str,
     ) -> Optional[JSONLike]:
         """Gets the contract code."""
 
-        return ledger_api.api.get_code(address)
+        code = ledger_api.api.eth.get_code(wallet_address).hex()
+        return {"is_contract": code != "0x"}

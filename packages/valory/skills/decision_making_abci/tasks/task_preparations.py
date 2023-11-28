@@ -136,6 +136,9 @@ class TaskPreparation:
 
         # Check extra conditions
         if not self.check_extra_conditions():
+            self.logger.info(
+                f"[{self.__class__.__name__}]: extra conditions returned False"
+            )
             return False
 
         # Run

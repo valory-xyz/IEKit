@@ -43,7 +43,6 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 
 TWEET_CONSENSUS_WVEOLAS_WEI = 2e6 * 1e18  # 2M wveOLAS to wei
 OLAS_ADDRESS_ETHEREUM = "0x0001a500a6b18995b03f44bb040a5ffc28e45cb0"
-OLAS_ADDRESS_GNOSIS = "0xce11e14225575945b8e6dc0d4f2dd4c570f79d9f"
 HTTP_OK = 200
 
 
@@ -167,6 +166,7 @@ class TweetValidationPreparation(TaskPreparation):
             is_valid = yield from self.validate_signature(
                 message_hash, address, signature
             )
+            self.logger.info(f"Is the vote valid? {is_valid}")
 
             if is_valid:
                 self.logger.info("Valid")
@@ -201,34 +201,33 @@ class TweetValidationPreparation(TaskPreparation):
         for voter in tweet["voters"]:
             address = list(voter.keys())[0]
             voting_power = yield from self.get_voting_power(address)
-            total_voting_power += voting_power
+            total_voting_power += cast(int, voting_power)
+
+        consensus = total_voting_power >= TWEET_CONSENSUS_WVEOLAS_WEI
 
         self.behaviour.context.logger.info(
-            f"Voting power is {total_voting_power} for tweet {tweet['text']}"
+            f"Voting power is {total_voting_power} for tweet {tweet['text']}. Executing? {consensus}"
         )
-        return total_voting_power >= TWEET_CONSENSUS_WVEOLAS_WEI
+
+        return consensus
 
     def get_voting_power(self, address: str):
         """Get the given address's balance."""
-        olas_balance_ethereum = (
-            yield from self.get_token_balance(
-                OLAS_ADDRESS_ETHEREUM, address, "ethereum"
-            )
-            or 0
+        olas_balance = yield from self.get_token_balance(
+            OLAS_ADDRESS_ETHEREUM, address, "ethereum"
         )
-        olas_balance_gnosis = (
-            yield from self.get_token_balance(OLAS_ADDRESS_GNOSIS, address, "gnosis")
-            or 0
-        )
-        voting_power = cast(int, olas_balance_ethereum) + cast(int, olas_balance_gnosis)
+
+        if not olas_balance:
+            olas_balance = 0
+
         self.behaviour.context.logger.info(
-            f"Voting power is {voting_power} for address {address}"
+            f"Voting power is {olas_balance} for address {address}"
         )
-        return voting_power
+        return olas_balance
 
     def get_token_balance(
         self, token_address, owner_address, chain_id
-    ) -> Generator[None, None, Optional[int]]:
+    ) -> Generator[None, None, Optional[float]]:
         """Get the given address's balance."""
         response = yield from self.behaviour.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
@@ -244,7 +243,8 @@ class TweetValidationPreparation(TaskPreparation):
             )
             return None
 
-        return response.state.body
+        balance = int(response.state.body["balance"]) / 1e18  # to olas
+        return balance
 
     def is_contract(self, address):
         """Check if the account is a smart contract"""
@@ -252,10 +252,10 @@ class TweetValidationPreparation(TaskPreparation):
         # Call get_code
         contract_api_msg = yield from self.behaviour.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
-            contract_address=self.params.dynamic_contribution_contract_address,
+            contract_address="0x000000000000000000000000000000000000000",  # this is a ledger api call, not needed
             contract_id=str(CompatibilityFallbackHandlerContract.contract_id),
-            contract_callable="get_code",
-            address=address,
+            contract_callable="is_contract",
+            wallet_address=address,
         )
         if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
             self.behaviour.context.logger.error(
@@ -263,9 +263,11 @@ class TweetValidationPreparation(TaskPreparation):
             )
             return False
 
-        is_valid = cast(bool, contract_api_msg.state.body["valid"])
+        is_contract = contract_api_msg.state.body["is_contract"]
 
-        return is_valid
+        self.logger.info(f"is_contract: {is_contract}")
+
+        return is_contract
 
     def validate_safe_signature(self, message_hash, address):
         """Validate a safe signature"""
