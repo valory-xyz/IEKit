@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
-  behaviours.py: bafybeigjnmpfbgmbqajqkgtgphmjizj6dpgtmqbvon4votvneravayq2wm
+  behaviours.py: bafybeiafvi2rm2djx73vzr3vy22t6j2we54umicaixr6apg5mm4nt6fkae
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
   fsm_specification.yaml: bafybeietp4zh3uf2ethzmqa64aywu5oabmwbqk3i7vtzom2j3iqu2qaknq
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
@@ -18,8 +18,8 @@ fingerprint:
   tasks/llm_preparation.py: bafybeihbuzwwasx37mxali34qw6tuunddenwricwxyhwa2qx2r43jnzjsu
   tasks/read_stream_preparation.py: bafybeiafka2ewgpznplr3ddugd5arag45n7sqdymjqcgycxiunzru3upjm
   tasks/score_preparations.py: bafybeifyq7545rwmt4onmxnb4546fdxdsfhkdajdl2sfbvmbvdht6dnyk4
-  tasks/task_preparations.py: bafybeifd6oajoc346fmy7towgmmpjlthp6uooxzxg545ocrpmlkhiwahz4
-  tasks/tweet_validation_preparation.py: bafybeigvq5z4swjdtvgo3u2n7xxwzbgyhwdek5agq4dsh3i37a2g4oh56u
+  tasks/task_preparations.py: bafybeidb2rowxlkhdmtbd2b2jppjrrenit6mvu6ygrmgzwd7godcsqbxem
+  tasks/tweet_validation_preparation.py: bafybeieep6557jche6bzqedabtogiozaak5gfbh65mbks2sbohegxdndce
   tasks/twitter_preparation.py: bafybeigoojes5j6za7i2uxs4wb363cvwnlwvvolpzdhjbh3gr42figuvpe
   tasks/week_in_olas_preparations.py: bafybeiei64bnalddu44ymphfctjhdpswn6hjaia7ubhk5hllr4rsef4qsq
   tasks/write_stream_preparation.py: bafybeih3ktnyi54rsd76n5zjnlur6v5rjuhwktduioekdrrqtokhul7q7y
@@ -34,8 +34,8 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/uniswap_v2_erc20:0.1.0:bafybeibtxm6piivwtxynbvmgksfgip6l3srafpzeb7zizmvxjr3f22f7ve
-- valory/compatibility_fallback_handler:0.1.0:bafybeibhwblbvyeasnkyvfarnuin2pprfgxk3yu3ovacxpwtg5ltzrhs6m
+- valory/uniswap_v2_erc20:0.1.0:bafybeidfqycr4lsyyj6iacsothtjusanjf2qgntn6mcqsqeiedtm5cxbhq
+- valory/compatibility_fallback_handler:0.1.0:bafybeiacphxonfnokxkmt3xmttsubj543c2fufnw7d65haahvqujqzikvu
 protocols:
 - valory/contract_api:1.0.0:bafybeialhbjvwiwcnqq3ysxcyemobcbie7xza66gaofcvla5njezkvhcka
 skills:
