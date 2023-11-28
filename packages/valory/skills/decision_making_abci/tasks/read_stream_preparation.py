@@ -32,6 +32,7 @@ class ReadCentaursPreparation(TaskPreparation):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
+        yield
         return True
 
     def _pre_task(self):
@@ -59,6 +60,7 @@ class ReadContributeDBPreparation(TaskPreparation):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
+        yield
         return True
 
     def _pre_task(self):
@@ -84,6 +86,7 @@ class ReadManualPointsPreparation(TaskPreparation):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
+        yield
         return True
 
     def _pre_task(self):

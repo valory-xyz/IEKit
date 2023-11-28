@@ -19,23 +19,12 @@
 
 """This package contains the logic for task preparations."""
 
-import json
-from typing import Generator, Optional, cast
+from eth_account.messages import encode_defunct
 
-from eth_account.account import Account
-from eth_account.messages import (
-    _hash_eip191_message,
-    encode_defunct,
-    encode_structured_data,
-)
-from eth_utils.exceptions import ValidationError
-
-from packages.valory.contracts.compatibility_fallback_handler.contract import (
-    CompatibilityFallbackHandlerContract,
-)
-from packages.valory.contracts.uniswap_v2_erc20.contract import UniswapV2ERC20Contract
-from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.decision_making_abci.rounds import Event
+from packages.valory.skills.decision_making_abci.tasks.signature_validation import (
+    SignatureValidationMixin,
+)
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
 )
@@ -43,47 +32,9 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 
 TWEET_CONSENSUS_WVEOLAS_WEI = 2e6 * 1e18  # 2M wveOLAS to wei
 OLAS_ADDRESS_ETHEREUM = "0x0001a500a6b18995b03f44bb040a5ffc28e45cb0"
-HTTP_OK = 200
 
 
-def fix_message_types(message_object):
-    """Fix types so the message is encodable"""
-    # timestamp and choice need to be integers
-    message_object["message"]["timestamp"] = int(message_object["message"]["timestamp"])
-    message_object["message"]["choice"] = int(message_object["message"]["choice"])
-
-    # proposal needs to be bytes
-    message_object["message"]["proposal"] = bytes.fromhex(
-        message_object["message"]["proposal"][2:]
-    )
-
-    return message_object
-
-
-def build_safe_typed_message(message_object):
-    """Build the safe message for a typed message"""
-    encoded = encode_structured_data(message_object)
-    hashed = _hash_eip191_message(encoded)
-    return hashed
-
-
-def build_safe_text_message(text):
-    """Build the safe message for a raw/text message"""
-    encoded = encode_defunct(text=text)
-    hashed = _hash_eip191_message(encoded)
-    return hashed
-
-
-def validate_eoa_signature(message_hash, expected_address, signature):
-    """Validate an EOA signature"""
-    try:
-        address = Account.recover_message(message_hash, signature=signature)
-        return address == expected_address
-    except ValidationError:
-        return False
-
-
-class TweetValidationPreparation(TaskPreparation):
+class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
     """TweetValidationPreparation"""
 
     task_name = "tweet_validation"
@@ -91,6 +42,7 @@ class TweetValidationPreparation(TaskPreparation):
 
     def check_extra_conditions(self):
         """Validate Twitter credentials for the current centaur"""
+        yield
         current_centaur = self.synchronized_data.centaurs_data[
             self.synchronized_data.current_centaur_index
         ]
@@ -121,205 +73,25 @@ class TweetValidationPreparation(TaskPreparation):
         centaurs_data = self.synchronized_data.centaurs_data
         current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
 
-        removal_ids = []
         for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
-            self.logger.info(f"Processing tweet: {tweet}")
             # Ignore posted tweets
             if tweet["posted"]:
                 continue
 
-            # Remove invalid votes and mark tweet for removal if needed
-            tweet = yield from self.clean_votes(tweet)
-            if not tweet["voters"]:
-                removal_ids.append(tweet["request_id"])
+            # Ignore already processed proposals
+            if tweet["proposer"]["verified"] is not None:
                 continue
 
-            # Ignore tweet if it is not market for execution
-            if not tweet["executionAttempts"]:
-                continue
-
-            # Mark execution for success or failure
-            is_tweet_executable = yield from self.is_tweet_executable(tweet)
-            tweet["executionAttempts"][-1]["verified"] = is_tweet_executable
-
-        # Remove invalid tweets
-        filtered_tweets = [
-            t
-            for t in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]
-            if t["request_id"] not in removal_ids
-        ]
-        current_centaur["plugins_data"]["scheduled_tweet"]["tweets"] = filtered_tweets
+            # Verify proposer signature
+            message = f"I am signing a message to verify that I propose a tweet starting with {tweet['text'][:10]}"
+            message_hash = encode_defunct(text=message)
+            is_valid = yield from self.validate_signature(
+                message_hash,
+                tweet["proposer"]["address"],
+                tweet["proposer"]["signature"],
+            )
+            tweet["proposer"]["verified"] = is_valid
 
         updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
 
         return updates, None
-
-    def clean_votes(self, tweet):
-        """Remove invalid signatures"""
-        message_hash = encode_defunct(text=tweet["text"])
-
-        valid_voters = []
-        for v in tweet["voters"]:
-            self.logger.info(f"Processing voter: {v}")
-            address = list(v.keys())[0]
-            signature = list(v.values())[0]
-            is_valid = yield from self.validate_signature(
-                message_hash, address, signature
-            )
-            self.logger.info(f"Is the vote valid? {is_valid}")
-
-            if is_valid:
-                self.logger.info("Valid")
-                valid_voters.append(v)
-        tweet["voters"] = valid_voters
-        return tweet
-
-    def is_tweet_executable(self, tweet: dict):
-        """Check whether a tweet can be published"""
-
-        # Reject tweets with no execution attempts
-        if not tweet["executionAttempts"]:
-            return False
-
-        # Reject already processed tweets
-        if tweet["executionAttempts"][-1]["verified"] in [True, False]:
-            return False
-
-        # At this point, the tweet is awaiting to be published [verified=None]
-
-        # Reject tweet that do not have enough voting power
-        consensus = yield from self.check_tweet_consensus(tweet)
-        if not consensus:
-            return False
-
-        return True
-
-    def check_tweet_consensus(self, tweet: dict):
-        """Check whether users agree on posting"""
-        total_voting_power = 0
-
-        for voter in tweet["voters"]:
-            address = list(voter.keys())[0]
-            voting_power = yield from self.get_voting_power(address)
-            total_voting_power += cast(int, voting_power)
-
-        consensus = total_voting_power >= TWEET_CONSENSUS_WVEOLAS_WEI
-
-        self.behaviour.context.logger.info(
-            f"Voting power is {total_voting_power} for tweet {tweet['text']}. Executing? {consensus}"
-        )
-
-        return consensus
-
-    def get_voting_power(self, address: str):
-        """Get the given address's balance."""
-        olas_balance = yield from self.get_token_balance(
-            OLAS_ADDRESS_ETHEREUM, address, "ethereum"
-        )
-
-        if not olas_balance:
-            olas_balance = 0
-
-        self.behaviour.context.logger.info(
-            f"Voting power is {olas_balance} for address {address}"
-        )
-        return olas_balance
-
-    def get_token_balance(
-        self, token_address, owner_address, chain_id
-    ) -> Generator[None, None, Optional[float]]:
-        """Get the given address's balance."""
-        response = yield from self.behaviour.get_contract_api_response(
-            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
-            contract_address=token_address,
-            contract_id=str(UniswapV2ERC20Contract.contract_id),
-            contract_callable="balance_of",
-            owner_address=owner_address,
-            chain_id=chain_id,
-        )
-        if response.performative != ContractApiMessage.Performative.STATE:
-            self.behaviour.context.logger.error(
-                f"Couldn't get the balance for address {chain_id}::{owner_address}: {response.performative}"
-            )
-            return None
-
-        balance = int(response.state.body["balance"]) / 1e18  # to olas
-        return balance
-
-    def is_contract(self, address):
-        """Check if the account is a smart contract"""
-
-        # Call get_code
-        contract_api_msg = yield from self.behaviour.get_contract_api_response(
-            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
-            contract_address="0x000000000000000000000000000000000000000",  # this is a ledger api call, not needed
-            contract_id=str(CompatibilityFallbackHandlerContract.contract_id),
-            contract_callable="is_contract",
-            wallet_address=address,
-        )
-        if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
-            self.behaviour.context.logger.error(
-                f"Error getting the code for address {address}: [{contract_api_msg.performative}]"
-            )
-            return False
-
-        is_contract = contract_api_msg.state.body["is_contract"]
-
-        self.logger.info(f"is_contract: {is_contract}")
-
-        return is_contract
-
-    def validate_safe_signature(self, message_hash, address):
-        """Validate a safe signature"""
-        # Get the message from the hash using Safe Transaction Service
-        url = f"https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/"
-
-        response = yield from self.behaviour.get_http_response(method="GET", url=url)
-
-        # Check response status
-        if response.status_code != HTTP_OK:
-            return False
-
-        response_json = json.loads(response.body)
-
-        message = response_json["message"]
-        safe_address = response_json["safe"]
-        signature = response_json["preparedSignature"]
-
-        if address != safe_address:
-            return False
-
-        if isinstance(message, str):
-            safe_message = build_safe_text_message(message)
-        else:
-            safe_message = build_safe_typed_message(fix_message_types(message))
-
-        # Call CompatibilityFallbackHandler::isValidSignature
-        contract_api_msg = yield from self.behaviour.get_contract_api_response(
-            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
-            contract_address=self.params.dynamic_contribution_contract_address,
-            contract_id=str(CompatibilityFallbackHandlerContract.contract_id),
-            contract_callable="is_valid_signature",
-            safe_message=safe_message,
-            signature=signature,
-        )
-        if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
-            self.behaviour.context.logger.error(
-                f"Error verifying the signature [{contract_api_msg.performative}]"
-            )
-            return False
-
-        is_valid = cast(dict, contract_api_msg.state.body["valid"])
-
-        self.behaviour.context.logger.info(f"Signature validity: {is_valid}")
-
-        return is_valid
-
-    def validate_signature(self, message_hash, address, signature):
-        """Validate signatures"""
-        is_contract = yield from self.is_contract(address)
-        if is_contract:
-            is_valid = yield from self.validate_safe_signature(message_hash, address)
-            return is_valid
-        else:
-            return validate_eoa_signature(message_hash, address, signature)

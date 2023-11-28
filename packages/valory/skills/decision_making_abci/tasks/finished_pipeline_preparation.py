@@ -31,6 +31,7 @@ class FinishedPipelinePreparation(TaskPreparation):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
+        yield
         return True
 
     def _pre_task(self):

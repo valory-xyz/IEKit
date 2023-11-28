@@ -246,7 +246,7 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
             )
 
             if next_task_preparation:
-                pre_updates, pre_event = next_task_preparation.pre_task()
+                pre_updates, pre_event = yield from next_task_preparation.pre_task()
                 self.context.logger.info(
                     f"Pre task updates = {pre_updates}, pre event = {pre_event}"
                 )

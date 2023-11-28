@@ -135,7 +135,8 @@ class TaskPreparation:
             return False
 
         # Check extra conditions
-        if not self.check_extra_conditions():
+        proceed = yield from self.check_extra_conditions()
+        if not proceed:
             self.logger.info(
                 f"[{self.__class__.__name__}]: extra conditions returned False"
             )
@@ -155,7 +156,8 @@ class TaskPreparation:
 
     def pre_task(self):
         """Task preprocessing"""
-        if self.check_conditions():
+        proceed = yield from self.check_conditions()
+        if not proceed:
             self.logger.info(f"Running {self.__class__.__name__}._pre_task()")
             return self._pre_task()
         self.logger.info(f"Skipping {self.__class__.__name__}._pre_task()")

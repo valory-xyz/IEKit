@@ -19,7 +19,16 @@
 
 """This package contains the logic for task preparations."""
 
+from typing import Generator, Optional, cast
+
+from eth_account.messages import encode_defunct
+
+from packages.valory.contracts.uniswap_v2_erc20.contract import UniswapV2ERC20Contract
+from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.decision_making_abci.rounds import Event
+from packages.valory.skills.decision_making_abci.tasks.signature_validation import (
+    SignatureValidationMixin,
+)
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
 )
@@ -35,6 +44,7 @@ class TwitterPreparation(TaskPreparation):
 
     def check_extra_conditions(self):
         """Validate Twitter credentials for the current centaur"""
+        yield
         current_centaur = self.synchronized_data.centaurs_data[
             self.synchronized_data.current_centaur_index
         ]
@@ -133,11 +143,15 @@ class DailyTweetPreparation(TwitterPreparation):
         return updates, event
 
 
-class ScheduledTweetPreparation(TwitterPreparation):
+class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
     """ScheduledTweetPreparation"""
 
     task_name = "scheduled_tweet"
     task_event = Event.SCHEDULED_TWEET.value
+
+    def __init__(self, synchronized_data, params, logger, now_utc, behaviour) -> None:
+        super().__init__(synchronized_data, params, logger, now_utc, behaviour)
+        self.pending_tweets = []
 
     def _post_task(self):
         """Task postprocessing"""
@@ -146,7 +160,7 @@ class ScheduledTweetPreparation(TwitterPreparation):
         # Set the scheduled tweet as posted
         centaurs_data = updates["centaurs_data"]
         current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
-        pending_tweets = self.get_pending_tweets()
+        pending_tweets = yield from self.get_pending_tweets()
         tweet_ids = self.synchronized_data.tweet_ids
         if not pending_tweets:
             return updates, event
@@ -169,8 +183,7 @@ class ScheduledTweetPreparation(TwitterPreparation):
 
     def get_tweet(self):
         """Get the tweet"""
-        pending_tweets = self.get_pending_tweets()
-        return pending_tweets[0]["text"]
+        return self.pending_tweets[0]["text"]
 
     def check_extra_conditions(self):
         """Check extra conditions"""
@@ -178,7 +191,8 @@ class ScheduledTweetPreparation(TwitterPreparation):
             self.synchronized_data.current_centaur_index
         ]
 
-        if not super().check_extra_conditions():
+        proceed = yield from super().check_extra_conditions()
+        if not proceed:
             return False
 
         if "scheduled_tweet" not in current_centaur["plugins_data"]:
@@ -198,8 +212,8 @@ class ScheduledTweetPreparation(TwitterPreparation):
             ):
                 return False
 
-        pending_tweets = self.get_pending_tweets()
-        if not pending_tweets:
+        self.pending_tweets = yield from self.get_pending_tweets()
+        if not self.pending_tweets:
             return False
 
         return True
@@ -212,15 +226,93 @@ class ScheduledTweetPreparation(TwitterPreparation):
 
         pending_tweets = []
         for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
+            # Ignore posted tweets
             if tweet["posted"]:
                 continue
 
+            # Ignore unverified proposals
+            if not tweet["proposer"]["verified"]:
+                continue
+
+            # Ignore tweets not marked for posting
             if not tweet["executionAttempts"]:
                 continue
 
-            if not tweet["executionAttempts"][-1]["verified"]:
+            if tweet["executionAttempts"][-1]["verified"] is not None:
                 continue
+
+            # At this point, the tweet is awaiting to be published [verified=None]
+
+            # Ignore tweet with no voters
+            if not tweet["voters"]:
+                continue
+
+            # Mark execution for success or failure
+            is_tweet_executable = yield from self.check_tweet_consensus(tweet)
+            tweet["executionAttempts"][-1]["verified"] = is_tweet_executable
 
             pending_tweets.append(tweet)
 
         return pending_tweets
+
+    def check_tweet_consensus(self, tweet: dict):
+        """Check whether users agree on posting"""
+        total_voting_power = 0
+
+        for voter in tweet["voters"]:
+            # Verify signature
+            message = f"I am signing a message to verify that I approve the tweet starting with {tweet['text'][:10]}"
+            message_hash = encode_defunct(text=message)
+            is_valid = yield from self.validate_signature(
+                message_hash, voter["address"], voter["signature"]
+            )
+
+            if not is_valid:
+                continue
+
+            # Get voting power
+            voting_power = yield from self.get_voting_power(voter["address"])
+            total_voting_power += cast(int, voting_power)
+
+        consensus = total_voting_power >= TWEET_CONSENSUS_WVEOLAS_WEI
+
+        self.behaviour.context.logger.info(
+            f"Voting power is {total_voting_power} for tweet {tweet['text']}. Executing? {consensus}"
+        )
+
+        return consensus
+
+    def get_voting_power(self, address: str):
+        """Get the given address's balance."""
+        olas_balance = yield from self.get_token_balance(
+            OLAS_ADDRESS_ETHEREUM, address, "ethereum"
+        )
+
+        if not olas_balance:
+            olas_balance = 0
+
+        self.behaviour.context.logger.info(
+            f"Voting power is {olas_balance} for address {address}"
+        )
+        return olas_balance
+
+    def get_token_balance(
+        self, token_address, owner_address, chain_id
+    ) -> Generator[None, None, Optional[float]]:
+        """Get the given address's balance."""
+        response = yield from self.behaviour.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
+            contract_address=token_address,
+            contract_id=str(UniswapV2ERC20Contract.contract_id),
+            contract_callable="balance_of",
+            owner_address=owner_address,
+            chain_id=chain_id,
+        )
+        if response.performative != ContractApiMessage.Performative.STATE:
+            self.behaviour.context.logger.error(
+                f"Couldn't get the balance for address {chain_id}::{owner_address}: {response.performative}"
+            )
+            return None
+
+        balance = int(response.state.body["balance"]) / 1e18  # to olas
+        return balance

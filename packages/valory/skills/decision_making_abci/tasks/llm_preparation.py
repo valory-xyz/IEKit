@@ -45,6 +45,7 @@ class LLMPreparation(TaskPreparation):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
+        yield
 
         # This task should only be run if Twitter and Orbis task are going to be run
         if (

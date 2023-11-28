@@ -29,6 +29,7 @@ class WriteStreamPreparation(TaskPreparation):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
+        yield
         return True
 
 
@@ -38,7 +39,8 @@ class OrbisPreparation(WriteStreamPreparation):
     def check_extra_conditions(self):
         """Validate Twitter credentials for the current centaur"""
 
-        if not super().check_extra_conditions():
+        proceed = yield from super().check_extra_conditions()
+        if not proceed:
             return False
 
         current_centaur = self.synchronized_data.centaurs_data[
@@ -152,7 +154,8 @@ class UpdateCentaursPreparation(WriteStreamPreparation):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
-        if not super().check_extra_conditions():
+        proceed = yield from super().check_extra_conditions()
+        if not proceed:
             return False
 
         return self.synchronized_data.has_centaurs_changes
@@ -193,7 +196,8 @@ class WriteContributeDBPreparation(WriteStreamPreparation):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
-        if not super().check_extra_conditions():
+        proceed = yield from super().check_extra_conditions()
+        if not proceed:
             return False
 
         return self.synchronized_data.pending_write
