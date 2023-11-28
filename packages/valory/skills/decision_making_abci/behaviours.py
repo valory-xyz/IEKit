@@ -19,7 +19,6 @@
 
 """This package contains round behaviours of DecisionMakingAbciApp."""
 
-import inspect
 import json
 from abc import ABC
 from datetime import datetime, timezone
