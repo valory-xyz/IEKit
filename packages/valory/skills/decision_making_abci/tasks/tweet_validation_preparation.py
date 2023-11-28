@@ -317,6 +317,7 @@ class TweetValidationPreparation(TaskPreparation):
         """Validate signatures"""
         is_contract = yield from self.is_contract(address)
         if is_contract:
-            yield from self.validate_safe_signature(message_hash, address)
+            is_valid = yield from self.validate_safe_signature(message_hash, address)
+            return is_valid
         else:
             return validate_eoa_signature(message_hash, address, signature)

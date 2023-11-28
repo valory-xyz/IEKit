@@ -221,16 +221,23 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
                         previous_task_preparation.post_task
                     )
 
-                    if is_generator:
-                        (
-                            post_updates,
-                            post_event,
-                        ) = yield from previous_task_preparation.post_task()
-                    else:
-                        (
-                            post_updates,
-                            post_event,
-                        ) = previous_task_preparation.post_task()
+                    self.context.logger.info(f"is_generator: {is_generator}")
+
+                    # if is_generator:
+                    #     (
+                    #         post_updates,
+                    #         post_event,
+                    #     ) = yield from previous_task_preparation.post_task()
+                    # else:
+                    #     (
+                    #         post_updates,
+                    #         post_event,
+                    #     ) = previous_task_preparation.post_task()
+
+                    (
+                        post_updates,
+                        post_event,
+                    ) = yield from previous_task_preparation.post_task()
 
                     self.context.logger.info(
                         f"Post task updates = {post_updates}, post event = {post_event}"

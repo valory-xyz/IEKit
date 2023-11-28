@@ -161,7 +161,8 @@ class TaskPreparation:
     def post_task(self):
         """Task postprocessing"""
         self.logger.info(f"Running {self.__class__.__name__}._post_task()")
-        return self._post_task()
+        updates, event = yield from self._post_task()
+        return updates, event
 
     def _post_task(self):
         """Preparations after running the task"""

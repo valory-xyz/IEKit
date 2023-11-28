@@ -100,6 +100,7 @@ class TwitterPreparation(TaskPreparation):
             current_centaur["actions"] = twitter_action
 
         updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
+        yield
         return updates, None
 
     def get_tweet(self):
@@ -119,7 +120,7 @@ class DailyTweetPreparation(TwitterPreparation):
 
     def _post_task(self):
         """Task postprocessing"""
-        updates, event = super()._post_task()
+        updates, event = yield from super()._post_task()
 
         # Update the last run time
         centaurs_data = updates["centaurs_data"]
@@ -129,7 +130,6 @@ class DailyTweetPreparation(TwitterPreparation):
         ] = self.now_utc.strftime("%Y-%m-%d %H:%M:%S %Z")
 
         updates["centaurs_data"] = centaurs_data
-
         return updates, event
 
 
@@ -141,7 +141,7 @@ class ScheduledTweetPreparation(TwitterPreparation):
 
     def _post_task(self):
         """Task postprocessing"""
-        updates, event = super()._post_task()
+        updates, event = yield from super()._post_task()
 
         # Set the scheduled tweet as posted
         centaurs_data = updates["centaurs_data"]
@@ -165,7 +165,6 @@ class ScheduledTweetPreparation(TwitterPreparation):
                 break
 
         updates["centaurs_data"] = centaurs_data
-
         return updates, event
 
     def get_tweet(self):

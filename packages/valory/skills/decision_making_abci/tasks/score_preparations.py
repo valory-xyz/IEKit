@@ -42,4 +42,5 @@ class ScorePreparation(TaskPreparation):
     def _post_task(self):
         """Preparations after running the task"""
         updates = {}
+        yield
         return updates, None

@@ -81,12 +81,12 @@ class OrbisPreparation(WriteStreamPreparation):
             current_centaur["actions"] = orbis_action
 
         updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
-
+        yield
         return updates, None
 
 
 class DailyOrbisPreparation(OrbisPreparation):
-    """DailyTweetPreparation"""
+    """DailyOrbisPreparation"""
 
     task_name = "daily_orbis"
     task_event = Event.DAILY_ORBIS.value
@@ -131,7 +131,7 @@ class DailyOrbisPreparation(OrbisPreparation):
 
     def _post_task(self):
         """Preparations after running the task"""
-        updates, event = super()._post_task()
+        updates, event = yield from super()._post_task()
 
         # Update the last run time
         centaurs_data = self.synchronized_data.centaurs_data
@@ -141,7 +141,6 @@ class DailyOrbisPreparation(OrbisPreparation):
         ] = self.now_utc.strftime("%Y-%m-%d %H:%M:%S %Z")
 
         updates = {"centaurs_data": centaurs_data}
-
         return updates, event
 
 
@@ -182,6 +181,7 @@ class UpdateCentaursPreparation(WriteStreamPreparation):
         updates = {
             "has_centaurs_changes": False,
         }
+        yield
         return updates, None
 
 
@@ -222,4 +222,5 @@ class WriteContributeDBPreparation(WriteStreamPreparation):
         updates = {
             "pending_write": False,
         }
+        yield
         return updates, None

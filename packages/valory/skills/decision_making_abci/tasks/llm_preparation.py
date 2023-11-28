@@ -119,6 +119,7 @@ class LLMPreparation(TaskPreparation):
             self.logger.info("The tweet is too long")
             if self.synchronized_data.re_prompt_attempts <= MAX_REPROMPTS:
                 self.logger.info("Re-prompting")
+                yield
                 return self._pre_task(reprompt=True)
             else:  # hard-trim
                 self.logger.info("Trimming the tweet")
@@ -127,6 +128,7 @@ class LLMPreparation(TaskPreparation):
         updates = {
             "daily_tweet": tweet,
         }
+        yield
         return updates, None
 
     def get_max_chars(self):

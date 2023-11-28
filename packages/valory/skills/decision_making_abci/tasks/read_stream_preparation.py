@@ -47,6 +47,7 @@ class ReadCentaursPreparation(TaskPreparation):
         updates = {
             "current_centaur_index": 0,  # reset the centaur index after reading
         }
+        yield
         return updates, None
 
 
@@ -71,6 +72,7 @@ class ReadContributeDBPreparation(TaskPreparation):
     def _post_task(self):
         """Preparations after running the task"""
         updates = {}
+        yield
         return updates, None
 
 
@@ -95,4 +97,5 @@ class ReadManualPointsPreparation(TaskPreparation):
     def _post_task(self):
         """Preparations after running the task"""
         updates = {}
+        yield
         return updates, None
