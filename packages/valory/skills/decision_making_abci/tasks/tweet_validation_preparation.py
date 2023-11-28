@@ -124,12 +124,13 @@ class TweetValidationPreparation(TaskPreparation):
 
         removal_ids = []
         for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
+            self.logger.info(f"Processing tweet: {tweet}")
             # Ignore posted tweets
             if tweet["posted"]:
                 continue
 
             # Remove invalid votes and mark tweet for removal if needed
-            tweet = self.clean_votes(tweet)
+            tweet = yield from self.clean_votes(tweet)
             if not tweet["voters"]:
                 removal_ids.append(tweet["request_id"])
                 continue
@@ -139,7 +140,7 @@ class TweetValidationPreparation(TaskPreparation):
                 continue
 
             # Mark execution for success or failure
-            is_tweet_executable = self.is_tweet_executable(tweet)
+            is_tweet_executable = yield from self.is_tweet_executable(tweet)
             tweet["executionAttempts"][-1]["verified"] = is_tweet_executable
 
         # Remove invalid tweets
@@ -160,11 +161,15 @@ class TweetValidationPreparation(TaskPreparation):
 
         valid_voters = []
         for v in tweet["voters"]:
+            self.logger.info(f"Processing voter: {v}")
             address = list(v.keys())[0]
             signature = list(v.values())[0]
-            is_valid = self.validate_signature(message_hash, address, signature)
+            is_valid = yield from self.validate_signature(
+                message_hash, address, signature
+            )
 
             if is_valid:
+                self.logger.info("Valid")
                 valid_voters.append(v)
         tweet["voters"] = valid_voters
         return tweet
@@ -183,7 +188,7 @@ class TweetValidationPreparation(TaskPreparation):
         # At this point, the tweet is awaiting to be published [verified=None]
 
         # Reject tweet that do not have enough voting power
-        consensus = self.check_tweet_consensus(tweet)
+        consensus = yield from self.check_tweet_consensus(tweet)
         if not consensus:
             return False
 
@@ -195,7 +200,7 @@ class TweetValidationPreparation(TaskPreparation):
 
         for voter in tweet["voters"]:
             address = list(voter.keys())[0]
-            voting_power = self.get_voting_power(address)
+            voting_power = yield from self.get_voting_power(address)
             total_voting_power += voting_power
 
         self.behaviour.context.logger.info(
@@ -205,11 +210,15 @@ class TweetValidationPreparation(TaskPreparation):
 
     def get_voting_power(self, address: str):
         """Get the given address's balance."""
-        olas_balance_ethereum = next(
-            self.get_token_balance(OLAS_ADDRESS_ETHEREUM, address, "ethereum") or 0
+        olas_balance_ethereum = (
+            yield from self.get_token_balance(
+                OLAS_ADDRESS_ETHEREUM, address, "ethereum"
+            )
+            or 0
         )
-        olas_balance_gnosis = next(
-            self.get_token_balance(OLAS_ADDRESS_GNOSIS, address, "gnosis") or 0
+        olas_balance_gnosis = (
+            yield from self.get_token_balance(OLAS_ADDRESS_GNOSIS, address, "gnosis")
+            or 0
         )
         voting_power = cast(int, olas_balance_ethereum) + cast(int, olas_balance_gnosis)
         self.behaviour.context.logger.info(
@@ -306,8 +315,8 @@ class TweetValidationPreparation(TaskPreparation):
 
     def validate_signature(self, message_hash, address, signature):
         """Validate signatures"""
-        is_contract = next(self.is_contract(address))
+        is_contract = yield from self.is_contract(address)
         if is_contract:
-            return next(self.validate_safe_signature(message_hash, address))
+            yield from self.validate_safe_signature(message_hash, address)
         else:
             return validate_eoa_signature(message_hash, address, signature)
