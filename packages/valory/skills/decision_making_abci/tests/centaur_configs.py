@@ -52,6 +52,11 @@ ENABLED_CENTAUR = {
                 {
                     "request_id": "dummy_id_1",
                     "posted": False,
+                    "proposer": {
+                        "address": "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf",
+                        "signature": "0x37904bcb8b6e11ae894856c1d722209397e548219f000fc172f9a58a064718dd634fa00ace138383dfe807f479a0cf22588edb3fd61bfea2f85378a7513c6cc41c",
+                        "verified": None,
+                    },
                     "text": "My agreed tweet: execute",
                     "voters": [
                         {"0x6c6766E04eF971367D27E720d1d161a9B495D647": 0},
@@ -62,6 +67,11 @@ ENABLED_CENTAUR = {
                 {
                     "request_id": "dummy_id_2",
                     "posted": False,
+                    "proposer": {
+                        "address": "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf",
+                        "signature": "0x37904bcb8b6e11ae894856c1d722209397e548219f000fc172f9a58a064718dd634fa00ace138383dfe807f479a0cf22588edb3fd61bfea2f85378a7513c6cc41c",
+                        "verified": None,
+                    },
                     "text": "My agreed tweet: dont execute",
                     "voters": [
                         {"0x6c6766E04eF971367D27E720d1d161a9B495D647": 0},
