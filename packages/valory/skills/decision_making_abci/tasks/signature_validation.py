@@ -98,8 +98,6 @@ class SignatureValidationMixin:
 
         is_contract = contract_api_msg.state.body["is_contract"]
 
-        self.logger.info(f"is_contract: {is_contract}")
-
         return is_contract
 
     def validate_safe_signature(self, message_hash, address):

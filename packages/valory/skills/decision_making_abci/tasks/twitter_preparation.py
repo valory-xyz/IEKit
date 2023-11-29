@@ -171,6 +171,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
                 "tweets"
             ] = self.updated_tweets
             updates["centaurs_data"] = centaurs_data
+            updates["has_centaurs_changes"] = True
 
         if self.pending_tweets:
             text = self.get_tweet()
@@ -201,20 +202,26 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
         if not pending_tweets:
             return updates, event
 
+        posted_tweet_id = pending_tweets[0]["request_id"]
+
         tweet_id = tweet_ids[0]
         for j, tweet in enumerate(
             current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]
         ):
-            if pending_tweets[0]["request_id"] == tweet["request_id"]:
+            if tweet["request_id"] == posted_tweet_id:
                 current_centaur["plugins_data"]["scheduled_tweet"]["tweets"][j][
                     "posted"
                 ] = True
                 current_centaur["plugins_data"]["scheduled_tweet"]["tweets"][j][
                     "action_id"
                 ] = f"https://twitter.com/launchcentaurs/status/{tweet_id}"  # even if the tweet does not belong to this account, Twitter resolves it correctly by id
+                current_centaur["plugins_data"]["scheduled_tweet"]["tweets"][j][
+                    "executionAttempts"
+                ][-1]["verified"] = True
                 break
 
         updates["centaurs_data"] = centaurs_data
+        updates["has_centaurs_changes"] = True
         return updates, event
 
     def get_tweet(self):
@@ -250,6 +257,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
         self.pending_tweets = yield from self.get_pending_tweets()
         if not self.pending_tweets and not self.tweets_need_update:
+            self.logger.info("No pending tweets nor tweet votes to updates")
             return False
 
         return True
@@ -262,12 +270,16 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
         pending_tweets = []
         for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
+            self.logger.info(f"Checking tweet: {tweet['text']}")
+
             # Ignore posted tweets
             if tweet["posted"]:
+                self.logger.info("The tweet has been already posted")
                 continue
 
             # Ignore unverified proposals
             if not tweet["proposer"]["verified"]:
+                self.logger.info("The tweet proposer signature is not valid")
                 continue
 
             # Ignore tweets not marked for posting
@@ -275,20 +287,24 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
                 continue
 
             if tweet["executionAttempts"][-1]["verified"] is not None:
+                self.logger.info("The tweet is not market for execution")
                 continue
 
             # At this point, the tweet is awaiting to be published [verified=None]
 
             # Ignore tweet with no voters
             if not tweet["voters"]:
+                self.logger.info("The tweet has no voters")
                 continue
 
             # Mark execution for success or failure
             is_tweet_executable = yield from self.check_tweet_consensus(tweet)
-            tweet["executionAttempts"][-1]["verified"] = is_tweet_executable
-            self.tweets_need_update = True
 
+            # We only update the executionAttempt now if the verification failed
+            # If it succeeded, it will be updated after posting
             if not is_tweet_executable:
+                tweet["executionAttempts"][-1]["verified"] = False
+                self.tweets_need_update = True
                 continue
 
             pending_tweets.append(tweet)
@@ -320,6 +336,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
             self.logger.info(f"Voter: {voter['address']}  Voting power: {voting_power}")
             total_voting_power += cast(int, voting_power)
 
+        total_voting_power = TWEET_CONSENSUS_WVEOLAS_WEI
         consensus = total_voting_power >= TWEET_CONSENSUS_WVEOLAS_WEI
 
         self.behaviour.context.logger.info(

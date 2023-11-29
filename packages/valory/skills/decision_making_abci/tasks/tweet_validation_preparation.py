@@ -90,9 +90,10 @@ class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
             tweet["proposer"]["verified"] = is_valid
             updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
 
-        return updates, None
+        return updates, self.task_event
 
     def _post_task(self):
         """Preparations after running the task"""
+        yield
         self.behaviour.context.logger.info("Nothing to do")
         return {}, None
