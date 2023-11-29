@@ -151,7 +151,7 @@
                 }
             },
             "required": ["address", "signature", "verified"],
-            "additionalItems": false
+            "additionalProperties": false
         },
         "voter": {
             "type": "object",
@@ -167,7 +167,7 @@
                 }
             },
             "required": ["address", "signature", "votingPower"],
-            "additionalItems": false
+            "additionalProperties": false
         },
         "scheduled_tweet_data": {
             "type": "object",
