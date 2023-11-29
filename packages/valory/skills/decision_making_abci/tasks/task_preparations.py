@@ -159,7 +159,8 @@ class TaskPreparation:
         proceed = yield from self.check_conditions()
         if proceed:
             self.logger.info(f"Running {self.__class__.__name__}._pre_task()")
-            return self._pre_task()
+            updates, event = yield from self._pre_task()
+            return updates, event
         self.logger.info(f"Skipping {self.__class__.__name__}._pre_task()")
         return {}, None
 

@@ -95,6 +95,7 @@ class DailyOrbisPreparation(OrbisPreparation):
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         current_centaur = self.synchronized_data.centaurs_data[
             self.synchronized_data.current_centaur_index
         ]
@@ -162,6 +163,7 @@ class UpdateCentaursPreparation(WriteStreamPreparation):
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         write_data = [
             {
                 "op": "update",
@@ -204,6 +206,7 @@ class WriteContributeDBPreparation(WriteStreamPreparation):
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         write_data = [
             {
                 "op": "update",

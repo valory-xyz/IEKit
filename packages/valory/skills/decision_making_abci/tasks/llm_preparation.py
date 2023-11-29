@@ -71,6 +71,7 @@ class LLMPreparation(TaskPreparation):
 
     def _pre_task(self, reprompt: bool = False):
         """Preparations before running the task"""
+        yield
         current_centaur = self.synchronized_data.centaurs_data[
             self.synchronized_data.current_centaur_index
         ]
@@ -121,8 +122,8 @@ class LLMPreparation(TaskPreparation):
             self.logger.info("The tweet is too long")
             if self.synchronized_data.re_prompt_attempts <= MAX_REPROMPTS:
                 self.logger.info("Re-prompting")
-                yield
-                return self._pre_task(reprompt=True)
+                updates, event = yield from self._pre_task(reprompt=True)
+                return updates, event
             else:  # hard-trim
                 self.logger.info("Trimming the tweet")
                 tweet = self.trim_tweet(tweet)
@@ -130,7 +131,6 @@ class LLMPreparation(TaskPreparation):
         updates = {
             "daily_tweet": tweet,
         }
-        yield
         return updates, None
 
     def get_max_chars(self):

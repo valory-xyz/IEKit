@@ -65,13 +65,9 @@ class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
 
     def _pre_task(self):
         """Preparations before running the task"""
-        self.behaviour.context.logger.info("Nothing to do")
-        return {}, self.task_event
-
-    def _post_task(self):
-        """Preparations after running the task"""
         centaurs_data = self.synchronized_data.centaurs_data
         current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
+        updates = {}
 
         for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
             # Ignore posted tweets
@@ -90,8 +86,13 @@ class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
                 tweet["proposer"]["address"],
                 tweet["proposer"]["signature"],
             )
+            self.logger.info(f"Is the proposer signature valid? {is_valid}")
             tweet["proposer"]["verified"] = is_valid
-
-        updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
+            updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
 
         return updates, None
+
+    def _post_task(self):
+        """Preparations after running the task"""
+        self.behaviour.context.logger.info("Nothing to do")
+        return {}, None

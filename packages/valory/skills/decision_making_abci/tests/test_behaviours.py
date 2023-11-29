@@ -118,7 +118,7 @@ class BaseDecisionMakingBehaviourTest(BaseDecisionMakingTest):
         state = cast(SharedState, self._skill.skill_context.state)
         state.round_sequence._last_round_transition_timestamp = datetime.datetime.now()
         self.fast_forward(self.initial_data)  # type: ignore
-        for _ in range(4):  # Needed due to the amount of nested generators
+        for _ in range(5):  # Needed due to the amount of nested generators
             self.behaviour.act_wrapper()
 
         self.complete(self.event)  # type: ignore

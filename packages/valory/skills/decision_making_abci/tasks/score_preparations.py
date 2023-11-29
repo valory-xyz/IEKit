@@ -37,6 +37,7 @@ class ScorePreparation(TaskPreparation):
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         updates = {}
         return updates, self.task_event
 

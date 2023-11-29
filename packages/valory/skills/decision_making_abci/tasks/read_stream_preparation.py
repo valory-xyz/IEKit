@@ -37,6 +37,7 @@ class ReadCentaursPreparation(TaskPreparation):
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         updates = {
             "read_stream_id": self.params.centaurs_stream_id,
             "read_target_property": "centaurs_data",
@@ -65,6 +66,7 @@ class ReadContributeDBPreparation(TaskPreparation):
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         updates = {
             "read_stream_id": self.params.ceramic_db_stream_id,
             "read_target_property": "ceramic_db",
@@ -91,6 +93,7 @@ class ReadManualPointsPreparation(TaskPreparation):
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         updates = {
             "read_stream_id": self.params.manual_points_stream_id,
             "read_target_property": "score_data",

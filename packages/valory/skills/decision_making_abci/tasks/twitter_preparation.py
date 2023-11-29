@@ -67,6 +67,7 @@ class TwitterPreparation(TaskPreparation):
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         current_centaur = self.synchronized_data.centaurs_data[
             self.synchronized_data.current_centaur_index
         ]
@@ -153,6 +154,40 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
         """Init"""
         super().__init__(synchronized_data, params, logger, now_utc, behaviour)
         self.pending_tweets = []
+        self.tweets_need_update = False
+        self.updated_tweets = None
+
+    def _pre_task(self):
+        """Preparations before running the task"""
+        yield
+        centaurs_data = self.synchronized_data.centaurs_data
+        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
+
+        updates = {}
+        event = None
+
+        if self.tweets_need_update:
+            current_centaur["plugins_data"]["scheduled_tweet"][
+                "tweets"
+            ] = self.updated_tweets
+            updates["centaurs_data"] = centaurs_data
+
+        if self.pending_tweets:
+            text = self.get_tweet()
+
+            write_data = [
+                {
+                    "text": text,
+                    "credentials": self.params.centaur_id_to_secrets[
+                        current_centaur["id"]
+                    ]["twitter"],
+                }
+            ]
+
+            updates["write_data"] = write_data
+            event = self.task_event
+
+        return updates, event
 
     def _post_task(self):
         """Task postprocessing"""
@@ -214,7 +249,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
                 return False
 
         self.pending_tweets = yield from self.get_pending_tweets()
-        if not self.pending_tweets:
+        if not self.pending_tweets and not self.tweets_need_update:
             return False
 
         return True
@@ -251,8 +286,16 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
             # Mark execution for success or failure
             is_tweet_executable = yield from self.check_tweet_consensus(tweet)
             tweet["executionAttempts"][-1]["verified"] = is_tweet_executable
+            self.tweets_need_update = True
+
+            if not is_tweet_executable:
+                continue
 
             pending_tweets.append(tweet)
+
+        self.updated_tweets = current_centaur["plugins_data"]["scheduled_tweet"][
+            "tweets"
+        ]
 
         return pending_tweets
 
@@ -268,11 +311,13 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
                 message_hash, voter["address"], voter["signature"]
             )
 
+            self.logger.info(f"Voter: {voter['address']}  Signature valid: {is_valid}")
             if not is_valid:
                 continue
 
             # Get voting power
             voting_power = yield from self.get_voting_power(voter["address"])
+            self.logger.info(f"Voter: {voter['address']}  Voting power: {voting_power}")
             total_voting_power += cast(int, voting_power)
 
         consensus = total_voting_power >= TWEET_CONSENSUS_WVEOLAS_WEI

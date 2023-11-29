@@ -36,6 +36,7 @@ class FinishedPipelinePreparation(TaskPreparation):
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         next_centaur_index = self.get_next_centaur_index()
         updates = {"current_centaur_index": next_centaur_index}
 
