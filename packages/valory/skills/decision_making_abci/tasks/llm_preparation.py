@@ -48,22 +48,23 @@ class LLMPreparation(TaskPreparation):
         yield
 
         # This task should only be run if Twitter and Orbis task are going to be run
-        if (
-            not DailyTweetPreparation(
-                self.synchronized_data,
-                self.params,
-                self.logger,
-                self.now_utc,
-                self.behaviour,
-            ).check_conditions()
-            and not DailyOrbisPreparation(
-                self.synchronized_data,
-                self.params,
-                self.logger,
-                self.now_utc,
-                self.behaviour,
-            ).check_conditions()
-        ):
+        run_daily_tweet = yield from DailyTweetPreparation(
+            self.synchronized_data,
+            self.params,
+            self.logger,
+            self.now_utc,
+            self.behaviour,
+        ).check_conditions()
+
+        run_daily_orbis = yield from DailyOrbisPreparation(
+            self.synchronized_data,
+            self.params,
+            self.logger,
+            self.now_utc,
+            self.behaviour,
+        ).check_conditions()
+
+        if not run_daily_tweet and not run_daily_orbis:
             return False
 
         return True
