@@ -77,6 +77,8 @@ def validate_eoa_signature(message_hash, expected_address, signature):
 
 
 class SignatureValidationMixin:
+    """SignatureValidationMixin"""
+
     def is_contract(self, address):
         """Check if the account is a smart contract"""
 
