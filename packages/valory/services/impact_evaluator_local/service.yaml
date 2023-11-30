@@ -120,6 +120,8 @@ models:
       mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
       ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
       default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
+      termination_from_block: ${TERMINATION_FROM_BLOCK:int:31204466}
+      termination_chain: ${TERMINATION_CHAIN:str:gnosis}
 ---
 public_id: valory/ledger:0.19.0
 type: connection
