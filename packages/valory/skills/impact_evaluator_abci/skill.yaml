@@ -23,21 +23,21 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeidau7loztcfy3mxvoqrv7otbpciemd2wf3lsxyjraq4dcvuvib25e
-- valory/ceramic_read_abci:0.1.0:bafybeie7t7jk2hq2cjticbfujosfld3dlnbafxdv7owhxnnj4zmtaujpwa
-- valory/generic_scoring_abci:0.1.0:bafybeidwhspcx4634xwtdnz6xlxhonbyo57d5fvpa4wihfqrfopdcgr6ve
-- valory/twitter_scoring_abci:0.1.0:bafybeieojsiu2r4g37d542xlm7tbrvjk2isekcvzzzxg3joriwqgllvh44
-- valory/ceramic_write_abci:0.1.0:bafybeihj37dsm2n6uxf4kh5r7mc734aatfaok24ylk3g2s2bkah54scsiq
-- valory/dynamic_nft_abci:0.1.0:bafybeigbqomn5weffi5ns4vkfde6gghnx7wjvpmuawrsfbmdhtgoxrkxb4
-- valory/registration_abci:0.1.0:bafybeif4tgr7zqzguknrjzxr4h766fxp7vr4tod25xii4jzzwsbvyzdzkq
-- valory/reset_pause_abci:0.1.0:bafybeiencz2uytz6fqj5wg7mcunevxjh4xg5gd6pqcgkshgqywhcimweyi
-- valory/termination_abci:0.1.0:bafybeigainmpy37gb33ogbrpggjbkuasodhthh5oz4vbzjdfjozerpf224
-- valory/transaction_settlement_abci:0.1.0:bafybeigk3debp6dswutqsuls2lqfvyj4ghe6kwjc2zfinnsvj6hujynxtq
-- valory/decision_making_abci:0.1.0:bafybeihijjjrrauxwom7jh63b2sqsk7j6ccw6lf7fqgufj3pc7iovm44ly
-- valory/llm_abci:0.1.0:bafybeibhihrpovqozjofkyfywm2w6hduo2vzwhhfw4a37vkvx32djxdavy
-- valory/twitter_write_abci:0.1.0:bafybeibuhmlm7a7rfgbq5xvtyp4mfh7pparqgjozy3yocnykytxkwb2fri
-- valory/olas_week_abci:0.1.0:bafybeic3mwcdh746cxfcwnfwaaxaz6szibqfg6cmvcmyyrktzz35rpwk5m
-- valory/mech_interact_abci:0.1.0:bafybeidaztwmric5nrve77g4tmdarinzw72lmiigzblremlojrandfvoqu
+- valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
+- valory/ceramic_read_abci:0.1.0:bafybeigqpkvsxfhz5jt3yuipmkl6eyfgqcw36226sgfhdgud7mphsjmopa
+- valory/generic_scoring_abci:0.1.0:bafybeiexjfu736oe3u43siklxsyqwvlltoks5rnmhl2t7jjmwpwuhc3fey
+- valory/twitter_scoring_abci:0.1.0:bafybeiezvn76bbkmfuddcitooj7b3r7kv4cdehz7noepybqylhz2cjt3hm
+- valory/ceramic_write_abci:0.1.0:bafybeighmakx2u2okkvokdimxyzrnfn5qb2cib3qzvzdh4tnkfr6hkx32a
+- valory/dynamic_nft_abci:0.1.0:bafybeibwx2r4pdvzy2myn5keawjskd5mz2w7yfdflqff5wz4cxiubpanlu
+- valory/registration_abci:0.1.0:bafybeic2ynseiak7jpta7jfwuqwyp453b4p7lolr4wihxmpn633uekv5am
+- valory/reset_pause_abci:0.1.0:bafybeidzajbe3erygeh2xbd6lrjv7nsptznjuzrt24ykgvhgotdeyhfnba
+- valory/termination_abci:0.1.0:bafybeie4zvjfxvdu7qrulmur3chpjz3kpj5m4bjsxvpk4gvj5zbyyayfaa
+- valory/transaction_settlement_abci:0.1.0:bafybeiaefgqbs7zsn5xe5kdwrujj7ivygkn3ujpw6crnvi3knvxw75qmja
+- valory/decision_making_abci:0.1.0:bafybeibx6wvyp76xkzcdnfpluxjoxlwqpcgmn7ovyam6pghhl6jfdz6kie
+- valory/llm_abci:0.1.0:bafybeiav6mfjf5ltrhpmrelfpix3s7irgrk35ejx6zuqjm4wengyihmsse
+- valory/twitter_write_abci:0.1.0:bafybeigcpqeu2ymlgozqq6o6befqnmvyfkudqpvfvh255ovrtd3erhodlu
+- valory/olas_week_abci:0.1.0:bafybeiholnppuo6zfrxh3yqjedvf5m7s2w6ahwsdfq444zfo7jlvfigfdu
+- valory/mech_interact_abci:0.1.0:bafybeielb6agwj5jfdv3nqnc7iugb4qz5us223jpr5uwolke4fmzxvmkna
 behaviours:
   main:
     args: {}
@@ -235,5 +235,5 @@ models:
     class_name: TwitterDialogues
 dependencies:
   open-aea-cli-ipfs:
-    version: <2.0.0,>=1.27.0
+    version: ==1.42.0
 is_abstract: false
