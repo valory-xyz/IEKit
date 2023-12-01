@@ -23,7 +23,7 @@ from typing import Generator, Optional
 
 from eth_account.messages import encode_defunct
 
-from packages.valory.contracts.wveOLAS.contract import WveOLASContract
+from packages.valory.contracts.wveolas.contract import WveOLASContract
 from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.signature_validation import (
@@ -34,7 +34,7 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 )
 
 
-PROPOSAL_MINIMUM_WVEOLAS_WEI = 100e3 * 1e18  # 2M wveOLAS to wei
+PROPOSAL_MINIMUM_WVEOLAS_WEI = 100e3 * 1e18  # 2M wveolas to wei
 WVEOLAS_ADDRESS_ETHEREUM = "0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40"
 
 

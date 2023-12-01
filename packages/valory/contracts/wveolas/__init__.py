@@ -17,4 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the support resources for the wveOLAS contract."""
+"""This module contains the support resources for the wveolas contract."""

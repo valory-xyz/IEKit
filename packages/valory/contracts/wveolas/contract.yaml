@@ -6,9 +6,9 @@ description: wveolas contract
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeia6ocx66ynigvgpbhimt7zwj7mgehny5mebgbdhljdaeok6dlpgle
-  build/wveolas.json: bafybeid45gy6x5ah5ub5p2obdhph36skpoy5qdhikwwfso7f3655iqnpc4
-  contract.py: bafybeief7obavmmsj7f62mh3vd6qovxlf4gcpioegvy6ysvkoh66eambkq
+  __init__.py: bafybeibtn3d7h6xkaudftjmqi47rg6c45nvbjbu77rcnhalj7xxujzgbru
+  build/wveOLAS.json: bafybeid4ypbtauutpx4hktinxecxecp2moxzny5cyky3anp6peu33slax4
+  contract.py: bafybeigpfkqtgkshe7nvdo54t2gt6gtqkzuh4khf2om74azzhu4axv4pti
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: WveOLASContract
