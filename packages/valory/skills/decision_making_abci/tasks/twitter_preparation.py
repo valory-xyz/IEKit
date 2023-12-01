@@ -320,7 +320,10 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
         for voter in tweet["voters"]:
             # Verify signature
-            message = f"I am signing a message to verify that I approve the tweet starting with {tweet['text'][:10]}"
+            tweet_text = (
+                tweet["text"] if isinstance(tweet["text"], str) else tweet["text"][0]
+            )
+            message = f"I am signing a message to verify that I approve the tweet starting with {tweet_text[:10]}"
             message_hash = encode_defunct(text=message)
             is_valid = yield from self.validate_signature(
                 message_hash, voter["address"], voter["signature"]

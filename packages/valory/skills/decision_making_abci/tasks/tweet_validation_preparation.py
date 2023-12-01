@@ -34,8 +34,9 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 )
 
 
-PROPOSAL_MINIMUM_WVEOLAS_WEI = 100e3 * 1e18  # 2M wveolas to wei
+PROPOSAL_MINIMUM_WVEOLAS_WEI = 100e3 * 1e18  # 100K wveolas to wei
 WVEOLAS_ADDRESS_ETHEREUM = "0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40"
+SERVICE_SAFE_ADDRESS = "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A"
 
 
 class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
@@ -74,7 +75,11 @@ class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
         updates = {}
 
         for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
-            self.logger.info(f"Checking tweet proposal: {tweet['text']}")
+            tweet_text = (
+                tweet["text"] if isinstance(tweet["text"], str) else tweet["text"][0]
+            )
+
+            self.logger.info(f"Checking tweet proposal: {tweet_text}")
 
             # Ignore posted tweets
             if tweet["posted"]:
@@ -100,7 +105,11 @@ class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
             voting_power = yield from self.get_voting_power(
                 tweet["proposer"]["address"]
             )
-            verified = voting_power >= PROPOSAL_MINIMUM_WVEOLAS_WEI
+
+            if tweet["proposer"]["address"] != SERVICE_SAFE_ADDRESS:
+                verified = voting_power >= PROPOSAL_MINIMUM_WVEOLAS_WEI
+            else:
+                verified = True
 
             self.logger.info(
                 f"Proposer voting power: {voting_power}. Proposal verified? {verified}"
