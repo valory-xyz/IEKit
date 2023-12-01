@@ -42,7 +42,7 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeiflcfufixmsrhobf56bn5745m2iipcfqyulwk2qegtnagb3kvaaxi
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
-- valory/impact_evaluator_abci:0.1.0:bafybeihv52iil4qknszjts33wpiknbvx46g2otowl6w2oklx3pvb5g7fye
+- valory/impact_evaluator_abci:0.1.0:bafybeidhwj2obfxzk34qwlavmycuozeoh53hidsud2zra7czqwrtk6dkwa
 - valory/generic_scoring_abci:0.1.0:bafybeiexjfu736oe3u43siklxsyqwvlltoks5rnmhl2t7jjmwpwuhc3fey
 - valory/twitter_scoring_abci:0.1.0:bafybeiezvn76bbkmfuddcitooj7b3r7kv4cdehz7noepybqylhz2cjt3hm
 - valory/ceramic_read_abci:0.1.0:bafybeigqpkvsxfhz5jt3yuipmkl6eyfgqcw36226sgfhdgud7mphsjmopa
@@ -52,11 +52,11 @@ skills:
 - valory/reset_pause_abci:0.1.0:bafybeidzajbe3erygeh2xbd6lrjv7nsptznjuzrt24ykgvhgotdeyhfnba
 - valory/termination_abci:0.1.0:bafybeie4zvjfxvdu7qrulmur3chpjz3kpj5m4bjsxvpk4gvj5zbyyayfaa
 - valory/transaction_settlement_abci:0.1.0:bafybeiaefgqbs7zsn5xe5kdwrujj7ivygkn3ujpw6crnvi3knvxw75qmja
-- valory/twitter_write_abci:0.1.0:bafybeigcpqeu2ymlgozqq6o6befqnmvyfkudqpvfvh255ovrtd3erhodlu
-- valory/decision_making_abci:0.1.0:bafybeibx6wvyp76xkzcdnfpluxjoxlwqpcgmn7ovyam6pghhl6jfdz6kie
+- valory/twitter_write_abci:0.1.0:bafybeibn4fgbckfyw5m6bid5uzsqcjyjhql4g7bbnanzsenbk7snd3spve
+- valory/decision_making_abci:0.1.0:bafybeigwfylowfewmoxewvmlnugvdewvmbijt5eezchacwampqrgo6zioq
 - valory/llm_abci:0.1.0:bafybeiav6mfjf5ltrhpmrelfpix3s7irgrk35ejx6zuqjm4wengyihmsse
 - valory/olas_week_abci:0.1.0:bafybeiholnppuo6zfrxh3yqjedvf5m7s2w6ahwsdfq444zfo7jlvfigfdu
-- valory/mech_interact_abci:0.1.0:bafybeielb6agwj5jfdv3nqnc7iugb4qz5us223jpr5uwolke4fmzxvmkna
+- valory/mech_interact_abci:0.1.0:bafybeihwvjvxyv2ca2eskt3d5cvac4onr7m2hla2inydpqdipw4ze3yz6a
 default_ledger: ethereum
 required_ledgers:
 - ethereum
