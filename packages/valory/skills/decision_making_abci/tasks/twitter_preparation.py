@@ -23,7 +23,7 @@ from typing import Generator, Optional, cast
 
 from eth_account.messages import encode_defunct
 
-from packages.valory.contracts.uniswap_v2_erc20.contract import UniswapV2ERC20Contract
+from packages.valory.contracts.wveOLAS.contract import WveOLASContract
 from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.signature_validation import (
@@ -35,8 +35,7 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 
 
 TWEET_CONSENSUS_WVEOLAS_WEI = 2e6 * 1e18  # 2M wveOLAS to wei
-OLAS_ADDRESS_ETHEREUM = "0x0001a500a6b18995b03f44bb040a5ffc28e45cb0"
-OLAS_ADDRESS_GNOSIS = "0xce11e14225575945b8e6dc0d4f2dd4c570f79d9f"
+WVEOLAS_ADDRESS_ETHEREUM = "0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40"
 
 
 class TwitterPreparation(TaskPreparation):
@@ -347,8 +346,8 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
     def get_voting_power(self, address: str):
         """Get the given address's balance."""
-        olas_balance = yield from self.get_token_balance(
-            OLAS_ADDRESS_ETHEREUM, address, "ethereum"
+        olas_balance = yield from self.get_votes(
+            WVEOLAS_ADDRESS_ETHEREUM, address, "ethereum"
         )
 
         if not olas_balance:
@@ -359,15 +358,15 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
         )
         return olas_balance
 
-    def get_token_balance(
+    def get_votes(
         self, token_address, owner_address, chain_id
     ) -> Generator[None, None, Optional[float]]:
         """Get the given address's balance."""
         response = yield from self.behaviour.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
             contract_address=token_address,
-            contract_id=str(UniswapV2ERC20Contract.contract_id),
-            contract_callable="balance_of",
+            contract_id=str(WveOLASContract.contract_id),
+            contract_callable="get_votes",
             owner_address=owner_address,
             chain_id=chain_id,
         )

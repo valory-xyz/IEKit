@@ -19,8 +19,12 @@
 
 """This package contains the logic for task preparations."""
 
+from typing import Generator, Optional
+
 from eth_account.messages import encode_defunct
 
+from packages.valory.contracts.wveOLAS.contract import WveOLASContract
+from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.signature_validation import (
     SignatureValidationMixin,
@@ -30,8 +34,8 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 )
 
 
-TWEET_CONSENSUS_WVEOLAS_WEI = 2e6 * 1e18  # 2M wveOLAS to wei
-OLAS_ADDRESS_ETHEREUM = "0x0001a500a6b18995b03f44bb040a5ffc28e45cb0"
+PROPOSAL_MINIMUM_WVEOLAS_WEI = 100e3 * 1e18  # 2M wveOLAS to wei
+WVEOLAS_ADDRESS_ETHEREUM = "0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40"
 
 
 class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
@@ -87,7 +91,14 @@ class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
                 tweet["proposer"]["signature"],
             )
             self.logger.info(f"Is the proposer signature valid? {is_valid}")
-            tweet["proposer"]["verified"] = is_valid
+
+            # Check the proposer voting power
+            voting_power = yield from self.get_voting_power(
+                tweet["proposer"]["address"]
+            )
+            verified = voting_power >= PROPOSAL_MINIMUM_WVEOLAS_WEI
+
+            tweet["proposer"]["verified"] = verified
             updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
 
         return updates, self.task_event
@@ -97,3 +108,38 @@ class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
         yield
         self.behaviour.context.logger.info("Nothing to do")
         return {}, None
+
+    def get_voting_power(self, address: str):
+        """Get the given address's balance."""
+        olas_balance = yield from self.get_votes(
+            WVEOLAS_ADDRESS_ETHEREUM, address, "ethereum"
+        )
+
+        if not olas_balance:
+            olas_balance = 0
+
+        self.behaviour.context.logger.info(
+            f"Voting power is {olas_balance} for address {address}"
+        )
+        return olas_balance
+
+    def get_votes(
+        self, token_address, owner_address, chain_id
+    ) -> Generator[None, None, Optional[float]]:
+        """Get the given address's balance."""
+        response = yield from self.behaviour.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
+            contract_address=token_address,
+            contract_id=str(WveOLASContract.contract_id),
+            contract_callable="get_votes",
+            owner_address=owner_address,
+            chain_id=chain_id,
+        )
+        if response.performative != ContractApiMessage.Performative.STATE:
+            self.behaviour.context.logger.error(
+                f"Couldn't get the balance for address {chain_id}::{owner_address}: {response.performative}"
+            )
+            return None
+
+        balance = int(response.state.body["balance"]) / 1e18  # to olas
+        return balance

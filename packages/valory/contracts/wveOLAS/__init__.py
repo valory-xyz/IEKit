@@ -17,4 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Tests package for valory/uniswap_v2_erc20 contract."""
+"""This module contains the support resources for the wveOLAS contract."""
