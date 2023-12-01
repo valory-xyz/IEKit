@@ -345,23 +345,23 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
         return consensus
 
     def get_voting_power(self, address: str):
-        """Get the given address's balance."""
-        olas_balance = yield from self.get_votes(
+        """Get the given address's votes."""
+        olas_votes = yield from self.get_votes(
             WVEOLAS_ADDRESS_ETHEREUM, address, "ethereum"
         )
 
-        if not olas_balance:
-            olas_balance = 0
+        if not olas_votes:
+            olas_votes = 0
 
         self.behaviour.context.logger.info(
-            f"Voting power is {olas_balance} for address {address}"
+            f"Voting power is {olas_votes} for address {address}"
         )
-        return olas_balance
+        return olas_votes
 
     def get_votes(
         self, token_address, owner_address, chain_id
     ) -> Generator[None, None, Optional[float]]:
-        """Get the given address's balance."""
+        """Get the given address's votes."""
         response = yield from self.behaviour.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
             contract_address=token_address,
@@ -372,9 +372,9 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
         )
         if response.performative != ContractApiMessage.Performative.STATE:
             self.behaviour.context.logger.error(
-                f"Couldn't get the balance for address {chain_id}::{owner_address}: {response.performative}"
+                f"Couldn't get the votes for address {chain_id}::{owner_address}: {response.performative}"
             )
             return None
 
-        balance = int(response.state.body["balance"]) / 1e18  # to olas
-        return balance
+        votes = int(response.state.body["votes"]) / 1e18  # to olas
+        return votes

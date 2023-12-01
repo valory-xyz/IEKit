@@ -47,10 +47,10 @@ class WveOLASContract(Contract):
         """Gets an account's balance."""
         contract_instance = cls.get_instance(ledger_api, contract_address)
 
-        balance = ledger_api.contract_method_call(
+        votes = ledger_api.contract_method_call(
             contract_instance=contract_instance,
             method_name="getVotes",
-            owner=owner_address,
+            account=owner_address,
         )
 
-        return {"balance": balance}
+        return {"votes": votes}

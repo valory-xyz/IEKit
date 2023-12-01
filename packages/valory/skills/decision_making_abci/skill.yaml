@@ -20,8 +20,8 @@ fingerprint:
   tasks/score_preparations.py: bafybeie7cfot24zcyod5becz6t5lasvva77httfkw57qmvgjk35d3qluxa
   tasks/signature_validation.py: bafybeidk6uty7772ao5inrd5zqhr7mzgaignsapwsmg5ahx75xji34olgu
   tasks/task_preparations.py: bafybeihqieo4logxhsqntyfjphimf243aapqr4go43jb3eacrt7ouystmq
-  tasks/tweet_validation_preparation.py: bafybeiddkq5ee6yywofzqagn6yltxkotjijwzfpqzdqm4wfdo7eirtkx2e
-  tasks/twitter_preparation.py: bafybeiex6rwvsyiphuk75dvcrs5y5fjmcixjguhl4uacpvnmvyjc6swqny
+  tasks/tweet_validation_preparation.py: bafybeiavsp3o5fc6duraplgtn2yqajmi64yxnyacwoy7imubi7lotob6vq
+  tasks/twitter_preparation.py: bafybeieg7ct5hcej3omgmuvvrw2bjtuwgevksw64otr6hqq7roa7db2dse
   tasks/week_in_olas_preparations.py: bafybeidk4vmnddwxs43le35bihnd4rp4scuywuivv4yr2nd3h36ald6feq
   tasks/write_stream_preparation.py: bafybeiaa7a7wsr7acpv5my3tqupuzsxpk5d23wg6i4262ea46isaz3q6ai
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
@@ -35,7 +35,7 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/wveolas:0.1.0:bafybeicp5lgqf5worcjydqia3hmiyudyqlzhvm3l4jabvv6r7tyzvazpbe
+- valory/wveolas:0.1.0:bafybeifap7ourb6ginmbndgwzsyq2xvap2t6uy6m6yshm2klvbio7nuobi
 - valory/compatibility_fallback_handler:0.1.0:bafybeiacphxonfnokxkmt3xmttsubj543c2fufnw7d65haahvqujqzikvu
 protocols:
 - valory/contract_api:1.0.0:bafybeialhbjvwiwcnqq3ysxcyemobcbie7xza66gaofcvla5njezkvhcka
