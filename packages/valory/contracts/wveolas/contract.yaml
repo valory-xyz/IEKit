@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeibtn3d7h6xkaudftjmqi47rg6c45nvbjbu77rcnhalj7xxujzgbru
-  build/wveOLAS.json: bafybeid4ypbtauutpx4hktinxecxecp2moxzny5cyky3anp6peu33slax4
+  build/wveolas.json: bafybeid4ypbtauutpx4hktinxecxecp2moxzny5cyky3anp6peu33slax4
   contract.py: bafybeigpfkqtgkshe7nvdo54t2gt6gtqkzuh4khf2om74azzhu4axv4pti
 fingerprint_ignore_patterns: []
 contracts: []
