@@ -174,7 +174,7 @@ class TwitterConnection(BaseSyncConnection):
 
         # Call the staging API
         if self.use_staging_api:
-            url = self.staging_api
+            url = f"{self.staging_api}/twitter/create_tweet"
 
             self.logger.info(
                 f"Posting tweet using the staging API {url}"
