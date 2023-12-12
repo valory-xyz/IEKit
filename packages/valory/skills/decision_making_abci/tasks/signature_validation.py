@@ -158,8 +158,8 @@ class SignatureValidationMixin:
             safe_message = build_safe_typed_message(fix_message_types(message))
 
         # Call CompatibilityFallbackHandler::isValidSignature
-        self.behaviour.context.logger, info(
-            f"Verifying safe_message={safe_message} against safe={safe_address} signature={signature}"
+        self.behaviour.context.logger.info(
+            f"Verifying message={message} safe_message={safe_message} safe={safe_address} signature={signature}"
         )
         contract_api_msg = yield from self.behaviour.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
