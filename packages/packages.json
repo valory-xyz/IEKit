@@ -1,13 +1,13 @@
 {
     "dev": {
-        "agent/valory/impact_evaluator/0.1.0": "bafybeif4zcwayt64fg4k5rszmix5suduicdtav4ev67cfl77j4hhjbsqiq",
+        "agent/valory/impact_evaluator/0.1.0": "bafybeiabic2u4epneurwtntyqnla2kmbume65o6pe3hnb3e2ok2ligmvgu",
         "contract/valory/dynamic_contribution/0.1.0": "bafybeia54zrihbupv35dkw23x4lc7cgeh3obinqlszvjighm7rxap6komi",
-        "service/valory/impact_evaluator/0.1.0": "bafybeib77ptz7ws3btwfoqhtaidkfzyx74qjzyyefdrlihgnslvs5wglx4",
+        "service/valory/impact_evaluator/0.1.0": "bafybeiebxi7t4bfsjfyktna6e45a2kk66gqcs4vwuurthsjb7ksqx6yzpq",
         "skill/valory/dynamic_nft_abci/0.1.0": "bafybeibwx2r4pdvzy2myn5keawjskd5mz2w7yfdflqff5wz4cxiubpanlu",
         "skill/valory/twitter_scoring_abci/0.1.0": "bafybeiezvn76bbkmfuddcitooj7b3r7kv4cdehz7noepybqylhz2cjt3hm",
         "skill/valory/ceramic_read_abci/0.1.0": "bafybeigqpkvsxfhz5jt3yuipmkl6eyfgqcw36226sgfhdgud7mphsjmopa",
         "skill/valory/ceramic_write_abci/0.1.0": "bafybeighmakx2u2okkvokdimxyzrnfn5qb2cib3qzvzdh4tnkfr6hkx32a",
-        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeih5erxexiht4kacd3wzgjhfjwiuabsdlz3ppjjifivcpw3qrf4csm",
+        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeice4tmumqwslcq4x3cipat6vpzkm67cxvtr32vyvr5eofxug5vbb4",
         "skill/valory/generic_scoring_abci/0.1.0": "bafybeiexjfu736oe3u43siklxsyqwvlltoks5rnmhl2t7jjmwpwuhc3fey",
         "protocol/valory/twitter/0.1.0": "bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4",
         "protocol/valory/llm/1.0.0": "bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4",
@@ -15,12 +15,12 @@
         "connection/valory/openai/0.1.0": "bafybeiepsxac7e2tq3mcfkgcx62zt6oiaeic5wwcs4mnv733l762kn62du",
         "skill/valory/twitter_write_abci/0.1.0": "bafybeiga55lbnr6k632ytgwintyuaxegrvvt7k6bn7vwymbgcq7w6tqi7m",
         "skill/valory/llm_abci/0.1.0": "bafybeiav6mfjf5ltrhpmrelfpix3s7irgrk35ejx6zuqjm4wengyihmsse",
-        "skill/valory/decision_making_abci/0.1.0": "bafybeibu7liryrudnq37s2ugcnbrpmk46c6t35dsyizjgzqxtwylprc3rq",
-        "service/valory/impact_evaluator_local/0.1.0": "bafybeiegaw2xkbslqm2ihnzaovmq6nhyvaimwnqechykt4cnz4gmqpxveq",
+        "skill/valory/decision_making_abci/0.1.0": "bafybeigreduye4kp2mjx3dpp2ynv5beeixaft2we72bkxbuocvqslid67e",
+        "service/valory/impact_evaluator_local/0.1.0": "bafybeih3jgvid2exfjrcqk5jurwtjgksv3mngwo4aoweuyjshmz4wy5mgi",
         "skill/valory/olas_week_abci/0.1.0": "bafybeiholnppuo6zfrxh3yqjedvf5m7s2w6ahwsdfq444zfo7jlvfigfdu",
         "skill/valory/mech_interact_abci/0.1.0": "bafybeihwvjvxyv2ca2eskt3d5cvac4onr7m2hla2inydpqdipw4ze3yz6a",
         "contract/valory/mech/0.1.0": "bafybeibv6ydk326zkny4pphze64zgzzv2sc5qkt2iyymoi6pt3ci2gtxne",
-        "contract/valory/compatibility_fallback_handler/0.1.0": "bafybeiacphxonfnokxkmt3xmttsubj543c2fufnw7d65haahvqujqzikvu",
+        "contract/valory/compatibility_fallback_handler/0.1.0": "bafybeifyan3wzhsvafwwkyq7tptojvkm3mzjtzgjqewvdbpkuia7r2dfnq",
         "contract/valory/wveolas/0.1.0": "bafybeifap7ourb6ginmbndgwzsyq2xvap2t6uy6m6yshm2klvbio7nuobi"
     },
     "third_party": {

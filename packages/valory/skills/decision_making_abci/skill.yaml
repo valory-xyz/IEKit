@@ -11,16 +11,16 @@ fingerprint:
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
   fsm_specification.yaml: bafybeietp4zh3uf2ethzmqa64aywu5oabmwbqk3i7vtzom2j3iqu2qaknq
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
-  models.py: bafybeictln7abrfqkm42euj2ldb2aqh3j3vuz45gltlepldzucgqgjy3va
+  models.py: bafybeiakd3plgdxyy5ceih6olpvbrycqrnjuazx6ssvfnowj63a5kplcbm
   payloads.py: bafybeif5bomwy74bwnphsk6bty6qb6efugvjnnopsz7qjunpe6gtgjaxya
   rounds.py: bafybeigrk5kkpdwmxz6r2nhwed7qpx4wburrbtfi3gh23rj67uwkhhwngi
   tasks/finished_pipeline_preparation.py: bafybeid652b53p7mtsbj3ksko3g2eezvg4nut2vukwvnfhxyfi4zkx3dym
   tasks/llm_preparation.py: bafybeibvevrnqbdipahg6gn6sn3gq7cfn6zcx67f6sbhvdsq2ql7ikip4y
   tasks/read_stream_preparation.py: bafybeigoi4lwtl3qfcl6yrvbl2sp4kuzv34lq34pa2hyb4pa6j2fypg2hq
   tasks/score_preparations.py: bafybeie7cfot24zcyod5becz6t5lasvva77httfkw57qmvgjk35d3qluxa
-  tasks/signature_validation.py: bafybeidk6uty7772ao5inrd5zqhr7mzgaignsapwsmg5ahx75xji34olgu
+  tasks/signature_validation.py: bafybeicovkkoza76wzn3aoduckqomyr53q2x7zl6y4yu3c7xiyn6ize5m4
   tasks/task_preparations.py: bafybeihqieo4logxhsqntyfjphimf243aapqr4go43jb3eacrt7ouystmq
-  tasks/tweet_validation_preparation.py: bafybeibwe3lfvs6wiykdl74hxzwvzagrnx6coz4d4lztpdel2lzhwswsci
+  tasks/tweet_validation_preparation.py: bafybeih4sfxvrdzmb7jtat2kp6gjusq24reppfxcekeqzvdmuc4kjw4siy
   tasks/twitter_preparation.py: bafybeihhwvlj4eprqtk22zjbwvye4ti6fphlcrvnefa6e5faguydne2r5e
   tasks/week_in_olas_preparations.py: bafybeidhcwqtdfzwim7uckv4yrzjfyiivu5wxs5thhxsi6ccoa4x5tq6bi
   tasks/write_stream_preparation.py: bafybeiaa7a7wsr7acpv5my3tqupuzsxpk5d23wg6i4262ea46isaz3q6ai
@@ -36,7 +36,7 @@ fingerprint_ignore_patterns: []
 connections: []
 contracts:
 - valory/wveolas:0.1.0:bafybeifap7ourb6ginmbndgwzsyq2xvap2t6uy6m6yshm2klvbio7nuobi
-- valory/compatibility_fallback_handler:0.1.0:bafybeiacphxonfnokxkmt3xmttsubj543c2fufnw7d65haahvqujqzikvu
+- valory/compatibility_fallback_handler:0.1.0:bafybeifyan3wzhsvafwwkyq7tptojvkm3mzjtzgjqewvdbpkuia7r2dfnq
 protocols:
 - valory/contract_api:1.0.0:bafybeialhbjvwiwcnqq3ysxcyemobcbie7xza66gaofcvla5njezkvhcka
 skills:
