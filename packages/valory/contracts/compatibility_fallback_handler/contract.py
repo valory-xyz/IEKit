@@ -73,3 +73,21 @@ class CompatibilityFallbackHandlerContract(Contract):
 
         code = ledger_api.api.eth.get_code(wallet_address).hex()
         return {"is_contract": code != "0x"}
+
+    @classmethod
+    def get_message_hash(
+        cls,
+        ledger_api: EthereumApi,
+        contract_address: str,
+        message: bytes,
+    ) -> Optional[JSONLike]:
+        """Validates a signature against a safe."""
+        contract_instance = cls.get_instance(ledger_api, contract_address)
+
+        result = ledger_api.contract_method_call(
+            contract_instance=contract_instance,
+            method_name="getMessageHash",
+            message=message,
+        )
+
+        return {"message_hash": "0x" + result.hex()}

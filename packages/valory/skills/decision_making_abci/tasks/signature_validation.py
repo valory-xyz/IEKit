@@ -28,6 +28,7 @@ from eth_account.messages import (
     encode_defunct,
     encode_structured_data,
 )
+from eth_utils.curried import keccak
 from eth_utils.exceptions import ValidationError
 
 from packages.valory.contracts.compatibility_fallback_handler.contract import (
@@ -100,10 +101,41 @@ class SignatureValidationMixin:
 
         return is_contract
 
-    def validate_safe_signature(self, message_hash, address):
+    def get_message_hash(self, message, safe_address):
+        """Get the messageHash from the Safe"""
+        encoded_message = encode_defunct(text=message)
+        msg_bytes = keccak(
+            b"\x19"
+            + encoded_message.version
+            + encoded_message.header
+            + encoded_message.body
+        )
+
+        # Call get_code
+        contract_api_msg = yield from self.behaviour.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
+            contract_address=safe_address,
+            contract_id=str(CompatibilityFallbackHandlerContract.contract_id),
+            contract_callable="get_message_hash",
+            message=msg_bytes,
+        )
+        if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
+            self.behaviour.context.logger.error(
+                f"Error getting the message hash for safe {safe_address}. Message: {message}"
+            )
+            return False
+
+        message_hash = contract_api_msg.state.body["message_hash"]
+
+        return message_hash
+
+    def validate_safe_signature(self, message, address):
         """Validate a safe signature"""
+        message_hash = yield from self.get_message_hash(message, address)
+
         # Get the message from the hash using Safe Transaction Service
-        url = f"https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/"
+        transaction_service_url = self.params.transaction_service_url
+        url = transaction_service_url.replace("{message_hash}", message_hash)
 
         response = yield from self.behaviour.get_http_response(method="GET", url=url)
 
@@ -146,11 +178,11 @@ class SignatureValidationMixin:
 
         return is_valid
 
-    def validate_signature(self, message_hash, address, signature):
+    def validate_signature(self, message, address, signature):
         """Validate signatures"""
         is_contract = yield from self.is_contract(address)
         if is_contract:
-            is_valid = yield from self.validate_safe_signature(message_hash, address)
+            is_valid = yield from self.validate_safe_signature(message, address)
             return is_valid
         else:
-            return validate_eoa_signature(message_hash, address, signature)
+            return validate_eoa_signature(message, address, signature)

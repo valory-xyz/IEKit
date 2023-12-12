@@ -19,8 +19,6 @@
 
 """This package contains the logic for task preparations."""
 
-from eth_account.messages import encode_defunct
-
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.signature_validation import (
     SignatureValidationMixin,
@@ -89,9 +87,8 @@ class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
 
             # Verify proposer signature
             message = f"I am signing a message to verify that I propose a tweet starting with {tweet['text'][:10]}"
-            message_hash = encode_defunct(text=message)
             is_valid = yield from self.validate_signature(
-                message_hash,
+                message,
                 tweet["proposer"]["address"],
                 tweet["proposer"]["signature"],
             )
