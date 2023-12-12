@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeigt4xzp4agqs7brmrsj2u343zhdgupujlqqk65chovx7lebitrck4
+agent: valory/impact_evaluator:0.1.0:bafybeif4zcwayt64fg4k5rszmix5suduicdtav4ev67cfl77j4hhjbsqiq
 number_of_agents: 1
 deployment:
   agent:
@@ -195,7 +195,7 @@ type: connection
     auth_token: <auth_token>
     consumer_key: <consumer_key>
     consumer_secret: <consumer_secret>
-    use_staging_api: ${bool:false}
+    use_staging_api: ${USE_STAGING_API:bool:false}
     staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
 1:
   config:
@@ -204,7 +204,7 @@ type: connection
     auth_token: <auth_token>
     consumer_key: <consumer_key>
     consumer_secret: <consumer_secret>
-    use_staging_api: ${bool:false}
+    use_staging_api: ${USE_STAGING_API:bool:false}
     staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
 2:
   config:
@@ -213,7 +213,7 @@ type: connection
     auth_token: <auth_token>
     consumer_key: <consumer_key>
     consumer_secret: <consumer_secret>
-    use_staging_api: ${bool:false}
+    use_staging_api: ${USE_STAGING_API:bool:false}
     staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
 3:
   config:
@@ -222,5 +222,5 @@ type: connection
     auth_token: <auth_token>
     consumer_key: <consumer_key>
     consumer_secret: <consumer_secret>
-    use_staging_api: ${bool:false}
+    use_staging_api: ${USE_STAGING_API:bool:false}
     staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
