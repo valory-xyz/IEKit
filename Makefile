@@ -75,7 +75,7 @@ generators:
 .PHONY: common-checks-1
 common-checks-1:
 	tomte check-copyright --author valory --exclude-part abci  --exclude-part http_client  --exclude-part ipfs  --exclude-part ledger  --exclude-part p2p_libp2p_client  --exclude-part gnosis_safe  --exclude-part gnosis_safe_proxy_factory  --exclude-part multisend  --exclude-part service_registry  --exclude-part acn  --exclude-part contract_api  --exclude-part http  --exclude-part ipfs  --exclude-part ledger_api --exclude-part tendermint --exclude-part abstract_abci --exclude-part abstract_round_abci --exclude-part registration_abci --exclude-part reset_pause_abci --exclude-part termination_abci --exclude-part transaction_settlement_abci --exclude-part http_server
-	tomte tomte check-doc-links --url-skips "https://goerli.infura.io/v3/<infura_api_key>"
+	tomte check-doc-links --url-skips "https://goerli.infura.io/v3/<infura_api_key>" --url-skips "https://twitter.com/autonolas" --url-skips "https://developer.twitter.com/en/portal/dashboard"
 	tox -p -e check-hash -e check-packages -e check-doc-hashes
 
 .PHONY: test
