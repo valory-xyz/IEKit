@@ -7,24 +7,26 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
-  behaviours.py: bafybeidlfdovcj37dowftf6xswhsf2rawx7issrkwgx2xz4mseo66zhtwu
+  behaviours.py: bafybeicd7ea67i34xcvpcp5a74s5vdh465bfiitmvp4qfpyvebydp222im
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
-  fsm_specification.yaml: bafybeiaz2ejzn654bckao54i3dicbm3ehdpq4obc6lfo4hvngjxteld7ye
+  fsm_specification.yaml: bafybeihqaaud54lucsousv5dbbn3mbqro3ryel3hxpzz33xkvf47tq4yhe
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
-  models.py: bafybeictln7abrfqkm42euj2ldb2aqh3j3vuz45gltlepldzucgqgjy3va
+  models.py: bafybeidlcxxckpzdkfbwp5tfz6lpiincektzrk3fg6gu7lpxsyonfv5caq
   payloads.py: bafybeif5bomwy74bwnphsk6bty6qb6efugvjnnopsz7qjunpe6gtgjaxya
-  rounds.py: bafybeifi6of7gxwkizhrhbemq7cu4itzxuuim6sf6qpqfemzqli7w2sky4
-  tasks/finished_pipeline_preparation.py: bafybeifvwzvnw3d2lxlk4p5hd6j2tcxr7bwjewm667ubssoqyfsk4xafd4
-  tasks/llm_preparation.py: bafybeigi7i5yp7w5hi5mcbzuzdfbfm4j5etsvplbhb2pdjcb3jfcy6qzrq
-  tasks/read_stream_preparation.py: bafybeiespz6kzkzvrjjf3d6ffwse3rufuyrrab3axvg64pxw4jj6zzhwny
-  tasks/score_preparations.py: bafybeieiesjkyjbcvqut3l6nlzcwpidibsmo3mz7j6p54lbqzspfcf3ram
-  tasks/task_preparations.py: bafybeibu4ltwrsh2xyexcqf4z3wkumbikkirq27dsfo6qorocnfkadfkf4
-  tasks/twitter_preparation.py: bafybeieoa5wkhg55w2bdbkwawdz4kh4wmifzgtcmzi3ursi3oaxvpu4mom
-  tasks/week_in_olas_preparations.py: bafybeiakt43xrdglfmsrmhw3i3donzsfrqhgxzygdyi26tehpaeyeoz7n4
-  tasks/write_stream_preparation.py: bafybeifl4j7s575ts6x4msntymkempwguj4yypmxy2xjmffknn7qhkzfo4
+  rounds.py: bafybeic43lqt47fpenlrojgc27w7ws643f3yfdtfblrdufwgm4oqwghgwy
+  tasks/finished_pipeline_preparation.py: bafybeid652b53p7mtsbj3ksko3g2eezvg4nut2vukwvnfhxyfi4zkx3dym
+  tasks/llm_preparation.py: bafybeibvevrnqbdipahg6gn6sn3gq7cfn6zcx67f6sbhvdsq2ql7ikip4y
+  tasks/read_stream_preparation.py: bafybeigoi4lwtl3qfcl6yrvbl2sp4kuzv34lq34pa2hyb4pa6j2fypg2hq
+  tasks/score_preparations.py: bafybeie7cfot24zcyod5becz6t5lasvva77httfkw57qmvgjk35d3qluxa
+  tasks/signature_validation.py: bafybeihyckhs37pvh77q4tn7cnaia3gs5x6wudyp22qipazaftycqtaezi
+  tasks/task_preparations.py: bafybeihqieo4logxhsqntyfjphimf243aapqr4go43jb3eacrt7ouystmq
+  tasks/tweet_validation_preparation.py: bafybeic57ncduxguroogueizijfupz7zk2kiexl3ram2zudmeizzxqmwlm
+  tasks/twitter_preparation.py: bafybeiaqtib5p7scfflhr5jk5zujgtzkovbvuevppvdz3tg3xyl2dioobq
+  tasks/week_in_olas_preparations.py: bafybeidhcwqtdfzwim7uckv4yrzjfyiivu5wxs5thhxsi6ccoa4x5tq6bi
+  tasks/write_stream_preparation.py: bafybeiaa7a7wsr7acpv5my3tqupuzsxpk5d23wg6i4262ea46isaz3q6ai
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
-  tests/centaur_configs.py: bafybeifgmz5nlpfj4ynpzywbwnnuhz2dxookezwhxmvzlucjbhugv3tgma
-  tests/test_behaviours.py: bafybeigddwn7uts6zb46lpk4j7eetp6sniwtclfzngkgws52yomue4cdvy
+  tests/centaur_configs.py: bafybeibpaghsahe4yi6o2s6x6sdluuid2kawe54kpnlruwdpqqavkmfbde
+  tests/test_behaviours.py: bafybeic5v76d7xc2r4iy2alikd653l6l36b5yhpk4oym4ezefeeyrjusre
   tests/test_dialogues.py: bafybeihxzcyy7xvg4lte4bv5hy2h4mozdzwvyaa36feu3oxv67jfvsyuoi
   tests/test_handlers.py: bafybeie6q3l6zyf356uvhldobhiir5ang5ybmi7lcao3556n3bnlpfqhfm
   tests/test_models.py: bafybeiazl2mfe3iwydtdkur3h2w7ir4iszext2666fzqnnhsr6xq2lhw3i
@@ -32,8 +34,11 @@ fingerprint:
   tests/test_rounds.py: bafybeicgeowr2ohxevcq6wflgt733fb5qi52dhmzzadhwrsmnigg5w2ynu
 fingerprint_ignore_patterns: []
 connections: []
-contracts: []
-protocols: []
+contracts:
+- valory/wveolas:0.1.0:bafybeifap7ourb6ginmbndgwzsyq2xvap2t6uy6m6yshm2klvbio7nuobi
+- valory/compatibility_fallback_handler:0.1.0:bafybeifyan3wzhsvafwwkyq7tptojvkm3mzjtzgjqewvdbpkuia7r2dfnq
+protocols:
+- valory/contract_api:1.0.0:bafybeialhbjvwiwcnqq3ysxcyemobcbie7xza66gaofcvla5njezkvhcka
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
 behaviours:
@@ -152,6 +157,8 @@ models:
       slash_threshold_amount: 10000000000000000
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
+      transaction_service_url: https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/
+      wveolas_address: '0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40'
     class_name: Params
   requests:
     args: {}

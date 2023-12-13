@@ -174,12 +174,30 @@ class TwitterConnection(BaseSyncConnection):
 
         # Call the staging API
         if self.use_staging_api:
-            url = self.staging_api
+            url = f"{self.staging_api}/twitter/create_tweet"
 
-            if isinstance(text, list):
-                # Thread
-                first_tweet_id = None
-                for tweet in text:
+            self.logger.info(
+                f"Posting tweet using the staging API {url}"
+            )
+
+            try:
+                if isinstance(text, list):
+                    # Thread
+                    first_tweet_id = None
+                    for tweet in text:
+                        response = requests.post(
+                            url,
+                            json={
+                                "user_name": "staging_contribute",
+                                "text": text
+                            },
+                            timeout=10
+                        )
+
+                        if not first_tweet_id:
+                            first_tweet_id = response.json()["tweet_id"]
+                else:
+                    # Single tweet
                     response = requests.post(
                         url,
                         json={
@@ -188,31 +206,31 @@ class TwitterConnection(BaseSyncConnection):
                         },
                         timeout=10
                     )
+                    first_tweet_id = response.json()["tweet_id"]
 
-                    if not first_tweet_id:
-                        first_tweet_id = response.json()["tweet_id"]
-            else:
-                # Single tweet
-                response = requests.post(
-                    url,
-                    json={
-                        "user_name": "staging_contribute",
-                        "text": text
-                    },
-                    timeout=10
+            except requests.exceptions.ConnectionError as error:
+                return cast(
+                    TwitterMessage,
+                    dialogue.reply(
+                        performative=TwitterMessage.Performative.ERROR,
+                        target_message=message,
+                        message=error,
+                    ),
                 )
-                first_tweet_id = response.json()["tweet_id"]
 
             return cast(
                 TwitterMessage,
                 dialogue.reply(
                     performative=TwitterMessage.Performative.TWEET_CREATED,
                     target_message=message,
-                    tweet_id=first_tweet_id,
+                    tweet_id=str(first_tweet_id),
                 ),
             )
 
         # Call the Twitter API
+        self.logger.info(
+            "Posting tweet using tweepy"
+        )
         api = (
             self.api
             if not credentials

@@ -1,0 +1,19 @@
+name: compatibility_fallback_handler
+author: valory
+version: 0.1.0
+type: contract
+description: Safe CompatibilityFallbackHandler contract
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeigyvgpsfdvw2ir5dliybm7oedojjffp5k4jifewhbcce7uk5isyse
+  build/compatibility_fallback_handler.json: bafybeiaviobfcfldps5ka32eo3sy2fhqn55ivrmevyzmcbjhy26jfiwh2u
+  contract.py: bafybeidpyi7muuzqjdyxdjdwx4tr2mghhg6wgqlgcybldexoc36ee5a6oy
+fingerprint_ignore_patterns: []
+contracts: []
+class_name: CompatibilityFallbackHandlerContract
+contract_interface_paths:
+  ethereum: build/compatibility_fallback_handler.json
+dependencies:
+  open-aea-ledger-ethereum:
+    version: ==1.42

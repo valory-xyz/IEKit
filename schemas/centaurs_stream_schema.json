@@ -62,7 +62,7 @@
                     "type": "boolean"
                 },
                 "last_run": {
-                    "type": ["integer", "null"]
+                    "type": ["integer", "null", "string"]
                 },
                 "run_hour_utc": {
                     "type": "integer"
@@ -94,7 +94,7 @@
                     "type": "boolean"
                 },
                 "last_run": {
-                    "type": ["integer", "null"]
+                    "type": ["integer", "null", "string"]
                 },
                 "run_hour_utc": {
                     "type": "integer"
@@ -113,13 +113,60 @@
                     "type": "boolean"
                 },
                 "last_run": {
-                    "type": ["integer", "null"]
+                    "type": ["integer", "null", "string"]
                 },
                 "run_hour_utc": {
                     "type": "integer"
                 }
             },
             "required": ["weekly", "enabled", "last_run", "run_hour_utc"],
+            "additionalProperties": false
+        },
+        "executionAttempt": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "dateCreated": {
+                    "type": "string"
+                },
+                "verified": {
+                    "type": ["boolean", "null"]
+                }
+            },
+            "required": ["id", "dateCreated", "verified"]
+        },
+        "proposer": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "signature": {
+                    "type": "string"
+                },
+                "verified": {
+                    "type": ["boolean", "null"]
+                }
+            },
+            "required": ["address", "signature", "verified"],
+            "additionalProperties": false
+        },
+        "voter": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "signature": {
+                    "type": "string"
+                },
+                "votingPower": {
+                    "type": ["number"]
+                }
+            },
+            "required": ["address", "signature", "votingPower"],
             "additionalProperties": false
         },
         "scheduled_tweet_data": {
@@ -134,22 +181,13 @@
                 "voters": {
                     "type": "array",
                     "items": {
-                        "type": "object",
-                        "propertyNames": {
-                            "pattern": "^0x[a-fA-F0-9]{40}$"
-                        },
-                        "patternProperties": {
-                            "^0x[a-fA-F0-9]{40}$": {
-                                "type": "string"
-                            }
-                        },
-                        "additionalProperties": false,
-                        "minProperties": 1,
-                        "maxProperties": 1
+                        "items": {
+                            "$ref": "#/definitions/voter"
+                        }
                     }
                 },
                 "proposer": {
-                    "type": "string"
+                    "$ref": "#/definitions/proposer"
                 },
                 "request_id": {
                     "type": "string"
@@ -157,14 +195,19 @@
                 "createdDate": {
                     "type": "number"
                 },
-                "execute": {
-                    "type": "boolean"
-                },
                 "action_id": {
                     "type": "string"
+                },
+                "executionAttempts": {
+                    "type": "array",
+                    "items": {
+                        "items": {
+                            "$ref": "#/definitions/executionAttempt"
+                        }
+                    }
                 }
             },
-            "required": ["text", "posted", "voters", "proposer", "request_id", "createdDate", "execute"],
+            "required": ["request_id", "createdDate", "text", "posted", "proposer", "voters",  "executionAttempts", "action_id"],
             "additionalProperties": false
         },
         "centaur": {

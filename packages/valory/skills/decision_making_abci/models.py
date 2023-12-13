@@ -69,7 +69,10 @@ class Params(BaseParams):
         self.centaur_id_to_secrets = json.loads(
             self._ensure("centaur_id_to_secrets", kwargs, str)
         )
-
+        self.transaction_service_url = self._ensure(
+            "transaction_service_url", kwargs, str
+        )
+        self.wveolas_address = self._ensure("wveolas_address", kwargs, str)
         super().__init__(*args, **kwargs)
 
 

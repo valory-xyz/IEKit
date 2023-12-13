@@ -21,7 +21,7 @@ connections:
 - valory/ledger:0.19.0:bafybeia47rr37ianvwsh77tjjpv3nwif5sywhhy2fbdshnz4a2icwln76a
 - valory/p2p_libp2p_client:0.1.0:bafybeihge56dn3xep2dzomu7rtvbgo4uc2qqh7ljl3fubqdi2lq44gs5lq
 - valory/openai:0.1.0:bafybeiepsxac7e2tq3mcfkgcx62zt6oiaeic5wwcs4mnv733l762kn62du
-- valory/twitter:0.1.0:bafybeigwywkh4ep72pu6yqr4v3qkahj6buo6f4ng5hhgkkgr5fvcv6ztey
+- valory/twitter:0.1.0:bafybeibju7477agfjcveypdv4smso2iy6vy2iqy5lz2ua2bbjhyxlm5dre
 contracts:
 - valory/dynamic_contribution:0.1.0:bafybeia54zrihbupv35dkw23x4lc7cgeh3obinqlszvjighm7rxap6komi
 - valory/gnosis_safe:0.1.0:bafybeidll7frtdsq2ckiluazkwk4zpkp7natt4kdejjehwvykqwzyuf6ei
@@ -42,7 +42,7 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeiflcfufixmsrhobf56bn5745m2iipcfqyulwk2qegtnagb3kvaaxi
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
-- valory/impact_evaluator_abci:0.1.0:bafybeihv52iil4qknszjts33wpiknbvx46g2otowl6w2oklx3pvb5g7fye
+- valory/impact_evaluator_abci:0.1.0:bafybeifi55u4cghp4mpq6fnolaoqozxiu4iqyecyo3kjc3m4xg3sow56bq
 - valory/generic_scoring_abci:0.1.0:bafybeiexjfu736oe3u43siklxsyqwvlltoks5rnmhl2t7jjmwpwuhc3fey
 - valory/twitter_scoring_abci:0.1.0:bafybeiezvn76bbkmfuddcitooj7b3r7kv4cdehz7noepybqylhz2cjt3hm
 - valory/ceramic_read_abci:0.1.0:bafybeigqpkvsxfhz5jt3yuipmkl6eyfgqcw36226sgfhdgud7mphsjmopa
@@ -52,11 +52,11 @@ skills:
 - valory/reset_pause_abci:0.1.0:bafybeidzajbe3erygeh2xbd6lrjv7nsptznjuzrt24ykgvhgotdeyhfnba
 - valory/termination_abci:0.1.0:bafybeie4zvjfxvdu7qrulmur3chpjz3kpj5m4bjsxvpk4gvj5zbyyayfaa
 - valory/transaction_settlement_abci:0.1.0:bafybeiaefgqbs7zsn5xe5kdwrujj7ivygkn3ujpw6crnvi3knvxw75qmja
-- valory/twitter_write_abci:0.1.0:bafybeigcpqeu2ymlgozqq6o6befqnmvyfkudqpvfvh255ovrtd3erhodlu
-- valory/decision_making_abci:0.1.0:bafybeibx6wvyp76xkzcdnfpluxjoxlwqpcgmn7ovyam6pghhl6jfdz6kie
+- valory/twitter_write_abci:0.1.0:bafybeiga55lbnr6k632ytgwintyuaxegrvvt7k6bn7vwymbgcq7w6tqi7m
+- valory/decision_making_abci:0.1.0:bafybeifgex5tw3vllnkulzwktupnirftaxr36c26vrdlpy5gcbtbry2eiy
 - valory/llm_abci:0.1.0:bafybeiav6mfjf5ltrhpmrelfpix3s7irgrk35ejx6zuqjm4wengyihmsse
 - valory/olas_week_abci:0.1.0:bafybeiholnppuo6zfrxh3yqjedvf5m7s2w6ahwsdfq444zfo7jlvfigfdu
-- valory/mech_interact_abci:0.1.0:bafybeielb6agwj5jfdv3nqnc7iugb4qz5us223jpr5uwolke4fmzxvmkna
+- valory/mech_interact_abci:0.1.0:bafybeihwvjvxyv2ca2eskt3d5cvac4onr7m2hla2inydpqdipw4ze3yz6a
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -250,9 +250,11 @@ models:
       light_slash_unit_amount: ${int:5000000000000000}
       serious_slash_unit_amount: ${int:8000000000000000}
       multisend_batch_size: ${int:50}
-      mech_contract_address: ${str:0xff82123dfb52ab75c417195c5fdb87630145ae81}
+      mech_contract_address: ${str:0x77af31de935740567cf4ff1986d04b2c964a786a}
       ipfs_address: ${str:https://gateway.autonolas.tech/ipfs/}
       default_chain_id: ${str:ethereum}
+      transaction_service_url: ${str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
+      wveolas_address: ${str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
 ---
 public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
 type: connection

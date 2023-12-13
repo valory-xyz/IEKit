@@ -30,13 +30,14 @@ class TaskPreparation:
     task_name = None
     task_event = None
 
-    def __init__(self, synchronized_data, params, logger, now_utc) -> None:
+    def __init__(self, synchronized_data, params, logger, now_utc, behaviour) -> None:
         """Init"""
         self.name = ""
         self.synchronized_data = synchronized_data
         self.params = params
         self.logger = logger
         self.now_utc = now_utc
+        self.behaviour = behaviour
         self.set_config()
         self.logger.info(f"Instantiated task {self.__class__.__name__}")
         self.log_config()
@@ -134,7 +135,11 @@ class TaskPreparation:
             return False
 
         # Check extra conditions
-        if not self.check_extra_conditions():
+        proceed = yield from self.check_extra_conditions()
+        if not proceed:
+            self.logger.info(
+                f"[{self.__class__.__name__}]: extra conditions returned False"
+            )
             return False
 
         # Run
@@ -151,16 +156,19 @@ class TaskPreparation:
 
     def pre_task(self):
         """Task preprocessing"""
-        if self.check_conditions():
+        proceed = yield from self.check_conditions()
+        if proceed:
             self.logger.info(f"Running {self.__class__.__name__}._pre_task()")
-            return self._pre_task()
+            updates, event = yield from self._pre_task()
+            return updates, event
         self.logger.info(f"Skipping {self.__class__.__name__}._pre_task()")
         return {}, None
 
     def post_task(self):
         """Task postprocessing"""
         self.logger.info(f"Running {self.__class__.__name__}._post_task()")
-        return self._post_task()
+        updates, event = yield from self._post_task()
+        return updates, event
 
     def _post_task(self):
         """Preparations after running the task"""

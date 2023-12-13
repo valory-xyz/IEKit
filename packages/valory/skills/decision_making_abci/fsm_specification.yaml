@@ -2,6 +2,7 @@ alphabet_in:
 - DAILY_ORBIS
 - DAILY_TWEET
 - DONE
+- FORCE_DB_UPDATE
 - LLM
 - NEXT_CENTAUR
 - NO_MAJORITY
@@ -11,6 +12,7 @@ alphabet_in:
 - ROUND_TIMEOUT
 - SCHEDULED_TWEET
 - SCORE
+- TWEET_VALIDATION
 - UPDATE_CENTAURS
 - WEEK_IN_OLAS_CREATE
 - WRITE_CONTRIBUTE_DB
@@ -47,6 +49,7 @@ transition_func:
     (DecisionMakingRound, DAILY_ORBIS): FinishedDecisionMakingWriteOrbisRound
     (DecisionMakingRound, DAILY_TWEET): FinishedDecisionMakingWriteTwitterRound
     (DecisionMakingRound, DONE): FinishedDecisionMakingDoneRound
+    (DecisionMakingRound, FORCE_DB_UPDATE): DecisionMakingRound
     (DecisionMakingRound, LLM): FinishedDecisionMakingLLMRound
     (DecisionMakingRound, NEXT_CENTAUR): DecisionMakingRound
     (DecisionMakingRound, NO_MAJORITY): DecisionMakingRound
@@ -56,6 +59,7 @@ transition_func:
     (DecisionMakingRound, ROUND_TIMEOUT): DecisionMakingRound
     (DecisionMakingRound, SCHEDULED_TWEET): FinishedDecisionMakingWriteTwitterRound
     (DecisionMakingRound, SCORE): FinishedDecisionMakingScoreRound
+    (DecisionMakingRound, TWEET_VALIDATION): DecisionMakingRound
     (DecisionMakingRound, UPDATE_CENTAURS): FinishedDecisionMakingUpdateCentaurRound
     (DecisionMakingRound, WEEK_IN_OLAS_CREATE): FinishedDecisionMakingWeekInOlasRound
     (DecisionMakingRound, WRITE_CONTRIBUTE_DB): FinishedDecisionMakingWriteContributeDBRound

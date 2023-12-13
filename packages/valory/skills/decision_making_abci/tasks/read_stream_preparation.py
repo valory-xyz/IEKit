@@ -32,10 +32,12 @@ class ReadCentaursPreparation(TaskPreparation):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
+        yield
         return True
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         updates = {
             "read_stream_id": self.params.centaurs_stream_id,
             "read_target_property": "centaurs_data",
@@ -47,6 +49,7 @@ class ReadCentaursPreparation(TaskPreparation):
         updates = {
             "current_centaur_index": 0,  # reset the centaur index after reading
         }
+        yield
         return updates, None
 
 
@@ -58,10 +61,12 @@ class ReadContributeDBPreparation(TaskPreparation):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
+        yield
         return True
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         updates = {
             "read_stream_id": self.params.ceramic_db_stream_id,
             "read_target_property": "ceramic_db",
@@ -71,6 +76,7 @@ class ReadContributeDBPreparation(TaskPreparation):
     def _post_task(self):
         """Preparations after running the task"""
         updates = {}
+        yield
         return updates, None
 
 
@@ -82,10 +88,12 @@ class ReadManualPointsPreparation(TaskPreparation):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
+        yield
         return True
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         updates = {
             "read_stream_id": self.params.manual_points_stream_id,
             "read_target_property": "score_data",
@@ -95,4 +103,5 @@ class ReadManualPointsPreparation(TaskPreparation):
     def _post_task(self):
         """Preparations after running the task"""
         updates = {}
+        yield
         return updates, None

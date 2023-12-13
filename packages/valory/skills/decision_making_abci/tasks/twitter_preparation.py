@@ -19,13 +19,20 @@
 
 """This package contains the logic for task preparations."""
 
+from typing import Generator, Optional, cast
+
+from packages.valory.contracts.wveolas.contract import WveOLASContract
+from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.decision_making_abci.rounds import Event
+from packages.valory.skills.decision_making_abci.tasks.signature_validation import (
+    SignatureValidationMixin,
+)
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
 )
 
 
-TWEET_CONSENSUS_WVEOLAS_WEI = 2e6 * 1e18  # 2M wveOLAS to wei
+TWEET_CONSENSUS_WVEOLAS_WEI = 2e6 * 1e18  # 2M wveolas to wei
 
 
 class TwitterPreparation(TaskPreparation):
@@ -33,6 +40,7 @@ class TwitterPreparation(TaskPreparation):
 
     def check_extra_conditions(self):
         """Validate Twitter credentials for the current centaur"""
+        yield
         current_centaur = self.synchronized_data.centaurs_data[
             self.synchronized_data.current_centaur_index
         ]
@@ -55,13 +63,16 @@ class TwitterPreparation(TaskPreparation):
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         current_centaur = self.synchronized_data.centaurs_data[
             self.synchronized_data.current_centaur_index
         ]
 
+        text = self.get_tweet()
+
         write_data = [
             {
-                "text": self.get_tweet(),
+                "text": text,
                 "credentials": self.params.centaur_id_to_secrets[current_centaur["id"]][
                     "twitter"
                 ],
@@ -96,7 +107,7 @@ class TwitterPreparation(TaskPreparation):
             current_centaur["actions"] = twitter_action
 
         updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
-
+        yield
         return updates, None
 
     def get_tweet(self):
@@ -116,7 +127,7 @@ class DailyTweetPreparation(TwitterPreparation):
 
     def _post_task(self):
         """Task postprocessing"""
-        updates, event = super()._post_task()
+        updates, event = yield from super()._post_task()
 
         # Update the last run time
         centaurs_data = updates["centaurs_data"]
@@ -126,56 +137,116 @@ class DailyTweetPreparation(TwitterPreparation):
         ] = self.now_utc.strftime("%Y-%m-%d %H:%M:%S %Z")
 
         updates["centaurs_data"] = centaurs_data
-
         return updates, event
 
 
-class ScheduledTweetPreparation(TwitterPreparation):
+class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
     """ScheduledTweetPreparation"""
 
     task_name = "scheduled_tweet"
     task_event = Event.SCHEDULED_TWEET.value
 
+    def __init__(self, synchronized_data, params, logger, now_utc, behaviour) -> None:
+        """Init"""
+        super().__init__(synchronized_data, params, logger, now_utc, behaviour)
+        self.pending_tweets = []
+        self.tweets_need_update = False
+        self.updated_tweets = None
+
+    def _pre_task(self):
+        """Preparations before running the task"""
+        yield
+        centaurs_data = self.synchronized_data.centaurs_data
+        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
+
+        updates = {}
+        event = None
+
+        if self.tweets_need_update:
+            current_centaur["plugins_data"]["scheduled_tweet"][
+                "tweets"
+            ] = self.updated_tweets
+            updates["centaurs_data"] = centaurs_data
+            updates["has_centaurs_changes"] = True
+            event = Event.FORCE_DB_UPDATE.value
+
+        if self.pending_tweets:
+            text = self.get_tweet()
+
+            write_data = [
+                {
+                    "text": text,
+                    "credentials": self.params.centaur_id_to_secrets[
+                        current_centaur["id"]
+                    ]["twitter"],
+                }
+            ]
+
+            updates["write_data"] = write_data
+            event = self.task_event
+
+        return updates, event
+
     def _post_task(self):
         """Task postprocessing"""
-        updates, event = super()._post_task()
+        if (
+            self.synchronized_data.previous_decision_event
+            == Event.FORCE_DB_UPDATE.value
+        ):
+            self.logger.info("Not running post_task because this was a force db update")
+            return {}, None
+
+        updates, event = yield from super()._post_task()
 
         # Set the scheduled tweet as posted
         centaurs_data = updates["centaurs_data"]
         current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
-        pending_tweets = self.get_pending_tweets()
+        pending_tweets = yield from self.get_pending_tweets()
         tweet_ids = self.synchronized_data.tweet_ids
         if not pending_tweets:
             return updates, event
+
+        posted_tweet_id = pending_tweets[0]["request_id"]
 
         tweet_id = tweet_ids[0]
         for j, tweet in enumerate(
             current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]
         ):
-            if pending_tweets[0]["request_id"] == tweet["request_id"]:
+            if tweet["request_id"] == posted_tweet_id:
                 current_centaur["plugins_data"]["scheduled_tweet"]["tweets"][j][
                     "posted"
                 ] = True
                 current_centaur["plugins_data"]["scheduled_tweet"]["tweets"][j][
                     "action_id"
                 ] = f"https://twitter.com/launchcentaurs/status/{tweet_id}"  # even if the tweet does not belong to this account, Twitter resolves it correctly by id
+                current_centaur["plugins_data"]["scheduled_tweet"]["tweets"][j][
+                    "executionAttempts"
+                ][-1]["verified"] = True
                 break
 
         updates["centaurs_data"] = centaurs_data
-
+        updates["has_centaurs_changes"] = True
         return updates, event
 
     def get_tweet(self):
         """Get the tweet"""
-        return self.get_pending_tweets()[0]["text"]
+        return self.pending_tweets[0]["text"]
 
     def check_extra_conditions(self):
         """Check extra conditions"""
+        if (
+            self.synchronized_data.previous_decision_event
+            == Event.FORCE_DB_UPDATE.value
+        ):
+            self.logger.info("Not running again because this was a force db update")
+            return False
+
         current_centaur = self.synchronized_data.centaurs_data[
             self.synchronized_data.current_centaur_index
         ]
 
-        if not super().check_extra_conditions():
+        proceed = yield from super().check_extra_conditions()
+        if not proceed:
             return False
 
         if "scheduled_tweet" not in current_centaur["plugins_data"]:
@@ -191,12 +262,13 @@ class ScheduledTweetPreparation(TwitterPreparation):
 
         for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
             if not all(
-                field in tweet
-                for field in ["execute", "posted", "request_id", "text", "voters"]
+                field in tweet for field in ["posted", "request_id", "text", "voters"]
             ):
                 return False
 
-        if not self.get_pending_tweets():
+        self.pending_tweets = yield from self.get_pending_tweets()
+        if not self.pending_tweets and not self.tweets_need_update:
+            self.logger.info("No pending tweets nor tweet votes to updates")
             return False
 
         return True
@@ -206,20 +278,116 @@ class ScheduledTweetPreparation(TwitterPreparation):
         current_centaur = self.synchronized_data.centaurs_data[
             self.synchronized_data.current_centaur_index
         ]
-        pending_tweets = [
-            t
-            for t in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]
-            if not t["posted"] and t["execute"]
-        ]
-        agreed_pending_tweets = list(
-            filter(
-                lambda t: self.check_tweet_consensus(t["voters"]),
-                pending_tweets,
-            )
-        )
-        return agreed_pending_tweets
 
-    def check_tweet_consensus(self, voters: dict):
+        pending_tweets = []
+        for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
+            self.logger.info(f"Checking tweet: {tweet['text']}")
+
+            # Ignore posted tweets
+            if tweet["posted"]:
+                self.logger.info("The tweet has been already posted")
+                continue
+
+            # Ignore unverified proposals
+            if not tweet["proposer"]["verified"]:
+                self.logger.info("The tweet proposer signature is not valid")
+                continue
+
+            # Ignore tweets not marked for posting
+            if not tweet["executionAttempts"]:
+                continue
+
+            if tweet["executionAttempts"][-1]["verified"] is not None:
+                self.logger.info("The tweet is not market for execution")
+                continue
+
+            # At this point, the tweet is awaiting to be published [verified=None]
+
+            # Ignore tweet with no voters
+            if not tweet["voters"]:
+                self.logger.info("The tweet has no voters")
+                continue
+
+            # Mark execution for success or failure
+            is_tweet_executable = yield from self.check_tweet_consensus(tweet)
+
+            # We only update the executionAttempt now if the verification failed
+            # If it succeeded, it will be updated after posting
+            if not is_tweet_executable:
+                tweet["executionAttempts"][-1]["verified"] = False
+                self.tweets_need_update = True
+                continue
+
+            pending_tweets.append(tweet)
+
+        self.updated_tweets = current_centaur["plugins_data"]["scheduled_tweet"][
+            "tweets"
+        ]
+
+        return pending_tweets
+
+    def check_tweet_consensus(self, tweet: dict):
         """Check whether users agree on posting"""
-        voting_power = sum([int(list(v.values())[0]) for v in voters])
-        return voting_power >= TWEET_CONSENSUS_WVEOLAS_WEI
+        total_voting_power = 0
+
+        for voter in tweet["voters"]:
+            # Verify signature
+            tweet_text = (
+                tweet["text"] if isinstance(tweet["text"], str) else tweet["text"][0]
+            )
+            message = f"I am signing a message to verify that I approve the tweet starting with {tweet_text[:10]}"
+            is_valid = yield from self.validate_signature(
+                message, voter["address"], voter["signature"]
+            )
+
+            self.logger.info(f"Voter: {voter['address']}  Signature valid: {is_valid}")
+            if not is_valid:
+                continue
+
+            # Get voting power
+            voting_power = yield from self.get_voting_power(voter["address"])
+            self.logger.info(f"Voter: {voter['address']}  Voting power: {voting_power}")
+            total_voting_power += cast(int, voting_power)
+
+        consensus = total_voting_power >= TWEET_CONSENSUS_WVEOLAS_WEI
+
+        self.behaviour.context.logger.info(
+            f"Voting power is {total_voting_power} for tweet {tweet['text']}. Executing? {consensus}"
+        )
+
+        return consensus
+
+    def get_voting_power(self, address: str):
+        """Get the given address's votes."""
+        olas_votes = yield from self.get_votes(
+            self.params.wveolas_address, address, "ethereum"
+        )
+
+        if not olas_votes:
+            olas_votes = 0
+
+        self.behaviour.context.logger.info(
+            f"Voting power is {olas_votes} for address {address}"
+        )
+        return olas_votes
+
+    def get_votes(
+        self, token_address, owner_address, chain_id
+    ) -> Generator[None, None, Optional[float]]:
+        """Get the given address's votes."""
+        response = yield from self.behaviour.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
+            contract_address=token_address,
+            contract_id=str(WveOLASContract.contract_id),
+            contract_callable="get_votes",
+            owner_address=owner_address,
+            chain_id=chain_id,
+        )
+        if response.performative != ContractApiMessage.Performative.STATE:
+            self.behaviour.context.logger.error(
+                f"Couldn't get the votes for address {chain_id}::{owner_address}: {response.performative}"
+            )
+            return None
+
+        votes = int(response.state.body["votes"]) / 1e18  # to olas
+        return votes

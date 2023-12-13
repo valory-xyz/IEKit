@@ -32,14 +32,17 @@ class ScorePreparation(TaskPreparation):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
+        yield
         return True
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         updates = {}
         return updates, self.task_event
 
     def _post_task(self):
         """Preparations after running the task"""
         updates = {}
+        yield
         return updates, None

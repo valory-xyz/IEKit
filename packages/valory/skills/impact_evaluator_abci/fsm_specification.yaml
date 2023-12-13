@@ -18,6 +18,7 @@ alphabet_in:
 - EVALUATE
 - FINALIZATION_FAILED
 - FINALIZE_TIMEOUT
+- FORCE_DB_UPDATE
 - INCORRECT_SERIALIZATION
 - INSUFFICIENT_FUNDS
 - LLM
@@ -46,6 +47,7 @@ alphabet_in:
 - SKIP_REQUEST
 - SUSPICIOUS_ACTIVITY
 - TWEET_EVALUATION_ROUND_TIMEOUT
+- TWEET_VALIDATION
 - UPDATE_CENTAURS
 - VALIDATE_TIMEOUT
 - VERIFICATION_ERROR
@@ -124,6 +126,7 @@ transition_func:
     (DecisionMakingRound, DAILY_ORBIS): RandomnessRound
     (DecisionMakingRound, DAILY_TWEET): RandomnessTwitterRound
     (DecisionMakingRound, DONE): ResetAndPauseRound
+    (DecisionMakingRound, FORCE_DB_UPDATE): DecisionMakingRound
     (DecisionMakingRound, LLM): LLMRandomnessRound
     (DecisionMakingRound, NEXT_CENTAUR): DecisionMakingRound
     (DecisionMakingRound, NO_MAJORITY): DecisionMakingRound
@@ -133,6 +136,7 @@ transition_func:
     (DecisionMakingRound, ROUND_TIMEOUT): DecisionMakingRound
     (DecisionMakingRound, SCHEDULED_TWEET): RandomnessTwitterRound
     (DecisionMakingRound, SCORE): GenericScoringRound
+    (DecisionMakingRound, TWEET_VALIDATION): DecisionMakingRound
     (DecisionMakingRound, UPDATE_CENTAURS): RandomnessRound
     (DecisionMakingRound, WEEK_IN_OLAS_CREATE): OlasWeekDecisionMakingRound
     (DecisionMakingRound, WRITE_CONTRIBUTE_DB): RandomnessRound

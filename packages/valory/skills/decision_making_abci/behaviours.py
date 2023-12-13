@@ -51,6 +51,9 @@ from packages.valory.skills.decision_making_abci.tasks.read_stream_preparation i
 from packages.valory.skills.decision_making_abci.tasks.score_preparations import (
     ScorePreparation,
 )
+from packages.valory.skills.decision_making_abci.tasks.tweet_validation_preparation import (
+    TweetValidationPreparation,
+)
 from packages.valory.skills.decision_making_abci.tasks.twitter_preparation import (
     DailyTweetPreparation,
     ScheduledTweetPreparation,
@@ -97,9 +100,17 @@ previous_event_to_task_preparation_cls = {
     },
     Event.WEEK_IN_OLAS_CREATE.value: {
         "prev": WeekInOlasCreatePreparation,
+        "next": TweetValidationPreparation,
+    },
+    Event.TWEET_VALIDATION.value: {
+        "prev": TweetValidationPreparation,
         "next": ScheduledTweetPreparation,
     },
     Event.SCHEDULED_TWEET.value: {
+        "prev": ScheduledTweetPreparation,
+        "next": UpdateCentaursPreparation,
+    },
+    Event.FORCE_DB_UPDATE.value: {
         "prev": ScheduledTweetPreparation,
         "next": UpdateCentaursPreparation,
     },
@@ -150,7 +161,7 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            updates, event = self.get_updates_and_event()
+            updates, event = yield from self.get_updates_and_event()
             payload_content = json.dumps(
                 {"updates": updates, "event": event}, sort_keys=True
             )
@@ -202,13 +213,18 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
                         self.params,
                         self.context.logger,
                         now_utc,
+                        self,
                     )
                     if previous_task_preparation_cls
                     else None
                 )
 
                 if previous_task_preparation:
-                    post_updates, post_event = previous_task_preparation.post_task()
+                    (
+                        post_updates,
+                        post_event,
+                    ) = yield from previous_task_preparation.post_task()
+
                     self.context.logger.info(
                         f"Post task updates = {post_updates}, post event = {post_event}"
                     )
@@ -227,13 +243,14 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
                     self.params,
                     self.context.logger,
                     now_utc,
+                    self,
                 )
                 if next_task_preparation_cls
                 else None
             )
 
             if next_task_preparation:
-                pre_updates, pre_event = next_task_preparation.pre_task()
+                pre_updates, pre_event = yield from next_task_preparation.pre_task()
                 self.context.logger.info(
                     f"Pre task updates = {pre_updates}, pre event = {pre_event}"
                 )

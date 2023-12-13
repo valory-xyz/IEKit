@@ -34,10 +34,12 @@ class WeekInOlasCreatePreparation(TaskPreparation):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
+        yield
         return True
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         updates = {}
         return updates, self.task_event
 
@@ -56,8 +58,7 @@ class WeekInOlasCreatePreparation(TaskPreparation):
             "text": self.synchronized_data.summary_tweets,
             "posted": False,
             "voters": [],
-            "execute": False,
-            "proposer": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",  # safe address
+            "proposer": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",  # service safe address (ethereum)
             "request_id": str(uuid.UUID(int=int(self.now_utc.timestamp()))),
             "createdDate": self.now_utc.timestamp(),
         }
@@ -65,5 +66,5 @@ class WeekInOlasCreatePreparation(TaskPreparation):
         current_centaur["plugins_data"]["scheduled_tweet"]["tweets"].append(thread)
 
         updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
-
+        yield
         return updates, None

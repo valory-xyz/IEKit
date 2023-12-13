@@ -29,6 +29,7 @@ class WriteStreamPreparation(TaskPreparation):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
+        yield
         return True
 
 
@@ -38,7 +39,8 @@ class OrbisPreparation(WriteStreamPreparation):
     def check_extra_conditions(self):
         """Validate Twitter credentials for the current centaur"""
 
-        if not super().check_extra_conditions():
+        proceed = yield from super().check_extra_conditions()
+        if not proceed:
             return False
 
         current_centaur = self.synchronized_data.centaurs_data[
@@ -81,18 +83,19 @@ class OrbisPreparation(WriteStreamPreparation):
             current_centaur["actions"] = orbis_action
 
         updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
-
+        yield
         return updates, None
 
 
 class DailyOrbisPreparation(OrbisPreparation):
-    """DailyTweetPreparation"""
+    """DailyOrbisPreparation"""
 
     task_name = "daily_orbis"
     task_event = Event.DAILY_ORBIS.value
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         current_centaur = self.synchronized_data.centaurs_data[
             self.synchronized_data.current_centaur_index
         ]
@@ -131,7 +134,7 @@ class DailyOrbisPreparation(OrbisPreparation):
 
     def _post_task(self):
         """Preparations after running the task"""
-        updates, event = super()._post_task()
+        updates, event = yield from super()._post_task()
 
         # Update the last run time
         centaurs_data = self.synchronized_data.centaurs_data
@@ -141,7 +144,6 @@ class DailyOrbisPreparation(OrbisPreparation):
         ] = self.now_utc.strftime("%Y-%m-%d %H:%M:%S %Z")
 
         updates = {"centaurs_data": centaurs_data}
-
         return updates, event
 
 
@@ -153,13 +155,15 @@ class UpdateCentaursPreparation(WriteStreamPreparation):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
-        if not super().check_extra_conditions():
+        proceed = yield from super().check_extra_conditions()
+        if not proceed:
             return False
 
         return self.synchronized_data.has_centaurs_changes
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         write_data = [
             {
                 "op": "update",
@@ -182,6 +186,7 @@ class UpdateCentaursPreparation(WriteStreamPreparation):
         updates = {
             "has_centaurs_changes": False,
         }
+        yield
         return updates, None
 
 
@@ -193,13 +198,15 @@ class WriteContributeDBPreparation(WriteStreamPreparation):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
-        if not super().check_extra_conditions():
+        proceed = yield from super().check_extra_conditions()
+        if not proceed:
             return False
 
         return self.synchronized_data.pending_write
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         write_data = [
             {
                 "op": "update",
@@ -222,4 +229,5 @@ class WriteContributeDBPreparation(WriteStreamPreparation):
         updates = {
             "pending_write": False,
         }
+        yield
         return updates, None
