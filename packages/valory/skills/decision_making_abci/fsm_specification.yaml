@@ -2,6 +2,7 @@ alphabet_in:
 - DAILY_ORBIS
 - DAILY_TWEET
 - DONE
+- FORCE_DB_UPDATE
 - LLM
 - NEXT_CENTAUR
 - NO_MAJORITY
@@ -48,6 +49,7 @@ transition_func:
     (DecisionMakingRound, DAILY_ORBIS): FinishedDecisionMakingWriteOrbisRound
     (DecisionMakingRound, DAILY_TWEET): FinishedDecisionMakingWriteTwitterRound
     (DecisionMakingRound, DONE): FinishedDecisionMakingDoneRound
+    (DecisionMakingRound, FORCE_DB_UPDATE): DecisionMakingRound
     (DecisionMakingRound, LLM): FinishedDecisionMakingLLMRound
     (DecisionMakingRound, NEXT_CENTAUR): DecisionMakingRound
     (DecisionMakingRound, NO_MAJORITY): DecisionMakingRound

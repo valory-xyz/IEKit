@@ -18,6 +18,7 @@ alphabet_in:
 - EVALUATE
 - FINALIZATION_FAILED
 - FINALIZE_TIMEOUT
+- FORCE_DB_UPDATE
 - INCORRECT_SERIALIZATION
 - INSUFFICIENT_FUNDS
 - LLM
@@ -125,6 +126,7 @@ transition_func:
     (DecisionMakingRound, DAILY_ORBIS): RandomnessRound
     (DecisionMakingRound, DAILY_TWEET): RandomnessTwitterRound
     (DecisionMakingRound, DONE): ResetAndPauseRound
+    (DecisionMakingRound, FORCE_DB_UPDATE): DecisionMakingRound
     (DecisionMakingRound, LLM): LLMRandomnessRound
     (DecisionMakingRound, NEXT_CENTAUR): DecisionMakingRound
     (DecisionMakingRound, NO_MAJORITY): DecisionMakingRound

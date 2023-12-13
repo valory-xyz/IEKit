@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeieomrmpzwqok47n6fundie4qzgpk2mskunio2md6ktzbianilblfu
+agent: valory/impact_evaluator:0.1.0:bafybeihd7diqbkneyl2coi4chmfx3geayemv5a6hcalvputuiqj5uc5rui
 number_of_agents: 1
 deployment:
   agent:
@@ -121,7 +121,7 @@ models:
       ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
       default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
       transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
-      wveolas_address_ethereum: ${WVEOLAS_ADDRESS_ETHEREUM:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
+      wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
 ---
 public_id: valory/ledger:0.19.0
 type: connection

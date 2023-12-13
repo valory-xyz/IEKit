@@ -21,8 +21,6 @@
 
 from typing import Generator, Optional, cast
 
-from eth_account.messages import encode_defunct
-
 from packages.valory.contracts.wveolas.contract import WveOLASContract
 from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.decision_making_abci.rounds import Event
