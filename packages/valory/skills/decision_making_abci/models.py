@@ -72,7 +72,7 @@ class Params(BaseParams):
         self.transaction_service_url = self._ensure(
             "transaction_service_url", kwargs, str
         )
-
+        self.wveolas_address = self._ensure("wveolas_address", kwargs, str)
         super().__init__(*args, **kwargs)
 
 

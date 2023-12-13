@@ -35,7 +35,6 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 
 
 TWEET_CONSENSUS_WVEOLAS_WEI = 2e6 * 1e18  # 2M wveolas to wei
-WVEOLAS_ADDRESS_ETHEREUM = "0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40"
 
 
 class TwitterPreparation(TaskPreparation):
@@ -363,7 +362,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
     def get_voting_power(self, address: str):
         """Get the given address's votes."""
         olas_votes = yield from self.get_votes(
-            WVEOLAS_ADDRESS_ETHEREUM, address, "ethereum"
+            self.params.wveolas_address, address, "ethereum"
         )
 
         if not olas_votes:

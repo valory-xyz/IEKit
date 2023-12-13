@@ -127,6 +127,7 @@ extra:
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
+        wveolas_address_ethereum: ${WVEOLAS_ADDRESS_ETHEREUM:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
 1:
   models:
     benchmark_tool:
@@ -206,6 +207,7 @@ extra:
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
+        wveolas_address_ethereum: ${WVEOLAS_ADDRESS_ETHEREUM:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
 2:
   models:
     benchmark_tool:
@@ -285,6 +287,7 @@ extra:
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
+        wveolas_address_ethereum: ${WVEOLAS_ADDRESS_ETHEREUM:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
 3:
   models:
     benchmark_tool:
@@ -368,6 +371,7 @@ extra:
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
+        wveolas_address_ethereum: ${WVEOLAS_ADDRESS_ETHEREUM:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
 ---
 public_id: valory/ledger:0.19.0
 type: connection
