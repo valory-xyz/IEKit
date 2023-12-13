@@ -324,9 +324,8 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
                 tweet["text"] if isinstance(tweet["text"], str) else tweet["text"][0]
             )
             message = f"I am signing a message to verify that I approve the tweet starting with {tweet_text[:10]}"
-            message_hash = encode_defunct(text=message)
             is_valid = yield from self.validate_signature(
-                message_hash, voter["address"], voter["signature"]
+                message, voter["address"], voter["signature"]
             )
 
             self.logger.info(f"Voter: {voter['address']}  Signature valid: {is_valid}")
@@ -338,7 +337,6 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
             self.logger.info(f"Voter: {voter['address']}  Voting power: {voting_power}")
             total_voting_power += cast(int, voting_power)
 
-        total_voting_power = TWEET_CONSENSUS_WVEOLAS_WEI
         consensus = total_voting_power >= TWEET_CONSENSUS_WVEOLAS_WEI
 
         self.behaviour.context.logger.info(
