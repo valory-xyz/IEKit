@@ -11,7 +11,7 @@ fingerprint:
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
   fsm_specification.yaml: bafybeihqaaud54lucsousv5dbbn3mbqro3ryel3hxpzz33xkvf47tq4yhe
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
-  models.py: bafybeidlcxxckpzdkfbwp5tfz6lpiincektzrk3fg6gu7lpxsyonfv5caq
+  models.py: bafybeibhlnmazgfiv4prucyk5lbg2jli44vb3lznc5cu3csvhtnstkdp6y
   payloads.py: bafybeif5bomwy74bwnphsk6bty6qb6efugvjnnopsz7qjunpe6gtgjaxya
   rounds.py: bafybeic43lqt47fpenlrojgc27w7ws643f3yfdtfblrdufwgm4oqwghgwy
   tasks/finished_pipeline_preparation.py: bafybeid652b53p7mtsbj3ksko3g2eezvg4nut2vukwvnfhxyfi4zkx3dym
@@ -21,7 +21,7 @@ fingerprint:
   tasks/signature_validation.py: bafybeihyckhs37pvh77q4tn7cnaia3gs5x6wudyp22qipazaftycqtaezi
   tasks/task_preparations.py: bafybeihqieo4logxhsqntyfjphimf243aapqr4go43jb3eacrt7ouystmq
   tasks/tweet_validation_preparation.py: bafybeic57ncduxguroogueizijfupz7zk2kiexl3ram2zudmeizzxqmwlm
-  tasks/twitter_preparation.py: bafybeiaqtib5p7scfflhr5jk5zujgtzkovbvuevppvdz3tg3xyl2dioobq
+  tasks/twitter_preparation.py: bafybeib7d37czhntqj7tgicpytylz7z2l4yjoysqtfmhadsud3brtt5d4m
   tasks/week_in_olas_preparations.py: bafybeidhcwqtdfzwim7uckv4yrzjfyiivu5wxs5thhxsi6ccoa4x5tq6bi
   tasks/write_stream_preparation.py: bafybeiaa7a7wsr7acpv5my3tqupuzsxpk5d23wg6i4262ea46isaz3q6ai
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
