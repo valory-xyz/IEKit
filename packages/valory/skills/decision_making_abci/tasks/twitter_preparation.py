@@ -32,9 +32,6 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 )
 
 
-TWEET_CONSENSUS_WVEOLAS_WEI = 2e6 * 1e18  # 2M wveolas to wei
-
-
 class TwitterPreparation(TaskPreparation):
     """TwitterPreparation"""
 
@@ -349,7 +346,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
             self.logger.info(f"Voter: {voter['address']}  Voting power: {voting_power}")
             total_voting_power += cast(int, voting_power)
 
-        consensus = total_voting_power >= TWEET_CONSENSUS_WVEOLAS_WEI
+        consensus = total_voting_power >= self.params.tweet_consensus_wveolas
 
         self.behaviour.context.logger.info(
             f"Voting power is {total_voting_power} for tweet {tweet['text']}. Executing? {consensus}"

@@ -73,6 +73,9 @@ class Params(BaseParams):
             "transaction_service_url", kwargs, str
         )
         self.wveolas_address = self._ensure("wveolas_address", kwargs, str)
+        self.tweet_consensus_wveolas = self._ensure(
+            "tweet_consensus_wveolas", kwargs, int
+        )
         super().__init__(*args, **kwargs)
 
 
