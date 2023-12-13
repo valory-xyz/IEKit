@@ -192,6 +192,13 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
     def _post_task(self):
         """Task postprocessing"""
+        if (
+            self.synchronized_data.previous_decision_event
+            == Event.FORCE_DB_UPDATE.value
+        ):
+            self.logger.info("Not running post_task because this was a force db update")
+            return {}, None
+
         updates, event = yield from super()._post_task()
 
         # Set the scheduled tweet as posted
@@ -234,7 +241,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
             self.synchronized_data.previous_decision_event
             == Event.FORCE_DB_UPDATE.value
         ):
-            self.logger.info("Not running because this was a force db update")
+            self.logger.info("Not running again because this was a force db update")
             return False
 
         current_centaur = self.synchronized_data.centaurs_data[
