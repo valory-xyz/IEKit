@@ -171,6 +171,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
             ] = self.updated_tweets
             updates["centaurs_data"] = centaurs_data
             updates["has_centaurs_changes"] = True
+            event = Event.FORCE_DB_UPDATE.value
 
         if self.pending_tweets:
             text = self.get_tweet()
@@ -229,6 +230,13 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
+        if (
+            self.synchronized_data.previous_decision_event
+            == Event.FORCE_DB_UPDATE.value
+        ):
+            self.logger.info("Not running because this was a force db update")
+            return False
+
         current_centaur = self.synchronized_data.centaurs_data[
             self.synchronized_data.current_centaur_index
         ]

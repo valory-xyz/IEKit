@@ -110,6 +110,10 @@ previous_event_to_task_preparation_cls = {
         "prev": ScheduledTweetPreparation,
         "next": UpdateCentaursPreparation,
     },
+    Event.FORCE_DB_UPDATE.value: {
+        "prev": ScheduledTweetPreparation,
+        "next": UpdateCentaursPreparation,
+    },
     Event.UPDATE_CENTAURS.value: {
         "prev": UpdateCentaursPreparation,
         "next": ScorePreparation,
