@@ -68,10 +68,11 @@ def build_safe_text_message(text):
     return hashed
 
 
-def validate_eoa_signature(message_hash, expected_address, signature):
+def validate_eoa_signature(message, expected_address, signature):
     """Validate an EOA signature"""
     try:
-        address = Account.recover_message(message_hash, signature=signature)
+        encoded_message = encode_defunct(text=message)
+        address = Account.recover_message(encoded_message, signature=signature)
         return address == expected_address
     except ValidationError:
         return False
