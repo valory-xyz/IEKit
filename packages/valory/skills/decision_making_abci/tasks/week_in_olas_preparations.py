@@ -58,9 +58,15 @@ class WeekInOlasCreatePreparation(TaskPreparation):
             "text": self.synchronized_data.summary_tweets,
             "posted": False,
             "voters": [],
-            "proposer": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",  # service safe address (ethereum)
+            "proposer": {
+                "address": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",  # service safe address (ethereum)
+                "verified": True,  # we automatically trust in the backend
+                "signature": "",
+            },
+            "action_id": "",
             "request_id": str(uuid.UUID(int=int(self.now_utc.timestamp()))),
             "createdDate": self.now_utc.timestamp(),
+            "executionAttempts": []
         }
 
         current_centaur["plugins_data"]["scheduled_tweet"]["tweets"].append(thread)
