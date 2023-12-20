@@ -66,7 +66,7 @@ class WeekInOlasCreatePreparation(TaskPreparation):
             "action_id": "",
             "request_id": str(uuid.UUID(int=int(self.now_utc.timestamp()))),
             "createdDate": self.now_utc.timestamp(),
-            "executionAttempts": []
+            "executionAttempts": [],
         }
 
         current_centaur["plugins_data"]["scheduled_tweet"]["tweets"].append(thread)
