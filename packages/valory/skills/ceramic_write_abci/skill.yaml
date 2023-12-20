@@ -173,5 +173,5 @@ dependencies:
   jsonpatch:
     version: ==1.32
   multiformats:
-    version: ==0.1.4.post3
+    version: ==0.3.1.post4
 is_abstract: true

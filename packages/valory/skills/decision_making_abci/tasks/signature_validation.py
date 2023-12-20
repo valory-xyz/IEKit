@@ -112,7 +112,7 @@ class SignatureValidationMixin:
             + encoded_message.body
         )
 
-        # Call get_code
+        # Call get_message_hash
         contract_api_msg = yield from self.behaviour.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
             contract_address=safe_address,
