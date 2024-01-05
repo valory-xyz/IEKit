@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import math
 import random
 import re
 from abc import ABC
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
 
 from twitter_text import parse_tweet
@@ -114,7 +114,7 @@ def build_tweet(highlights: list, header: str = ""):
     return tweet.strip(), highlights
 
 
-def build_thread(raw_text: str, week: int) -> list:
+def build_thread(raw_text: str, week: int, year: int) -> list:
     """Build a twitter thread"""
 
     # Extract highlights
@@ -130,7 +130,7 @@ def build_thread(raw_text: str, week: int) -> list:
     ]
 
     # Build tweets. Add highlights while the max char count is not exceeded
-    header = f"Week {week} in Olas\n\nHighlights included:\n"
+    header = f"Week {week} '{year} in Olas\n\nHighlights included:\n"
     first_tweet, all_highlights = build_tweet(all_highlights, header)
     thread = [first_tweet]
 
@@ -677,9 +677,9 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
                 ]
             )
 
-            week_number = self.get_week_number()
+            week_number, year = self.get_week_number_and_year()
 
-            summary_tweets = yield from self.evaluate_summary(text, week_number)
+            summary_tweets = yield from self.evaluate_summary(text, week_number, year)
 
             sender = self.context.agent_address
             payload = OlasWeekEvaluationPayload(
@@ -693,15 +693,16 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
 
         self.set_done()
 
-    def get_week_number(self) -> int:
+    def get_week_number_and_year(self) -> int:
         """Gets the olas week number"""
-        STARTING_WEEK = 42
-        STARTING_DAY = datetime(year=2023, month=10, day=20)
-        weeks_delta = round((datetime.now() - STARTING_DAY).days / 7.0)
-        return STARTING_WEEK + weeks_delta
+        current_date = date.today()
+        iso_calendar = current_date.isocalendar()
+        year = iso_calendar[0]
+        week_number = iso_calendar[1]
+        return week_number, year
 
     def evaluate_summary(
-        self, text: str, week_number: int
+        self, text: str, week_number: int, year: int
     ) -> Generator[None, None, list]:
         """Create the tweet summary using a LLM."""
 
@@ -710,10 +711,11 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
         llm_dialogues = cast(LlmDialogues, self.context.llm_dialogues)
 
         # llm request message
+        year_abbreviation = int(str(year)[2:])
         request_llm_message, llm_dialogue = llm_dialogues.create(
             counterparty=str(LLM_CONNECTION_PUBLIC_ID),
             performative=LlmMessage.Performative.REQUEST,
-            prompt_template=tweet_summarizer_prompt.replace("{tweet_text}", text),
+            prompt_template=tweet_summarizer_prompt.format(tweet_text=text),
             prompt_values={},
         )
         request_llm_message = cast(LlmMessage, request_llm_message)
@@ -724,7 +726,7 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
         data = llm_response_message.value
         self.openai_calls.increase_call_count()
         self.context.logger.info(f"Got summary: {repr(data)}")
-        summary = build_thread(data, week_number)
+        summary = build_thread(data, week_number, year_abbreviation)
         self.context.logger.info(f"Parsed summary: {summary}")
         return summary
 
