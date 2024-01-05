@@ -33,7 +33,7 @@ Tweet2 link
 and so on
 
 Your response should follow the format:
-"Week [Week number] in Olas
+"Week [Week number] '23 in Olas
 Highlights included:
 ☴[Tweet1 headline]
 ☴[Tweet2 headline]
@@ -114,7 +114,7 @@ Boost your project and overall skills with web3 data querying!
 https://twitter.com/autonolas/status/1710294338435957248"
 
 Your response should have been:
-"Week 40 in Olas
+"Week 40 '23 in Olas
 Highlights included:
 ☴ Innovation Station Spotlight: Double Award-Winner at @ETHGlobal
 ☴ Olas Partners with @safe for DAATA and AI Hackathon
