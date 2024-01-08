@@ -532,6 +532,10 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
             # Add the retrieved tweets
             for tweet in api_data["data"]:
+                # Skip retweets
+                if tweet["text"].startswith("RT @"):
+                    continue
+
                 tweets[tweet["id"]] = tweet
 
                 # Set the author handle
@@ -789,6 +793,10 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
             # Add the retrieved tweets
             for tweet in api_data["data"]:
+                # Skip retweets
+                if tweet["text"].startswith("RT @"):
+                    continue
+
                 retrieved_tweets += 1
                 if tweet["id"] not in tweets:  # avoids duplicated tweets
                     tweets[tweet["id"]] = tweet
