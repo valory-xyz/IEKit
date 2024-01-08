@@ -79,6 +79,7 @@ TWEET_QUALITY_TO_POINTS = {"LOW": 1, "AVERAGE": 2, "HIGH": 3}
 TWEET_RELATIONSHIP_TO_POINTS = {"LOW": 100, "AVERAGE": 200, "HIGH": 300}
 HTTP_OK = 200
 HTTP_TOO_MANY_REQUESTS = 429
+RETWEET_START = "RT @"
 
 
 def extract_headers(header_str: str) -> dict:
@@ -533,7 +534,7 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
             # Add the retrieved tweets
             for tweet in api_data["data"]:
                 # Skip retweets
-                if tweet["text"].startswith("RT @"):
+                if tweet["text"].startswith(RETWEET_START):
                     continue
 
                 tweets[tweet["id"]] = tweet
@@ -794,7 +795,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
             # Add the retrieved tweets
             for tweet in api_data["data"]:
                 # Skip retweets
-                if tweet["text"].startswith("RT @"):
+                if tweet["text"].startswith(RETWEET_START):
                     continue
 
                 retrieved_tweets += 1
