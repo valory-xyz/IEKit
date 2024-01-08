@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -79,6 +79,7 @@ TWEET_QUALITY_TO_POINTS = {"LOW": 1, "AVERAGE": 2, "HIGH": 3}
 TWEET_RELATIONSHIP_TO_POINTS = {"LOW": 100, "AVERAGE": 200, "HIGH": 300}
 HTTP_OK = 200
 HTTP_TOO_MANY_REQUESTS = 429
+RETWEET_START = "RT @"
 
 
 def extract_headers(header_str: str) -> dict:
@@ -532,6 +533,10 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
             # Add the retrieved tweets
             for tweet in api_data["data"]:
+                # Skip retweets
+                if tweet["text"].startswith(RETWEET_START):
+                    continue
+
                 tweets[tweet["id"]] = tweet
 
                 # Set the author handle
@@ -789,6 +794,10 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
             # Add the retrieved tweets
             for tweet in api_data["data"]:
+                # Skip retweets
+                if tweet["text"].startswith(RETWEET_START):
+                    continue
+
                 retrieved_tweets += 1
                 if tweet["id"] not in tweets:  # avoids duplicated tweets
                     tweets[tweet["id"]] = tweet
