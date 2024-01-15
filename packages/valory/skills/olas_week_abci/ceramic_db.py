@@ -36,6 +36,7 @@ class CeramicDB:
         "token_id",
         "points",
         "current_period_points",
+        "tweet_id_to_points"
     }
 
     def __init__(
@@ -69,12 +70,14 @@ class CeramicDB:
 
         fields = self.USER_FIELDS.union(user_data.keys())
 
-        new_user = {
-            field: user_data.get(
-                field, 0 if field in ("points", "current_period_points") else None
-            )
-            for field in fields
-        }
+        new_user = {}
+        for field in fields:
+            if field in ("points", "current_period_points"):
+                new_user[field] = 0
+            elif field in ("tweet_id_to_points"):
+                new_user[field] = {}
+            else:
+                new_user[field] = None
 
         self.data["users"].append(new_user)
 
