@@ -615,9 +615,9 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
             ).performed_twitter_tasks
             performed_twitter_tasks["db_update"] = Event.DONE.value
 
-            # Clear processed tweets that are no longer needed
+            # Clear processed tweets that are no longer needed. Keep only those with no points yet.
             tweets = cast(SynchronizedData, self.synchronized_data).tweets
-            tweets = {k: v for k, v in tweets.items() if "points" in v}
+            tweets = {k: v for k, v in tweets.items() if "points" not in v}
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
