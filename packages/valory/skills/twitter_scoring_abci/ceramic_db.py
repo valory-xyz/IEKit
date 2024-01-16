@@ -73,11 +73,11 @@ class CeramicDB:
         new_user = {}
         for field in fields:
             if field in ("points", "current_period_points"):
-                new_user[field] = 0
+                new_user[field] = user_data.get(field, 0)
             elif field in ("tweet_id_to_points"):
-                new_user[field] = {}
+                new_user[field] = user_data.get(field, {})
             else:
-                new_user[field] = None
+                new_user[field] = user_data.get(field, None)
 
         self.data["users"].append(new_user)
 
@@ -162,6 +162,12 @@ class CeramicDB:
                     # We just keep the max current_period_points
                     if field == "current_period_points":
                         values = [max(values)]
+
+                    # We merge the tweet_id_to_points
+                    if field == "tweet_id_to_points":
+                        for value in values[1:]:
+                            values[0].update(value)  # type: ignore
+                        values = [values[0]]
 
                     # Check whether all values are the same
                     if len(values) > 1:
