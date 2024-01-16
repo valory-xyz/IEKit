@@ -86,7 +86,7 @@ class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
                 continue
 
             # Verify proposer signature
-            message = f"I am signing a message to verify that I propose a tweet starting with {tweet['text'][:10]}"
+            message = f"I am signing a message to verify that I propose a tweet starting with {tweet_text[:10]}"
             is_valid = yield from self.validate_signature(
                 message,
                 tweet["proposer"]["address"],
