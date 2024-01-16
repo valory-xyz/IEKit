@@ -36,7 +36,7 @@ class CeramicDB:
         "token_id",
         "points",
         "current_period_points",
-        "tweet_id_to_points"
+        "tweet_id_to_points",
     }
 
     def __init__(
