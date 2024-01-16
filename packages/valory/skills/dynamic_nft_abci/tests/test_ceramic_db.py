@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ DEFAULT_DATA = {
     "discord_id": None,
     "discord_handle": None,
     "current_period_points": 0,
+    "tweet_id_to_points": {},
 }
 
 
@@ -100,12 +101,14 @@ def test_merge_by_wallet():
         "wallet_address": "dummy_address",
         "points": 10,
         "current_period_points": 20,
+        "tweet_id_to_points": {"1": 100, "2": 200},
     }
     user_b = {
         "discord_id": "dummy_discord_id",
         "wallet_address": "dummy_address",
         "points": 10,
         "current_period_points": 15,
+        "tweet_id_to_points": {"2": 200, "3": 300},
     }
     db.create_user(user_a)
     db.create_user(user_b)
@@ -120,6 +123,7 @@ def test_merge_by_wallet():
         "twitter_handle": None,
         "discord_handle": None,
         "current_period_points": 20,
+        "tweet_id_to_points": {"1": 100, "2": 200, "3": 300},
     }
 
 

@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeigscnaoxkvdibetykhpp3bm572h2tqselcljdioxh62bydk3cv5oe
+agent: valory/impact_evaluator:0.1.0:bafybeihgyj7t6wt5u2kkcnutst552mwe53jfy7kqd3r4bmwv4zgopn466q
 number_of_agents: 4
 deployment:
   agent:
@@ -28,7 +28,7 @@ extra:
   params_args:
     args:
       setup: &id001
-        safe_contract_address: ${SAFE_CONTRACT_ADDRESS:str:0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A}
+        safe_contract_address: ${SAFE_CONTRACT_ADDRESS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
         all_participants: ${ALL_PARTICIPANTS:list:["0xc6D322afc319EC651eF8e194f37cC52f3137c393","0x0b20d156A207EDC2d1D30936b5a7B9F077A0c89e","0x5E0fbDb17A976c653a7ab48146d72F3a59dfab37","0x1d1b64C0d38fbd270813Eea35e6F2652337E1e5f"]}
         consensus_threshold: null
       genesis_config: &id002
@@ -105,12 +105,13 @@ extra:
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
+        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
         twitter_tweets_args: ${TWITTER_TWEETS_ARGS:str:tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
         tx_timeout: 10.0
-        use_termination: ${USE_TERMINATION:bool:false}
+        use_termination: ${USE_TERMINATION:bool:true}
         validate_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
@@ -122,10 +123,10 @@ extra:
         slash_threshold_amount: ${SLASH_THRESHOLD_AMOUNT:int:10000000000000000}
         light_slash_unit_amount: ${LIGHT_SLASH_UNIT_AMOUNT:int:5000000000000000}
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
-        multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
+        multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:5}
         mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31de935740567cf4ff1986d04b2c964a786a}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
-        default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
+        default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
         wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
         tweet_consensus_wveolas: ${TWEET_CONSENSUS_WVEOLAS:int:2000000}
@@ -186,12 +187,13 @@ extra:
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
+        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
         twitter_tweets_args: ${TWITTER_TWEETS_ARGS:str:tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
         tx_timeout: 10.0
-        use_termination: ${USE_TERMINATION:bool:false}
+        use_termination: ${USE_TERMINATION:bool:true}
         validate_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
@@ -203,10 +205,10 @@ extra:
         slash_threshold_amount: ${SLASH_THRESHOLD_AMOUNT:int:10000000000000000}
         light_slash_unit_amount: ${LIGHT_SLASH_UNIT_AMOUNT:int:5000000000000000}
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
-        multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
+        multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:5}
         mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31de935740567cf4ff1986d04b2c964a786a}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
-        default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
+        default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
         wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
         tweet_consensus_wveolas: ${TWEET_CONSENSUS_WVEOLAS:int:2000000}
@@ -267,12 +269,13 @@ extra:
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
+        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
         twitter_tweets_args: ${TWITTER_TWEETS_ARGS:str:tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
         tx_timeout: 10.0
-        use_termination: ${USE_TERMINATION:bool:false}
+        use_termination: ${USE_TERMINATION:bool:true}
         validate_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
         max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:5000}
@@ -284,10 +287,10 @@ extra:
         slash_threshold_amount: ${SLASH_THRESHOLD_AMOUNT:int:10000000000000000}
         light_slash_unit_amount: ${LIGHT_SLASH_UNIT_AMOUNT:int:5000000000000000}
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
-        multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
+        multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:5}
         mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31de935740567cf4ff1986d04b2c964a786a}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
-        default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
+        default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
         wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
         tweet_consensus_wveolas: ${TWEET_CONSENSUS_WVEOLAS:int:2000000}
@@ -350,12 +353,13 @@ extra:
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
+        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
         twitter_tweets_args: ${TWITTER_TWEETS_ARGS:str:tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
         tx_timeout: 10.0
-        use_termination: ${USE_TERMINATION:bool:false}
+        use_termination: ${USE_TERMINATION:bool:true}
         validate_timeout: 1205
         finalize_timeout: 60.0
         history_check_timeout: 1205
@@ -369,10 +373,10 @@ extra:
         slash_threshold_amount: ${SLASH_THRESHOLD_AMOUNT:int:10000000000000000}
         light_slash_unit_amount: ${LIGHT_SLASH_UNIT_AMOUNT:int:5000000000000000}
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
-        multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:50}
+        multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:5}
         mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31de935740567cf4ff1986d04b2c964a786a}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
-        default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
+        default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
         wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
         tweet_consensus_wveolas: ${TWEET_CONSENSUS_WVEOLAS:int:2000000}

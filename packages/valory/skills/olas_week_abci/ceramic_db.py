@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ class CeramicDB:
         "token_id",
         "points",
         "current_period_points",
+        "tweet_id_to_points",
     }
 
     def __init__(
@@ -69,12 +70,14 @@ class CeramicDB:
 
         fields = self.USER_FIELDS.union(user_data.keys())
 
-        new_user = {
-            field: user_data.get(
-                field, 0 if field in ("points", "current_period_points") else None
-            )
-            for field in fields
-        }
+        new_user = {}
+        for field in fields:
+            if field in ("points", "current_period_points"):
+                new_user[field] = user_data.get(field, 0)
+            elif field in ("tweet_id_to_points"):
+                new_user[field] = user_data.get(field, {})
+            else:
+                new_user[field] = user_data.get(field, None)
 
         self.data["users"].append(new_user)
 
@@ -159,6 +162,12 @@ class CeramicDB:
                     # We just keep the max current_period_points
                     if field == "current_period_points":
                         values = [max(values)]
+
+                    # We merge the tweet_id_to_points
+                    if field == "tweet_id_to_points":
+                        for value in values[1:]:
+                            values[0].update(value)  # type: ignore
+                        values = [values[0]]
 
                     # Check whether all values are the same
                     if len(values) > 1:

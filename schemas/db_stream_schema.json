@@ -27,9 +27,18 @@
                 },
                 "current_period_points": {
                     "type": "integer"
+                },
+                "tweet_id_to_points": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                          "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false
                 }
             },
-            "required": ["points", "token_id", "discord_id", "twitter_id", "discord_handle", "twitter_handle", "wallet_address", "current_period_points"],
+            "required": ["points", "token_id", "discord_id", "twitter_id", "discord_handle", "twitter_handle", "wallet_address", "current_period_points", "tweet_id_to_points"],
             "additionalProperties": false
         }
     },
