@@ -8,7 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiasfbratsbsxyji2k2xeft3jdqaajwqskjsvbjsqht4mrew6wb2km
   behaviours.py: bafybeihy3r6isnjeyfcdcji5uc2jbrpegxttj3xmjzb4lmgckjmcebdyq4
-  ceramic_db.py: bafybeicusdonrdq6kirgkpdqmi3a6kmeal4nctnm5ozjqf5s5se6jpitjm
+  ceramic_db.py: bafybeib43qozo77ihsfe2bbyd3h6ffc2tonviqebqm2lcbs2xk3qod2zja
   dialogues.py: bafybeiabtq2to7x6bbbnxzrvupz5rky4b6k73y2lw5dmclb6xx74nuzxe4
   fsm_specification.yaml: bafybeibkm4iniyjt7ofqredclpvvudtfjbmuatccnblygvqnfucsuymbxy
   handlers.py: bafybeidco56mt3ump7wjd7o3u5czp2gqynm5qqrsxrtfj6eu5feb42tyma
@@ -17,7 +17,7 @@ fingerprint:
   rounds.py: bafybeiesszqelbm455dvk5zcbm4qhnru6yruk3xxgz44htu526sz2szhge
   tests/__init__.py: bafybeidxte5jeugotf25yogfbsoivyokeqffrvzo7lqgspm4kzrgbhvc3u
   tests/test_behaviours.py: bafybeibojamjtso4gc5zxuvssqwdhigpaeixz2f4s7jkeiwxi5g5vvhaqm
-  tests/test_ceramic_db.py: bafybeiaemz76p55aicazhysbgisrjm5sls55jbbnyfbbyye5fpsk6ltxz4
+  tests/test_ceramic_db.py: bafybeiaceukxpsx5ylqqqwxx345njb3oik6vnzg6ycl2pwky6ybfiyfjme
   tests/test_dialogues.py: bafybeigybvptoehtw2o2jbudvyxggo5yr4pyqic7m732sha4xtaaxnfdpe
   tests/test_handlers.py: bafybeihtowiu7nfirjkievt36vjtjdougyfjgjnjga2flmna3ztvf3qilm
   tests/test_models.py: bafybeietgyqb5rsbnzqgzcsgm2pu2qcadu7rr7akxscfmegtghc5aguz44

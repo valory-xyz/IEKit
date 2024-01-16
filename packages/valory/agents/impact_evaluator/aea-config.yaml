@@ -42,12 +42,12 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeiflcfufixmsrhobf56bn5745m2iipcfqyulwk2qegtnagb3kvaaxi
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
-- valory/impact_evaluator_abci:0.1.0:bafybeifa32is7uw3oqaculei2lwxz5xpxvpzymtd5cskvsgkgues42d2cm
-- valory/generic_scoring_abci:0.1.0:bafybeiexjfu736oe3u43siklxsyqwvlltoks5rnmhl2t7jjmwpwuhc3fey
-- valory/twitter_scoring_abci:0.1.0:bafybeic3a4x4imhaxsehriey6xxmledxkxfr7qgfeqjycvriilkwxbtyzq
+- valory/impact_evaluator_abci:0.1.0:bafybeicymi32s6cw2mdgph3a6ejrd3vgakuj2qjte6ajutvqdl4al4xpr4
+- valory/generic_scoring_abci:0.1.0:bafybeic6k5mjnyqle7xpewuur75x4v3g5r7vkfoeglzbic2ptfnspbiadm
+- valory/twitter_scoring_abci:0.1.0:bafybeihnv7blpc5xdx4uehidvpmwfewtebyaoyvoehqvq6vw7j2shpfpc4
 - valory/ceramic_read_abci:0.1.0:bafybeice3n2zpjnsktff5suz6fc7rb2vmkigf3f5drizjvfmhtzufoxyxi
 - valory/ceramic_write_abci:0.1.0:bafybeieivnfglbzxb27tr5uzzmrkzymwulo3mzhlvtwi3mun6nts6xyjvq
-- valory/dynamic_nft_abci:0.1.0:bafybeibwx2r4pdvzy2myn5keawjskd5mz2w7yfdflqff5wz4cxiubpanlu
+- valory/dynamic_nft_abci:0.1.0:bafybeieswk5ii4xfag6lxphs5vtob6krmkylzo5x5wap7gex2kpue67nzq
 - valory/registration_abci:0.1.0:bafybeic2ynseiak7jpta7jfwuqwyp453b4p7lolr4wihxmpn633uekv5am
 - valory/reset_pause_abci:0.1.0:bafybeidzajbe3erygeh2xbd6lrjv7nsptznjuzrt24ykgvhgotdeyhfnba
 - valory/termination_abci:0.1.0:bafybeie4zvjfxvdu7qrulmur3chpjz3kpj5m4bjsxvpk4gvj5zbyyayfaa
@@ -55,7 +55,7 @@ skills:
 - valory/twitter_write_abci:0.1.0:bafybeiga55lbnr6k632ytgwintyuaxegrvvt7k6bn7vwymbgcq7w6tqi7m
 - valory/decision_making_abci:0.1.0:bafybeihoiyxw4jonkdc6daotd4crvbgxo2yuhywrapwkd5bbl742u2vvdy
 - valory/llm_abci:0.1.0:bafybeiav6mfjf5ltrhpmrelfpix3s7irgrk35ejx6zuqjm4wengyihmsse
-- valory/olas_week_abci:0.1.0:bafybeic7ldozxh6y6swys3j3dr6pixwzgtzx7hpppoohrmtwfyruqzqen4
+- valory/olas_week_abci:0.1.0:bafybeicvn6dfjx6vnwhhkabexcvf72wekiagzjp6afc7uy2sj7harle4ke
 - valory/mech_interact_abci:0.1.0:bafybeihwvjvxyv2ca2eskt3d5cvac4onr7m2hla2inydpqdipw4ze3yz6a
 default_ledger: ethereum
 required_ledgers:
