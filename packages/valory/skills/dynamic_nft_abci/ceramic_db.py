@@ -74,7 +74,7 @@ class CeramicDB:
         for field in fields:
             if field in ("points", "current_period_points"):
                 new_user[field] = user_data.get(field, 0)
-            elif field in ("tweet_id_to_points"):
+            elif field in ("tweet_id_to_points",):
                 new_user[field] = user_data.get(field, {})
             else:
                 new_user[field] = user_data.get(field, None)
