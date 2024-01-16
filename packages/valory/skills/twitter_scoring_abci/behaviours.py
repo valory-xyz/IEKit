@@ -999,7 +999,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         period_reset_users = set()
 
         # Update data
-        for tweet in tweets.values():
+        for tweet_id, tweet in tweets.items():
             if "points" not in tweet:
                 continue
 
@@ -1037,9 +1037,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
             # Store the tweet id and awarded points
             tweet_id_to_points = {} if not user else user.get("tweet_id_to_points", {})
-            if tweet["id"] not in tweet_id_to_points:
+            if tweet_id not in tweet_id_to_points:
                 # Keep in mind that we store the updated points if the user has reached max_points_per_period
-                tweet_id_to_points[tweet["id"]] = new_points
+                tweet_id_to_points[tweet_id] = new_points
 
             # User data to update
             user_data = {
