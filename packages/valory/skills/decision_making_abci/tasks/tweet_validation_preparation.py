@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -86,7 +86,7 @@ class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
                 continue
 
             # Verify proposer signature
-            message = f"I am signing a message to verify that I propose a tweet starting with {tweet['text'][:10]}"
+            message = f"I am signing a message to verify that I propose a tweet starting with {tweet_text[:10]}"
             is_valid = yield from self.validate_signature(
                 message,
                 tweet["proposer"]["address"],
