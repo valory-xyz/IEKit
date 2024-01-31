@@ -20,6 +20,7 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections:
 - valory/openai:0.1.0:bafybeiepsxac7e2tq3mcfkgcx62zt6oiaeic5wwcs4mnv733l762kn62du
+- valory/decision_making_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
 contracts: []
 protocols:
 - valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
@@ -164,6 +165,9 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
+  ceramic_db:
+    args: {}
+    class_name: CeramicDB
 dependencies:
   twitter_text_parser:
     version: ==3.0.0

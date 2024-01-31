@@ -28,7 +28,6 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-from packages.valory.skills.generic_scoring_abci.ceramic_db import CeramicDB
 from packages.valory.skills.generic_scoring_abci.models import Params
 from packages.valory.skills.generic_scoring_abci.rounds import (
     GenericScoringAbciApp,
@@ -36,6 +35,7 @@ from packages.valory.skills.generic_scoring_abci.rounds import (
     GenericScoringRound,
     SynchronizedData,
 )
+from copy import deepcopy
 
 
 class GenericScoringBaseBehaviour(BaseBehaviour, ABC):
@@ -80,6 +80,7 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
 
         # Instantiate the db
         ceramic_db = CeramicDB(self.synchronized_data.ceramic_db, self.context.logger)
+        original_data = deepcopy(ceramic_db.data)
         scores_db = CeramicDB(self.synchronized_data.score_data)
 
         # Only update if latest_update_id has increased

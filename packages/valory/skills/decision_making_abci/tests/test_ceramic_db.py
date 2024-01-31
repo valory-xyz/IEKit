@@ -23,8 +23,6 @@ from copy import copy
 
 import pytest
 
-from packages.valory.skills.dynamic_nft_abci.ceramic_db import CeramicDB
-
 
 DEFAULT_DATA = {
     "points": 0,

@@ -27,10 +27,11 @@ from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
 )
 from packages.valory.skills.abstract_round_abci.models import Requests as BaseRequests
-from packages.valory.skills.abstract_round_abci.models import (
+from packages.valory.skills.decision_making_abci.models import (
     SharedState as BaseSharedState,
 )
 from packages.valory.skills.olas_week_abci.rounds import WeekInOlasAbciApp
+from packages.valory.skills.decision_making_abci.models import CeramicDB as BaseCeramicDB
 
 
 class SharedState(BaseSharedState):
@@ -104,3 +105,4 @@ class Params(BaseParams):
 
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
+CeramicDB = BaseCeramicDB

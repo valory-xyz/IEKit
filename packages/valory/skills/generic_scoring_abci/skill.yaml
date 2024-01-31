@@ -30,6 +30,7 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
+- valory/decision_making_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
 behaviours:
   main:
     args: {}
@@ -146,5 +147,8 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
+  ceramic_db:
+    args: {}
+    class_name: CeramicDB
 dependencies: {}
 is_abstract: true
