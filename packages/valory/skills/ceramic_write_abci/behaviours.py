@@ -37,7 +37,7 @@ from packages.valory.skills.ceramic_write_abci.ceramic.payloads import (
     build_data_from_commits,
     build_genesis_payload,
 )
-from packages.valory.skills.ceramic_write_abci.models import Params
+from packages.valory.skills.ceramic_write_abci.models import Params, SharedState
 from packages.valory.skills.ceramic_write_abci.rounds import (
     CeramicWriteAbciApp,
     RandomnessPayload,
@@ -193,16 +193,17 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
         """Write the scores to the Ceramic stream"""
 
         write_index = self.synchronized_data.write_index
-        write_data = self.synchronized_data.write_data[write_index]
+        write_data = self.synchronized_data.write_data if self.synchronized_data.is_data_on_sync_db else cast(SharedState, self.shared_state).ceramic_data
+        selected_data = write_data[write_index]
 
-        stream_id = write_data["stream_id"] if "stream_id" in write_data else None
-        stream_op = write_data["op"]
-        stream_data = write_data["data"]
-        did_str = write_data["did_str"]
+        stream_id = selected_data["stream_id"] if "stream_id" in selected_data else None
+        stream_op = selected_data["op"]
+        stream_data = selected_data["data"]
+        did_str = selected_data["did_str"]
         if not did_str.startswith("did:key:"):
             did_str = "did:key:" + did_str
-        did_seed = write_data["did_seed"]
-        extra_metadata = write_data.get("extra_metadata", {})
+        did_seed = selected_data["did_seed"]
+        extra_metadata = selected_data.get("extra_metadata", {})
 
         if stream_op == "update":
             return self._update_stream(stream_id, stream_data, did_str, did_seed)
