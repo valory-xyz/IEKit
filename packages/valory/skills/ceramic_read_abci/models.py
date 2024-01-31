@@ -19,8 +19,8 @@
 
 """This module contains the shared state for the abci skill of CeramicReadAbciApp."""
 
-from typing import Any
-
+from typing import Any, Optional, Dict
+from aea.skills.base import SkillContext
 from packages.valory.skills.abstract_round_abci.models import BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
@@ -31,11 +31,20 @@ from packages.valory.skills.abstract_round_abci.models import (
 )
 from packages.valory.skills.ceramic_read_abci.rounds import CeramicReadAbciApp
 
-
 class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
 
     abci_app_cls = CeramicReadAbciApp
+
+    def __init__(
+        self,
+        *args: Any,
+        skill_context: SkillContext,
+        **kwargs: Any,
+    ) -> None:
+        """Initialize the state."""
+        super().__init__(*args, skill_context=skill_context, **kwargs)
+        self.ceramic_data: Optional[Dict] = None
 
 
 class Params(BaseParams):
@@ -48,13 +57,13 @@ class Params(BaseParams):
             "ceramic_api_base"
         )  # shared param, can't use ensure
         self.ceramic_api_read_endpoint = kwargs.get("ceramic_api_read_endpoint")
+        self.sync_on_ceramic_data = self._ensure("sync_on_ceramic_data", kwargs, bool)
 
         # These parameters are optional, therefore we do not use ensure
         self.default_read_stream_id = kwargs.pop("default_read_stream_id", None)
         self.default_read_target_property = kwargs.pop(
             "default_read_target_property", None
         )
-
         super().__init__(*args, **kwargs)
 
 

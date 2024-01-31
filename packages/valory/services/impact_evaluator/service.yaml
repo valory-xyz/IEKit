@@ -130,6 +130,7 @@ extra:
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
         wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
         tweet_consensus_wveolas: ${TWEET_CONSENSUS_WVEOLAS:int:2000000}
+        sync_on_ceramic_data: ${SYNC_ON_CERAMIC_DATA:bool:false}
 1:
   models:
     benchmark_tool:
@@ -212,6 +213,7 @@ extra:
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
         wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
         tweet_consensus_wveolas: ${TWEET_CONSENSUS_WVEOLAS:int:2000000}
+        sync_on_ceramic_data: ${SYNC_ON_CERAMIC_DATA:bool:false}
 2:
   models:
     benchmark_tool:
@@ -294,6 +296,7 @@ extra:
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
         wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
         tweet_consensus_wveolas: ${TWEET_CONSENSUS_WVEOLAS:int:2000000}
+        sync_on_ceramic_data: ${SYNC_ON_CERAMIC_DATA:bool:false}
 3:
   models:
     benchmark_tool:
@@ -380,6 +383,7 @@ extra:
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
         wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
         tweet_consensus_wveolas: ${TWEET_CONSENSUS_WVEOLAS:int:2000000}
+        sync_on_ceramic_data: ${SYNC_ON_CERAMIC_DATA:bool:false}
 ---
 public_id: valory/ledger:0.19.0
 type: connection

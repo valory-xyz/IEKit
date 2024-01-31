@@ -169,6 +169,7 @@ models:
       ceramic_api_read_endpoint: ${str:api/v0/commits/{stream_id}}
       ceramic_did_seed: ${str:0101010101010101010101010101010101010101010101010101010101010101}
       ceramic_did_str: ${str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
+      default_read_target_property: ${str:default_read_target_property}
       default_write_target_property: ${str:default_write_target_property}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
@@ -256,6 +257,7 @@ models:
       transaction_service_url: ${str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
       wveolas_address: ${str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
       tweet_consensus_wveolas: ${int:2000000}
+      sync_on_ceramic_data: ${bool:false}
 ---
 public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
 type: connection
