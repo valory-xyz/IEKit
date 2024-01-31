@@ -211,7 +211,7 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
                     previous_task_preparation_cls(
                         self.synchronized_data,
                         self.params,
-                        self.context.logger,
+                        self.context,
                         now_utc,
                         self,
                     )

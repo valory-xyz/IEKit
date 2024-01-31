@@ -62,6 +62,12 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the read_target_property."""
         return cast(str, self.db.get("read_target_property", None))
 
+    @property
+    def sync_on_ceramic_data(self) -> bool:
+        """Get the sync_on_ceramic_data."""
+        return cast(bool, self.db.get("sync_on_ceramic_data", True))
+
+
 
 class StreamReadRound(CollectSameUntilThresholdRound):
     """StreamReadRound"""
@@ -76,7 +82,7 @@ class StreamReadRound(CollectSameUntilThresholdRound):
         if self.threshold_reached:
 
             # Sync on the data
-            if self.context.params.sync_on_ceramic_data:
+            if cast(SynchronizedData, self.synchronized_data).sync_on_ceramic_data:
 
                 payload = json.loads(self.most_voted_payload)
 

@@ -57,7 +57,6 @@ class Params(BaseParams):
             "ceramic_api_base"
         )  # shared param, can't use ensure
         self.ceramic_api_read_endpoint = kwargs.get("ceramic_api_read_endpoint")
-        self.sync_on_ceramic_data = self._ensure("sync_on_ceramic_data", kwargs, bool)
 
         # These parameters are optional, therefore we do not use ensure
         self.default_read_stream_id = kwargs.pop("default_read_stream_id", None)

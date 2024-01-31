@@ -41,6 +41,7 @@ protocols:
 - valory/contract_api:1.0.0:bafybeialhbjvwiwcnqq3ysxcyemobcbie7xza66gaofcvla5njezkvhcka
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
+- valory/ceramic_read_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
 behaviours:
   main:
     args: {}
@@ -173,6 +174,9 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
+  ceramic_db:
+    args: {}
+    class_name: CeramicDB
 dependencies:
   twitter_text_parser:
     version: ==3.0.0

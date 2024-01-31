@@ -136,7 +136,7 @@ class StreamReadBehaviour(CeramicReadBaseBehaviour):
             payload_content = StreamReadRound.ERROR_PAYLOAD
 
             # Sync on the data itself and load into synchronized_data
-            if stream_data and self.params.sync_on_ceramic_data:
+            if stream_data and self.synchronized_data.sync_on_ceramic_data:
                 payload_content = json.dumps({
                     "stream_data": stream_data["data"],
                     "read_target_property": read_target_property,
@@ -146,7 +146,7 @@ class StreamReadBehaviour(CeramicReadBaseBehaviour):
                 )
 
             # Sync on the data hash and load into custom model
-            if stream_data and not self.params.sync_on_ceramic_data:
+            if stream_data and not self.synchronized_data.sync_on_ceramic_data:
 
                 # Calculate data hash
                 data_hash = IPFSHashOnly().hash_bytes(json.dumps(stream_data, sort_keys=True).encode("utf-8"))

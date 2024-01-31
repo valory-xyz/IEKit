@@ -257,7 +257,6 @@ models:
       transaction_service_url: ${str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
       wveolas_address: ${str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
       tweet_consensus_wveolas: ${int:2000000}
-      sync_on_ceramic_data: ${bool:false}
 ---
 public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
 type: connection

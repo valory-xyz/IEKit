@@ -125,9 +125,12 @@ class DailyOrbisPreparation(OrbisPreparation):
             }
         ]
 
+        # Dump the data into the state
+        self.state.ceramic_data = write_data
+
         updates = {
             "write_results": [],  # clear previous results
-            "write_data": write_data,
+            "is_data_on_sync_db": False,
         }
 
         return updates, self.task_event
@@ -174,9 +177,12 @@ class UpdateCentaursPreparation(WriteStreamPreparation):
             }
         ]
 
+        # Dump the data into the state
+        self.state.ceramic_data = write_data
+
         updates = {
             "write_results": [],  # clear previous results
-            "write_data": write_data,
+            "is_data_on_sync_db": False,
         }
         return updates, self.task_event
 
@@ -211,15 +217,17 @@ class WriteContributeDBPreparation(WriteStreamPreparation):
             {
                 "op": "update",
                 "stream_id": self.params.ceramic_db_stream_id,
-                "data": self.synchronized_data.ceramic_db,
+                "data": self.ceramic_db.data,
                 "did_str": self.params.ceramic_did_str,
                 "did_seed": self.params.ceramic_did_seed,
             }
         ]
 
+        # Dump the data into the state
+        self.state.ceramic_data = write_data
+
         updates = {
-            "write_results": [],  # clear previous results
-            "write_data": write_data,
+            "is_data_on_sync_db": False,
         }
         return updates, self.task_event
 

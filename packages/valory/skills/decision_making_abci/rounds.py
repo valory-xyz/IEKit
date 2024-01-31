@@ -94,24 +94,9 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(list, self.db.get("llm_results", []))
 
     @property
-    def write_data(self) -> list:
-        """Get the write_stream_id."""
-        return cast(list, self.db.get_strict("write_data"))
-
-    @property
-    def write_results(self) -> list:
-        """Get the write_results."""
-        return cast(list, self.db.get_strict("write_results"))
-
-    @property
     def read_stream_id(self) -> Optional[str]:
         """Get the read_stream_id."""
         return cast(str, self.db.get("read_stream_id", None))
-
-    @property
-    def read_target_property(self) -> Optional[str]:
-        """Get the read_target_property."""
-        return cast(str, self.db.get("read_target_property", None))
 
     @property
     def daily_tweet(self) -> str:

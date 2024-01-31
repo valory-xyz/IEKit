@@ -240,7 +240,7 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
         url = api_base + api_endpoint
 
         self.context.logger.info(
-            f"Writing new data to Ceramic stream {stream_id} using did {did_str} [{url}]:\n{new_data}\nPayload: {commit_payload}"
+            f"Writing new data to Ceramic stream {stream_id} using did {did_str} [{url}]"
         )
         response = yield from self.get_http_response(
             method="POST",
@@ -277,7 +277,7 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
         url = api_base + api_endpoint
 
         self.context.logger.info(
-            f"Creating new stream using did {did_str} [{url}]:\n{new_data}\nPayload: {commit_payload}"
+            f"Creating new stream using did {did_str} [{url}]"
         )
         response = yield from self.get_http_response(
             method="POST",
@@ -330,12 +330,13 @@ class VerificationBehaviour(CeramicWriteBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             write_index = self.synchronized_data.write_index
-            write_data = self.synchronized_data.write_data[write_index]
+            write_data = self.synchronized_data.write_data if self.synchronized_data.is_data_on_sync_db else cast(SharedState, self.shared_state).ceramic_data
+            selected_data = write_data[write_index]
             stream_id = self.synchronized_data.stream_id_to_verify
 
             # Verify if the retrieved data matches local user_to_total_points
             expected_data = json.dumps(
-                write_data["data"],
+                selected_data["data"],
                 sort_keys=True,
             )
 
