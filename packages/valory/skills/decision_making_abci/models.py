@@ -28,7 +28,7 @@ from packages.valory.skills.abstract_round_abci.models import (
 )
 from packages.valory.skills.abstract_round_abci.models import Requests as BaseRequests
 from packages.valory.skills.ceramic_read_abci.models import SharedState as CeramicReadSharedState
-
+import jsonpatch
 from packages.valory.skills.decision_making_abci.rounds import DecisionMakingAbciApp
 
 
@@ -98,13 +98,10 @@ class CeramicDB:
     }
 
     def __init__(
-        self,
-        data: Optional[Dict] = None,
-        logger: Optional[Any] = None,
+        self, *args: Any, **kwargs: Any
     ) -> None:
         """Create a database"""
-        self.load(data)
-        self.logger = logger
+        self.load()
 
     def load(self, data: Optional[Dict] = None):
         """Load data into the class"""
@@ -140,9 +137,6 @@ class CeramicDB:
 
         self.data["users"].append(new_user)
 
-        if self.logger:
-            self.logger.info(f"DB: created new user: {new_user}")  # pragma: nocover
-
     def get_user_by_field(self, field, value) -> Tuple[Optional[Dict], Optional[int]]:
         """Search users"""
 
@@ -176,11 +170,6 @@ class CeramicDB:
             else user["points"] + new_data.get("points", 0)
             for field in fields
         }
-
-        if self.logger:
-            self.logger.info(
-                f"DB: updated user: from {json.dumps(user, sort_keys=True)} to {json.dumps(updated_user, sort_keys=True)}"
-            )
 
         self.data["users"][index] = updated_user
 
@@ -250,3 +239,12 @@ class CeramicDB:
 
                 # Add merged user
                 self.data["users"].append(merged_user)
+
+
+    def diff(self, other_db):
+        """Create data diff"""
+        return str(jsonpatch.make_patch(self.data, other_db.data))  # TODO: needs sorting?
+
+    def apply_diff(self, patch):
+        """Apply a diff"""
+        self.data = jsonpatch.JsonPatch.from_string(patch).apply(self.data)

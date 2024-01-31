@@ -168,12 +168,12 @@ class OlasWeekBaseBehaviour(BaseBehaviour, ABC):
         """Check if the daily limit has exceeded or not"""
         try:
             number_of_tweets_pulled_today = int(
-                self.synchronized_data.ceramic_db["module_data"]["twitter"][
+                self.context.ceramic_db["module_data"]["twitter"][
                     "number_of_tweets_pulled_today"
                 ]
             )
             last_tweet_pull_window_reset = float(
-                self.synchronized_data.ceramic_db["module_data"]["twitter"][
+                self.context.ceramic_db["module_data"]["twitter"][
                     "last_tweet_pull_window_reset"
                 ]
             )
