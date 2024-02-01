@@ -100,6 +100,10 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
                 "pending_write": pending_write,
             }
 
+        self.context.logger.info(
+            f"Detected new score update with id {latest_update_id_stream}"
+        )
+
         # discord_id, discord_handle, points, wallet_address
         for user in scores_db.data["users"]:
             discord_id = user.pop("discord_id")

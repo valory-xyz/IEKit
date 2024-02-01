@@ -42,11 +42,11 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeiflcfufixmsrhobf56bn5745m2iipcfqyulwk2qegtnagb3kvaaxi
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
-- valory/impact_evaluator_abci:0.1.0:bafybeigcxaxkevmr5dzmydcglllz2jfvayulquo3w255ktpzn6rh6fiubq
-- valory/generic_scoring_abci:0.1.0:bafybeifxqwfyhazmhjglzagohlw2cvcmjru7lr56qvekxr4o6f72mab4xe
+- valory/impact_evaluator_abci:0.1.0:bafybeih7dfwfthrehpj6ivcyp2q4i7ekpf6wlbkem2hm7dufigpkrhjwaq
+- valory/generic_scoring_abci:0.1.0:bafybeidm2c7wzgffh3i7xg3sund7xhlrlas3ehastzy2ql7cmn3ltxuisa
 - valory/twitter_scoring_abci:0.1.0:bafybeiactiivg6tstrpuqynmyyenfltc3hjdpptjrlbvcydbhzuegm3jnq
 - valory/ceramic_read_abci:0.1.0:bafybeigwgrljeaw67ogy3txy6g5wdoyl2sarqwwv3tixs6t7gicqlrk5ta
-- valory/ceramic_write_abci:0.1.0:bafybeiccdzwgqezhxfmj5jtdnphgu4ggxzu6iilu54z55mc7yqudzotw4q
+- valory/ceramic_write_abci:0.1.0:bafybeica7lc75dgb4oyz5dtblyxks5xmrzsmsngbger6ibjmcna7giwrwu
 - valory/dynamic_nft_abci:0.1.0:bafybeieomszmoeuj2fdkzxmrfeqohoj7d5fhxtens7uaobi6rwnxm4j5wy
 - valory/registration_abci:0.1.0:bafybeic2ynseiak7jpta7jfwuqwyp453b4p7lolr4wihxmpn633uekv5am
 - valory/reset_pause_abci:0.1.0:bafybeidzajbe3erygeh2xbd6lrjv7nsptznjuzrt24ykgvhgotdeyhfnba

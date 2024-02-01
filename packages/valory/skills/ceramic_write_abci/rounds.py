@@ -201,7 +201,13 @@ class VerificationRound(CollectSameUntilThresholdRound):
             )
 
             # Check if we need to continue writing
-            if next_write_index < len(synchronized_data.write_data):
+            write_data = (
+                synchronized_data.write_data
+                if synchronized_data.is_data_on_sync_db
+                else self.context.state.ceramic_data
+            )
+
+            if next_write_index < len(write_data):
                 synchronized_data = synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
                     **{

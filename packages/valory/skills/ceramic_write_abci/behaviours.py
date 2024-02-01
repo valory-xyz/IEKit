@@ -173,8 +173,13 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
                 )
 
             write_index = self.synchronized_data.write_index
-            write_data = self.synchronized_data.write_data[write_index]
-            extra_metadata = write_data.get("extra_metadata", {})
+            write_data = (
+                self.synchronized_data.write_data
+                if self.synchronized_data.is_data_on_sync_db
+                else cast(SharedState, self.shared_state).ceramic_data
+            )
+            selected_data = write_data[write_index]
+            extra_metadata = selected_data.get("extra_metadata", {})
 
             # Force Orbis indexing
             if success and extra_metadata.get("family", None) == "orbis":
