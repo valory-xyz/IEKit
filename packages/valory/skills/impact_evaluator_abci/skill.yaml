@@ -95,8 +95,6 @@ models:
     class_name: LlmDialogues
   params:
     args:
-      broadcast_to_server: false
-      history_end: null
       centaurs_stream_id: dummy_centaurs_stream_id
       manual_points_stream_id: manual_points_stream_id
       ceramic_db_stream_id: ceramic_db_stream_id

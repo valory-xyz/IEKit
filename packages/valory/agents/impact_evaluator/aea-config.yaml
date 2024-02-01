@@ -104,11 +104,11 @@ config:
 public_id: valory/twitter:0.1.0
 type: connection
 config:
-  access_secret: <access_secret>
-  access_token: <access_token>
-  auth_token: <auth_token>
-  consumer_key: <consumer_key>
-  consumer_secret: <consumer_secret>
+  access_secret: ${str:<access_secret>}
+  access_token: ${str:<access_token>}
+  auth_token: ${str:<auth_token>}
+  consumer_key: ${str:<consumer_key>}
+  consumer_secret: ${str:<consumer_secret>}
   use_staging_api: ${bool:false}
   staging_api: ${str:http://host.docker.internal:5000/twitter/create_tweet}
 ---
@@ -155,16 +155,14 @@ type: skill
 models:
   benchmark_tool:
     args:
-      log_dir: /logs
+      log_dir: ${str:/logs}
   params:
     args:
-      broadcast_to_server: false
-      history_end: null
       centaurs_stream_id: ${str:kjzl6cwe1jw146h5momfk1vwzjq9vtg2ic4c1h5893usybetw3x338gu0ui2iih}
       manual_points_stream_id: ${str:manual_points_stream_id}
       ceramic_db_stream_id: ${str:ceramic_db_stream_id}
       ceramic_api_base: ${str:https://ceramic-clay.3boxlabs.com/}
-      ceramic_api_create_endpoint: api/v0/streams
+      ceramic_api_create_endpoint: ${str:api/v0/streams}
       ceramic_api_commit_endpoint: ${str:api/v0/commits}
       ceramic_api_read_endpoint: ${str:api/v0/commits/{stream_id}}
       ceramic_did_seed: ${str:0101010101010101010101010101010101010101010101010101010101010101}

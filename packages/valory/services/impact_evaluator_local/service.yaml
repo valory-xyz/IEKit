@@ -51,13 +51,11 @@ extra:
 models:
   benchmark_tool:
     args:
-      log_dir: /logs
+      log_dir: ${LOG_DIR:str:/logs}
   params:
     args:
       setup: *id001
       genesis_config: *id002
-      broadcast_to_server: false
-      history_end: null
       centaurs_stream_id: ${CENTAURS_STREAM_ID:str:dummy_centaurs_stream_id}
       manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
       ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:ceramic_db_stream_id}
@@ -194,37 +192,37 @@ public_id: valory/twitter:0.1.0
 type: connection
 0:
   config:
-    access_secret: <access_secret>
-    access_token: <access_token>
-    auth_token: <auth_token>
-    consumer_key: <consumer_key>
-    consumer_secret: <consumer_secret>
+    access_secret: ${ACCESS_SECRET:str:<access_secret>}
+    access_token: ${ACCESS_TOKEN:str:<access_token>}
+    auth_token: ${AUTH_TOKEN:str:<auth_token>}
+    consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
+    consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
     use_staging_api: ${USE_STAGING_API:bool:false}
     staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
 1:
   config:
-    access_secret: <access_secret>
-    access_token: <access_token>
-    auth_token: <auth_token>
-    consumer_key: <consumer_key>
-    consumer_secret: <consumer_secret>
+    access_secret: ${ACCESS_SECRET:str:<access_secret>}
+    access_token: ${ACCESS_TOKEN:str:<access_token>}
+    auth_token: ${AUTH_TOKEN:str:<auth_token>}
+    consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
+    consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
     use_staging_api: ${USE_STAGING_API:bool:false}
     staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
 2:
   config:
-    access_secret: <access_secret>
-    access_token: <access_token>
-    auth_token: <auth_token>
-    consumer_key: <consumer_key>
-    consumer_secret: <consumer_secret>
+    access_secret: ${ACCESS_SECRET:str:<access_secret>}
+    access_token: ${ACCESS_TOKEN:str:<access_token>}
+    auth_token: ${AUTH_TOKEN:str:<auth_token>}
+    consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
+    consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
     use_staging_api: ${USE_STAGING_API:bool:false}
     staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
 3:
   config:
-    access_secret: <access_secret>
-    access_token: <access_token>
-    auth_token: <auth_token>
-    consumer_key: <consumer_key>
-    consumer_secret: <consumer_secret>
+    access_secret: ${ACCESS_SECRET:str:<access_secret>}
+    access_token: ${ACCESS_TOKEN:str:<access_token>}
+    auth_token: ${AUTH_TOKEN:str:<auth_token>}
+    consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
+    consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
     use_staging_api: ${USE_STAGING_API:bool:false}
     staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
