@@ -25,18 +25,18 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
 - valory/ceramic_read_abci:0.1.0:bafybeidiss52ypzfuw63xbo5uuzpnjyzynjejgmoecup4qdsbbxqe7klci
-- valory/generic_scoring_abci:0.1.0:bafybeihx4ybfwok773tuipbqf5wraavhdk6v5tkg3mbm3xxsspyrjpdvue
-- valory/twitter_scoring_abci:0.1.0:bafybeid2igxnvn23tm33es5j6tcm6i3sojngx72qtz3srsgh4buy5pll3m
+- valory/generic_scoring_abci:0.1.0:bafybeiclklthjkkcigfmixrx4y7biqvnnipukllq3afbeodq4wi5qdrqxu
+- valory/twitter_scoring_abci:0.1.0:bafybeif6q7vgjxcpaliwrawukodiszsgmebmwvhp4avd4xymz5zp6lav5u
 - valory/ceramic_write_abci:0.1.0:bafybeifdhsvhrxedjl5dz63jyc4tr22uzkjq2bu43wkny4eubtwilvrely
-- valory/dynamic_nft_abci:0.1.0:bafybeihr54ukydffq2c7nc7rwaofczqs25otyivno5w4xe36wsyfbhpzaa
+- valory/dynamic_nft_abci:0.1.0:bafybeiey4pl5ntf3i3vqt4r3pudws3qnawtp2xhuslxalrzqoidqywrelm
 - valory/registration_abci:0.1.0:bafybeic2ynseiak7jpta7jfwuqwyp453b4p7lolr4wihxmpn633uekv5am
 - valory/reset_pause_abci:0.1.0:bafybeidzajbe3erygeh2xbd6lrjv7nsptznjuzrt24ykgvhgotdeyhfnba
 - valory/termination_abci:0.1.0:bafybeie4zvjfxvdu7qrulmur3chpjz3kpj5m4bjsxvpk4gvj5zbyyayfaa
 - valory/transaction_settlement_abci:0.1.0:bafybeiaefgqbs7zsn5xe5kdwrujj7ivygkn3ujpw6crnvi3knvxw75qmja
-- valory/decision_making_abci:0.1.0:bafybeiahqrdo2qmtszid3yqghx66lfegi5ihfhnajx3nrilxmdau7pavpi
+- valory/decision_making_abci:0.1.0:bafybeiahnvshbisgjix42wq3gfakjbgmr7nshywpzpoxsoa6ncqzglvcva
 - valory/llm_abci:0.1.0:bafybeiav6mfjf5ltrhpmrelfpix3s7irgrk35ejx6zuqjm4wengyihmsse
 - valory/twitter_write_abci:0.1.0:bafybeiga55lbnr6k632ytgwintyuaxegrvvt7k6bn7vwymbgcq7w6tqi7m
-- valory/olas_week_abci:0.1.0:bafybeifxnzx2kukd6njuaxuheb4lldjjugx33hmuhggrwrhd7yfugsyup4
+- valory/olas_week_abci:0.1.0:bafybeiewtawxsocbaz6ahugykgezh6aixwnlxrfpdyz4q2vll4yzcr44ki
 - valory/mech_interact_abci:0.1.0:bafybeihwvjvxyv2ca2eskt3d5cvac4onr7m2hla2inydpqdipw4ze3yz6a
 behaviours:
   main:

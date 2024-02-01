@@ -181,4 +181,6 @@ models:
 dependencies:
   twitter_text_parser:
     version: ==3.0.0
+  jsonpatch:
+    version: ==1.32
 is_abstract: true
