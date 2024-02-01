@@ -21,7 +21,6 @@
 
 import json
 from abc import ABC
-from copy import deepcopy
 from typing import Dict, Generator, Optional, Set, Tuple, Type, cast
 
 from packages.valory.contracts.dynamic_contribution.contract import (
@@ -149,7 +148,7 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
         token_id_to_points = self.synchronized_data.token_id_to_points
 
         # Instantiate the db
-        ceramic_db_copy = deepcopy(self.context.ceramic_db)
+        ceramic_db_copy = self.context.ceramic_db.copy()
 
         # Update token_ids in the ceramic_db
         for token_id, address in new_token_id_to_address.items():

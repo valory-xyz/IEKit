@@ -101,7 +101,9 @@ class StreamReadRound(CollectSameUntilThresholdRound):
                 # data from IPFS. All agents should push to IPFS.
                 event = (
                     Event.DONE
-                    if set([cast(StreamReadPayload, p).content for p in self.payloads])
+                    if len(
+                        set([cast(StreamReadPayload, p).content for p in self.payloads])
+                    )
                     == 1
                     else Event.RETRY
                 )

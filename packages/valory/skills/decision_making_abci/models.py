@@ -21,6 +21,7 @@
 
 import itertools
 import json
+from copy import deepcopy
 from typing import Any, Dict, List, Optional, Tuple
 
 import jsonpatch
@@ -87,7 +88,7 @@ Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
 
 
-class CeramicDB(Model):
+class CeramicDBBase:
     """A class that represents the user database"""
 
     USER_FIELDS = {
@@ -102,9 +103,8 @@ class CeramicDB(Model):
         "tweet_id_to_points",
     }
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
+    def __init__(self) -> None:
         """Create a database"""
-        super().__init__(*args, **kwargs)
         self.load()
 
     def load(self, data: Optional[Dict] = None):
@@ -253,3 +253,22 @@ class CeramicDB(Model):
     def apply_diff(self, patch):
         """Apply a diff"""
         self.data = jsonpatch.JsonPatch.from_string(patch).apply(self.data)
+
+    def copy(self):
+        """Get a deep copy of the database"""
+        copy = CeramicDBBase()
+        copy.load(deepcopy(self.data))
+        return copy
+
+    def __getitem__(self, key):
+        """Dict like access"""
+        return self.data[key]
+
+
+class CeramicDB(Model, CeramicDBBase):
+    """CeramicDB Model"""
+
+    def __init__(self, *args, **kwargs):
+        """Init"""
+        Model.__init__(self, *args, **kwargs)
+        CeramicDBBase.__init__(self)

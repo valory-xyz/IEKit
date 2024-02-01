@@ -153,11 +153,11 @@ class StreamReadBehaviour(CeramicReadBaseBehaviour):
             if stream_data and not self.synchronized_data.sync_on_ceramic_data:
                 # Calculate data hash
                 data_hash = IPFSHashOnly().hash_bytes(
-                    json.dumps(stream_data, sort_keys=True).encode("utf-8")
+                    json.dumps(stream_data, sort_keys=True).encode("utf-8"), wrap=False
                 )
 
                 # Load into shared state
-                self.context.state.ceramic_data = stream_data
+                self.context.state.ceramic_data = stream_data["data"]
                 payload_content = data_hash
 
                 self.context.logger.info(

@@ -41,8 +41,8 @@ class TaskPreparation:
         self.ceramic_db = behaviour.context.ceramic_db
         self.now_utc = now_utc
 
-        self.set_config()
         self.logger.info(f"Instantiated task {self.__class__.__name__}")
+        self.set_config()
         self.log_config()
 
     def set_config(self):

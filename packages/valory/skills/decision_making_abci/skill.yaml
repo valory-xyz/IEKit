@@ -7,23 +7,23 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
-  behaviours.py: bafybeibrkk72tw5hqfggn2w55p63lwl4s35q6yui2dzaca56h2tebfrm6y
+  behaviours.py: bafybeicnr3dz54m24w7hjdchrxum66uj2izbt7xsrjsekszjspbhviro2i
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
   fsm_specification.yaml: bafybeihqaaud54lucsousv5dbbn3mbqro3ryel3hxpzz33xkvf47tq4yhe
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
-  models.py: bafybeicck6ruytwcl4bl5juzd2aryt6rkyy3rrqmjmgq37qjak26myx7w4
+  models.py: bafybeiewtra4a2ze776ckh7rzuzx2cdsih3qwi6m7ouqqxh5gfdagufi7m
   payloads.py: bafybeif5bomwy74bwnphsk6bty6qb6efugvjnnopsz7qjunpe6gtgjaxya
   rounds.py: bafybeiceh4234h7l4c2cfhvlbdiqp2m6wp7eq2ugpalbdld5xdsdhrz43e
   tasks/finished_pipeline_preparation.py: bafybeid652b53p7mtsbj3ksko3g2eezvg4nut2vukwvnfhxyfi4zkx3dym
-  tasks/llm_preparation.py: bafybeibvevrnqbdipahg6gn6sn3gq7cfn6zcx67f6sbhvdsq2ql7ikip4y
-  tasks/read_stream_preparation.py: bafybeif5lf4gxlgivwi7hit43mwlefxqptqf7e2nw44xr2llw2n3u7skya
+  tasks/llm_preparation.py: bafybeiazbjc4m3obkpdkjfcbmz6pzvugdrgvlgfz7awmx54mzysr3ktbvy
+  tasks/read_stream_preparation.py: bafybeicmjasiyecopfweobodzbmn3tbluu5q724uzzqkit6urn3lb5q354
   tasks/score_preparations.py: bafybeie7cfot24zcyod5becz6t5lasvva77httfkw57qmvgjk35d3qluxa
   tasks/signature_validation.py: bafybeihbwrv72hnh3ytko2i5oszqgdky2j6h2wse45wvuhf2j32lo2tsjy
-  tasks/task_preparations.py: bafybeibsz37daedplwttv7bvqbspiqshploo7we7wfseu2ltjhrcfscoai
+  tasks/task_preparations.py: bafybeif3g3uhedl2wd3sixjzat5mj7e45zffqyeyfpohsu6l6vhmhncvki
   tasks/tweet_validation_preparation.py: bafybeiat6eyiqvtqzsl4ibtwnpjihqw7pgnnjoaatlp5nne57kgi6iu6ay
-  tasks/twitter_preparation.py: bafybeib7d37czhntqj7tgicpytylz7z2l4yjoysqtfmhadsud3brtt5d4m
+  tasks/twitter_preparation.py: bafybeiceqcg7mtxfb6cttuizryolz3yu27t76fxmzzqhewavczlv5wkxdu
   tasks/week_in_olas_preparations.py: bafybeids7nah5nilmykainnntx7j7dvnboo6ypaqb2w2icdxrjhpgxxygy
-  tasks/write_stream_preparation.py: bafybeifrjd2o3ybjyuxdzcuyyfmgsuit64uftvqbctuhhbob4bilhadsdy
+  tasks/write_stream_preparation.py: bafybeiatdcckbobkaawnuphcgvjx2kgcuil7dtbunfpje7pfjd26gd2es4
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
   tests/centaur_configs.py: bafybeibpaghsahe4yi6o2s6x6sdluuid2kawe54kpnlruwdpqqavkmfbde
   tests/test_behaviours.py: bafybeic5v76d7xc2r4iy2alikd653l6l36b5yhpk4oym4ezefeeyrjusre
@@ -42,7 +42,7 @@ protocols:
 - valory/contract_api:1.0.0:bafybeialhbjvwiwcnqq3ysxcyemobcbie7xza66gaofcvla5njezkvhcka
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
-- valory/ceramic_read_abci:0.1.0:bafybeif5zw7x7ry3qpoq64cjdh5x7bv4j2s7pmnhuqd65fasjsif54lwjm
+- valory/ceramic_read_abci:0.1.0:bafybeigwgrljeaw67ogy3txy6g5wdoyl2sarqwwv3tixs6t7gicqlrk5ta
 behaviours:
   main:
     args: {}

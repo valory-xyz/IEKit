@@ -24,7 +24,6 @@ import math
 import random
 import re
 from abc import ABC
-from copy import deepcopy
 from dataclasses import asdict
 from datetime import datetime
 from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
@@ -983,7 +982,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         tweets = self.synchronized_data.tweets
 
         # Instantiate the db
-        ceramic_db_copy = deepcopy(self.context.ceramic_db)
+        ceramic_db_copy = self.context.ceramic_db.copy()
 
         # Have we changed scoring period?
         now = cast(

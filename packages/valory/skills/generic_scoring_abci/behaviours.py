@@ -21,7 +21,6 @@
 
 import json
 from abc import ABC
-from copy import deepcopy
 from typing import Dict, Generator, Set, Type, cast
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
@@ -29,7 +28,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-from packages.valory.skills.decision_making_abci.models import CeramicDB
+from packages.valory.skills.decision_making_abci.models import CeramicDBBase
 from packages.valory.skills.generic_scoring_abci.models import Params
 from packages.valory.skills.generic_scoring_abci.rounds import (
     GenericScoringAbciApp,
@@ -80,8 +79,8 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
         pending_write = self.synchronized_data.pending_write
 
         # Instantiate the db
-        ceramic_db_copy = deepcopy(self.context.ceramic_db)
-        scores_db = CeramicDB()
+        ceramic_db_copy = self.context.ceramic_db.copy()
+        scores_db = CeramicDBBase()
         scores_db.load(self.synchronized_data.score_data)  # temp db
 
         # Only update if latest_update_id has increased

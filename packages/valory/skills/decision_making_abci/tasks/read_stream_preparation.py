@@ -47,7 +47,7 @@ class ReadCentaursPreparation(TaskPreparation):
     def _post_task(self):
         """Preparations after running the task"""
         updates = {
-            "centaurs_data": self.state.ceramic_data,
+            "centaurs_data": self.behaviour.context.state.ceramic_data,
             "current_centaur_index": 0,  # reset the centaur index after reading
         }
         yield
@@ -78,7 +78,7 @@ class ReadContributeDBPreparation(TaskPreparation):
         """Preparations after running the task"""
         updates = {}
         # Load the stream data into the db model
-        self.ceramic_db.load(self.state.ceramic_data)
+        self.ceramic_db.load(self.behaviour.context.state.ceramic_data)
         yield
         return updates, None
 
@@ -105,6 +105,6 @@ class ReadManualPointsPreparation(TaskPreparation):
 
     def _post_task(self):
         """Preparations after running the task"""
-        updates = {"score_data": self.state.ceramic_data}
+        updates = {"score_data": self.behaviour.context.state.ceramic_data}
         yield
         return updates, None

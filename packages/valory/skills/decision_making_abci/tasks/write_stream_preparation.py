@@ -126,7 +126,7 @@ class DailyOrbisPreparation(OrbisPreparation):
         ]
 
         # Dump the data into the state
-        self.state.ceramic_data = write_data
+        self.behaviour.context.state.ceramic_data = write_data
 
         updates = {
             "write_results": [],  # clear previous results
@@ -178,7 +178,7 @@ class UpdateCentaursPreparation(WriteStreamPreparation):
         ]
 
         # Dump the data into the state
-        self.state.ceramic_data = write_data
+        self.behaviour.context.state.ceramic_data = write_data
 
         updates = {
             "write_results": [],  # clear previous results
@@ -224,7 +224,7 @@ class WriteContributeDBPreparation(WriteStreamPreparation):
         ]
 
         # Dump the data into the state
-        self.state.ceramic_data = write_data
+        self.behaviour.context.state.ceramic_data = write_data
 
         updates = {
             "is_data_on_sync_db": False,

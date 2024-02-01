@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -49,19 +49,15 @@ class LLMPreparation(TaskPreparation):
 
         # This task should only be run if Twitter and Orbis task are going to be run
         run_daily_tweet = yield from DailyTweetPreparation(
-            self.synchronized_data,
-            self.params,
-            self.logger,
             self.now_utc,
             self.behaviour,
+            self.synchronized_data,
         ).check_conditions()
 
         run_daily_orbis = yield from DailyOrbisPreparation(
-            self.synchronized_data,
-            self.params,
-            self.logger,
             self.now_utc,
             self.behaviour,
+            self.synchronized_data,
         ).check_conditions()
 
         if not run_daily_tweet and not run_daily_orbis:
