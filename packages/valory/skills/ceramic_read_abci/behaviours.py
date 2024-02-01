@@ -24,7 +24,7 @@ import os
 from abc import ABC
 from typing import Generator, Optional, Set, Type, cast
 
-from aea.helpers.ipfs import IPFSHashOnly
+from aea.helpers.ipfs.base import IPFSHashOnly
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
