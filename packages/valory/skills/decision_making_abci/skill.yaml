@@ -42,7 +42,7 @@ protocols:
 - valory/contract_api:1.0.0:bafybeialhbjvwiwcnqq3ysxcyemobcbie7xza66gaofcvla5njezkvhcka
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
-- valory/ceramic_read_abci:0.1.0:bafybeidiss52ypzfuw63xbo5uuzpnjyzynjejgmoecup4qdsbbxqe7klci
+- valory/ceramic_read_abci:0.1.0:bafybeic3c5v64nqcihjjzd7b65vljm6helmzpz3y7223sv3bid2auxnwma
 behaviours:
   main:
     args: {}
