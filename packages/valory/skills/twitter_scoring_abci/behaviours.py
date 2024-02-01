@@ -24,10 +24,11 @@ import math
 import random
 import re
 from abc import ABC
+from copy import deepcopy
 from dataclasses import asdict
 from datetime import datetime
 from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
-from copy import deepcopy
+
 from web3 import Web3
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
@@ -962,13 +963,12 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-
             sender = self.context.agent_address
             payload = DBUpdatePayload(
-                sender=sender, content=json.dumps(
-                    {"ceramic_diff": self.get_update_diff()},
-                    sort_keys=True
-                )
+                sender=sender,
+                content=json.dumps(
+                    {"ceramic_diff": self.get_update_diff()}, sort_keys=True
+                ),
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -991,7 +991,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         ).round_sequence.last_round_transition_timestamp.timestamp()
 
         today = datetime.fromtimestamp(now).strftime("%Y-%m-%d")
-        current_period = ceramic_db_copy.data["module_data"]["twitter"]["current_period"]
+        current_period = ceramic_db_copy.data["module_data"]["twitter"][
+            "current_period"
+        ]
         is_period_changed = today != current_period
         if is_period_changed:
             self.context.logger.info(
@@ -1012,7 +1014,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             wallet_address = self.get_registration(tweet["text"])
 
             # Check this user's point limit per period
-            user, _ = ceramic_db_copy.get_user_by_field("twitter_id", tweet["author_id"])
+            user, _ = ceramic_db_copy.get_user_by_field(
+                "twitter_id", tweet["author_id"]
+            )
 
             if not user:
                 # New user
@@ -1068,16 +1072,16 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         # Update the latest_hashtag_tweet_id
         latest_hashtag_tweet_id = self.synchronized_data.latest_hashtag_tweet_id
         if latest_hashtag_tweet_id:
-            ceramic_db_copy.data["module_data"]["twitter"]["latest_hashtag_tweet_id"] = str(
-                latest_hashtag_tweet_id
-            )
+            ceramic_db_copy.data["module_data"]["twitter"][
+                "latest_hashtag_tweet_id"
+            ] = str(latest_hashtag_tweet_id)
 
         # Update the latest_mention_tweet_id
         latest_mention_tweet_id = self.synchronized_data.latest_mention_tweet_id
         if latest_mention_tweet_id:
-            ceramic_db_copy.data["module_data"]["twitter"]["latest_mention_tweet_id"] = str(
-                latest_mention_tweet_id
-            )
+            ceramic_db_copy.data["module_data"]["twitter"][
+                "latest_mention_tweet_id"
+            ] = str(latest_mention_tweet_id)
 
         # Update the number of tweets made today
         number_of_tweets_pulled_today = (

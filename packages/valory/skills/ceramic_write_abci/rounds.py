@@ -99,6 +99,7 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the is_data_on_sync_db."""
         return cast(bool, self.db.get("is_data_on_sync_db", True))
 
+
 class RandomnessRound(CollectSameUntilThresholdRound):
     """A round for generating randomness"""
 

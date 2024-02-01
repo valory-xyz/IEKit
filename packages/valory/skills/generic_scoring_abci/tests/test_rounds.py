@@ -84,7 +84,7 @@ def get_payloads(
 
 def get_dummy_generic_scoring_payload_serialized():
     """Dummy payload"""
-    return json.dumps({"ceramic_db": {}, "pending_write": False}, sort_keys=True)
+    return json.dumps({"pending_write": False}, sort_keys=True)
 
 
 class BaseGenericScoringRoundTest(BaseCollectSameUntilThresholdRoundTest):
@@ -127,16 +127,12 @@ class TestGenericScoringRound(BaseGenericScoringRoundTest):
         (
             RoundTestCase(
                 name="Happy path",
-                initial_data={"ceramic_db": {}},
+                initial_data={},
                 payloads=get_payloads(
                     payload_cls=GenericScoringPayload,
                     data=get_dummy_generic_scoring_payload_serialized(),
                 ),
-                final_data={
-                    "ceramic_db": json.loads(
-                        get_dummy_generic_scoring_payload_serialized()
-                    )["ceramic_db"],
-                },
+                final_data={},
                 event=Event.DONE,
                 most_voted_payload=get_dummy_generic_scoring_payload_serialized(),
                 synchronized_data_attr_checks=[

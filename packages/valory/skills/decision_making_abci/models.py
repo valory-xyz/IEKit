@@ -19,16 +19,20 @@
 
 """This module contains the shared state for the abci skill of DecisionMakingAbciApp."""
 
+import itertools
 import json
 from typing import Any, Dict, List, Optional, Tuple
-import itertools
+
+import jsonpatch
+
 from packages.valory.skills.abstract_round_abci.models import BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
 )
 from packages.valory.skills.abstract_round_abci.models import Requests as BaseRequests
-from packages.valory.skills.ceramic_read_abci.models import SharedState as CeramicReadSharedState
-import jsonpatch
+from packages.valory.skills.ceramic_read_abci.models import (
+    SharedState as CeramicReadSharedState,
+)
 from packages.valory.skills.decision_making_abci.rounds import DecisionMakingAbciApp
 
 
@@ -97,9 +101,7 @@ class CeramicDB:
         "tweet_id_to_points",
     }
 
-    def __init__(
-        self, *args: Any, **kwargs: Any
-    ) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Create a database"""
         self.load()
 
@@ -240,10 +242,11 @@ class CeramicDB:
                 # Add merged user
                 self.data["users"].append(merged_user)
 
-
     def diff(self, other_db):
         """Create data diff"""
-        return str(jsonpatch.make_patch(self.data, other_db.data))  # TODO: needs sorting?
+        return str(
+            jsonpatch.make_patch(self.data, other_db.data)
+        )  # TODO: needs sorting?
 
     def apply_diff(self, patch):
         """Apply a diff"""

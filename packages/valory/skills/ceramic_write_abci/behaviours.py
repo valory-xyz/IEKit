@@ -193,7 +193,11 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
         """Write the scores to the Ceramic stream"""
 
         write_index = self.synchronized_data.write_index
-        write_data = self.synchronized_data.write_data if self.synchronized_data.is_data_on_sync_db else cast(SharedState, self.shared_state).ceramic_data
+        write_data = (
+            self.synchronized_data.write_data
+            if self.synchronized_data.is_data_on_sync_db
+            else cast(SharedState, self.shared_state).ceramic_data
+        )
         selected_data = write_data[write_index]
 
         stream_id = selected_data["stream_id"] if "stream_id" in selected_data else None
@@ -276,9 +280,7 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
         api_endpoint = self.params.ceramic_api_create_endpoint
         url = api_base + api_endpoint
 
-        self.context.logger.info(
-            f"Creating new stream using did {did_str} [{url}]"
-        )
+        self.context.logger.info(f"Creating new stream using did {did_str} [{url}]")
         response = yield from self.get_http_response(
             method="POST",
             url=url,
@@ -330,7 +332,11 @@ class VerificationBehaviour(CeramicWriteBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             write_index = self.synchronized_data.write_index
-            write_data = self.synchronized_data.write_data if self.synchronized_data.is_data_on_sync_db else cast(SharedState, self.shared_state).ceramic_data
+            write_data = (
+                self.synchronized_data.write_data
+                if self.synchronized_data.is_data_on_sync_db
+                else cast(SharedState, self.shared_state).ceramic_data
+            )
             selected_data = write_data[write_index]
             stream_id = self.synchronized_data.stream_id_to_verify
 

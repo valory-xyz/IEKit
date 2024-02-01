@@ -336,7 +336,9 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
             else:
                 updates[
                     get_name(SynchronizedData.latest_mention_tweet_id)
-                ] = self.context.ceramic_db["module_data"]["twitter"]["latest_mention_tweet_id"]
+                ] = self.context.ceramic_db["module_data"]["twitter"][
+                    "latest_mention_tweet_id"
+                ]
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
@@ -472,7 +474,9 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
             else:
                 updates[
                     get_name(SynchronizedData.latest_hashtag_tweet_id)
-                ] = self.context.ceramic_db["module_data"]["twitter"]["latest_hashtag_tweet_id"]
+                ] = self.context.ceramic_db["module_data"]["twitter"][
+                    "latest_hashtag_tweet_id"
+                ]
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
@@ -756,9 +760,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         Event.ROUND_TIMEOUT: 30.0,
         Event.TWEET_EVALUATION_ROUND_TIMEOUT: 600.0,
     }
-    cross_period_persisted_keys: FrozenSet[str] = frozenset(
-        ["pending_write", "tweets"]
-    )
+    cross_period_persisted_keys: FrozenSet[str] = frozenset(["pending_write", "tweets"])
     db_pre_conditions: Dict[AppState, Set[str]] = {
         TwitterDecisionMakingRound: set(),
     }

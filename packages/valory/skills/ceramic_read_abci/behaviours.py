@@ -20,14 +20,18 @@
 """This package contains round behaviours of CeramicReadAbciApp."""
 
 import json
+import os
 from abc import ABC
 from typing import Generator, Optional, Set, Type, cast
+
+from aea.helpers.ipfs import IPFSHashOnly
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
+from packages.valory.skills.abstract_round_abci.io_.store import SupportedFiletype
 from packages.valory.skills.ceramic_read_abci.ceramic.payloads import (
     build_data_from_commits,
 )
@@ -38,12 +42,10 @@ from packages.valory.skills.ceramic_read_abci.rounds import (
     StreamReadRound,
     SynchronizedData,
 )
-import os
-from packages.valory.skills.abstract_round_abci.io_.store import SupportedFiletype
-from aea.helpers.ipfs import IPFSHashOnly
 
 
 DATA_FILE_NAME = "stream.json"
+
 
 class CeramicReadBaseBehaviour(BaseBehaviour, ABC):
     """Base behaviour for the ceramic_read_abci skill."""
@@ -137,19 +139,23 @@ class StreamReadBehaviour(CeramicReadBaseBehaviour):
 
             # Sync on the data itself and load into synchronized_data
             if stream_data and self.synchronized_data.sync_on_ceramic_data:
-                payload_content = json.dumps({
-                    "stream_data": stream_data["data"],
-                    "read_target_property": read_target_property,
-                }, sort_keys=True)
+                payload_content = json.dumps(
+                    {
+                        "stream_data": stream_data["data"],
+                        "read_target_property": read_target_property,
+                    },
+                    sort_keys=True,
+                )
                 self.context.logger.info(
                     f"Loading data into 'synchronized_data.{read_target_property}'"
                 )
 
             # Sync on the data hash and load into custom model
             if stream_data and not self.synchronized_data.sync_on_ceramic_data:
-
                 # Calculate data hash
-                data_hash = IPFSHashOnly().hash_bytes(json.dumps(stream_data, sort_keys=True).encode("utf-8"))
+                data_hash = IPFSHashOnly().hash_bytes(
+                    json.dumps(stream_data, sort_keys=True).encode("utf-8")
+                )
 
                 # Load into shared state
                 self.context.state.ceramic_data = stream_data
@@ -159,12 +165,9 @@ class StreamReadBehaviour(CeramicReadBaseBehaviour):
                     f"Loading data into state.ceramic_data. Data hash is {data_hash}"
                 )
 
-
             # Send the payload
             sender = self.context.agent_address
-            payload = StreamReadPayload(
-                sender=sender, content=payload_content
-            )
+            payload = StreamReadPayload(sender=sender, content=payload_content)
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(payload)

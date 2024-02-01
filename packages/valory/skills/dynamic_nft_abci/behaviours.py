@@ -21,8 +21,9 @@
 
 import json
 from abc import ABC
-from typing import Dict, Generator, Optional, Set, Tuple, Type, cast
 from copy import deepcopy
+from typing import Dict, Generator, Optional, Set, Tuple, Type, cast
+
 from packages.valory.contracts.dynamic_contribution.contract import (
     DynamicContributionContract,
 )

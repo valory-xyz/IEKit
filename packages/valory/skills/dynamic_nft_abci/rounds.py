@@ -163,5 +163,5 @@ class DynamicNFTAbciApp(AbciApp[Event]):
         FinishedTokenTrackRound: set(),
     }
     cross_period_persisted_keys: FrozenSet[str] = frozenset(
-        ["token_id_to_points", "last_update_time", "ceramic_db", "pending_write"]
+        ["token_id_to_points", "last_update_time", "pending_write"]
     )

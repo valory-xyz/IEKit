@@ -21,6 +21,7 @@
 
 import json
 from abc import ABC
+from copy import deepcopy
 from typing import Dict, Generator, Set, Type, cast
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
@@ -28,6 +29,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
+from packages.valory.skills.decision_making_abci.models import CeramicDB
 from packages.valory.skills.generic_scoring_abci.models import Params
 from packages.valory.skills.generic_scoring_abci.rounds import (
     GenericScoringAbciApp,
@@ -35,8 +37,6 @@ from packages.valory.skills.generic_scoring_abci.rounds import (
     GenericScoringRound,
     SynchronizedData,
 )
-from copy import deepcopy
-from packages.valory.skills.decision_making_abci.models import CeramicDB
 
 
 class GenericScoringBaseBehaviour(BaseBehaviour, ABC):
@@ -96,7 +96,10 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
             self.context.logger.info(
                 f"Not adding scores from the stream because latest_update_id_stream({latest_update_id_stream!r}) <= latest_update_id_db({latest_update_id_db!r})"
             )
-            return {"ceramic_diff": self.context.ceramic_db.diff(ceramic_db_copy), "pending_write": pending_write}
+            return {
+                "ceramic_diff": self.context.ceramic_db.diff(ceramic_db_copy),
+                "pending_write": pending_write,
+            }
 
         # discord_id, discord_handle, points, wallet_address
         for user in scores_db.data["users"]:
@@ -116,7 +119,10 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
         # entries on the database
         ceramic_db_copy.merge_by_wallet()
 
-        return {"ceramic_diff": self.context.ceramic_db.diff(ceramic_db_copy), "pending_write": pending_write}
+        return {
+            "ceramic_diff": self.context.ceramic_db.diff(ceramic_db_copy),
+            "pending_write": pending_write,
+        }
 
 
 class GenericScoringRoundBehaviour(AbstractRoundBehaviour):

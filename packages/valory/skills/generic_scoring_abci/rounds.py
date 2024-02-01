@@ -113,7 +113,6 @@ class GenericScoringAbciApp(AbciApp[Event]):
     }
     cross_period_persisted_keys: FrozenSet[str] = frozenset(
         [
-            "ceramic_db",
             "pending_write",
         ]
     )

@@ -92,7 +92,6 @@ def get_dummy_token_track_payload_serialized() -> str:
     """Dummy new tokens payload"""
     return json.dumps(
         {
-            "ceramic_db": DUMMY_CERAMIC_DB,
             "token_id_to_points": DUMMY_TOKEN_ID_TO_POINTS,
             "last_update_time": "dymmy_last_update_time",
             "pending_write": True,
@@ -171,9 +170,6 @@ class TestTokenTrackRound(BaseDynamicNFTRoundTestClass):
                     "token_id_to_points": json.loads(
                         get_dummy_token_track_payload_serialized()
                     )["token_id_to_points"],
-                    "ceramic_db": json.loads(
-                        get_dummy_token_track_payload_serialized()
-                    )["ceramic_db"],
                     "last_update_time": json.loads(
                         get_dummy_token_track_payload_serialized()
                     )["last_update_time"],

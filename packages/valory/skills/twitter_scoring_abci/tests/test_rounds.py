@@ -172,11 +172,7 @@ class TestMentionsCollectionRound(BaseTwitterScoringRoundTest):
         (
             RoundTestCase(
                 name="Happy path",
-                initial_data={
-                    "ceramic_db": {
-                        "module_data": {"twitter": {"latest_mention_tweet_id": 0}}
-                    }
-                },
+                initial_data={},
                 payloads=get_payloads(
                     payload_cls=TwitterMentionsCollectionPayload,
                     data=get_dummy_mentions_collection_payload_serialized(),
@@ -243,11 +239,7 @@ class TestHashtagsCollectionRound(BaseTwitterScoringRoundTest):
         (
             RoundTestCase(
                 name="Happy path",
-                initial_data={
-                    "ceramic_db": {
-                        "module_data": {"twitter": {"latest_hashtag_tweet_id": 0}}
-                    }
-                },
+                initial_data={},
                 payloads=get_payloads(
                     payload_cls=TwitterHashtagsCollectionPayload,
                     data=get_dummy_hashtags_collection_payload_serialized(),
@@ -314,7 +306,7 @@ class TestDecisionMakingRound(BaseTwitterScoringRoundTest):
         (
             RoundTestCase(
                 name="Happy path",
-                initial_data={"ceramic_db": {}},
+                initial_data={},
                 payloads=get_payloads(
                     payload_cls=TwitterDecisionMakingPayload,
                     data=Event.RETRIEVE_HASHTAGS.value,
@@ -343,7 +335,7 @@ class TestDBUpdateRound(BaseTwitterScoringRoundTest):
         (
             RoundTestCase(
                 name="Happy path",
-                initial_data={"ceramic_db": {}},
+                initial_data={},
                 payloads=get_payloads(
                     payload_cls=DBUpdatePayload,
                     data="{}",
@@ -372,7 +364,7 @@ class TestPreMechRequestRound(BaseTwitterScoringRoundTest):
         (
             RoundTestCase(
                 name="Happy path",
-                initial_data={"ceramic_db": {}},
+                initial_data={},
                 payloads=get_payloads(
                     payload_cls=PreMechRequestPayload,
                     data='{"new_mech_requests":[]}',
@@ -386,7 +378,7 @@ class TestPreMechRequestRound(BaseTwitterScoringRoundTest):
             ),
             RoundTestCase(
                 name="Happy path",
-                initial_data={"ceramic_db": {}},
+                initial_data={},
                 payloads=get_payloads(
                     payload_cls=PreMechRequestPayload,
                     data='{"new_mech_requests":["dummy_request"]}',

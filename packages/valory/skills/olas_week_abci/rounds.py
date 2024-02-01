@@ -461,9 +461,7 @@ class WeekInOlasAbciApp(AbciApp[Event]):
         Event.ROUND_TIMEOUT: 30.0,
         Event.TWEET_EVALUATION_ROUND_TIMEOUT: 600.0,
     }
-    cross_period_persisted_keys: FrozenSet[str] = frozenset(
-        ["pending_write"]
-    )
+    cross_period_persisted_keys: FrozenSet[str] = frozenset(["pending_write"])
     db_pre_conditions: Dict[AppState, Set[str]] = {
         OlasWeekDecisionMakingRound: set(),
     }

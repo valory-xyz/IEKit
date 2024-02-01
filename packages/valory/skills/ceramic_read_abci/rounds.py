@@ -68,7 +68,6 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(bool, self.db.get("sync_on_ceramic_data", True))
 
 
-
 class StreamReadRound(CollectSameUntilThresholdRound):
     """StreamReadRound"""
 
@@ -80,10 +79,8 @@ class StreamReadRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
-
             # Sync on the data
             if cast(SynchronizedData, self.synchronized_data).sync_on_ceramic_data:
-
                 payload = json.loads(self.most_voted_payload)
 
                 if payload == self.ERROR_PAYLOAD:
@@ -102,7 +99,12 @@ class StreamReadRound(CollectSameUntilThresholdRound):
                 # For now, we require that ALL the payloads are the same
                 # Alternatively, agents that do not agree on the data hash could redownload
                 # data from IPFS. All agents should push to IPFS.
-                event = Event.DONE if set([cast(StreamReadPayload, p).content for p in self.payloads]) == 1 else Event.RETRY
+                event = (
+                    Event.DONE
+                    if set([cast(StreamReadPayload, p).content for p in self.payloads])
+                    == 1
+                    else Event.RETRY
+                )
                 return self.synchronized_data, event
 
         if not self.is_majority_possible(

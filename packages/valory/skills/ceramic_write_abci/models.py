@@ -26,8 +26,11 @@ from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
 )
 from packages.valory.skills.abstract_round_abci.models import Requests as BaseRequests
+from packages.valory.skills.ceramic_read_abci.models import (
+    SharedState as CeramicReadSharedState,
+)
 from packages.valory.skills.ceramic_write_abci.rounds import CeramicWriteAbciApp
-from packages.valory.skills.ceramic_read_abci.models import SharedState as CeramicReadSharedState
+
 
 class SharedState(CeramicReadSharedState):
     """Keep the current shared state of the skill."""

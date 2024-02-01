@@ -124,11 +124,6 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(bool, self.db.get("has_centaurs_changes", False))
 
     @property
-    def ceramic_db(self) -> dict:
-        """Get the data stored in the main stream."""
-        return cast(dict, self.db.get_strict("ceramic_db"))
-
-    @property
     def pending_write(self) -> bool:
         """Checks whether there are changes pending to be written to Ceramic."""
         return cast(bool, self.db.get("pending_write", False))
@@ -164,7 +159,6 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
                     **{
                         **payload["updates"],
                         "previous_decision_event": event.value,
-                        "ceramic_db": dict(),
                         "score_data": dict(),
                         "centaurs_data": list(),
                     }
