@@ -23,6 +23,8 @@ from copy import copy
 
 import pytest
 
+from packages.valory.skills.decision_making_abci.models import CeramicDB
+
 
 DEFAULT_DATA = {
     "points": 0,

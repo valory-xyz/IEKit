@@ -31,7 +31,6 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-from packages.valory.skills.abstract_round_abci.io_.store import SupportedFiletype
 from packages.valory.skills.ceramic_read_abci.ceramic.payloads import (
     build_data_from_commits,
 )
