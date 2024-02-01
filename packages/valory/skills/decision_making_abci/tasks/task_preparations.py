@@ -30,18 +30,17 @@ class TaskPreparation:
     task_name = None
     task_event = None
 
-    def __init__(
-        self, synchronized_data, params, state, context, now_utc, behaviour
-    ) -> None:
+    def __init__(self, now_utc, behaviour, synchronized_data) -> None:
         """Init"""
         self.name = ""
-        self.synchronized_data = synchronized_data
-        self.params = params
-        self.logger = context.logger
-        self.state = state
-        self.ceramic_db = context.ceramic_db
-        self.now_utc = now_utc
         self.behaviour = behaviour
+        self.synchronized_data = synchronized_data
+        self.params = behaviour.params
+        self.logger = behaviour.context.logger
+        self.state = behaviour.state
+        self.ceramic_db = behaviour.context.ceramic_db
+        self.now_utc = now_utc
+
         self.set_config()
         self.logger.info(f"Instantiated task {self.__class__.__name__}")
         self.log_config()

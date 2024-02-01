@@ -209,12 +209,9 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
             if not previous_task_skipped:
                 previous_task_preparation = (
                     previous_task_preparation_cls(
-                        self.synchronized_data,
-                        self.params,
-                        self.state,
-                        self.context,
                         now_utc,
                         self,
+                        self.synchronized_data,
                     )
                     if previous_task_preparation_cls
                     else None
@@ -237,14 +234,12 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
             # Process pre task
             next_task_preparation = (
                 next_task_preparation_cls(
+                    now_utc,
+                    self,
                     self.synchronized_data.update(  # use an updated version of the data
                         synchronized_data_class=SynchronizedData,
                         **post_updates,
                     ),
-                    self.params,
-                    self.context.logger,
-                    now_utc,
-                    self,
                 )
                 if next_task_preparation_cls
                 else None
