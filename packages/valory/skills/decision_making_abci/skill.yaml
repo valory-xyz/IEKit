@@ -27,7 +27,7 @@ fingerprint:
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
   tests/centaur_configs.py: bafybeibpaghsahe4yi6o2s6x6sdluuid2kawe54kpnlruwdpqqavkmfbde
   tests/test_behaviours.py: bafybeic5v76d7xc2r4iy2alikd653l6l36b5yhpk4oym4ezefeeyrjusre
-  tests/test_ceramic_db.py: bafybeibjndfhlvnnqjjh2e22re62fdoayba23ufposm4w5fv2gbup5uucm
+  tests/test_ceramic_db.py: bafybeiclsbhk72qt3vam2iz5oajg5enny7mmrp76slxzlourptaboohx5a
   tests/test_dialogues.py: bafybeihxzcyy7xvg4lte4bv5hy2h4mozdzwvyaa36feu3oxv67jfvsyuoi
   tests/test_handlers.py: bafybeie6q3l6zyf356uvhldobhiir5ang5ybmi7lcao3556n3bnlpfqhfm
   tests/test_models.py: bafybeiazl2mfe3iwydtdkur3h2w7ir4iszext2666fzqnnhsr6xq2lhw3i
@@ -42,7 +42,7 @@ protocols:
 - valory/contract_api:1.0.0:bafybeialhbjvwiwcnqq3ysxcyemobcbie7xza66gaofcvla5njezkvhcka
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
-- valory/ceramic_read_abci:0.1.0:bafybeic3c5v64nqcihjjzd7b65vljm6helmzpz3y7223sv3bid2auxnwma
+- valory/ceramic_read_abci:0.1.0:bafybeiatmquxniw3foi3n22aylboe57mnnxns5pksxl2losexqtcdeuqte
 behaviours:
   main:
     args: {}
