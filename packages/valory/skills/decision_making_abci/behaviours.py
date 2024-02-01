@@ -207,10 +207,14 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
 
             # Process post task
             if not previous_task_skipped:
+                import pdb
+
+                pdb.set_trace()
                 previous_task_preparation = (
                     previous_task_preparation_cls(
                         self.synchronized_data,
                         self.params,
+                        self.state,
                         self.context,
                         now_utc,
                         self,

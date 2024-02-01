@@ -24,6 +24,7 @@ import json
 from typing import Any, Dict, List, Optional, Tuple
 
 import jsonpatch
+from aea.skills.base import Model
 
 from packages.valory.skills.abstract_round_abci.models import BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
@@ -86,7 +87,7 @@ Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
 
 
-class CeramicDB:
+class CeramicDB(Model):
     """A class that represents the user database"""
 
     USER_FIELDS = {
@@ -103,6 +104,7 @@ class CeramicDB:
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Create a database"""
+        super().__init__(*args, **kwargs)
         self.load()
 
     def load(self, data: Optional[Dict] = None):

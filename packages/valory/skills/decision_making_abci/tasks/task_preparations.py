@@ -30,13 +30,15 @@ class TaskPreparation:
     task_name = None
     task_event = None
 
-    def __init__(self, synchronized_data, params, context, now_utc, behaviour) -> None:
+    def __init__(
+        self, synchronized_data, params, state, context, now_utc, behaviour
+    ) -> None:
         """Init"""
         self.name = ""
         self.synchronized_data = synchronized_data
         self.params = params
         self.logger = context.logger
-        self.state = context.state
+        self.state = state
         self.ceramic_db = context.ceramic_db
         self.now_utc = now_utc
         self.behaviour = behaviour

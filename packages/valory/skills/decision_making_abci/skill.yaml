@@ -7,11 +7,11 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
-  behaviours.py: bafybeigfg5rkovr7enf2yww5m4evyl273vydiksg7ts73e4fnv5rzht45m
+  behaviours.py: bafybeih4hw3njcchknjw572hzdjv5erxmlcaosdr65otvc5jd7bctuqb7i
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
   fsm_specification.yaml: bafybeihqaaud54lucsousv5dbbn3mbqro3ryel3hxpzz33xkvf47tq4yhe
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
-  models.py: bafybeiafrtq4tu7uv47q7a5uw65btuwc7sugitvxwsh2mapidgk3j5wb6y
+  models.py: bafybeiewibrd62pvrpqy7bbxt2dvvprlxpvwfdnaz4tgxvnp3vvbi6s6de
   payloads.py: bafybeif5bomwy74bwnphsk6bty6qb6efugvjnnopsz7qjunpe6gtgjaxya
   rounds.py: bafybeiceh4234h7l4c2cfhvlbdiqp2m6wp7eq2ugpalbdld5xdsdhrz43e
   tasks/finished_pipeline_preparation.py: bafybeid652b53p7mtsbj3ksko3g2eezvg4nut2vukwvnfhxyfi4zkx3dym
@@ -19,7 +19,7 @@ fingerprint:
   tasks/read_stream_preparation.py: bafybeif5lf4gxlgivwi7hit43mwlefxqptqf7e2nw44xr2llw2n3u7skya
   tasks/score_preparations.py: bafybeie7cfot24zcyod5becz6t5lasvva77httfkw57qmvgjk35d3qluxa
   tasks/signature_validation.py: bafybeihbwrv72hnh3ytko2i5oszqgdky2j6h2wse45wvuhf2j32lo2tsjy
-  tasks/task_preparations.py: bafybeiaaxhpgrljvvnptezgvuq7snti4rcdcngylgibojtbgthhgfz5bxu
+  tasks/task_preparations.py: bafybeiaclqrucwljyygbbpctxa2ljrbkazqhmil4ne4bf7blfptossc6se
   tasks/tweet_validation_preparation.py: bafybeiat6eyiqvtqzsl4ibtwnpjihqw7pgnnjoaatlp5nne57kgi6iu6ay
   tasks/twitter_preparation.py: bafybeib7d37czhntqj7tgicpytylz7z2l4yjoysqtfmhadsud3brtt5d4m
   tasks/week_in_olas_preparations.py: bafybeids7nah5nilmykainnntx7j7dvnboo6ypaqb2w2icdxrjhpgxxygy

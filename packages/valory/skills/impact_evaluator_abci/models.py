@@ -39,6 +39,9 @@ from packages.valory.skills.ceramic_write_abci.models import (
 )
 from packages.valory.skills.ceramic_write_abci.rounds import Event as CeramicWriteEvent
 from packages.valory.skills.decision_making_abci.models import (
+    CeramicDB as DecisionMakingCeramicDB,
+)
+from packages.valory.skills.decision_making_abci.models import (
     Params as DecisionMakingAbciParams,
 )
 from packages.valory.skills.decision_making_abci.rounds import (
@@ -88,6 +91,7 @@ Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
 RandomnessApi = CeramicWriteRandomnessApi
 MechResponseSpecs = BaseMechResponseSpecs
+CeramicDB = DecisionMakingCeramicDB
 
 MARGIN = 5
 MULTIPLIER = 2
