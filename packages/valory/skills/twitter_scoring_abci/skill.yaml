@@ -8,7 +8,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
-  behaviours.py: bafybeifsvp2muhr2o7iknhykz3allowlr3ldswb6i55yvcoxouvsnlcndy
+  behaviours.py: bafybeibxutvie2q43eqogcanll3sxfwcsgzro5cc4aqnjfsueirhb2w6qa
   ceramic_db.py: bafybeihpgdev4sdnyeyekp7t7lpfo56q2m24sdw4xougq2zddblvmoxneu
   dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
   fsm_specification.yaml: bafybeihbq2olrdqx2x5lcvypxyi44ecog4nntsvw2v6oeab4imvj5nz6ae
@@ -16,14 +16,14 @@ fingerprint:
   models.py: bafybeihrwlkjzhxktcmtj4uqzzobukf4mpyt7ba73pcpldk4i76pofaei4
   payloads.py: bafybeidb2qiw26b5fhyxujseibbo2ji5zo54auhyelllsqnj7zn5sbc3pi
   prompts.py: bafybeieiuqn427bgwfnzynxf3vtqfpvmqqscs5tyw4oibfofwropifotke
-  rounds.py: bafybeig5cfaoughoi2xvqitfuazeumwzelcfcqdtle5ceqe4dqulc545lu
+  rounds.py: bafybeih73oszf2lchl6okumcx376qopnua24nvz6zpa277igchjhul6xpi
   tests/__init__.py: bafybeidwzzd4ejsyf3aryd5kmrvd63h7ajgqyrxphmfaacvpjnneacejay
-  tests/test_behaviours.py: bafybeictveh7uptkgfrgfoic5vxc3khe4b2jyvpvbiguqk47oq26vrxyry
+  tests/test_behaviours.py: bafybeigcju5ax2dmu6chvtbqt4pcsuqi27raa5gp6semijtjjhfgypkzoe
   tests/test_dialogues.py: bafybeiheyq7klonzb7rnjub2i22h7bmsnoimn2pq4j7ofikt3yovstvgt4
   tests/test_handlers.py: bafybeigevirvi3saepukke2zmp334btgsdxhj55o2vawj3hqam63miirg4
   tests/test_models.py: bafybeihaiirqmcsshghztl5lvqjzem6y6rdeefhtiycrhh45v7cuwnmdz4
   tests/test_payloads.py: bafybeihoiaic7hmbhgknworqyoaexbxni4ufrsmw2xh56tf7fm2pqo3szi
-  tests/test_rounds.py: bafybeibwjckwpz2tozkvlnhtaab4pyfu4yscwdsdazw6kk5b2d5vz2w6dm
+  tests/test_rounds.py: bafybeiadi33q7kgyqlsh3mr2toj426nuzhwdzrf44g2qsubhymyxd2crga
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
@@ -31,7 +31,7 @@ protocols:
 - valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
-- valory/decision_making_abci:0.1.0:bafybeicbkgefkscgdjbojhiqf7fdchans6rhdxgxkldszkpfgoctnksltu
+- valory/decision_making_abci:0.1.0:bafybeifgonmjgm6szmmqfxymsk6g2iknguyjgtxznckjptrpkmlqj46sw4
 behaviours:
   main:
     args: {}
