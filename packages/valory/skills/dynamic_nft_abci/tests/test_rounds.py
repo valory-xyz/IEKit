@@ -95,6 +95,7 @@ def get_dummy_token_track_payload_serialized() -> str:
             "token_id_to_points": DUMMY_TOKEN_ID_TO_POINTS,
             "last_update_time": "dymmy_last_update_time",
             "pending_write": True,
+            "ceramic_diff": [],
         },
         sort_keys=True,
     )
@@ -178,7 +179,6 @@ class TestTokenTrackRound(BaseDynamicNFTRoundTestClass):
                 most_voted_payload=get_dummy_token_track_payload_serialized(),
                 synchronized_data_attr_checks=[
                     lambda _synchronized_data: _synchronized_data.token_id_to_points,
-                    lambda _synchronized_data: _synchronized_data.ceramic_db,
                     lambda _synchronized_data: _synchronized_data.last_update_time,
                 ],
             ),

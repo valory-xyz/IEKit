@@ -477,7 +477,6 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
                 ] = self.context.ceramic_db["module_data"]["twitter"][
                     "latest_hashtag_tweet_id"
                 ]
-
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **updates,

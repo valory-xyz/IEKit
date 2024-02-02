@@ -78,6 +78,7 @@ class RoundTestCase:
     event: Event
     most_voted_payload: Any
     synchronized_data_attr_checks: List[Callable] = field(default_factory=list)
+    ceramic_db: Optional[Any] = None
 
 
 MAX_PARTICIPANTS: int = 4
@@ -143,9 +144,11 @@ class BaseTwitterScoringRoundTest(BaseCollectSameUntilThresholdRoundTest):
         """Run the test"""
 
         self.synchronized_data.update(**test_case.initial_data)
-
+        context_mock = mock.MagicMock()
+        if test_case.ceramic_db:
+            context_mock.ceramic_db = test_case.ceramic_db
         test_round = self.round_class(
-            synchronized_data=self.synchronized_data, context=mock.MagicMock()
+            synchronized_data=self.synchronized_data, context=context_mock
         )
 
         self._complete_run(
@@ -185,8 +188,8 @@ class TestMentionsCollectionRound(BaseTwitterScoringRoundTest):
                 event=Event.DONE,
                 most_voted_payload=get_dummy_mentions_collection_payload_serialized(),
                 synchronized_data_attr_checks=[
-                    lambda _synchronized_data: _synchronized_data.ceramic_db,
                 ],
+                ceramic_db={"module_data": {"twitter": {"latest_hashtag_tweet_id": 0, "latest_mention_tweet_id": 0}}}
             ),
             RoundTestCase(
                 name="API error",
@@ -252,8 +255,8 @@ class TestHashtagsCollectionRound(BaseTwitterScoringRoundTest):
                 event=Event.DONE,
                 most_voted_payload=get_dummy_hashtags_collection_payload_serialized(),
                 synchronized_data_attr_checks=[
-                    lambda _synchronized_data: _synchronized_data.ceramic_db,
                 ],
+                ceramic_db={"module_data": {"twitter": {"latest_hashtag_tweet_id": 0}}}
             ),
             RoundTestCase(
                 name="API error",
@@ -315,7 +318,6 @@ class TestDecisionMakingRound(BaseTwitterScoringRoundTest):
                 event=Event.RETRIEVE_HASHTAGS,
                 most_voted_payload=Event.RETRIEVE_HASHTAGS.value,
                 synchronized_data_attr_checks=[
-                    lambda _synchronized_data: _synchronized_data.ceramic_db,
                 ],
             ),
         ),
@@ -338,13 +340,12 @@ class TestDBUpdateRound(BaseTwitterScoringRoundTest):
                 initial_data={},
                 payloads=get_payloads(
                     payload_cls=DBUpdatePayload,
-                    data="{}",
+                    data='{"ceramic_diff":{}}',
                 ),
                 final_data={},
                 event=Event.DONE,
-                most_voted_payload="{}",
+                most_voted_payload='{"ceramic_diff":{}}',
                 synchronized_data_attr_checks=[
-                    lambda _synchronized_data: _synchronized_data.ceramic_db,
                 ],
             ),
         ),
@@ -373,7 +374,6 @@ class TestPreMechRequestRound(BaseTwitterScoringRoundTest):
                 event=Event.SKIP_EVALUATION,
                 most_voted_payload='{"new_mech_requests":[]}',
                 synchronized_data_attr_checks=[
-                    lambda _synchronized_data: _synchronized_data.ceramic_db,
                 ],
             ),
             RoundTestCase(
@@ -387,7 +387,6 @@ class TestPreMechRequestRound(BaseTwitterScoringRoundTest):
                 event=Event.DONE,
                 most_voted_payload='{"new_mech_requests":["dummy_request"]}',
                 synchronized_data_attr_checks=[
-                    lambda _synchronized_data: _synchronized_data.ceramic_db,
                 ],
             ),
         ),
