@@ -133,6 +133,11 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the summary_tweets."""
         return cast(list, self.db.get("summary_tweets", []))
 
+    @property
+    def write_results(self) -> list:
+        """Get the write_results."""
+        return cast(list, self.db.get("write_results", []))
+
 
 class DecisionMakingRound(CollectSameUntilThresholdRound):
     """DecisionMakingRound"""

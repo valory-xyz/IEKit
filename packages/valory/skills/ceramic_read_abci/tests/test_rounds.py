@@ -60,14 +60,11 @@ def get_payloads(
 
 def get_dummy_ceramic_read_payload_serialized(api_error: bool = False) -> str:
     """Dummy ceramic write payload"""
-    if api_error:
-        payload = {"error": "true"}
-    else:
-        payload = {
-            "stream_data": {"dummy": "data"},
-            "read_target_property": "dummy_property_name",
-        }
-    return json.dumps(payload, sort_keys=True)
+    payload = {
+        "stream_data": {"dummy": "data"},
+        "read_target_property": "dummy_property_name",
+    }
+    return "ERROR_PAYLOAD" if api_error else json.dumps(payload, sort_keys=True)
 
 
 @dataclass

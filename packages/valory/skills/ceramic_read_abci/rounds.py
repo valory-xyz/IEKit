@@ -79,13 +79,14 @@ class StreamReadRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
+
+            if self.most_voted_payload == self.ERROR_PAYLOAD:
+                return self.synchronized_data, Event.API_ERROR
+
+            payload = json.loads(self.most_voted_payload)
+
             # Sync on the data
             if cast(SynchronizedData, self.synchronized_data).sync_on_ceramic_data:
-                payload = json.loads(self.most_voted_payload)
-
-                if payload == self.ERROR_PAYLOAD:
-                    return self.synchronized_data, Event.API_ERROR
-
                 synchronized_data = self.synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
                     **{

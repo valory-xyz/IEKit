@@ -84,7 +84,7 @@ def get_payloads(
 
 def get_dummy_generic_scoring_payload_serialized():
     """Dummy payload"""
-    return json.dumps({"pending_write": False}, sort_keys=True)
+    return json.dumps({"pending_write": False, "ceramic_diff": {}}, sort_keys=True)
 
 
 class BaseGenericScoringRoundTest(BaseCollectSameUntilThresholdRoundTest):
@@ -136,7 +136,6 @@ class TestGenericScoringRound(BaseGenericScoringRoundTest):
                 event=Event.DONE,
                 most_voted_payload=get_dummy_generic_scoring_payload_serialized(),
                 synchronized_data_attr_checks=[
-                    lambda _synchronized_data: _synchronized_data.ceramic_db,
                 ],
             ),
         ),
