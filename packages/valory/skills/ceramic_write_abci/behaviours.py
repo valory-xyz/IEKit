@@ -260,7 +260,7 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
 
         if response.status_code != HTTP_OK:
             self.context.logger.error(
-                f"API error while updating the stream: {response.status_code}: {response.body}"
+                f"API error while updating the stream: {response.status_code}: {response.body}\ndata={new_data}"
             )
             return False, stream_id
 
@@ -295,7 +295,7 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
 
         if response.status_code != HTTP_OK:
             self.context.logger.error(
-                f"API error while updating the stream: {response.status_code}: {response.body}"
+                f"API error while updating the stream: {response.status_code}: {response.body}\ndata={new_data}"
             )
             return False, None
 

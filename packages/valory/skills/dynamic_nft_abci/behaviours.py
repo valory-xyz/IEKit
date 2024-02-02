@@ -207,7 +207,7 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
             "pending_write": pending_write,
         }
 
-        self.context.logger.info(f"Token data updated: {data}")
+        self.context.logger.info("Token data updated")
 
         return data
 
