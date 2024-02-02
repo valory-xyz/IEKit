@@ -601,7 +601,6 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
     def _sender_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
-
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             self.context.logger.info("I am a keeper")
 
