@@ -187,9 +187,15 @@ class TestMentionsCollectionRound(BaseTwitterScoringRoundTest):
                 },
                 event=Event.DONE,
                 most_voted_payload=get_dummy_mentions_collection_payload_serialized(),
-                synchronized_data_attr_checks=[
-                ],
-                ceramic_db={"module_data": {"twitter": {"latest_hashtag_tweet_id": 0, "latest_mention_tweet_id": 0}}}
+                synchronized_data_attr_checks=[],
+                ceramic_db={
+                    "module_data": {
+                        "twitter": {
+                            "latest_hashtag_tweet_id": 0,
+                            "latest_mention_tweet_id": 0,
+                        }
+                    }
+                },
             ),
             RoundTestCase(
                 name="API error",
@@ -254,9 +260,8 @@ class TestHashtagsCollectionRound(BaseTwitterScoringRoundTest):
                 },
                 event=Event.DONE,
                 most_voted_payload=get_dummy_hashtags_collection_payload_serialized(),
-                synchronized_data_attr_checks=[
-                ],
-                ceramic_db={"module_data": {"twitter": {"latest_hashtag_tweet_id": 0}}}
+                synchronized_data_attr_checks=[],
+                ceramic_db={"module_data": {"twitter": {"latest_hashtag_tweet_id": 0}}},
             ),
             RoundTestCase(
                 name="API error",
@@ -317,8 +322,7 @@ class TestDecisionMakingRound(BaseTwitterScoringRoundTest):
                 final_data={},
                 event=Event.RETRIEVE_HASHTAGS,
                 most_voted_payload=Event.RETRIEVE_HASHTAGS.value,
-                synchronized_data_attr_checks=[
-                ],
+                synchronized_data_attr_checks=[],
             ),
         ),
     )
@@ -345,8 +349,7 @@ class TestDBUpdateRound(BaseTwitterScoringRoundTest):
                 final_data={},
                 event=Event.DONE,
                 most_voted_payload='{"ceramic_diff":{}}',
-                synchronized_data_attr_checks=[
-                ],
+                synchronized_data_attr_checks=[],
             ),
         ),
     )
@@ -373,8 +376,7 @@ class TestPreMechRequestRound(BaseTwitterScoringRoundTest):
                 final_data={},
                 event=Event.SKIP_EVALUATION,
                 most_voted_payload='{"new_mech_requests":[]}',
-                synchronized_data_attr_checks=[
-                ],
+                synchronized_data_attr_checks=[],
             ),
             RoundTestCase(
                 name="Happy path",
@@ -386,8 +388,7 @@ class TestPreMechRequestRound(BaseTwitterScoringRoundTest):
                 final_data={},
                 event=Event.DONE,
                 most_voted_payload='{"new_mech_requests":["dummy_request"]}',
-                synchronized_data_attr_checks=[
-                ],
+                synchronized_data_attr_checks=[],
             ),
         ),
     )

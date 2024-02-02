@@ -301,7 +301,9 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
         super().setup_class(param_overrides={"twitter_max_pages": 10})
         cls.llm_handler = cls._skill.skill_context.handlers.llm
 
-    def fast_forward(self, data: Optional[Dict[str, Any]] = None, ceramic_db: Optional[Any] = None) -> None:
+    def fast_forward(
+        self, data: Optional[Dict[str, Any]] = None, ceramic_db: Optional[Any] = None
+    ) -> None:
         """Fast-forward on initialization"""
 
         data = data if data is not None else {}
@@ -432,6 +434,40 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
                     "status_code": 200,
                 },
             ),
+        ],
+    )
+    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
+        """Run tests."""
+        self.fast_forward(test_case.initial_data)
+        self.behaviour.act_wrapper()
+        for i in range(len(kwargs.get("request_urls"))):
+            self.mock_http_request(
+                request_kwargs=dict(
+                    method="GET",
+                    headers=kwargs.get("request_headers")[i],
+                    version="",
+                    url=kwargs.get("request_urls")[i],
+                ),
+                response_kwargs=dict(
+                    version="",
+                    status_code=kwargs.get("status_code"),
+                    status_text="",
+                    body=kwargs.get("response_bodies")[i].encode(),
+                    url=kwargs.get("response_urls")[i],
+                ),
+            )
+        self.complete(test_case.event)
+
+
+class TestMentionsCollectionBehaviourSerial(BaseBehaviourTest):
+    """Tests BinanceObservationBehaviour"""
+
+    behaviour_class = TwitterMentionsCollectionBehaviour
+    next_behaviour_class = TwitterDecisionMakingBehaviour
+
+    @pytest.mark.parametrize(
+        "test_case, kwargs",
+        [
             (
                 BehaviourTestCase(
                     "API daily limit reached",
@@ -449,7 +485,7 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
                                 "last_tweet_pull_window_reset": 1993903085,
                             }
                         }
-                    }
+                    },
                 ),
                 {
                     "request_urls": [],
@@ -459,7 +495,7 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
         """Run tests."""
-        ceramic_db=None
+        ceramic_db = None
         if test_case.ceramic_db:
             ceramic_db = CeramicDBBase()
             ceramic_db.load(test_case.ceramic_db)
@@ -583,6 +619,40 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                     "status_code": 200,
                 },
             ),
+        ],
+    )
+    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
+        """Run tests."""
+        self.fast_forward(test_case.initial_data)
+        self.behaviour.act_wrapper()
+        for i in range(len(kwargs.get("request_urls"))):
+            self.mock_http_request(
+                request_kwargs=dict(
+                    method="GET",
+                    headers=kwargs.get("request_headers")[i],
+                    version="",
+                    url=kwargs.get("request_urls")[i],
+                ),
+                response_kwargs=dict(
+                    version="",
+                    status_code=kwargs.get("status_code"),
+                    status_text="",
+                    body=kwargs.get("response_bodies")[i].encode(),
+                    url=kwargs.get("response_urls")[i],
+                ),
+            )
+        self.complete(test_case.event)
+
+
+class TestHashtagsCollectionBehaviourSerial(BaseBehaviourTest):
+    """Tests BinanceObservationBehaviour"""
+
+    behaviour_class = TwitterHashtagsCollectionBehaviour
+    next_behaviour_class = TwitterDecisionMakingBehaviour
+
+    @pytest.mark.parametrize(
+        "test_case, kwargs",
+        [
             (
                 BehaviourTestCase(
                     "API daily limit reached",
@@ -610,7 +680,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
         """Run tests."""
-        ceramic_db=None
+        ceramic_db = None
         if test_case.ceramic_db:
             ceramic_db = CeramicDBBase()
             ceramic_db.load(test_case.ceramic_db)
@@ -1075,9 +1145,7 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
                         "users": [
                             {"twitter_id": "1", "points": 0, "wallet_address": None}
                         ],
-                        "module_data": {
-                            "twitter": {"current_period": "2023-09-04"}
-                        },
+                        "module_data": {"twitter": {"current_period": "2023-09-04"}},
                     },
                 ),
                 {},
@@ -1086,7 +1154,7 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
         """Run tests."""
-        ceramic_db=None
+        ceramic_db = None
         if test_case.ceramic_db:
             ceramic_db = CeramicDBBase()
             ceramic_db.load(test_case.ceramic_db)

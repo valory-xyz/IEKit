@@ -135,8 +135,7 @@ class TestGenericScoringRound(BaseGenericScoringRoundTest):
                 final_data={},
                 event=Event.DONE,
                 most_voted_payload=get_dummy_generic_scoring_payload_serialized(),
-                synchronized_data_attr_checks=[
-                ],
+                synchronized_data_attr_checks=[],
             ),
         ),
     )
