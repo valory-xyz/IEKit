@@ -2,6 +2,7 @@ alphabet_in:
 - API_ERROR
 - DONE
 - NO_MAJORITY
+- RETRY
 - ROUND_TIMEOUT
 default_start_state: StreamReadRound
 final_states:
@@ -16,4 +17,5 @@ transition_func:
     (StreamReadRound, API_ERROR): StreamReadRound
     (StreamReadRound, DONE): FinishedReadingRound
     (StreamReadRound, NO_MAJORITY): StreamReadRound
+    (StreamReadRound, RETRY): StreamReadRound
     (StreamReadRound, ROUND_TIMEOUT): StreamReadRound

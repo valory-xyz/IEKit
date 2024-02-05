@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ from packages.valory.skills.ceramic_write_abci.ceramic.payloads import (
     build_data_from_commits,
     build_genesis_payload,
 )
-from packages.valory.skills.ceramic_write_abci.models import Params
+from packages.valory.skills.ceramic_write_abci.models import Params, SharedState
 from packages.valory.skills.ceramic_write_abci.rounds import (
     CeramicWriteAbciApp,
     RandomnessPayload,
@@ -173,8 +173,13 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
                 )
 
             write_index = self.synchronized_data.write_index
-            write_data = self.synchronized_data.write_data[write_index]
-            extra_metadata = write_data.get("extra_metadata", {})
+            write_data = (
+                self.synchronized_data.write_data
+                if self.synchronized_data.is_data_on_sync_db
+                else cast(SharedState, self.shared_state).ceramic_data
+            )
+            selected_data = write_data[write_index]
+            extra_metadata = selected_data.get("extra_metadata", {})
 
             # Force Orbis indexing
             if success and extra_metadata.get("family", None) == "orbis":
@@ -193,16 +198,21 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
         """Write the scores to the Ceramic stream"""
 
         write_index = self.synchronized_data.write_index
-        write_data = self.synchronized_data.write_data[write_index]
+        write_data = (
+            self.synchronized_data.write_data
+            if self.synchronized_data.is_data_on_sync_db
+            else cast(SharedState, self.shared_state).ceramic_data
+        )
+        selected_data = write_data[write_index]
 
-        stream_id = write_data["stream_id"] if "stream_id" in write_data else None
-        stream_op = write_data["op"]
-        stream_data = write_data["data"]
-        did_str = write_data["did_str"]
+        stream_id = selected_data["stream_id"] if "stream_id" in selected_data else None
+        stream_op = selected_data["op"]
+        stream_data = selected_data["data"]
+        did_str = selected_data["did_str"]
         if not did_str.startswith("did:key:"):
             did_str = "did:key:" + did_str
-        did_seed = write_data["did_seed"]
-        extra_metadata = write_data.get("extra_metadata", {})
+        did_seed = selected_data["did_seed"]
+        extra_metadata = selected_data.get("extra_metadata", {})
 
         if stream_op == "update":
             return self._update_stream(stream_id, stream_data, did_str, did_seed)
@@ -239,7 +249,7 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
         url = api_base + api_endpoint
 
         self.context.logger.info(
-            f"Writing new data to Ceramic stream {stream_id} using did {did_str} [{url}]:\n{new_data}\nPayload: {commit_payload}"
+            f"Writing new data to Ceramic stream {stream_id} using did {did_str} [{url}]"
         )
         response = yield from self.get_http_response(
             method="POST",
@@ -250,7 +260,7 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
 
         if response.status_code != HTTP_OK:
             self.context.logger.error(
-                f"API error while updating the stream: {response.status_code}: {response.body}"
+                f"API error while updating the stream: {response.status_code}: {response.body}\ndata={new_data}"
             )
             return False, stream_id
 
@@ -275,9 +285,7 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
         api_endpoint = self.params.ceramic_api_create_endpoint
         url = api_base + api_endpoint
 
-        self.context.logger.info(
-            f"Creating new stream using did {did_str} [{url}]:\n{new_data}\nPayload: {commit_payload}"
-        )
+        self.context.logger.info(f"Creating new stream using did {did_str} [{url}]")
         response = yield from self.get_http_response(
             method="POST",
             url=url,
@@ -287,7 +295,7 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
 
         if response.status_code != HTTP_OK:
             self.context.logger.error(
-                f"API error while updating the stream: {response.status_code}: {response.body}"
+                f"API error while updating the stream: {response.status_code}: {response.body}\ndata={new_data}"
             )
             return False, None
 
@@ -329,12 +337,17 @@ class VerificationBehaviour(CeramicWriteBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             write_index = self.synchronized_data.write_index
-            write_data = self.synchronized_data.write_data[write_index]
+            write_data = (
+                self.synchronized_data.write_data
+                if self.synchronized_data.is_data_on_sync_db
+                else cast(SharedState, self.shared_state).ceramic_data
+            )
+            selected_data = write_data[write_index]
             stream_id = self.synchronized_data.stream_id_to_verify
 
             # Verify if the retrieved data matches local user_to_total_points
             expected_data = json.dumps(
-                write_data["data"],
+                selected_data["data"],
                 sort_keys=True,
             )
 

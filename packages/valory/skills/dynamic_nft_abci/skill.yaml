@@ -7,22 +7,20 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiasfbratsbsxyji2k2xeft3jdqaajwqskjsvbjsqht4mrew6wb2km
-  behaviours.py: bafybeihy3r6isnjeyfcdcji5uc2jbrpegxttj3xmjzb4lmgckjmcebdyq4
-  ceramic_db.py: bafybeihpgdev4sdnyeyekp7t7lpfo56q2m24sdw4xougq2zddblvmoxneu
+  behaviours.py: bafybeibl3d6vlzm6v2gxxfwrlyqdf7d6bfkj2d3hsfwwurthcadplve7p4
   dialogues.py: bafybeiabtq2to7x6bbbnxzrvupz5rky4b6k73y2lw5dmclb6xx74nuzxe4
   fsm_specification.yaml: bafybeibkm4iniyjt7ofqredclpvvudtfjbmuatccnblygvqnfucsuymbxy
   handlers.py: bafybeidco56mt3ump7wjd7o3u5czp2gqynm5qqrsxrtfj6eu5feb42tyma
-  models.py: bafybeianeimox27xwxbm5yq6go3ygf3oa2cbuv6h4y64oyjo3m2ua23sxq
+  models.py: bafybeifcsahmyl53nw7wft5ykkq2rrsx6wocdhgofofnbr2zg64gtk6szy
   payloads.py: bafybeiggpj2qmh73nlr2rscisscxovf7bfrczlut7k33jujvutzgszjcwi
-  rounds.py: bafybeiesszqelbm455dvk5zcbm4qhnru6yruk3xxgz44htu526sz2szhge
+  rounds.py: bafybeicxlx6ulahk3caue56zcyjpzlud67dh26qqzjlqdcuqde5sl4qzh4
   tests/__init__.py: bafybeidxte5jeugotf25yogfbsoivyokeqffrvzo7lqgspm4kzrgbhvc3u
   tests/test_behaviours.py: bafybeibojamjtso4gc5zxuvssqwdhigpaeixz2f4s7jkeiwxi5g5vvhaqm
-  tests/test_ceramic_db.py: bafybeiaceukxpsx5ylqqqwxx345njb3oik6vnzg6ycl2pwky6ybfiyfjme
   tests/test_dialogues.py: bafybeigybvptoehtw2o2jbudvyxggo5yr4pyqic7m732sha4xtaaxnfdpe
   tests/test_handlers.py: bafybeihtowiu7nfirjkievt36vjtjdougyfjgjnjga2flmna3ztvf3qilm
   tests/test_models.py: bafybeietgyqb5rsbnzqgzcsgm2pu2qcadu7rr7akxscfmegtghc5aguz44
   tests/test_payloads.py: bafybeifpwaozt6s56uctvfmkdmcuxqawmvhu5skgyfu3ekegqd3iz7v2nm
-  tests/test_rounds.py: bafybeid5ndadenmeqctrnzir4m7mpv2beqfbi3t66ry2dyozd7rabrezrq
+  tests/test_rounds.py: bafybeicl25nujsxjjjxz4xhqbu4tv2nhfzf24x47o5szlxf2d3knlpfohi
 fingerprint_ignore_patterns: []
 connections:
 - valory/http_server:0.22.0:bafybeiesafy2af2wakqvsal4hz6ldycb73j5w62szhwy25iyhlf2wgyg44
@@ -33,6 +31,7 @@ protocols:
 - valory/http:1.0.0:bafybeiejoqgv7finfxo3rcvvovrlj5ccrbgxodjq43uo26ylpowsa3llfe
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
+- valory/decision_making_abci:0.1.0:bafybeifgonmjgm6szmmqfxymsk6g2iknguyjgtxznckjptrpkmlqj46sw4
 behaviours:
   main:
     args: {}
@@ -158,5 +157,8 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
+  ceramic_db:
+    args: {}
+    class_name: CeramicDB
 dependencies: {}
 is_abstract: true

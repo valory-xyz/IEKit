@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -93,6 +93,11 @@ class SynchronizedData(BaseSynchronizedData):
     def api_retries(self) -> int:
         """Get the api_retries."""
         return cast(int, self.db.get("api_retries", 0))
+
+    @property
+    def is_data_on_sync_db(self) -> bool:
+        """Get the is_data_on_sync_db."""
+        return cast(bool, self.db.get("is_data_on_sync_db", True))
 
 
 class RandomnessRound(CollectSameUntilThresholdRound):
@@ -196,7 +201,13 @@ class VerificationRound(CollectSameUntilThresholdRound):
             )
 
             # Check if we need to continue writing
-            if next_write_index < len(synchronized_data.write_data):
+            write_data = (
+                synchronized_data.write_data
+                if synchronized_data.is_data_on_sync_db
+                else self.context.state.ceramic_data
+            )
+
+            if next_write_index < len(write_data):
                 synchronized_data = synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
                     **{

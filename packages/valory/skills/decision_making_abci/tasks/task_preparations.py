@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -30,16 +30,19 @@ class TaskPreparation:
     task_name = None
     task_event = None
 
-    def __init__(self, synchronized_data, params, logger, now_utc, behaviour) -> None:
+    def __init__(self, now_utc, behaviour, synchronized_data) -> None:
         """Init"""
         self.name = ""
-        self.synchronized_data = synchronized_data
-        self.params = params
-        self.logger = logger
-        self.now_utc = now_utc
         self.behaviour = behaviour
-        self.set_config()
+        self.synchronized_data = synchronized_data
+        self.params = behaviour.params
+        self.logger = behaviour.context.logger
+        self.state = behaviour.state
+        self.ceramic_db = behaviour.context.ceramic_db
+        self.now_utc = now_utc
+
         self.logger.info(f"Instantiated task {self.__class__.__name__}")
+        self.set_config()
         self.log_config()
 
     def set_config(self):

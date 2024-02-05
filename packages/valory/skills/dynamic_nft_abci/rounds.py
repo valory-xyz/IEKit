@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -67,11 +67,6 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(float, self.db.get("last_update_time", None))
 
     @property
-    def ceramic_db(self) -> dict:
-        """Get the data stored in the main stream."""
-        return cast(dict, self.db.get_strict("ceramic_db"))
-
-    @property
     def pending_write(self) -> bool:
         """Checks whether there are changes pending to be written to Ceramic."""
         return cast(bool, self.db.get("pending_write", False))
@@ -117,15 +112,14 @@ class TokenTrackRound(CollectSameUntilThresholdRound):
 
             token_id_to_points = payload["token_id_to_points"]
             last_update_time = payload["last_update_time"]
-            ceramic_db = payload["ceramic_db"]
             pending_write = payload["pending_write"]
+            self.context.ceramic_db.apply_diff(payload["ceramic_diff"])
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
                     get_name(SynchronizedData.token_id_to_points): token_id_to_points,
                     get_name(SynchronizedData.last_update_time): last_update_time,
-                    get_name(SynchronizedData.ceramic_db): ceramic_db,
                     get_name(SynchronizedData.pending_write): pending_write,
                     get_name(SynchronizedData.token_event_retries): 0,
                 }
@@ -169,5 +163,5 @@ class DynamicNFTAbciApp(AbciApp[Event]):
         FinishedTokenTrackRound: set(),
     }
     cross_period_persisted_keys: FrozenSet[str] = frozenset(
-        ["token_id_to_points", "last_update_time", "ceramic_db", "pending_write"]
+        ["token_id_to_points", "last_update_time", "pending_write"]
     )

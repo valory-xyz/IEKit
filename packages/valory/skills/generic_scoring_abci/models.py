@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -24,7 +24,10 @@ from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
 )
 from packages.valory.skills.abstract_round_abci.models import Requests as BaseRequests
-from packages.valory.skills.abstract_round_abci.models import (
+from packages.valory.skills.decision_making_abci.models import (
+    CeramicDB as BaseCeramicDB,
+)
+from packages.valory.skills.decision_making_abci.models import (
     SharedState as BaseSharedState,
 )
 from packages.valory.skills.generic_scoring_abci.rounds import GenericScoringAbciApp
@@ -39,3 +42,4 @@ class SharedState(BaseSharedState):
 Params = BaseParams
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
+CeramicDB = BaseCeramicDB

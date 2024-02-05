@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -20,8 +20,11 @@
 """This package contains round behaviours of CeramicReadAbciApp."""
 
 import json
+import os
 from abc import ABC
 from typing import Generator, Optional, Set, Type, cast
+
+from aea.helpers.ipfs.base import IPFSHashOnly
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
@@ -40,6 +43,9 @@ from packages.valory.skills.ceramic_read_abci.rounds import (
 )
 
 
+DATA_FILE_NAME = "stream.json"
+
+
 class CeramicReadBaseBehaviour(BaseBehaviour, ABC):
     """Base behaviour for the ceramic_read_abci skill."""
 
@@ -52,6 +58,10 @@ class CeramicReadBaseBehaviour(BaseBehaviour, ABC):
     def params(self) -> Params:
         """Return the params."""
         return cast(Params, super().params)
+
+    def from_data_dir(self, path: str) -> str:
+        """Return the given path appended to the data dir."""
+        return os.path.join(self.context.data_dir, path)
 
     def _get_stream_data(self, stream_id: str) -> Generator[None, None, Optional[dict]]:
         """Get the current data from a Ceramic stream"""
@@ -124,22 +134,39 @@ class StreamReadBehaviour(CeramicReadBaseBehaviour):
 
             # Get the stream data
             stream_data = yield from self._get_stream_data(stream_id)
-            if not stream_data:
-                payload_content = StreamReadRound.ERROR_PAYLOAD
-            else:
-                payload_content = {
-                    "stream_data": stream_data["data"],
-                    "read_target_property": read_target_property,
-                }
+            payload_content = StreamReadRound.ERROR_PAYLOAD
+
+            # Sync on the data itself and load into synchronized_data
+            if stream_data and self.synchronized_data.sync_on_ceramic_data:
+                payload_content = json.dumps(
+                    {
+                        "stream_data": stream_data["data"],
+                        "read_target_property": read_target_property,
+                    },
+                    sort_keys=True,
+                )
                 self.context.logger.info(
                     f"Loading data into 'synchronized_data.{read_target_property}'"
                 )
 
+            # Sync on the data hash and load into custom model
+            if stream_data and not self.synchronized_data.sync_on_ceramic_data:
+                # Calculate data hash
+                data_hash = IPFSHashOnly().hash_bytes(
+                    json.dumps(stream_data, sort_keys=True).encode("utf-8"), wrap=False
+                )
+
+                # Load into shared state
+                self.context.state.ceramic_data = stream_data["data"]
+                payload_content = data_hash
+
+                self.context.logger.info(
+                    f"Loading data into state.ceramic_data. Data hash is {data_hash}"
+                )
+
             # Send the payload
             sender = self.context.agent_address
-            payload = StreamReadPayload(
-                sender=sender, content=json.dumps(payload_content, sort_keys=True)
-            )
+            payload = StreamReadPayload(sender=sender, content=payload_content)
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(payload)

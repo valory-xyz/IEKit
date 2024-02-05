@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -42,6 +42,7 @@ class Event(Enum):
     API_ERROR = "api_error"
     NO_MAJORITY = "no_majority"
     DONE = "done"
+    RETRY = "retry"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -61,6 +62,11 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the read_target_property."""
         return cast(str, self.db.get("read_target_property", None))
 
+    @property
+    def sync_on_ceramic_data(self) -> bool:
+        """Get the sync_on_ceramic_data."""
+        return cast(bool, self.db.get("sync_on_ceramic_data", True))
+
 
 class StreamReadRound(CollectSameUntilThresholdRound):
     """StreamReadRound"""
@@ -68,23 +74,40 @@ class StreamReadRound(CollectSameUntilThresholdRound):
     payload_class = StreamReadPayload
     synchronized_data_class = SynchronizedData
 
-    ERROR_PAYLOAD = {"error": "true"}
+    ERROR_PAYLOAD = "ERROR_PAYLOAD"
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
-            payload = json.loads(self.most_voted_payload)
-
-            if payload == self.ERROR_PAYLOAD:
+            if self.most_voted_payload == self.ERROR_PAYLOAD:
                 return self.synchronized_data, Event.API_ERROR
 
-            synchronized_data = self.synchronized_data.update(
-                synchronized_data_class=SynchronizedData,
-                **{
-                    payload["read_target_property"]: payload["stream_data"],
-                }
-            )
-            return synchronized_data, Event.DONE
+            payload = json.loads(self.most_voted_payload)
+
+            # Sync on the data
+            if cast(SynchronizedData, self.synchronized_data).sync_on_ceramic_data:
+                synchronized_data = self.synchronized_data.update(
+                    synchronized_data_class=SynchronizedData,
+                    **{
+                        payload["read_target_property"]: payload["stream_data"],
+                    }
+                )
+                return synchronized_data, Event.DONE
+
+            # Sync on the data hash
+            else:
+                # For now, we require that ALL the payloads are the same
+                # Alternatively, agents that do not agree on the data hash could redownload
+                # data from IPFS. All agents should push to IPFS.
+                event = (
+                    Event.DONE
+                    if len(
+                        set([cast(StreamReadPayload, p).content for p in self.payloads])
+                    )
+                    == 1
+                    else Event.RETRY
+                )
+                return self.synchronized_data, event
 
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
@@ -105,6 +128,7 @@ class CeramicReadAbciApp(AbciApp[Event]):
     transition_function: AbciAppTransitionFunction = {
         StreamReadRound: {
             Event.DONE: FinishedReadingRound,
+            Event.RETRY: StreamReadRound,
             Event.API_ERROR: StreamReadRound,
             Event.NO_MAJORITY: StreamReadRound,
             Event.ROUND_TIMEOUT: StreamReadRound,

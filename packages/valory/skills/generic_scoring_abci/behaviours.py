@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-from packages.valory.skills.generic_scoring_abci.ceramic_db import CeramicDB
+from packages.valory.skills.decision_making_abci.models import CeramicDBBase
 from packages.valory.skills.generic_scoring_abci.models import Params
 from packages.valory.skills.generic_scoring_abci.rounds import (
     GenericScoringAbciApp,
@@ -79,42 +79,53 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
         pending_write = self.synchronized_data.pending_write
 
         # Instantiate the db
-        ceramic_db = CeramicDB(self.synchronized_data.ceramic_db, self.context.logger)
-        scores_db = CeramicDB(self.synchronized_data.score_data)
+        ceramic_db_copy = self.context.ceramic_db.copy()
+        scores_db = CeramicDBBase()
+        scores_db.load(self.synchronized_data.score_data)  # temp db
 
         # Only update if latest_update_id has increased
         latest_update_id_stream = int(
             scores_db.data["module_data"]["generic"]["latest_update_id"]
         )
         latest_update_id_db = int(
-            ceramic_db.data["module_data"]["generic"]["latest_update_id"]
+            ceramic_db_copy.data["module_data"]["generic"]["latest_update_id"]
         )
 
         if latest_update_id_stream <= latest_update_id_db:
             self.context.logger.info(
                 f"Not adding scores from the stream because latest_update_id_stream({latest_update_id_stream!r}) <= latest_update_id_db({latest_update_id_db!r})"
             )
-            return {"ceramic_db": ceramic_db.data, "pending_write": pending_write}
+            return {
+                "ceramic_diff": self.context.ceramic_db.diff(ceramic_db_copy),
+                "pending_write": pending_write,
+            }
+
+        self.context.logger.info(
+            f"Detected new score update with id {latest_update_id_stream}"
+        )
 
         # discord_id, discord_handle, points, wallet_address
         for user in scores_db.data["users"]:
             discord_id = user.pop("discord_id")
-            ceramic_db.update_or_create_user(  # overwrites all common fields for the user
+            ceramic_db_copy.update_or_create_user(  # overwrites all common fields for the user
                 "discord_id", discord_id, user
             )
             pending_write = True
 
         # latest_update_id
-        ceramic_db.data["module_data"]["generic"]["latest_update_id"] = str(
+        ceramic_db_copy.data["module_data"]["generic"]["latest_update_id"] = str(
             scores_db.data["module_data"]["generic"]["latest_update_id"]
         )
 
         # If a user has first contributed to one module (i.e. twitter) without registering a wallet,
         # and later he/she contributes to another module, it could happen that we have two different
         # entries on the database
-        ceramic_db.merge_by_wallet()
+        ceramic_db_copy.merge_by_wallet()
 
-        return {"ceramic_db": ceramic_db.data, "pending_write": pending_write}
+        return {
+            "ceramic_diff": self.context.ceramic_db.diff(ceramic_db_copy),
+            "pending_write": pending_write,
+        }
 
 
 class GenericScoringRoundBehaviour(AbstractRoundBehaviour):

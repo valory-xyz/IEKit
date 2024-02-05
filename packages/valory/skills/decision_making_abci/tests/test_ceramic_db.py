@@ -23,7 +23,7 @@ from copy import copy
 
 import pytest
 
-from packages.valory.skills.dynamic_nft_abci.ceramic_db import CeramicDB
+from packages.valory.skills.decision_making_abci.models import CeramicDBBase
 
 
 DEFAULT_DATA = {
@@ -40,8 +40,8 @@ DEFAULT_DATA = {
 
 
 def test_create_empty():
-    """Test CeramicDB"""
-    db = CeramicDB()
+    """Test CeramicDBBase"""
+    db = CeramicDBBase()
     assert db.data == {
         "users": [],
         "module_data": {
@@ -56,15 +56,16 @@ def test_create_empty():
 
 
 def test_create_non_empty():
-    """Test CeramicDB"""
+    """Test CeramicDBBase"""
     dummy_data = {"dummy": "data"}
-    db = CeramicDB(dummy_data)
+    db = CeramicDBBase()
+    db.load(dummy_data)
     assert db.data == dummy_data
 
 
 def test_update_or_create():
-    """Test CeramicDB"""
-    db = CeramicDB()
+    """Test CeramicDBBase"""
+    db = CeramicDBBase()
     default_data = copy(DEFAULT_DATA)
 
     # Create a new user
@@ -81,8 +82,8 @@ def test_update_or_create():
 
 
 def test_add_user():
-    """Test CeramicDB"""
-    db = CeramicDB()
+    """Test CeramicDBBase"""
+    db = CeramicDBBase()
     user_data = {"dummy": "data"}
     db.create_user(user_data)
 
@@ -94,8 +95,8 @@ def test_add_user():
 
 
 def test_merge_by_wallet():
-    """Test CeramicDB"""
-    db = CeramicDB()
+    """Test CeramicDBBase"""
+    db = CeramicDBBase()
     user_a = {
         "twitter_id": "dummy_twitter_id",
         "wallet_address": "dummy_address",
@@ -128,8 +129,8 @@ def test_merge_by_wallet():
 
 
 def test_merge_by_wallet_raises():
-    """Test CeramicDB"""
-    db = CeramicDB()
+    """Test CeramicDBBase"""
+    db = CeramicDBBase()
     user_a = {"twitter_id": "dummy_twitter_id", "wallet_address": "dummy_address"}
     user_b = {"twitter_id": "dummy_twitter_id_2", "wallet_address": "dummy_address"}
     db.create_user(user_a)

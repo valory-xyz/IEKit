@@ -7,26 +7,27 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
-  behaviours.py: bafybeicd7ea67i34xcvpcp5a74s5vdh465bfiitmvp4qfpyvebydp222im
+  behaviours.py: bafybeicnr3dz54m24w7hjdchrxum66uj2izbt7xsrjsekszjspbhviro2i
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
   fsm_specification.yaml: bafybeihqaaud54lucsousv5dbbn3mbqro3ryel3hxpzz33xkvf47tq4yhe
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
-  models.py: bafybeibhlnmazgfiv4prucyk5lbg2jli44vb3lznc5cu3csvhtnstkdp6y
+  models.py: bafybeiewtra4a2ze776ckh7rzuzx2cdsih3qwi6m7ouqqxh5gfdagufi7m
   payloads.py: bafybeif5bomwy74bwnphsk6bty6qb6efugvjnnopsz7qjunpe6gtgjaxya
-  rounds.py: bafybeic43lqt47fpenlrojgc27w7ws643f3yfdtfblrdufwgm4oqwghgwy
+  rounds.py: bafybeieiu5bkpjvis2eksnviemwyxnhua6wjkk2eifw6u3y7gdag57tqva
   tasks/finished_pipeline_preparation.py: bafybeid652b53p7mtsbj3ksko3g2eezvg4nut2vukwvnfhxyfi4zkx3dym
-  tasks/llm_preparation.py: bafybeibvevrnqbdipahg6gn6sn3gq7cfn6zcx67f6sbhvdsq2ql7ikip4y
-  tasks/read_stream_preparation.py: bafybeigoi4lwtl3qfcl6yrvbl2sp4kuzv34lq34pa2hyb4pa6j2fypg2hq
+  tasks/llm_preparation.py: bafybeiazbjc4m3obkpdkjfcbmz6pzvugdrgvlgfz7awmx54mzysr3ktbvy
+  tasks/read_stream_preparation.py: bafybeicmjasiyecopfweobodzbmn3tbluu5q724uzzqkit6urn3lb5q354
   tasks/score_preparations.py: bafybeie7cfot24zcyod5becz6t5lasvva77httfkw57qmvgjk35d3qluxa
   tasks/signature_validation.py: bafybeihbwrv72hnh3ytko2i5oszqgdky2j6h2wse45wvuhf2j32lo2tsjy
-  tasks/task_preparations.py: bafybeihqieo4logxhsqntyfjphimf243aapqr4go43jb3eacrt7ouystmq
+  tasks/task_preparations.py: bafybeif3g3uhedl2wd3sixjzat5mj7e45zffqyeyfpohsu6l6vhmhncvki
   tasks/tweet_validation_preparation.py: bafybeiat6eyiqvtqzsl4ibtwnpjihqw7pgnnjoaatlp5nne57kgi6iu6ay
-  tasks/twitter_preparation.py: bafybeib7d37czhntqj7tgicpytylz7z2l4yjoysqtfmhadsud3brtt5d4m
+  tasks/twitter_preparation.py: bafybeiceqcg7mtxfb6cttuizryolz3yu27t76fxmzzqhewavczlv5wkxdu
   tasks/week_in_olas_preparations.py: bafybeids7nah5nilmykainnntx7j7dvnboo6ypaqb2w2icdxrjhpgxxygy
-  tasks/write_stream_preparation.py: bafybeiaa7a7wsr7acpv5my3tqupuzsxpk5d23wg6i4262ea46isaz3q6ai
+  tasks/write_stream_preparation.py: bafybeiatdcckbobkaawnuphcgvjx2kgcuil7dtbunfpje7pfjd26gd2es4
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
   tests/centaur_configs.py: bafybeibpaghsahe4yi6o2s6x6sdluuid2kawe54kpnlruwdpqqavkmfbde
-  tests/test_behaviours.py: bafybeic5v76d7xc2r4iy2alikd653l6l36b5yhpk4oym4ezefeeyrjusre
+  tests/test_behaviours.py: bafybeigt4ifqyyw23ejypquaqgecjrgmvtrgxustwmzucolgm6kr5gzdnu
+  tests/test_ceramic_db.py: bafybeichhitigsks5clojark7pfax3xulbxrtwvzbgg5pjjiqtm4khiu4y
   tests/test_dialogues.py: bafybeihxzcyy7xvg4lte4bv5hy2h4mozdzwvyaa36feu3oxv67jfvsyuoi
   tests/test_handlers.py: bafybeie6q3l6zyf356uvhldobhiir5ang5ybmi7lcao3556n3bnlpfqhfm
   tests/test_models.py: bafybeiazl2mfe3iwydtdkur3h2w7ir4iszext2666fzqnnhsr6xq2lhw3i
@@ -41,6 +42,7 @@ protocols:
 - valory/contract_api:1.0.0:bafybeialhbjvwiwcnqq3ysxcyemobcbie7xza66gaofcvla5njezkvhcka
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
+- valory/ceramic_read_abci:0.1.0:bafybeidnkoiogt7vkjtof7yy2ux6vn4hnm2geyerptivywsk6e5fb3atk4
 behaviours:
   main:
     args: {}
@@ -173,7 +175,12 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
+  ceramic_db:
+    args: {}
+    class_name: CeramicDB
 dependencies:
   twitter_text_parser:
     version: ==3.0.0
+  jsonpatch:
+    version: ==1.32
 is_abstract: true

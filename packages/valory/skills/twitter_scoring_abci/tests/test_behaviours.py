@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -38,6 +38,7 @@ from packages.valory.skills.abstract_round_abci.test_tools.base import (
 from packages.valory.skills.abstract_round_abci.test_tools.common import (
     BaseRandomnessBehaviourTest,
 )
+from packages.valory.skills.decision_making_abci.models import CeramicDBBase
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
     DBUpdateBehaviour,
     PostMechRequestBehaviour,
@@ -280,6 +281,7 @@ class BehaviourTestCase:
     initial_data: Dict[str, Any]
     event: Event
     next_behaviour_class: Optional[Type[TwitterScoringBaseBehaviour]] = None
+    ceramic_db: Optional[Any] = None
 
 
 class BaseBehaviourTest(FSMBehaviourBaseCase):
@@ -299,7 +301,9 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
         super().setup_class(param_overrides={"twitter_max_pages": 10})
         cls.llm_handler = cls._skill.skill_context.handlers.llm
 
-    def fast_forward(self, data: Optional[Dict[str, Any]] = None) -> None:
+    def fast_forward(
+        self, data: Optional[Dict[str, Any]] = None, ceramic_db: Optional[Any] = None
+    ) -> None:
         """Fast-forward on initialization"""
 
         data = data if data is not None else {}
@@ -311,6 +315,9 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
         self.skill.skill_context.state.round_sequence._last_round_transition_timestamp = (
             datetime.now()
         )
+        if ceramic_db:
+            self.skill.skill_context.ceramic_db = ceramic_db
+
         assert (
             self.behaviour.current_behaviour.auto_behaviour_id()  # type: ignore
             == self.behaviour_class.auto_behaviour_id()
@@ -342,7 +349,6 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
                 BehaviourTestCase(
                     "Happy path",
                     initial_data=dict(
-                        ceramic_db={},
                         most_voted_keeper_addresses=[
                             "test_agent_address",
                             "test_agent_address",
@@ -372,7 +378,6 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
                 BehaviourTestCase(
                     "Happy path, multi-page",
                     initial_data=dict(
-                        ceramic_db={},
                         most_voted_keeper_addresses=[
                             "test_agent_address",
                             "test_agent_address",
@@ -406,7 +411,6 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
                 BehaviourTestCase(
                     "Happy path, result_count=0",
                     initial_data=dict(
-                        ceramic_db={},
                         most_voted_keeper_addresses=[
                             "test_agent_address",
                             "test_agent_address",
@@ -430,24 +434,58 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
                     "status_code": 200,
                 },
             ),
+        ],
+    )
+    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
+        """Run tests."""
+        self.fast_forward(test_case.initial_data)
+        self.behaviour.act_wrapper()
+        for i in range(len(kwargs.get("request_urls"))):
+            self.mock_http_request(
+                request_kwargs=dict(
+                    method="GET",
+                    headers=kwargs.get("request_headers")[i],
+                    version="",
+                    url=kwargs.get("request_urls")[i],
+                ),
+                response_kwargs=dict(
+                    version="",
+                    status_code=kwargs.get("status_code"),
+                    status_text="",
+                    body=kwargs.get("response_bodies")[i].encode(),
+                    url=kwargs.get("response_urls")[i],
+                ),
+            )
+        self.complete(test_case.event)
+
+
+class TestMentionsCollectionBehaviourSerial(BaseBehaviourTest):
+    """Tests BinanceObservationBehaviour"""
+
+    behaviour_class = TwitterMentionsCollectionBehaviour
+    next_behaviour_class = TwitterDecisionMakingBehaviour
+
+    @pytest.mark.parametrize(
+        "test_case, kwargs",
+        [
             (
                 BehaviourTestCase(
                     "API daily limit reached",
                     initial_data=dict(
-                        ceramic_db={
-                            "module_data": {
-                                "twitter": {
-                                    "number_of_tweets_pulled_today": 10000,
-                                    "last_tweet_pull_window_reset": 1993903085,
-                                }
-                            }
-                        },
                         most_voted_keeper_addresses=[
                             "test_agent_address",
                             "test_agent_address",
                         ],
                     ),
                     event=Event.DONE,
+                    ceramic_db={
+                        "module_data": {
+                            "twitter": {
+                                "number_of_tweets_pulled_today": 10000,
+                                "last_tweet_pull_window_reset": 1993903085,
+                            }
+                        }
+                    },
                 ),
                 {
                     "request_urls": [],
@@ -457,7 +495,11 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
         """Run tests."""
-        self.fast_forward(test_case.initial_data)
+        ceramic_db = None
+        if test_case.ceramic_db:
+            ceramic_db = CeramicDBBase()
+            ceramic_db.load(test_case.ceramic_db)
+        self.fast_forward(test_case.initial_data, ceramic_db)
         self.behaviour.act_wrapper()
         for i in range(len(kwargs.get("request_urls"))):
             self.mock_http_request(
@@ -491,7 +533,6 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                 BehaviourTestCase(
                     "Happy path",
                     initial_data=dict(
-                        ceramic_db={},
                         most_voted_keeper_addresses=[
                             "test_agent_address",
                             "test_agent_address",
@@ -522,7 +563,6 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                 BehaviourTestCase(
                     "Happy path, multi-page",
                     initial_data=dict(
-                        ceramic_db={},
                         most_voted_keeper_addresses=[
                             "test_agent_address",
                             "test_agent_address",
@@ -556,7 +596,6 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                 BehaviourTestCase(
                     "Happy path, result_count=0",
                     initial_data=dict(
-                        ceramic_db={},
                         most_voted_keeper_addresses=[
                             "test_agent_address",
                             "test_agent_address",
@@ -580,24 +619,58 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                     "status_code": 200,
                 },
             ),
+        ],
+    )
+    def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
+        """Run tests."""
+        self.fast_forward(test_case.initial_data)
+        self.behaviour.act_wrapper()
+        for i in range(len(kwargs.get("request_urls"))):
+            self.mock_http_request(
+                request_kwargs=dict(
+                    method="GET",
+                    headers=kwargs.get("request_headers")[i],
+                    version="",
+                    url=kwargs.get("request_urls")[i],
+                ),
+                response_kwargs=dict(
+                    version="",
+                    status_code=kwargs.get("status_code"),
+                    status_text="",
+                    body=kwargs.get("response_bodies")[i].encode(),
+                    url=kwargs.get("response_urls")[i],
+                ),
+            )
+        self.complete(test_case.event)
+
+
+class TestHashtagsCollectionBehaviourSerial(BaseBehaviourTest):
+    """Tests BinanceObservationBehaviour"""
+
+    behaviour_class = TwitterHashtagsCollectionBehaviour
+    next_behaviour_class = TwitterDecisionMakingBehaviour
+
+    @pytest.mark.parametrize(
+        "test_case, kwargs",
+        [
             (
                 BehaviourTestCase(
                     "API daily limit reached",
                     initial_data=dict(
-                        ceramic_db={
-                            "module_data": {
-                                "twitter": {
-                                    "number_of_tweets_pulled_today": 10000,
-                                    "last_tweet_pull_window_reset": 1993903085,
-                                }
-                            }
-                        },
                         most_voted_keeper_addresses=[
                             "test_agent_address",
                             "test_agent_address",
                         ],
                     ),
                     event=Event.DONE,
+                    ceramic_db={
+                        "module_data": {
+                            "twitter": {
+                                "number_of_tweets_pulled_today": 10000,
+                                "last_tweet_pull_window_reset": 1993903085,
+                            }
+                        }
+                    },
                 ),
                 {
                     "request_urls": [],
@@ -607,7 +680,11 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
         """Run tests."""
-        self.fast_forward(test_case.initial_data)
+        ceramic_db = None
+        if test_case.ceramic_db:
+            ceramic_db = CeramicDBBase()
+            ceramic_db.load(test_case.ceramic_db)
+        self.fast_forward(test_case.initial_data, ceramic_db)
         self.behaviour.act_wrapper()
         for i in range(len(kwargs.get("request_urls"))):
             self.mock_http_request(
@@ -641,7 +718,6 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                 BehaviourTestCase(
                     "API error mentions: 404",
                     initial_data=dict(
-                        ceramic_db={},
                         most_voted_keeper_addresses=[
                             "test_agent_address",
                             "test_agent_address",
@@ -665,7 +741,6 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                 BehaviourTestCase(
                     "API error mentions: missing data",
                     initial_data=dict(
-                        ceramic_db={},
                         most_voted_keeper_addresses=[
                             "test_agent_address",
                             "test_agent_address",
@@ -688,7 +763,6 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                 BehaviourTestCase(
                     "API error mentions: missing meta",
                     initial_data=dict(
-                        ceramic_db={},
                         most_voted_keeper_addresses=[
                             "test_agent_address",
                             "test_agent_address",
@@ -711,7 +785,6 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                 BehaviourTestCase(
                     "API error mentions: missing includes",
                     initial_data=dict(
-                        ceramic_db={},
                         most_voted_keeper_addresses=[
                             "test_agent_address",
                             "test_agent_address",
@@ -768,7 +841,6 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                 BehaviourTestCase(
                     "API error registrations: 404",
                     initial_data=dict(
-                        ceramic_db={},
                         most_voted_keeper_addresses=[
                             "test_agent_address",
                             "test_agent_address",
@@ -791,7 +863,6 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                 BehaviourTestCase(
                     "API error registrations: missing data",
                     initial_data=dict(
-                        ceramic_db={},
                         most_voted_keeper_addresses=[
                             "test_agent_address",
                             "test_agent_address",
@@ -815,7 +886,6 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                 BehaviourTestCase(
                     "API error registrations: missing meta",
                     initial_data=dict(
-                        ceramic_db={},
                         most_voted_keeper_addresses=[
                             "test_agent_address",
                             "test_agent_address",
@@ -837,7 +907,6 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                 BehaviourTestCase(
                     "API error mentions: missing includes",
                     initial_data=dict(
-                        ceramic_db={},
                         most_voted_keeper_addresses=[
                             "test_agent_address",
                             "test_agent_address",
@@ -1070,16 +1139,14 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
                         latest_hashtag_tweet_id=1,
                         number_of_tweets_pulled_today=1,
                         last_tweet_pull_window_reset=1993903085,  # in 10 years
-                        ceramic_db={
-                            "users": [
-                                {"twitter_id": "1", "points": 0, "wallet_address": None}
-                            ],
-                            "module_data": {
-                                "twitter": {"current_period": "2023-09-04"}
-                            },
-                        },
                     ),
                     event=Event.DONE,
+                    ceramic_db={
+                        "users": [
+                            {"twitter_id": "1", "points": 0, "wallet_address": None}
+                        ],
+                        "module_data": {"twitter": {"current_period": "2023-09-04"}},
+                    },
                 ),
                 {},
             ),
@@ -1087,7 +1154,11 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
         """Run tests."""
-        self.fast_forward(test_case.initial_data)
+        ceramic_db = None
+        if test_case.ceramic_db:
+            ceramic_db = CeramicDBBase()
+            ceramic_db.load(test_case.ceramic_db)
+        self.fast_forward(test_case.initial_data, ceramic_db)
         self.behaviour.act_wrapper()
         self.complete(test_case.event)
 

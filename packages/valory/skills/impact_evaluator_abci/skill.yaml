@@ -10,9 +10,9 @@ fingerprint:
   behaviours.py: bafybeibdq5p4zi47nsycpcjs7ouw2fjxqjn7hgbd4aalp7yumdhnmlfufq
   composition.py: bafybeidqds5nsbwp56cduwmypcu3j4qvufuo7dbyw2xzqhiqed67ax2qsa
   dialogues.py: bafybeigjknz4qqynbsltjje46gidg4rftsqw6ybjwegz24wetmycutpzh4
-  fsm_specification.yaml: bafybeigmlh4m2ua6alsy4skohxfy4yz7mhoks4lheacugdv3b4qlqghjiy
+  fsm_specification.yaml: bafybeiehm5jtcgotx5manu3kca6e3kgx2hy5ykvkvrvrkzcoqbkrndlrh4
   handlers.py: bafybeidkli6fphcmdgwsys4lkyf3fx6fbawet4nt2pnixfypzijhg6b3ze
-  models.py: bafybeiaeczqvmcosk4cer4oq5n7cgbihjgtkdspzporymluuefwyb5irnm
+  models.py: bafybeibetsvsi33rwfpe3srevqzcvrkhtrkvtdxif2tfcf5244cz3ogqfm
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
   tests/test_behaviours.py: bafybeifkazsevd6vsfaapulouxepez3rl24y3rxgja5zhmj7s323zdjlmq
   tests/test_dialogues.py: bafybeieaos2byphju6i6xvytppqqcuqqvnpilnflsy73l3wqazzjttbg7m
@@ -24,19 +24,19 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
-- valory/ceramic_read_abci:0.1.0:bafybeice3n2zpjnsktff5suz6fc7rb2vmkigf3f5drizjvfmhtzufoxyxi
-- valory/generic_scoring_abci:0.1.0:bafybeidpbr4m3nuwy7fvh7dphn2znng4aj3vn5v3sv2hnbgrbqgaxlptha
-- valory/twitter_scoring_abci:0.1.0:bafybeiekzzpmv7c5dkwjiixvnga35l5j75od57lrsjvx45lkhq4unpyelm
-- valory/ceramic_write_abci:0.1.0:bafybeieivnfglbzxb27tr5uzzmrkzymwulo3mzhlvtwi3mun6nts6xyjvq
-- valory/dynamic_nft_abci:0.1.0:bafybeiexoimxapwtvq3xkkizs4tpdojtg6zekqdpubjmxyugog2hg26qda
+- valory/ceramic_read_abci:0.1.0:bafybeidnkoiogt7vkjtof7yy2ux6vn4hnm2geyerptivywsk6e5fb3atk4
+- valory/generic_scoring_abci:0.1.0:bafybeicccyhioaoirbkksmp42ahikhhectmfjk3ujrxk4b65faaa754rfy
+- valory/twitter_scoring_abci:0.1.0:bafybeiadhnqmzw3z5b2xox7hpuwbxajyong3ysa7c4oysrjlhmzuftq5ne
+- valory/ceramic_write_abci:0.1.0:bafybeihgka6y3xxs6ytjcz67u3vfydheifcehhbgxryryimied3vjlhzue
+- valory/dynamic_nft_abci:0.1.0:bafybeicpaz247ton27c3jyk3itayvwfwsbdcktc3lsqpvuhaewkt3iplzi
 - valory/registration_abci:0.1.0:bafybeic2ynseiak7jpta7jfwuqwyp453b4p7lolr4wihxmpn633uekv5am
 - valory/reset_pause_abci:0.1.0:bafybeidzajbe3erygeh2xbd6lrjv7nsptznjuzrt24ykgvhgotdeyhfnba
 - valory/termination_abci:0.1.0:bafybeie4zvjfxvdu7qrulmur3chpjz3kpj5m4bjsxvpk4gvj5zbyyayfaa
 - valory/transaction_settlement_abci:0.1.0:bafybeiaefgqbs7zsn5xe5kdwrujj7ivygkn3ujpw6crnvi3knvxw75qmja
-- valory/decision_making_abci:0.1.0:bafybeigj6ynrugt6zd3wakjf2xg76qs3grfozcn7cazjfjr2too2szlrde
+- valory/decision_making_abci:0.1.0:bafybeifgonmjgm6szmmqfxymsk6g2iknguyjgtxznckjptrpkmlqj46sw4
 - valory/llm_abci:0.1.0:bafybeiav6mfjf5ltrhpmrelfpix3s7irgrk35ejx6zuqjm4wengyihmsse
 - valory/twitter_write_abci:0.1.0:bafybeiga55lbnr6k632ytgwintyuaxegrvvt7k6bn7vwymbgcq7w6tqi7m
-- valory/olas_week_abci:0.1.0:bafybeicvn6dfjx6vnwhhkabexcvf72wekiagzjp6afc7uy2sj7harle4ke
+- valory/olas_week_abci:0.1.0:bafybeiguzgtpjpdbobvgkcxfme2cw34obaj6w3z55eqdpbe7d6yldg6gua
 - valory/mech_interact_abci:0.1.0:bafybeihwvjvxyv2ca2eskt3d5cvac4onr7m2hla2inydpqdipw4ze3yz6a
 behaviours:
   main:
@@ -95,8 +95,6 @@ models:
     class_name: LlmDialogues
   params:
     args:
-      broadcast_to_server: false
-      history_end: null
       centaurs_stream_id: dummy_centaurs_stream_id
       manual_points_stream_id: manual_points_stream_id
       ceramic_db_stream_id: ceramic_db_stream_id
@@ -236,6 +234,9 @@ models:
   twitter_dialogues:
     args: {}
     class_name: TwitterDialogues
+  ceramic_db:
+    args: {}
+    class_name: CeramicDB
 dependencies:
   open-aea-cli-ipfs:
     version: ==1.42.0

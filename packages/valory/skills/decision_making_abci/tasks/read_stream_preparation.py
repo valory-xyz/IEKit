@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -40,13 +40,14 @@ class ReadCentaursPreparation(TaskPreparation):
         yield
         updates = {
             "read_stream_id": self.params.centaurs_stream_id,
-            "read_target_property": "centaurs_data",
+            "sync_on_ceramic_data": False,
         }
         return updates, self.task_event
 
     def _post_task(self):
         """Preparations after running the task"""
         updates = {
+            "centaurs_data": self.behaviour.context.state.ceramic_data,
             "current_centaur_index": 0,  # reset the centaur index after reading
         }
         yield
@@ -69,13 +70,15 @@ class ReadContributeDBPreparation(TaskPreparation):
         yield
         updates = {
             "read_stream_id": self.params.ceramic_db_stream_id,
-            "read_target_property": "ceramic_db",
+            "sync_on_ceramic_data": False,
         }
         return updates, self.task_event
 
     def _post_task(self):
         """Preparations after running the task"""
         updates = {}
+        # Load the stream data into the db model
+        self.ceramic_db.load(self.behaviour.context.state.ceramic_data)
         yield
         return updates, None
 
@@ -96,12 +99,12 @@ class ReadManualPointsPreparation(TaskPreparation):
         yield
         updates = {
             "read_stream_id": self.params.manual_points_stream_id,
-            "read_target_property": "score_data",
+            "sync_on_ceramic_data": False,
         }
         return updates, self.task_event
 
     def _post_task(self):
         """Preparations after running the task"""
-        updates = {}
+        updates = {"score_data": self.behaviour.context.state.ceramic_data}
         yield
         return updates, None

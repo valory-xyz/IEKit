@@ -8,15 +8,15 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeibvgxh4baqhxapbbryg7qlglf4czricwqqs34gjs5vwwppg5nuvsq
-  behaviours.py: bafybeie6qwyq3f66q2ww4vrsa23vlg4kjamahv4yxeiamls45uzsi2g35m
+  behaviours.py: bafybeigmayexifwi3qeihubnrzlkcqogvamvmoftyph7lyh53cbhdge3ja
   ceramic_db.py: bafybeib43qozo77ihsfe2bbyd3h6ffc2tonviqebqm2lcbs2xk3qod2zja
   dialogues.py: bafybeia7zebqkgbubzenskcrgjocgyd2pc3q5yxcjddte4emys32qt6xpm
   fsm_specification.yaml: bafybeienycmc4m3wurhlsuj7hfumrsx5id3qfdn6eisoze4gdzeeojlrbu
   handlers.py: bafybeialoqm2byetvqqrjujhk3qzgdgsrzmhakmzwdop2cr24kswipl6ti
-  models.py: bafybeihsqzu4n2r5a4wlvcpmpnwkbtp3sr7axry53to5gpxoacqbkhx5cq
+  models.py: bafybeigtoewmf4czfn2wfzh5jrer46plir3fqubcbono6pmebiq5bipdjy
   payloads.py: bafybeietg3ceghstjx5bytqv2t377k5pyww3cdq7zg7d7lxhscwmfelai4
   prompts.py: bafybeiaod4e6knvmjl6jjqnlpcushy6iab4sfax2tevskxuirfu36afeta
-  rounds.py: bafybeieme2ymb4vv4rkmuzl53jbpuisjik3jp6mx6rntuyj52frukpaeya
+  rounds.py: bafybeid47ew65heuf277xrqsjzqqjhrfa4ynsnkn7yptbh27cwoeqqweli
 fingerprint_ignore_patterns: []
 connections:
 - valory/openai:0.1.0:bafybeiepsxac7e2tq3mcfkgcx62zt6oiaeic5wwcs4mnv733l762kn62du
@@ -25,6 +25,7 @@ protocols:
 - valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
+- valory/decision_making_abci:0.1.0:bafybeifgonmjgm6szmmqfxymsk6g2iknguyjgtxznckjptrpkmlqj46sw4
 behaviours:
   main:
     args: {}
@@ -164,6 +165,9 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
+  ceramic_db:
+    args: {}
+    class_name: CeramicDB
 dependencies:
   twitter_text_parser:
     version: ==3.0.0

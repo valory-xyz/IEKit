@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -75,11 +75,6 @@ class SynchronizedData(BaseSynchronizedData):
 
     This data is replicated by the tendermint application.
     """
-
-    @property
-    def ceramic_db(self) -> dict:
-        """Get the data stored in the main stream."""
-        return cast(dict, self.db.get_strict("ceramic_db"))
 
     @property
     def pending_write(self) -> bool:
@@ -466,14 +461,10 @@ class WeekInOlasAbciApp(AbciApp[Event]):
         Event.ROUND_TIMEOUT: 30.0,
         Event.TWEET_EVALUATION_ROUND_TIMEOUT: 600.0,
     }
-    cross_period_persisted_keys: FrozenSet[str] = frozenset(
-        ["ceramic_db", "pending_write"]
-    )
+    cross_period_persisted_keys: FrozenSet[str] = frozenset(["pending_write"])
     db_pre_conditions: Dict[AppState, Set[str]] = {
         OlasWeekDecisionMakingRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedWeekInOlasRound: {
-            get_name(SynchronizedData.ceramic_db),
-        },
+        FinishedWeekInOlasRound: set(),
     }

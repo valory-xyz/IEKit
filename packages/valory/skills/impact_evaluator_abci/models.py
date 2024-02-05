@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -38,6 +38,9 @@ from packages.valory.skills.ceramic_write_abci.models import (
     RandomnessApi as CeramicWriteRandomnessApi,
 )
 from packages.valory.skills.ceramic_write_abci.rounds import Event as CeramicWriteEvent
+from packages.valory.skills.decision_making_abci.models import (
+    CeramicDB as DecisionMakingCeramicDB,
+)
 from packages.valory.skills.decision_making_abci.models import (
     Params as DecisionMakingAbciParams,
 )
@@ -88,6 +91,7 @@ Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
 RandomnessApi = CeramicWriteRandomnessApi
 MechResponseSpecs = BaseMechResponseSpecs
+CeramicDB = DecisionMakingCeramicDB
 
 MARGIN = 5
 MULTIPLIER = 2

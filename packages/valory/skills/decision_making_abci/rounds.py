@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -94,24 +94,9 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(list, self.db.get("llm_results", []))
 
     @property
-    def write_data(self) -> list:
-        """Get the write_stream_id."""
-        return cast(list, self.db.get_strict("write_data"))
-
-    @property
-    def write_results(self) -> list:
-        """Get the write_results."""
-        return cast(list, self.db.get_strict("write_results"))
-
-    @property
     def read_stream_id(self) -> Optional[str]:
         """Get the read_stream_id."""
         return cast(str, self.db.get("read_stream_id", None))
-
-    @property
-    def read_target_property(self) -> Optional[str]:
-        """Get the read_target_property."""
-        return cast(str, self.db.get("read_target_property", None))
 
     @property
     def daily_tweet(self) -> str:
@@ -139,11 +124,6 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(bool, self.db.get("has_centaurs_changes", False))
 
     @property
-    def ceramic_db(self) -> dict:
-        """Get the data stored in the main stream."""
-        return cast(dict, self.db.get_strict("ceramic_db"))
-
-    @property
     def pending_write(self) -> bool:
         """Checks whether there are changes pending to be written to Ceramic."""
         return cast(bool, self.db.get("pending_write", False))
@@ -152,6 +132,11 @@ class SynchronizedData(BaseSynchronizedData):
     def summary_tweets(self) -> list:
         """Get the summary_tweets."""
         return cast(list, self.db.get("summary_tweets", []))
+
+    @property
+    def write_results(self) -> list:
+        """Get the write_results."""
+        return cast(list, self.db.get("write_results", []))
 
 
 class DecisionMakingRound(CollectSameUntilThresholdRound):
@@ -179,7 +164,6 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
                     **{
                         **payload["updates"],
                         "previous_decision_event": event.value,
-                        "ceramic_db": dict(),
                         "score_data": dict(),
                         "centaurs_data": list(),
                     }

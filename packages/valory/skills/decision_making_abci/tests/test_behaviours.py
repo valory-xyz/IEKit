@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -117,6 +117,7 @@ class BaseDecisionMakingBehaviourTest(BaseDecisionMakingTest):
         self.mock_params(self.centaur_id_to_secrets)  # type: ignore
         state = cast(SharedState, self._skill.skill_context.state)
         state.round_sequence._last_round_transition_timestamp = datetime.datetime.now()
+        state.ceramic_data = DUMMY_CENTAURS_DATA
         self.fast_forward(self.initial_data)  # type: ignore
         for _ in range(5):  # Needed due to the amount of nested generators
             self.behaviour.act_wrapper()

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -143,9 +143,9 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
     task_name = "scheduled_tweet"
     task_event = Event.SCHEDULED_TWEET.value
 
-    def __init__(self, synchronized_data, params, logger, now_utc, behaviour) -> None:
+    def __init__(self, now_utc, behaviour, synchronized_data) -> None:
         """Init"""
-        super().__init__(synchronized_data, params, logger, now_utc, behaviour)
+        super().__init__(now_utc, behaviour, synchronized_data)
         self.pending_tweets = []
         self.tweets_need_update = False
         self.updated_tweets = None

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -209,11 +209,9 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
             if not previous_task_skipped:
                 previous_task_preparation = (
                     previous_task_preparation_cls(
-                        self.synchronized_data,
-                        self.params,
-                        self.context.logger,
                         now_utc,
                         self,
+                        self.synchronized_data,
                     )
                     if previous_task_preparation_cls
                     else None
@@ -225,9 +223,7 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
                         post_event,
                     ) = yield from previous_task_preparation.post_task()
 
-                    self.context.logger.info(
-                        f"Post task updates = {post_updates}, post event = {post_event}"
-                    )
+                    self.context.logger.info(f"Post task event = {post_event}")
 
                 # If the post task returns an event, do not proceed with the pre task:
                 if post_event:
@@ -236,14 +232,12 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
             # Process pre task
             next_task_preparation = (
                 next_task_preparation_cls(
+                    now_utc,
+                    self,
                     self.synchronized_data.update(  # use an updated version of the data
                         synchronized_data_class=SynchronizedData,
                         **post_updates,
                     ),
-                    self.params,
-                    self.context.logger,
-                    now_utc,
-                    self,
                 )
                 if next_task_preparation_cls
                 else None
@@ -251,9 +245,7 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
 
             if next_task_preparation:
                 pre_updates, pre_event = yield from next_task_preparation.pre_task()
-                self.context.logger.info(
-                    f"Pre task updates = {pre_updates}, pre event = {pre_event}"
-                )
+                self.context.logger.info(f"Pre task event = {pre_event}")
 
             if pre_event:
                 if set(post_updates.keys()).intersection(set(pre_updates.keys())):

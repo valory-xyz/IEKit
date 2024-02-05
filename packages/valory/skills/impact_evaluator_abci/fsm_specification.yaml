@@ -39,6 +39,7 @@ alphabet_in:
 - RETRIEVE_HASHTAGS
 - RETRIEVE_MENTIONS
 - RETRIEVE_TWEETS
+- RETRY
 - ROUND_TIMEOUT
 - SCHEDULED_TWEET
 - SCORE
@@ -240,6 +241,7 @@ transition_func:
     (StreamReadRound, API_ERROR): StreamReadRound
     (StreamReadRound, DONE): DecisionMakingRound
     (StreamReadRound, NO_MAJORITY): StreamReadRound
+    (StreamReadRound, RETRY): StreamReadRound
     (StreamReadRound, ROUND_TIMEOUT): StreamReadRound
     (StreamWriteRound, API_ERROR): RandomnessRound
     (StreamWriteRound, DID_NOT_SEND): RandomnessRound

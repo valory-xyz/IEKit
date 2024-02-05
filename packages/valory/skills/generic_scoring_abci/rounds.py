@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -57,11 +57,6 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(dict, self.db.get_strict("score_data"))
 
     @property
-    def ceramic_db(self) -> dict:
-        """Get the data stored in the main stream."""
-        return cast(dict, self.db.get_strict("ceramic_db"))
-
-    @property
     def pending_write(self) -> bool:
         """Checks whether there are changes pending to be written to Ceramic."""
         return cast(bool, self.db.get("pending_write", False))
@@ -77,11 +72,11 @@ class GenericScoringRound(CollectSameUntilThresholdRound):
         """Process the end of the block."""
         if self.threshold_reached:
             payload = json.loads(self.most_voted_payload)
+            self.context.ceramic_db.apply_diff(payload["ceramic_diff"])
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    get_name(SynchronizedData.ceramic_db): payload["ceramic_db"],
                     get_name(SynchronizedData.pending_write): payload["pending_write"],
                 }
             )
@@ -118,7 +113,6 @@ class GenericScoringAbciApp(AbciApp[Event]):
     }
     cross_period_persisted_keys: FrozenSet[str] = frozenset(
         [
-            "ceramic_db",
             "pending_write",
         ]
     )

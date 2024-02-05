@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -26,13 +26,13 @@ from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
 )
 from packages.valory.skills.abstract_round_abci.models import Requests as BaseRequests
-from packages.valory.skills.abstract_round_abci.models import (
-    SharedState as BaseSharedState,
+from packages.valory.skills.ceramic_read_abci.models import (
+    SharedState as CeramicReadSharedState,
 )
 from packages.valory.skills.ceramic_write_abci.rounds import CeramicWriteAbciApp
 
 
-class SharedState(BaseSharedState):
+class SharedState(CeramicReadSharedState):
     """Keep the current shared state of the skill."""
 
     abci_app_cls = CeramicWriteAbciApp
