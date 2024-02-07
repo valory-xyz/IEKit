@@ -10,7 +10,7 @@ on:
 jobs:
   deploy-service-on-propel:
     name: Deploy service on propel
-    environment: 'staging'
+    environment: 'production'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -50,7 +50,7 @@ jobs:
           # determine ipfs hash id
           export IPFS_HASH=$(jq '.dev | to_entries[] | select(.key | startswith("service"))| .value' -r  ./packages/packages.json | head -n1)
           export SERVICE_PATH=service_for_propel
- 
+
           # fetch service file and check it published
           autonomy init --reset --author ci --ipfs --remote
           autonomy fetch $IPFS_HASH --service --alias $SERVICE_PATH
