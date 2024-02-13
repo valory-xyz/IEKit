@@ -22,15 +22,17 @@ STAGING_API_TWITTER=http://host.docker.internal:5000/twitter/create_tweet
 TRANSACTION_SERVICE_URL=https://safe-transaction-goerli.safe.global/api/v1/messages/{message_hash}/
 WVEOLAS_ADDRESS=0xa2AA89938805836077aB0724f335142da7A27085
 USE_TERMINATION=false
+POINTS_TO_IMAGE_HASHES='{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
 
-; Fill in the following variables
+# Fill in the following variables
+# -------------------------------
 ETHEREUM_LEDGER_RPC=
 GNOSIS_LEDGER_RPC=
 TWITTER_API_BEARER_TOKEN=
 ALL_PARTICIPANTS='["<agent_address>"]'
-POINTS_TO_IMAGE_HASHES='{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
-CENTAUR_ID_TO_SECRETS='{"2":{"orbis":{"context":"","did_seed":"9a683e9b21777b5b159974c35c4766bc0c4522855aefc8de30876dbaa252f179","did_str":"z6MkszfuezSP8ftgHRhMr8AX8uyTjtKpcia4bP19TBgmhEPs"},"twitter":{"consumer_key":"<your_consumer_key>","consumer_secret":"<your_consumer_secret>","access_token":"<your_access_token>","access_secret":"<your_access_secret>"}}}'
-OPENAI_API_KEY_0=sk-
+# The following var contains multiple secrets: Orbis context, dids, and 4 Twitter tokens
+CENTAUR_ID_TO_SECRETS='{"1":{"orbis":{"context":"","did_seed":"9a683e9b21777b5b159974c35c4766bc0c4522855aefc8de30876dbaa252f179","did_str":"z6MkszfuezSP8ftgHRhMr8AX8uyTjtKpcia4bP19TBgmhEPs"},"twitter":{"consumer_key":"<your_consumer_key>","consumer_secret":"<your_consumer_secret>","access_token":"<your_access_token>","access_secret":"<your_access_secret>"}}}'
+OPENAI_API_KEY_0=
 KEYS_PATH=
 CERAMIC_DB_STREAM_ID=
 CENTAURS_STREAM_ID=
