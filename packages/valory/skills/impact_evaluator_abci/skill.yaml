@@ -24,19 +24,19 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
-- valory/ceramic_read_abci:0.1.0:bafybeib4gjwl7usvgcv6zyprd3sqsg5nflu4aklqlgqxjsok7zr5ifocei
-- valory/generic_scoring_abci:0.1.0:bafybeicg22gynywnclsfppvfye4pwfyoskjub3vnogl2uv5s637k73pc7e
-- valory/twitter_scoring_abci:0.1.0:bafybeign5el66az2yukirusfkxhlbvjh5bbczxmnqmddm7iehdklpuqgqi
-- valory/ceramic_write_abci:0.1.0:bafybeicepwaurh7yqspjkx4twq7ebwhnqh3bhji6ij3ekljtcciqcjlheq
-- valory/dynamic_nft_abci:0.1.0:bafybeihacgytvkb3n2q4pa3tj5dvbfh424kt3zi4brzsfruiomzm6m7cqm
+- valory/ceramic_read_abci:0.1.0:bafybeiafbsl2x44ermzebs5qzka4kfrqmxtzy7pxutg5jrzye7jiqev4zq
+- valory/generic_scoring_abci:0.1.0:bafybeie2jik3zqqmpa2luksvfggxtb5buljraj5r2qepahr4lq3khwau34
+- valory/twitter_scoring_abci:0.1.0:bafybeifxh4ykob2uh2m2nkyx3ht676xj2brycorqqn7kudkzaya5n5jwta
+- valory/ceramic_write_abci:0.1.0:bafybeib2kkwkl3xl3ub7hs4np5kfgo6f6kb5zkc22nu4gczrufu5usz5ju
+- valory/dynamic_nft_abci:0.1.0:bafybeie5fglj5ggy54tgk27q4h35lahbriyjmjovknrxvbyijuhusjvrtu
 - valory/registration_abci:0.1.0:bafybeic2ynseiak7jpta7jfwuqwyp453b4p7lolr4wihxmpn633uekv5am
 - valory/reset_pause_abci:0.1.0:bafybeidzajbe3erygeh2xbd6lrjv7nsptznjuzrt24ykgvhgotdeyhfnba
 - valory/termination_abci:0.1.0:bafybeie4zvjfxvdu7qrulmur3chpjz3kpj5m4bjsxvpk4gvj5zbyyayfaa
 - valory/transaction_settlement_abci:0.1.0:bafybeiaefgqbs7zsn5xe5kdwrujj7ivygkn3ujpw6crnvi3knvxw75qmja
-- valory/decision_making_abci:0.1.0:bafybeihyaz7oowe5go7samsw6h4sy3y7b6nulxnxkklz3yw3mcdmject6e
+- valory/decision_making_abci:0.1.0:bafybeibofp5mqakcu5466bg43mmu4qj2a5mbptknmeqwolrhhj27vv6k6i
 - valory/llm_abci:0.1.0:bafybeiav6mfjf5ltrhpmrelfpix3s7irgrk35ejx6zuqjm4wengyihmsse
 - valory/twitter_write_abci:0.1.0:bafybeiga55lbnr6k632ytgwintyuaxegrvvt7k6bn7vwymbgcq7w6tqi7m
-- valory/olas_week_abci:0.1.0:bafybeibpg37olhg6nzyv2i5kj7e6vcxxcs3fdnrn4nmensfa37mhdkhjtq
+- valory/olas_week_abci:0.1.0:bafybeiewc5hmew4khksokjbglkz4y46rwawistxjklo3em43gjkgfyaauq
 - valory/mech_interact_abci:0.1.0:bafybeihwvjvxyv2ca2eskt3d5cvac4onr7m2hla2inydpqdipw4ze3yz6a
 behaviours:
   main:

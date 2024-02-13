@@ -66,6 +66,7 @@ def base64UrlEncode(data):
 
 
 def build_data_for_signing(header: dict, encoded_payload: str) -> str:
+    """Build data for signing"""
     header_str = json.dumps(header)
     header_bytes = bytearray(header_str, "utf-8")
     header_base64 = base64UrlEncode(header_bytes)
