@@ -4,7 +4,7 @@ DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS=0x02C26437B292D86c5F4F21bbCcE0771948274f84
 CERAMIC_DID_STR=z6MkszfuezSP8ftgHRhMr8AX8uyTjtKpcia4bP19TBgmhEPs
 CERAMIC_DID_SEED=9a683e9b21777b5b159974c35c4766bc0c4522855aefc8de30876dbaa252f179
 RESET_PAUSE_DURATION=30
-CERAMIC_API_BASE=https://ceramic-clay.3boxlabs.com
+CERAMIC_API_BASE=https://ceramic-clay.3boxlabs.com/
 EARLIEST_BLOCK_TO_MONITOR=16097553
 RESET_TENDERMINT_AFTER=5
 TWITTER_SEARCH_ARGS=query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
