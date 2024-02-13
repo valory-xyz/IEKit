@@ -11,7 +11,6 @@ TWITTER_SEARCH_ARGS=query=%23OlasNetwork&tweet.fields=author_id,created_at,conve
 MAX_POINTS_PER_PERIOD=5000
 USE_ACN=false
 TWITTER_TWEETS_ARGS=tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=10&start_time={start_time}
-SAFE_CONTRACT_ADDRESS=0xAE938e5FAEdBD32b048C5b39043Ca5E42c89A598
 DEFAULT_CHAIN_ID=gnosis
 USE_STAGING_API=true
 TWITTER_API_BASE=https://api.twitter.com/
@@ -26,14 +25,22 @@ POINTS_TO_IMAGE_HASHES='{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gc
 
 # Fill in the following variables
 # -------------------------------
+
+# RPCS
 ETHEREUM_LEDGER_RPC=
 GNOSIS_LEDGER_RPC=
-TWITTER_API_BEARER_TOKEN=
+
+# Agent keys, addresses and Safe. Agents must be owners of the safe, which is used for Mech interactions.
+KEYS_PATH=
 ALL_PARTICIPANTS='["<agent_address>"]'
-# The following var contains multiple secrets: Orbis context, dids, and 4 Twitter tokens
+SAFE_CONTRACT_ADDRESS=
+
+# The following var contains multiple secrets: Orbis context, dids, and multiple Twitter and OpenAI tokens
+TWITTER_API_BEARER_TOKEN=
 CENTAUR_ID_TO_SECRETS='{"1":{"orbis":{"context":"","did_seed":"9a683e9b21777b5b159974c35c4766bc0c4522855aefc8de30876dbaa252f179","did_str":"z6MkszfuezSP8ftgHRhMr8AX8uyTjtKpcia4bP19TBgmhEPs"},"twitter":{"consumer_key":"<your_consumer_key>","consumer_secret":"<your_consumer_secret>","access_token":"<your_access_token>","access_secret":"<your_access_secret>"}}}'
 OPENAI_API_KEY_0=
-KEYS_PATH=
+
+# Ceramic streams
 CERAMIC_DB_STREAM_ID=
 CENTAURS_STREAM_ID=
 MANUAL_POINTS_STREAM_ID=
