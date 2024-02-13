@@ -37,10 +37,10 @@ SAFE_CONTRACT_ADDRESS=
 
 # The following var contains multiple secrets: Orbis context, dids, and multiple Twitter and OpenAI tokens
 TWITTER_API_BEARER_TOKEN=
-CENTAUR_ID_TO_SECRETS='{"1":{"orbis":{"context":"","did_seed":"9a683e9b21777b5b159974c35c4766bc0c4522855aefc8de30876dbaa252f179","did_str":"z6MkszfuezSP8ftgHRhMr8AX8uyTjtKpcia4bP19TBgmhEPs"},"twitter":{"consumer_key":"<your_consumer_key>","consumer_secret":"<your_consumer_secret>","access_token":"<your_access_token>","access_secret":"<your_access_secret>"}}}'
 OPENAI_API_KEY_0=
+CENTAUR_ID_TO_SECRETS='{"1":{"orbis":{"context":"","did_seed":"9a683e9b21777b5b159974c35c4766bc0c4522855aefc8de30876dbaa252f179","did_str":"z6MkszfuezSP8ftgHRhMr8AX8uyTjtKpcia4bP19TBgmhEPs"},"twitter":{"consumer_key":"<your_consumer_key>","consumer_secret":"<your_consumer_secret>","access_token":"<your_access_token>","access_secret":"<your_access_secret>"}}}'
 
-# Ceramic streams
+# Ceramic streams (use the create_streams.py script to create some dummy streams)
 CERAMIC_DB_STREAM_ID=
 CENTAURS_STREAM_ID=
 MANUAL_POINTS_STREAM_ID=

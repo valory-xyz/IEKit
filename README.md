@@ -40,3 +40,13 @@ Prepare the environment to build your own IEKit-based service.
 - Pull packages:
 
       autonomy packages sync --update-packages
+
+- Create some dummy Ceramic streams
+
+      python create_streams.py
+
+- Fill in the required env vars in `.sample_env`
+
+- Run a single agent service:
+
+      bash run_service_single.sh
