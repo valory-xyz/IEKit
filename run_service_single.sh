@@ -1,23 +1,23 @@
 #!/usr/bin/env bash
 
-# Go into the relevant venv
-#cd /home/david/Valory/repos/IEKit && pipenv shell
-
 # Set env vars
-export $(grep -v '^#' .1env | xargs)
+export $(grep -v '^#' .sample_env | xargs)
 
 # Push packages and fetch service
 make clean
 
 autonomy push-all
 
-autonomy fetch --local --service valory/impact_evaluator_local && cd impact_evaluator_local
+autonomy fetch --local --service valory/impact_evaluator_local
+
+# Copy the keys and build the deployment
+cp $KEYS_PATH ./impact_evaluator_local/keys.json
+cd impact_evaluator_local
 
 # Build the image
 autonomy build-image
 
-# Copy the keys and build the deployment
-cp $KEY_DIR/keys1_gnosis.json ./keys.json
+# Build the deployment
 autonomy deploy build -ltm
 
 # Run the deployment
