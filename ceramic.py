@@ -122,9 +122,9 @@ class Ceramic:
         """Update a stream"""
         # Get all the commits
         data, genesis_cid_str, previous_cid_str = self.get_data(stream_id)
-        # if not data:
-        #     print(f"Error updating stream {stream_id}")
-        #     return
+        if not data:
+            print(f"Error updating stream {stream_id}")
+            return
 
         # Prepare the commit payload
         commit_payload = build_commit_payload(
