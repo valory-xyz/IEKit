@@ -31,7 +31,7 @@ In order to run a local demo service based on the IEKit:
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeiass4awbuldz5xbhax5rotv5jhmpjcerffsmlg6adj574py7fwiy4 --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeihi5k3uxx2edasdtplkpfpte2zoznlqlc65vjigosann253kuopha --service
     ```
 
 3. Build the Docker image of the service agents
@@ -70,37 +70,64 @@ In order to run a local demo service based on the IEKit:
 
 5. Prepare the environment and build the service deployment.
 
-    1. Create a [Twitter API Bearer Token](https://developer.twitter.com/en/portal/dashboard).
+    1. Create [Twitter API Authentication Tokens](https://developer.twitter.com/en/portal/dashboard) and an [OpenAI API key](https://openai.com/blog/openai-api).
 
     2. Create a Ceramic Decentralized Identity (DID) using [Glaze](https://github.com/ceramicstudio/js-glaze).
 
-    3. Using the DID created in the previous step, create two empty Ceramic streams. The service will optionally read generic scores from the first one and will write scores to the second one.
+    3. Using the DID created in the previous step, create three empty Ceramic streams. The service will optionally read generic scores from the first one and will write scores to the second one. The third one will store some tool configurations. Alternatively, the [`create_streams.py` script from the IEKit repo](https://github.com/valory-xyz/IEKit) can be used to create some dummy streams.
 
-    4. Create an API key for [Infura](https://www.infura.io/) or your preferred provider.
+    4. Create an API key for [Infura](https://www.infura.io/) or your preferred provider. You will need both Ethereum and Gnosis Chain RPCs.
 
-    5. Create an `.env` file with the required environment variables, modifying its values to your needs.
+    5. Deploy a [Safe](https://app.safe.global/welcome) on Gnosis chain and set your agents as the owners so they can interact with it. The service will send Mech requests using the Safe. Alternatively, use [Olas protocol frontend](https://registry.olas.network/ethereum/services) to mint the service, and a Safe will be automatically deployed for you.
+
+    6. Create an `.env` file with the required environment variables, modifying its values to your needs.
 
         ```bash
-        ETHEREUM_LEDGER_RPC=https://goerli.infura.io/v3/<infura_api_key>
         ETHEREUM_LEDGER_CHAIN_ID=1
-        DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS=0x7C3B976434faE9986050B26089649D9f63314BD8
-        EARLIEST_BLOCK_TO_MONITOR=16097553
-        CERAMIC_DID_SEED=<ceramic_seed_did>
-        CERAMIC_DID_STR=<ceramic_did_string>
-        CERAMIC_API_BASE=<ceramic_node_endpoint>
-        CENTAURS_STREAM_ID=<centaurs_stream_id>
-        CERAMIC_DB_STREAM_ID=<main_db_stream_id>
-        MANUAL_POINTS_STREAM_ID=<generic_scores_stream_id>
-        CENTAUR_ID_TO_SECRETS='{"your_centaur_id":{"orbis":{"context":"orbis_context_stream_id","did_seed":"your_did_seed","did_str":"your_did_str"},"twitter":{"consumer_key":"your_consumer_key","consumer_secret":"your_consumer_secret","access_token":"your_access_token","access_secret":"your_access_secret"}}}'
-        OPENAI_API_KEY_0=<openai_api_key>
-        OPENAI_API_KEY_1=<openai_api_key>
-        OPENAI_API_KEY_2=<openai_api_key>
-        OPENAI_API_KEY_3=<openai_api_key>
-        TWITTER_API_BEARER_TOKEN=<twitter_api_token>
+        GNOSIS_LEDGER_CHAIN_ID=100
+        DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS=0x02C26437B292D86c5F4F21bbCcE0771948274f84
+        CERAMIC_DID_STR=z6MkszfuezSP8ftgHRhMr8AX8uyTjtKpcia4bP19TBgmhEPs
+        CERAMIC_DID_SEED=9a683e9b21777b5b159974c35c4766bc0c4522855aefc8de30876dbaa252f179
         RESET_PAUSE_DURATION=30
-        ALL_PARTICIPANTS='["0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65","0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc","0x976EA74026E726554dB657fA54763abd0C3a0aa9","0x14dC79964da2C08b23698B3D3cc7Ca32193d9955"]'
-        POINTS_TO_IMAGE_HASHES='{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
+        CERAMIC_API_BASE=https://ceramic-clay.3boxlabs.com/
+        EARLIEST_BLOCK_TO_MONITOR=16097553
+        RESET_TENDERMINT_AFTER=5
+        TWITTER_SEARCH_ARGS=query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
+        MAX_POINTS_PER_PERIOD=5000
         USE_ACN=false
+        TWITTER_TWEETS_ARGS=tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=10&start_time={start_time}
+        DEFAULT_CHAIN_ID=gnosis
+        USE_STAGING_API=true
+        TWITTER_API_BASE=https://api.twitter.com/
+        TWITTER_MENTIONS_ENDPOINT=twitter/2/users/1/mentions?
+        TWITTER_SEARCH_ENDPOINT=twitter/2/tweets/search/recent?
+        MECH_CONTRACT_ADDRESS=0x77af31De935740567Cf4fF1986D04B2c964A786a
+        STAGING_API_TWITTER=http://host.docker.internal:5000/twitter/create_tweet
+        TRANSACTION_SERVICE_URL=https://safe-transaction-goerli.safe.global/api/v1/messages/{message_hash}/
+        WVEOLAS_ADDRESS=0xa2AA89938805836077aB0724f335142da7A27085
+        USE_TERMINATION=false
+        POINTS_TO_IMAGE_HASHES='{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
+
+        # Fill in the following variables
+        # -------------------------------
+
+        # RPCS
+        ETHEREUM_LEDGER_RPC=
+        GNOSIS_LEDGER_RPC=
+
+        # Agent addresses and Safe. Agents must be owners of the safe, which is used for Mech interactions.
+        ALL_PARTICIPANTS='["<agent_address>","<agent_address>","<agent_address>"."<agent_address>"]'
+        SAFE_CONTRACT_ADDRESS=
+
+        # The following var contains multiple secrets: Orbis context, dids, and multiple Twitter and OpenAI tokens
+        TWITTER_API_BEARER_TOKEN=
+        OPENAI_API_KEY_0=
+        CENTAUR_ID_TO_SECRETS='{"1":{"orbis":{"context":"","did_seed":"9a683e9b21777b5b159974c35c4766bc0c4522855aefc8de30876dbaa252f179","did_str":"z6MkszfuezSP8ftgHRhMr8AX8uyTjtKpcia4bP19TBgmhEPs"},"twitter":{"consumer_key":"<your_consumer_key>","consumer_secret":"<your_consumer_secret>","access_token":"<your_access_token>","access_secret":"<your_access_secret>"}}}'
+
+        # Ceramic streams (use the create_streams.py script to create some dummy streams)
+        CERAMIC_DB_STREAM_ID=
+        CENTAURS_STREAM_ID=
+        MANUAL_POINTS_STREAM_ID=
         ```
 
         and export them:
@@ -109,7 +136,9 @@ In order to run a local demo service based on the IEKit:
         export $(grep -v '^#' .env | xargs)
         ```
 
-    6. Build the service deployment.
+    7. Copy the keys.json file inside the service's folder.
+
+    8. Build the service deployment.
 
         ```bash
         autonomy deploy build keys.json -ltm

@@ -64,7 +64,7 @@ jobs:
       - name: License compatibility check
         run: tox -e liccheck
       - name: Check doc links
-        run: tomte check-doc-links --url-skips "https://goerli.infura.io/v3/<infura_api_key>" --url-skips "https://twitter.com/autonolas" --url-skips "https://developer.twitter.com/en/portal/dashboard"
+        run: tomte check-doc-links --url-skips "https://goerli.infura.io/v3/<infura_api_key>" --url-skips "https://twitter.com/autonolas" --url-skips "https://developer.twitter.com/en/portal/dashboard" --url-skips "https://ceramic-clay.3boxlabs.com/" --url-skips "https://api.twitter.com/" --url-skips "http://host.docker.internal:5000/twitter/create_tweet"  --http-skips "http://host.docker.internal:5000/twitter/create_tweet"  --url-skips "https://safe-transaction-goerli.safe.global/api/v1/messages/{message_hash}/"
       - name: Check doc IPFS hashes
         run: tox -e check-doc-hashes
 

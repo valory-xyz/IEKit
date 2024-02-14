@@ -1,0 +1,45 @@
+[
+    {
+        "id": "1",
+        "name": "Test Centaur",
+        "memory": [],
+        "actions": [],
+        "members": [],
+        "purpose": "To test IEKit",
+        "messages": [],
+        "plugins_data": {
+            "daily_orbis": {},
+            "daily_tweet": {},
+            "scheduled_tweet": {
+                "tweets": []
+            }
+        },
+        "configuration": {
+            "plugins": {
+                "daily_orbis": {
+                    "daily": true,
+                    "enabled": false,
+                    "last_run": null,
+                    "run_hour_utc": 12
+                },
+                "daily_tweet": {
+                    "daily": true,
+                    "enabled": false,
+                    "last_run": null,
+                    "run_hour_utc": 12
+                },
+                "week_in_olas": {
+                    "weekly": 4,
+                    "enabled": true,
+                    "last_run": null,
+                    "run_hour_utc": 15
+                },
+                "scheduled_tweet": {
+                    "daily": false,
+                    "enabled": true
+                }
+            },
+            "memberWhitelist": []
+        }
+    }
+]

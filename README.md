@@ -21,7 +21,7 @@ Prepare the environment to build your own IEKit-based service.
     - [Tendermint](https://docs.tendermint.com/v0.34/introduction/install.html) `==0.34.19`
     - [IPFS node](https://docs.ipfs.io/install/command-line/#official-distributions) `==0.6.0`
     - [Pipenv](https://pipenv.pypa.io/en/latest/installation.html) `>=2021.x.xx`
-    - [Docker Engine](https://docs.docker.com/engine/install/)
+    - [Docker Engine](https://docs.docker.com/engine/install/) `<25.0`
     - [Docker Compose](https://docs.docker.com/compose/install/)
 
 - Pull pre-built images:
@@ -40,3 +40,13 @@ Prepare the environment to build your own IEKit-based service.
 - Pull packages:
 
       autonomy packages sync --update-packages
+
+- Create some dummy Ceramic streams
+
+      python create_streams.py
+
+- Fill in the required env vars in `.sample_env`
+
+- Run a single agent service:
+
+      bash run_service_single.sh
