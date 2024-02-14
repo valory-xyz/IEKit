@@ -55,14 +55,10 @@ class Ceramic:
     def _make_request(self, url: str, request_type: str="get", json_data: dict={}):
         """Handle requests"""
         response = None
-        if request_type not in ("get", "post", "delete"):
-            raise ValueError(f"Request method '{request_type}' not supported")
-        if request_type == "get":
-            response = requests.get(url)
-        if request_type == "post":
-            response = requests.post(url, json=json_data)
-        if request_type == "delete":
-            response = requests.delete(url)
+        try:
+            response = getattr(requests, request_type)(url)
+        except AttributeError as exc:
+            raise ValueError(f"Request method '{request_type}' not supported") from exc
         if not response:
             return response.status_code, None
         headers = response.headers.get("content-type")
