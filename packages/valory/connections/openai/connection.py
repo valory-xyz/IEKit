@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2023 Valory AG
+#   Copyright 2021-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -20,15 +20,15 @@
 
 """OpenAI connection and channel."""
 
-from typing import Any, Dict, cast
+from typing import Any, Dict, Optional, cast
 
-import openai
 import requests
 from aea.configurations.base import PublicId
 from aea.connections.base import BaseSyncConnection
 from aea.mail.base import Envelope
 from aea.protocols.base import Address, Message
 from aea.protocols.dialogue.base import Dialogue
+from openai import OpenAI
 
 from packages.valory.protocols.llm.dialogues import LlmDialogue
 from packages.valory.protocols.llm.dialogues import LlmDialogues as BaseLlmDialogues
@@ -39,8 +39,27 @@ PUBLIC_ID = PublicId.from_str("valory/openai:0.1.0")
 
 ENGINES = {
     "chat": ["gpt-3.5-turbo", "gpt-4"],
-    "completion": ["text-davinci-002", "text-davinci-003"],
 }
+
+
+client: Optional[OpenAI] = None
+
+class OpenAIClientManager:
+    """Client context manager for OpenAI."""
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+
+    def __enter__(self) -> OpenAI:
+        global client
+        if client is None:
+            client = OpenAI(api_key=self.api_key)
+        return client
+
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        global client
+        if client is not None:
+            client.close()
+            client = None
 
 
 class LlmDialogues(BaseLlmDialogues):
@@ -206,31 +225,22 @@ class OpenaiConnection(BaseSyncConnection):
 
         # Call the OpenAI API
         if engine in ENGINES["chat"]:
-            messages = [
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": formatted_prompt},
-            ]
-            response = openai.ChatCompletion.create(
-                model=engine,
-                messages=messages,
-                temperature=self.openai_settings["temperature"],
-                max_tokens=self.openai_settings["max_tokens"],
-                n=1,
-                request_timeout=self.openai_settings["request_timeout"],
-                stop=None,
-            )
-            output = response.choices[0].message.content
-        elif engine in ENGINES["completion"]:
-            response = openai.Completion.create(
-                engine=engine,
-                prompt=formatted_prompt,
-                temperature=self.openai_settings["temperature"],
-                max_tokens=self.openai_settings["max_tokens"],
-                n=1,
-                request_timeout=self.openai_settings["request_timeout"],
-                stop=None,
-            )
-            output = response.choices[0].text
+            with OpenAIClientManager(self.openai_settings["openai_api_key"]):
+                # Call the OpenAI API
+                messages = [
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": formatted_prompt},
+                ]
+                response = client.chat.completions.create(
+                    model=engine,
+                    messages=messages,
+                    temperature=self.openai_settings["temperature"],
+                    max_tokens=self.openai_settings["max_tokens"],
+                    n=1,
+                    request_timeout=self.openai_settings["request_timeout"],
+                    stop=None,
+                )
+                output = response.choices[0].message.content
         else:
             raise AttributeError(f"Unrecognized OpenAI engine: {engine}")
 
