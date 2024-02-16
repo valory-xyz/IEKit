@@ -28,7 +28,7 @@ from aea.connections.base import BaseSyncConnection
 from aea.mail.base import Envelope
 from aea.protocols.base import Address, Message
 from aea.protocols.dialogue.base import Dialogue
-from openai import OpenAI
+from openai import AuthenticationError, OpenAI, RateLimitError
 
 from packages.valory.protocols.llm.dialogues import LlmDialogue
 from packages.valory.protocols.llm.dialogues import LlmDialogues as BaseLlmDialogues
@@ -129,7 +129,6 @@ class OpenaiConnection(BaseSyncConnection):
                 "staging_api"
             )
         }
-        openai.api_key = self.openai_settings["openai_api_key"]
         self.dialogues = LlmDialogues(connection_id=PUBLIC_ID)
 
     def main(self) -> None:
@@ -178,13 +177,13 @@ class OpenaiConnection(BaseSyncConnection):
                 prompt_template=llm_message.prompt_template,
                 prompt_values=llm_message.prompt_values,
             )
-        except openai.error.AuthenticationError as e:
+        except AuthenticationError as e:
             self.logger.error(e)
             value = "OpenAI authentication error"
-        except openai.error.APIError as e:
+        except APIError as e:
             self.logger.error(e)
             value = "OpenAI server error"
-        except openai.error.RateLimitError as e:
+        except RateLimitError as e:
             self.logger.error(e)
             value = "OpenAI rate limit error"
 
@@ -237,7 +236,7 @@ class OpenaiConnection(BaseSyncConnection):
                     temperature=self.openai_settings["temperature"],
                     max_tokens=self.openai_settings["max_tokens"],
                     n=1,
-                    request_timeout=self.openai_settings["request_timeout"],
+                    timeout=self.openai_settings["request_timeout"],
                     stop=None,
                 )
                 output = response.choices[0].message.content
