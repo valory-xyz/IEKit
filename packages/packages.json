@@ -2,7 +2,7 @@
     "dev": {
         "agent/valory/impact_evaluator/0.1.0": "bafybeib4ab77t6ywitzyerv27ojh7osvdlj4bnadcfqeaixdpmeza245we",
         "contract/valory/dynamic_contribution/0.1.0": "bafybeiazwcofumvpcl5uzyjhcibwwvvums6ins2hjqfu44fz6widg4js5u",
-        "service/valory/impact_evaluator/0.1.0": "bafybeifantyntlqrxgfljcrqu3p2pz5fnguh2rmkp4tjn45f57tqfcva7u",
+        "service/valory/impact_evaluator/0.1.0": "bafybeidsbflffhwphg5gof4mayaq3ayprqbwjpqahydzlxdpxvgvkwxkyu",
         "skill/valory/dynamic_nft_abci/0.1.0": "bafybeielrb5xb7d6w2chc3gnqdrgif4u7uckfdjyklaecz4qatq37sgvei",
         "skill/valory/twitter_scoring_abci/0.1.0": "bafybeiceo4ayxnak4xdescm3gx7s4vuvztwozw723welltqsjm7q44tsk4",
         "skill/valory/ceramic_read_abci/0.1.0": "bafybeigs24uorwfsbogo3kwbezcjkumjgvbbizdsg5ichmoborufwlzgee",
@@ -16,7 +16,7 @@
         "skill/valory/twitter_write_abci/0.1.0": "bafybeihub4vgcuezuf4xy35ugh7euakneti74lkymmyc7gg4kzwjdpuudm",
         "skill/valory/llm_abci/0.1.0": "bafybeibqpvhjo3zyg35dcfr7peyuggy5ry5nluwigodpozjch3djml5zl4",
         "skill/valory/decision_making_abci/0.1.0": "bafybeibba5rvnejjnhfanwpulgy4r5ponikqlnnzru45gb34lbiziqdcd4",
-        "service/valory/impact_evaluator_local/0.1.0": "bafybeiaau3dgnwwculnuct52hsnzbzkgd6sgaasxd22nya7wuaxwst4xpy",
+        "service/valory/impact_evaluator_local/0.1.0": "bafybeih4lhfgm45luqr272ok4l3o2p4iwlr7nxabf7m5js3o4zhzrxq6oq",
         "skill/valory/olas_week_abci/0.1.0": "bafybeibwoyghwedthef7dxkarli7fk2oks6hpwn2omloce7gsnq26ruiq4",
         "skill/valory/mech_interact_abci/0.1.0": "bafybeigedkfnyxwsdky7qly72svbi6ergekzpufeojnc5ggddciswadave",
         "contract/valory/mech/0.1.0": "bafybeibcfe2utllc2dakdvdsxawoypodwmilstnjord6rvshunl3hiywuq",
