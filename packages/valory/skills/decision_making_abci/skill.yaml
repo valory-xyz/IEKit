@@ -36,13 +36,13 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/wveolas:0.1.0:bafybeifap7ourb6ginmbndgwzsyq2xvap2t6uy6m6yshm2klvbio7nuobi
-- valory/compatibility_fallback_handler:0.1.0:bafybeifyan3wzhsvafwwkyq7tptojvkm3mzjtzgjqewvdbpkuia7r2dfnq
+- valory/wveolas:0.1.0:bafybeiazrckjwbwoi5o44g7ikde3k2kd2ilw2so7o4fv2sd5vu5jkklq6i
+- valory/compatibility_fallback_handler:0.1.0:bafybeiaiosad7j5ygj3yjb4s66kmscmwqb5n37ashdsls5xllmeyivevhi
 protocols:
-- valory/contract_api:1.0.0:bafybeialhbjvwiwcnqq3ysxcyemobcbie7xza66gaofcvla5njezkvhcka
+- valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
-- valory/ceramic_read_abci:0.1.0:bafybeiafbsl2x44ermzebs5qzka4kfrqmxtzy7pxutg5jrzye7jiqev4zq
+- valory/abstract_round_abci:0.1.0:bafybeib3te5ami7gi7vh6v2rvq7mjmatyqdzqwkqpn7qh6mzfmpc4ikq4q
+- valory/ceramic_read_abci:0.1.0:bafybeigs24uorwfsbogo3kwbezcjkumjgvbbizdsg5ichmoborufwlzgee
 behaviours:
   main:
     args: {}
