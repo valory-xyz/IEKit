@@ -23,21 +23,21 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiaqcl7h2famylusiffigwem7tevkcsyocdu5xd42jkmgq6kvowzgq
-- valory/ceramic_read_abci:0.1.0:bafybeiafbsl2x44ermzebs5qzka4kfrqmxtzy7pxutg5jrzye7jiqev4zq
-- valory/generic_scoring_abci:0.1.0:bafybeie2jik3zqqmpa2luksvfggxtb5buljraj5r2qepahr4lq3khwau34
-- valory/twitter_scoring_abci:0.1.0:bafybeifxh4ykob2uh2m2nkyx3ht676xj2brycorqqn7kudkzaya5n5jwta
-- valory/ceramic_write_abci:0.1.0:bafybeib2kkwkl3xl3ub7hs4np5kfgo6f6kb5zkc22nu4gczrufu5usz5ju
-- valory/dynamic_nft_abci:0.1.0:bafybeie5fglj5ggy54tgk27q4h35lahbriyjmjovknrxvbyijuhusjvrtu
-- valory/registration_abci:0.1.0:bafybeic2ynseiak7jpta7jfwuqwyp453b4p7lolr4wihxmpn633uekv5am
-- valory/reset_pause_abci:0.1.0:bafybeidzajbe3erygeh2xbd6lrjv7nsptznjuzrt24ykgvhgotdeyhfnba
-- valory/termination_abci:0.1.0:bafybeie4zvjfxvdu7qrulmur3chpjz3kpj5m4bjsxvpk4gvj5zbyyayfaa
-- valory/transaction_settlement_abci:0.1.0:bafybeiaefgqbs7zsn5xe5kdwrujj7ivygkn3ujpw6crnvi3knvxw75qmja
-- valory/decision_making_abci:0.1.0:bafybeibofp5mqakcu5466bg43mmu4qj2a5mbptknmeqwolrhhj27vv6k6i
-- valory/llm_abci:0.1.0:bafybeigavymbpj2rniedtjrc2kvbzn4mhszqp5pqj3wph6ymuu66mdqieq
-- valory/twitter_write_abci:0.1.0:bafybeiga55lbnr6k632ytgwintyuaxegrvvt7k6bn7vwymbgcq7w6tqi7m
-- valory/olas_week_abci:0.1.0:bafybeievzurqcvr6ishlpsjvhlhtzfmwh5tsy5cy6magdn7f67ga34if2e
-- valory/mech_interact_abci:0.1.0:bafybeihwvjvxyv2ca2eskt3d5cvac4onr7m2hla2inydpqdipw4ze3yz6a
+- valory/abstract_round_abci:0.1.0:bafybeigjrepaqpb3m7zunmt4hryos4vto4yyj3u6iyofdb2fotwho3bqvm
+- valory/ceramic_read_abci:0.1.0:bafybeiaexxgdzmfcbymwiz525gpnpv2oaiowmbdwwtwvzksgou75u3snx4
+- valory/generic_scoring_abci:0.1.0:bafybeigcyxevm5im2pob44lyawcokosfrvgimdtm4kk7fayr5mzaphjw2i
+- valory/twitter_scoring_abci:0.1.0:bafybeifgqmkrns2q4au3d235k6runfq65qdchgqhzlgh6yflc3gg6gwreq
+- valory/ceramic_write_abci:0.1.0:bafybeig7sh3hujmvdompgzjbsxs3vnsnh2l4un3gfhv3p4pb44z4ok7lda
+- valory/dynamic_nft_abci:0.1.0:bafybeicmmghehgor4p3rf7yotkre3gkgzsj2s6pbqdmys7up5gmq64lcny
+- valory/registration_abci:0.1.0:bafybeif3ln6eg53ebrfe6uicjew4uqp2ynyrcxkw5wi4jm3ixqv3ykte4a
+- valory/reset_pause_abci:0.1.0:bafybeicm7onl72rfnn33pbvzwjpkl5gafeieyobfcnyresxz7kunjwmqea
+- valory/termination_abci:0.1.0:bafybeie6h7j4hyhgj2wte64n3xyudxq4pgqcqjmslxi5tff4mb6vce2tay
+- valory/transaction_settlement_abci:0.1.0:bafybeid57tozt5f3kgzmu22nbr3c3oy4p7bi2bu66rqsgnlylq6xgh2ixe
+- valory/decision_making_abci:0.1.0:bafybeif2gob4mjlxrtonwiwb4vq7qtn7yyszqqctaakkibyya5jiay557m
+- valory/llm_abci:0.1.0:bafybeiajzphzfosfmr7wg6fpsbnepmew5a5yojm7qw4dodxpaurs4ntmwa
+- valory/twitter_write_abci:0.1.0:bafybeia6aspguv7elqa4c7apwqoegk37zxunrdprvwrwgmsgume6k5wtja
+- valory/olas_week_abci:0.1.0:bafybeids2xzgkwwgxafl33mchutwm3pctrhmh2xfuauos7izzodiov7f2y
+- valory/mech_interact_abci:0.1.0:bafybeicjunamybs27vwz2jz5hdrtkrtr2xwy2a5dyhbqksjrgh266qpnha
 behaviours:
   main:
     args: {}
@@ -133,6 +133,7 @@ models:
       max_healthcheck: 120
       multisend_address: '0x0000000000000000000000000000000000000000'
       termination_sleep: 900
+      termination_from_block: 0
       init_fallback_gas: 0
       keeper_allowed_retries: 3
       reset_pause_duration: 10
@@ -239,5 +240,5 @@ models:
     class_name: CeramicDB
 dependencies:
   open-aea-cli-ipfs:
-    version: ==1.42.0
+    version: ==1.48.0
 is_abstract: false
