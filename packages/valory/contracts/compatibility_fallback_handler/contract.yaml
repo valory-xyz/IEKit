@@ -16,4 +16,4 @@ contract_interface_paths:
   ethereum: build/compatibility_fallback_handler.json
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==1.47.0
+    version: ==1.48.0

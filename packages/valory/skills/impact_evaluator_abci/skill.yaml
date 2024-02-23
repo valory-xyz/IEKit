@@ -240,5 +240,5 @@ models:
     class_name: CeramicDB
 dependencies:
   open-aea-cli-ipfs:
-    version: ==1.47.0
+    version: ==1.48.0
 is_abstract: false
