@@ -15,6 +15,7 @@ leak_report
 packages/valory/connections/*
 !packages/valory/connections/twitter
 !packages/valory/connections/openai
+!packages/valory/connections/farcaster
 packages/valory/contracts/service_registry
 packages/valory/contracts/gnosis_safe
 packages/valory/contracts/gnosis_safe_proxy_factory
@@ -22,6 +23,7 @@ packages/valory/contracts/multisend
 packages/valory/protocols/*
 !packages/valory/protocols/twitter
 !packages/valory/protocols/llm
+!packages/valory/protocols/srr
 packages/valory/skills/abstract_abci
 packages/valory/skills/abstract_round_abci
 packages/valory/skills/registration_abci

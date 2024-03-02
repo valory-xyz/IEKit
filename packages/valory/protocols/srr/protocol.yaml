@@ -1,0 +1,20 @@
+name: srr
+author: valory
+version: 0.1.0
+protocol_specification_id: valory/srr:0.1.0
+type: protocol
+description: A protocol for basic json-based request-response interactions.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeicdhueeevuwqpjzqtd42atjkvrro4msp7npf65tgyjls3abb5fgdy
+  dialogues.py: bafybeigew3pdkzsldo5sdlznvbzqxiibv5o3hnypp2dtik37ohhlfkzbfu
+  message.py: bafybeicbvorarunzfm2lnkjmq2upoebu6mn423bghjvsr4ptokukzcn5ri
+  serialization.py: bafybeicpo3mleynposymbjcyapnnssppllkyzlv4o756fvvk76h75m6hhi
+  srr.proto: bafybeih6as35mfl5jae444qoasknbvdfzkp6irzu6tarhegrx57jncofga
+  srr_pb2.py: bafybeih5pcyjx33cdzglqcz7kks6w5gbldhmiyxdezsx7vir5ongsj5dha
+  tests/test_srr_dialogues.py: bafybeidzrwe72pieuejqkijpmzqgszo5oqn4jta7estd22rccexxbkxew4
+  tests/test_srr_messages.py: bafybeiae3w2erqxngiq22tlyunztnoxy32ofm32jeongvk5njs56vlib7m
+fingerprint_ignore_patterns: []
+dependencies:
+  protobuf: {}
