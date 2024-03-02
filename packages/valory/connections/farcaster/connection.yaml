@@ -6,13 +6,13 @@ description: The farcaster connection provides a wrapper around Farcaster SDK.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeiagnziswj5tll4yzx63u4hvat4yieoaaqt5b67chvvqxg5th5mxz4
-  connection.py: bafybeidbhxjopa7r4h6fz5xrvldjmfet5vi2zucfmdnplei3ttnb743r7u
-  readme.md: bafybeibqbvpfn6i2w7vxk2m65gizd2hcofu7mdzp2yusx7uupelztme724
+  __init__.py: bafybeigwa4fd4m4rlk2ulhwbiul4rcrr4p6t4cais6to4ge2qz4ng3yo4i
+  connection.py: bafybeidbafe6eo5gy5yebpqjfdfxmieorgmcg7hzeq6755wimrmx745ug4
+  readme.md: bafybeicyxpek46od5mxdshhdrq7leoqp7mucaftanthcnmrtrplwcmtqda
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
-- valory/srr:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
+- valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
 class_name: FarcasterConnection
 config:
   mnemonic: null
