@@ -1,0 +1,28 @@
+alphabet_in:
+- API_ERROR
+- CONTINUE
+- DONE
+- NO_MAJORITY
+- ROUND_TIMEOUT
+default_start_state: RandomnessFarcasterRound
+final_states:
+- FinishedFarcasterWriteRound
+label: FarcasterWriteAbciApp
+start_states:
+- RandomnessFarcasterRound
+states:
+- FinishedFarcasterWriteRound
+- RandomnessFarcasterRound
+- SelectKeeperFarcasterRound
+- FarcasterWriteRound
+transition_func:
+    (RandomnessFarcasterRound, DONE): SelectKeeperFarcasterRound
+    (RandomnessFarcasterRound, NO_MAJORITY): RandomnessFarcasterRound
+    (RandomnessFarcasterRound, ROUND_TIMEOUT): RandomnessFarcasterRound
+    (SelectKeeperFarcasterRound, DONE): FarcasterWriteRound
+    (SelectKeeperFarcasterRound, NO_MAJORITY): RandomnessFarcasterRound
+    (SelectKeeperFarcasterRound, ROUND_TIMEOUT): RandomnessFarcasterRound
+    (FarcasterWriteRound, API_ERROR): RandomnessFarcasterRound
+    (FarcasterWriteRound, CONTINUE): FarcasterWriteRound
+    (FarcasterWriteRound, DONE): FinishedFarcasterWriteRound
+    (FarcasterWriteRound, ROUND_TIMEOUT): RandomnessFarcasterRound
