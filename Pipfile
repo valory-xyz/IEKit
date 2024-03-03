@@ -46,6 +46,7 @@ twitter_text_parser = "==3.0.0"
 py-multibase = "==1.0.3"
 py-multicodec = "==0.2.1"
 protobuf = "<4.25.0,>=4.21.6"
+farcaster = "==0.7.11"
 
 [requires]
 python_version = "3.10"
