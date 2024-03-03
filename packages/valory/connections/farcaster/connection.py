@@ -171,11 +171,11 @@ class FarcasterConnection(BaseSyncConnection):
         method = getattr(self.farcaster, payload["method"])
 
         try:
-            response = method(payload["args"])
+            response = method(**payload["args"])
         except Exception as e:
             return {"error": f"Exception while calling farcaster{payload['method']}({payload['args']}):\n{e}"}, True
 
-        return response, False
+        return {"cast_id": response.cast.hash}, False
 
     def on_connect(self) -> None:
         """
