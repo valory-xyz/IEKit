@@ -50,6 +50,9 @@ handlers:
   tendermint:
     args: {}
     class_name: TendermintHandler
+  farcaster:
+    args: {}
+    class_name: FarcasterHandler
 models:
   abci_dialogues:
     args: {}
@@ -123,6 +126,12 @@ models:
       tendermint_url: http://localhost:26657
       tx_timeout: 10.0
       validate_timeout: 1205
+      use_termination: false
+      use_slashing: false
+      slash_cooldown_hours: 3
+      slash_threshold_amount: 10000000000000000
+      light_slash_unit_amount: 5000000000000000
+      serious_slash_unit_amount: 8000000000000000
     class_name: Params
   requests:
     args: {}
