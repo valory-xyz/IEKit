@@ -62,10 +62,10 @@ from packages.valory.skills.abstract_round_abci.dialogues import (
     TendermintDialogues as BaseTendermintDialogues,
 )
 from packages.valory.skills.farcaster_write_abci.dialogues import (
-    FarcasterDialogue as BaseFarcasterDialogue,
+    SrrDialogue as BaseSrrDialogue,
 )
 from packages.valory.skills.farcaster_write_abci.dialogues import (
-    FarcasterDialogues as BaseFarcasterDialogues,
+    SrrDialogues as BaseSrrDialogues,
 )
 
 
@@ -96,5 +96,5 @@ IpfsDialogue = BaseIpfsDialogue
 IpfsDialogues = BaseIpfsDialogues
 
 
-FarcasterDialogue = BaseFarcasterDialogue
-FarcasterDialogues = BaseFarcasterDialogues
+SrrDialogue = BaseSrrDialogue
+SrrDialogues = BaseSrrDialogues

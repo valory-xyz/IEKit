@@ -25,10 +25,8 @@ from aea.protocols.base import Address, Message
 from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 from aea.skills.base import Model
 
-from packages.valory.protocols.srr.dialogues import SrrDialogue as BaseFarcasterDialogue
-from packages.valory.protocols.srr.dialogues import (
-    SrrDialogues as BaseFarcasterDialogues,
-)
+from packages.valory.protocols.srr.dialogues import SrrDialogue as BaseSrrDialogue
+from packages.valory.protocols.srr.dialogues import SrrDialogues as BaseSrrDialogues
 from packages.valory.skills.abstract_round_abci.dialogues import (
     AbciDialogue as BaseAbciDialogue,
 )
@@ -100,10 +98,9 @@ TendermintDialogues = BaseTendermintDialogues
 IpfsDialogue = BaseIpfsDialogue
 IpfsDialogues = BaseIpfsDialogues
 
-FarcasterDialogue = BaseFarcasterDialogue
+SrrDialogue = BaseSrrDialogue
 
-
-class FarcasterDialogues(Model, BaseFarcasterDialogues):
+class SrrDialogues(Model, BaseSrrDialogues):
     """The dialogues class keeps track of all dialogues."""
 
     def __init__(self, **kwargs: Any) -> None:
@@ -123,9 +120,9 @@ class FarcasterDialogues(Model, BaseFarcasterDialogues):
             :param receiver_address: the address of the receiving agent
             :return: The role of the agent
             """
-            return FarcasterDialogue.Role.SKILL
+            return SrrDialogue.Role.SKILL
 
-        BaseFarcasterDialogues.__init__(
+        BaseSrrDialogues.__init__(
             self,
             self_address=str(self.skill_id),
             role_from_first_message=role_from_first_message,

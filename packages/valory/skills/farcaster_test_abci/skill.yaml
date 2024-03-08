@@ -9,7 +9,7 @@ fingerprint:
   __init__.py: bafybeibbycjkjg3k4imv25tvjxixvr6y4g3bfb7s46p7lxnogap2dnaasi
   behaviours.py: bafybeiencqonbknwiptgpw6ab7hj4ba5if5ztolghcsqkymf3hmubjozxe
   composition.py: bafybeibti2jell3skqhxzkrk7eiipwzwa4u4amjpobcfyt4gdyx7c6wndu
-  dialogues.py: bafybeibiqwm5uc6k5ajnvakogueljtz64m74mhyk5eo4wof3sooduwldk4
+  dialogues.py: bafybeibhbdeicko6fq5pbzl5xm2bjbo4iwdkyyhwpepjnwbxyqbx6tx6hu
   fsm_specification.yaml: bafybeiehm5jtcgotx5manu3kca6e3kgx2hy5ykvkvrvrkzcoqbkrndlrh4
   handlers.py: bafybeid6usaozer37wnwvthuiyngmzp2q7wmz5r53asyt3ktx4e2njafa4
   models.py: bafybeibupr5tzyvqvh3jhhmjws7rg7flznsgln3hcilfqjfv3jwhg7ebpu
@@ -21,7 +21,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeic2emnylfmdtidobgdsxa4tgdelreeimtglqzrmic6cumhpsbfzhe
 - valory/registration_abci:0.1.0:bafybeibzduasg5pahk2d2glc36wlopg54ybwcdmjqbzozt2lmkp4reqsdu
 - valory/reset_pause_abci:0.1.0:bafybeib3geaw3o35aigmb4dhplxrjlsef7hbdwrozu4akiunlgyiegshj4
-- valory/farcaster_write_abci:0.1.0:bafybeigalwnxpnwk4trnk5zqceyhhn3tz7iuvkq3gpyz5lvzaith2wm4mq
+- valory/farcaster_write_abci:0.1.0:bafybeiawje7rx3oxrz6hvymr7wxdisg3zca3tfa5wq7s7c3ffoafiqroby
 behaviours:
   main:
     args: {}
@@ -157,8 +157,8 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
-  farcaster_dialogues:
+  srr_dialogues:
     args: {}
-    class_name: FarcasterDialogues
+    class_name: SrrDialogues
 dependencies: {}
 is_abstract: false

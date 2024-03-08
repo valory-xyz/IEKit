@@ -120,6 +120,7 @@ class FarcasterWriteBehaviour(BaseFarcasterWriteBehaviour):
                 text = write_data[write_index]["text"]
                 self.context.logger.info(f"Creating cast with text: {text}")
                 response = yield from self._create_cast(text=text)
+                response_data = json.loads(response.payload)
 
                 if response.error:
                     self.context.logger.error(
@@ -127,8 +128,8 @@ class FarcasterWriteBehaviour(BaseFarcasterWriteBehaviour):
                     )
                     payload_data = {"success": False, "cast_id": None}
                 else:
-                    self.context.logger.info(f"Posted cast with ID: {response.payload['cast_id']}")
-                    payload_data = {"success": True, "cast_id": response.payload["cast_id"]}
+                    self.context.logger.info(f"Posted cast with ID: {response_data['cast_id']}")
+                    payload_data = {"success": True, "cast_id": response_data["cast_id"]}
 
             # No casts to publish
             else:
@@ -154,8 +155,8 @@ class FarcasterWriteBehaviour(BaseFarcasterWriteBehaviour):
         text: str,
     ) -> Generator[None, None, SrrMessage]:
         """Send an http request message from the skill context."""
-        farcaster_dialogues = cast(SrrDialogues, self.context.farcaster_dialogues)
-        farcaster_message, farcaster_dialogue = farcaster_dialogues.create(
+        srr_dialogues = cast(SrrDialogues, self.context.srr_dialogues)
+        farcaster_message, srr_dialogue = srr_dialogues.create(
             counterparty=str(FARCASTER_CONNECTION_PUBLIC_ID),
             performative=SrrMessage.Performative.REQUEST,
             payload=json.dumps(
@@ -163,9 +164,9 @@ class FarcasterWriteBehaviour(BaseFarcasterWriteBehaviour):
             ),
         )
         farcaster_message = cast(SrrMessage, farcaster_message)
-        farcaster_dialogue = cast(SrrDialogue, farcaster_dialogue)
+        srr_dialogue = cast(SrrDialogue, srr_dialogue)
         response = yield from self._do_farcaster_request(
-            farcaster_message, farcaster_dialogue
+            farcaster_message, srr_dialogue
         )
         return response
 
