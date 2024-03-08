@@ -7,10 +7,10 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeidoitq4dqbgeldinplwsdka3mls3b6iy4ajc72untkpnyndz5fczy
-  behaviours.py: bafybeigk7h5ocifrbxs3g5fltbrpxvaf3vafkxeetfts5p7obo27be67qa
-  dialogues.py: bafybeif36dc3mtyah4vudl6c2tmtyzemye3cg7mqyuk4qq4whazkz2xqpq
+  behaviours.py: bafybeifpatt43md2uwujv4joltj7522gg5x5jwec666yvw7mbquqrcgcjy
+  dialogues.py: bafybeif45dytijcwxku2qdrchwcxlf4jqzvniuzkn7mlekmasjxnofe7au
   fsm_specification.yaml: bafybeicpgmfhaw6riumanuwyylz42plkyaa5vonew5ygmdr7a2vb3dx52m
-  handlers.py: bafybeiddqpgfbtvbjhfoc7ta7z7vcs6acxxil4ohvli556x64qdw75nm2y
+  handlers.py: bafybeia2rtnsmtjd5je33sbtaicocgpbcsp6htj62hgymk6kur6eospt6q
   models.py: bafybeiahqkjeucnyxug3vtvofnnhtid7fmeligxurzxtg2aekmkiedlgey
   payloads.py: bafybeiazdhdcfixxjdnuo622tocwazwzxi7aubl5bl3jpu7pg257ogjyze
   rounds.py: bafybeiayupwh7g7mzmckgcxiorwixe7p35cq3rdg3wge3qepfkdz7ldete
@@ -145,6 +145,9 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
+  farcaster_dialogues:
+    args: {}
+    class_name: FarcasterDialogues
 dependencies: {}
-is_abstract: false
+is_abstract: true
 customs: []

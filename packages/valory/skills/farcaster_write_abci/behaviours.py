@@ -144,7 +144,6 @@ class FarcasterWriteBehaviour(BaseFarcasterWriteBehaviour):
     def _create_cast(
         self,
         text: str,
-        credentials: dict,
     ) -> Generator[None, None, SrrMessage]:
         """Send an http request message from the skill context."""
         farcaster_dialogues = cast(SrrDialogues, self.context.farcaster_dialogues)
