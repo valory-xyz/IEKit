@@ -114,18 +114,26 @@ class FarcasterWriteBehaviour(BaseFarcasterWriteBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             write_index = self.synchronized_data.write_index
-            data = self.synchronized_data.write_data[write_index]
-            text = data["text"]
-            self.context.logger.info(f"Creating cast with text: {text}")
-            response = yield from self._create_cast(text=text)
-            if response.error:
-                self.context.logger.error(
-                    f"Writing cast failed with following error message: {response.payload}"
-                )
-                payload_data = {"success": False, "cast_id": None}
+            write_data = self.synchronized_data.write_data
+
+            if write_data:
+                text = write_data[write_index]["text"]
+                self.context.logger.info(f"Creating cast with text: {text}")
+                response = yield from self._create_cast(text=text)
+
+                if response.error:
+                    self.context.logger.error(
+                        f"Writing cast failed with following error message: {response.payload}"
+                    )
+                    payload_data = {"success": False, "cast_id": None}
+                else:
+                    self.context.logger.info(f"Posted cast with ID: {response.payload['cast_id']}")
+                    payload_data = {"success": True, "cast_id": response.payload["cast_id"]}
+
+            # No casts to publish
             else:
-                self.context.logger.info(f"Posted cast with ID: {response.payload['cast_id']}")
-                payload_data = {"success": True, "cast_id": response.payload["cast_id"]}
+                self.context.logger.info(f"No casts")
+                payload_data = {"success": True, "cast_id": None}
 
             payload = FarcasterWritePayload(
                 sender=self.context.agent_address,

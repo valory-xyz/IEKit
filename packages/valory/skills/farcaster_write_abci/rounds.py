@@ -61,7 +61,7 @@ class SynchronizedData(BaseSynchronizedData):
     @property
     def write_data(self) -> list:
         """Get the write_stream_id."""
-        return cast(list, self.db.get_strict("write_data"))
+        return cast(list, self.db.get("write_data", []))
 
     @property
     def write_index(self) -> int:
@@ -120,9 +120,13 @@ class FarcasterWriteRound(OnlyKeeperSendsRound):
             return self.synchronized_data, Event.API_ERROR
 
         synchronized_data = cast(SynchronizedData, self.synchronized_data)
+
+        # No casts to publish
+        if not synchronized_data.write_data:
+            return synchronized_data, Event.DONE
+
         write_index = synchronized_data.write_index + 1
         cast_ids = synchronized_data.cast_ids
-
         cast_ids.append(keeper_payload["cast_id"])
 
         finished_casting = write_index == len(synchronized_data.write_data)
