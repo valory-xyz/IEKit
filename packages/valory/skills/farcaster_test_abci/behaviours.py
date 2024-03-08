@@ -25,11 +25,11 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
+from packages.valory.skills.farcaster_test_abci.composition import (
+    FarcasterTestSkillAbciApp,
+)
 from packages.valory.skills.farcaster_write_abci.behaviours import (
     FarcasterWriteRoundBehaviour,
-)
-from packages.valory.skills.impact_evaluator_abci.composition import (
-    ImpactEvaluatorSkillAbciApp,
 )
 from packages.valory.skills.registration_abci.behaviours import (
     AgentRegistrationRoundBehaviour,
@@ -38,17 +38,15 @@ from packages.valory.skills.registration_abci.behaviours import (
 from packages.valory.skills.reset_pause_abci.behaviours import (
     ResetPauseABCIConsensusBehaviour,
 )
-from packages.valory.skills.termination_abci.behaviours import BackgroundBehaviour
 
 
 class FarcasterTestConsensusBehaviour(AbstractRoundBehaviour):
     """Class to define the behaviours this AbciApp has."""
 
     initial_behaviour_cls = RegistrationStartupBehaviour
-    abci_app_cls = ImpactEvaluatorSkillAbciApp
+    abci_app_cls = FarcasterTestSkillAbciApp
     behaviours: Set[Type[BaseBehaviour]] = {
         *AgentRegistrationRoundBehaviour.behaviours,
         *ResetPauseABCIConsensusBehaviour.behaviours,
         *FarcasterWriteRoundBehaviour.behaviours,
     }
-    background_behaviours_cls = {BackgroundBehaviour}

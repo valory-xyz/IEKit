@@ -32,7 +32,7 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeibvz3hi25ktgdzm25kih25o5osml62zk4kzpgmzmyrem3hzo2vtnm
 - valory/abstract_round_abci:0.1.0:bafybeic2emnylfmdtidobgdsxa4tgdelreeimtglqzrmic6cumhpsbfzhe
-- valory/farcaster_test_abci:0.1.0:bafybeihuyp45wkie6rsg64p6miejd6hxzu7hvlufe52jiihsrckjafdkrm
+- valory/farcaster_test_abci:0.1.0:bafybeieudgxl2ncrwyzn6zzd22tebga5st7ldvrwtwwhks7zgl4oq5zjwq
 - valory/registration_abci:0.1.0:bafybeibzduasg5pahk2d2glc36wlopg54ybwcdmjqbzozt2lmkp4reqsdu
 - valory/reset_pause_abci:0.1.0:bafybeib3geaw3o35aigmb4dhplxrjlsef7hbdwrozu4akiunlgyiegshj4
 - valory/farcaster_write_abci:0.1.0:bafybeigg3byjdgixogm6gh4kylriqqz6mifjfc4a7uxgiqdm4qfqaxaz5y
@@ -169,8 +169,8 @@ models:
       tendermint_max_retries: 5
       tendermint_url: ${str:http://localhost:26657}
       tendermint_p2p_url: ${str:localhost:26656}
-      token_uri_base: ${str:https://pfp.staging.autonolas.tech/}
       use_termination: ${bool:false}
+      tx_timeout: 10.0
       validate_timeout: 1205
       finalize_timeout: 60.0
       history_check_timeout: 1205

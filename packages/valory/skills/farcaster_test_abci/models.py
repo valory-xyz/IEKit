@@ -40,12 +40,6 @@ from packages.valory.skills.farcaster_write_abci.rounds import (
     Event as FarcasterWriteEvent,
 )
 from packages.valory.skills.reset_pause_abci.rounds import Event as ResetPauseEvent
-from packages.valory.skills.twitter_scoring_abci.models import (
-    Params as TwitterScoringAbciParams,
-)
-
-
-TwitterScoringParams = TwitterScoringAbciParams
 
 
 Requests = BaseRequests

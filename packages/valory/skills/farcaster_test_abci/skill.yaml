@@ -7,12 +7,12 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeibbycjkjg3k4imv25tvjxixvr6y4g3bfb7s46p7lxnogap2dnaasi
-  behaviours.py: bafybeiftqnps4a5gsae4qki56f4asyzt4vilxzjgqzhcqsc6nszlveyxga
-  composition.py: bafybeid5pjpem3gjflusi65wpzcupaz6jytfzqvufnetlbb3dekstuiyse
-  dialogues.py: bafybeigetedaj2gpbn6nvsei5zzdmu6tf6bdzgg7kkq6soj447jxidvtg4
+  behaviours.py: bafybeiencqonbknwiptgpw6ab7hj4ba5if5ztolghcsqkymf3hmubjozxe
+  composition.py: bafybeibti2jell3skqhxzkrk7eiipwzwa4u4amjpobcfyt4gdyx7c6wndu
+  dialogues.py: bafybeibiqwm5uc6k5ajnvakogueljtz64m74mhyk5eo4wof3sooduwldk4
   fsm_specification.yaml: bafybeiehm5jtcgotx5manu3kca6e3kgx2hy5ykvkvrvrkzcoqbkrndlrh4
-  handlers.py: bafybeievvn2vfpofs2jfnja2znshejp7yvmjocsu6mdxb76vdtkccseo5y
-  models.py: bafybeigfhnubd65ehh2xu57fq2oup4p3b7vg7rsh2f5y2i4hwexcc4plqi
+  handlers.py: bafybeid6usaozer37wnwvthuiyngmzp2q7wmz5r53asyt3ktx4e2njafa4
+  models.py: bafybeibupr5tzyvqvh3jhhmjws7rg7flznsgln3hcilfqjfv3jwhg7ebpu
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
@@ -42,9 +42,6 @@ handlers:
   ledger_api:
     args: {}
     class_name: LedgerApiHandler
-  llm:
-    args: {}
-    class_name: LlmHandler
   signing:
     args: {}
     class_name: SigningHandler
@@ -65,15 +62,15 @@ models:
   contract_api_dialogues:
     args: {}
     class_name: ContractApiDialogues
-  http_dialogues:
-    args: {}
-    class_name: HttpDialogues
   ipfs_dialogues:
     args: {}
     class_name: IpfsDialogues
   ledger_api_dialogues:
     args: {}
     class_name: LedgerApiDialogues
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
   params:
     args:
       cleanup_history_depth: 1
@@ -125,7 +122,6 @@ models:
       tendermint_max_retries: 5
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
-      token_uri_base: https://pfp.staging.autonolas.tech/
       use_termination: false
       validate_timeout: 1205
       finalize_timeout: 60.0
@@ -136,6 +132,7 @@ models:
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
       multisend_batch_size: 50
+      tx_timeout: 10.0
     class_name: Params
   randomness_api:
     args:

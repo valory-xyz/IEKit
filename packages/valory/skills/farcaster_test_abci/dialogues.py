@@ -67,13 +67,10 @@ from packages.valory.skills.farcaster_write_abci.dialogues import (
 from packages.valory.skills.farcaster_write_abci.dialogues import (
     FarcasterDialogues as BaseFarcasterDialogues,
 )
-from packages.valory.skills.llm_abci.dialogues import LlmDialogue as BaseLlmDialogue
-from packages.valory.skills.llm_abci.dialogues import LlmDialogues as BaseLlmDialogues
 
 
 AbciDialogue = BaseAbciDialogue
 AbciDialogues = BaseAbciDialogues
-
 
 HttpDialogue = BaseHttpDialogue
 HttpDialogues = BaseHttpDialogues
@@ -99,9 +96,5 @@ IpfsDialogue = BaseIpfsDialogue
 IpfsDialogues = BaseIpfsDialogues
 
 
-LlmDialogue = BaseLlmDialogue
-LlmDialogues = BaseLlmDialogues
-
-
-SrrDialogue = BaseFarcasterDialogue
-SrrDialogues = BaseFarcasterDialogues
+FarcasterDialogue = BaseFarcasterDialogue
+FarcasterDialogues = BaseFarcasterDialogues
