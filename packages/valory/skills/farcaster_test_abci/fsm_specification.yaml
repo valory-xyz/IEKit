@@ -1,0 +1,37 @@
+alphabet_in:
+- API_ERROR
+- CONTINUE
+- DONE
+- NO_MAJORITY
+- RESET_AND_PAUSE_TIMEOUT
+- ROUND_TIMEOUT
+default_start_state: RegistrationStartupRound
+final_states: []
+label: FarcasterTestSkillAbciApp
+start_states:
+- RegistrationRound
+- RegistrationStartupRound
+states:
+- FarcasterWriteRound
+- RandomnessFarcasterRound
+- RegistrationRound
+- RegistrationStartupRound
+- ResetAndPauseRound
+- SelectKeeperFarcasterRound
+transition_func:
+    (FarcasterWriteRound, API_ERROR): RandomnessFarcasterRound
+    (FarcasterWriteRound, CONTINUE): FarcasterWriteRound
+    (FarcasterWriteRound, DONE): ResetAndPauseRound
+    (FarcasterWriteRound, ROUND_TIMEOUT): RandomnessFarcasterRound
+    (RandomnessFarcasterRound, DONE): SelectKeeperFarcasterRound
+    (RandomnessFarcasterRound, NO_MAJORITY): RandomnessFarcasterRound
+    (RandomnessFarcasterRound, ROUND_TIMEOUT): RandomnessFarcasterRound
+    (RegistrationRound, DONE): RandomnessFarcasterRound
+    (RegistrationRound, NO_MAJORITY): RegistrationRound
+    (RegistrationStartupRound, DONE): RandomnessFarcasterRound
+    (ResetAndPauseRound, DONE): RandomnessFarcasterRound
+    (ResetAndPauseRound, NO_MAJORITY): ResetAndPauseRound
+    (ResetAndPauseRound, RESET_AND_PAUSE_TIMEOUT): ResetAndPauseRound
+    (SelectKeeperFarcasterRound, DONE): FarcasterWriteRound
+    (SelectKeeperFarcasterRound, NO_MAJORITY): RandomnessFarcasterRound
+    (SelectKeeperFarcasterRound, ROUND_TIMEOUT): RandomnessFarcasterRound

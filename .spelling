@@ -5,6 +5,12 @@
 # where filename is relative to this configuration file
 IEKit
 Mech
+Farcaster
+farcaster
+json-based
+env
+vars
+RPCs
 TwitterObservation
 ScoreAdd
 SelectKeeper
