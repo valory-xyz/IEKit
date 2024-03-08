@@ -18,7 +18,7 @@ fingerprint:
   tests/test_behaviours.py: bafybeiasy74xaos6uijw4g2dmanjparilv2d6u4rr33l53nxyet4hpqvky
 fingerprint_ignore_patterns: []
 connections:
-- valory/farcaster:0.1.0:bafybeif7pziscxkyrb5pkwkg5v7yrew6nqr6mtzomsblarn7vougszb2hq
+- valory/farcaster:0.1.0:bafybeih74jn5dedgbbjnqrksbuwb4radi3sbcknf6r75ink7srnofrikd4
 contracts: []
 protocols:
 - valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
