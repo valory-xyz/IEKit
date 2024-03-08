@@ -37,10 +37,10 @@
     #   limitations under the License.
     #
     # ------------------------------------------------------------------------------
-     
+
 """This module contains the implementation of the default skill."""
 
 from aea.configurations.base import PublicId
 
 
-PUBLIC_ID = PublicId.from_str("valory/farcaster_write:0.1.0")
+PUBLIC_ID = PublicId.from_str("valory/farcaster_write_abci:0.1.0")
