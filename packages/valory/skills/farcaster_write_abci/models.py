@@ -19,7 +19,7 @@
 
 """This module contains the shared state for the abci skill of FarcasterWriteAbciApp."""
 
-from packages.valory.skills.abstract_round_abci.models import BaseParams
+from packages.valory.skills.abstract_round_abci.models import ApiSpecs, BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
 )
@@ -36,6 +36,11 @@ class SharedState(BaseSharedState):
     abci_app_cls = FarcasterWriteAbciApp
 
 
-Params = BaseParams
+class Params(BaseParams):
+    """Parameters."""
+
+class RandomnessApi(ApiSpecs):
+    """A model that wraps ApiSpecs for randomness api specifications."""
+
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool

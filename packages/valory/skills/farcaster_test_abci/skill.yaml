@@ -1,37 +1,46 @@
-name: farcaster_write_abci
+name: farcaster_test_abci
 author: valory
 version: 0.1.0
 type: skill
-description: This skill publishes casts to farcaster.
+description: The chained abci for the farcaster_test skill.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeidoitq4dqbgeldinplwsdka3mls3b6iy4ajc72untkpnyndz5fczy
-  behaviours.py: bafybeifpatt43md2uwujv4joltj7522gg5x5jwec666yvw7mbquqrcgcjy
-  dialogues.py: bafybeif45dytijcwxku2qdrchwcxlf4jqzvniuzkn7mlekmasjxnofe7au
-  fsm_specification.yaml: bafybeicpgmfhaw6riumanuwyylz42plkyaa5vonew5ygmdr7a2vb3dx52m
-  handlers.py: bafybeia2rtnsmtjd5je33sbtaicocgpbcsp6htj62hgymk6kur6eospt6q
-  models.py: bafybeifxiefogl6p3zgrknjurp3r3aqkif6m2elojlz76v2ef4a5ukobky
-  payloads.py: bafybeiazdhdcfixxjdnuo622tocwazwzxi7aubl5bl3jpu7pg257ogjyze
-  rounds.py: bafybeiayupwh7g7mzmckgcxiorwixe7p35cq3rdg3wge3qepfkdz7ldete
-  tests/__init__.py: bafybeigu226vhnijf6s6wngihcfmi7o3axixmc6oouwst26foovefktjli
-  tests/test_behaviours.py: bafybeiasy74xaos6uijw4g2dmanjparilv2d6u4rr33l53nxyet4hpqvky
+  __init__.py: bafybeibbycjkjg3k4imv25tvjxixvr6y4g3bfb7s46p7lxnogap2dnaasi
+  behaviours.py: bafybeiftqnps4a5gsae4qki56f4asyzt4vilxzjgqzhcqsc6nszlveyxga
+  composition.py: bafybeid5pjpem3gjflusi65wpzcupaz6jytfzqvufnetlbb3dekstuiyse
+  dialogues.py: bafybeigetedaj2gpbn6nvsei5zzdmu6tf6bdzgg7kkq6soj447jxidvtg4
+  fsm_specification.yaml: bafybeiehm5jtcgotx5manu3kca6e3kgx2hy5ykvkvrvrkzcoqbkrndlrh4
+  handlers.py: bafybeievvn2vfpofs2jfnja2znshejp7yvmjocsu6mdxb76vdtkccseo5y
+  models.py: bafybeigfhnubd65ehh2xu57fq2oup4p3b7vg7rsh2f5y2i4hwexcc4plqi
 fingerprint_ignore_patterns: []
-connections:
-- valory/farcaster:0.1.0:bafybeif7pziscxkyrb5pkwkg5v7yrew6nqr6mtzomsblarn7vougszb2hq
+connections: []
 contracts: []
-protocols:
-- valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
+protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeic2emnylfmdtidobgdsxa4tgdelreeimtglqzrmic6cumhpsbfzhe
+- valory/ceramic_read_abci:0.1.0:bafybeih4dlvbj7fd6p7paxsncerol6tygr4n5yt66nvrbbr2zfjvo7rw5i
+- valory/generic_scoring_abci:0.1.0:bafybeigzddwke6dtuxdoutzd2pxw4m67h4r4blrhh2nckfcduybcja2ev4
+- valory/twitter_scoring_abci:0.1.0:bafybeibgeqcruawbtgrxtqtfpcnivxsawofk2sxjh4f2nmh2kxdnpdbudm
+- valory/ceramic_write_abci:0.1.0:bafybeib54equuk4ihgvrhddsvkg6oskcqeqefobxcxbd44o34bxeaiiilq
+- valory/dynamic_nft_abci:0.1.0:bafybeid42scgvbkqoqsrdo2zirzicrdb77himour4y33u546hshi2bqwha
+- valory/registration_abci:0.1.0:bafybeibzduasg5pahk2d2glc36wlopg54ybwcdmjqbzozt2lmkp4reqsdu
+- valory/reset_pause_abci:0.1.0:bafybeib3geaw3o35aigmb4dhplxrjlsef7hbdwrozu4akiunlgyiegshj4
+- valory/termination_abci:0.1.0:bafybeifnfuy3svz5oz6kwglu35q6jn7ai3riqplyypskb7za5ejyvjmfza
+- valory/transaction_settlement_abci:0.1.0:bafybeifhuemoavm6hf4vypg2sl7kng3iv4ipxgpk3itbh5hp73lworpuwq
+- valory/decision_making_abci:0.1.0:bafybeig56fkfycpkip3xtd66n5727ucdv7vou227flo4nlatanzi4p2f3q
+- valory/llm_abci:0.1.0:bafybeickyn43tpgmd5hdit552xthcbpavrmjo5aaqgfdo6xxy6t2owhcva
+- valory/farcaster_write_abci:0.1.0:bafybeief7jtb56ryk74o7mdy3f6un3j5nxqnsuqoe3w7dyumoacpxa5nei
+- valory/olas_week_abci:0.1.0:bafybeidzk7pa4fzesf2l356yktwqj7rmbkurtrjxs6z57dwkechn6mxiem
+- valory/mech_interact_abci:0.1.0:bafybeiaecjeg5xv37gbuechxsqvih56qlytd6qqyblj5yguxlt3jknb7ea
 behaviours:
   main:
     args: {}
-    class_name: FarcasterWriteRoundBehaviour
+    class_name: FarcasterTestConsensusBehaviour
 handlers:
   abci:
     args: {}
-    class_name: ABCIHandler
+    class_name: ABCIRoundHandler
   contract_api:
     args: {}
     class_name: ContractApiHandler
@@ -44,6 +53,9 @@ handlers:
   ledger_api:
     args: {}
     class_name: LedgerApiHandler
+  llm:
+    args: {}
+    class_name: LlmHandler
   signing:
     args: {}
     class_name: SigningHandler
@@ -78,8 +90,8 @@ models:
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
-      finalize_timeout: 60.0
       genesis_config:
+        genesis_time: '2022-09-26T00:00:00.000000000Z'
         chain_id: chain-c4daS1
         consensus_params:
           block:
@@ -87,36 +99,36 @@ models:
             max_gas: '-1'
             time_iota_ms: '1000'
           evidence:
-            max_age_duration: '172800000000000'
             max_age_num_blocks: '100000'
+            max_age_duration: '172800000000000'
             max_bytes: '1048576'
           validator:
             pub_key_types:
             - ed25519
           version: {}
-        genesis_time: '2022-05-20T16:00:21.735122717Z'
         voting_power: '10'
-      history_check_timeout: 1205
-      ipfs_domain_name: null
-      keeper_allowed_retries: 3
       keeper_timeout: 30.0
       max_attempts: 10
       max_healthcheck: 120
+      multisend_address: '0x0000000000000000000000000000000000000000'
+      termination_sleep: 900
+      termination_from_block: 0
+      init_fallback_gas: 0
+      keeper_allowed_retries: 3
+      reset_pause_duration: 10
       on_chain_service_id: null
       request_retry_delay: 1.0
       request_timeout: 10.0
-      reset_pause_duration: 10
       reset_tendermint_after: 2
       retry_attempts: 400
       retry_timeout: 3
       round_timeout_seconds: 30.0
-      service_id: farcaster_write
+      service_id: farcaster_test
       service_registry_address: null
       setup:
-        all_participants:
-        - '0x0000000000000000000000000000000000000000'
-        consensus_threshold: null
+        all_participants: []
         safe_contract_address: '0x0000000000000000000000000000000000000000'
+        consensus_threshold: null
       share_tm_config_on_startup: false
       sleep_time: 1
       tendermint_check_sleep_delay: 3
@@ -124,15 +136,29 @@ models:
       tendermint_max_retries: 5
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
-      tx_timeout: 10.0
-      validate_timeout: 1205
+      token_uri_base: https://pfp.staging.autonolas.tech/
       use_termination: false
+      validate_timeout: 1205
+      finalize_timeout: 60.0
+      history_check_timeout: 1205
       use_slashing: false
       slash_cooldown_hours: 3
       slash_threshold_amount: 10000000000000000
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
+      multisend_batch_size: 50
     class_name: Params
+  randomness_api:
+    args:
+      api_id: cloudflare
+      headers: {}
+      method: GET
+      parameters: {}
+      response_key: null
+      response_type: dict
+      retries: 5
+      url: https://drand.cloudflare.com/public/latest
+    class_name: RandomnessApi
   requests:
     args: {}
     class_name: Requests
@@ -149,5 +175,4 @@ models:
     args: {}
     class_name: FarcasterDialogues
 dependencies: {}
-is_abstract: true
-customs: []
+is_abstract: false
