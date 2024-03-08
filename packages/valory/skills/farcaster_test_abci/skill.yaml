@@ -10,7 +10,7 @@ fingerprint:
   behaviours.py: bafybeiencqonbknwiptgpw6ab7hj4ba5if5ztolghcsqkymf3hmubjozxe
   composition.py: bafybeibti2jell3skqhxzkrk7eiipwzwa4u4amjpobcfyt4gdyx7c6wndu
   dialogues.py: bafybeibhbdeicko6fq5pbzl5xm2bjbo4iwdkyyhwpepjnwbxyqbx6tx6hu
-  fsm_specification.yaml: bafybeiehm5jtcgotx5manu3kca6e3kgx2hy5ykvkvrvrkzcoqbkrndlrh4
+  fsm_specification.yaml: bafybeicj4ajbfschtxknkh6nbg4rjpejqykpo5twbyfd2iidmop5bvmad4
   handlers.py: bafybeid6usaozer37wnwvthuiyngmzp2q7wmz5r53asyt3ktx4e2njafa4
   models.py: bafybeibupr5tzyvqvh3jhhmjws7rg7flznsgln3hcilfqjfv3jwhg7ebpu
 fingerprint_ignore_patterns: []
@@ -21,7 +21,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeic2emnylfmdtidobgdsxa4tgdelreeimtglqzrmic6cumhpsbfzhe
 - valory/registration_abci:0.1.0:bafybeibzduasg5pahk2d2glc36wlopg54ybwcdmjqbzozt2lmkp4reqsdu
 - valory/reset_pause_abci:0.1.0:bafybeib3geaw3o35aigmb4dhplxrjlsef7hbdwrozu4akiunlgyiegshj4
-- valory/farcaster_write_abci:0.1.0:bafybeig7k7zxli57re7dym43e2peaj2yebn6wrhxqcwadhwfxrfjhrbg5y
+- valory/farcaster_write_abci:0.1.0:bafybeid2uyurq2sonsxlgnhs2jx6akkggl5io7aywvlwskpdds734blkwa
 behaviours:
   main:
     args: {}
