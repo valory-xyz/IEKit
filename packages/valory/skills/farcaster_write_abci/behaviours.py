@@ -26,6 +26,7 @@ from typing import Generator, Optional, Set, Type, cast
 from packages.valory.connections.farcaster.connection import (
     PUBLIC_ID as FARCASTER_CONNECTION_PUBLIC_ID,
 )
+from packages.valory.protocols.srr.dialogues import SrrDialogue, SrrDialogues
 from packages.valory.protocols.srr.message import SrrMessage
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
@@ -37,10 +38,6 @@ from packages.valory.skills.abstract_round_abci.common import (
     SelectKeeperBehaviour,
 )
 from packages.valory.skills.abstract_round_abci.models import Requests
-from packages.valory.skills.farcaster_write_abci.dialogues import (
-    FarcasterDialogue,
-    FarcasterDialogues,
-)
 from packages.valory.skills.farcaster_write_abci.models import Params
 from packages.valory.skills.farcaster_write_abci.payloads import FarcasterWritePayload
 from packages.valory.skills.farcaster_write_abci.rounds import (
@@ -150,7 +147,7 @@ class FarcasterWriteBehaviour(BaseFarcasterWriteBehaviour):
         credentials: dict,
     ) -> Generator[None, None, SrrMessage]:
         """Send an http request message from the skill context."""
-        farcaster_dialogues = cast(FarcasterDialogues, self.context.farcaster_dialogues)
+        farcaster_dialogues = cast(SrrDialogues, self.context.farcaster_dialogues)
         farcaster_message, farcaster_dialogue = farcaster_dialogues.create(
             counterparty=str(FARCASTER_CONNECTION_PUBLIC_ID),
             performative=SrrMessage.Performative.REQUEST,
@@ -159,7 +156,7 @@ class FarcasterWriteBehaviour(BaseFarcasterWriteBehaviour):
             ),
         )
         farcaster_message = cast(SrrMessage, farcaster_message)
-        farcaster_dialogue = cast(FarcasterDialogue, farcaster_dialogue)
+        farcaster_dialogue = cast(SrrDialogue, farcaster_dialogue)
         response = yield from self._do_farcaster_request(
             farcaster_message, farcaster_dialogue
         )
@@ -168,7 +165,7 @@ class FarcasterWriteBehaviour(BaseFarcasterWriteBehaviour):
     def _do_farcaster_request(
         self,
         message: SrrMessage,
-        dialogue: FarcasterDialogue,
+        dialogue: SrrDialogue,
         timeout: Optional[float] = None,
     ) -> Generator[None, None, SrrMessage]:
         """Do a request and wait the response, asynchronously."""
