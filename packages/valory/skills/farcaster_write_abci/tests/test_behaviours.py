@@ -19,6 +19,7 @@
 
 """This package contains round behaviours of FarcasterWriteAbciApp."""
 
+import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Optional, Type, cast
@@ -220,7 +221,7 @@ class TestFarcasterWriteBehaviour(BaseFarcasterWriteTest):
                     initial_data=dict(
                         most_voted_keeper_address="test_agent_address",
                         write_index=0,
-                        write_data=[{"text": "dummy_tweet", "credentials": {}}],
+                        write_data=[{"text": "dummy_cast"}],
                     ),
                     event=Event.DONE,
                 ),
@@ -232,7 +233,7 @@ class TestFarcasterWriteBehaviour(BaseFarcasterWriteTest):
                     initial_data=dict(
                         most_voted_keeper_address="not_my_address",
                         write_index=0,
-                        write_data=[{"text": "dummy_tweet", "credentials": {}}],
+                        write_data=[{"text": "dummy_cast"}],
                     ),
                     event=Event.DONE,
                 ),
@@ -252,7 +253,7 @@ class TestFarcasterWriteBehaviour(BaseFarcasterWriteTest):
                 ),
                 response_kwargs=dict(
                     performative=SrrMessage.Performative.RESPONSE,
-                    cast_id="dummy",
+                    payload=json.dumps({"cast_id": "dummy"}),
                 ),
             )
 

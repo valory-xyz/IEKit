@@ -15,7 +15,7 @@ fingerprint:
   payloads.py: bafybeiazdhdcfixxjdnuo622tocwazwzxi7aubl5bl3jpu7pg257ogjyze
   rounds.py: bafybeiayupwh7g7mzmckgcxiorwixe7p35cq3rdg3wge3qepfkdz7ldete
   tests/__init__.py: bafybeigu226vhnijf6s6wngihcfmi7o3axixmc6oouwst26foovefktjli
-  tests/test_behaviours.py: bafybeihxu2kcpjlcopmvfbcnejcgkxdam2j4sbx5llaeassza3c7ebonpm
+  tests/test_behaviours.py: bafybeiasy74xaos6uijw4g2dmanjparilv2d6u4rr33l53nxyet4hpqvky
 fingerprint_ignore_patterns: []
 connections:
 - valory/farcaster:0.1.0:bafybeif7pziscxkyrb5pkwkg5v7yrew6nqr6mtzomsblarn7vougszb2hq
