@@ -118,7 +118,7 @@ jobs:
                   echo "You are not on a tagged branch"
                   exit 1
               fi
-          curl "$CHARLIE_API" -X POST -H "Content-Type: application/json" -H "Authorization: $CHARLIE_TOKEN" -d '{"name": "valory-xyz/IEKit", "version": "$VERSION"}
+          curl "$CHARLIE_API/release" -X POST -H "Content-Type: application/json" -H "Authorization: $CHARLIE_TOKEN" -d '{"name": "valory-xyz/IEKit", "version": "$VERSION"}
 
   deploy-service-on-propel:
     name: Deploy service on propel
