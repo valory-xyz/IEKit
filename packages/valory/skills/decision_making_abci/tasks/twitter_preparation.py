@@ -19,6 +19,7 @@
 
 """This package contains the logic for task preparations."""
 
+import json
 from typing import Generator, Optional, cast
 
 from packages.valory.contracts.wveolas.contract import WveOLASContract
@@ -30,6 +31,28 @@ from packages.valory.skills.decision_making_abci.tasks.signature_validation impo
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
 )
+
+
+SNAPSHOT_ENDPOINT = "https://hub.snapshot.org/graphql"
+
+VOTING_POWER_QUERY = """
+query Vp(
+  $voter: String!
+  $space: String!
+  $proposal: String!
+) {
+  vp (
+    voter: $voter
+    space: $space
+    proposal: $proposal
+  ) {
+    vp
+    vp_state
+  }
+}
+"""
+
+HTTP_OK = 200
 
 
 class TwitterPreparation(TaskPreparation):
@@ -356,21 +379,24 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
     def get_voting_power(self, address: str):
         """Get the given address's votes."""
-        olas_votes = yield from self.get_votes(
+
+        # Check wveOLAS voting power
+        votes = yield from self.get_wveolas_votes(
             self.params.wveolas_address, address, "ethereum"
         )
 
-        if not olas_votes:
-            olas_votes = 0
+        # Check Snapshot voting power
+        if votes == 0:
+            votes = yield from self.get_snapshot_votes(address)
 
         self.behaviour.context.logger.info(
-            f"Voting power is {olas_votes} for address {address}"
+            f"Voting power is {votes} for address {address}"
         )
-        return olas_votes
+        return votes
 
-    def get_votes(
+    def get_wveolas_votes(
         self, token_address, owner_address, chain_id
-    ) -> Generator[None, None, Optional[float]]:
+    ) -> Generator[None, None, float]:
         """Get the given address's votes."""
         response = yield from self.behaviour.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
@@ -384,7 +410,40 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
             self.behaviour.context.logger.error(
                 f"Couldn't get the votes for address {chain_id}::{owner_address}: {response.performative}"
             )
-            return None
+            return 0
 
         votes = int(response.state.body["votes"]) / 1e18  # to olas
         return votes
+
+    def get_snapshot_votes(self, address: str) -> Generator[None, None, float]:
+        """Get Snapshot voting power"""
+
+        request_data = {
+            "query": VOTING_POWER_QUERY,
+            "variables": {
+                "voter": address,
+                "space": "autonolas.eth",
+                "proposal": self.params.tweet_approval_proposal,
+            },
+        }
+
+        response = yield from self.behaviour.get_http_response(
+            method="POST",
+            url=SNAPSHOT_ENDPOINT,
+            content=json.dumps(request_data).encode(),
+        )
+
+        if response.status_code != HTTP_OK:
+            self.behaviour.context.logger.error(
+                f"Couldn't get Snapshot voting power for address {address} [{response.status_code}]"
+            )
+            return 0
+
+        try:
+            response_json = json.loads(response.body)
+            return response_json["data"]["vp"]["vp"]
+        except Exception as e:
+            self.behaviour.context.logger.error(
+                f"Couldn't get Snapshot voting power for address {address} [{e}]"
+            )
+            return 0
