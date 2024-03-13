@@ -20,7 +20,7 @@
 """This package contains the logic for task preparations."""
 
 import json
-from typing import Generator, Optional, cast
+from typing import Generator, cast
 
 from packages.valory.contracts.wveolas.contract import WveOLASContract
 from packages.valory.protocols.contract_api import ContractApiMessage
