@@ -61,8 +61,7 @@ class SynchronizedData(BaseSynchronizedData):
     @property
     def write_data(self) -> list:
         """Get the write_stream_id."""
-        # return cast(list, self.db.get("write_data", []))
-        return [{"text": "Agent test: hello world!"}, {"text": "Agent test: and that makes two!"}]
+        return cast(list, self.db.get("write_data", []))
 
     @property
     def write_index(self) -> int:
