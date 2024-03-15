@@ -69,6 +69,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     TxSettlementAbci.FailedRound: MechRequestStates.MechRequestRound,
     MechFinalStates.FinishedMechResponseRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     MechFinalStates.FinishedMechRequestSkipRound: TwitterScoringAbci.TwitterDecisionMakingRound,
+    MechFinalStates.FinishedMechResponseTimeoutRound: MechResponseStates.MechResponseRound,
     TwitterScoringAbci.FinishedTwitterScoringRound: DynamicNFTAbci.TokenTrackRound,
     WeekInOlasAbciApp.FinishedWeekInOlasRound: DecisionMakingAbci.DecisionMakingRound,
     DynamicNFTAbci.FinishedTokenTrackRound: DecisionMakingAbci.DecisionMakingRound,

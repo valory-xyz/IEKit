@@ -32,3 +32,7 @@ class FinishedMechRequestSkipRound(DegenerateRound):
 
 class FinishedMechResponseRound(DegenerateRound):
     """FinishedMechResponseRound"""
+
+
+class FinishedMechResponseTimeoutRound(DegenerateRound):
+    """FinishedMechResponseTimeoutRound"""
