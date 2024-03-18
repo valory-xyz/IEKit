@@ -6,9 +6,8 @@ description: wveolas_delegation contract
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeibtn3d7h6xkaudftjmqi47rg6c45nvbjbu77rcnhalj7xxujzgbru
-  build/wveolas.json: bafybeid4ypbtauutpx4hktinxecxecp2moxzny5cyky3anp6peu33slax4
-  contract.py: bafybeib52j57zi2tsm7g4bnv75nxdbmbmsxmf7coxw3cyzgrdxzctlzgmy
+  __init__.py: bafybeidgqbp4alhzaus4ae4xlkkb4oyfion5ygkutomne3je4dn42gbtpq
+  contract.py: bafybeig2yy5wecpzhn3g5rtritvja4ttw7gw6rnybuyqflziabevebcidq
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: WveOLASDelegationContract
