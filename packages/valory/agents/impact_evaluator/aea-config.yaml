@@ -254,6 +254,7 @@ models:
       default_chain_id: ${str:ethereum}
       transaction_service_url: ${str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
       wveolas_address: ${str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
+      wveolas_delegation_address: ${str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
       tweet_consensus_wveolas: ${int:2000000}
       termination_from_block: ${int:0}
 ---

@@ -28,11 +28,6 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 )
 
 
-PROPOSAL_MINIMUM_WVEOLAS_WEI = 100e3 * 1e18  # 100K wveolas to wei
-WVEOLAS_ADDRESS = "0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40"
-SERVICE_SAFE_ADDRESS = "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A"
-
-
 class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
     """TweetValidationPreparation"""
 
