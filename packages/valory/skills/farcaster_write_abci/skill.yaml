@@ -16,7 +16,7 @@ fingerprint:
   rounds.py: bafybeidocsx2qn4vvffyciblxzmnvt5btooybrs7jqihxwjzycuzj7ds3y
 fingerprint_ignore_patterns: []
 connections:
-- valory/farcaster:0.1.0:bafybeih74jn5dedgbbjnqrksbuwb4radi3sbcknf6r75ink7srnofrikd4
+- valory/farcaster:0.1.0:bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi
 contracts: []
 protocols:
 - valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
