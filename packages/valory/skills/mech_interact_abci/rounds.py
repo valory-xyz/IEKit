@@ -89,7 +89,5 @@ class MechInteractAbciApp(AbciApp[Event]):
         },
         FinishedMechRequestSkipRound: set(),
         FinishedMechResponseRound: set(get_name(SynchronizedData.mech_responses)),
-        FinishedMechResponseTimeoutRound: set(
-            get_name(SynchronizedData.mech_responses)
-        ),
+        FinishedMechResponseTimeoutRound: set(),
     }
