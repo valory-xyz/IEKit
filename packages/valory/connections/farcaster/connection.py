@@ -93,7 +93,9 @@ class FarcasterConnection(BaseSyncConnection):
         :param kwargs: keyword arguments passed to component base
         """
         super().__init__(*args, **kwargs)
-        self.farcaster = Warpcast(mnemonic=self.configuration.config.get("farcaster_mnemonic"))
+        mnemonic = str(self.configuration.config.get("farcaster_mnemonic"))
+        mnemonic = mnemonic.replace(",", " ")  # we expect the mnmemonic to be like: 'word1,word2,word3...'
+        self.farcaster = Warpcast(mnemonic=mnemonic)
         self.dialogues = SrrDialogues(connection_id=PUBLIC_ID)
 
     def main(self) -> None:
