@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2023 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ from packages.valory.skills.mech_interact_abci.states.final_states import (
     FinishedMechRequestRound,
     FinishedMechRequestSkipRound,
     FinishedMechResponseRound,
+    FinishedMechResponseTimeoutRound,
 )
 from packages.valory.skills.mech_interact_abci.states.request import MechRequestRound
 from packages.valory.skills.mech_interact_abci.states.response import MechResponseRound
@@ -56,15 +57,17 @@ class MechInteractAbciApp(AbciApp[Event]):
         MechResponseRound: {
             Event.DONE: FinishedMechResponseRound,
             Event.NO_MAJORITY: MechResponseRound,
-            Event.ROUND_TIMEOUT: MechResponseRound,
+            Event.ROUND_TIMEOUT: FinishedMechResponseTimeoutRound,
         },
         FinishedMechRequestRound: {},
         FinishedMechResponseRound: {},
+        FinishedMechResponseTimeoutRound: {},
         FinishedMechRequestSkipRound: {},
     }
     final_states: Set[AppState] = {
         FinishedMechRequestRound,
         FinishedMechResponseRound,
+        FinishedMechResponseTimeoutRound,
         FinishedMechRequestSkipRound,
     }
     event_to_timeout: EventToTimeout = {
@@ -86,4 +89,5 @@ class MechInteractAbciApp(AbciApp[Event]):
         },
         FinishedMechRequestSkipRound: set(),
         FinishedMechResponseRound: set(get_name(SynchronizedData.mech_responses)),
+        FinishedMechResponseTimeoutRound: set(),
     }

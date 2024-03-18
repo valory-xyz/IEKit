@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2023 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -69,6 +69,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     TxSettlementAbci.FailedRound: MechRequestStates.MechRequestRound,
     MechFinalStates.FinishedMechResponseRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     MechFinalStates.FinishedMechRequestSkipRound: TwitterScoringAbci.TwitterDecisionMakingRound,
+    MechFinalStates.FinishedMechResponseTimeoutRound: MechResponseStates.MechResponseRound,
     TwitterScoringAbci.FinishedTwitterScoringRound: DynamicNFTAbci.TokenTrackRound,
     WeekInOlasAbciApp.FinishedWeekInOlasRound: DecisionMakingAbci.DecisionMakingRound,
     DynamicNFTAbci.FinishedTokenTrackRound: DecisionMakingAbci.DecisionMakingRound,

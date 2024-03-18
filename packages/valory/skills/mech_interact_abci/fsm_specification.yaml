@@ -8,6 +8,7 @@ final_states:
 - FinishedMechRequestRound
 - FinishedMechRequestSkipRound
 - FinishedMechResponseRound
+- FinishedMechResponseTimeoutRound
 label: MechInteractAbciApp
 start_states:
 - MechRequestRound
@@ -16,6 +17,7 @@ states:
 - FinishedMechRequestRound
 - FinishedMechRequestSkipRound
 - FinishedMechResponseRound
+- FinishedMechResponseTimeoutRound
 - MechRequestRound
 - MechResponseRound
 transition_func:
@@ -25,4 +27,4 @@ transition_func:
     (MechRequestRound, SKIP_REQUEST): FinishedMechRequestSkipRound
     (MechResponseRound, DONE): FinishedMechResponseRound
     (MechResponseRound, NO_MAJORITY): MechResponseRound
-    (MechResponseRound, ROUND_TIMEOUT): MechResponseRound
+    (MechResponseRound, ROUND_TIMEOUT): FinishedMechResponseTimeoutRound
