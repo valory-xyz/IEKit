@@ -10,13 +10,13 @@ fingerprint:
   __init__.py: bafybeidf3nlv5fpvfy4libtscayhirdw64shgmhfmvjiftjmjkmhu7auxq
   behaviours/__init__.py: bafybeie3zsi6p3yanz5mqwpkdrcgywaqvkit3hdintsb4awnvalgxpxa4i
   behaviours/base.py: bafybeiac7bdwweyorjdqrss5n6fwigf6lvlwdlongplkndi53jjkcijaba
-  behaviours/request.py: bafybeihopsheuflpyysdhnzswhbxzn4qcdxqhrgo3hvr76puskpf4njbou
+  behaviours/request.py: bafybeievl764hd6uk4ejsd57vaknqxrprdrskoxjh4j2qmymencfveyc64
   behaviours/response.py: bafybeichmwfhue3mxtiyzsf5qfsgdzswqtfl7i3bsl2jiwmvr5xau27wve
   behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
   dialogues.py: bafybeigjmyzd2bx6mgqiet2c223k6wkc5jk7kdkstbhpaxlqxatey26tlm
   fsm_specification.yaml: bafybeiapzwz6zcneelc2b2wrcb7cae7x6vbthmf6a57cm4mv6hucp67lz4
   handlers.py: bafybeiduy2nwkqdynainuimkjulcv7u2qq6iglkuut3gfurkckydapitg4
-  models.py: bafybeiek3mqzfyyk3mgt3azxhokupqgu3fnwl74pyw5i4hvy76dp32azcy
+  models.py: bafybeicnbj52b5szxola4fg7sb27jzxgm56rexffzym5cove2xtokluzoy
   payloads.py: bafybeihnbcukejcg6db5nuz3pnwrlxoxy64oe4llpbpgs7rpx4fn7ihopy
   rounds.py: bafybeidfsw3h4jumxbndidk4xbwxnhhaxpco6ggjv5nhayfuoozeyk27sa
   states/__init__.py: bafybeie34wx5znr2hxwh3gs2fchmbeuzjcfnraymdvtzjaxaq5zsiw233q
