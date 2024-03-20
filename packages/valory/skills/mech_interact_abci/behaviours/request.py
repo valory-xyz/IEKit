@@ -270,6 +270,17 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
     def _get_price(self) -> WaitableConditionType:
         """Get the price of the mech request."""
+        # If the optional parameter 'request_price' is set, then
+        # use that price (wei). Otherwise, determine the request price
+        # by calling the contract.
+        # This parameter is useful to set 'request_price=0' when the
+        # agent is using a Nevermined subscription.
+        price = self.params.request_price
+
+        if price:
+            self.price = price
+            return True
+
         result = yield from self._mech_contract_interact(
             "get_price",
             "price",
