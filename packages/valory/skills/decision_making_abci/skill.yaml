@@ -11,7 +11,7 @@ fingerprint:
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
   fsm_specification.yaml: bafybeihqaaud54lucsousv5dbbn3mbqro3ryel3hxpzz33xkvf47tq4yhe
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
-  models.py: bafybeiewtra4a2ze776ckh7rzuzx2cdsih3qwi6m7ouqqxh5gfdagufi7m
+  models.py: bafybeif22dks45zqbfulcwy3auq3vv2nn6ulgbnr7cgjwy2osq2muuenvi
   payloads.py: bafybeif5bomwy74bwnphsk6bty6qb6efugvjnnopsz7qjunpe6gtgjaxya
   rounds.py: bafybeieiu5bkpjvis2eksnviemwyxnhua6wjkk2eifw6u3y7gdag57tqva
   tasks/finished_pipeline_preparation.py: bafybeid652b53p7mtsbj3ksko3g2eezvg4nut2vukwvnfhxyfi4zkx3dym
@@ -20,8 +20,8 @@ fingerprint:
   tasks/score_preparations.py: bafybeie7cfot24zcyod5becz6t5lasvva77httfkw57qmvgjk35d3qluxa
   tasks/signature_validation.py: bafybeihbwrv72hnh3ytko2i5oszqgdky2j6h2wse45wvuhf2j32lo2tsjy
   tasks/task_preparations.py: bafybeif3g3uhedl2wd3sixjzat5mj7e45zffqyeyfpohsu6l6vhmhncvki
-  tasks/tweet_validation_preparation.py: bafybeiat6eyiqvtqzsl4ibtwnpjihqw7pgnnjoaatlp5nne57kgi6iu6ay
-  tasks/twitter_preparation.py: bafybeiceqcg7mtxfb6cttuizryolz3yu27t76fxmzzqhewavczlv5wkxdu
+  tasks/tweet_validation_preparation.py: bafybeif3wbfskiyuij7unx72euklms7owrzwzgdu462xatvypalm6xrgca
+  tasks/twitter_preparation.py: bafybeibavj7muwmtfreg5qx33j7igcmrg36nldgve57m3hs2y42kbrgalq
   tasks/week_in_olas_preparations.py: bafybeids7nah5nilmykainnntx7j7dvnboo6ypaqb2w2icdxrjhpgxxygy
   tasks/write_stream_preparation.py: bafybeiatdcckbobkaawnuphcgvjx2kgcuil7dtbunfpje7pfjd26gd2es4
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
@@ -36,7 +36,7 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/wveolas:0.1.0:bafybeibtlvxqrve5g4uentwwfsjpnffxr3qfczwjqa7va3oyvosrzw5vd4
+- valory/veolas_delegation:0.1.0:bafybeiejwiiqxizjfcgiscwqt753kqdsjzn7a3rdefjxvhtocghykrsm7m
 - valory/compatibility_fallback_handler:0.1.0:bafybeiaoaxll4lwdiaahxl2r2vunafifu7w2axjbpnghwcfrexusfbsftq
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
@@ -161,7 +161,8 @@ models:
       serious_slash_unit_amount: 8000000000000000
       transaction_service_url: https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/
       wveolas_address: '0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40'
-      tweet_consensus_wveolas: 2000000
+      veolas_delegation_address: '0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68'
+      tweet_consensus_veolas: 2000000
     class_name: Params
   requests:
     args: {}

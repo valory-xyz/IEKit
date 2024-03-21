@@ -28,6 +28,7 @@ contracts:
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeig3vqcoxgp56uis3npzgbpfsgu4ku2t74ks6qsabzutacrmbziee4
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/service_registry:0.1.0:bafybeidrbrx5np67xc2rm5jvugplopeobawwqongp6meahhzzpzqsgolsu
+- valory/veolas_delegation:0.1.0:bafybeiejwiiqxizjfcgiscwqt753kqdsjzn7a3rdefjxvhtocghykrsm7m
 protocols:
 - open_aea/signing:1.0.0:bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi
 - valory/abci:0.1.0:bafybeiaqmp7kocbfdboksayeqhkbrynvlfzsx4uy4x6nohywnmaig4an7u
@@ -42,20 +43,20 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeigcfsulh6doa6mifuihtfbdf46dtwlvmvtvilzosu6t5myh63rjre
 - valory/abstract_round_abci:0.1.0:bafybeigr33fuqxsw7dwurncs7b4ogqa736k4ojktd3ucluv22setixe2a4
-- valory/impact_evaluator_abci:0.1.0:bafybeifyxpat6exs7wkavhoh4rtmtg5pdcjznkwyt6rsaxoj7afhp6ywui
-- valory/generic_scoring_abci:0.1.0:bafybeihmjgy7aitlbik7kyv62ypcwja6uot2mve4pfsm2ppwmtjjjdf4l4
-- valory/twitter_scoring_abci:0.1.0:bafybeic4mggmkrxf76yendceyy57wxxc3plbklrxcocqk6gbn6s5wlr2zu
+- valory/impact_evaluator_abci:0.1.0:bafybeib666d5ipws46r3qzww4pbp2sjdp4ozswdligavg7ct3ec6b7b7ku
+- valory/generic_scoring_abci:0.1.0:bafybeiagamdztdokdtgompt5uykacbj5s23vfg63io3fsadbyxxng2a3cy
+- valory/twitter_scoring_abci:0.1.0:bafybeidcl4soqbo6jyogoqrdx2n4rsa3yzaszwgh33llhh2lngugowokny
 - valory/ceramic_read_abci:0.1.0:bafybeihwubnxqzkoiwetko5ryzizss7cc76o2aurm3ieekiiykq5bmtnv4
 - valory/ceramic_write_abci:0.1.0:bafybeicpj76kojwue4ntpiaxtif3rest2dunbntspjjk5io7jumfxa4csq
-- valory/dynamic_nft_abci:0.1.0:bafybeicp2cklnotyhluhn2czo2dm2sx7et6ujomlpxnz4n6xw6ghnlmp6a
+- valory/dynamic_nft_abci:0.1.0:bafybeifqzka3la2n3gssi4lqfgqxwrq3got2o7vayxt5ob6q5ymdh4uiua
 - valory/registration_abci:0.1.0:bafybeierykfwmk3gyv4b6szl3xbnngzztsruh6d6k6rcom32fnuveplm5a
 - valory/reset_pause_abci:0.1.0:bafybeihcm6h4ae4lwjwu5k3prdyj7mvxv2plzpl444vmjzwhwwp5qathbu
 - valory/termination_abci:0.1.0:bafybeif2gi2zvnixowmrqgvu6jm3eytwik7nvngv7cz5i44etg3iueorfe
 - valory/transaction_settlement_abci:0.1.0:bafybeihbor7t3ozvzxqbiie5wl57ol3k7sqkhd22q2boogmwzj7sfvzic4
 - valory/twitter_write_abci:0.1.0:bafybeifszjlil5nrorftxzj6i22hde67xdxd4qv2wjoarmicxyagxntzou
-- valory/decision_making_abci:0.1.0:bafybeiduvf4uyoquthpf2s2fzi27cwb5el7ar6iplaneogfhf6kl72kori
+- valory/decision_making_abci:0.1.0:bafybeibiuppnxiagb4vlgdltwzabhor7fafgyh7kahnorbzhozxddlk2nm
 - valory/llm_abci:0.1.0:bafybeigjqnglkk337bjghlqkfbuimsowpp47uz222dxtea72paoafya4r4
-- valory/olas_week_abci:0.1.0:bafybeifc6codjdivqxkoie6pj633zmzvkorcdlee5iwjkxhqlbtiprt7gi
+- valory/olas_week_abci:0.1.0:bafybeidhntwffwnucyh2wml5rtbviidgi6xfn6zecnmnuhwrsxrejeprqq
 - valory/mech_interact_abci:0.1.0:bafybeigreynkdiklkaii3y7ujssikpuphsd2vom3xrnhqatmgfnsideaqq
 default_ledger: ethereum
 required_ledgers:
@@ -254,7 +255,8 @@ models:
       default_chain_id: ${str:ethereum}
       transaction_service_url: ${str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
       wveolas_address: ${str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
-      tweet_consensus_wveolas: ${int:2000000}
+      veolas_delegation_address: ${str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
+      tweet_consensus_veolas: ${int:2000000}
       termination_from_block: ${int:0}
 ---
 public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
