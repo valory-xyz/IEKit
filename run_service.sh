@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 
-# Go into the relevant venv
-#cd /home/david/Valory/repos/IEKit && pipenv shell
-
-# Set env vars
-export $(grep -v '^#' .env | xargs)
+REPO_PATH=$PWD
 
 # Push packages and fetch service
 make clean
@@ -17,8 +13,11 @@ autonomy fetch --local --service valory/impact_evaluator && cd impact_evaluator
 autonomy init --reset --author valory --remote --ipfs --ipfs-node "/dns/registry.autonolas.tech/tcp/443/https"
 autonomy build-image
 
+# Copy .env file
+cp $REPO_PATH/.env .
+
 # Copy the keys and build the deployment
-cp $KEY_DIR/keys.json .
+cp $REPO_PATH/keys.json .
 autonomy deploy build -ltm
 
 # Run the deployment
