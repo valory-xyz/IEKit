@@ -21,8 +21,8 @@
 
 from typing import Generator, Optional, cast
 
-from packages.valory.contracts.wveolas_delegation.contract import (
-    WveOLASDelegationContract,
+from packages.valory.contracts.veolas_delegation.contract import (
+    VeOLASDelegationContract,
 )
 from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.decision_making_abci.rounds import Event
@@ -348,7 +348,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
             self.logger.info(f"Voter: {voter['address']}  Voting power: {voting_power}")
             total_voting_power += cast(int, voting_power)
 
-        consensus = total_voting_power >= self.params.tweet_consensus_wveolas
+        consensus = total_voting_power >= self.params.tweet_consensus_veolas
 
         self.behaviour.context.logger.info(
             f"Voting power is {total_voting_power} for tweet {tweet['text']}. Executing? {consensus}"
@@ -359,7 +359,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
     def get_voting_power(self, address: str):
         """Get the given address's votes."""
         olas_votes = yield from self.get_votes(
-            self.params.wveolas_delegation_address, address, "ethereum"
+            self.params.veolas_delegation_address, address, "ethereum"
         )
 
         if not olas_votes:
@@ -377,7 +377,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
         response = yield from self.behaviour.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
             contract_address=token_address,
-            contract_id=str(WveOLASDelegationContract.contract_id),
+            contract_id=str(VeOLASDelegationContract.contract_id),
             contract_callable="get_votes",
             voter_address=voter_address,
             chain_id=chain_id,

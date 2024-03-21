@@ -78,11 +78,11 @@ class Params(BaseParams):
             "transaction_service_url", kwargs, str
         )
         self.wveolas_address = self._ensure("wveolas_address", kwargs, str)
-        self.wveolas_delegation_address = self._ensure(
-            "wveolas_delegation_address", kwargs, str
+        self.veolas_delegation_address = self._ensure(
+            "veolas_delegation_address", kwargs, str
         )
-        self.tweet_consensus_wveolas = self._ensure(
-            "tweet_consensus_wveolas", kwargs, int
+        self.tweet_consensus_veolas = self._ensure(
+            "tweet_consensus_veolas", kwargs, int
         )
         super().__init__(*args, **kwargs)
 

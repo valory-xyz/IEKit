@@ -28,7 +28,7 @@ contracts:
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeig3vqcoxgp56uis3npzgbpfsgu4ku2t74ks6qsabzutacrmbziee4
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/service_registry:0.1.0:bafybeidrbrx5np67xc2rm5jvugplopeobawwqongp6meahhzzpzqsgolsu
-- valory/wveolas_delegation:0.1.0:bafybeiegyiylozysa3giccnzjzmedjtrtqkod5x6sevyplqzo6wvfqxdx4
+- valory/veolas_delegation:0.1.0:bafybeiegyiylozysa3giccnzjzmedjtrtqkod5x6sevyplqzo6wvfqxdx4
 protocols:
 - open_aea/signing:1.0.0:bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi
 - valory/abci:0.1.0:bafybeiaqmp7kocbfdboksayeqhkbrynvlfzsx4uy4x6nohywnmaig4an7u
@@ -255,8 +255,8 @@ models:
       default_chain_id: ${str:ethereum}
       transaction_service_url: ${str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
       wveolas_address: ${str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
-      wveolas_delegation_address: ${str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
-      tweet_consensus_wveolas: ${int:2000000}
+      veolas_delegation_address: ${str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
+      tweet_consensus_veolas: ${int:2000000}
       termination_from_block: ${int:0}
 ---
 public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq

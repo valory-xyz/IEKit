@@ -1,8 +1,8 @@
-name: wveolas_delegation
+name: veolas_delegation
 author: valory
 version: 0.1.0
 type: contract
-description: wveolas_delegation contract
+description: veolas_delegation contract
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
@@ -11,7 +11,7 @@ fingerprint:
   contract.py: bafybeidbtq662ct7tbjbinqcft4wyr6na2y3txmcibn3rxqqodgolmkrhm
 fingerprint_ignore_patterns: []
 contracts: []
-class_name: WveOLASDelegationContract
+class_name: VeOLASDelegationContract
 contract_interface_paths:
   ethereum: build/DelegateContribute.json
 dependencies:

@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the class to connect to the wveolas_delegation contract."""
+"""This module contains the class to connect to the veolas_delegation contract."""
 import logging
 from typing import Optional
 
@@ -27,7 +27,7 @@ from aea.contracts.base import Contract
 from aea_ledger_ethereum import EthereumApi
 
 
-PUBLIC_ID = PublicId.from_str("valory/wveolas_delegation:0.1.0")
+PUBLIC_ID = PublicId.from_str("valory/veolas_delegation:0.1.0")
 
 _logger = logging.getLogger(
     f"aea.packages.{PUBLIC_ID.author}.contracts.{PUBLIC_ID.name}.contract"
@@ -35,8 +35,8 @@ _logger = logging.getLogger(
 
 
 # pylint: disable=too-many-arguments,invalid-name
-class WveOLASDelegationContract(Contract):
-    """The wveolas delegation contract."""
+class VeOLASDelegationContract(Contract):
+    """The veolas delegation contract."""
 
     contract_id = PUBLIC_ID
 

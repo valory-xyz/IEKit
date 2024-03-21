@@ -17,4 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the support resources for the wveolas_delegation contract."""
+"""This module contains the support resources for the veolas_delegation contract."""

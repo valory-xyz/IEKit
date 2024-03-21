@@ -7,7 +7,7 @@
         "contract/valory/mech/0.1.0": "bafybeicct2ijhq7x5tin3km6b4bjmrhbknrz7xptxwzzriv7443shcmjle",
         "contract/valory/compatibility_fallback_handler/0.1.0": "bafybeiaoaxll4lwdiaahxl2r2vunafifu7w2axjbpnghwcfrexusfbsftq",
         "contract/valory/wveolas/0.1.0": "bafybeibtlvxqrve5g4uentwwfsjpnffxr3qfczwjqa7va3oyvosrzw5vd4",
-        "contract/valory/wveolas_delegation/0.1.0": "bafybeiegyiylozysa3giccnzjzmedjtrtqkod5x6sevyplqzo6wvfqxdx4",
+        "contract/valory/veolas_delegation/0.1.0": "bafybeiegyiylozysa3giccnzjzmedjtrtqkod5x6sevyplqzo6wvfqxdx4",
         "connection/valory/twitter/0.1.0": "bafybeibju7477agfjcveypdv4smso2iy6vy2iqy5lz2ua2bbjhyxlm5dre",
         "connection/valory/openai/0.1.0": "bafybeigyehjbahya5mp7vyp5tjvn36rey4btvzskp3ql3mgxp3zu6gwq5a",
         "connection/valory/farcaster/0.1.0": "bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi",
