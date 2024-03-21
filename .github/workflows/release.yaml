@@ -61,7 +61,7 @@ jobs:
               echo VERSION=$TAG> env.sh
               echo AUTHOR=$(grep 'service' packages/packages.json | awk -F/ '{print $2}' | head -1) >> env.sh
               echo SERVICE=$(grep 'service' packages/packages.json | awk -F/ '{print $3}' | head -1) >> env.sh
-              echo DEFAULT_IMAGE_TAG=$(cat packages/packages.json | grep agent | awk -F: '{print $2}' | tr -d '", ') >> env.sh
+              echo DEFAULT_IMAGE_TAG=$(cat packages/packages.json | grep agent/valory/impact_evaluator | awk -F: '{print $2}' | tr -d '", ') >> env.sh
               cat env.sh
 
       - uses: addnab/docker-run-action@v3
@@ -124,7 +124,7 @@ jobs:
           # for staging
           export IP_ADDR=$(dig +short balancer.tcp.propel.staging.autonolas.tech)
           echo -e "\n$IP_ADDR\tapp.propel.staging.valory.xyz\n"  | sudo tee -a /etc/hosts
-          
+
           # for prod
           export IP_ADDR=$(dig +short balancer.tcp.propel.autonolas.tech)
           echo -e "\n$IP_ADDR\tapp.propel.valory.xyz\n"  | sudo tee -a /etc/hosts
