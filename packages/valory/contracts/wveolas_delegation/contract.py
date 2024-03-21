@@ -50,7 +50,7 @@ class WveOLASDelegationContract(Contract):
         voting_power = ledger_api.contract_method_call(
             contract_instance=contract_instance,
             method_name="votingPower",
-            account=voter_address,
+            delegatee=voter_address,
         )
 
         return {"voting_power": voting_power}

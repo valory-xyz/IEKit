@@ -12,7 +12,7 @@ fingerprint_ignore_patterns: []
 contracts: []
 class_name: WveOLASDelegationContract
 contract_interface_paths:
-  ethereum: build/wveolas_delegation.json
+  ethereum: build/DelegateContribute.json
 dependencies:
   open-aea-ledger-ethereum:
     version: ==1.49.0
