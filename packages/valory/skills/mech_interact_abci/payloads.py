@@ -28,6 +28,7 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 class MechRequestPayload(BaseTxPayload):
     """Represent a transaction payload for the MechRequestRound."""
 
+    tx_submitter: str
     tx_hash: str
     price: int
     chain_id: str

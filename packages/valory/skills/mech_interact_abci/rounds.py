@@ -84,6 +84,7 @@ class MechInteractAbciApp(AbciApp[Event]):
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedMechRequestRound: {
+            get_name(SynchronizedData.tx_submitter),
             get_name(SynchronizedData.most_voted_tx_hash),
             get_name(SynchronizedData.mech_price),
         },

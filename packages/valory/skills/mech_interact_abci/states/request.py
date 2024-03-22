@@ -34,6 +34,7 @@ class MechRequestRound(MechInteractionRound):
     payload_class = MechRequestPayload
 
     selection_key = (
+        get_name(SynchronizedData.tx_submitter),
         get_name(SynchronizedData.most_voted_tx_hash),
         get_name(SynchronizedData.mech_price),
         get_name(SynchronizedData.chain_id),
