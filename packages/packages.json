@@ -24,10 +24,10 @@
         "skill/valory/mech_interact_abci/0.1.0": "bafybeigreynkdiklkaii3y7ujssikpuphsd2vom3xrnhqatmgfnsideaqq",
         "skill/valory/farcaster_write_abci/0.1.0": "bafybeia22wo2a7lxcu7pprqswj7jrsie2ewmqj7t6obx2x76jsspvhpbwm",
         "skill/valory/farcaster_test_abci/0.1.0": "bafybeih7plhlaoad5inicewdcbqcyr7uinjf2sn5mksmgtwjskonwriqre",
-        "agent/valory/impact_evaluator/0.1.0": "bafybeibtjbaujueri4j6uz5xypljsxm2kq55tnjwc5jhba4ortnmidc3qe",
+        "agent/valory/impact_evaluator/0.1.0": "bafybeiazqf4otdmngjv4suhb5up55rhlvqcyvhufn3rmyt7unmh2rwfq74",
         "agent/valory/farcaster_test/0.1.0": "bafybeigcpqk5rou5di3eol56k3xhxlrvex5p7bq3kmreu3hy52unlegepq",
-        "service/valory/impact_evaluator/0.1.0": "bafybeifpfxhr3f6g4hekdtjs6mn6wqy7ep2aajmkr64viqxliwvt3ayei4",
-        "service/valory/impact_evaluator_local/0.1.0": "bafybeid6fw4vecmrva4z2xd32zzj6de43z32yw2m6ytwmxyhssn45uvtdi"
+        "service/valory/impact_evaluator/0.1.0": "bafybeicdls42znqb4jn7lgdzvmatetbkm7eq7w2tljw2ufv3qpopou3ja4",
+        "service/valory/impact_evaluator_local/0.1.0": "bafybeigluh6irhbma6pos37oue46ri23n2h7nlwsi3wcmapklx4q4qkfjq"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi",

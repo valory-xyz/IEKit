@@ -268,7 +268,6 @@ models:
       response_type: dict
       retries: 5
       url: ${str:https://drand.cloudflare.com/public/latest}
-    class_name: RandomnessApi
 ---
 public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
 type: connection
