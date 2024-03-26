@@ -48,9 +48,9 @@ handlers:
   tendermint:
     args: {}
     class_name: TendermintHandler
-  farcaster:
+  srr:
     args: {}
-    class_name: FarcasterHandler
+    class_name: SrrHandler
 models:
   abci_dialogues:
     args: {}
