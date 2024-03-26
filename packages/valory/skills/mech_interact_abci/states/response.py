@@ -19,6 +19,8 @@
 
 """This module contains the response state of the mech interaction abci app."""
 
+from enum import Enum
+from typing import Optional, Tuple, cast
 from packages.valory.skills.abstract_round_abci.base import get_name
 from packages.valory.skills.mech_interact_abci.payloads import MechResponsePayload
 from packages.valory.skills.mech_interact_abci.states.base import (
@@ -33,3 +35,19 @@ class MechResponseRound(MechInteractionRound):
     payload_class = MechResponsePayload
     selection_key = get_name(SynchronizedData.mech_responses)
     collection_key = get_name(SynchronizedData.participant_to_responses)
+
+    def end_block(self) -> Optional[Tuple[SynchronizedData, Enum]]:
+        """Process the end of the block."""
+
+        self.context.logger.info("end_block 1")
+        res = super().end_block()
+        if res is None:
+            return None
+
+        self.context.logger.info("end_block 2")
+
+        synced_data, event = cast(Tuple[SynchronizedData, Enum], res)
+
+        self.context.logger.info("end_block 3")
+
+        return synced_data, event
