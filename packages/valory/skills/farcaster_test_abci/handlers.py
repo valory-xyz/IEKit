@@ -38,10 +38,10 @@ from packages.valory.skills.abstract_round_abci.handlers import (
     TendermintHandler as BaseTendermintHandler,
 )
 from packages.valory.skills.farcaster_write_abci.handlers import (
-    SrrHandler as BaseSrrHandler,
+    HttpHandler as BaseHttpHandler,
 )
 from packages.valory.skills.farcaster_write_abci.handlers import (
-    HttpHandler as BaseHttpHandler,
+    SrrHandler as BaseSrrHandler,
 )
 
 
