@@ -11,7 +11,7 @@ fingerprint:
   composition.py: bafybeibti2jell3skqhxzkrk7eiipwzwa4u4amjpobcfyt4gdyx7c6wndu
   dialogues.py: bafybeibhbdeicko6fq5pbzl5xm2bjbo4iwdkyyhwpepjnwbxyqbx6tx6hu
   fsm_specification.yaml: bafybeicj4ajbfschtxknkh6nbg4rjpejqykpo5twbyfd2iidmop5bvmad4
-  handlers.py: bafybeid6usaozer37wnwvthuiyngmzp2q7wmz5r53asyt3ktx4e2njafa4
+  handlers.py: bafybeigquxsw3z2v36ts4xmmxnuxyd3z2aaymccbp7ghtzhewhbfesw54y
   models.py: bafybeibupr5tzyvqvh3jhhmjws7rg7flznsgln3hcilfqjfv3jwhg7ebpu
 fingerprint_ignore_patterns: []
 connections: []
@@ -21,7 +21,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeigr33fuqxsw7dwurncs7b4ogqa736k4ojktd3ucluv22setixe2a4
 - valory/registration_abci:0.1.0:bafybeierykfwmk3gyv4b6szl3xbnngzztsruh6d6k6rcom32fnuveplm5a
 - valory/reset_pause_abci:0.1.0:bafybeihcm6h4ae4lwjwu5k3prdyj7mvxv2plzpl444vmjzwhwwp5qathbu
-- valory/farcaster_write_abci:0.1.0:bafybeibdrx6a6hirk6shcevx6kjgu5ndwfslzd5adef2ywh3lcmluwx3da
+- valory/farcaster_write_abci:0.1.0:bafybeia22wo2a7lxcu7pprqswj7jrsie2ewmqj7t6obx2x76jsspvhpbwm
 behaviours:
   main:
     args: {}
@@ -48,9 +48,9 @@ handlers:
   tendermint:
     args: {}
     class_name: TendermintHandler
-  farcaster:
+  srr:
     args: {}
-    class_name: FarcasterHandler
+    class_name: SrrHandler
 models:
   abci_dialogues:
     args: {}

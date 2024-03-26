@@ -258,6 +258,16 @@ models:
       veolas_delegation_address: ${str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
       tweet_consensus_veolas: ${int:2000000}
       termination_from_block: ${int:0}
+  randomness_api:
+    args:
+      api_id: cloudflare
+      headers: {}
+      method: GET
+      parameters: {}
+      response_key: null
+      response_type: dict
+      retries: 5
+      url: ${str:https://drand.cloudflare.com/public/latest}
 ---
 public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
 type: connection
