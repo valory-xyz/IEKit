@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -116,6 +116,8 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
     def set_mech_response_specs(self, request_id: int) -> None:
         """Set the mech's response specs."""
+        self.context.logger.info("set_mech_response_specs 1")
+
         full_ipfs_hash = IPFS_HASH_PREFIX + self.response_hex
         ipfs_link = self.params.ipfs_address + full_ipfs_hash + f"/{request_id}"
         # The url must be dynamically generated as it depends on the ipfs hash

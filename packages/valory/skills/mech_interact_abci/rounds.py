@@ -43,7 +43,32 @@ from packages.valory.skills.mech_interact_abci.states.response import MechRespon
 
 
 class MechInteractAbciApp(AbciApp[Event]):
-    """MechInteractAbciApp"""
+    """MechInteractAbciApp
+
+    Initial round: MechRequestRound
+
+    Initial states: {MechRequestRound, MechResponseRound}
+
+    Transition states:
+        0. MechRequestRound
+            - done: 2.
+            - skip request: 5.
+            - no majority: 0.
+            - round timeout: 0.
+        1. MechResponseRound
+            - done: 3.
+            - no majority: 1.
+            - round timeout: 4.
+        2. FinishedMechRequestRound
+        3. FinishedMechResponseRound
+        4. FinishedMechResponseTimeoutRound
+        5. FinishedMechRequestSkipRound
+
+    Final states: {FinishedMechRequestRound, FinishedMechRequestSkipRound, FinishedMechResponseRound, FinishedMechResponseTimeoutRound}
+
+    Timeouts:
+        round timeout: 30.0
+    """
 
     initial_round_cls: AppState = MechRequestRound
     initial_states: Set[AppState] = {MechRequestRound, MechResponseRound}
@@ -84,6 +109,7 @@ class MechInteractAbciApp(AbciApp[Event]):
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedMechRequestRound: {
+            get_name(SynchronizedData.tx_submitter),
             get_name(SynchronizedData.most_voted_tx_hash),
             get_name(SynchronizedData.mech_price),
         },

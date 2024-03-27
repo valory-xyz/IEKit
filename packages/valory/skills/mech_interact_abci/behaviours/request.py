@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -270,6 +270,17 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
     def _get_price(self) -> WaitableConditionType:
         """Get the price of the mech request."""
+        # If the optional parameter 'request_price' is set, then
+        # use that price (wei). Otherwise, determine the request price
+        # by calling the contract.
+        # This parameter is useful to set 'request_price=0' when the
+        # agent is using a Nevermined subscription.
+        price = self.params.request_price
+
+        if price:
+            self.price = price
+            return True
+
         result = yield from self._mech_contract_interact(
             "get_price",
             "price",
@@ -294,7 +305,13 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             if not self._mech_requests:
                 payload = MechRequestPayload(
-                    self.context.agent_address, None, None, GNOSIS_CHAIN_ID, None, None
+                    self.context.agent_address,
+                    self.matching_round.auto_round_id(),
+                    None,
+                    None,
+                    GNOSIS_CHAIN_ID,
+                    None,
+                    None,
                 )
             else:
                 self.context.logger.info(
@@ -310,6 +327,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                 )
                 payload = MechRequestPayload(
                     self.context.agent_address,
+                    self.matching_round.auto_round_id(),
                     self.tx_hex,
                     self.price,
                     GNOSIS_CHAIN_ID,
