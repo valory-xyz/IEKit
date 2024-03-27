@@ -1,23 +1,23 @@
 #!/usr/bin/env bash
 
-# Set env vars
-export $(grep -v '^#' .sample_env | xargs)
+REPO_PATH=$PWD
 
 # Push packages and fetch service
 make clean
 
 autonomy push-all
 
-autonomy fetch --local --service valory/impact_evaluator_local
-
-# Copy the keys and build the deployment
-cp $KEYS_PATH ./impact_evaluator_local/keys.json
-cd impact_evaluator_local
+autonomy fetch --local --service valory/impact_evaluator_local && cd impact_evaluator_local
 
 # Build the image
+autonomy init --reset --author valory --remote --ipfs --ipfs-node "/dns/registry.autonolas.tech/tcp/443/https"
 autonomy build-image
 
-# Build the deployment
+# Copy .env file
+cp $REPO_PATH/.1env ./.env
+
+# Copy the keys and build the deployment
+cp $REPO_PATH/keys1.json ./keys.json
 autonomy deploy build -ltm
 
 # Run the deployment

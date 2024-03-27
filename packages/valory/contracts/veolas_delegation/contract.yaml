@@ -1,0 +1,19 @@
+name: veolas_delegation
+author: valory
+version: 0.1.0
+type: contract
+description: veolas_delegation contract
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeigyd3v35lzfmckfrucgknh55arblioofflclkw72e4m2elizwkj24
+  build/DelegateContribute.json: bafybeigeu2df4b3637s7vwcbqe2vdau6cuk3rbxvkc32bg2byljidiblgm
+  contract.py: bafybeigp3qq6kolybopidyvw43rv6bttouwtvdtr4nup4qrtj5ymdi73na
+fingerprint_ignore_patterns: []
+contracts: []
+class_name: VeOLASDelegationContract
+contract_interface_paths:
+  ethereum: build/DelegateContribute.json
+dependencies:
+  open-aea-ledger-ethereum:
+    version: ==1.50.0

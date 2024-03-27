@@ -31,7 +31,7 @@ In order to run a local demo service based on the IEKit:
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeiel4oma4co63eur7iesyzwpxm5n2br5hwifobn4niumjn2bbgl2va --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeiakf3obln5fgdnrrq26mvjsjygpkia3k4spppqulqgls3aivderfi --service
     ```
 
 3. Build the Docker image of the service agents
@@ -104,7 +104,6 @@ In order to run a local demo service based on the IEKit:
         MECH_CONTRACT_ADDRESS=0x77af31De935740567Cf4fF1986D04B2c964A786a
         STAGING_API_TWITTER=http://host.docker.internal:5000/twitter/create_tweet
         TRANSACTION_SERVICE_URL=https://safe-transaction-goerli.safe.global/api/v1/messages/{message_hash}/
-        WVEOLAS_ADDRESS=0xa2AA89938805836077aB0724f335142da7A27085
         USE_TERMINATION=false
         POINTS_TO_IMAGE_HASHES='{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
 
