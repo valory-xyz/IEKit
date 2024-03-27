@@ -119,16 +119,11 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self.context.logger.info("set_mech_response_specs 1")
 
         full_ipfs_hash = IPFS_HASH_PREFIX + self.response_hex
-        self.context.logger.info("set_mech_response_specs 2")
         ipfs_link = self.params.ipfs_address + full_ipfs_hash + f"/{request_id}"
         # The url must be dynamically generated as it depends on the ipfs hash
-        self.context.logger.info("set_mech_response_specs 3")
         self.mech_response_api.__dict__["_frozen"] = False
-        self.context.logger.info("set_mech_response_specs 4")
         self.mech_response_api.url = ipfs_link
-        self.context.logger.info(f"set_mech_response_specs 5: {ipfs_link}")
         self.mech_response_api.__dict__["_frozen"] = True
-        self.context.logger.info("set_mech_response_specs 6")
 
     def _get_block_number(self) -> WaitableConditionType:
         """Get the block number in which the request to the mech was settled."""
@@ -200,16 +195,10 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
     def _get_response(self) -> WaitableConditionType:
         """Get the response data from IPFS."""
-        self.context.logger.info(f"_get_response 1.")
         specs = self.mech_response_api.get_spec()
-        self.context.logger.info(f"_get_response 2.")
         res_raw = yield from self.get_http_response(**specs)
-        self.context.logger.info(f"_get_response 3. {res_raw}")
         res = self.mech_response_api.process_response(res_raw)
-        self.context.logger.info(f"_get_response 4.")
-
         res = self._handle_response(res)
-        self.context.logger.info(f"_get_response 5.")
 
         if self.mech_response_api.is_retries_exceeded():
             self._current_mech_response.retries_exceeded()
