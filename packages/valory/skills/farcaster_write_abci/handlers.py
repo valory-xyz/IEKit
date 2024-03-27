@@ -57,7 +57,7 @@ TendermintHandler = BaseTendermintHandler
 IpfsHandler = BaseIpfsHandler
 
 
-class FarcasterHandler(AbstractResponseHandler):
+class SrrHandler(AbstractResponseHandler):
     """A class for handling Farcaster messages."""
 
     SUPPORTED_PROTOCOL: Optional[PublicId] = SrrMessage.protocol_id
