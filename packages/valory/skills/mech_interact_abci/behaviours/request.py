@@ -305,7 +305,13 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             if not self._mech_requests:
                 payload = MechRequestPayload(
-                    self.context.agent_address, self.matching_round.auto_round_id(), None, None, GNOSIS_CHAIN_ID, None, None
+                    self.context.agent_address,
+                    self.matching_round.auto_round_id(),
+                    None,
+                    None,
+                    GNOSIS_CHAIN_ID,
+                    None,
+                    None,
                 )
             else:
                 self.context.logger.info(
