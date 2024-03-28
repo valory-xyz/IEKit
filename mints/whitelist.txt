@@ -1,0 +1,2 @@
+agent/valory/farcaster_test/0.1.0
+skill/valory/farcaster_test_abci/0.1.0
