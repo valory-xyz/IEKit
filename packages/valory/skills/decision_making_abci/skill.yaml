@@ -21,7 +21,7 @@ fingerprint:
   tasks/signature_validation.py: bafybeihbwrv72hnh3ytko2i5oszqgdky2j6h2wse45wvuhf2j32lo2tsjy
   tasks/task_preparations.py: bafybeif3g3uhedl2wd3sixjzat5mj7e45zffqyeyfpohsu6l6vhmhncvki
   tasks/tweet_validation_preparation.py: bafybeif3wbfskiyuij7unx72euklms7owrzwzgdu462xatvypalm6xrgca
-  tasks/twitter_preparation.py: bafybeibavj7muwmtfreg5qx33j7igcmrg36nldgve57m3hs2y42kbrgalq
+  tasks/twitter_preparation.py: bafybeiaufkfm4t6ulafxtu6ojsj6xoxz3kol4yx7aensym57ex53pbdjee
   tasks/week_in_olas_preparations.py: bafybeids7nah5nilmykainnntx7j7dvnboo6ypaqb2w2icdxrjhpgxxygy
   tasks/write_stream_preparation.py: bafybeiatdcckbobkaawnuphcgvjx2kgcuil7dtbunfpje7pfjd26gd2es4
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
@@ -36,7 +36,7 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/veolas_delegation:0.1.0:bafybeiejwiiqxizjfcgiscwqt753kqdsjzn7a3rdefjxvhtocghykrsm7m
+- valory/veolas_delegation:0.1.0:bafybeifsl5e75bauixbq2fvrq4dyse3dle5zvdozz224t2heridjqequti
 - valory/compatibility_fallback_handler:0.1.0:bafybeiaoaxll4lwdiaahxl2r2vunafifu7w2axjbpnghwcfrexusfbsftq
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
