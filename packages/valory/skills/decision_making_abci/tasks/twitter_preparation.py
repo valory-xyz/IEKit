@@ -388,5 +388,11 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
             )
             return None
 
+        if "votes" not in response.state.body:
+            self.behaviour.context.logger.error(
+                f"State does not contain 'votes': {response.state.body}"
+            )
+            return None
+
         votes = int(response.state.body["votes"]) / 1e18  # to olas
         return votes
