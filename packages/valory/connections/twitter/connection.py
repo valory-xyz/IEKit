@@ -171,6 +171,7 @@ class TwitterConnection(BaseSyncConnection):
         data = json.loads(message.text)
         text = data["text"]
         credentials = data["credentials"]
+        media_ids = data.get("media_ids", None)
 
         # Call the staging API
         if self.use_staging_api:
@@ -242,20 +243,25 @@ class TwitterConnection(BaseSyncConnection):
             )
         )
         try:
+            tweet_kwargs = {"text": text}
+            if media_ids:
+                tweet_kwargs["media_ids"] = media_ids
+
             if isinstance(text, list):
                 # Thread
                 previous_tweet_id = None
                 first_tweet_id = None
                 for tweet in text:
                     if not previous_tweet_id:
-                        response = api.create_tweet(text=tweet)
+                        response = api.create_tweet(**tweet_kwargs)
                         first_tweet_id = response.data["id"]
                     else:
-                        response = api.create_tweet(text=tweet, in_reply_to_tweet_id=previous_tweet_id)
+                        tweet_kwargs["in_reply_to_tweet_id"] = previous_tweet_id
+                        response = api.create_tweet(**tweet_kwargs)
                     previous_tweet_id = response.data["id"]
             else:
                 # Single tweet
-                response = api.create_tweet(text=text)
+                response = api.create_tweet(**tweet_kwargs)
                 first_tweet_id = response.data["id"]
 
         except TweepyHTTPException as e:

@@ -67,17 +67,17 @@ class TwitterPreparation(TaskPreparation):
             self.synchronized_data.current_centaur_index
         ]
 
-        text = self.get_tweet()
+        tweet = self.get_tweet()
 
         write_data = [
             {
-                "text": text,
+                "text": tweet["text"],
+                "media_ids": tweet.get("media_ids", None),
                 "credentials": self.params.centaur_id_to_secrets[current_centaur["id"]][
                     "twitter"
                 ],
             }
         ]
-
         updates = {
             "write_data": write_data,
         }
@@ -170,11 +170,12 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
             event = Event.FORCE_DB_UPDATE.value
 
         if self.pending_tweets:
-            text = self.get_tweet()
+            tweet = self.get_tweet()
 
             write_data = [
                 {
-                    "text": text,
+                    "text": tweet["text"],
+                    "media_ids": tweet.get("media_ids", None),
                     "credentials": self.params.centaur_id_to_secrets[
                         current_centaur["id"]
                     ]["twitter"],
@@ -229,7 +230,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
     def get_tweet(self):
         """Get the tweet"""
-        return self.pending_tweets[0]["text"]
+        return self.pending_tweets[0]
 
     def check_extra_conditions(self):
         """Check extra conditions"""
