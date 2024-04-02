@@ -24,7 +24,7 @@ fingerprint:
   tests/test_rounds.py: bafybeihmp5cnruopzf2qfxubhlhnrjsauavo2zx5ubdutmubhnnoedpxim
 fingerprint_ignore_patterns: []
 connections:
-- valory/twitter:0.1.0:bafybeibju7477agfjcveypdv4smso2iy6vy2iqy5lz2ua2bbjhyxlm5dre
+- valory/twitter:0.1.0:bafybeigrjnxeenj6nf57q7swgzjjozwrpg6c5hsh2nmij5534xaqekn4cy
 contracts: []
 protocols:
 - valory/twitter:0.1.0:bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4

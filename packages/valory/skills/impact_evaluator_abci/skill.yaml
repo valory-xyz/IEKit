@@ -25,18 +25,18 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeih3enhagoql7kzpeyzzu2scpkif6y3ubakpralfnwxcvxexdyvy5i
 - valory/ceramic_read_abci:0.1.0:bafybeihnao4vubt3rjhka7swjqedifppohfa3jzgpmdxalfdofr44q5jti
-- valory/generic_scoring_abci:0.1.0:bafybeif5yqzf7lwnfssijm2eytog6takawngjltkvgzxmhfdob7klmgph4
-- valory/twitter_scoring_abci:0.1.0:bafybeidoizlbvmh7gk3vll7k4hid7fxkde4qdvrdxpo7gweda2f5kqyj3m
+- valory/generic_scoring_abci:0.1.0:bafybeiboo6v2izj6dnxxt3se7eohi7gms6plvvwsofst6ygcwrtbgfg4ma
+- valory/twitter_scoring_abci:0.1.0:bafybeifeeibhpxzagkxdnvf6mhk4mdoqccloyeijvugjtsmrmfmq4qy44e
 - valory/ceramic_write_abci:0.1.0:bafybeia5mutx7urihg3bfjqmw7ox2luspcr2fakuvkkx6oglupbt52wpxi
-- valory/dynamic_nft_abci:0.1.0:bafybeicwglwwo6ojow7vb2azrpucp4haxtfb7qszhk6a7tibxwcarxr5hy
+- valory/dynamic_nft_abci:0.1.0:bafybeialft6tvglvklyero5dsc6rvro5uaojtv373tqqlkkczx465af3eq
 - valory/registration_abci:0.1.0:bafybeiek7zcsxbucjwzgqfftafhfrocvc7q4yxllh2q44jeemsjxg3rcfm
 - valory/reset_pause_abci:0.1.0:bafybeidw4mbx3os3hmv7ley7b3g3gja7ydpitr7mxbjpwzxin2mzyt5yam
 - valory/termination_abci:0.1.0:bafybeihq6qtbwt6i53ayqym63vhjexkcppy26gguzhhjqywfmiuqghvv44
 - valory/transaction_settlement_abci:0.1.0:bafybeigtzlk4uakmd54rxnznorcrstsr52kta474lgrnvx5ovr546vj7sq
-- valory/decision_making_abci:0.1.0:bafybeien73urcvuyewvpdyp26lwvnasmpltgtcsi5h463it6a2h576riem
+- valory/decision_making_abci:0.1.0:bafybeia7xhipytmeaur3gnql2ylcmz5wutrf72shb5ufrnyzpvxttdfhle
 - valory/llm_abci:0.1.0:bafybeigu2xacitzocldv7kofnzi4g6e64xwl4vzl3m665bjbdqfkua6g3q
-- valory/twitter_write_abci:0.1.0:bafybeialoyaropbcglckqsvhul3ojiuthsbdcm6a34py5p2b2sit4awoey
-- valory/olas_week_abci:0.1.0:bafybeigjaawlgphqsjispczom6mrmvl23xhzaaxxytovgcgwzzhyht463i
+- valory/twitter_write_abci:0.1.0:bafybeid2zsbr47rdsryia5x45bbvik5jkif4ymrf3ss4zvgmrzmwl4jb34
+- valory/olas_week_abci:0.1.0:bafybeibqy3xkn56ifufp5scwwhc4bsh3shkml5slgihodnj34rpod4ajzq
 - valory/mech_interact_abci:0.1.0:bafybeia55wkn5bpwtm66avsyst5aot6nj7gelnfpyhtsyayzxba5cresii
 behaviours:
   main:
