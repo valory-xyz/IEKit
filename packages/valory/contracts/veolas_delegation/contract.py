@@ -53,4 +53,4 @@ class VeOLASDelegationContract(Contract):
             delegatee=voter_address,
         )
 
-        return {"voting_power": voting_power}
+        return {"votes": voting_power}

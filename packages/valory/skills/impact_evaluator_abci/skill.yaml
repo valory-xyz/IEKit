@@ -25,19 +25,19 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeih3enhagoql7kzpeyzzu2scpkif6y3ubakpralfnwxcvxexdyvy5i
 - valory/ceramic_read_abci:0.1.0:bafybeihnao4vubt3rjhka7swjqedifppohfa3jzgpmdxalfdofr44q5jti
-- valory/generic_scoring_abci:0.1.0:bafybeialxow7ojn36obwqpact4evkj2425icmioigjnkdb4ls5oektuqvi
-- valory/twitter_scoring_abci:0.1.0:bafybeiejz5rzgruvtb4xeqyib5o2rlujugulac4t2bmszbzkxfcty4srke
+- valory/generic_scoring_abci:0.1.0:bafybeif5yqzf7lwnfssijm2eytog6takawngjltkvgzxmhfdob7klmgph4
+- valory/twitter_scoring_abci:0.1.0:bafybeidoizlbvmh7gk3vll7k4hid7fxkde4qdvrdxpo7gweda2f5kqyj3m
 - valory/ceramic_write_abci:0.1.0:bafybeia5mutx7urihg3bfjqmw7ox2luspcr2fakuvkkx6oglupbt52wpxi
-- valory/dynamic_nft_abci:0.1.0:bafybeiahdrgvjjaosvtonuads6dnwoevzphuxuhqhosvimnxey5wkdj2xq
+- valory/dynamic_nft_abci:0.1.0:bafybeicwglwwo6ojow7vb2azrpucp4haxtfb7qszhk6a7tibxwcarxr5hy
 - valory/registration_abci:0.1.0:bafybeiek7zcsxbucjwzgqfftafhfrocvc7q4yxllh2q44jeemsjxg3rcfm
 - valory/reset_pause_abci:0.1.0:bafybeidw4mbx3os3hmv7ley7b3g3gja7ydpitr7mxbjpwzxin2mzyt5yam
 - valory/termination_abci:0.1.0:bafybeihq6qtbwt6i53ayqym63vhjexkcppy26gguzhhjqywfmiuqghvv44
 - valory/transaction_settlement_abci:0.1.0:bafybeigtzlk4uakmd54rxnznorcrstsr52kta474lgrnvx5ovr546vj7sq
-- valory/decision_making_abci:0.1.0:bafybeihtagassa4kmws6dn3khufstbpm7avph3gahkcjsjlq2r2irs3vwu
+- valory/decision_making_abci:0.1.0:bafybeien73urcvuyewvpdyp26lwvnasmpltgtcsi5h463it6a2h576riem
 - valory/llm_abci:0.1.0:bafybeigu2xacitzocldv7kofnzi4g6e64xwl4vzl3m665bjbdqfkua6g3q
 - valory/twitter_write_abci:0.1.0:bafybeialoyaropbcglckqsvhul3ojiuthsbdcm6a34py5p2b2sit4awoey
-- valory/olas_week_abci:0.1.0:bafybeiccfwbxsovw7rlrwpjhkpf4gsplnxzt6t42uctqi247zzlqxcu6zy
-- valory/mech_interact_abci:0.1.0:bafybeibqmg6lawncyot2xjsfsgtam6jubqravkhruex2o2vfzuc46khoiu
+- valory/olas_week_abci:0.1.0:bafybeigjaawlgphqsjispczom6mrmvl23xhzaaxxytovgcgwzzhyht463i
+- valory/mech_interact_abci:0.1.0:bafybeia55wkn5bpwtm66avsyst5aot6nj7gelnfpyhtsyayzxba5cresii
 behaviours:
   main:
     args: {}
