@@ -175,6 +175,9 @@
                 "text": {
                     "type": ["string", "array"]
                 },
+                "media_hashes": {
+                    "type": ["string", "array"]
+                },
                 "posted": {
                     "type": "boolean"
                 },
