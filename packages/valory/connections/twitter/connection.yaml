@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeibxwzkyh7odchnlkeczpguencdjiizm4nezfmi4drybn2zd25xdkq
-  connection.py: bafybeidv4pvsharlgx4k3rgspiinyqpdkuyxwlqi6tuuw7dxey6fzyk5ai
+  connection.py: bafybeidr6xnxtu54palnpkmvedi3oheniusnucwepocmfn3luwvh5xluh4
   readme.md: bafybeihg5yfzgqvg5ngy7r2o5tfeqnelx2ffxw4po5hmheqjfhumpmxpoq
 fingerprint_ignore_patterns: []
 connections: []
@@ -29,5 +29,7 @@ dependencies:
     version: ==4.14.0
   requests:
     version: ==2.28.1
+  open-aea-cli-ipfs:
+    version: ==1.50.0
 is_abstract: false
 cert_requests: []

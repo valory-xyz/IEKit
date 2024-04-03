@@ -41,7 +41,7 @@ from packages.valory.protocols.twitter.message import TwitterMessage
 
 
 PUBLIC_ID = PublicId.from_str("valory/twitter:0.1.0")
-MEDIA_DIR = "/tmp"
+MEDIA_DIR = "/tmp"   # nosec
 
 class TwitterDialogues(BaseTwitterDialogues):
     """A class to keep track of IPFS dialogues."""
