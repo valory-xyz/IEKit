@@ -8,7 +8,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifmfivpoooso45mltpffcv3vvonhrtycv443aqpzm6cetrkwopsdi
-  behaviours.py: bafybeie4m65fzhaltzmf62eyhcdy77vsrvdovgtajmvkupk3lkiuk2oxzq
+  behaviours.py: bafybeigifdcoq54tlirfzd7b474bo3mihwhgwoa324h5qfldguf7bnx4zy
   dialogues.py: bafybeicbuuhc6u3oih6yeziqs7dqi2tebmahdgpc6sd5fzgqyjek6qhwty
   fsm_specification.yaml: bafybeif77zpgvvwjxxpeakzbi5ftsjejlsryeyjhkzddpvqkcq6wrxzufy
   handlers.py: bafybeibofqqb5dvfugwjzuwmm5ktcumwzdak43uyfvythrdrfhk7wcacne
@@ -24,7 +24,7 @@ fingerprint:
   tests/test_rounds.py: bafybeihmp5cnruopzf2qfxubhlhnrjsauavo2zx5ubdutmubhnnoedpxim
 fingerprint_ignore_patterns: []
 connections:
-- valory/twitter:0.1.0:bafybeigrjnxeenj6nf57q7swgzjjozwrpg6c5hsh2nmij5534xaqekn4cy
+- valory/twitter:0.1.0:bafybeiby6s36zeggfvvtmzpxnvg666ix7b4msvmypcmka7eijclt2hxxmq
 contracts: []
 protocols:
 - valory/twitter:0.1.0:bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4
