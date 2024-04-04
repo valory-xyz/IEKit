@@ -2,6 +2,12 @@
 
 REPO_PATH=$PWD
 
+# Remove previous service build
+if test -d impact_evaluator_local; then
+  echo "Removing previous service build"
+  sudo rm -r impact_evaluator_local
+fi
+
 # Push packages and fetch service
 make clean
 

@@ -270,7 +270,10 @@ class TwitterConnection(BaseSyncConnection):
                 previous_tweet_id = None
                 first_tweet_id = None
                 for i, text in enumerate(tweet):
-                    tweet_kwargs = {"text": text}
+                    tweet_kwargs = {}
+
+                    if text:
+                        tweet_kwargs["text"] = text
 
                     if thread_media_ids and thread_media_ids[i]:
                         tweet_kwargs["media_ids"] = thread_media_ids[i]
@@ -284,9 +287,9 @@ class TwitterConnection(BaseSyncConnection):
                     previous_tweet_id = response.data["id"]
             else:
                 # Single tweet
-                tweet_kwargs = {
-                    "text": tweet,
-                }
+                tweet_kwargs = {}
+                if tweet:
+                    tweet_kwargs["text"] = tweet
                 if thread_media_ids and thread_media_ids[0]:
                     tweet_kwargs["media_ids"] = thread_media_ids[0]
                 response = twitter_cli.create_tweet(**tweet_kwargs)
