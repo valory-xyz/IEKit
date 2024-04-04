@@ -208,7 +208,7 @@ class Mech(Contract):
     def _process_event(
         cls,
         ledger_api: LedgerApi,
-        contract_address: str,
+        contract: Any,
         tx_hash: HexStr,
         expected_logs: int,
         event_name: str,
@@ -217,7 +217,6 @@ class Mech(Contract):
     ) -> JSONLike:
         """Process the logs of the given event."""
         ledger_api = cast(EthereumApi, ledger_api)
-        contract = cls.get_instance(ledger_api, contract_address)
         receipt: TxReceipt = ledger_api.api.eth.get_transaction_receipt(tx_hash)
         event_method = getattr(contract.events, event_name)
         logs: List[EventData] = list(event_method().process_receipt(receipt))
@@ -257,9 +256,16 @@ class Mech(Contract):
         :return: a dictionary with a key named `results`
         which contains a list of dictionaries (as many as the expected logs) containing the request id and the data.
         """
-        return cls._process_event(
-            ledger_api, contract_address, tx_hash, expected_logs, "Request", "requestId", "data"
-        )
+        res = {}
+        for abi in partial_abis:
+            contract_instance = ledger_api.api.eth.contract(contract_address, abi=abi)
+            res = cls._process_event(
+                ledger_api, contract_instance, tx_hash, expected_logs, "Request", "requestId", "data"
+            )
+            if "error" not in res:
+                return res
+
+        return res
 
     @classmethod
     def process_deliver_event(
@@ -279,10 +285,16 @@ class Mech(Contract):
         :param expected_logs: the number of logs expected.
         :return: a dictionary with the request id and the data.
         """
-        return cls._process_event(
-            ledger_api, contract_address, tx_hash, expected_logs, "Deliver", "requestId", "data"
-        )
+        res = {}
+        for abi in partial_abis:
+            contract_instance = ledger_api.api.eth.contract(contract_address, abi=abi)
+            res = cls._process_event(
+                ledger_api, contract_instance, tx_hash, expected_logs, "Deliver", "requestId", "data"
+            )
+            if "error" not in res:
+                return res
 
+        return res
     @classmethod
     def get_block_number(
         cls,
