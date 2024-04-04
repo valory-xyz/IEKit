@@ -24,14 +24,14 @@ In order to run a local demo service based on the IEKit:
     mkdir your_workspace && cd your_workspace
     touch Pipfile && pipenv --python 3.10 && pipenv shell
 
-    pipenv install open-autonomy[all]==0.14.6
+    pipenv install open-autonomy[all]==0.14.10
     autonomy init --remote --ipfs --reset --author=your_name
     ```
 
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeicvl7buw27qt7rpzvvswaa4oefwm6ikyxvepm3zkykzviwtg6d5yu --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeibalbgu2khvypip32ssj6upjby3fwq2rcjtzh4qwsg5pxhfipcine --service
     ```
 
 3. Build the Docker image of the service agents

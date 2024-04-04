@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 """This module contains the models for the abci skill of MechInteractAbciApp."""
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Optional
 
 from aea.exceptions import enforce
 from hexbytes import HexBytes
@@ -65,6 +65,7 @@ class MechParams(BaseParams):
         self.mech_contract_address: str = self._ensure(
             "mech_contract_address", kwargs, str
         )
+        self.request_price: Optional[int] = kwargs.get("request_price", None)
         self._ipfs_address: str = self._ensure("ipfs_address", kwargs, str)
         super().__init__(*args, **kwargs)
 
