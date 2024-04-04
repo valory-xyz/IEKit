@@ -72,7 +72,7 @@ class TwitterPreparation(TaskPreparation):
         write_data = [
             {
                 "text": tweet["text"],
-                "media_ids": tweet.get("media_ids", None),
+                "media_hashes": tweet.get("media_hashes", None),
                 "credentials": self.params.centaur_id_to_secrets[current_centaur["id"]][
                     "twitter"
                 ],
@@ -175,7 +175,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
             write_data = [
                 {
                     "text": tweet["text"],
-                    "media_ids": tweet.get("media_ids", None),
+                    "media_hashes": tweet.get("media_hashes", None),
                     "credentials": self.params.centaur_id_to_secrets[
                         current_centaur["id"]
                     ]["twitter"],
@@ -204,7 +204,10 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
         pending_tweets = self.get_pending_tweets()
         tweet_ids = self.synchronized_data.tweet_ids
         if not pending_tweets:
+            self.logger.info("No tweets are pending to be published")
             return updates, event
+
+        self.logger.info("There are tweets pending to be published")
 
         posted_tweet_id = pending_tweets[0]["request_id"]
 
@@ -268,7 +271,9 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
         self.pending_tweets = self.get_pending_tweets()
         if not self.pending_tweets and not self.tweets_need_update:
-            self.logger.info("No pending tweets nor tweet votes to updates")
+            self.logger.info(
+                f"No pending tweets nor tweet votes to update:\npending_tweets={self.pending_tweets}\n\ntweets_need_update={self.tweets_need_update}"
+            )
             return False
 
         return True
@@ -281,7 +286,9 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
         pending_tweets = []
         for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
-            self.logger.info(f"Checking tweet: {tweet['text']}")
+            self.logger.info(
+                f"Checking tweet: {tweet['text']} {tweet.get('media_hashes', None)}"
+            )
 
             # Ignore posted tweets
             if tweet["posted"]:
@@ -298,7 +305,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
                 continue
 
             if tweet["executionAttempts"][-1]["verified"] is not None:
-                self.logger.info("The tweet is not market for execution")
+                self.logger.info("The tweet is not marked for execution")
                 continue
 
             # At this point, the tweet is awaiting to be published [verified=None]
@@ -310,6 +317,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
             # Mark execution for success or failure
             is_tweet_executable = yield from self.check_tweet_consensus(tweet)
+            self.logger.info("The tweet will be marked for execution")
 
             # We only update the executionAttempt now if the verification failed
             # If it succeeded, it will be updated after posting
