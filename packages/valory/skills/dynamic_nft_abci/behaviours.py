@@ -125,7 +125,7 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
         )
         if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
             self.context.logger.info(
-                f"Error retrieving the token_id to address data [{contract_api_msg.performative}]"
+                f"Error retrieving the token_id to address data [{contract_api_msg}]"
             )
             return TokenTrackRound.ERROR_PAYLOAD, from_block
         data = cast(dict, contract_api_msg.state.body["token_id_to_member"])

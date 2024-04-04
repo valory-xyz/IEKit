@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 
 import json
 from abc import ABC
-from typing import Generator, Optional, Set, Type, cast
+from typing import Generator, List, Optional, Set, Type, cast
 
 from packages.valory.connections.twitter.connection import (
     PUBLIC_ID as TWITTER_CONNECTION_PUBLIC_ID,
@@ -120,8 +120,11 @@ class TwitterWriteBehaviour(BaseTwitterWriteBehaviour):
             data = self.synchronized_data.write_data[write_index]
             text = data["text"]
             credentials = data["credentials"]
+            media_hashes = data.get("media_hashes", None)
             self.context.logger.info(f"Creating post with text: {text}")
-            response = yield from self._create_tweet(text=text, credentials=credentials)
+            response = yield from self._create_tweet(
+                text=text, credentials=credentials, media_hashes=media_hashes
+            )
             if response.performative == TwitterMessage.Performative.ERROR:
                 self.context.logger.error(
                     f"Writing post failed with following error message: {response.message}"
@@ -149,6 +152,7 @@ class TwitterWriteBehaviour(BaseTwitterWriteBehaviour):
         self,
         text: str,
         credentials: dict,
+        media_hashes: Optional[List] = None,
     ) -> Generator[None, None, TwitterMessage]:
         """Send an http request message from the skill context."""
         twitter_dialogues = cast(TwitterDialogues, self.context.twitter_dialogues)
@@ -156,7 +160,7 @@ class TwitterWriteBehaviour(BaseTwitterWriteBehaviour):
             counterparty=str(TWITTER_CONNECTION_PUBLIC_ID),
             performative=TwitterMessage.Performative.CREATE_TWEET,
             text=json.dumps(
-                {"text": text, "credentials": credentials}
+                {"text": text, "credentials": credentials, "media_hashes": media_hashes}
             ),  # temp hack: we need to update the connection and protocol
         )
         twitter_message = cast(TwitterMessage, twitter_message)

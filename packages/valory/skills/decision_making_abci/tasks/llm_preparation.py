@@ -125,7 +125,7 @@ class LLMPreparation(TaskPreparation):
                 tweet = self.trim_tweet(tweet)
 
         updates = {
-            "daily_tweet": tweet,
+            "daily_tweet": {"text": tweet},
         }
         return updates, None
 

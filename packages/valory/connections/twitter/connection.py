@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2023 Valory AG
+#   Copyright 2021-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -19,7 +19,9 @@
 # ------------------------------------------------------------------------------
 """Scaffold connection and channel."""
 import json
-from typing import Any, Callable, cast
+import os
+from pathlib import Path
+from typing import Any, Callable, List, Optional, cast
 
 import requests
 import tweepy
@@ -28,6 +30,7 @@ from aea.connections.base import BaseSyncConnection
 from aea.mail.base import Envelope
 from aea.protocols.base import Address, Message
 from aea.protocols.dialogue.base import Dialogue
+from aea_cli_ipfs.ipfs_utils import IPFSTool
 from tweepy.errors import HTTPException as TweepyHTTPException
 
 from packages.valory.protocols.twitter.dialogues import TwitterDialogue
@@ -38,7 +41,7 @@ from packages.valory.protocols.twitter.message import TwitterMessage
 
 
 PUBLIC_ID = PublicId.from_str("valory/twitter:0.1.0")
-
+MEDIA_DIR = "/tmp"   # nosec
 
 class TwitterDialogues(BaseTwitterDialogues):
     """A class to keep track of IPFS dialogues."""
@@ -106,6 +109,9 @@ class TwitterConnection(BaseSyncConnection):
         self.access_token = self.configuration.config["access_token"]
         self.use_staging_api = self.configuration.config["use_staging_api"]
         self.staging_api = self.configuration.config["staging_api"]
+        self.ipfs_tool = IPFSTool()
+        self.twitter_cli = None
+        self.twitter_api = None
 
         self.dialogues = TwitterDialogues(connection_id=PUBLIC_ID)
 
@@ -169,8 +175,34 @@ class TwitterConnection(BaseSyncConnection):
         """Create a tweet and return tweet id."""
         # Temp hack: we need to update the connection and protocol
         data = json.loads(message.text)
-        text = data["text"]
+        tweet = data["text"]
+        thread_media_hashes = data.get("media_hashes", None)
         credentials = data["credentials"]
+
+        # Set up the client and api
+        twitter_cli = self.twitter_cli
+        twitter_api = self.twitter_api
+
+        if credentials:
+            twitter_cli = tweepy.Client(
+                consumer_key=credentials["consumer_key"],
+                consumer_secret=credentials["consumer_secret"],
+                access_token=credentials["access_token"],
+                access_token_secret=credentials["access_secret"],
+            )
+
+            auth = tweepy.OAuth1UserHandler(
+                consumer_key=credentials["consumer_key"],
+                consumer_secret=credentials["consumer_secret"],
+                access_token=credentials["access_token"],
+                access_token_secret=credentials["access_secret"],
+            )
+            twitter_api = tweepy.API(auth)
+
+
+        # Process media
+        thread_media_ids = self.process_media(thread_media_hashes, twitter_api)
+        self.logger.info(f"Processed media ids: {thread_media_ids}")
 
         # Call the staging API
         if self.use_staging_api:
@@ -181,10 +213,10 @@ class TwitterConnection(BaseSyncConnection):
             )
 
             try:
-                if isinstance(text, list):
+                if isinstance(tweet, list):
                     # Thread
                     first_tweet_id = None
-                    for tweet in text:
+                    for text in tweet:
                         response = requests.post(
                             url,
                             json={
@@ -202,7 +234,7 @@ class TwitterConnection(BaseSyncConnection):
                         url,
                         json={
                             "user_name": "staging_contribute",
-                            "text": text
+                            "text": tweet
                         },
                         timeout=10
                     )
@@ -231,31 +263,39 @@ class TwitterConnection(BaseSyncConnection):
         self.logger.info(
             "Posting tweet using tweepy"
         )
-        api = (
-            self.api
-            if not credentials
-            else tweepy.Client(
-                consumer_key=credentials["consumer_key"],
-                consumer_secret=credentials["consumer_secret"],
-                access_token=credentials["access_token"],
-                access_token_secret=credentials["access_secret"],
-            )
-        )
+
         try:
-            if isinstance(text, list):
+            if isinstance(tweet, list):
                 # Thread
                 previous_tweet_id = None
                 first_tweet_id = None
-                for tweet in text:
+                for i, text in enumerate(tweet):
+                    tweet_kwargs = {}
+
+                    if text:
+                        tweet_kwargs["text"] = text
+
+                    if thread_media_ids and thread_media_ids[i]:
+                        tweet_kwargs["media_ids"] = thread_media_ids[i]
+
                     if not previous_tweet_id:
-                        response = api.create_tweet(text=tweet)
+                        self.logger.info(f"Tweepy kwargs: {tweet_kwargs}")
+                        response = twitter_cli.create_tweet(**tweet_kwargs)
                         first_tweet_id = response.data["id"]
                     else:
-                        response = api.create_tweet(text=tweet, in_reply_to_tweet_id=previous_tweet_id)
+                        tweet_kwargs["in_reply_to_tweet_id"] = previous_tweet_id
+                        self.logger.info(f"Tweepy kwargs: {tweet_kwargs}")
+                        response = twitter_cli.create_tweet(**tweet_kwargs)
                     previous_tweet_id = response.data["id"]
             else:
                 # Single tweet
-                response = api.create_tweet(text=text)
+                tweet_kwargs = {}
+                if tweet:
+                    tweet_kwargs["text"] = tweet
+                if thread_media_ids and thread_media_ids[0]:
+                    tweet_kwargs["media_ids"] = thread_media_ids[0]
+                self.logger.info(f"Tweepy kwargs: {tweet_kwargs}")
+                response = twitter_cli.create_tweet(**tweet_kwargs)
                 first_tweet_id = response.data["id"]
 
         except TweepyHTTPException as e:
@@ -285,12 +325,20 @@ class TwitterConnection(BaseSyncConnection):
         Connection status set automatically.
         """
         # authenticating to access the twitter API
-        self.api = tweepy.Client(
+        self.twitter_cli = tweepy.Client(
             consumer_key=self.consumer_key,
             consumer_secret=self.consumer_secret,
             access_token=self.access_token,
             access_token_secret=self.access_secret,
         )
+
+        auth = tweepy.OAuth1UserHandler(
+            consumer_key=self.consumer_key,
+            consumer_secret=self.consumer_secret,
+            access_token=self.access_token,
+            access_token_secret=self.access_secret,
+        )
+        self.twitter_api = tweepy.API(auth)
 
     def on_disconnect(self) -> None:
         """
@@ -298,3 +346,69 @@ class TwitterConnection(BaseSyncConnection):
 
         Connection status set automatically.
         """
+
+
+    def process_media(self, thread_media_hashes: Optional[List], twitter_api) -> Optional[List]:
+        """Process tweet media"""
+        thread_media_ids = []
+        self.logger.info(f"Processing media: {thread_media_hashes}")
+
+        # Media hashes is always a list of lists
+        # Each tweet can contain several media items
+        # A thread can contain several tweets
+        # media_hashes = [[], [hashes_for_tweet_2], [], [hashes_for_tweet_4]]
+        if not thread_media_hashes:
+            return None
+
+        for tweet_media_hashes in thread_media_hashes:
+
+            tweet_media_ids = []
+
+            if not isinstance(tweet_media_hashes, list):
+                self.logger.error(
+                    f"Hash list is not a list: {tweet_media_hashes}. Skipping tweet media..."
+                )
+                thread_media_ids.append(tweet_media_ids)
+                continue
+
+            for media_hash in tweet_media_hashes:
+
+                if "." not in media_hash:
+                    self.logger.error(
+                        f"Hash {media_hash} does not contain an extension. Skipping media..."
+                    )
+                    continue
+
+                image_hash, image_ext = media_hash.split(".")
+                target_file = Path(MEDIA_DIR, image_hash)
+
+                # Remove file if it exists
+                if os.path.isfile(target_file):
+                    os.remove(target_file)
+
+                # Get media from IPFS
+                try:
+                    self.ipfs_tool.download(
+                        hash_id=image_hash,
+                        target_dir=MEDIA_DIR,
+                        attempts=1
+                    )
+                except Exception as e:
+                    self.logger.error(
+                        f"Failed to donwload media hash {media_hash}. Skipping media...\n{e}"
+                    )
+                    continue
+
+                # Rename file to include its corresponding extension
+                renamed_file = Path(MEDIA_DIR, f"{image_hash}.{image_ext}")
+                os.rename(target_file, renamed_file)
+                self.logger.info(f"Got media from IPFS: {media_hash} -> {renamed_file}")
+
+                # Send media to Twitter
+                media = twitter_api.media_upload(renamed_file)
+                tweet_media_ids.append(media.media_id)
+                self.logger.info(f"Uploaded media to Twitter: {media.media_id} ")
+
+            thread_media_ids.append(tweet_media_ids)
+
+        return thread_media_ids
