@@ -2,6 +2,8 @@
 
 REPO_PATH=$PWD
 
+export $(grep -v '^#' .1env | xargs)
+
 # Remove previous service build
 if test -d impact_evaluator_local; then
   echo "Removing previous service build"
@@ -20,7 +22,7 @@ autonomy init --reset --author valory --remote --ipfs --ipfs-node "/dns/registry
 autonomy build-image
 
 # Copy .env file
-cp $REPO_PATH/.1env ./.env
+# cp $REPO_PATH/.1env ./.env
 
 # Copy the keys and build the deployment
 cp $REPO_PATH/keys1.json ./keys.json
