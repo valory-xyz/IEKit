@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -130,6 +130,11 @@ class SynchronizedData(TxSynchronizedData):
     def chain_id(self) -> Optional[str]:
         """Get the chain name where to send the transactions."""
         return cast(str, self.db.get("chain_id", None))
+
+    @property
+    def tx_submitter(self) -> str:
+        """Get the round that submitted a tx to transaction_settlement_abci."""
+        return str(self.db.get_strict("tx_submitter"))
 
 
 class MechInteractionRound(CollectSameUntilThresholdRound):

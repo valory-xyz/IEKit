@@ -43,7 +43,7 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeihat4giyc4bz6zopvahcj4iw53356pbtwfn7p4d5yflwly2qhahum
 - valory/abstract_round_abci:0.1.0:bafybeih3enhagoql7kzpeyzzu2scpkif6y3ubakpralfnwxcvxexdyvy5i
-- valory/impact_evaluator_abci:0.1.0:bafybeif36fcmfsuqcm2e6bkn54tse45onpwrlyl5qpehmweztx43jmgvhi
+- valory/impact_evaluator_abci:0.1.0:bafybeihbj67rybtlqxs6oai7t2hgk3b5dof7bfqntgxic5wbbr3yhuayym
 - valory/generic_scoring_abci:0.1.0:bafybeif5yqzf7lwnfssijm2eytog6takawngjltkvgzxmhfdob7klmgph4
 - valory/twitter_scoring_abci:0.1.0:bafybeidoizlbvmh7gk3vll7k4hid7fxkde4qdvrdxpo7gweda2f5kqyj3m
 - valory/ceramic_read_abci:0.1.0:bafybeihnao4vubt3rjhka7swjqedifppohfa3jzgpmdxalfdofr44q5jti
@@ -57,7 +57,7 @@ skills:
 - valory/decision_making_abci:0.1.0:bafybeien73urcvuyewvpdyp26lwvnasmpltgtcsi5h463it6a2h576riem
 - valory/llm_abci:0.1.0:bafybeigu2xacitzocldv7kofnzi4g6e64xwl4vzl3m665bjbdqfkua6g3q
 - valory/olas_week_abci:0.1.0:bafybeigjaawlgphqsjispczom6mrmvl23xhzaaxxytovgcgwzzhyht463i
-- valory/mech_interact_abci:0.1.0:bafybeia55wkn5bpwtm66avsyst5aot6nj7gelnfpyhtsyayzxba5cresii
+- valory/mech_interact_abci:0.1.0:bafybeidxignwgujlkhw5hbek7xw2uz5nrd3h2xx7sj5zor263dgh4fm3p4
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -250,7 +250,8 @@ models:
       light_slash_unit_amount: ${int:5000000000000000}
       serious_slash_unit_amount: ${int:8000000000000000}
       multisend_batch_size: ${int:50}
-      mech_contract_address: ${str:0x77af31de935740567cf4ff1986d04b2c964a786a}
+      mech_contract_address: ${str:0x77af31De935740567Cf4fF1986D04B2c964A786a}
+      request_price: ${int:null}
       ipfs_address: ${str:https://gateway.autonolas.tech/ipfs/}
       default_chain_id: ${str:ethereum}
       transaction_service_url: ${str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
