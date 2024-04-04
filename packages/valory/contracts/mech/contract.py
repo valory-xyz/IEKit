@@ -182,6 +182,7 @@ class Mech(Contract):
         **kwargs: Any
     ) -> JSONLike:
         """Get the price of a request."""
+        contract_address = ledger_api.api.to_checksum_address(contract_address)
         contract_instance = cls.get_instance(ledger_api, contract_address)
         price = ledger_api.contract_method_call(contract_instance, "price")
         return dict(price=price)
@@ -200,6 +201,7 @@ class Mech(Contract):
         :param contract_address: the contract's address
         :param request_data: the request data
         """
+        contract_address = ledger_api.api.to_checksum_address(contract_address)
         contract_instance = cls.get_instance(ledger_api, contract_address)
         encoded_data = contract_instance.encodeABI("request", args=(request_data,))
         return {"data": bytes.fromhex(encoded_data[2:])}
@@ -256,6 +258,7 @@ class Mech(Contract):
         :return: a dictionary with a key named `results`
         which contains a list of dictionaries (as many as the expected logs) containing the request id and the data.
         """
+        contract_address = ledger_api.api.to_checksum_address(contract_address)
         res = {}
         for abi in partial_abis:
             contract_instance = ledger_api.api.eth.contract(contract_address, abi=abi)
@@ -285,6 +288,7 @@ class Mech(Contract):
         :param expected_logs: the number of logs expected.
         :return: a dictionary with the request id and the data.
         """
+        contract_address = ledger_api.api.to_checksum_address(contract_address)
         res = {}
         for abi in partial_abis:
             contract_instance = ledger_api.api.eth.contract(contract_address, abi=abi)
@@ -304,6 +308,7 @@ class Mech(Contract):
         **kwargs: Any
     ) -> JSONLike:
         """Get the number of the block in which the tx of the given hash was settled."""
+        contract_address = ledger_api.api.to_checksum_address(contract_address)
         receipt: TxReceipt = ledger_api.api.eth.get_transaction_receipt(tx_hash)
         block: BlockData = ledger_api.api.eth.get_block(receipt["blockNumber"])
         return dict(number=block["number"])
@@ -320,6 +325,7 @@ class Mech(Contract):
         **kwargs: Any
     ) -> JSONLike:
         """Filter the `Deliver` events emitted by the contract and get the data of the given `request_id`."""
+        contract_address = ledger_api.api.to_checksum_address(contract_address)
         ledger_api = cast(EthereumApi, ledger_api)
 
         def get_responses() -> Any:
@@ -365,6 +371,7 @@ class Mech(Contract):
         **kwargs: Any
     ) -> JSONLike:
         """Get the price of a request."""
+        contract_address = ledger_api.api.to_checksum_address(contract_address)
         contract_instance = cls.get_instance(ledger_api, contract_address)
         mech_id = ledger_api.contract_method_call(contract_instance, "tokenId")
         return dict(id=mech_id)

@@ -35,7 +35,7 @@ fingerprint_ignore_patterns: []
 connections: []
 contracts:
 - valory/gnosis_safe:0.1.0:bafybeibq77mgzhyb23blf2eqmia3kc6io5karedfzhntvpcebeqdzrgyqa
-- valory/mech:0.1.0:bafybeidll3ko4re2pndar3szfhtuxi5x2gx3bw7uusb33g5gmvxcxalwqm
+- valory/mech:0.1.0:bafybeiejdn3rqqa7smbeiypajy63um7okteimvj6bsud3gezneycmdc6te
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
@@ -143,7 +143,7 @@ models:
       tx_timeout: 10.0
       validate_timeout: 1205
       multisend_batch_size: 50
-      mech_contract_address: '0x77af31de935740567cf4ff1986d04b2c964a786a'
+      mech_contract_address: '0x77af31De935740567Cf4fF1986D04B2c964A786a'
       request_price: null
       ipfs_address: https://gateway.autonolas.tech/ipfs/
       use_termination: false
