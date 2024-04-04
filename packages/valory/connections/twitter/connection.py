@@ -201,8 +201,8 @@ class TwitterConnection(BaseSyncConnection):
 
 
         # Process media
-        thread_media_ids = self. process_media(thread_media_hashes, twitter_api)
-
+        thread_media_ids = self.process_media(thread_media_hashes, twitter_api)
+        self.logger.info(f"Processed media ids: {thread_media_ids}")
 
         # Call the staging API
         if self.use_staging_api:
@@ -279,10 +279,12 @@ class TwitterConnection(BaseSyncConnection):
                         tweet_kwargs["media_ids"] = thread_media_ids[i]
 
                     if not previous_tweet_id:
+                        self.logger.info(f"Tweepy kwargs: {tweet_kwargs}")
                         response = twitter_cli.create_tweet(**tweet_kwargs)
                         first_tweet_id = response.data["id"]
                     else:
                         tweet_kwargs["in_reply_to_tweet_id"] = previous_tweet_id
+                        self.logger.info(f"Tweepy kwargs: {tweet_kwargs}")
                         response = twitter_cli.create_tweet(**tweet_kwargs)
                     previous_tweet_id = response.data["id"]
             else:
@@ -292,6 +294,7 @@ class TwitterConnection(BaseSyncConnection):
                     tweet_kwargs["text"] = tweet
                 if thread_media_ids and thread_media_ids[0]:
                     tweet_kwargs["media_ids"] = thread_media_ids[0]
+                self.logger.info(f"Tweepy kwargs: {tweet_kwargs}")
                 response = twitter_cli.create_tweet(**tweet_kwargs)
                 first_tweet_id = response.data["id"]
 
@@ -348,6 +351,7 @@ class TwitterConnection(BaseSyncConnection):
     def process_media(self, thread_media_hashes: Optional[List], twitter_api) -> Optional[List]:
         """Process tweet media"""
         thread_media_ids = []
+        self.logger.info(f"Processing media: {thread_media_hashes}")
 
         # Media hashes is always a list of lists
         # Each tweet can contain several media items
@@ -398,10 +402,12 @@ class TwitterConnection(BaseSyncConnection):
                 # Rename file to include its corresponding extension
                 renamed_file = Path(MEDIA_DIR, f"{image_hash}.{image_ext}")
                 os.rename(target_file, renamed_file)
+                self.logger.info(f"Got media from IPFS: {media_hash} -> {renamed_file}")
 
                 # Send media to Twitter
                 media = twitter_api.media_upload(renamed_file)
                 tweet_media_ids.append(media.media_id)
+                self.logger.info(f"Uploaded media to Twitter: {media.media_id} ")
 
             thread_media_ids.append(tweet_media_ids)
 
