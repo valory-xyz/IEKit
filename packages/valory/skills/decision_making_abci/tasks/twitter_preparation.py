@@ -201,7 +201,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
         # Set the scheduled tweet as posted
         centaurs_data = updates["centaurs_data"]
         current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
-        pending_tweets = yield from self.get_pending_tweets()
+        pending_tweets = self.get_pending_tweets()
         tweet_ids = self.synchronized_data.tweet_ids
         if not pending_tweets:
             return updates, event
@@ -266,7 +266,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
             ):
                 return False
 
-        self.pending_tweets = yield from self.get_pending_tweets()
+        self.pending_tweets = self.get_pending_tweets()
         if not self.pending_tweets and not self.tweets_need_update:
             self.logger.info("No pending tweets nor tweet votes to updates")
             return False
