@@ -37,7 +37,7 @@ contracts:
 - valory/gnosis_safe:0.1.0:bafybeibq77mgzhyb23blf2eqmia3kc6io5karedfzhntvpcebeqdzrgyqa
 - valory/mech:0.1.0:bafybeiejdn3rqqa7smbeiypajy63um7okteimvj6bsud3gezneycmdc6te
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
-- valory/erc20:0.1.0:bafybeidhpjp6tizcwtkrm57ib7hcj4gzyo3hchkxajs6dimjsfhrlkgmj4
+- valory/erc20:0.1.0:bafybeif7pchwpod7svho3tlam4dzy5vvlzakfza6uqlzei3eu4blvcgxey
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 skills:
