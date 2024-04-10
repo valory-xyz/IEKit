@@ -375,3 +375,18 @@ class Mech(Contract):
         contract_instance = cls.get_instance(ledger_api, contract_address)
         mech_id = ledger_api.contract_method_call(contract_instance, "tokenId")
         return dict(id=mech_id)
+
+    @classmethod
+    def get_requests_count(
+        cls,
+        ledger_api: EthereumApi,
+        contract_address: str,
+        address: str,
+        **kwargs: Any
+    ) -> JSONLike:
+        """Get the requests count."""
+        contract_address = ledger_api.api.to_checksum_address(contract_address)
+        address = ledger_api.api.to_checksum_address(address)
+        contract_instance = cls.get_instance(ledger_api, contract_address)
+        requests_count = contract_instance.functions.getRequestsCount(address).call()
+        return {"requests_count": requests_count}
