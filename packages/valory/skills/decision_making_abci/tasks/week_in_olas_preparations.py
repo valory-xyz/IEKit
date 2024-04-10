@@ -69,6 +69,8 @@ class WeekInOlasCreatePreparation(TaskPreparation):
             "executionAttempts": [],
         }
 
+        self.logger.info(f"Added WiO to the tweet list:\n{thread}")
+
         current_centaur["plugins_data"]["scheduled_tweet"]["tweets"].append(thread)
 
         updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
