@@ -153,6 +153,7 @@ models:
       slash_threshold_amount: 10000000000000000
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
+      mech_chain_id: gnosis
     class_name: Params
   mech_response:
     args:

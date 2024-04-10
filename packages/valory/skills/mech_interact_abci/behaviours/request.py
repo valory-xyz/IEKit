@@ -65,7 +65,6 @@ Ox = "0x"
 # which is what we want in most cases
 # more info here: https://safe-docs.dev.gnosisdev.com/safe/docs/contracts_tx_execution/
 SAFE_GAS = 0
-GNOSIS_CHAIN_ID = "gnosis"
 
 WXDAI = "0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d"
 
@@ -268,7 +267,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             contract_id=str(MultiSendContract.contract_id),
             contract_callable="get_tx_data",
             multi_send_txs=self.multi_send_txs,
-            chain_id=GNOSIS_CHAIN_ID,
+            chain_id=self.params.mech_chain_id,
         )
         expected_performative = ContractApiMessage.Performative.RAW_TRANSACTION
         if response_msg.performative != expected_performative:
@@ -306,7 +305,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             data=self.multisend_data,
             safe_tx_gas=SAFE_GAS,
             operation=SafeOperation.DELEGATE_CALL.value,
-            chain_id=GNOSIS_CHAIN_ID,
+            chain_id=self.params.mech_chain_id,
         )
 
         if response_msg.performative != ContractApiMessage.Performative.STATE:
@@ -365,7 +364,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             "data",
             get_name(MechRequestBehaviour.request_data),
             request_data=self._v1_hex_truncated,
-            chain_id=GNOSIS_CHAIN_ID,
+            chain_id=self.params.mech_chain_id,
         )
 
         if status:
@@ -395,7 +394,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             "get_price",
             "price",
             get_name(MechRequestBehaviour.price),
-            chain_id=GNOSIS_CHAIN_ID,
+            chain_id=self.params.mech_chain_id,
         )
         return result
 
@@ -420,7 +419,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     self.matching_round.auto_round_id(),
                     None,
                     None,
-                    GNOSIS_CHAIN_ID,
+                    self.params.mech_chain_id,
                     None,
                     None,
                 )
@@ -441,7 +440,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     self.matching_round.auto_round_id(),
                     self.tx_hex,
                     self.price,
-                    GNOSIS_CHAIN_ID,
+                    self.params.mech_chain_id,
                     *serialized_data,
                 )
         yield from self.finish_behaviour(payload)

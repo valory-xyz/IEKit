@@ -259,6 +259,7 @@ models:
       veolas_delegation_address: ${str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
       tweet_consensus_veolas: ${int:2000000}
       termination_from_block: ${int:0}
+      mech_chain_id: ${str:gnosis}
   randomness_api:
     args:
       api_id: cloudflare
