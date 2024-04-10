@@ -151,14 +151,14 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         )
 
     @property
-    def collateral_token(self) -> str:
+    def mech_token_address(self) -> str:
         """Get the contract address of the token that the market maker supports."""
-        return WXDAI
+        return self.params.mech_token_address or WXDAI
 
     @property
     def is_wxdai(self) -> bool:
         """Get whether the collateral address is wxDAI."""
-        return self.collateral_token.lower() == WXDAI.lower()
+        return self.mech_token_address.lower() == WXDAI.lower()
 
     @staticmethod
     def wei_to_native(wei: int) -> float:
@@ -170,7 +170,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         return (
             f"{self.wei_to_native(amount)} wxDAI"
             if self.is_wxdai
-            else f"{amount} WEI of the collateral token with address {self.collateral_token}"
+            else f"{amount} WEI of the collateral token with address {self.mech_token_address}"
         )
 
     @property
@@ -182,7 +182,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         """Check the safe's balance."""
         response_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
-            contract_address=self.collateral_token,
+            contract_address=self.mech_token_address,
             contract_id=str(ERC20.contract_id),
             contract_callable="check_balance",
             account=self.synchronized_data.safe_contract_address,
@@ -229,7 +229,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             return False
 
         batch = MultisendBatch(
-            to=self.collateral_token,
+            to=self.mech_token_address,
             data=HexBytes(withdraw_data),
         )
         self.multisend_batches.append(batch)
