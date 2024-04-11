@@ -155,14 +155,6 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         """Convert WEI to unit token."""
         return wei / 10**18
 
-    def _collateral_amount_info(self, amount: int) -> str:
-        """Get a description of the collateral token's amount."""
-        return (
-            f"{self.wei_to_unit(amount)} wxDAI"
-            if self.is_wxdai
-            else f"{amount} WEI of the collateral token with address {self.params.wrapped_native_token_address}"
-        )
-
     def _get_native_balance(self, account: str) -> Generator[None, None, Optional[int]]:
         """Get native balance for account."""
         ledger_api_response = yield from self.get_ledger_api_response(
@@ -269,6 +261,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             data=HexBytes(withdraw_data),
         )
         self.multisend_batches.append(batch)
+        self.context.logger.info(f"Built transaction to unwrap {amount} tokens.")
         return True
 
     def _ensure_available_balance(self) -> WaitableConditionType:
