@@ -27,6 +27,7 @@ from typing import Any, Generator, List, Optional, cast
 
 import multibase
 import multicodec
+from aea.exceptions import AEAEnforceError
 from aea.helpers.cid import to_v1
 from hexbytes import HexBytes
 
@@ -37,6 +38,7 @@ from packages.valory.contracts.gnosis_safe.contract import (
 )
 from packages.valory.contracts.multisend.contract import MultiSendContract
 from packages.valory.protocols.contract_api import ContractApiMessage
+from packages.valory.protocols.ledger_api.message import LedgerApiMessage
 from packages.valory.skills.abstract_round_abci.base import get_name
 from packages.valory.skills.abstract_round_abci.io_.store import SupportedFiletype
 from packages.valory.skills.mech_interact_abci.behaviours.base import (
@@ -65,9 +67,6 @@ Ox = "0x"
 # which is what we want in most cases
 # more info here: https://safe-docs.dev.gnosisdev.com/safe/docs/contracts_tx_execution/
 SAFE_GAS = 0
-GNOSIS_CHAIN_ID = "gnosis"
-
-WXDAI = "0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d"
 
 
 class MechRequestBehaviour(MechInteractBaseBehaviour):
@@ -151,73 +150,103 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             SafeOperation.DELEGATE_CALL.value,
         )
 
-    @property
-    def collateral_token(self) -> str:
-        """Get the contract address of the token that the market maker supports."""
-        return WXDAI
-
-    @property
-    def is_wxdai(self) -> bool:
-        """Get whether the collateral address is wxDAI."""
-        return self.collateral_token.lower() == WXDAI.lower()
-
     @staticmethod
-    def wei_to_native(wei: int) -> float:
-        """Convert WEI to native token."""
+    def wei_to_unit(wei: int) -> float:
+        """Convert WEI to unit token."""
         return wei / 10**18
 
-    def _collateral_amount_info(self, amount: int) -> str:
-        """Get a description of the collateral token's amount."""
-        return (
-            f"{self.wei_to_native(amount)} wxDAI"
-            if self.is_wxdai
-            else f"{amount} WEI of the collateral token with address {self.collateral_token}"
+    def _get_native_balance(self, account: str) -> Generator[None, None, Optional[int]]:
+        """Get native balance for account."""
+        ledger_api_response = yield from self.get_ledger_api_response(
+            performative=LedgerApiMessage.Performative.GET_STATE,  # type: ignore
+            ledger_callable="get_balance",
+            block_identifier="latest",
+            account=account,
         )
 
-    @property
-    def xdai_deficit(self) -> int:
-        """Get the amount of missing xDAI for sending the request."""
-        return self.price - self.wallet_balance
+        try:
+            balance = int(ledger_api_response.state.body["get_balance_result"])
+        except (AEAEnforceError, KeyError, ValueError, TypeError):
+            balance = None
 
-    def check_balance(self) -> WaitableConditionType:
-        """Check the safe's balance."""
+        if balance is None:
+            log_msg = f"Failed to get the native balance for account {account}."
+            self.context.logger.error(f"{log_msg}: {ledger_api_response}")
+            return None
+
+        self.context.logger.info(
+            f"Account {account} has {self.wei_to_unit(balance)} native tokens."
+        )
+        return balance
+
+    def _get_wrapped_native_balance(
+        self, account: str
+    ) -> Generator[None, None, Optional[int]]:
+        """Get wrapped native balance for account."""
+
+        error_message = f"Failed to get the wrapped native balance for account {account} (mech_wrapped_native_token_address={self.params.mech_wrapped_native_token_address})."
+        config_message = "Please configure 'mech_wrapped_native_token_address' appropriately if you want to use wrapped native tokens for mech requests."
+        if not self.params.mech_wrapped_native_token_address:
+            self.context.logger.info(
+                f"Wrapped native token address has not been configured. Assumed wrapped native token = 0. {config_message}"
+            )
+            return 0
+
         response_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
-            contract_address=self.collateral_token,
+            contract_address=self.params.mech_wrapped_native_token_address,
             contract_id=str(ERC20.contract_id),
             contract_callable="check_balance",
-            account=self.synchronized_data.safe_contract_address,
+            account=account,
         )
         if response_msg.performative != ContractApiMessage.Performative.RAW_TRANSACTION:
             self.context.logger.error(
-                f"Could not calculate the balance of the safe: {response_msg}"
+                f"{error_message} {config_message} {response_msg}"
             )
-            return False
+            return None
 
         token = response_msg.raw_transaction.body.get("token", None)
         wallet = response_msg.raw_transaction.body.get("wallet", None)
         if token is None or wallet is None:
             self.context.logger.error(
-                f"Something went wrong while trying to get the balance of the safe: {response_msg}"
+                f"{error_message} {config_message} {response_msg}"
             )
+            return None
+
+        self.context.logger.info(
+            f"Account {account} has {self.wei_to_unit(token)} wrapped native tokens."
+        )
+        return token
+
+    def update_safe_balances(self) -> WaitableConditionType:
+        """Check the safe's balance."""
+        account = self.synchronized_data.safe_contract_address
+        wallet = yield from self._get_native_balance(account)
+        if wallet is None:
+            return False
+
+        token = yield from self._get_wrapped_native_balance(account)
+        if token is None:
             return False
 
         self.token_balance = int(token)
         self.wallet_balance = int(wallet)
-
-        native = self.wei_to_native(self.wallet_balance)
-        collateral = self._collateral_amount_info(self.token_balance)
-        self.context.logger.info(f"The safe has {native} xDAI and {collateral}.")
         return True
 
-    def _build_unwrap_wxdai_tx(self) -> WaitableConditionType:
-        """Exchange wxDAI to xDAI."""
+    def _build_unwrap_tokens_tx(self) -> WaitableConditionType:
+        """Exchange wrapped native tokens to native tokens."""
+
+        if not self.params.mech_wrapped_native_token_address:
+            return True
+
+        # A total of price - wallet_balance wrapped native tokens are required
+        amount = self.price - self.wallet_balance
         response_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
-            contract_address=WXDAI,
+            contract_address=self.params.mech_wrapped_native_token_address,
             contract_id=str(ERC20.contract_id),
             contract_callable="build_withdraw_tx",
-            amount=self.xdai_deficit,
+            amount=amount,
         )
 
         if response_msg.performative != ContractApiMessage.Performative.STATE:
@@ -230,31 +259,33 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             return False
 
         batch = MultisendBatch(
-            to=self.collateral_token,
+            to=self.params.mech_wrapped_native_token_address,
             data=HexBytes(withdraw_data),
         )
         self.multisend_batches.append(batch)
+        self.context.logger.info(f"Built transaction to unwrap {amount} tokens.")
         return True
 
-    def _check_unwrap_wxdai(self) -> WaitableConditionType:
-        """Check whether the payment for the mech request is possible and unwrap some wxDAI if needed."""
-        yield from self.wait_for_condition_with_sleep(self.check_balance)
-        missing = self.xdai_deficit
-        if missing <= 0:
+    def _ensure_available_balance(self) -> WaitableConditionType:
+        """Ensures available payment for the mech request and unwraps tokens if needed."""
+        yield from self.wait_for_condition_with_sleep(self.update_safe_balances)
+
+        # There is enough balance using native tokens
+        if self.price <= self.wallet_balance:
             return True
 
-        # if the collateral token is wxDAI, subtract the wxDAI balance from the xDAI that is missing for paying the mech
-        if self.is_wxdai:
-            missing -= self.token_balance
-
-        # if we can cover the required amount by unwrapping some wxDAI, proceed to add this to a multisend tx
-        if missing <= 0:
-            yield from self.wait_for_condition_with_sleep(self._build_unwrap_wxdai_tx)
+        # There is enough balance using native and wrapped tokens
+        if self.price <= self.wallet_balance + self.token_balance:
+            yield from self.wait_for_condition_with_sleep(self._build_unwrap_tokens_tx)
             return True
 
-        balance_info = "The balance is not enough to pay for the mech's price"
-        refill_info = f". Please refill the safe with at least {self.wei_to_native(missing)} xDAI or wxDAI."
-        self.context.logger.warning(balance_info + refill_info)
+        shortage = self.price - self.wallet_balance - self.token_balance
+        balance_info = "The balance is not enough to pay for the mech's price."
+        refill_info = f"Please refill the safe with at least {self.wei_to_unit(shortage)} native tokens."
+        if self.params.mech_wrapped_native_token_address:
+            refill_info = f"Please refill the safe with at least {self.wei_to_unit(shortage)} native tokens or wrapped native tokens."
+
+        self.context.logger.warning(balance_info + " " + refill_info)
         self.sleep(self.params.sleep_time)
         return False
 
@@ -268,7 +299,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             contract_id=str(MultiSendContract.contract_id),
             contract_callable="get_tx_data",
             multi_send_txs=self.multi_send_txs,
-            chain_id=GNOSIS_CHAIN_ID,
+            chain_id=self.params.mech_chain_id,
         )
         expected_performative = ContractApiMessage.Performative.RAW_TRANSACTION
         if response_msg.performative != expected_performative:
@@ -306,7 +337,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             data=self.multisend_data,
             safe_tx_gas=SAFE_GAS,
             operation=SafeOperation.DELEGATE_CALL.value,
-            chain_id=GNOSIS_CHAIN_ID,
+            chain_id=self.params.mech_chain_id,
         )
 
         if response_msg.performative != ContractApiMessage.Performative.STATE:
@@ -365,7 +396,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             "data",
             get_name(MechRequestBehaviour.request_data),
             request_data=self._v1_hex_truncated,
-            chain_id=GNOSIS_CHAIN_ID,
+            chain_id=self.params.mech_chain_id,
         )
 
         if status:
@@ -380,12 +411,12 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
     def _get_price(self) -> WaitableConditionType:
         """Get the price of the mech request."""
-        # If the optional parameter 'request_price' is set, then
+        # If the optional parameter 'mech_request_price' is set, then
         # use that price (wei). Otherwise, determine the request price
         # by calling the contract.
-        # This parameter is useful to set 'request_price=0' when the
+        # This parameter is useful to set 'mech_request_price=0' when the
         # agent is using a Nevermined subscription.
-        price = self.params.request_price
+        price = self.params.mech_request_price
 
         if price:
             self.price = price
@@ -395,7 +426,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             "get_price",
             "price",
             get_name(MechRequestBehaviour.price),
-            chain_id=GNOSIS_CHAIN_ID,
+            chain_id=self.params.mech_chain_id,
         )
         return result
 
@@ -403,7 +434,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         """Prepare a multisend safe tx for sending requests to a mech and return the hex for the tx settlement skill."""
         n_iters = min(self.params.multisend_batch_size, len(self._mech_requests))
         steps = (self._get_price,)
-        steps += (self._check_unwrap_wxdai,)
+        steps += (self._ensure_available_balance,)
         steps += (self._send_metadata_to_ipfs, self._build_request_data) * n_iters
         steps += (self._build_multisend_data, self._build_multisend_safe_tx_hash)
 
@@ -420,7 +451,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     self.matching_round.auto_round_id(),
                     None,
                     None,
-                    GNOSIS_CHAIN_ID,
+                    self.params.mech_chain_id,
                     None,
                     None,
                 )
@@ -441,7 +472,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     self.matching_round.auto_round_id(),
                     self.tx_hex,
                     self.price,
-                    GNOSIS_CHAIN_ID,
+                    self.params.mech_chain_id,
                     *serialized_data,
                 )
         yield from self.finish_behaviour(payload)

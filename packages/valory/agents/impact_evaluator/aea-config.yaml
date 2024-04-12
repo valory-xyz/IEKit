@@ -43,21 +43,21 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeihat4giyc4bz6zopvahcj4iw53356pbtwfn7p4d5yflwly2qhahum
 - valory/abstract_round_abci:0.1.0:bafybeih3enhagoql7kzpeyzzu2scpkif6y3ubakpralfnwxcvxexdyvy5i
-- valory/impact_evaluator_abci:0.1.0:bafybeicad26pbre72m3hqq5wsh6bylb34s3yvujqtvv54r3osk2ndkaw7m
-- valory/generic_scoring_abci:0.1.0:bafybeifssz5k6uaejnyssdc2qjg2g7qofm6u45np6va6lr4bjgpivyj2dm
-- valory/twitter_scoring_abci:0.1.0:bafybeieewaqtva72m45xpuxmkaaxq3v4dajgvz7tokvquz43iz3zdtvwhe
+- valory/impact_evaluator_abci:0.1.0:bafybeictmdauqukbe4kzuqf3zxjpdrixwoyxx53ovx4wncglwe5wpgclqe
+- valory/generic_scoring_abci:0.1.0:bafybeiejxwez7hdz6sobv2wsybaz3f53fvppg67ufz5bgtgpkil24wmosi
+- valory/twitter_scoring_abci:0.1.0:bafybeienvsxnns4b26cmc2u5ccrfindqqzs4aokqnevqldm5lc7sgkttzm
 - valory/ceramic_read_abci:0.1.0:bafybeihnao4vubt3rjhka7swjqedifppohfa3jzgpmdxalfdofr44q5jti
 - valory/ceramic_write_abci:0.1.0:bafybeia5mutx7urihg3bfjqmw7ox2luspcr2fakuvkkx6oglupbt52wpxi
-- valory/dynamic_nft_abci:0.1.0:bafybeibigdwrd4wsnmvze7lppxwy4fwcwtbocwl5anstfb5ougq23f2aaq
+- valory/dynamic_nft_abci:0.1.0:bafybeib7cz2dkuavmt7alzdfzvrlix7i6q4m2epyxaehd2veauwije76qi
 - valory/registration_abci:0.1.0:bafybeiek7zcsxbucjwzgqfftafhfrocvc7q4yxllh2q44jeemsjxg3rcfm
 - valory/reset_pause_abci:0.1.0:bafybeidw4mbx3os3hmv7ley7b3g3gja7ydpitr7mxbjpwzxin2mzyt5yam
 - valory/termination_abci:0.1.0:bafybeihq6qtbwt6i53ayqym63vhjexkcppy26gguzhhjqywfmiuqghvv44
 - valory/transaction_settlement_abci:0.1.0:bafybeigtzlk4uakmd54rxnznorcrstsr52kta474lgrnvx5ovr546vj7sq
 - valory/twitter_write_abci:0.1.0:bafybeiadlfmtkddyqay6y5i6ktjbtyq3lhbm5xatuwggxag4yv2gtf3tji
-- valory/decision_making_abci:0.1.0:bafybeienk7euiul5dr3hjitifcjhycerv7kz7wboecdexgwf7cvaolxbgi
+- valory/decision_making_abci:0.1.0:bafybeicxsxcsf4urwc5ggvbha6nqmelxsletduyrbx2nsycegrx7miqs7a
 - valory/llm_abci:0.1.0:bafybeigu2xacitzocldv7kofnzi4g6e64xwl4vzl3m665bjbdqfkua6g3q
-- valory/olas_week_abci:0.1.0:bafybeidmglw42t6i3675texwq4l2byhycqcn44b5dzq4sga3hlgqrx4kga
-- valory/mech_interact_abci:0.1.0:bafybeihovtfa2oocrx32pdq2af6ey37om7q7b2gy3kkd3azv6mjrclohsy
+- valory/olas_week_abci:0.1.0:bafybeibrq7di5v25kcmnz4ipvcftpjnuzatpshdo7odpzbk5nwefrwhrvq
+- valory/mech_interact_abci:0.1.0:bafybeib3aytq2a5hk6vjsak3eznuilndx4p53utdylbyhcmt6ty7kk6euq
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -251,7 +251,7 @@ models:
       serious_slash_unit_amount: ${int:8000000000000000}
       multisend_batch_size: ${int:50}
       mech_contract_address: ${str:0x77af31De935740567Cf4fF1986D04B2c964A786a}
-      request_price: ${int:null}
+      mech_request_price: ${int:null}
       ipfs_address: ${str:https://gateway.autonolas.tech/ipfs/}
       default_chain_id: ${str:ethereum}
       transaction_service_url: ${str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
@@ -259,6 +259,7 @@ models:
       veolas_delegation_address: ${str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
       tweet_consensus_veolas: ${int:2000000}
       termination_from_block: ${int:0}
+      mech_chain_id: ${str:gnosis}
   randomness_api:
     args:
       api_id: cloudflare

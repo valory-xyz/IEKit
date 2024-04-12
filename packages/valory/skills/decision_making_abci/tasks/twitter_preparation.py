@@ -287,7 +287,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
         pending_tweets = []
         for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
             self.logger.info(
-                f"Checking tweet: {tweet['text']} {tweet.get('media_hashes', None)}"
+                f"Checking tweet: text={tweet['text']} media_hashes={tweet.get('media_hashes', None)}"
             )
 
             # Ignore posted tweets
@@ -302,10 +302,11 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
             # Ignore tweets not marked for posting
             if not tweet["executionAttempts"]:
+                self.logger.info("The tweet is not marked for execution")
                 continue
 
             if tweet["executionAttempts"][-1]["verified"] is not None:
-                self.logger.info("The tweet is not marked for execution")
+                self.logger.info("The tweet execution attempt has not been verified")
                 continue
 
             # At this point, the tweet is awaiting to be published [verified=None]
