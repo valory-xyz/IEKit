@@ -34,3 +34,4 @@ f91f017c41d644b87699fb06619d5bdb3b568838:packages/valory/services/impact_evaluat
 8fd2e768a581e5119a50d39d0dde43848bffb148:packages/valory/skills/transaction_settlement_abci/skill.yaml:generic-api-key:92
 580e513a26e54df7b4ec3d299106ce82f5af02a7:packages/valory/skills/termination_abci/skill.yaml:generic-api-key:84
 2bb6c7b9e3b1dd3c1242278ea3bbebb54ba510cd:packages/valory/skills/mech_interact_abci/skill.yaml:generic-api-key:158
+e966c738cfdc66d6befef76d0f59bac5f1f61929:packages/valory/skills/mech_interact_abci/skill.yaml:generic-api-key:151
