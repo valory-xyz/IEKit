@@ -184,22 +184,24 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
     ) -> Generator[None, None, Optional[int]]:
         """Get wrapped native balance for account."""
 
-        if not self.params.wrapped_native_token_address:
+        error_message = f"Failed to get the wrapped native balance for account {account} (mech_wrapped_native_token_address={self.params.mech_wrapped_native_token_address})."
+        config_message = "Please configure 'mech_wrapped_native_token_address' appropriately if you want to use wrapped native tokens for mech requests."
+        if not self.params.mech_wrapped_native_token_address:
             self.context.logger.info(
-                "Wrapped native token address has not been configured."
+                f"Wrapped native token address has not been configured. Assumed wrapped native token = 0. {config_message}"
             )
             return 0
 
         response_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
-            contract_address=self.params.wrapped_native_token_address,
+            contract_address=self.params.mech_wrapped_native_token_address,
             contract_id=str(ERC20.contract_id),
             contract_callable="check_balance",
             account=account,
         )
         if response_msg.performative != ContractApiMessage.Performative.RAW_TRANSACTION:
             self.context.logger.error(
-                f"Failed to get the wrapped native balance for account {account}: {response_msg}"
+                f"{error_message} {config_message} {response_msg}"
             )
             return None
 
@@ -207,7 +209,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         wallet = response_msg.raw_transaction.body.get("wallet", None)
         if token is None or wallet is None:
             self.context.logger.error(
-                f"Failed to get the wrapped native balance for account {account}: {response_msg}"
+                f"{error_message} {config_message} {response_msg}"
             )
             return None
 
@@ -234,14 +236,14 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
     def _build_unwrap_tokens_tx(self) -> WaitableConditionType:
         """Exchange wrapped native tokens to native tokens."""
 
-        if not self.params.wrapped_native_token_address:
+        if not self.params.mech_wrapped_native_token_address:
             return True
 
         # A total of price - wallet_balance wrapped native tokens are required
         amount = self.price - self.wallet_balance
         response_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
-            contract_address=self.params.wrapped_native_token_address,
+            contract_address=self.params.mech_wrapped_native_token_address,
             contract_id=str(ERC20.contract_id),
             contract_callable="build_withdraw_tx",
             amount=amount,
@@ -257,7 +259,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             return False
 
         batch = MultisendBatch(
-            to=self.params.wrapped_native_token_address,
+            to=self.params.mech_wrapped_native_token_address,
             data=HexBytes(withdraw_data),
         )
         self.multisend_batches.append(batch)
@@ -280,7 +282,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         shortage = self.price - self.wallet_balance - self.token_balance
         balance_info = "The balance is not enough to pay for the mech's price."
         refill_info = f"Please refill the safe with at least {self.wei_to_unit(shortage)} native tokens."
-        if self.params.wrapped_native_token_address:
+        if self.params.mech_wrapped_native_token_address:
             refill_info = f"Please refill the safe with at least {self.wei_to_unit(shortage)} native tokens or wrapped native tokens."
 
         self.context.logger.warning(balance_info + " " + refill_info)
@@ -409,12 +411,12 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
     def _get_price(self) -> WaitableConditionType:
         """Get the price of the mech request."""
-        # If the optional parameter 'request_price' is set, then
+        # If the optional parameter 'mech_request_price' is set, then
         # use that price (wei). Otherwise, determine the request price
         # by calling the contract.
-        # This parameter is useful to set 'request_price=0' when the
+        # This parameter is useful to set 'mech_request_price=0' when the
         # agent is using a Nevermined subscription.
-        price = self.params.request_price
+        price = self.params.mech_request_price
 
         if price:
             self.price = price

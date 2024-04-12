@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeiducw2el3wt5xhtgoedxvtbkb2pxah4c7ca7dzgch3whkjqcifpym
+agent: valory/impact_evaluator:0.1.0:bafybeidt4gx5rmfl3os3rs3hfw5g3iyrm4mzkiivip6mn5qfmyr372g7bi
 number_of_agents: 4
 deployment:
   agent:
@@ -123,7 +123,7 @@ extra:
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:5}
         mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31De935740567Cf4fF1986D04B2c964A786a}
-        request_price: ${REQUEST_PRICE:int:null}
+        mech_request_price: ${MECH_REQUEST_PRICE:int:null}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
@@ -210,7 +210,7 @@ extra:
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:5}
         mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31De935740567Cf4fF1986D04B2c964A786a}
-        request_price: ${REQUEST_PRICE:int:null}
+        mech_request_price: ${MECH_REQUEST_PRICE:int:null}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
@@ -297,7 +297,7 @@ extra:
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:5}
         mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31De935740567Cf4fF1986D04B2c964A786a}
-        request_price: ${REQUEST_PRICE:int:null}
+        mech_request_price: ${MECH_REQUEST_PRICE:int:null}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
@@ -388,7 +388,7 @@ extra:
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:5}
         mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31De935740567Cf4fF1986D04B2c964A786a}
-        request_price: ${REQUEST_PRICE:int:null}
+        mech_request_price: ${MECH_REQUEST_PRICE:int:null}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}

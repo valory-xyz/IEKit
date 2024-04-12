@@ -37,7 +37,7 @@ skills:
 - valory/llm_abci:0.1.0:bafybeigu2xacitzocldv7kofnzi4g6e64xwl4vzl3m665bjbdqfkua6g3q
 - valory/twitter_write_abci:0.1.0:bafybeiadlfmtkddyqay6y5i6ktjbtyq3lhbm5xatuwggxag4yv2gtf3tji
 - valory/olas_week_abci:0.1.0:bafybeibrq7di5v25kcmnz4ipvcftpjnuzatpshdo7odpzbk5nwefrwhrvq
-- valory/mech_interact_abci:0.1.0:bafybeihvjtdg47pchoutcuh5l7jwiclpowriymtj7nyud22cetjjxggeiy
+- valory/mech_interact_abci:0.1.0:bafybeib3aytq2a5hk6vjsak3eznuilndx4p53utdylbyhcmt6ty7kk6euq
 behaviours:
   main:
     args: {}
@@ -191,7 +191,7 @@ models:
       serious_slash_unit_amount: 8000000000000000
       multisend_batch_size: 50
       mech_contract_address: '0x77af31De935740567Cf4fF1986D04B2c964A786a'
-      request_price: null
+      mech_request_price: null
       ipfs_address: https://gateway.autonolas.tech/ipfs/
       default_chain_id: ethereum
       transaction_service_url: https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/
