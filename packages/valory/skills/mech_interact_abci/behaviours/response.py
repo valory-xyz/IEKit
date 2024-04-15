@@ -32,10 +32,7 @@ from packages.valory.skills.mech_interact_abci.behaviours.base import (
     MechInteractBaseBehaviour,
     WaitableConditionType,
 )
-from packages.valory.skills.mech_interact_abci.behaviours.request import (
-    GNOSIS_CHAIN_ID,
-    V1_HEX_PREFIX,
-)
+from packages.valory.skills.mech_interact_abci.behaviours.request import V1_HEX_PREFIX
 from packages.valory.skills.mech_interact_abci.models import MechResponseSpecs
 from packages.valory.skills.mech_interact_abci.payloads import MechResponsePayload
 from packages.valory.skills.mech_interact_abci.states.base import (
@@ -134,7 +131,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             data_key="number",
             placeholder=get_name(MechResponseBehaviour.from_block),
             tx_hash=self.synchronized_data.final_tx_hash,
-            chain_id=GNOSIS_CHAIN_ID,
+            chain_id=self.params.mech_chain_id,
         )
 
         return result
@@ -147,7 +144,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             placeholder=get_name(MechResponseBehaviour.requests),
             tx_hash=self.synchronized_data.final_tx_hash,
             expected_logs=len(self._mech_responses),
-            chain_id=GNOSIS_CHAIN_ID,
+            chain_id=self.params.mech_chain_id,
         )
         return result
 
@@ -164,7 +161,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             placeholder=get_name(MechResponseBehaviour.response_hex),
             request_id=request_id,
             from_block=self.from_block,
-            chain_id=GNOSIS_CHAIN_ID,
+            chain_id=self.params.mech_chain_id,
         )
 
         if result:

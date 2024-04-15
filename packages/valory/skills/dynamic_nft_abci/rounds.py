@@ -108,7 +108,7 @@ class TokenTrackRound(CollectSameUntilThresholdRound):
                     }
                 )
 
-                return self.synchronized_data, Event.CONTRACT_ERROR
+                return synchronized_data, Event.CONTRACT_ERROR
 
             token_id_to_points = payload["token_id_to_points"]
             last_update_time = payload["last_update_time"]

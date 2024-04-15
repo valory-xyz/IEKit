@@ -10,13 +10,13 @@ fingerprint:
   __init__.py: bafybeidf3nlv5fpvfy4libtscayhirdw64shgmhfmvjiftjmjkmhu7auxq
   behaviours/__init__.py: bafybeie3zsi6p3yanz5mqwpkdrcgywaqvkit3hdintsb4awnvalgxpxa4i
   behaviours/base.py: bafybeiac7bdwweyorjdqrss5n6fwigf6lvlwdlongplkndi53jjkcijaba
-  behaviours/request.py: bafybeih4bnx2rtatkq7jypnogc5qhpv3aqw4lkrbj6me2oqv2xefobuyby
-  behaviours/response.py: bafybeihq27u3etmnzicsjxdkpgveoizkkmx5r3cwmkslxhwedfx2672ciq
+  behaviours/request.py: bafybeibgwmmccwpgm4pelr53bhtww3xhac6qmanozamabillr6u6ftpnyy
+  behaviours/response.py: bafybeigquse6twwelumj346kt4nptyxwlkyfcrlnws5tggwle5aghh4uxu
   behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
   dialogues.py: bafybeigjmyzd2bx6mgqiet2c223k6wkc5jk7kdkstbhpaxlqxatey26tlm
   fsm_specification.yaml: bafybeiapzwz6zcneelc2b2wrcb7cae7x6vbthmf6a57cm4mv6hucp67lz4
   handlers.py: bafybeiduy2nwkqdynainuimkjulcv7u2qq6iglkuut3gfurkckydapitg4
-  models.py: bafybeicnbj52b5szxola4fg7sb27jzxgm56rexffzym5cove2xtokluzoy
+  models.py: bafybeielsvvexkpaiixu7gdqnlhj6xgqbv7vcda37w2v4znbpua2alr2hm
   payloads.py: bafybeihhnbwsnaqxcltqxp4camiw3tz7gcymrdvxhmqlk4nww24tujiy7q
   rounds.py: bafybeif7taciv6pqupb7xuewurqssziplbjeobbv4d7ea3vbngz3kpjnee
   states/__init__.py: bafybeie34wx5znr2hxwh3gs2fchmbeuzjcfnraymdvtzjaxaq5zsiw233q
@@ -34,15 +34,16 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/gnosis_safe:0.1.0:bafybeiag5jjj5c66skkbjnxcjngeufhtcvcpnbnjlgox5mtuo2tk4w3ohi
+- valory/gnosis_safe:0.1.0:bafybeibq77mgzhyb23blf2eqmia3kc6io5karedfzhntvpcebeqdzrgyqa
 - valory/mech:0.1.0:bafybeihjh3bihxnzm7jjcnhbb5daldhdkygpfae5hnx2vhvnh7po6ylrxm
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/erc20:0.1.0:bafybeifaxbokuzwsbxbwda5vtreznd233eu6sa2dmw4zsyg2p6b3rz7spy
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
+- valory/ledger_api:1.0.0:bafybeihdk6psr4guxmbcrc26jr2cbgzpd5aljkqvpwo64bvaz7tdti2oni
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeia7msuvsouwcky263k6lup5hwcj73pka4pepkgyii6sya2wfawqvy
-- valory/transaction_settlement_abci:0.1.0:bafybeihfrdgfhu7ijjorvktjplfa4aq3b5as4dtwmkgl6nhy2oz4ayidfu
+- valory/abstract_round_abci:0.1.0:bafybeih3enhagoql7kzpeyzzu2scpkif6y3ubakpralfnwxcvxexdyvy5i
+- valory/transaction_settlement_abci:0.1.0:bafybeigtzlk4uakmd54rxnznorcrstsr52kta474lgrnvx5ovr546vj7sq
 behaviours:
   main:
     args: {}
@@ -145,7 +146,9 @@ models:
       validate_timeout: 1205
       multisend_batch_size: 50
       mech_contract_address: '0x77af31De935740567Cf4fF1986D04B2c964A786a'
-      request_price: null
+      mech_request_price: null
+      mech_chain_id: gnosis
+      mech_wrapped_native_token_address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'
       ipfs_address: https://gateway.autonolas.tech/ipfs/
       use_termination: false
       use_slashing: false

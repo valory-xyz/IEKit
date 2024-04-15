@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeiegzf3lanahhoxdtqzgb2ws6yudswwi24djthnv6d42jd5u7m76om
+agent: valory/impact_evaluator:0.1.0:bafybeichoqcso6zr4meqnujhichz4vbhvjb7tjt52xtfmrjhye4bov7uoq
 number_of_agents: 4
 deployment:
   agent:
@@ -123,7 +123,7 @@ extra:
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:5}
         mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31De935740567Cf4fF1986D04B2c964A786a}
-        request_price: ${REQUEST_PRICE:int:null}
+        mech_request_price: ${MECH_REQUEST_PRICE:int:null}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
@@ -131,6 +131,7 @@ extra:
         veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
         tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
         termination_from_block: ${TERMINATION_FROM_BLOCK:int:0}
+        mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -209,7 +210,7 @@ extra:
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:5}
         mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31De935740567Cf4fF1986D04B2c964A786a}
-        request_price: ${REQUEST_PRICE:int:null}
+        mech_request_price: ${MECH_REQUEST_PRICE:int:null}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
@@ -217,6 +218,7 @@ extra:
         veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
         tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
         termination_from_block: ${TERMINATION_FROM_BLOCK:int:0}
+        mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -295,7 +297,7 @@ extra:
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:5}
         mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31De935740567Cf4fF1986D04B2c964A786a}
-        request_price: ${REQUEST_PRICE:int:null}
+        mech_request_price: ${MECH_REQUEST_PRICE:int:null}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
@@ -303,6 +305,7 @@ extra:
         veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
         tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
         termination_from_block: ${TERMINATION_FROM_BLOCK:int:0}
+        mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -385,7 +388,7 @@ extra:
         serious_slash_unit_amount: ${SERIOUS_SLASH_UNIT_AMOUNT:int:8000000000000000}
         multisend_batch_size: ${MULTISEND_BATCH_SIZE:int:5}
         mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31De935740567Cf4fF1986D04B2c964A786a}
-        request_price: ${REQUEST_PRICE:int:null}
+        mech_request_price: ${MECH_REQUEST_PRICE:int:null}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
         default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
@@ -393,6 +396,7 @@ extra:
         veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
         tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
         termination_from_block: ${TERMINATION_FROM_BLOCK:int:0}
+        mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
