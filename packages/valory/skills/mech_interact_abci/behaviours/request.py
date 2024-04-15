@@ -162,6 +162,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             ledger_callable="get_balance",
             block_identifier="latest",
             account=account,
+            chain_id=self.params.mech_chain_id,
         )
 
         try:
