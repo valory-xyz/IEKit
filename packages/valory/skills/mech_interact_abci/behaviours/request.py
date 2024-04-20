@@ -419,7 +419,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         # agent is using a Nevermined subscription.
         price = self.params.mech_request_price
 
-        if price:
+        if price is not None:
             self.price = price
             return True
 
