@@ -247,6 +247,11 @@ class CeramicDBBase:
                 # Add merged user
                 self.data["users"].append(merged_user)
 
+    def reset_period_points(self):
+        """Resets period points"""
+        for u in self.data["users"]:
+            u["current_period_points"] = 0
+
     def diff(self, other_db):
         """Create data diff"""
         return str(
