@@ -130,7 +130,7 @@ extra:
         wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
         veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
         tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
-        termination_from_block: ${TERMINATION_FROM_BLOCK:int:0}
+        termination_from_block: ${TERMINATION_FROM_BLOCK:int:19717045}
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
     randomness_api:
       args:
@@ -217,7 +217,7 @@ extra:
         wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
         veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
         tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
-        termination_from_block: ${TERMINATION_FROM_BLOCK:int:0}
+        termination_from_block: ${TERMINATION_FROM_BLOCK:int:19717045}
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
     randomness_api:
       args:
@@ -304,7 +304,7 @@ extra:
         wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
         veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
         tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
-        termination_from_block: ${TERMINATION_FROM_BLOCK:int:0}
+        termination_from_block: ${TERMINATION_FROM_BLOCK:int:19717045}
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
     randomness_api:
       args:
@@ -395,7 +395,7 @@ extra:
         wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
         veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
         tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
-        termination_from_block: ${TERMINATION_FROM_BLOCK:int:0}
+        termination_from_block: ${TERMINATION_FROM_BLOCK:int:19717045}
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
     randomness_api:
       args:

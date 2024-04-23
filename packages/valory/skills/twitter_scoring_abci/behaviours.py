@@ -1016,7 +1016,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 "twitter_id", tweet["author_id"]
             )
 
-            current_period_points = user["current_period_points"]
+            current_period_points = user["current_period_points"] if user else 0
 
             if current_period_points + new_points > self.params.max_points_per_period:
                 self.context.logger.info(
@@ -1089,6 +1089,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         # Update the current_period
         ceramic_db_copy.data["module_data"]["twitter"]["current_period"] = today
+        self.context.logger.info("Finished updating the db")
 
         return self.context.ceramic_db.diff(ceramic_db_copy)
 
