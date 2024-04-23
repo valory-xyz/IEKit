@@ -995,9 +995,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         is_period_changed = today != current_period
         if is_period_changed:
             self.context.logger.info(
-                f"Scoring period has changed from {current_period} to {today}"
+                f"Scoring period has changed from {current_period} to {today}. Resetting user period points..."
             )
-        period_reset_users = set()
+            ceramic_db_copy.reset_period_points()
 
         # Update data
         for tweet_id, tweet in tweets.items():
@@ -1016,18 +1016,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 "twitter_id", tweet["author_id"]
             )
 
-            if not user:
-                # New user
-                period_reset_users.add(tweet["author_id"])
-                current_period_points = 0
-            else:
-                if is_period_changed and user["twitter_id"] not in period_reset_users:
-                    # Existing user, not reset yet
-                    period_reset_users.add(user["twitter_id"])
-                    current_period_points = 0
-                else:
-                    # Existing user, already reset
-                    current_period_points = user["current_period_points"]
+            current_period_points = user["current_period_points"] if user else 0
 
             if current_period_points + new_points > self.params.max_points_per_period:
                 self.context.logger.info(
@@ -1100,6 +1089,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         # Update the current_period
         ceramic_db_copy.data["module_data"]["twitter"]["current_period"] = today
+        self.context.logger.info("Finished updating the db")
 
         return self.context.ceramic_db.diff(ceramic_db_copy)
 

@@ -1134,6 +1134,12 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
                                 "username": "dummy",
                                 "text": "dummy text",
                             },
+                            "5": {
+                                "author_id": "4",
+                                "points": 900,
+                                "username": "dummy_4",
+                                "text": "I'm linking my wallet to @Autonolas Contribute:\n0x4F4715CA99C973A55303bc4a5f3e3acBb9fF75DB\n\nStart contributing to #OlasNetwork: https://t.co/4ocCNGEtyG",
+                            },
                         },
                         latest_mention_tweet_id=1,
                         latest_hashtag_tweet_id=1,

@@ -137,3 +137,26 @@ def test_merge_by_wallet_raises():
     db.create_user(user_b)
     with pytest.raises(ValueError):
         db.merge_by_wallet()
+
+
+def test_reset_period_points():
+    """Test CeramicDBBase"""
+    db = CeramicDBBase()
+    user_a = {
+        "twitter_id": "dummy_twitter_id",
+        "wallet_address": "dummy_address",
+        "points": 10,
+        "current_period_points": 20,
+        "tweet_id_to_points": {"1": 100, "2": 200},
+    }
+    user_b = {
+        "discord_id": "dummy_discord_id",
+        "wallet_address": "dummy_address",
+        "points": 10,
+        "current_period_points": 15,
+        "tweet_id_to_points": {"2": 200, "3": 300},
+    }
+    db.create_user(user_a)
+    db.create_user(user_b)
+    db.reset_period_points()
+    assert all(u["current_period_points"] == 0 for u in db.data["users"])
