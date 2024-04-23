@@ -125,7 +125,7 @@ extra:
         mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31De935740567Cf4fF1986D04B2c964A786a}
         mech_request_price: ${MECH_REQUEST_PRICE:int:null}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
-        default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
+        default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
         wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
         veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
@@ -212,7 +212,7 @@ extra:
         mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31De935740567Cf4fF1986D04B2c964A786a}
         mech_request_price: ${MECH_REQUEST_PRICE:int:null}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
-        default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
+        default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
         wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
         veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
@@ -299,7 +299,7 @@ extra:
         mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31De935740567Cf4fF1986D04B2c964A786a}
         mech_request_price: ${MECH_REQUEST_PRICE:int:null}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
-        default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
+        default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
         wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
         veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
@@ -390,7 +390,7 @@ extra:
         mech_contract_address: ${MECH_CONTRACT_ADDRESS:str:0x77af31De935740567Cf4fF1986D04B2c964A786a}
         mech_request_price: ${MECH_REQUEST_PRICE:int:null}
         ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
-        default_chain_id: ${DEFAULT_CHAIN_ID:str:gnosis}
+        default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
         wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
         veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
