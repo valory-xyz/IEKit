@@ -43,9 +43,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeiedikuvfpdx7xhyrxcpp6ywi2d6qf6uqvlwmhgcal7qhw5duicvym
 - valory/abstract_round_abci:0.1.0:bafybeia7msuvsouwcky263k6lup5hwcj73pka4pepkgyii6sya2wfawqvy
-- valory/impact_evaluator_abci:0.1.0:bafybeiam7cxhsun6rbh4culjylv67rsyuqyixzttskpv4vsj2c2uj6gi2a
+- valory/impact_evaluator_abci:0.1.0:bafybeia6n3qrzr7o4golltcumgmcckhl4lutbwxjyyn4wr42wccdok6aye
 - valory/generic_scoring_abci:0.1.0:bafybeiapwdfso7uj3mhzd454shq7hxcmudeeyso4kf2wazkl4hethvy7my
-- valory/twitter_scoring_abci:0.1.0:bafybeiez6bih7em7zv4vgb4yklcuhzsage4opcwfglhhzdo4qmsro6jaru
+- valory/twitter_scoring_abci:0.1.0:bafybeid6arrh4wc37h6tfmp2vjilulyjnmsfyap5afyht34czysxk3z47m
 - valory/ceramic_read_abci:0.1.0:bafybeicegat7fpjabsvmwcoyxytfdl2wzcyclw34mrhh4z4il46xnlgy2a
 - valory/ceramic_write_abci:0.1.0:bafybeicvlhgywrcyyjsqha2phvlyy4e46zhesoweoipg77vugc5emz2u3y
 - valory/dynamic_nft_abci:0.1.0:bafybeiftqbbpkulryk625restgpu2h5h6c47oo3emktbzqrwacrrwy53ha
