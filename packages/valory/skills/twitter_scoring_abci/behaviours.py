@@ -1089,9 +1089,10 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         # Update the current_period
         ceramic_db_copy.data["module_data"]["twitter"]["current_period"] = today
-        self.context.logger.info("Finished updating the db")
+        diff = self.context.ceramic_db.diff(ceramic_db_copy)
 
-        return self.context.ceramic_db.diff(ceramic_db_copy)
+        self.context.logger.info(f"Finished updating the db:\n{diff}")
+        return diff
 
     def get_registration(self, text: str) -> Optional[str]:
         """Check if the tweet is a registration and return the wallet address"""
