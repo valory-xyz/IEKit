@@ -121,7 +121,6 @@ models:
       ipfs_address: ${IPFS_ADDRESS:str:https://gateway.autonolas.tech/ipfs/}
       default_chain_id: ${DEFAULT_CHAIN_ID:str:ethereum}
       transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
-      wveolas_address: ${WVEOLAS_ADDRESS:str:0x4039B809E0C0Ad04F6Fc880193366b251dDf4B40}
       veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
       tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
       termination_from_block: ${TERMINATION_FROM_BLOCK:int:0}

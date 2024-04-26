@@ -77,7 +77,6 @@ class Params(BaseParams):
         self.transaction_service_url = self._ensure(
             "transaction_service_url", kwargs, str
         )
-        self.wveolas_address = self._ensure("wveolas_address", kwargs, str)
         self.veolas_delegation_address = self._ensure(
             "veolas_delegation_address", kwargs, str
         )
