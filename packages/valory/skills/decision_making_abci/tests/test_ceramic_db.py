@@ -160,3 +160,27 @@ def test_reset_period_points():
     db.create_user(user_b)
     db.reset_period_points()
     assert all(u["current_period_points"] == 0 for u in db.data["users"])
+
+
+def test_diff():
+    """Test CeramicDBBase"""
+    db_a = CeramicDBBase()
+    db_b = CeramicDBBase()
+    user_a = {
+        "twitter_id": "dummy_twitter_id",
+        "wallet_address": "dummy_address",
+        "points": 10,
+        "current_period_points": 20,
+        "tweet_id_to_points": {"1": 100, "2": 200},
+    }
+    user_b = {  # same data as user_a but in different order
+        "current_period_points": 20,
+        "wallet_address": "dummy_address",
+        "points": 10,
+        "tweet_id_to_points": {"1": 100, "2": 200},
+        "twitter_id": "dummy_twitter_id",
+    }
+    db_a.create_user(user_a)
+    db_b.create_user(user_b)
+    diff = db_b.diff(db_a)
+    assert diff == "[]"
