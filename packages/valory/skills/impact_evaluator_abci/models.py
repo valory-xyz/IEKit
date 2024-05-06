@@ -94,7 +94,7 @@ MechResponseSpecs = BaseMechResponseSpecs
 CeramicDB = DecisionMakingCeramicDB
 
 MARGIN = 5
-MULTIPLIER = 2
+MULTIPLIER = 5
 
 
 class RandomnessApi(ApiSpecs):
