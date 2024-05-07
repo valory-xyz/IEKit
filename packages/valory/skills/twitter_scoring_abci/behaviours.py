@@ -553,7 +553,7 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
             break
 
         self.context.logger.info(
-            f"Got {len(tweets)} new mentions until tweet_id={latest_tweet_id}"
+            f"Got {len(tweets)} new mentions until tweet_id={latest_tweet_id}: {tweets.keys()}"
         )
 
         return {
@@ -815,7 +815,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
             break
 
         self.context.logger.info(
-            f"Got {retrieved_tweets} new hashtag tweets until tweet_id={latest_tweet_id}"
+            f"Got {retrieved_tweets} new hashtag tweets until tweet_id={latest_tweet_id}: {tweets.keys()}"
         )
 
         return {

@@ -77,7 +77,6 @@ class Params(BaseParams):
         self.transaction_service_url = self._ensure(
             "transaction_service_url", kwargs, str
         )
-        self.wveolas_address = self._ensure("wveolas_address", kwargs, str)
         self.veolas_delegation_address = self._ensure(
             "veolas_delegation_address", kwargs, str
         )
@@ -108,6 +107,7 @@ class CeramicDBBase:
 
     def __init__(self) -> None:
         """Create a database"""
+        self.data = {}
         self.load()
 
     def load(self, data: Optional[Dict] = None):
@@ -252,14 +252,33 @@ class CeramicDBBase:
         for u in self.data["users"]:
             u["current_period_points"] = 0
 
+    def sort_data(self):
+        """Sort the data"""
+        # Sort users
+        self.data["users"] = sorted(
+            self.data["users"],
+            key=lambda u: (
+                u["points"],
+                int(u["token_id"] or -1),
+                u["twitter_id"] or "zz_no_id",
+                u["discord_id"] or "zz_no_id",
+            ),
+        )
+        self.data = json.loads(json.dumps(self.data, sort_keys=True))
+
     def diff(self, other_db):
         """Create data diff"""
+        # Sort both dbs to minimize diff patch size
+        self.sort_data()
+        other_db.sort_data()
         return str(
             jsonpatch.make_patch(self.data, other_db.data)
         )  # TODO: needs sorting?
 
     def apply_diff(self, patch):
         """Apply a diff"""
+        # Ensure the db is sorted
+        self.sort_data()
         self.data = jsonpatch.JsonPatch.from_string(patch).apply(self.data)
 
     def copy(self):

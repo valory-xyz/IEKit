@@ -246,7 +246,7 @@ transition_func:
     (StreamWriteRound, API_ERROR): RandomnessRound
     (StreamWriteRound, DID_NOT_SEND): RandomnessRound
     (StreamWriteRound, DONE): VerificationRound
-    (StreamWriteRound, MAX_RETRIES_ERROR): DecisionMakingRound
+    (StreamWriteRound, MAX_RETRIES_ERROR): RandomnessRound
     (StreamWriteRound, ROUND_TIMEOUT): RandomnessRound
     (SynchronizeLateMessagesRound, DONE): CheckLateTxHashesRound
     (SynchronizeLateMessagesRound, NONE): SelectKeeperTransactionSubmissionBRound

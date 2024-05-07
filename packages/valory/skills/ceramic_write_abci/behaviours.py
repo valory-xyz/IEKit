@@ -215,9 +215,11 @@ class StreamWriteBehaviour(CeramicWriteBaseBehaviour):
         extra_metadata = selected_data.get("extra_metadata", {})
 
         if stream_op == "update":
+            self.context.logger.info(f"Updating stream {stream_id} as DID {did_str}")
             return self._update_stream(stream_id, stream_data, did_str, did_seed)
 
         if stream_op == "create":
+            self.context.logger.info(f"Creating new stream as DID {did_str}")
             return self._create_stream(stream_data, did_str, did_seed, extra_metadata)
 
         raise ValueError(f"Operation {stream_op} is not supported")

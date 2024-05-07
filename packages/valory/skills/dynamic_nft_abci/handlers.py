@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -312,7 +312,7 @@ class HttpHandler(BaseHttpHandler):
         is_tm_unhealthy = None
         is_transitioning_fast = None
         current_round = None
-        previous_rounds = None
+        rounds = None
 
         round_sequence = cast(SharedState, self.context.state).round_sequence
 
@@ -334,17 +334,17 @@ class HttpHandler(BaseHttpHandler):
 
         if round_sequence._abci_app:
             current_round = round_sequence._abci_app.current_round.round_id
-            previous_rounds = [
-                r.round_id for r in round_sequence._abci_app._previous_rounds[-10:]
+            rounds = [
+                r.round_id for r in round_sequence._abci_app._previous_rounds[-25:]
             ]
+            rounds.append(current_round)
 
         data = {
             "seconds_since_last_transition": seconds_since_last_transition,
             "is_tm_healthy": not is_tm_unhealthy,
             "period": self.synchronized_data.period_count,
             "reset_pause_duration": self.context.params.reset_pause_duration,
-            "current_round": current_round,
-            "previous_rounds": previous_rounds,
+            "rounds": rounds,
             "is_transitioning_fast": is_transitioning_fast,
         }
 

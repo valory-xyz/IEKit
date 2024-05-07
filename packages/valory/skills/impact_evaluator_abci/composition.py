@@ -77,7 +77,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     TwitterWriteAbciApp.FinishedTwitterWriteRound: DecisionMakingAbci.DecisionMakingRound,
     CeramicReadAbci.FinishedReadingRound: DecisionMakingAbci.DecisionMakingRound,
     CeramicWriteAbci.FinishedVerificationRound: DecisionMakingAbci.DecisionMakingRound,
-    CeramicWriteAbci.FinishedMaxRetriesRound: DecisionMakingAbci.DecisionMakingRound,
+    CeramicWriteAbci.FinishedMaxRetriesRound: CeramicWriteAbci.RandomnessRound,
     ResetAndPauseAbci.FinishedResetAndPauseRound: DecisionMakingAbci.DecisionMakingRound,
     ResetAndPauseAbci.FinishedResetAndPauseErrorRound: ResetAndPauseAbci.ResetAndPauseRound,
 }
