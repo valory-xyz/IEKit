@@ -268,17 +268,12 @@ class CeramicDBBase:
 
     def diff(self, other_db):
         """Create data diff"""
-        # Sort both dbs to minimize diff patch size
-        self.sort_data()
-        other_db.sort_data()
         return str(
             jsonpatch.make_patch(self.data, other_db.data)
-        )  # TODO: needs sorting?
+        )
 
     def apply_diff(self, patch):
         """Apply a diff"""
-        # Ensure the db is sorted
-        self.sort_data()
         self.data = jsonpatch.JsonPatch.from_string(patch).apply(self.data)
 
     def copy(self):
