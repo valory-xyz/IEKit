@@ -115,7 +115,7 @@ def test_merge_by_wallet():
     db.create_user(user_b)
     db.merge_by_wallet()
     assert len(db.data["users"]) == 1, "User merge was not successful"
-    assert db.data["users"]["0"] == {
+    assert db.data["users"]["2"] == {
         "twitter_id": "dummy_twitter_id",
         "wallet_address": "dummy_address",
         "discord_id": "dummy_discord_id",

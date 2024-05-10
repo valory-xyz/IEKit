@@ -130,8 +130,10 @@ class CeramicDBBase:
 
     def get_next_user_id(self):
         """Calculate next user id"""
+        if not self.data["users"]:
+            return "0"
         user_ids = list(sorted(list(self.data["users"].keys())))
-        return user_ids[-1] + 1
+        return str(int(user_ids[-1]) + 1)
 
     def create_user(self, user_data):
         """Create a new user"""
@@ -168,7 +170,7 @@ class CeramicDBBase:
         user_ids = []
         for user_id, user in self.data["users"].items():
             if user[field] == value:
-                user_ids.append((user, user_id))
+                user_ids.append(user_id)
         return user_ids
 
     def update_or_create_user(self, field: str, value: str, new_data: Dict):
