@@ -62,14 +62,14 @@ DUMMY_ADDRESSES = [
 ]
 
 DUMMY_CERAMIC_DB = {
-    "users": [
-        {
+    "users": {
+        user_id: {
             "wallet_address": address,
             "token_id": None,
             "points": DEFAULT_POINTS,
         }
-        for address in DUMMY_ADDRESSES
-    ],
+        for user_id, address in enumerate(DUMMY_ADDRESSES)
+    },
     "module_data": {"dynamic_nft": {}},
 }
 

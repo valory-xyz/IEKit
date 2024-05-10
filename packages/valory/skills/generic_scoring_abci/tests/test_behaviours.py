@@ -46,13 +46,13 @@ from packages.valory.skills.generic_scoring_abci.rounds import (
 
 
 DUMMY_CERAMIC_DB = {
-    "users": [
-        {
+    "users": {
+        "0": {
             "discord_id": "dummy_discord_id",
             "wallet_address": "dummy_wallet_address",
             "points": 10,
         }
-    ],
+    },
     "module_data": {
         "twitter": {"latest_mention_tweet_id": 0},
         "dynamic_nft": {},
@@ -61,13 +61,13 @@ DUMMY_CERAMIC_DB = {
 }
 
 DUMMY_SCORE_DATA = {
-    "users": [
-        {
+    "users": {
+        "0": {
             "discord_id": "dummy_discord_id",
             "wallet_address": "dummy_wallet_address",
             "points": 10,
         }
-    ],
+    },
     "module_data": {
         "twitter": {},
         "dynamic_nft": {},

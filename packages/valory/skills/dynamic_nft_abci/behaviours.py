@@ -176,7 +176,7 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
         # Rebuild token_to_points
         new_token_id_to_points = {
             user["token_id"]: user["points"]
-            for user in ceramic_db_copy.data["users"]
+            for user in ceramic_db_copy.data["users"].values()
             if user["token_id"]
         }
 

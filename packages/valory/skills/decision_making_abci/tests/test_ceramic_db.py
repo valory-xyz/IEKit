@@ -43,7 +43,7 @@ def test_create_empty():
     """Test CeramicDBBase"""
     db = CeramicDBBase()
     assert db.data == {
-        "users": [],
+        "users": {},
         "module_data": {
             "twitter": {
                 "latest_mention_tweet_id": 0,
@@ -73,12 +73,12 @@ def test_update_or_create():
     db.update_or_create_user("twitter_id", "dummy_twitter_id", dummy_data)
     default_data.update(dummy_data)
     default_data["twitter_id"] = "dummy_twitter_id"
-    assert db.data["users"][0] == default_data
+    assert db.data["users"]["0"] == default_data
 
     # Update the same user
     db.update_or_create_user("twitter_id", "dummy_twitter_id", {"points": 1})
     default_data.update({"points": 1})
-    assert db.data["users"][0] == default_data
+    assert db.data["users"]["0"] == default_data
 
 
 def test_add_user():
@@ -115,7 +115,7 @@ def test_merge_by_wallet():
     db.create_user(user_b)
     db.merge_by_wallet()
     assert len(db.data["users"]) == 1, "User merge was not successful"
-    assert db.data["users"][0] == {
+    assert db.data["users"]["0"] == {
         "twitter_id": "dummy_twitter_id",
         "wallet_address": "dummy_address",
         "discord_id": "dummy_discord_id",
@@ -159,7 +159,7 @@ def test_reset_period_points():
     db.create_user(user_a)
     db.create_user(user_b)
     db.reset_period_points()
-    assert all(u["current_period_points"] == 0 for u in db.data["users"])
+    assert all(u["current_period_points"] == 0 for u in db.data["users"].values())
 
 
 def test_diff():
