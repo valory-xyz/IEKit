@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiasfbratsbsxyji2k2xeft3jdqaajwqskjsvbjsqht4mrew6wb2km
-  behaviours.py: bafybeifvi5hjyhi7ugg7niqxsxkukpvxm6lytazztyaqtuqajoykdpcwwa
+  behaviours.py: bafybeieczpv7gqtmh55bf2lpufeayl5d7j36gtcxjglf6la7rwxpm27rwe
   dialogues.py: bafybeiabtq2to7x6bbbnxzrvupz5rky4b6k73y2lw5dmclb6xx74nuzxe4
   fsm_specification.yaml: bafybeibkm4iniyjt7ofqredclpvvudtfjbmuatccnblygvqnfucsuymbxy
   handlers.py: bafybeifedc6acno42mz7yahtwsrrkovzou65v4enxtob3trw3fq6nsjnai
@@ -15,12 +15,12 @@ fingerprint:
   payloads.py: bafybeiggpj2qmh73nlr2rscisscxovf7bfrczlut7k33jujvutzgszjcwi
   rounds.py: bafybeidmlfpt6x3clbb647egq7gjjjsvbubts2cc6mnon2lp54djsz7spm
   tests/__init__.py: bafybeidxte5jeugotf25yogfbsoivyokeqffrvzo7lqgspm4kzrgbhvc3u
-  tests/test_behaviours.py: bafybeibojamjtso4gc5zxuvssqwdhigpaeixz2f4s7jkeiwxi5g5vvhaqm
+  tests/test_behaviours.py: bafybeig5lhgywijd3gcooujztrxy5ihfny5ddcxw2awqtoo245y2xcgtam
   tests/test_dialogues.py: bafybeigybvptoehtw2o2jbudvyxggo5yr4pyqic7m732sha4xtaaxnfdpe
   tests/test_handlers.py: bafybeihtowiu7nfirjkievt36vjtjdougyfjgjnjga2flmna3ztvf3qilm
   tests/test_models.py: bafybeietgyqb5rsbnzqgzcsgm2pu2qcadu7rr7akxscfmegtghc5aguz44
   tests/test_payloads.py: bafybeifpwaozt6s56uctvfmkdmcuxqawmvhu5skgyfu3ekegqd3iz7v2nm
-  tests/test_rounds.py: bafybeicl25nujsxjjjxz4xhqbu4tv2nhfzf24x47o5szlxf2d3knlpfohi
+  tests/test_rounds.py: bafybeifj5mqzrl2d5jykqdgletlhytaw2yidnshgyejxmyeunh6cqshje4
 fingerprint_ignore_patterns: []
 connections:
 - valory/http_server:0.22.0:bafybeihpgu56ovmq4npazdbh6y6ru5i7zuv6wvdglpxavsckyih56smu7m
@@ -31,7 +31,7 @@ protocols:
 - valory/http:1.0.0:bafybeifugzl63kfdmwrxwphrnrhj7bn6iruxieme3a4ntzejf6kmtuwmae
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiar2yhzxacfe3qqamqhaihtlcimquwedffctw55sowx6rac3cm3ui
-- valory/decision_making_abci:0.1.0:bafybeifmov44ieyipijozsd7spkf34i3rksn2rhumrnnyy7ws5zoi6ngae
+- valory/decision_making_abci:0.1.0:bafybeihmazposa4xl5wbjgigvipnhb7vvdhxadi4yl5f375a37kom73nji
 behaviours:
   main:
     args: {}
