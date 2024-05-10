@@ -58,7 +58,7 @@ extra:
         setup: *id001
         genesis_config: *id002
         centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw149xtnm40kvveyhywbkgp798nen6s9ul3dzdwuxh39cxyv480kwn}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw146k8j9l26rg6gw85mokzwnxm7t1krux0y162sgn3pc1887e3wsr}
+        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81vhee620y3g9sdo7fwwd}
         ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
         ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
         ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
@@ -144,7 +144,7 @@ extra:
         setup: *id001
         genesis_config: *id002
         centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw149xtnm40kvveyhywbkgp798nen6s9ul3dzdwuxh39cxyv480kwn}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw146k8j9l26rg6gw85mokzwnxm7t1krux0y162sgn3pc1887e3wsr}
+        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81vhee620y3g9sdo7fwwd}
         ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
         ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
         ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
@@ -230,7 +230,7 @@ extra:
         setup: *id001
         genesis_config: *id002
         centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw149xtnm40kvveyhywbkgp798nen6s9ul3dzdwuxh39cxyv480kwn}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw146k8j9l26rg6gw85mokzwnxm7t1krux0y162sgn3pc1887e3wsr}
+        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81vhee620y3g9sdo7fwwd}
         ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
         ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
         ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
@@ -316,7 +316,7 @@ extra:
         setup: *id001
         genesis_config: *id002
         centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw149xtnm40kvveyhywbkgp798nen6s9ul3dzdwuxh39cxyv480kwn}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw146k8j9l26rg6gw85mokzwnxm7t1krux0y162sgn3pc1887e3wsr}
+        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81vhee620y3g9sdo7fwwd}
         ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
         ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
         ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
