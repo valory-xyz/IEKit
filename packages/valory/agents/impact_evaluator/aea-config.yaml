@@ -43,20 +43,20 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeieh4ei3qdelmacnm7vwq57phoewgumr3udvxt6pybmuggwc3yk65q
 - valory/abstract_round_abci:0.1.0:bafybeiar2yhzxacfe3qqamqhaihtlcimquwedffctw55sowx6rac3cm3ui
-- valory/impact_evaluator_abci:0.1.0:bafybeiekv3cnk355p2iga5ai6wqsp6meszfvw5ayeg5zcsh4xr5f24y2be
-- valory/generic_scoring_abci:0.1.0:bafybeia3wpuzxqvnjlpibppzq7usjjpg7wwcngoqyp3ixrbv627y3ol2ya
-- valory/twitter_scoring_abci:0.1.0:bafybeihnst73rc2zlpeinzpvnruae46bqdzxbdq4qlnpc3ggjveevhxzrq
+- valory/impact_evaluator_abci:0.1.0:bafybeicw75y3qqkmzdkqevzd65vkzppquwmwcbs6jqii2dg4pezrbsa7om
+- valory/generic_scoring_abci:0.1.0:bafybeifphqhrjwydhegztohrrqab2xckxq5yxobannwttgz4tgoppyoneq
+- valory/twitter_scoring_abci:0.1.0:bafybeibdm54drzerm6zjpq7f6gxg3zsfq4abw24nlcpynol6mtmuoswxga
 - valory/ceramic_read_abci:0.1.0:bafybeihq3hy2roywidbhhixrse57subkwl5ofezdtr7ssu2c2nteq3mdkm
 - valory/ceramic_write_abci:0.1.0:bafybeihex4szqlzjdfl423rmyyzdguzrbdbtjeak4gxlcw3torrry75w6m
-- valory/dynamic_nft_abci:0.1.0:bafybeiebmpspvja5c7joftlwva3ssz5nmdrl5roshq2n5yetl2742ngafu
+- valory/dynamic_nft_abci:0.1.0:bafybeihxrgmhgrutkdxpchqlrr3cy54i5q4hr6qzxkjeghgjahhclxs4xu
 - valory/registration_abci:0.1.0:bafybeieu7vq3pyns4t5ty6u3sbmpkd7yznpg3rmqifoz3jhy7pmqyg3w6q
 - valory/reset_pause_abci:0.1.0:bafybeiameewywqigpupy3u2iwnkfczeiiucue74x2l5lbge74rmw6bgaie
 - valory/termination_abci:0.1.0:bafybeif2zim2de356eo3sipkmoev5emwadpqqzk3huwqarywh4tmqt3vzq
 - valory/transaction_settlement_abci:0.1.0:bafybeic3tccdjypuge2lewtlgprwkbb53lhgsgn7oiwzyrcrrptrbeyote
 - valory/twitter_write_abci:0.1.0:bafybeialypc6dqgf66p5rpvhbogcsmzzpk5em2euasursxv5o47podibda
-- valory/decision_making_abci:0.1.0:bafybeifmov44ieyipijozsd7spkf34i3rksn2rhumrnnyy7ws5zoi6ngae
+- valory/decision_making_abci:0.1.0:bafybeihmazposa4xl5wbjgigvipnhb7vvdhxadi4yl5f375a37kom73nji
 - valory/llm_abci:0.1.0:bafybeibdqkrbh6xmzy2fn5qqlgbwotjq7crrd6jocj57ulizweccnifeau
-- valory/olas_week_abci:0.1.0:bafybeihb6pgdzi5cpk4sv3uhqnldua6xciauzfwkgideqdyig3cbrsjbw4
+- valory/olas_week_abci:0.1.0:bafybeia2axbnscr7sbofobzamax3f55tbulki2xwgbjrlpmd665mhthq2a
 - valory/mech_interact_abci:0.1.0:bafybeieryw7rk2tspyxx46loqqqimr2l5vvhtshiyg2mmdxijzb7pdoi6a
 default_ledger: ethereum
 required_ledgers:
@@ -140,7 +140,7 @@ public_id: valory/p2p_libp2p_client:0.1.0
 type: connection
 config:
   nodes:
-  - uri: ${str:acn.staging.autonolas.tech:9005}
+  - uri: ${str:acn.autonolas.tech:9005}
     public_key: ${str:02d3a830c9d6ea1ae91936951430dee11f4662f33118b02190693be835359a9d77}
 cert_requests:
 - identifier: acn

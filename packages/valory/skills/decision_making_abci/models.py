@@ -116,7 +116,7 @@ class CeramicDBBase:
             data
             if data not in (None, {})
             else {
-                "users": [],
+                "users": {},
                 "module_data": {
                     "twitter": {
                         "latest_mention_tweet_id": 0,
@@ -127,6 +127,13 @@ class CeramicDBBase:
                 },
             }
         )
+
+    def get_next_user_id(self):
+        """Calculate next user id"""
+        if not self.data["users"]:
+            return "0"
+        user_ids = list(sorted(list(self.data["users"].keys())))
+        return str(int(user_ids[-1]) + 1)
 
     def create_user(self, user_data):
         """Create a new user"""
@@ -142,30 +149,35 @@ class CeramicDBBase:
             else:
                 new_user[field] = user_data.get(field, None)
 
-        self.data["users"].append(new_user)
+        user_id = self.get_next_user_id()
+        self.data["users"][user_id] = new_user
 
-    def get_user_by_field(self, field, value) -> Tuple[Optional[Dict], Optional[int]]:
+    def get_user_by_field(self, field, value) -> Tuple[Optional[Dict], Optional[str]]:
         """Search users"""
 
-        for index, user in enumerate(self.data["users"]):
+        for user_id, user in self.data["users"].items():
             if user[field] == value:
-                return user, index  # returns the first user that marches
+                return user, user_id  # returns the first user that marches
 
         return None, None
 
-    def get_users_by_field(self, field, value) -> List[Tuple[Dict, int]]:
+    def get_user_by_id(self, user_id) -> Optional[Dict]:
         """Search users"""
-        users = []
-        for index, user in enumerate(self.data["users"]):
+        return self.data["users"].get(user_id, None)
+
+    def get_user_ids_by_field(self, field, value) -> List[Tuple[Dict, int]]:
+        """Search users"""
+        user_ids = []
+        for user_id, user in self.data["users"].items():
             if user[field] == value:
-                users.append((user, index))
-        return users
+                user_ids.append(user_id)
+        return user_ids
 
     def update_or_create_user(self, field: str, value: str, new_data: Dict):
         """Update an existing user"""
-        user, index = self.get_user_by_field(field, value)
+        user, user_id = self.get_user_by_field(field, value)
 
-        if user is None or index is None:
+        if user is None or user_id is None:
             self.create_user({field: value, **new_data})
             return
 
@@ -178,24 +190,25 @@ class CeramicDBBase:
             for field in fields
         }
 
-        self.data["users"][index] = updated_user
+        self.data["users"][user_id] = updated_user
 
     def merge_by_wallet(self):
         """Merges users that share the wallet"""
         wallet_addresses = set(
             [
                 user["wallet_address"]
-                for user in self.data["users"]
+                for user in self.data["users"].values()
                 if user["wallet_address"]
             ]
         )
 
         for wallet_address in wallet_addresses:
-            users = self.get_users_by_field("wallet_address", wallet_address)
+            user_ids = self.get_user_ids_by_field("wallet_address", wallet_address)
+            users = [self.get_user_by_id(user_id) for user_id in user_ids]
 
             if len(users) > 1:
                 # Get the set of fields
-                fields = set(itertools.chain(*[list(user.keys()) for user, _ in users]))
+                fields = set(itertools.chain(*[list(user.keys()) for user in users]))
                 fields.remove(
                     "wallet_address"
                 )  # we already know this one is duplicated
@@ -206,7 +219,7 @@ class CeramicDBBase:
                     # Get all the non None values from all users
                     values = [
                         user[field]
-                        for user, _ in users
+                        for user in users
                         if field in user and user[field] is not None
                     ]
 
@@ -240,45 +253,26 @@ class CeramicDBBase:
                     merged_user[field] = values[0] if values else None
                 merged_user["wallet_address"] = wallet_address
 
+                next_user_id = self.get_next_user_id()
+
                 # Remove duplicated users
-                for index in sorted([index for _, index in users], reverse=True):
-                    self.data["users"].pop(index)
+                for user_id in user_ids:
+                    del self.data["users"][user_id]
 
                 # Add merged user
-                self.data["users"].append(merged_user)
+                self.data["users"][next_user_id] = merged_user
 
     def reset_period_points(self):
         """Resets period points"""
-        for u in self.data["users"]:
-            u["current_period_points"] = 0
-
-    def sort_data(self):
-        """Sort the data"""
-        # Sort users
-        self.data["users"] = sorted(
-            self.data["users"],
-            key=lambda u: (
-                u["points"],
-                int(u["token_id"] or -1),
-                u["twitter_id"] or "zz_no_id",
-                u["discord_id"] or "zz_no_id",
-            ),
-        )
-        self.data = json.loads(json.dumps(self.data, sort_keys=True))
+        for user_id in self.data["users"].keys():
+            self.data["users"][user_id]["current_period_points"] = 0
 
     def diff(self, other_db):
         """Create data diff"""
-        # Sort both dbs to minimize diff patch size
-        self.sort_data()
-        other_db.sort_data()
-        return str(
-            jsonpatch.make_patch(self.data, other_db.data)
-        )  # TODO: needs sorting?
+        return str(jsonpatch.make_patch(self.data, other_db.data))
 
     def apply_diff(self, patch):
         """Apply a diff"""
-        # Ensure the db is sorted
-        self.sort_data()
         self.data = jsonpatch.JsonPatch.from_string(patch).apply(self.data)
 
     def copy(self):

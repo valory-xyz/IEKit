@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeibx2m4h2yye63xcwj7hzq44ylzijsmx7reezfmcsnlxsxpfbgic6e
+agent: valory/impact_evaluator:0.1.0:bafybeigekaif5hchtjvy37hbpujfml57t7ufyptkijbb4guefaou52d7qq
 number_of_agents: 4
 deployment:
   agent:
@@ -58,7 +58,7 @@ extra:
         setup: *id001
         genesis_config: *id002
         centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw149xtnm40kvveyhywbkgp798nen6s9ul3dzdwuxh39cxyv480kwn}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw146k8j9l26rg6gw85mokzwnxm7t1krux0y162sgn3pc1887e3wsr}
+        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81vhee620y3g9sdo7fwwd}
         ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
         ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
         ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
@@ -144,7 +144,7 @@ extra:
         setup: *id001
         genesis_config: *id002
         centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw149xtnm40kvveyhywbkgp798nen6s9ul3dzdwuxh39cxyv480kwn}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw146k8j9l26rg6gw85mokzwnxm7t1krux0y162sgn3pc1887e3wsr}
+        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81vhee620y3g9sdo7fwwd}
         ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
         ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
         ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
@@ -230,7 +230,7 @@ extra:
         setup: *id001
         genesis_config: *id002
         centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw149xtnm40kvveyhywbkgp798nen6s9ul3dzdwuxh39cxyv480kwn}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw146k8j9l26rg6gw85mokzwnxm7t1krux0y162sgn3pc1887e3wsr}
+        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81vhee620y3g9sdo7fwwd}
         ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
         ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
         ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
@@ -316,7 +316,7 @@ extra:
         setup: *id001
         genesis_config: *id002
         centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw149xtnm40kvveyhywbkgp798nen6s9ul3dzdwuxh39cxyv480kwn}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw146k8j9l26rg6gw85mokzwnxm7t1krux0y162sgn3pc1887e3wsr}
+        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81vhee620y3g9sdo7fwwd}
         ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
         ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
         ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
@@ -416,7 +416,7 @@ public_id: valory/p2p_libp2p_client:0.1.0
 type: connection
 config:
   nodes:
-  - uri: ${ACN_URI:str:acn.staging.autonolas.tech:9005}
+  - uri: ${ACN_URI:str:acn.autonolas.tech:9005}
     public_key: ${ACN_NODE_PUBLIC_KEY:str:02d3a830c9d6ea1ae91936951430dee11f4662f33118b02190693be835359a9d77}
 cert_requests:
 - identifier: acn

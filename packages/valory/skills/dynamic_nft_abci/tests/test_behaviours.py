@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -62,14 +62,14 @@ DUMMY_ADDRESSES = [
 ]
 
 DUMMY_CERAMIC_DB = {
-    "users": [
-        {
+    "users": {
+        user_id: {
             "wallet_address": address,
             "token_id": None,
             "points": DEFAULT_POINTS,
         }
-        for address in DUMMY_ADDRESSES
-    ],
+        for user_id, address in enumerate(DUMMY_ADDRESSES)
+    },
     "module_data": {"dynamic_nft": {}},
 }
 

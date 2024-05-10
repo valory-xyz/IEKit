@@ -1148,15 +1148,15 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
                     ),
                     event=Event.DONE,
                     ceramic_db={
-                        "users": [
-                            {
+                        "users": {
+                            "0": {
                                 "twitter_id": "1",
                                 "points": 0,
                                 "wallet_address": None,
                                 "token_id": None,
                                 "discord_id": None,
                             }
-                        ],
+                        },
                         "module_data": {"twitter": {"current_period": "2023-09-04"}},
                     },
                 ),

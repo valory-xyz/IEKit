@@ -40,28 +40,28 @@ from packages.valory.skills.dynamic_nft_abci.rounds import (
 
 
 DUMMY_CERAMIC_DB = {
-    "users": [
-        {
+    "users": {
+        "0": {
             "wallet_address": "0x54EfA9b1865FFE8c528fb375A7A606149598932A",
             "points": DEFAULT_POINTS,
         },
-        {
+        "1": {
             "wallet_address": "0x3c03a080638b3c176aB7D9ed56E25bC416dFf525",
             "points": DEFAULT_POINTS,
         },
-        {
+        "2": {
             "wallet_address": "0x44704AE66f0B9FF08a7b0584B49FE941AdD1bAE7",
             "points": DEFAULT_POINTS,
         },
-        {
+        "3": {
             "wallet_address": "0x19B043aD06C48aeCb2028B0f10503422BD0E0918",
             "points": DEFAULT_POINTS,
         },
-        {
+        "4": {
             "wallet_address": "0x8325c5e4a56E352355c590E4A43420840F067F98",
             "points": DEFAULT_POINTS,
         },
-    ],
+    },
     "modules": {"dynamic_nft": {}},
 }
 

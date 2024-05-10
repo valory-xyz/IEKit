@@ -1107,7 +1107,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
             address_to_twitter_handles = {
                 user["wallet_address"]: user["twitter_handle"]
-                for user in self.context.ceramic_db["users"]
+                for user in self.context.ceramic_db["users"].values()
                 if user["wallet_address"]
             }
 
