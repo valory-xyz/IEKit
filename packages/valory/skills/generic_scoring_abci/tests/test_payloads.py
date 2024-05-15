@@ -34,6 +34,7 @@ from packages.valory.skills.generic_scoring_abci.payloads import (
 class PayloadTestCase:
     """PayloadTestCase"""
 
+    name: str
     payload_cls: BaseTxPayload
     content: Hashable
 
@@ -42,8 +43,14 @@ class PayloadTestCase:
     "test_case",
     [
         PayloadTestCase(
+            name="Happy path",
             payload_cls=GenericScoringPayload,
             content="payload_test_content",
+        ),
+        PayloadTestCase(
+            name="Payload incorrect data type",
+            payload_cls=GenericScoringPayload,
+            content=12345,
         ),
     ],
 )
@@ -54,6 +61,12 @@ def test_payloads(test_case: PayloadTestCase) -> None:
         sender="sender",
         content=test_case.content,
     )
+
     assert payload.sender == "sender"
     assert payload.content == test_case.content
-    assert payload.from_json(payload.json) == payload
+
+    if test_case.name == "Payload incorrect data type":
+        with pytest.raises(TypeError):
+            payload.data()
+    else:
+        assert payload.from_json(payload.json) == payload

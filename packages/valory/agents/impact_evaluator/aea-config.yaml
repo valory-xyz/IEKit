@@ -43,9 +43,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeieh4ei3qdelmacnm7vwq57phoewgumr3udvxt6pybmuggwc3yk65q
 - valory/abstract_round_abci:0.1.0:bafybeiar2yhzxacfe3qqamqhaihtlcimquwedffctw55sowx6rac3cm3ui
-- valory/impact_evaluator_abci:0.1.0:bafybeiekv3cnk355p2iga5ai6wqsp6meszfvw5ayeg5zcsh4xr5f24y2be
-- valory/generic_scoring_abci:0.1.0:bafybeia3wpuzxqvnjlpibppzq7usjjpg7wwcngoqyp3ixrbv627y3ol2ya
-- valory/twitter_scoring_abci:0.1.0:bafybeihnst73rc2zlpeinzpvnruae46bqdzxbdq4qlnpc3ggjveevhxzrq
+- valory/impact_evaluator_abci:0.1.0:bafybeicqtnbyuv47nsjiiokpftmeupexv2y35qjn5j6svrsnxllgowcntq
+- valory/generic_scoring_abci:0.1.0:bafybeihdg5lfcbwb24ia237khvtt63xrzyfqwwdoknka7lwpz456tjzbg4
+- valory/twitter_scoring_abci:0.1.0:bafybeigfybotw66o4bruhkel2iwpjutf65bhybr2a5zsk4pn3efamj3ncm
 - valory/ceramic_read_abci:0.1.0:bafybeihq3hy2roywidbhhixrse57subkwl5ofezdtr7ssu2c2nteq3mdkm
 - valory/ceramic_write_abci:0.1.0:bafybeihex4szqlzjdfl423rmyyzdguzrbdbtjeak4gxlcw3torrry75w6m
 - valory/dynamic_nft_abci:0.1.0:bafybeiebmpspvja5c7joftlwva3ssz5nmdrl5roshq2n5yetl2742ngafu
