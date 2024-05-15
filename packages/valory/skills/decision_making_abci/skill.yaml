@@ -11,7 +11,7 @@ fingerprint:
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
   fsm_specification.yaml: bafybeihqaaud54lucsousv5dbbn3mbqro3ryel3hxpzz33xkvf47tq4yhe
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
-  models.py: bafybeierhqqxdqc5lxs4osbjqlqezpxmicx5infqaxepzi2623mq6bpngm
+  models.py: bafybeid7t5guzkvgpxdldth4jdzyiu75tumc6p3pn6u4ba7tgqafskhp4e
   payloads.py: bafybeif5bomwy74bwnphsk6bty6qb6efugvjnnopsz7qjunpe6gtgjaxya
   rounds.py: bafybeieiu5bkpjvis2eksnviemwyxnhua6wjkk2eifw6u3y7gdag57tqva
   tasks/finished_pipeline_preparation.py: bafybeid652b53p7mtsbj3ksko3g2eezvg4nut2vukwvnfhxyfi4zkx3dym
@@ -27,7 +27,7 @@ fingerprint:
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
   tests/centaur_configs.py: bafybeibpaghsahe4yi6o2s6x6sdluuid2kawe54kpnlruwdpqqavkmfbde
   tests/test_behaviours.py: bafybeigt4ifqyyw23ejypquaqgecjrgmvtrgxustwmzucolgm6kr5gzdnu
-  tests/test_ceramic_db.py: bafybeie5qevdc2xgb7n2hzpfvog4t6ubeutfpsp6xdvc73ngl47ce66wnq
+  tests/test_ceramic_db.py: bafybeihfkxlugegbexqukuc6uo33m4fvo5hskqlpx2ez24lh47juradr4m
   tests/test_dialogues.py: bafybeihxzcyy7xvg4lte4bv5hy2h4mozdzwvyaa36feu3oxv67jfvsyuoi
   tests/test_handlers.py: bafybeie6q3l6zyf356uvhldobhiir5ang5ybmi7lcao3556n3bnlpfqhfm
   tests/test_models.py: bafybeiazl2mfe3iwydtdkur3h2w7ir4iszext2666fzqnnhsr6xq2lhw3i

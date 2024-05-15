@@ -24,7 +24,7 @@ protocols:
 - valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiar2yhzxacfe3qqamqhaihtlcimquwedffctw55sowx6rac3cm3ui
-- valory/decision_making_abci:0.1.0:bafybeifmov44ieyipijozsd7spkf34i3rksn2rhumrnnyy7ws5zoi6ngae
+- valory/decision_making_abci:0.1.0:bafybeihmazposa4xl5wbjgigvipnhb7vvdhxadi4yl5f375a37kom73nji
 behaviours:
   main:
     args: {}

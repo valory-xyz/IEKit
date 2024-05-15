@@ -24,9 +24,11 @@
     "type": "object",
     "properties": {
         "users": {
-            "type": "array",
-            "items": {
-                "$ref": "#/definitions/user"
+            "type": "object",
+            "patternProperties": {
+                "^[0-9]+$": {
+                    "$ref": "#/definitions/user"
+                }
             }
         },
         "module_data": {

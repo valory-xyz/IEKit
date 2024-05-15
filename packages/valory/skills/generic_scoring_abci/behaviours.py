@@ -105,10 +105,10 @@ class GenericScoringBehaviour(GenericScoringBaseBehaviour):
         )
 
         # discord_id, discord_handle, points, wallet_address
-        for user in scores_db.data["users"]:
-            discord_id = user.pop("discord_id")
+        for user_id in scores_db.data["users"].keys():
+            discord_id = scores_db.data["users"][user_id].pop("discord_id")
             ceramic_db_copy.update_or_create_user(  # overwrites all common fields for the user
-                "discord_id", discord_id, user
+                "discord_id", discord_id, scores_db.data["users"][user_id]
             )
             pending_write = True
 
