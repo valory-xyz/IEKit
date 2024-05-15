@@ -13,11 +13,11 @@
         "connection/valory/openai/0.1.0": "bafybeigyehjbahya5mp7vyp5tjvn36rey4btvzskp3ql3mgxp3zu6gwq5a",
         "connection/valory/farcaster/0.1.0": "bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi",
         "skill/valory/dynamic_nft_abci/0.1.0": "bafybeihxrgmhgrutkdxpchqlrr3cy54i5q4hr6qzxkjeghgjahhclxs4xu",
-        "skill/valory/twitter_scoring_abci/0.1.0": "bafybeibdm54drzerm6zjpq7f6gxg3zsfq4abw24nlcpynol6mtmuoswxga",
+        "skill/valory/twitter_scoring_abci/0.1.0": "bafybeigdxpb7wcqahdmbtulutzjgzwx53ksumoe73seou7umvo5o34muw4",
         "skill/valory/ceramic_read_abci/0.1.0": "bafybeihq3hy2roywidbhhixrse57subkwl5ofezdtr7ssu2c2nteq3mdkm",
         "skill/valory/ceramic_write_abci/0.1.0": "bafybeihex4szqlzjdfl423rmyyzdguzrbdbtjeak4gxlcw3torrry75w6m",
-        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeicw75y3qqkmzdkqevzd65vkzppquwmwcbs6jqii2dg4pezrbsa7om",
-        "skill/valory/generic_scoring_abci/0.1.0": "bafybeifphqhrjwydhegztohrrqab2xckxq5yxobannwttgz4tgoppyoneq",
+        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeict6fw4nqaucczxuiggawcabrbfwwokynbsidwm6gjvlnrtaxiglm",
+        "skill/valory/generic_scoring_abci/0.1.0": "bafybeiahqpvbbh6fb5zvojzaj6u2x25i7lc24qzh6miobwslkeiqc37hvu",
         "skill/valory/twitter_write_abci/0.1.0": "bafybeialypc6dqgf66p5rpvhbogcsmzzpk5em2euasursxv5o47podibda",
         "skill/valory/llm_abci/0.1.0": "bafybeibdqkrbh6xmzy2fn5qqlgbwotjq7crrd6jocj57ulizweccnifeau",
         "skill/valory/decision_making_abci/0.1.0": "bafybeihmazposa4xl5wbjgigvipnhb7vvdhxadi4yl5f375a37kom73nji",
@@ -25,10 +25,10 @@
         "skill/valory/mech_interact_abci/0.1.0": "bafybeieryw7rk2tspyxx46loqqqimr2l5vvhtshiyg2mmdxijzb7pdoi6a",
         "skill/valory/farcaster_write_abci/0.1.0": "bafybeifa4btbjvjo75yx65wift6n2qode5sbgviwh3kmcgft4v3c4s34wq",
         "skill/valory/farcaster_test_abci/0.1.0": "bafybeiaz55b3zgcrkattnqmlwjhjzsp5iwauxemqgelpxgdrl5g2nratpm",
-        "agent/valory/impact_evaluator/0.1.0": "bafybeigekaif5hchtjvy37hbpujfml57t7ufyptkijbb4guefaou52d7qq",
+        "agent/valory/impact_evaluator/0.1.0": "bafybeigqk4gldvf33nb344onxneu3bxk5nnwe4v67ibgxdbwjqncvsfsbm",
         "agent/valory/farcaster_test/0.1.0": "bafybeiadnjkfh26isxcm6abfmvylp2aemlmqb2ov5v3czckkyndjziivmm",
-        "service/valory/impact_evaluator/0.1.0": "bafybeidafs5cgkwdef7fehkl6afx3r726xw7byi5ti4v3ckjvls6a33gne",
-        "service/valory/impact_evaluator_local/0.1.0": "bafybeiflrwxn2zvki6wcpt64gldbu5bcg4xktsr3xvyy7dj3jr2llcymu4"
+        "service/valory/impact_evaluator/0.1.0": "bafybeiahkgewjskifmz7dxsfwoj6qgubmmzldynqx4svggoiqfvs7pazqy",
+        "service/valory/impact_evaluator_local/0.1.0": "bafybeievryzfglx4ldcmplpxukors2nznohylytu6icgfz2f2zrudmlo4a"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi",
