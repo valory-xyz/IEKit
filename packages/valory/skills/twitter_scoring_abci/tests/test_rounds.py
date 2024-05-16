@@ -231,6 +231,22 @@ class TestMentionsCollectionRound(BaseTwitterScoringRoundTest):
                 ),
                 synchronized_data_attr_checks=[],
             ),
+            RoundTestCase(
+                name="API error: api limits",
+                initial_data={},
+                payloads=get_payloads(
+                    payload_cls=TwitterMentionsCollectionPayload,
+                    data=get_dummy_mentions_collection_payload_serialized(
+                        api_error=True
+                    ).replace('"error": "generic"', '"error": "too many requests"'),
+                ),
+                final_data={},
+                event=Event.DONE_API_LIMITS,
+                most_voted_payload=get_dummy_mentions_collection_payload_serialized(
+                    api_error=True
+                ).replace('"error": "generic"', '"error": "too many requests"'),
+                synchronized_data_attr_checks=[],
+            ),
         ),
     )
     def test_run(self, test_case: RoundTestCase) -> None:

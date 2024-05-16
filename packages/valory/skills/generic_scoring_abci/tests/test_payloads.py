@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ class PayloadTestCase:
 
     payload_cls: BaseTxPayload
     content: Hashable
+    raises_type_error: bool
 
 
 @pytest.mark.parametrize(
@@ -44,6 +45,12 @@ class PayloadTestCase:
         PayloadTestCase(
             payload_cls=GenericScoringPayload,
             content="payload_test_content",
+            raises_type_error=False,
+        ),
+        PayloadTestCase(
+            payload_cls=GenericScoringPayload,
+            content=12345,
+            raises_type_error=True,
         ),
     ],
 )
@@ -54,6 +61,12 @@ def test_payloads(test_case: PayloadTestCase) -> None:
         sender="sender",
         content=test_case.content,
     )
+
     assert payload.sender == "sender"
     assert payload.content == test_case.content
-    assert payload.from_json(payload.json) == payload
+
+    if test_case.raises_type_error:
+        with pytest.raises(TypeError):
+            payload.data()
+    else:
+        assert payload.from_json(payload.json) == payload
