@@ -34,23 +34,23 @@ from packages.valory.skills.generic_scoring_abci.payloads import (
 class PayloadTestCase:
     """PayloadTestCase"""
 
-    name: str
     payload_cls: BaseTxPayload
     content: Hashable
+    raises_type_error: bool
 
 
 @pytest.mark.parametrize(
     "test_case",
     [
         PayloadTestCase(
-            name="Happy path",
             payload_cls=GenericScoringPayload,
             content="payload_test_content",
+            raises_type_error=False,
         ),
         PayloadTestCase(
-            name="Payload incorrect data type",
             payload_cls=GenericScoringPayload,
             content=12345,
+            raises_type_error=True,
         ),
     ],
 )
@@ -65,7 +65,7 @@ def test_payloads(test_case: PayloadTestCase) -> None:
     assert payload.sender == "sender"
     assert payload.content == test_case.content
 
-    if test_case.name == "Payload incorrect data type":
+    if test_case.raises_type_error:
         with pytest.raises(TypeError):
             payload.data()
     else:
