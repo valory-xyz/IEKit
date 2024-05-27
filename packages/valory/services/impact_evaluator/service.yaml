@@ -131,6 +131,7 @@ extra:
         tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
         termination_from_block: ${TERMINATION_FROM_BLOCK:int:19717045}
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
+        mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -217,6 +218,7 @@ extra:
         tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
         termination_from_block: ${TERMINATION_FROM_BLOCK:int:19717045}
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
+        mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -303,6 +305,7 @@ extra:
         tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
         termination_from_block: ${TERMINATION_FROM_BLOCK:int:19717045}
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
+        mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -393,6 +396,7 @@ extra:
         tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
         termination_from_block: ${TERMINATION_FROM_BLOCK:int:19717045}
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
+        mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}

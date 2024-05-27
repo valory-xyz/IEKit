@@ -71,6 +71,9 @@ class MechParams(BaseParams):
         self.mech_wrapped_native_token_address: Optional[str] = kwargs.get(
             "mech_wrapped_native_token_address", None
         )
+        self.mech_interaction_sleep_time: int = self._ensure(
+            "mech_interaction_sleep_time", kwargs, int
+        )
         super().__init__(*args, **kwargs)
 
     @property

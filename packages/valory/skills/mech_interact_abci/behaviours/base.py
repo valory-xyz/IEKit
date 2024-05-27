@@ -169,8 +169,9 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
                 break
             if timeout is not None and datetime.now() > deadline:
                 raise TimeoutException()
-            self.context.logger.info(f"Retrying in {self.params.sleep_time} seconds.")
-            yield from self.sleep(self.params.sleep_time)
+            msg = f"Retrying in {self.params.mech_interaction_sleep_time} seconds."
+            self.context.logger.info(msg)
+            yield from self.sleep(self.params.mech_interaction_sleep_time)
 
     def finish_behaviour(self, payload: BaseTxPayload) -> Generator:
         """Finish the behaviour."""
