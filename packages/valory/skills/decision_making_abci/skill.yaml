@@ -36,13 +36,13 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/veolas_delegation:0.1.0:bafybeigt36t37evw6n7kskjeynda3iik5olzdpukxafzzstvppxdymgqy4
-- valory/compatibility_fallback_handler:0.1.0:bafybeifyvgbmz3o626sq75wvykzk5uwzs5cxeauybsnnpsjoxkbfhr56z4
+- valory/veolas_delegation:0.1.0:bafybeieicrbkito2hglwvd4j2cbq3etxpm3rrzfyx5kqqe34fu7q5aftye
+- valory/compatibility_fallback_handler:0.1.0:bafybeihr5y3243pctx334stsprpsmt6sssygw2jepx7fa23yofgwpp7jt4
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiar2yhzxacfe3qqamqhaihtlcimquwedffctw55sowx6rac3cm3ui
-- valory/ceramic_read_abci:0.1.0:bafybeihq3hy2roywidbhhixrse57subkwl5ofezdtr7ssu2c2nteq3mdkm
+- valory/abstract_round_abci:0.1.0:bafybeihnb4dd2ey2vjhlbprtxhnpc4q4resnsdrhpavjqnqaq467d6ouey
+- valory/ceramic_read_abci:0.1.0:bafybeibisk3c4r43vhp2eookkulq5gc3vabl2tpge5eldbkt5txatrjhdm
 behaviours:
   main:
     args: {}
