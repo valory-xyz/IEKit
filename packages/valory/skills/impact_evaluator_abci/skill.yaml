@@ -37,7 +37,7 @@ skills:
 - valory/llm_abci:0.1.0:bafybeibdqkrbh6xmzy2fn5qqlgbwotjq7crrd6jocj57ulizweccnifeau
 - valory/twitter_write_abci:0.1.0:bafybeialypc6dqgf66p5rpvhbogcsmzzpk5em2euasursxv5o47podibda
 - valory/olas_week_abci:0.1.0:bafybeia2axbnscr7sbofobzamax3f55tbulki2xwgbjrlpmd665mhthq2a
-- valory/mech_interact_abci:0.1.0:bafybeieryw7rk2tspyxx46loqqqimr2l5vvhtshiyg2mmdxijzb7pdoi6a
+- valory/mech_interact_abci:0.1.0:bafybeih2cck5xu6yaibomwtm5zbcp6llghr3ighdnk56fzwu3ihu5xx35e
 behaviours:
   main:
     args: {}
@@ -198,6 +198,7 @@ models:
       veolas_delegation_address: '0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68'
       tweet_consensus_veolas: 2000000
       mech_chain_id: gnosis
+      mech_interaction_sleep_time: 10
     class_name: Params
   randomness_api:
     args:

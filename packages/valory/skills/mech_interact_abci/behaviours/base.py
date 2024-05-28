@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -169,8 +169,9 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
                 break
             if timeout is not None and datetime.now() > deadline:
                 raise TimeoutException()
-            self.context.logger.info(f"Retrying in {self.params.sleep_time} seconds.")
-            yield from self.sleep(self.params.sleep_time)
+            msg = f"Retrying in {self.params.mech_interaction_sleep_time} seconds."
+            self.context.logger.info(msg)
+            yield from self.sleep(self.params.mech_interaction_sleep_time)
 
     def finish_behaviour(self, payload: BaseTxPayload) -> Generator:
         """Finish the behaviour."""
