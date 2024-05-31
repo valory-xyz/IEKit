@@ -8,7 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
   behaviours.py: bafybeibdq5p4zi47nsycpcjs7ouw2fjxqjn7hgbd4aalp7yumdhnmlfufq
-  composition.py: bafybeih3rqznglb24w3bgj2f62rf2uojnvsiopmsgsx2rti46zihpahmyu
+  composition.py: bafybeifwmregxn3ibbln3dfkqpmyl5iznfwzepplkjwduoxramikzv6p34
   dialogues.py: bafybeigjknz4qqynbsltjje46gidg4rftsqw6ybjwegz24wetmycutpzh4
   fsm_specification.yaml: bafybeici5e75dzjuxck63cmjmct36jbdc7yoda4tlcerfuondmbpxarfu4
   handlers.py: bafybeidkli6fphcmdgwsys4lkyf3fx6fbawet4nt2pnixfypzijhg6b3ze
@@ -25,18 +25,18 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiar2yhzxacfe3qqamqhaihtlcimquwedffctw55sowx6rac3cm3ui
 - valory/ceramic_read_abci:0.1.0:bafybeihq3hy2roywidbhhixrse57subkwl5ofezdtr7ssu2c2nteq3mdkm
-- valory/generic_scoring_abci:0.1.0:bafybeicfdva26tyziiievu3nxe5j4zokci7xsicogbtls2mnsnl34opipy
-- valory/twitter_scoring_abci:0.1.0:bafybeiasha6ybahrdrstd4tzzhmepgq5crxeznfymrfcdb63eqcpwdm6oe
+- valory/generic_scoring_abci:0.1.0:bafybeiacvweulejbocwsrbgqtxuodkfp5xerybj5ioewcy22nmpp7fi2jm
+- valory/twitter_scoring_abci:0.1.0:bafybeifwhgwh4doc3flztvl27m65ds2o3endg7wof3kpvaq4357tunodzu
 - valory/ceramic_write_abci:0.1.0:bafybeihex4szqlzjdfl423rmyyzdguzrbdbtjeak4gxlcw3torrry75w6m
-- valory/dynamic_nft_abci:0.1.0:bafybeihxrgmhgrutkdxpchqlrr3cy54i5q4hr6qzxkjeghgjahhclxs4xu
+- valory/dynamic_nft_abci:0.1.0:bafybeifhezgjzdews5yhejdc4ifwobnqd3d24nnybxfi5kjdqtwtxgdmqy
 - valory/registration_abci:0.1.0:bafybeieu7vq3pyns4t5ty6u3sbmpkd7yznpg3rmqifoz3jhy7pmqyg3w6q
 - valory/reset_pause_abci:0.1.0:bafybeiameewywqigpupy3u2iwnkfczeiiucue74x2l5lbge74rmw6bgaie
 - valory/termination_abci:0.1.0:bafybeif2zim2de356eo3sipkmoev5emwadpqqzk3huwqarywh4tmqt3vzq
 - valory/transaction_settlement_abci:0.1.0:bafybeic3tccdjypuge2lewtlgprwkbb53lhgsgn7oiwzyrcrrptrbeyote
-- valory/decision_making_abci:0.1.0:bafybeihmazposa4xl5wbjgigvipnhb7vvdhxadi4yl5f375a37kom73nji
+- valory/decision_making_abci:0.1.0:bafybeiffpmdj2c7k72nmfipvcdwy5zjejoe7nugzkkqmhi2r4yhht4avdq
 - valory/llm_abci:0.1.0:bafybeibdqkrbh6xmzy2fn5qqlgbwotjq7crrd6jocj57ulizweccnifeau
 - valory/twitter_write_abci:0.1.0:bafybeialypc6dqgf66p5rpvhbogcsmzzpk5em2euasursxv5o47podibda
-- valory/olas_week_abci:0.1.0:bafybeia2axbnscr7sbofobzamax3f55tbulki2xwgbjrlpmd665mhthq2a
+- valory/olas_week_abci:0.1.0:bafybeigyv3lfsirkxequcvkku5qk6a6fxravl7jjtmtcaxrcrhz2bxzsgm
 - valory/mech_interact_abci:0.1.0:bafybeih2cck5xu6yaibomwtm5zbcp6llghr3ighdnk56fzwu3ihu5xx35e
 behaviours:
   main:
