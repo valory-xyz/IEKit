@@ -207,7 +207,7 @@ class TestMentionsCollectionRound(BaseTwitterScoringRoundTest):
                     ),
                 ),
                 final_data={},
-                event=Event.DONE_MAX_RETRIES,
+                event=Event.API_ERROR,
                 most_voted_payload=get_dummy_mentions_collection_payload_serialized(
                     api_error=True
                 ),
@@ -216,7 +216,7 @@ class TestMentionsCollectionRound(BaseTwitterScoringRoundTest):
             RoundTestCase(
                 name="API error: max retries",
                 initial_data={
-                    "api_retries": 2,
+                    "api_retries": 1,
                 },
                 payloads=get_payloads(
                     payload_cls=TwitterMentionsCollectionPayload,
@@ -289,7 +289,7 @@ class TestHashtagsCollectionRound(BaseTwitterScoringRoundTest):
                     ),
                 ),
                 final_data={},
-                event=Event.DONE_MAX_RETRIES,
+                event=Event.API_ERROR,
                 most_voted_payload=get_dummy_hashtags_collection_payload_serialized(
                     api_error=True
                 ),
@@ -298,7 +298,7 @@ class TestHashtagsCollectionRound(BaseTwitterScoringRoundTest):
             RoundTestCase(
                 name="API error: max retries",
                 initial_data={
-                    "api_retries": 2,
+                    "api_retries": 1,
                 },
                 payloads=get_payloads(
                     payload_cls=TwitterHashtagsCollectionPayload,
