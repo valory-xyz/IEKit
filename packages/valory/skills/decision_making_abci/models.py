@@ -132,7 +132,7 @@ class CeramicDBBase:
         """Calculate next user id"""
         if not self.data["users"]:
             return "0"
-        user_ids = list(sorted(list(self.data["users"].keys())))
+        user_ids = list(sorted([int(user_id) for user_id in self.data["users"].keys()]))
         return str(int(user_ids[-1]) + 1)
 
     def create_user(self, user_data):
