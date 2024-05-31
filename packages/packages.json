@@ -16,7 +16,7 @@
         "skill/valory/twitter_scoring_abci/0.1.0": "bafybeifwhgwh4doc3flztvl27m65ds2o3endg7wof3kpvaq4357tunodzu",
         "skill/valory/ceramic_read_abci/0.1.0": "bafybeihq3hy2roywidbhhixrse57subkwl5ofezdtr7ssu2c2nteq3mdkm",
         "skill/valory/ceramic_write_abci/0.1.0": "bafybeihex4szqlzjdfl423rmyyzdguzrbdbtjeak4gxlcw3torrry75w6m",
-        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeie43tc7x6nhtwdaq4zl5yhoiotus4mvmopi53dcsm3gi4w2dwugse",
+        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeiefqil7ivcmkfwwtnmaagjs7cqjrqb3sclkufo6rdajoamfcesk4m",
         "skill/valory/generic_scoring_abci/0.1.0": "bafybeiacvweulejbocwsrbgqtxuodkfp5xerybj5ioewcy22nmpp7fi2jm",
         "skill/valory/twitter_write_abci/0.1.0": "bafybeialypc6dqgf66p5rpvhbogcsmzzpk5em2euasursxv5o47podibda",
         "skill/valory/llm_abci/0.1.0": "bafybeibdqkrbh6xmzy2fn5qqlgbwotjq7crrd6jocj57ulizweccnifeau",
@@ -25,10 +25,10 @@
         "skill/valory/mech_interact_abci/0.1.0": "bafybeih2cck5xu6yaibomwtm5zbcp6llghr3ighdnk56fzwu3ihu5xx35e",
         "skill/valory/farcaster_write_abci/0.1.0": "bafybeifa4btbjvjo75yx65wift6n2qode5sbgviwh3kmcgft4v3c4s34wq",
         "skill/valory/farcaster_test_abci/0.1.0": "bafybeiaz55b3zgcrkattnqmlwjhjzsp5iwauxemqgelpxgdrl5g2nratpm",
-        "agent/valory/impact_evaluator/0.1.0": "bafybeictwdlh77tpq5ykbz2yirynfob4wo2j6sewre4iocxbakyzrlbpu4",
+        "agent/valory/impact_evaluator/0.1.0": "bafybeidocy2axex2ojuac7aoy7ltm7hrl6sftj747z35duddwxv7mpsubq",
         "agent/valory/farcaster_test/0.1.0": "bafybeiadnjkfh26isxcm6abfmvylp2aemlmqb2ov5v3czckkyndjziivmm",
-        "service/valory/impact_evaluator/0.1.0": "bafybeiam7waxoe3alxh5nx66gdvpzqy54onlsksl2zxemdjhccda73tnka",
-        "service/valory/impact_evaluator_local/0.1.0": "bafybeidcrsgjf6oc2yr2limzltqwtnovu7c5ckmomsum3tfubdfjioxa6y"
+        "service/valory/impact_evaluator/0.1.0": "bafybeib7t5xs35lofjdakczlzkb325lkuugnda33jcjeqiajftp7sqn4ae",
+        "service/valory/impact_evaluator_local/0.1.0": "bafybeibtdf3lbz5pqg3tlottbfd4ucwrvspbh77pwwif3ux27wakrapyt4"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi",
