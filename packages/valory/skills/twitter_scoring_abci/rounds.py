@@ -88,6 +88,14 @@ class MechInteractionResponse(MechRequest):
     result: Optional[str] = None
     error: str = "Unknown"
 
+    def retries_exceeded(self) -> None:
+        """Set an incorrect format response."""
+        self.error = "Retries were exceeded while trying to get the mech's response."
+
+    def incorrect_format(self, res: Any) -> None:
+        """Set an incorrect format response."""
+        self.error = f"The response's format was unexpected: {res}"
+
 
 class Event(Enum):
     """TwitterScoringAbciApp Events"""
@@ -267,21 +275,37 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
                     )
                     return synchronized_data, Event.DONE_API_LIMITS
 
+                api_retries = (
+                    cast(SynchronizedData, self.synchronized_data).api_retries + 1
+                )
+
                 # Other API errors
-                performed_twitter_tasks[
-                    "retrieve_mentions"
-                ] = Event.DONE_MAX_RETRIES.value
+                if api_retries >= MAX_API_RETRIES:
+                    performed_twitter_tasks[
+                        "retrieve_mentions"
+                    ] = Event.DONE_MAX_RETRIES.value
+                    synchronized_data = self.synchronized_data.update(
+                        synchronized_data_class=SynchronizedData,
+                        **{
+                            get_name(SynchronizedData.api_retries): 0,  # reset retries
+                            get_name(
+                                SynchronizedData.performed_twitter_tasks
+                            ): performed_twitter_tasks,
+                            get_name(SynchronizedData.sleep_until): payload[
+                                "sleep_until"
+                            ],
+                        },
+                    )
+                    return synchronized_data, Event.DONE_MAX_RETRIES
+
                 synchronized_data = self.synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
                     **{
-                        get_name(SynchronizedData.api_retries): 0,  # reset retries
-                        get_name(
-                            SynchronizedData.performed_twitter_tasks
-                        ): performed_twitter_tasks,
+                        get_name(SynchronizedData.api_retries): api_retries,
                         get_name(SynchronizedData.sleep_until): payload["sleep_until"],
                     },
                 )
-                return synchronized_data, Event.DONE_MAX_RETRIES
+                return synchronized_data, Event.API_ERROR
 
             # Happy path
             previous_tweets = cast(SynchronizedData, self.synchronized_data).tweets
@@ -389,21 +413,37 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
                     )
                     return synchronized_data, Event.DONE_API_LIMITS
 
+                api_retries = (
+                    cast(SynchronizedData, self.synchronized_data).api_retries + 1
+                )
+
                 # Other API errors
-                performed_twitter_tasks[
-                    "retrieve_hashtags"
-                ] = Event.DONE_MAX_RETRIES.value
+                if api_retries >= MAX_API_RETRIES:
+                    performed_twitter_tasks[
+                        "retrieve_hashtags"
+                    ] = Event.DONE_MAX_RETRIES.value
+                    synchronized_data = self.synchronized_data.update(
+                        synchronized_data_class=SynchronizedData,
+                        **{
+                            get_name(SynchronizedData.api_retries): 0,  # reset retries
+                            get_name(
+                                SynchronizedData.performed_twitter_tasks
+                            ): performed_twitter_tasks,
+                            get_name(SynchronizedData.sleep_until): payload[
+                                "sleep_until"
+                            ],
+                        },
+                    )
+                    return self.synchronized_data, Event.DONE_MAX_RETRIES
+
                 synchronized_data = self.synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
                     **{
-                        get_name(SynchronizedData.api_retries): 0,  # reset retries
-                        get_name(
-                            SynchronizedData.performed_twitter_tasks
-                        ): performed_twitter_tasks,
+                        get_name(SynchronizedData.api_retries): api_retries,
                         get_name(SynchronizedData.sleep_until): payload["sleep_until"],
                     },
                 )
-                return synchronized_data, Event.DONE_MAX_RETRIES
+                return synchronized_data, Event.API_ERROR
 
             # Happy path
             previous_tweets = cast(SynchronizedData, self.synchronized_data).tweets
