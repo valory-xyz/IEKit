@@ -79,7 +79,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     CeramicWriteAbci.FinishedVerificationRound: DecisionMakingAbci.DecisionMakingRound,
     CeramicWriteAbci.FinishedMaxRetriesRound: CeramicWriteAbci.RandomnessRound,
     ResetAndPauseAbci.FinishedResetAndPauseRound: DecisionMakingAbci.DecisionMakingRound,
-    ResetAndPauseAbci.FinishedResetAndPauseErrorRound: ResetAndPauseAbci.ResetAndPauseRound,
+    ResetAndPauseAbci.FinishedResetAndPauseErrorRound: RegistrationAbci.RegistrationRound,
 }
 
 termination_config = BackgroundAppConfig(
