@@ -23,21 +23,21 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiar2yhzxacfe3qqamqhaihtlcimquwedffctw55sowx6rac3cm3ui
-- valory/ceramic_read_abci:0.1.0:bafybeihq3hy2roywidbhhixrse57subkwl5ofezdtr7ssu2c2nteq3mdkm
-- valory/generic_scoring_abci:0.1.0:bafybeiacvweulejbocwsrbgqtxuodkfp5xerybj5ioewcy22nmpp7fi2jm
-- valory/twitter_scoring_abci:0.1.0:bafybeia5jf2zj52zjtx7nmuxf44ikda6opdl33yrjkll7nbrx5iwkn35di
-- valory/ceramic_write_abci:0.1.0:bafybeihex4szqlzjdfl423rmyyzdguzrbdbtjeak4gxlcw3torrry75w6m
-- valory/dynamic_nft_abci:0.1.0:bafybeifhezgjzdews5yhejdc4ifwobnqd3d24nnybxfi5kjdqtwtxgdmqy
-- valory/registration_abci:0.1.0:bafybeieu7vq3pyns4t5ty6u3sbmpkd7yznpg3rmqifoz3jhy7pmqyg3w6q
-- valory/reset_pause_abci:0.1.0:bafybeiameewywqigpupy3u2iwnkfczeiiucue74x2l5lbge74rmw6bgaie
-- valory/termination_abci:0.1.0:bafybeif2zim2de356eo3sipkmoev5emwadpqqzk3huwqarywh4tmqt3vzq
-- valory/transaction_settlement_abci:0.1.0:bafybeic3tccdjypuge2lewtlgprwkbb53lhgsgn7oiwzyrcrrptrbeyote
-- valory/decision_making_abci:0.1.0:bafybeiffpmdj2c7k72nmfipvcdwy5zjejoe7nugzkkqmhi2r4yhht4avdq
-- valory/llm_abci:0.1.0:bafybeibdqkrbh6xmzy2fn5qqlgbwotjq7crrd6jocj57ulizweccnifeau
-- valory/twitter_write_abci:0.1.0:bafybeialypc6dqgf66p5rpvhbogcsmzzpk5em2euasursxv5o47podibda
-- valory/olas_week_abci:0.1.0:bafybeif4kwb4c2akjtd7leunocp6iykdvd5geg6tjoeqjrjpfqv7ilqmfa
-- valory/mech_interact_abci:0.1.0:bafybeih2cck5xu6yaibomwtm5zbcp6llghr3ighdnk56fzwu3ihu5xx35e
+- valory/abstract_round_abci:0.1.0:bafybeih2soag6gy472x7vbbxmetmr532jqzm2efcapymi3725as33fvjvu
+- valory/ceramic_read_abci:0.1.0:bafybeih3ihqbd4x5wy7jpkg4mvrp2rlgm3pkcgzukkfu7clcivd444vcvq
+- valory/generic_scoring_abci:0.1.0:bafybeihpynv3565stc7fsahgesmeetklqzqbvj3f2ipxlnh3bzna3hypcy
+- valory/twitter_scoring_abci:0.1.0:bafybeif42fwffcttuuwnegrupczchy55vzce53xiuhxyqjdxmmysmn23ru
+- valory/ceramic_write_abci:0.1.0:bafybeia66sapsttlkalawanhgztk4hnv673x32w3vgz6si24nazowqcube
+- valory/dynamic_nft_abci:0.1.0:bafybeif27gez6axqu5yddfnjrpurwtlzrhtg4ongtobzghqas6guxeo7py
+- valory/registration_abci:0.1.0:bafybeiaxomjnv2h7ozc7mvmz5wysfinfgtqnniznpcdunijb5iiekv4mzi
+- valory/reset_pause_abci:0.1.0:bafybeiatyhxriq2gzny3s5by2plk7tyw4o5uvabzuhvhvwrl2pburbdjcm
+- valory/termination_abci:0.1.0:bafybeig3gpsgm4c2ibywmriv2py6224xxsfw5b6p6j3gc7szz3qv22bhce
+- valory/transaction_settlement_abci:0.1.0:bafybeicq4ttsarwurbll4xqabjb26g3po2ntrcxkwi7vac6d2kmvt6hati
+- valory/decision_making_abci:0.1.0:bafybeid2ek6ffalgebg2kjvwbaxppswiqarx423ctn7q2fwwvzi75n3de4
+- valory/llm_abci:0.1.0:bafybeicljcawuikys472glztza4mfj7ccl2eqxcbptysl7tdexik6w6zvm
+- valory/twitter_write_abci:0.1.0:bafybeiaofknda4gzs6xks53ta5xwhgs2dvyvfqypdk2ey7if6egjpgarna
+- valory/olas_week_abci:0.1.0:bafybeiafopl7jgspashjnrsxikcimn7yjyuihe32hlcohbppwbtot4j3my
+- valory/mech_interact_abci:0.1.0:bafybeicj4c6brjtijdqywn3knejwl4o5ynzi4jcc4sinezeyj7lbgxbu5q
 behaviours:
   main:
     args: {}
@@ -243,5 +243,5 @@ models:
     class_name: CeramicDB
 dependencies:
   open-aea-cli-ipfs:
-    version: ==1.52.0
+    version: ==1.53.0
 is_abstract: false
