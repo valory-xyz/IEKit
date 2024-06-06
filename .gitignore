@@ -14,6 +14,7 @@ keys.json
 leak_report
 packages/valory/connections/*
 !packages/valory/connections/twitter
+!packages/valory/connections/tweepy
 !packages/valory/connections/openai
 !packages/valory/connections/farcaster
 packages/valory/contracts/service_registry
