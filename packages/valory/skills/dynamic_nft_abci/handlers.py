@@ -261,7 +261,7 @@ class HttpHandler(BaseHttpHandler):
         token_id = str(request_uri.split("/")[-1])
         token_id_to_points = self.synchronized_data.token_id_to_points
 
-        if token_id not in token_id_to_points:
+        if not token_id_to_points or token_id not in token_id_to_points:
             self.context.logger.info(
                 f"Requested URL {request_uri} is not present in token table"
             )

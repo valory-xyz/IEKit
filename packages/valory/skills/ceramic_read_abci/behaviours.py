@@ -20,7 +20,6 @@
 """This package contains round behaviours of CeramicReadAbciApp."""
 
 import json
-import os
 from abc import ABC
 from typing import Generator, Optional, Set, Type, cast
 
@@ -58,10 +57,6 @@ class CeramicReadBaseBehaviour(BaseBehaviour, ABC):
     def params(self) -> Params:
         """Return the params."""
         return cast(Params, super().params)
-
-    def from_data_dir(self, path: str) -> str:
-        """Return the given path appended to the data dir."""
-        return os.path.join(self.context.data_dir, path)
 
     def _get_stream_data(self, stream_id: str) -> Generator[None, None, Optional[dict]]:
         """Get the current data from a Ceramic stream"""
