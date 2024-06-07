@@ -219,6 +219,26 @@ class TestStreamReadBehaviour(BaseCeramicReadTest):
                     },
                 },
             ),
+            (
+                BehaviourTestCase(
+                    "Sync on data hash",
+                    initial_data=dict(
+                        read_stream_id="dummy_stream_id",
+                        read_target_property="dummy_property_name",
+                        sync_on_ceramic_data=False,
+                    ),
+                    event=Event.DONE,
+                ),
+                {
+                    "read_data": {
+                        "body": json.dumps(
+                            DUMMY_API_RESPONSE_OK,
+                        ),
+                        "status": 200,
+                        "headers": "",
+                    },
+                },
+            ),
         ],
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
@@ -322,6 +342,9 @@ class TestStreamReadBehaviourRaises(BaseCeramicReadTest):
         params = cast(SharedState, self._skill.skill_context.params)
         params.__dict__["_frozen"] = False
         params.default_read_target_property = None
-        self.fast_forward({})
-        with pytest.raises(AEAActException):
+        self.fast_forward({"read_stream_id": "dummy_stream_id"})
+        with pytest.raises(
+            AEAActException,
+            match="read_target_property has not been set neither in the synchronized_data nor as a default parameter",
+        ):
             self.behaviour.act_wrapper()
