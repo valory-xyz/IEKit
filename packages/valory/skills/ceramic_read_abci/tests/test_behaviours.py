@@ -135,6 +135,16 @@ class BehaviourTestCase:
     next_behaviour_class: Optional[Type[CeramicReadBaseBehaviour]] = None
 
 
+@dataclass
+class BehaviourRaisesTestCase:
+    """BehaviourRaisesTestCase"""
+
+    name: str
+    param_mapping: Dict[str, Any]
+    initial_data: Dict[str, Any]
+    raises_message: str
+
+
 class BaseCeramicReadTest(FSMBehaviourBaseCase):
     """Base test case."""
 
@@ -325,26 +335,33 @@ class TestStreamReadBehaviourRaises(BaseCeramicReadTest):
     behaviour_class = StreamReadBehaviour
     next_behaviour_class = StreamReadBehaviour
 
-    def test_raises_a(self) -> None:
+    @pytest.mark.parametrize(
+        "test_case",
+        [
+            BehaviourRaisesTestCase(
+                "Read stream id",
+                param_mapping={"default_read_stream_id": None},
+                initial_data={},
+                raises_message="read_stream_id has not been set neither in the synchronized_data nor as a default parameter",
+            ),
+            BehaviourRaisesTestCase(
+                "Read target property",
+                param_mapping={"default_read_target_property": None},
+                initial_data={"read_stream_id": "dummy_stream_id"},
+                raises_message="read_target_property has not been set neither in the synchronized_data nor as a default parameter",
+            ),
+        ],
+    )
+    def test_run(self, test_case: BehaviourRaisesTestCase) -> None:
         """Run tests."""
         params = cast(SharedState, self._skill.skill_context.params)
         params.__dict__["_frozen"] = False
-        params.default_read_stream_id = None
-        self.fast_forward({})
-        with pytest.raises(
-            AEAActException,
-            match="read_stream_id has not been set neither in the synchronized_data nor as a default parameter",
-        ):
+        self.set_params(params, test_case.param_mapping)
+        self.fast_forward(test_case.initial_data)
+        with pytest.raises(AEAActException, match=test_case.raises_message):
             self.behaviour.act_wrapper()
 
-    def test_raises_b(self) -> None:
-        """Run tests."""
-        params = cast(SharedState, self._skill.skill_context.params)
-        params.__dict__["_frozen"] = False
-        params.default_read_target_property = None
-        self.fast_forward({"read_stream_id": "dummy_stream_id"})
-        with pytest.raises(
-            AEAActException,
-            match="read_target_property has not been set neither in the synchronized_data nor as a default parameter",
-        ):
-            self.behaviour.act_wrapper()
+    def set_params(self, params: SharedState, param_mapping: Dict[str, Any]) -> None:
+        """Set parameters based on the provided mapping."""
+        for param_name, param_value in param_mapping.items():
+            setattr(params, param_name, param_value)
