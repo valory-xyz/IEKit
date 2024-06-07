@@ -146,6 +146,20 @@ class TestStreamReadRound(BaseCeramicReadRoundTest):
                 ),
                 synchronized_data_attr_checks=[],
             ),
+            RoundTestCase(
+                name="Sync on data hash",
+                initial_data={"sync_on_ceramic_data": False},
+                payloads=get_payloads(
+                    payload_cls=StreamReadPayload,
+                    data=get_dummy_ceramic_read_payload_serialized(),
+                ),
+                final_data={
+                    "most_voted_api_data": get_dummy_ceramic_read_payload_serialized(),
+                },
+                event=Event.DONE,
+                most_voted_payload=get_dummy_ceramic_read_payload_serialized(),
+                synchronized_data_attr_checks=[],
+            ),
         ),
     )
     def test_run(self, test_case: RoundTestCase) -> None:
