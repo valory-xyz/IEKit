@@ -21,14 +21,21 @@
 """Tweepy connection."""
 
 import json
-from typing import Any, Dict, Tuple, cast, Callable, Any
-import functools
+import os
+from collections import deque
+from pathlib import Path
+from typing import Any, Deque, Dict, List, Optional, Tuple, cast
+
+import jsonschema
+import requests
 import tweepy
 from aea.configurations.base import PublicId
 from aea.connections.base import BaseSyncConnection
 from aea.mail.base import Envelope
 from aea.protocols.base import Address, Message
 from aea.protocols.dialogue.base import Dialogue
+from aea_cli_ipfs.ipfs_utils import IPFSTool
+from tweepy.errors import HTTPException as TweepyHTTPException
 
 from packages.valory.protocols.srr.dialogues import SrrDialogue
 from packages.valory.protocols.srr.dialogues import SrrDialogues as BaseSrrDialogues
@@ -37,35 +44,51 @@ from packages.valory.protocols.srr.message import SrrMessage
 
 PUBLIC_ID = PublicId.from_str("valory/tweepy:0.1.0")
 
+REQUEST_PAYLOAD_SCHEMA = {
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "properties": {
+        "action": {
+            "type": "string",
+            "enum": ["search_recent_tweets", "get_users_mentions", "get_users_tweets", "post_tweet_or_thread"]
+        },
+        "kwargs": {
+            "type": "object"
+        },
+        "additionalProperties": False
+    }
+}
 
-def credential_rotator(func: Callable):
-    """Credential rotator decorator"""
+CREDENTIALS_SCHEMA = {
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "account_id": {
+                "type": "string"
+            },
+            "consumer_key": {
+                "type": "string"
+            },
+            "consumer_secret": {
+                "type": "string"
+            },
+            "access_secret": {
+                "type": "string"
+            },
+            "access_token": {
+                "type": "string"
+            },
+            "bearer_token": {
+                "type": "string"
+            }
+        },
+        "additionalProperties": False
+    }
+}
 
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs) -> Any:
-        """Credential rotator wrapper"""
-
-        MAX_RETRIES = 3
-
-        twitter_read_credentials = kwargs["twitter_read_credentials"]
-        retries = {cred["id"]: 0 for cred in twitter_read_credentials}
-
-        def execute() -> Any:
-            """Retry the function with a new key."""
-            try:
-                result = func(*args, **kwargs)
-                return result
-
-            except tweepy.errors.TooManyRequests as e:
-
-                if retries_left[service] <= 0:
-                    raise e
-                retries_left[service] -= 1
-                api_keys.rotate(service)
-                return execute()
-            except Exception as e:
-                return str(e)
-
+MEDIA_DIR = "/tmp"   # nosec
 
 class SrrDialogues(BaseSrrDialogues):
     """A class to keep track of SRR dialogues."""
@@ -122,25 +145,30 @@ class TweepyConnection(BaseSyncConnection):
         :param kwargs: keyword arguments passed to component base
         """
         super().__init__(*args, **kwargs)
-        self.twitter_read_credentials = self.configuration.config.get("twitter_read_credentials", {})
-        self.twitter_write_credentials = self.configuration.config.get("twitter_write_credentials", {})
+        self.twitter_read_credentials = deque(self.configuration.config.get("twitter_read_credentials", []))
+        self.twitter_write_credentials = deque(self.configuration.config.get("twitter_write_credentials", []))
+        self.use_staging_api = self.configuration.config.get("use_staging_api", False)
+        self.staging_api = self.configuration.config["staging_api"]
+        self.ipfs_tool = IPFSTool()
+
+        if not self.twitter_read_credentials:
+            self.logger.warning("No Twitter read credentials have been set. The service will not be able to read tweets.")
+
+        try:
+            jsonschema.validate(instance=self.twitter_read_credentials, schema=CREDENTIALS_SCHEMA)
+        except jsonschema.exceptions.ValidationError as e:
+            raise ValueError(f"Twitter read credentials do not follow the required schema:\n{e}") from e
+
+        if not self.twitter_write_credentials:
+            self.logger.warning("No Twitter write credentials have been set. The service will not be able to write tweets.")
+
+        try:
+            jsonschema.validate(instance=self.twitter_write_credentials, schema=CREDENTIALS_SCHEMA)
+        except jsonschema.exceptions.ValidationError as e:
+            raise ValueError(f"Twitter write credentials do not follow the required schema:\n{e}") from e
 
         self.dialogues = SrrDialogues(connection_id=PUBLIC_ID)
 
-
-    def get_client(self):
-        """Get the client"""
-
-        # Client is Tweepy's interface for Twitter API v2
-        self.client = tweepy.Client(
-            bearer_token=self.twitter_read_credentials[0]["bearer"],
-            wait_on_rate_limit=False
-        )
-
-
-
-    def rotate_credentials(self):
-        """Rotates credentials"""
 
     def main(self) -> None:
         """
@@ -166,6 +194,21 @@ class TweepyConnection(BaseSyncConnection):
         This blocking code can be executed in the main function and new envelops
         can be created in the event callback.
         """
+
+    def on_connect(self) -> None:
+        """
+        Tear down the connection.
+
+        Connection status set automatically.
+        """
+
+    def on_disconnect(self) -> None:
+        """
+        Tear down the connection.
+
+        Connection status set automatically.
+        """
+
 
     def on_send(self, envelope: Envelope) -> None:
         """
@@ -206,42 +249,286 @@ class TweepyConnection(BaseSyncConnection):
 
         self.put_envelope(response_envelope)
 
+
     def _get_response(self, payload: dict) -> Tuple[Dict, bool]:
-        """Get response from Llama."""
+        """Get response from Tweepy."""
 
-        REQUIRED_PROPERTIES = ["system", "user"]
-
-        if not all(i in payload for i in REQUIRED_PROPERTIES):
+        # Validate the payload
+        try:
+            jsonschema.validate(instance=payload, schema=REQUEST_PAYLOAD_SCHEMA)
+        except jsonschema.exceptions.ValidationError as e:
             return {
-                "error": f"Some parameter is missing from the request data: required={REQUIRED_PROPERTIES}, got={list(payload.keys())}"
+                "error": f"Tweepy connection request is not valid: {e}"
             }, True
 
-        self.logger.info(f"Calling chat completion: {payload}")
+        # Run the method
+        try:
+            method = getattr(self, payload["method"])
+            result = method(**payload["kwargs"])
+            return result, False
+        except Exception as e:
+            return {"error": f"Exception while calling Tweepy:\n{e}"}, True
+
+
+    def rotate_read_credentials(self):
+        """Rotate read credentials"""
+        self.twitter_read_credentials.rotate(-1)
+
+
+    def get_read_cli(self):
+        """Get the Tweepy cli"""
+        # Client is Tweepy's interface for Twitter API v2
+        # cli = tweepy.Client(
+        #     consumer_key=self.twitter_read_credentials[0]["consumer_key"],
+        #     consumer_secret=self.twitter_read_credentials[0]["consumer_secret"],
+        #     access_token=self.twitter_read_credentials[0]["access_token"],
+        #     access_token_secret=self.twitter_read_credentials[0]["access_secret"],
+        # )
+        cli = tweepy.Client(
+            bearer_token=self.twitter_read_credentials[0]["bearer"],
+            wait_on_rate_limit=False
+        )
+        return cli
+
+
+    def get_write_cli(self, account_id):
+        """Get the Tweepy cli"""
+        # Client is Tweepy's interface for Twitter API v2
+        # cli = tweepy.Client(
+        #     consumer_key=self.twitter_write_credentials[0]["consumer_key"],
+        #     consumer_secret=self.twitter_write_credentials[0]["consumer_secret"],
+        #     access_token=self.twitter_write_credentials[0]["access_token"],
+        #     access_token_secret=self.twitter_write_credentials[0]["access_secret"],
+        # )
+
+        for cred in self.twitter_write_credentials:
+            if cred["id"] == account_id:
+                cli = tweepy.Client(
+                    bearer_token=cred["bearer"],
+                    wait_on_rate_limit=False
+                )
+                return cli
+        self.logger.error(f"Could not get Tweepy client for acoount_id={account_id}")
+        return None
+
+
+    def get_write_api(self, account_id):
+        """Get the Tweepy api"""
+        for cred in self.twitter_write_credentials:
+            if cred["id"] == account_id:
+                auth = tweepy.OAuth1UserHandler(
+                    consumer_key=cred["consumer_key"],
+                    consumer_secret=cred["consumer_secret"],
+                    access_token=cred["access_token"],
+                    access_token_secret=cred["access_secret"],
+                )
+                api = tweepy.API(auth)
+                return api
+
+        self.logger.error(f"Could not get Tweepy API for acoount_id={account_id}")
+        return None
+
+
+    def read_with_key_rotation(self, method, **kwargs) -> Tuple[Dict, bool]:
+        """Make a call to the tweepy client with automatic key rotation"""
+        max_rotations = len(self.twitter_read_credentials)
+        rotations = 0
+
+        while rotations < max_rotations:
+            try:
+                cli = self.get_read_cli()
+                method = getattr(cli, method)
+                result = method(**kwargs)
+                return result, False
+            except Exception:
+                self.rotate_read_credentials()
+                rotations += 1
+        return {"error": "Max Twitter read credential rotations reached"}, True
+
+
+    def search_recent_tweets(self, **kwargs) -> Tuple[Dict, bool]:
+        """Search recent tweets"""
+        return self.read_with_key_rotation(
+            method="search_recent_tweets",
+            expansions=["author_id"],
+            tweet_fields=["author_id", "created_at", "conversation_id"],
+            user_fields=["username"],
+            **kwargs
+        )
+
+    def get_users_mentions(self, **kwargs) -> Tuple[Dict, bool]:
+        """Get users mentions"""
+        return self.read_with_key_rotation(
+            method="get_users_mentions",
+            expansions=["author_id"],
+            tweet_fields=["author_id", "created_at", "conversation_id"],
+            user_fields=["username"],
+            **kwargs
+        )
+
+    def get_users_tweets(self, **kwargs) -> Tuple[Dict, bool]:
+        """Get users tweets"""
+        return self.read_with_key_rotation(
+            method="get_users_tweets",
+            expansions=["author_id"],
+            tweet_fields=["author_id", "created_at", "conversation_id"],
+            user_fields=["username"],
+            **kwargs
+        )
+
+    def post_tweet_or_thread(self, **kwargs) -> Tuple[Dict, bool]:
+        """Post tweet or thread"""
+
+        if self.use_staging_api:
+            return self.post_tweet_or_thread_staging(**kwargs)
+
+        # Process media
+        thread_media_ids = self.process_media(**kwargs)
+        self.logger.info(f"Processed media ids: {thread_media_ids}")
+
+        # Publish tweets
+        cli = self.get_write_cli(kwargs.get("account_id", None))
+
+        if not cli:
+            return {"error": "Could not get tweepy cli"}, True
+
+        text = kwargs.get("text")
+        tweets = text if isinstance(text, list) else [text]
+        thread_media_ids = thread_media_ids if thread_media_ids else [[] for _ in tweets]
 
         try:
-            response = self.llm.create_chat_completion(
-                messages=[
-                    {"role": "system", "content": payload["system"]},  # type: ignore
-                    {"role": "user", "content": payload["user"]},  # type: ignore
-                ],
-                temperature=float(payload.get("temperature", DEFAULT_TEMPERATURE)),
-            )
-            self.logger.info(f"LLM response: {response}")
-        except Exception as e:
-            return {"error": f"Exception while calling Llama:\n{e}"}, True
+            tweet_id = None
+            for text, media_ids in zip(tweets, thread_media_ids):
+                tweet_kwargs = {}
 
-        return {"response": response["choices"][0]["message"]["content"]}, False  # type: ignore
+                if text:
+                    tweet_kwargs["text"] = text
 
-    def on_connect(self) -> None:
-        """
-        Tear down the connection.
+                if media_ids:
+                    tweet_kwargs["media_ids"] = media_ids
 
-        Connection status set automatically.
-        """
+                if tweet_id:
+                    tweet_kwargs["in_reply_to_tweet_id"] = tweet_id
 
-    def on_disconnect(self) -> None:
-        """
-        Tear down the connection.
+                self.logger.info(f"Tweepy kwargs: {tweet_kwargs}")
 
-        Connection status set automatically.
-        """
+                response = cli.create_tweet(**tweet_kwargs)
+
+                if not tweet_id:
+                    tweet_id = response.data["id"]
+
+            return {"tweet_id": tweet_id}, False
+
+        except TweepyHTTPException as e:
+            return {"error": "; ".join(e.api_messages)}, True
+
+
+    def post_tweet_or_thread_staging(self, **kwargs) -> Tuple[Dict, bool]:
+        """Post tweet or thread to staging"""
+
+        text = kwargs.get("text")
+        tweets = text if isinstance(text, list) else [text]
+
+        url = f"{self.staging_api}/twitter/create_tweet"
+
+        self.logger.info(
+            f"Posting tweet using the staging API {url}"
+        )
+
+        try:
+            tweet_id = None
+            for tweet in tweets:
+                response = requests.post(
+                    url,
+                    json={
+                        "user_name": "staging_contribute",
+                        "text": tweet
+                    },
+                    timeout=10
+                )
+
+                # Keep the first tweet_id only
+                if not tweet_id:
+                    tweet_id = response.json()["tweet_id"]
+
+            return {"tweet_id": tweet_id}, False
+
+        except requests.exceptions.ConnectionError as error:
+            return {"error": error}, True
+
+
+
+    def process_media(self, **kwargs) -> Optional[List]:
+        """Process tweet media"""
+
+        # Media hashes is always a list of lists
+        # Each tweet can contain several media items
+        # A thread can contain several tweets
+        # media_hashes = [[], [hashes_for_tweet_2], [], [hashes_for_tweet_4]]
+        media_hashes = kwargs.get("media_hashes")
+        self.logger.info(f"Processing media: {media_hashes}")
+        thread_media_ids = []
+
+        if not media_hashes:
+            return None
+
+        api = self.get_write_api(kwargs.get("account_id", None))
+
+        if not api:
+            return None
+
+        for tweet_media_hashes in media_hashes:
+
+            tweet_media_ids = []
+
+            # tweet_media_hashes is not a list
+            if not isinstance(tweet_media_hashes, list):
+                self.logger.error(
+                    f"Hash list is not a list: {tweet_media_hashes}. Skipping tweet media..."
+                )
+                thread_media_ids.append(tweet_media_ids)
+                continue
+
+            for media_hash in tweet_media_hashes:
+
+                # The hash foes not contain an extension
+                if "." not in media_hash:
+                    self.logger.error(
+                        f"Hash {media_hash} does not contain an extension. Skipping media..."
+                    )
+                    continue
+
+                # Target file path
+                image_hash, image_ext = media_hash.split(".")
+                target_file = Path(MEDIA_DIR, image_hash)
+
+                # Remove file if it exists
+                if os.path.isfile(target_file):
+                    os.remove(target_file)
+
+                # Get media from IPFS
+                try:
+                    self.ipfs_tool.download(
+                        hash_id=image_hash,
+                        target_dir=MEDIA_DIR,
+                        attempts=1
+                    )
+                except Exception as e:
+                    self.logger.error(
+                        f"Failed to donwload media hash {media_hash}. Skipping media...\n{e}"
+                    )
+                    continue
+
+                # Rename file to include its corresponding extension
+                renamed_file = Path(MEDIA_DIR, f"{image_hash}.{image_ext}")
+                os.rename(target_file, renamed_file)
+                self.logger.info(f"Got media from IPFS: {media_hash} -> {renamed_file}")
+
+                # Send media to Twitter
+                media = api.media_upload(renamed_file)
+                tweet_media_ids.append(media.media_id)
+                self.logger.info(f"Uploaded media to Twitter: {media.media_id} ")
+
+            thread_media_ids.append(tweet_media_ids)
+
+        return thread_media_ids

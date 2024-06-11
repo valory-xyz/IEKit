@@ -17,10 +17,16 @@ class_name: LlamaConnection
 config:
   twitter_read_credentials: []
   twitter_write_credentials: []
+  use_staging_api: false
+  staging_api: http://host.docker.internal:5000/twitter/create_tweet
 excluded_protocols: []
 restricted_to_protocols: []
 dependencies:
   tweepy:
     version: ==4.14.0
+  requests:
+    version: ==2.28.1
+  open-aea-cli-ipfs:
+    version: ==1.53.0
 is_abstract: false
 cert_requests: []
