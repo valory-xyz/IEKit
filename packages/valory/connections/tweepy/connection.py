@@ -50,13 +50,16 @@ REQUEST_PAYLOAD_SCHEMA = {
     "properties": {
         "action": {
             "type": "string",
-            "enum": ["search_recent_tweets", "get_users_mentions", "get_users_tweets", "post_tweet_or_thread"]
+            "enum": [
+                "search_recent_tweets",
+                "get_users_mentions",
+                "get_users_tweets",
+                "post_tweet_or_thread",
+            ],
         },
-        "kwargs": {
-            "type": "object"
-        },
-        "additionalProperties": False
-    }
+        "kwargs": {"type": "object"},
+        "additionalProperties": False,
+    },
 }
 
 CREDENTIALS_SCHEMA = {
@@ -65,30 +68,19 @@ CREDENTIALS_SCHEMA = {
     "items": {
         "type": "object",
         "properties": {
-            "account_id": {
-                "type": "string"
-            },
-            "consumer_key": {
-                "type": "string"
-            },
-            "consumer_secret": {
-                "type": "string"
-            },
-            "access_secret": {
-                "type": "string"
-            },
-            "access_token": {
-                "type": "string"
-            },
-            "bearer_token": {
-                "type": "string"
-            }
+            "account_id": {"type": "string"},
+            "consumer_key": {"type": "string"},
+            "consumer_secret": {"type": "string"},
+            "access_secret": {"type": "string"},
+            "access_token": {"type": "string"},
+            "bearer_token": {"type": "string"},
         },
-        "additionalProperties": False
-    }
+        "additionalProperties": False,
+    },
 }
 
-MEDIA_DIR = "/tmp"   # nosec
+MEDIA_DIR = "/tmp"  # nosec
+
 
 class SrrDialogues(BaseSrrDialogues):
     """A class to keep track of SRR dialogues."""
@@ -145,30 +137,45 @@ class TweepyConnection(BaseSyncConnection):
         :param kwargs: keyword arguments passed to component base
         """
         super().__init__(*args, **kwargs)
-        self.twitter_read_credentials = deque(self.configuration.config.get("twitter_read_credentials", []))
-        self.twitter_write_credentials = deque(self.configuration.config.get("twitter_write_credentials", []))
+        self.twitter_read_credentials = deque(
+            self.configuration.config.get("twitter_read_credentials", [])
+        )
+        self.twitter_write_credentials = deque(
+            self.configuration.config.get("twitter_write_credentials", [])
+        )
         self.use_staging_api = self.configuration.config.get("use_staging_api", False)
         self.staging_api = self.configuration.config["staging_api"]
         self.ipfs_tool = IPFSTool()
 
         if not self.twitter_read_credentials:
-            self.logger.warning("No Twitter read credentials have been set. The service will not be able to read tweets.")
+            self.logger.warning(
+                "No Twitter read credentials have been set. The service will not be able to read tweets."
+            )
 
         try:
-            jsonschema.validate(instance=self.twitter_read_credentials, schema=CREDENTIALS_SCHEMA)
+            jsonschema.validate(
+                instance=self.twitter_read_credentials, schema=CREDENTIALS_SCHEMA
+            )
         except jsonschema.exceptions.ValidationError as e:
-            raise ValueError(f"Twitter read credentials do not follow the required schema:\n{e}") from e
+            raise ValueError(
+                f"Twitter read credentials do not follow the required schema:\n{e}"
+            ) from e
 
         if not self.twitter_write_credentials:
-            self.logger.warning("No Twitter write credentials have been set. The service will not be able to write tweets.")
+            self.logger.warning(
+                "No Twitter write credentials have been set. The service will not be able to write tweets."
+            )
 
         try:
-            jsonschema.validate(instance=self.twitter_write_credentials, schema=CREDENTIALS_SCHEMA)
+            jsonschema.validate(
+                instance=self.twitter_write_credentials, schema=CREDENTIALS_SCHEMA
+            )
         except jsonschema.exceptions.ValidationError as e:
-            raise ValueError(f"Twitter write credentials do not follow the required schema:\n{e}") from e
+            raise ValueError(
+                f"Twitter write credentials do not follow the required schema:\n{e}"
+            ) from e
 
         self.dialogues = SrrDialogues(connection_id=PUBLIC_ID)
-
 
     def main(self) -> None:
         """
@@ -209,7 +216,6 @@ class TweepyConnection(BaseSyncConnection):
         Connection status set automatically.
         """
 
-
     def on_send(self, envelope: Envelope) -> None:
         """
         Send an envelope.
@@ -249,7 +255,6 @@ class TweepyConnection(BaseSyncConnection):
 
         self.put_envelope(response_envelope)
 
-
     def _get_response(self, payload: dict) -> Tuple[Dict, bool]:
         """Get response from Tweepy."""
 
@@ -257,9 +262,7 @@ class TweepyConnection(BaseSyncConnection):
         try:
             jsonschema.validate(instance=payload, schema=REQUEST_PAYLOAD_SCHEMA)
         except jsonschema.exceptions.ValidationError as e:
-            return {
-                "error": f"Tweepy connection request is not valid: {e}"
-            }, True
+            return {"error": f"Tweepy connection request is not valid: {e}"}, True
 
         # Run the method
         try:
@@ -269,48 +272,30 @@ class TweepyConnection(BaseSyncConnection):
         except Exception as e:
             return {"error": f"Exception while calling Tweepy:\n{e}"}, True
 
-
     def rotate_read_credentials(self):
         """Rotate read credentials"""
         self.twitter_read_credentials.rotate(-1)
 
-
     def get_read_cli(self):
         """Get the Tweepy cli"""
         # Client is Tweepy's interface for Twitter API v2
-        # cli = tweepy.Client(
-        #     consumer_key=self.twitter_read_credentials[0]["consumer_key"],
-        #     consumer_secret=self.twitter_read_credentials[0]["consumer_secret"],
-        #     access_token=self.twitter_read_credentials[0]["access_token"],
-        #     access_token_secret=self.twitter_read_credentials[0]["access_secret"],
-        # )
         cli = tweepy.Client(
             bearer_token=self.twitter_read_credentials[0]["bearer"],
-            wait_on_rate_limit=False
+            wait_on_rate_limit=False,
         )
         return cli
-
 
     def get_write_cli(self, account_id):
         """Get the Tweepy cli"""
         # Client is Tweepy's interface for Twitter API v2
-        # cli = tweepy.Client(
-        #     consumer_key=self.twitter_write_credentials[0]["consumer_key"],
-        #     consumer_secret=self.twitter_write_credentials[0]["consumer_secret"],
-        #     access_token=self.twitter_write_credentials[0]["access_token"],
-        #     access_token_secret=self.twitter_write_credentials[0]["access_secret"],
-        # )
-
         for cred in self.twitter_write_credentials:
             if cred["id"] == account_id:
                 cli = tweepy.Client(
-                    bearer_token=cred["bearer"],
-                    wait_on_rate_limit=False
+                    bearer_token=cred["bearer"], wait_on_rate_limit=False
                 )
                 return cli
         self.logger.error(f"Could not get Tweepy client for acoount_id={account_id}")
         return None
-
 
     def get_write_api(self, account_id):
         """Get the Tweepy api"""
@@ -328,7 +313,6 @@ class TweepyConnection(BaseSyncConnection):
         self.logger.error(f"Could not get Tweepy API for acoount_id={account_id}")
         return None
 
-
     def read_with_key_rotation(self, method, **kwargs) -> Tuple[Dict, bool]:
         """Make a call to the tweepy client with automatic key rotation"""
         max_rotations = len(self.twitter_read_credentials)
@@ -340,11 +324,13 @@ class TweepyConnection(BaseSyncConnection):
                 method = getattr(cli, method)
                 result = method(**kwargs)
                 return result, False
-            except Exception:
+            except Exception as e:
+                self.logger.error(
+                    f"Error when calling {method} on account {self.twitter_read_credentials[0]['account_id']}. Rotating credentials:\n{e}"
+                )
                 self.rotate_read_credentials()
                 rotations += 1
         return {"error": "Max Twitter read credential rotations reached"}, True
-
 
     def search_recent_tweets(self, **kwargs) -> Tuple[Dict, bool]:
         """Search recent tweets"""
@@ -353,7 +339,7 @@ class TweepyConnection(BaseSyncConnection):
             expansions=["author_id"],
             tweet_fields=["author_id", "created_at", "conversation_id"],
             user_fields=["username"],
-            **kwargs
+            **kwargs,
         )
 
     def get_users_mentions(self, **kwargs) -> Tuple[Dict, bool]:
@@ -363,7 +349,7 @@ class TweepyConnection(BaseSyncConnection):
             expansions=["author_id"],
             tweet_fields=["author_id", "created_at", "conversation_id"],
             user_fields=["username"],
-            **kwargs
+            **kwargs,
         )
 
     def get_users_tweets(self, **kwargs) -> Tuple[Dict, bool]:
@@ -373,7 +359,7 @@ class TweepyConnection(BaseSyncConnection):
             expansions=["author_id"],
             tweet_fields=["author_id", "created_at", "conversation_id"],
             user_fields=["username"],
-            **kwargs
+            **kwargs,
         )
 
     def post_tweet_or_thread(self, **kwargs) -> Tuple[Dict, bool]:
@@ -394,7 +380,9 @@ class TweepyConnection(BaseSyncConnection):
 
         text = kwargs.get("text")
         tweets = text if isinstance(text, list) else [text]
-        thread_media_ids = thread_media_ids if thread_media_ids else [[] for _ in tweets]
+        thread_media_ids = (
+            thread_media_ids if thread_media_ids else [[] for _ in tweets]
+        )
 
         try:
             tweet_id = None
@@ -422,7 +410,6 @@ class TweepyConnection(BaseSyncConnection):
         except TweepyHTTPException as e:
             return {"error": "; ".join(e.api_messages)}, True
 
-
     def post_tweet_or_thread_staging(self, **kwargs) -> Tuple[Dict, bool]:
         """Post tweet or thread to staging"""
 
@@ -431,20 +418,15 @@ class TweepyConnection(BaseSyncConnection):
 
         url = f"{self.staging_api}/twitter/create_tweet"
 
-        self.logger.info(
-            f"Posting tweet using the staging API {url}"
-        )
+        self.logger.info(f"Posting tweet using the staging API {url}")
 
         try:
             tweet_id = None
             for tweet in tweets:
                 response = requests.post(
                     url,
-                    json={
-                        "user_name": "staging_contribute",
-                        "text": tweet
-                    },
-                    timeout=10
+                    json={"user_name": "staging_contribute", "text": tweet},
+                    timeout=10,
                 )
 
                 # Keep the first tweet_id only
@@ -455,8 +437,6 @@ class TweepyConnection(BaseSyncConnection):
 
         except requests.exceptions.ConnectionError as error:
             return {"error": error}, True
-
-
 
     def process_media(self, **kwargs) -> Optional[List]:
         """Process tweet media"""
@@ -478,7 +458,6 @@ class TweepyConnection(BaseSyncConnection):
             return None
 
         for tweet_media_hashes in media_hashes:
-
             tweet_media_ids = []
 
             # tweet_media_hashes is not a list
@@ -490,7 +469,6 @@ class TweepyConnection(BaseSyncConnection):
                 continue
 
             for media_hash in tweet_media_hashes:
-
                 # The hash foes not contain an extension
                 if "." not in media_hash:
                     self.logger.error(
@@ -509,9 +487,7 @@ class TweepyConnection(BaseSyncConnection):
                 # Get media from IPFS
                 try:
                     self.ipfs_tool.download(
-                        hash_id=image_hash,
-                        target_dir=MEDIA_DIR,
-                        attempts=1
+                        hash_id=image_hash, target_dir=MEDIA_DIR, attempts=1
                     )
                 except Exception as e:
                     self.logger.error(
