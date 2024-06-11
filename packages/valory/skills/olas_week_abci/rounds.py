@@ -280,7 +280,7 @@ class OlasWeekTweetCollectionRound(CollectSameUntilThresholdRound):
                             ],
                         },
                     )
-                    return self.synchronized_data, Event.DONE_MAX_RETRIES
+                    return synchronized_data, Event.DONE_MAX_RETRIES
 
                 synchronized_data = self.synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
