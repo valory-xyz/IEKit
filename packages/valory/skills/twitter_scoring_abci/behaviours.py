@@ -772,12 +772,11 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
     """TwitterScoringRoundBehaviour"""
 
-    initial_behaviour_cls = TwitterMentionsCollectionBehaviour
+    initial_behaviour_cls = TwitterDecisionMakingBehaviour
     abci_app_cls = TwitterScoringAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
         TwitterDecisionMakingBehaviour,
-        TwitterMentionsCollectionBehaviour,
-        TwitterHashtagsCollectionBehaviour,
+        TweetCollectionBehaviour,
         DBUpdateBehaviour,
         TwitterRandomnessBehaviour,
         TwitterSelectKeepersBehaviour,

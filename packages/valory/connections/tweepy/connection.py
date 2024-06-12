@@ -45,7 +45,7 @@ import json
 import os
 from collections import deque
 from pathlib import Path
-from typing import Any, Deque, Dict, List, Optional, Tuple, cast
+from typing import Any, Dict, List, Optional, Tuple, cast
 
 import jsonschema
 import requests
@@ -478,7 +478,7 @@ class TweepyConnection(BaseSyncConnection):
         # Media hashes is always a list of lists
         # Each tweet can contain several media items
         # A thread can contain several tweets
-        # media_hashes = [[], [hashes_for_tweet_2], [], [hashes_for_tweet_4]]
+        # media_hashes = [[], [hashes_for_tweet_2], [], [hashes_for_tweet_4]]  # noqa: E800
         media_hashes = kwargs.get("media_hashes")
         self.logger.info(f"Processing media: {media_hashes}")
         thread_media_ids = []
