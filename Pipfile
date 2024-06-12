@@ -48,6 +48,8 @@ py-multicodec = "==0.2.1"
 py-eth-sig-utils = "*"
 protobuf = "<4.25.0,>=4.21.6"
 farcaster = "==0.7.11"
+pycryptodome = "==3.18.0"
+jwcrypto = "*"
 
 [requires]
 python_version = "3.10"

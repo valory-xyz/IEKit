@@ -53,3 +53,5 @@ impact_evaluator_local/
 farcaster_test/
 !packages/valory/agents/farcaster_test/
 keys1.json
+
+ceramic/dids.py
