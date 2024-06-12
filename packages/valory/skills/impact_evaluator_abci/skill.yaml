@@ -10,7 +10,7 @@ fingerprint:
   behaviours.py: bafybeibdq5p4zi47nsycpcjs7ouw2fjxqjn7hgbd4aalp7yumdhnmlfufq
   composition.py: bafybeifwmregxn3ibbln3dfkqpmyl5iznfwzepplkjwduoxramikzv6p34
   dialogues.py: bafybeigjknz4qqynbsltjje46gidg4rftsqw6ybjwegz24wetmycutpzh4
-  fsm_specification.yaml: bafybeigxkqdtkr5vldnvd3izkjejtvv5l5fura5dwfljllpoblsc6nty6u
+  fsm_specification.yaml: bafybeibmri3227lxzrdmswvyf52jrar6s5pdupjwbbdtriftyl3pt6pdca
   handlers.py: bafybeidkli6fphcmdgwsys4lkyf3fx6fbawet4nt2pnixfypzijhg6b3ze
   models.py: bafybeif7kujqjk77j7xnnat7lpi7ldgqzh2tp5xhojdjqentfg3s4md6y4
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
@@ -26,7 +26,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeih2soag6gy472x7vbbxmetmr532jqzm2efcapymi3725as33fvjvu
 - valory/ceramic_read_abci:0.1.0:bafybeihmqflb7aaofxpmvqfwoipzxbwe7jyefddwxgozjdvocamisrfezi
 - valory/generic_scoring_abci:0.1.0:bafybeihn7dp3ck5rhuyar35xllb3f7uyblnz4yfnrpgrmtoyu4kxxsavkm
-- valory/twitter_scoring_abci:0.1.0:bafybeiauqp3cbs57fjevnkwkrzwpbtrjwmtncmhrpet7kshuvr3hryzigu
+- valory/twitter_scoring_abci:0.1.0:bafybeicr2uomhzlroks5hohmhltk365crayyzmsgkiezcjn652oj7weqyi
 - valory/ceramic_write_abci:0.1.0:bafybeibovogo3fzi3clu2eurlrq7nct5bxej3ktd255ajosk55igq4dlqe
 - valory/dynamic_nft_abci:0.1.0:bafybeihxqueloy3vpevun72wgikkrgmsgpnm3khxb7tt43hdol32imt6by
 - valory/registration_abci:0.1.0:bafybeiaxomjnv2h7ozc7mvmz5wysfinfgtqnniznpcdunijb5iiekv4mzi
@@ -36,7 +36,7 @@ skills:
 - valory/decision_making_abci:0.1.0:bafybeih7uhlaqfr6mxaiiwujk27afwiml3reia3af53z6c3fioaehvqbsq
 - valory/llm_abci:0.1.0:bafybeicljcawuikys472glztza4mfj7ccl2eqxcbptysl7tdexik6w6zvm
 - valory/twitter_write_abci:0.1.0:bafybeiaofknda4gzs6xks53ta5xwhgs2dvyvfqypdk2ey7if6egjpgarna
-- valory/olas_week_abci:0.1.0:bafybeigsx6qsinvq2dgcz5hpodyip75vm6qpjmgrhtf5ahxyvscqg3quia
+- valory/olas_week_abci:0.1.0:bafybeiayeqzb3u6e4culfuzenkhtwlgnzttpvahdeqlekfdottm2rmrj4i
 - valory/mech_interact_abci:0.1.0:bafybeicj4c6brjtijdqywn3knejwl4o5ynzi4jcc4sinezeyj7lbgxbu5q
 behaviours:
   main:
@@ -190,7 +190,8 @@ models:
       tweet_consensus_veolas: 2000000
       mech_chain_id: gnosis
       mech_interaction_sleep_time: 10
-      recent_tweet_query: '@autonolas OR #OlasNetwork OR #StakeWithPearl -is:retweet -is:reply'
+      recent_tweet_query: '@autonolas OR #OlasNetwork OR #StakeWithPearl -is:retweet
+        -is:reply'
       twitter_max_recent_results: 10
     class_name: Params
   randomness_api:

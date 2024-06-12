@@ -8,14 +8,14 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
-  behaviours.py: bafybeifchonz4zghkztye742qtv4xrt63kylidcftfkkf5wbqturcuhzwy
+  behaviours.py: bafybeib5f265xhosn4flr5vdwrl6rx73nzw4m6iqifqzhhob4enn5kqg4q
   dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
-  fsm_specification.yaml: bafybeihbq2olrdqx2x5lcvypxyi44ecog4nntsvw2v6oeab4imvj5nz6ae
+  fsm_specification.yaml: bafybeihz4bgnyzntjnjdxgrmc33iimpkuf4wyrf7ly4rs34piozksmlbf4
   handlers.py: bafybeid3nqvcyotqj5g5hlgrz57nf7vpjysmgvsxe3p7644f4z5dcwqn6u
-  models.py: bafybeihrwlkjzhxktcmtj4uqzzobukf4mpyt7ba73pcpldk4i76pofaei4
-  payloads.py: bafybeidb2qiw26b5fhyxujseibbo2ji5zo54auhyelllsqnj7zn5sbc3pi
+  models.py: bafybeifgonkpxbuzcazmarak2xvflmjl2qa7lsgcuq46l2dlx6xbuvq4t4
+  payloads.py: bafybeiajehgklh2y4gzzosg5xxdxt5r4egkynfs36ma4wd5ul6jvfrbgqa
   prompts.py: bafybeieiuqn427bgwfnzynxf3vtqfpvmqqscs5tyw4oibfofwropifotke
-  rounds.py: bafybeibprkxnaneq3gz4amlipnfvxp7d6rzx4lnhcuefc4ewwthxrbasce
+  rounds.py: bafybeidub7bf4hq37kefsg727rpmxt7ies6zgrytlxz62og2i3waa63jly
   tests/__init__.py: bafybeidwzzd4ejsyf3aryd5kmrvd63h7ajgqyrxphmfaacvpjnneacejay
   tests/test_behaviours.py: bafybeigtf3jc65rl4c3p73mbtv667w62yvhkxiivnqb42serqij4rxhx4q
   tests/test_dialogues.py: bafybeiheyq7klonzb7rnjub2i22h7bmsnoimn2pq4j7ofikt3yovstvgt4
@@ -141,7 +141,8 @@ models:
       slash_threshold_amount: 10000000000000000
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
-      recent_tweet_query: '@autonolas OR #OlasNetwork OR #StakeWithPearl -is:retweet -is:reply'
+      recent_tweet_query: '@autonolas OR #OlasNetwork OR #StakeWithPearl -is:retweet
+        -is:reply'
       twitter_max_recent_results: 10
     class_name: Params
   randomness_api:

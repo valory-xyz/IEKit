@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeifaq3zorj63ujyy6oqqbsy4gufkbtnosmrjrriofk75p5dqe6ah6e
+agent: valory/impact_evaluator:0.1.0:bafybeicvdmud7tlhabiy5nmc4xnckglwz2bv6lvghayob5xn5ckqnhgohe
 number_of_agents: 1
 deployment:
   agent:
@@ -117,7 +117,7 @@ models:
       termination_from_block: ${TERMINATION_FROM_BLOCK:int:0}
       mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
       mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
-      recent_tweet_query: ${RECENT_TWEET_QUERY:str:@autonolas OR #OlasNetwork OR #StakeWithPearl -is:retweet -is:reply}
+      recent_tweet_query: ${RECENT_TWEET_QUERY:str:@autonolas OR
       twitter_max_recent_results: ${TWITTER_MAX_RECENT_RESULTS:int:10}
   randomness_api:
     args:
