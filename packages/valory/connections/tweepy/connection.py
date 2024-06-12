@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2024 David Vilela Freire
+#   Copyright 2021-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import json
 import os
 from collections import deque
 from pathlib import Path
-from typing import Any, Deque, Dict, List, Optional, Tuple, cast
+from typing import Any, Dict, List, Optional, Tuple, cast
 
 import jsonschema
 import requests
@@ -323,7 +323,7 @@ class TweepyConnection(BaseSyncConnection):
                 cli = self.get_read_cli()
                 method = getattr(cli, method)
                 result = method(**kwargs)
-                return result, False
+                return {"tweets": self.process_tweets(result)}, False
             except Exception as e:
                 self.logger.error(
                     f"Error when calling {method} on account {self.twitter_read_credentials[0]['account_id']}. Rotating credentials:\n{e}"
@@ -331,6 +331,19 @@ class TweepyConnection(BaseSyncConnection):
                 self.rotate_read_credentials()
                 rotations += 1
         return {"error": "Max Twitter read credential rotations reached"}, True
+
+    def process_tweets(self, tweets) -> List:
+        """Process tweets"""
+        users = {u["id"]: u for u in tweets.includes["users"]}
+        return [
+            {
+                "id": tweet.id,
+                "text": tweet.text,
+                "author_id": tweet.author_id,
+                "username": users[tweet.author_id],
+            }
+            for tweet in tweets
+        ]
 
     def search_recent_tweets(self, **kwargs) -> Tuple[Dict, bool]:
         """Search recent tweets"""
@@ -444,7 +457,7 @@ class TweepyConnection(BaseSyncConnection):
         # Media hashes is always a list of lists
         # Each tweet can contain several media items
         # A thread can contain several tweets
-        # media_hashes = [[], [hashes_for_tweet_2], [], [hashes_for_tweet_4]]
+        # media_hashes = [[], [hashes_for_tweet_2], [], [hashes_for_tweet_4]]  # noqa: E800
         media_hashes = kwargs.get("media_hashes")
         self.logger.info(f"Processing media: {media_hashes}")
         thread_media_ids = []

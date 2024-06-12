@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -25,15 +25,8 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 
 @dataclass(frozen=True)
-class TwitterMentionsCollectionPayload(BaseTxPayload):
-    """Represent a transaction payload for the TwitterMentionsCollectionRound."""
-
-    content: str
-
-
-@dataclass(frozen=True)
-class TwitterHashtagsCollectionPayload(BaseTxPayload):
-    """Represent a transaction payload for the TwitterHashtagsCollectionRound."""
+class TweetCollectionPayload(BaseTxPayload):
+    """Represent a transaction payload for the TweetCollectionRound."""
 
     content: str
 
