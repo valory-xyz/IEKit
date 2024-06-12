@@ -28,14 +28,21 @@ from dataclasses import asdict
 from datetime import datetime
 from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
 
+from aea.protocols.base import Message
 from web3 import Web3
 
+from packages.valory.connections.tweepy.connection import (
+    PUBLIC_ID as TWEEPY_CONNECTION_PUBLIC_ID,
+)
+from packages.valory.protocols.srr.dialogues import SrrDialogue, SrrDialogues
+from packages.valory.protocols.srr.message import SrrMessage
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
 from packages.valory.skills.abstract_round_abci.common import RandomnessBehaviour
+from packages.valory.skills.abstract_round_abci.models import Requests
 from packages.valory.skills.twitter_scoring_abci.models import (
     OpenAICalls,
     Params,
@@ -45,9 +52,8 @@ from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
     PostMechRequestPayload,
     PreMechRequestPayload,
+    TweetCollectionPayload,
     TwitterDecisionMakingPayload,
-    TwitterHashtagsCollectionPayload,
-    TwitterMentionsCollectionPayload,
     TwitterRandomnessPayload,
     TwitterSelectKeepersPayload,
 )
@@ -55,15 +61,14 @@ from packages.valory.skills.twitter_scoring_abci.prompts import tweet_evaluation
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     DBUpdateRound,
     ERROR_API_LIMITS,
-    ERROR_GENERIC,
+    ERROR_TWEEPY_CONNECTION,
     Event,
     MechMetadata,
     PostMechRequestRound,
     PreMechRequestRound,
     SynchronizedData,
+    TweetCollectionRound,
     TwitterDecisionMakingRound,
-    TwitterHashtagsCollectionRound,
-    TwitterMentionsCollectionRound,
     TwitterRandomnessRound,
     TwitterScoringAbciApp,
     TwitterSelectKeepersRound,
@@ -76,9 +81,6 @@ TAGLINE = "I'm linking my wallet to @Autonolas Contribute:"
 DEFAULT_TWEET_POINTS = 100
 TWEET_QUALITY_TO_POINTS = {"LOW": 1, "AVERAGE": 2, "HIGH": 3}
 TWEET_RELATIONSHIP_TO_POINTS = {"LOW": 100, "AVERAGE": 200, "HIGH": 300}
-HTTP_OK = 200
-HTTP_TOO_MANY_REQUESTS = 429
-RETWEET_START = "RT @"
 
 
 def extract_headers(header_str: str) -> dict:
@@ -155,6 +157,38 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
 
         # Window has not expired and we have not reached the max number of tweets
         return False, number_of_tweets_pulled_today, last_tweet_pull_window_reset
+
+    def _do_connection_request(
+        self,
+        message: Message,
+        dialogue: Message,
+        timeout: Optional[float] = None,
+    ) -> Generator[None, None, Message]:
+        """Do a request and wait the response, asynchronously."""
+
+        self.context.outbox.put_message(message=message)
+        request_nonce = self._get_request_nonce_from_dialogue(dialogue)  # type: ignore
+        cast(Requests, self.context.requests).request_id_to_callback[
+            request_nonce
+        ] = self.get_callback_request()
+        response = yield from self.wait_for_message(timeout=timeout)
+        return response
+
+    def _call_tweepy(
+        self,
+        **kwargs,
+    ) -> Generator[None, None, Dict]:
+        """Send a request message from the skill context."""
+        srr_dialogues = cast(SrrDialogues, self.context.srr_dialogues)
+        srr_message, srr_dialogue = srr_dialogues.create(
+            counterparty=str(TWEEPY_CONNECTION_PUBLIC_ID),
+            performative=SrrMessage.Performative.REQUEST,
+            payload=json.dumps(**kwargs),
+        )
+        srr_message = cast(SrrMessage, srr_message)
+        srr_dialogue = cast(SrrDialogue, srr_dialogue)
+        response = yield from self._do_connection_request(srr_message, srr_dialogue)  # type: ignore
+        return json.loads(response.payload)  # type: ignore
 
 
 class TwitterRandomnessBehaviour(RandomnessBehaviour):
@@ -285,11 +319,8 @@ class TwitterDecisionMakingBehaviour(TwitterScoringBaseBehaviour):
         if Event.SELECT_KEEPERS.value not in performed_tasks:
             return Event.SELECT_KEEPERS.value
 
-        if Event.RETRIEVE_HASHTAGS.value not in performed_tasks:
-            return Event.RETRIEVE_HASHTAGS.value
-
-        if Event.RETRIEVE_MENTIONS.value not in performed_tasks:
-            return Event.RETRIEVE_MENTIONS.value
+        if Event.TWEET_COLLECTION.value not in performed_tasks:
+            return Event.TWEET_COLLECTION.value
 
         if Event.PRE_MECH.value not in performed_tasks:
             return Event.PRE_MECH.value
@@ -303,17 +334,10 @@ class TwitterDecisionMakingBehaviour(TwitterScoringBaseBehaviour):
         return Event.DONE.value
 
 
-class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
-    """TwitterMentionsCollectionBehaviour"""
+class TweetCollectionBehaviour(TwitterScoringBaseBehaviour):
+    """TweetCollectionBehaviour"""
 
-    matching_round: Type[AbstractRound] = TwitterMentionsCollectionRound
-
-    def _i_am_not_sending(self) -> bool:
-        """Indicates if the current agent is one of the sender or not."""
-        return (
-            self.context.agent_address
-            not in self.synchronized_data.most_voted_keeper_addresses
-        )
+    matching_round: Type[AbstractRound] = TweetCollectionRound
 
     def async_act(self) -> Generator[None, None, None]:
         """
@@ -329,266 +353,12 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
         else:
             yield from self._sender_act()
 
-    def _not_sender_act(self) -> Generator:
-        """Do the non-sender action."""
-        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
-            self.context.logger.info(
-                f"Waiting for the keeper to do its keeping: keepers={self.synchronized_data.most_voted_keeper_addresses}, me={self.context.agent_address}"
-            )
-            yield from self.wait_until_round_end()
-        self.set_done()
-
-    def _sender_act(self) -> Generator:
-        """Do the act, supporting asynchronous execution."""
-
-        with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            self.context.logger.info("I am a keeper")
-
-            (
-                has_limit_reached,
-                number_of_tweets_pulled_today,
-                last_tweet_pull_window_reset,
-            ) = self._check_twitter_limits()
-
-            if has_limit_reached:
-                self.context.logger.info(
-                    "Cannot retrieve tweets, max number of tweets reached for today or 15-min request amount reached"
-                )
-                payload_data = {
-                    "tweets": None,
-                    "error": ERROR_API_LIMITS,
-                    "latest_mention_tweet_id": None,
-                    "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
-                    "sleep_until": self.synchronized_data.sleep_until,
-                }
-
-            else:
-                # Get mentions from Twitter
-                payload_data = yield from self._get_twitter_mentions(
-                    number_of_tweets_pulled_today=number_of_tweets_pulled_today
-                )
-
-            payload_data["last_tweet_pull_window_reset"] = last_tweet_pull_window_reset
-            sender = self.context.agent_address
-            payload = TwitterMentionsCollectionPayload(
-                sender=sender, content=json.dumps(payload_data, sort_keys=True)
-            )
-
-        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
-            yield from self.send_a2a_transaction(payload)
-            yield from self.wait_until_round_end()
-
-        self.set_done()
-
-    def _get_twitter_mentions(
-        self,
-        number_of_tweets_pulled_today: int,
-    ) -> Generator[None, None, Dict]:
-        """Get Twitter mentions"""
-
-        api_base = self.params.twitter_api_base
-        api_endpoint = self.params.twitter_mentions_endpoint
-        try:
-            latest_mention_tweet_id = int(
-                self.context.ceramic_db["module_data"]["twitter"][
-                    "latest_mention_tweet_id"
-                ]
-            )
-        except KeyError:
-            latest_mention_tweet_id = 0
-
-        number_of_tweets_remaining_today = (
-            self.params.max_tweet_pulls_allowed - number_of_tweets_pulled_today
-        )
-        if number_of_tweets_remaining_today <= 0:
-            self.context.logger.info(
-                "Cannot retrieve twitter mentions, max number of tweets reached for today"
-            )
-            return {
-                "tweets": None,
-                "error": ERROR_API_LIMITS,
-                "latest_mention_tweet_id": None,
-                "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
-                "sleep_until": self.synchronized_data.sleep_until,
-            }
-
-        next_tweet_id = (
-            int(latest_mention_tweet_id) + 1 if int(latest_mention_tweet_id) != 0 else 0
-        )
-        api_args = self.params.twitter_mentions_args.replace(
-            "{since_id}", str(next_tweet_id)
-        )
-        api_args = api_args.replace(
-            "{max_results}", str(number_of_tweets_remaining_today)
-        )
-        api_url = api_base + api_endpoint + api_args
-        headers = dict(Authorization=f"Bearer {self.params.twitter_api_bearer_token}")
-
-        self.context.logger.info(
-            f"Retrieving mentions from Twitter API [{api_url}]\nBearer token {self.params.twitter_api_bearer_token[:5]}*******{self.params.twitter_api_bearer_token[-5:]}"
-        )
-
-        tweets = {}
-        next_token = None
-        latest_tweet_id = None
-
-        # Pagination loop: we read a max of <twitter_max_pages> pages each period
-        # Each page contains 100 tweets. The default value for twitter_max_pages is 10
-        for _ in range(self.params.twitter_max_pages):
-            self.context.logger.info(
-                f"Retrieving a new page. max_pages={self.params.twitter_max_pages}"
-            )
-            url = api_url
-            # Add the pagination token if it exists
-            if next_token:
-                url += f"&pagination_token={next_token}"
-
-            # Make the request
-            response = yield from self.get_http_response(
-                method="GET", url=url, headers=headers
-            )
-
-            # Check response status
-            if response.status_code != 200:
-                header_dict = extract_headers(response.headers)
-
-                remaining, limit, reset_ts = [
-                    header_dict.get(header, "?")
-                    for header in [
-                        "x-rate-limit-remaining",
-                        "x-rate-limit-limit",
-                        "x-rate-limit-reset",
-                    ]
-                ]
-                reset = (
-                    datetime.fromtimestamp(int(reset_ts)).strftime("%Y-%m-%d %H:%M:%S")
-                    if reset_ts != "?"
-                    else None
-                )
-
-                self.context.logger.error(
-                    f"Error retrieving mentions from Twitter [{response.status_code}]: {response.body}"
-                    f"API limits: {remaining}/{limit}. Window reset: {reset}"
-                )
-
-                return {
-                    "tweets": None,
-                    "error": ERROR_API_LIMITS
-                    if response.status_code == HTTP_TOO_MANY_REQUESTS
-                    else ERROR_GENERIC,
-                    "latest_mention_tweet_id": None,
-                    "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
-                    "sleep_until": reset_ts
-                    if response.status_code == HTTP_TOO_MANY_REQUESTS
-                    else self.synchronized_data.sleep_until,
-                }
-
-            api_data = json.loads(response.body)
-
-            # Check the meta field
-            if "meta" not in api_data:
-                self.context.logger.error(
-                    f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
-                )
-                return {
-                    "tweets": None,
-                    "error": ERROR_GENERIC,
-                    "latest_mention_tweet_id": None,
-                    "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
-                    "sleep_until": None,  # we reset this on a successful request
-                }
-
-            # Check if there are no more results
-            if (
-                "result_count" in api_data["meta"]
-                and int(api_data["meta"]["result_count"]) == 0
-            ):
-                break
-
-            # Check that the data exists
-            if "data" not in api_data or "newest_id" not in api_data["meta"]:
-                self.context.logger.error(
-                    f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
-                )
-                return {
-                    "tweets": None,
-                    "error": ERROR_GENERIC,
-                    "latest_mention_tweet_id": None,
-                    "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
-                    "sleep_until": None,  # we reset this on a successful request
-                }
-
-            if "includes" not in api_data or "users" not in api_data["includes"]:
-                self.context.logger.error(
-                    f"Twitter API response does not contain the required 'includes/users' field: {api_data!r}"
-                )
-                return {
-                    "tweets": None,
-                    "error": ERROR_GENERIC,
-                    "latest_mention_tweet_id": None,
-                    "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
-                    "sleep_until": None,  # we reset this on a successful request
-                }
-
-            # Add the retrieved tweets
-            for tweet in api_data["data"]:
-                # Skip retweets
-                if tweet["text"].startswith(RETWEET_START):
-                    continue
-
-                tweets[tweet["id"]] = tweet
-
-                # Set the author handle
-                for user in api_data["includes"]["users"]:
-                    if user["id"] == tweet["author_id"]:
-                        tweets[tweet["id"]]["username"] = user["username"]
-                        break
-                number_of_tweets_pulled_today += 1
-            latest_tweet_id = int(api_data["meta"]["newest_id"])
-
-            if "next_token" in api_data["meta"]:
-                next_token = api_data["meta"]["next_token"]
-                continue
-
-            break
-
-        self.context.logger.info(
-            f"Got {len(tweets)} new mentions until tweet_id={latest_tweet_id}: {tweets.keys()}"
-        )
-
-        return {
-            "tweets": tweets,
-            "latest_mention_tweet_id": latest_tweet_id,
-            "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
-            "sleep_until": None,  # we reset this on a successful request
-        }
-
-
-class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
-    """TwitterHashtagsCollectionBehaviour"""
-
-    matching_round: Type[AbstractRound] = TwitterHashtagsCollectionRound
-
     def _i_am_not_sending(self) -> bool:
         """Indicates if the current agent is one of the sender or not."""
         return (
             self.context.agent_address
             not in self.synchronized_data.most_voted_keeper_addresses
         )
-
-    def async_act(self) -> Generator[None, None, None]:
-        """
-        Do the action.
-
-        Steps:
-        - If the agent is the keeper, then prepare the transaction and send it.
-        - Otherwise, wait until the next round.
-        - If a timeout is hit, set exit A event, otherwise set done event.
-        """
-        if self._i_am_not_sending():
-            yield from self._not_sender_act()
-        else:
-            yield from self._sender_act()
 
     def _not_sender_act(self) -> Generator:
         """Do the non-sender action."""
@@ -624,13 +394,13 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
             else:
                 # Get hashtags from Twitter
-                payload_data = yield from self._get_twitter_hashtag_search(
+                payload_data = yield from self._get_recent_tweets(
                     number_of_tweets_pulled_today=number_of_tweets_pulled_today
                 )
 
             payload_data["last_tweet_pull_window_reset"] = last_tweet_pull_window_reset
             sender = self.context.agent_address
-            payload = TwitterHashtagsCollectionPayload(
+            payload = TweetCollectionPayload(
                 sender=sender, content=json.dumps(payload_data, sort_keys=True)
             )
 
@@ -640,14 +410,13 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
         self.set_done()
 
-    def _get_twitter_hashtag_search(
+    def _get_recent_tweets(
         self,
         number_of_tweets_pulled_today: int,
     ) -> Generator[None, None, Dict]:
         """Get registrations from Twitter"""
 
-        api_base = self.params.twitter_api_base
-        api_endpoint = self.params.twitter_search_endpoint
+        # Read the latest tweet id from the previous period
         try:
             latest_hashtag_tweet_id = int(
                 self.context.ceramic_db["module_data"]["twitter"][
@@ -657,162 +426,41 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
         except KeyError:
             latest_hashtag_tweet_id = 0
 
-        number_of_tweets_remaining_today = (
-            self.params.max_tweet_pulls_allowed - number_of_tweets_pulled_today
+        next_tweet_id = (
+            int(latest_hashtag_tweet_id) + 1 if int(latest_hashtag_tweet_id) != 0 else 0
         )
-        if number_of_tweets_remaining_today <= 0:
-            self.context.logger.info(
-                "Cannot retrieve hashtag mentions, max number of tweets reached for today"
-            )
+
+        recent_tweet_query = self.params.recent_tweet_query
+        self.context.logger.info(
+            f"Searching recent tweets since id={next_tweet_id}. Query={recent_tweet_query}"
+        )
+
+        # Call Tweepy conection
+        response = yield from self._call_tweepy(
+            action="search_recent_tweets",
+            kwargs={
+                "query": recent_tweet_query,
+                "since_id": next_tweet_id,
+                "max_results": self.params.twitter_max_recent_results,
+            },
+        )
+        # Check response
+        if "error" in response:
             return {
                 "tweets": None,
-                "error": ERROR_API_LIMITS,
+                "error": ERROR_TWEEPY_CONNECTION,
                 "latest_mention_tweet_id": None,
                 "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
                 "sleep_until": self.synchronized_data.sleep_until,
             }
 
-        next_tweet_id = (
-            int(latest_hashtag_tweet_id) + 1 if int(latest_hashtag_tweet_id) != 0 else 0
-        )
-        api_args = self.params.twitter_search_args.replace(
-            "{since_id}", str(next_tweet_id)
-        )
-        api_args = api_args.replace(
-            "{max_results}", str(number_of_tweets_remaining_today)
-        )
-        api_url = api_base + api_endpoint + api_args
-        headers = dict(Authorization=f"Bearer {self.params.twitter_api_bearer_token}")
-
-        self.context.logger.info(f"Retrieving hashtags from Twitter API [{api_url}]")
-
-        next_token = None
-        latest_tweet_id = None
-        retrieved_tweets = 0
-        tweets = {}
-        # Pagination loop: we read a max of <twitter_max_pages> pages each period
-        # Each page contains 100 tweets. The default value for twitter_max_pages is 10
-        for _ in range(self.params.twitter_max_pages):
-            self.context.logger.info(
-                f"Retrieving a new page. max_pages={self.params.twitter_max_pages}"
-            )
-
-            url = api_url
-
-            # Add the pagination token if it exists
-            if next_token:
-                url += f"&pagination_token={next_token}"
-
-            # Make the request
-            response = yield from self.get_http_response(
-                method="GET", url=url, headers=headers
-            )
-
-            # Check response status
-            if response.status_code != 200:
-                header_dict = extract_headers(response.headers)
-
-                remaining, limit, reset_ts = [
-                    header_dict.get(header, "?")
-                    for header in [
-                        "x-rate-limit-remaining",
-                        "x-rate-limit-limit",
-                        "x-rate-limit-reset",
-                    ]
-                ]
-                reset = (
-                    datetime.fromtimestamp(int(reset_ts)).strftime("%Y-%m-%d %H:%M:%S")
-                    if reset_ts != "?"
-                    else None
-                )
-
-                self.context.logger.error(
-                    f"Error retrieving hashtags from Twitter [{response.status_code}]: {response.body}"
-                    f"API limits: {remaining}/{limit}. Window reset: {reset}"
-                )
-
-                return {
-                    "tweets": None,
-                    "error": ERROR_API_LIMITS
-                    if response.status_code == HTTP_TOO_MANY_REQUESTS
-                    else ERROR_GENERIC,
-                    "latest_mention_tweet_id": None,
-                    "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
-                    "sleep_until": reset_ts
-                    if response.status_code == HTTP_TOO_MANY_REQUESTS
-                    else self.synchronized_data.sleep_until,
-                }
-
-            api_data = json.loads(response.body)
-
-            # Check the meta field
-            if "meta" not in api_data:
-                self.context.logger.error(
-                    f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
-                )
-                return {
-                    "tweets": None,
-                    "error": ERROR_GENERIC,
-                    "latest_mention_tweet_id": None,
-                    "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
-                    "sleep_until": None,  # we reset this on a successful request
-                }
-
-            # Check if there are no more results
-            if (
-                "result_count" in api_data["meta"]
-                and int(api_data["meta"]["result_count"]) == 0
-            ):
-                break
-
-            # Check that the data exists
-            if "data" not in api_data or "newest_id" not in api_data["meta"]:
-                self.context.logger.error(
-                    f"Twitter API response does not contain the required 'meta' field: {api_data!r}"
-                )
-                return {
-                    "tweets": None,
-                    "error": ERROR_GENERIC,
-                    "latest_mention_tweet_id": None,
-                    "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
-                    "sleep_until": None,  # we reset this on a successful request
-                }
-
-            if "includes" not in api_data or "users" not in api_data["includes"]:
-                self.context.logger.error(
-                    f"Twitter API response does not contain the required 'includes/users' field: {api_data!r}"
-                )
-                return {
-                    "tweets": None,
-                    "error": ERROR_GENERIC,
-                    "latest_mention_tweet_id": None,
-                    "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
-                    "sleep_until": None,  # we reset this on a successful request
-                }
-
-            # Add the retrieved tweets
-            for tweet in api_data["data"]:
-                # Skip retweets
-                if tweet["text"].startswith(RETWEET_START):
-                    continue
-
-                retrieved_tweets += 1
-                if tweet["id"] not in tweets:  # avoids duplicated tweets
-                    tweets[tweet["id"]] = tweet
-
-                    # Set the author handle
-                    for user in api_data["includes"]["users"]:
-                        if user["id"] == tweet["author_id"]:
-                            tweets[tweet["id"]]["username"] = user["username"]
-                            break
-                number_of_tweets_pulled_today += 1
-            latest_tweet_id = int(api_data["meta"]["newest_id"])
-
-            if "next_token" in api_data["meta"]:
-                next_token = api_data["meta"]["next_token"]
-                continue
-
-            break
+        # Process tweets
+        tweets = {t["id"]: t for t in response["tweets"]}
+        retrieved_tweets = len(response["tweets"])
+        number_of_tweets_pulled_today += retrieved_tweets
+        latest_tweet_id = response["tweets"][
+            0
+        ].id  # tweepy sorts by most recent first by default
 
         self.context.logger.info(
             f"Got {retrieved_tweets} new hashtag tweets until tweet_id={latest_tweet_id}: {tweets.keys()}"

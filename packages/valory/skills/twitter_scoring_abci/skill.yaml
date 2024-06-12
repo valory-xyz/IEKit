@@ -130,14 +130,7 @@ models:
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
       tx_timeout: 10.0
-      twitter_api_base: https://api.twitter.com/
-      twitter_api_bearer_token: <default_bearer_token>
-      twitter_mentions_endpoint: 2/users/1450081635559428107/mentions?
-      twitter_mentions_args: tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
-      twitter_max_pages: 1
       max_tweet_pulls_allowed: 80
-      twitter_search_endpoint: 2/tweets/search/recent?
-      twitter_search_args: query=%23olas&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
       openai_call_window_size: 3600.0
       openai_calls_allowed_in_window: 100
       max_points_per_period: 900
@@ -148,6 +141,8 @@ models:
       slash_threshold_amount: 10000000000000000
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
+      recent_tweet_query: '@autonolas OR #OlasNetwork OR #StakeWithPearl -is:retweet -is:reply'
+      twitter_max_recent_results: 10
     class_name: Params
   randomness_api:
     args:

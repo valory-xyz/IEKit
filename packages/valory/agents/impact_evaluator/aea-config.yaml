@@ -225,16 +225,7 @@ models:
       whitelist_api_key: null
       whitelist_endpoint: http://localhost
       points_to_image_hashes: ${str:{}}
-      twitter_api_base: ${str:https://api.twitter.com/}
-      twitter_api_bearer_token: ${str:<default_bearer_token>}
-      twitter_mentions_endpoint: ${str:2/users/1450081635559428107/mentions?}
-      twitter_mentions_args: ${str:tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
-      twitter_max_pages: ${int:1}
       max_tweet_pulls_allowed: ${int:80}
-      twitter_search_endpoint: ${str:2/tweets/search/recent?}
-      twitter_search_args: ${str:query=%23olas&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
-      twitter_tweets_endpoint: ${str:2/users/1450081635559428107/tweets?}
-      twitter_tweets_args: ${str:tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
       openai_call_window_size: ${float:3600.0}
       openai_calls_allowed_in_window: ${int:100}
       tx_timeout: 10.0
@@ -260,6 +251,8 @@ models:
       termination_from_block: ${int:0}
       mech_chain_id: ${str:gnosis}
       mech_interaction_sleep_time: ${int:10}
+      recent_tweet_query: ${str:@autonolas OR #OlasNetwork OR #StakeWithPearl -is:retweet -is:reply}
+      twitter_max_recent_results: ${int:10}
   randomness_api:
     args:
       api_id: cloudflare

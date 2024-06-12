@@ -105,6 +105,8 @@ class Params(BaseParams):
             openai_call_window_size=self.openai_call_window_size,
             openai_calls_allowed_in_window=self.openai_calls_allowed_in_window,
         )
+        self.recent_tweet_query = kwargs.get("recent_tweet_query")
+        self.twitter_max_recent_results = kwargs.get("twitter_max_recent_results")
         super().__init__(*args, **kwargs)
 
 

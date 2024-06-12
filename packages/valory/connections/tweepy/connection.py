@@ -323,7 +323,7 @@ class TweepyConnection(BaseSyncConnection):
                 cli = self.get_read_cli()
                 method = getattr(cli, method)
                 result = method(**kwargs)
-                return result, False
+                return {"tweets": self.process_tweets(result)}, False
             except Exception as e:
                 self.logger.error(
                     f"Error when calling {method} on account {self.twitter_read_credentials[0]['account_id']}. Rotating credentials:\n{e}"
@@ -331,6 +331,19 @@ class TweepyConnection(BaseSyncConnection):
                 self.rotate_read_credentials()
                 rotations += 1
         return {"error": "Max Twitter read credential rotations reached"}, True
+
+    def process_tweets(self, tweets) -> List:
+        """Process tweets"""
+        users = {u["id"]: u for u in tweets.includes["users"]}
+        return [
+            {
+                "id": tweet.id,
+                "text": tweet.text,
+                "author_id": tweet.author_id,
+                "username": users[tweet.author_id],
+            }
+            for tweet in tweets
+        ]
 
     def search_recent_tweets(self, **kwargs) -> Tuple[Dict, bool]:
         """Search recent tweets"""

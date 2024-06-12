@@ -36,8 +36,6 @@ alphabet_in:
 - READ_MANUAL_POINTS
 - RESET_AND_PAUSE_TIMEOUT
 - RESET_TIMEOUT
-- RETRIEVE_HASHTAGS
-- RETRIEVE_MENTIONS
 - RETRIEVE_TWEETS
 - RETRY
 - ROUND_TIMEOUT
@@ -47,6 +45,7 @@ alphabet_in:
 - SKIP_EVALUATION
 - SKIP_REQUEST
 - SUSPICIOUS_ACTIVITY
+- TWEET_COLLECTION
 - TWEET_EVALUATION_ROUND_TIMEOUT
 - TWEET_VALIDATION
 - UPDATE_CENTAURS
@@ -97,9 +96,8 @@ states:
 - StreamWriteRound
 - SynchronizeLateMessagesRound
 - TokenTrackRound
+- TweetCollectionRound
 - TwitterDecisionMakingRound
-- TwitterHashtagsCollectionRound
-- TwitterMentionsCollectionRound
 - TwitterRandomnessRound
 - TwitterSelectKeepersRound
 - TwitterWriteRound
@@ -256,27 +254,20 @@ transition_func:
     (TokenTrackRound, DONE): DecisionMakingRound
     (TokenTrackRound, NO_MAJORITY): TokenTrackRound
     (TokenTrackRound, ROUND_TIMEOUT): TokenTrackRound
+    (TweetCollectionRound, API_ERROR): TweetCollectionRound
+    (TweetCollectionRound, DONE): TwitterDecisionMakingRound
+    (TweetCollectionRound, DONE_API_LIMITS): TwitterDecisionMakingRound
+    (TweetCollectionRound, DONE_MAX_RETRIES): TwitterDecisionMakingRound
+    (TweetCollectionRound, NO_MAJORITY): TwitterRandomnessRound
+    (TweetCollectionRound, ROUND_TIMEOUT): TwitterRandomnessRound
     (TwitterDecisionMakingRound, DB_UPDATE): DBUpdateRound
     (TwitterDecisionMakingRound, DONE): TokenTrackRound
     (TwitterDecisionMakingRound, NO_MAJORITY): TwitterDecisionMakingRound
     (TwitterDecisionMakingRound, POST_MECH): PostMechRequestRound
     (TwitterDecisionMakingRound, PRE_MECH): PreMechRequestRound
-    (TwitterDecisionMakingRound, RETRIEVE_HASHTAGS): TwitterHashtagsCollectionRound
-    (TwitterDecisionMakingRound, RETRIEVE_MENTIONS): TwitterMentionsCollectionRound
     (TwitterDecisionMakingRound, ROUND_TIMEOUT): TwitterDecisionMakingRound
     (TwitterDecisionMakingRound, SELECT_KEEPERS): TwitterRandomnessRound
-    (TwitterHashtagsCollectionRound, API_ERROR): TwitterHashtagsCollectionRound
-    (TwitterHashtagsCollectionRound, DONE): TwitterDecisionMakingRound
-    (TwitterHashtagsCollectionRound, DONE_API_LIMITS): TwitterDecisionMakingRound
-    (TwitterHashtagsCollectionRound, DONE_MAX_RETRIES): TwitterDecisionMakingRound
-    (TwitterHashtagsCollectionRound, NO_MAJORITY): TwitterRandomnessRound
-    (TwitterHashtagsCollectionRound, ROUND_TIMEOUT): TwitterRandomnessRound
-    (TwitterMentionsCollectionRound, API_ERROR): TwitterMentionsCollectionRound
-    (TwitterMentionsCollectionRound, DONE): TwitterDecisionMakingRound
-    (TwitterMentionsCollectionRound, DONE_API_LIMITS): TwitterDecisionMakingRound
-    (TwitterMentionsCollectionRound, DONE_MAX_RETRIES): TwitterDecisionMakingRound
-    (TwitterMentionsCollectionRound, NO_MAJORITY): TwitterRandomnessRound
-    (TwitterMentionsCollectionRound, ROUND_TIMEOUT): TwitterRandomnessRound
+    (TwitterDecisionMakingRound, TWEET_COLLECTION): TweetCollectionRound
     (TwitterRandomnessRound, DONE): TwitterSelectKeepersRound
     (TwitterRandomnessRound, NO_MAJORITY): TwitterRandomnessRound
     (TwitterRandomnessRound, ROUND_TIMEOUT): TwitterRandomnessRound
