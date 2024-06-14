@@ -7,13 +7,13 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicrwqrdownfmeyvvzu45fllxouiwvtynrzs5fhbpt3wndyyhn66eu
-  connection.py: bafybeida6vznywho622atwu6esrspco32ndv62pk2q2sjpwo2m5iswmtpm
+  connection.py: bafybeihpcj6fgossjrohep3ucoi3ctma7kzxnou6lxsvvqnzlbjsq6sjhu
   readme.md: bafybeib5oflnp3gymrottersu6qrnitjmaifl2gvbvjq7kbmsdbihhzfaa
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
 - valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
-class_name: LlamaConnection
+class_name: TweepyConnection
 config:
   twitter_read_credentials: []
   twitter_write_credentials: []

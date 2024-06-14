@@ -137,43 +137,46 @@ class TweepyConnection(BaseSyncConnection):
         :param kwargs: keyword arguments passed to component base
         """
         super().__init__(*args, **kwargs)
-        self.twitter_read_credentials = deque(
+        twitter_read_credentials = deque(
             self.configuration.config.get("twitter_read_credentials", [])
         )
-        self.twitter_write_credentials = deque(
+        twitter_write_credentials = deque(
             self.configuration.config.get("twitter_write_credentials", [])
         )
         self.use_staging_api = self.configuration.config.get("use_staging_api", False)
         self.staging_api = self.configuration.config["staging_api"]
         self.ipfs_tool = IPFSTool()
 
-        if not self.twitter_read_credentials:
+        if not twitter_read_credentials:
             self.logger.warning(
                 "No Twitter read credentials have been set. The service will not be able to read tweets."
             )
 
         try:
             jsonschema.validate(
-                instance=self.twitter_read_credentials, schema=CREDENTIALS_SCHEMA
+                instance=twitter_read_credentials, schema=CREDENTIALS_SCHEMA
             )
         except jsonschema.exceptions.ValidationError as e:
             raise ValueError(
                 f"Twitter read credentials do not follow the required schema:\n{e}"
             ) from e
 
-        if not self.twitter_write_credentials:
+        if not twitter_write_credentials:
             self.logger.warning(
                 "No Twitter write credentials have been set. The service will not be able to write tweets."
             )
 
         try:
             jsonschema.validate(
-                instance=self.twitter_write_credentials, schema=CREDENTIALS_SCHEMA
+                instance=twitter_write_credentials, schema=CREDENTIALS_SCHEMA
             )
         except jsonschema.exceptions.ValidationError as e:
             raise ValueError(
                 f"Twitter write credentials do not follow the required schema:\n{e}"
             ) from e
+
+        self.twitter_read_credentials = twitter_read_credentials
+        self.twitter_write_credentials = twitter_write_credentials
 
         self.dialogues = SrrDialogues(connection_id=PUBLIC_ID)
 
