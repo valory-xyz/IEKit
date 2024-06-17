@@ -137,11 +137,11 @@ class TweepyConnection(BaseSyncConnection):
         :param kwargs: keyword arguments passed to component base
         """
         super().__init__(*args, **kwargs)
-        twitter_read_credentials = deque(
-            self.configuration.config.get("twitter_read_credentials", [])
+        twitter_read_credentials = self.configuration.config.get(
+            "twitter_read_credentials", []
         )
-        twitter_write_credentials = deque(
-            self.configuration.config.get("twitter_write_credentials", [])
+        twitter_write_credentials = self.configuration.config.get(
+            "twitter_write_credentials", []
         )
         self.use_staging_api = self.configuration.config.get("use_staging_api", False)
         self.staging_api = self.configuration.config["staging_api"]
@@ -175,8 +175,8 @@ class TweepyConnection(BaseSyncConnection):
                 f"Twitter write credentials do not follow the required schema:\n{e}"
             ) from e
 
-        self.twitter_read_credentials = twitter_read_credentials
-        self.twitter_write_credentials = twitter_write_credentials
+        self.twitter_read_credentials = deque(twitter_read_credentials)
+        self.twitter_write_credentials = deque(twitter_write_credentials)
 
         self.dialogues = SrrDialogues(connection_id=PUBLIC_ID)
 

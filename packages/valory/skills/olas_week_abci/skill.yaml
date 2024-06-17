@@ -22,7 +22,7 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections:
 - valory/openai:0.1.0:bafybeigyehjbahya5mp7vyp5tjvn36rey4btvzskp3ql3mgxp3zu6gwq5a
-- valory/tweepy:0.1.0:bafybeihtvn6sahyg5vk26xeau3fmav5v342w735xp3zxeycjapzzp5zdvu
+- valory/tweepy:0.1.0:bafybeicz3swgbkegder6mrptuq5ghkgzw2fw7bgnp37fmnk3ckccxvh3qq
 contracts: []
 protocols:
 - valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
