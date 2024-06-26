@@ -41,7 +41,7 @@ DUMMY_CENTAURS_DATA = [
     centaur_configs.DISABLED_CENTAUR,
 ]
 
-DUMMY_EXCEEDS_MAX_LENGTH_TWEET = "Mock tweet that exceeds MAX_TWEET_LENGTH: mockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmock"
+DUMMY_EXCEEDS_MAX_LENGTH_TWEET = "Dummy tweet that exceeds MAX_TWEET_LENGTH counted in blocks of 10 chars:        (00000000)(00000001)(00000002)(00000003)(00000004)(00000005)(00000006)(00000007)(00000008)(00000009)(00000010)(00000011)(00000012)(00000013)(00000014)(00000015)(00000016)(00000017)(00000018)(00000019)(00000020)(00000021)"
 
 
 @dataclass
@@ -258,5 +258,5 @@ class TestLLMPreparation(BaseTestLLMPreparation):
         """Test trim_tweet."""
         self.set_up()
         dummy_tweet = DUMMY_EXCEEDS_MAX_LENGTH_TWEET
-        dummy_returned_tweet = "Mock tweet that exceeds MAX_TWEET_LENGTH: mockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmockmock"
+        dummy_returned_tweet = "Dummy tweet that exceeds MAX_TWEET_LENGTH counted in blocks of 10 chars:        (00000000)(00000001)(00000002)(00000003)(00000004)(00000005)(00000006)(00000007)(00000008)(00000009)(00000010)(00000011)(00000012)(00000013)(00000014)(00000015)(00000016)(00000017)(00000018)(00000019)"
         assert self.mock_llm_preparation.trim_tweet(dummy_tweet) == dummy_returned_tweet
