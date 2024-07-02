@@ -31,7 +31,7 @@ from packages.valory.skills.decision_making_abci.tasks.week_in_olas_preparations
 )
 
 
-class TesWeekInOlasPreparation(unittest.TestCase):
+class TestWeekInOlasPreparation(unittest.TestCase):
     """Test the WeekInOlasCreatePreparation class."""
 
     def setUp(self):
