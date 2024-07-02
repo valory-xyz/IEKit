@@ -58,6 +58,7 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     FinishedTwitterScoringRound,
     MechInteractionResponse,
     SynchronizedData,
+    TwitterScoringAbciApp,
 )
 
 
@@ -1059,6 +1060,12 @@ class TestTwitterDecisionMakingBehaviour(BaseBehaviourTest):
         self.complete(test_case.event)
 
 
+@pytest.fixture(scope="class")
+def add_mech_responses_to_cross_period(request):
+    """Fixture which adds the mech responses to the `cross_period_persisted_keys` of the abci app."""
+    TwitterScoringAbciApp.cross_period_persisted_keys = frozenset({"mech_responses"})
+
+
 class TestPostMechRequestBehaviour(BaseBehaviourTest):
     """Tests PostMechRequestBehaviour"""
 
@@ -1094,6 +1101,14 @@ class TestPostMechRequestBehaviour(BaseBehaviourTest):
         self.fast_forward(test_case.initial_data)
         self.behaviour.act_wrapper()
         self.complete(test_case.event)
+
+    def test_cross_period_defaults(self, add_mech_responses_to_cross_period) -> None:
+        """Run a test using the default of the mech responses."""
+        # use the latest db data, i.e., the defaults of the `cross_period_persisted_keys`
+        db_data = self.behaviour.current_behaviour.synchronized_data.db.get_latest()
+        self.fast_forward(db_data)
+        self.behaviour.act_wrapper()
+        self.complete(Event.DONE)
 
 
 class TestDBUpdateBehaviour(BaseBehaviourTest):
