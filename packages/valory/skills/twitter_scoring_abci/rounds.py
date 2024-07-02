@@ -23,7 +23,7 @@ import json
 import math
 from dataclasses import asdict, dataclass, is_dataclass
 from enum import Enum
-from typing import Any, Dict, FrozenSet, List, Optional, Set, Tuple, cast
+from typing import Any, Dict, FrozenSet, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     ABCIAppInternalError,
@@ -35,6 +35,9 @@ from packages.valory.skills.abstract_round_abci.base import (
     DegenerateRound,
     EventToTimeout,
     get_name,
+)
+from packages.valory.skills.mech_interact_abci.states.base import (
+    SynchronizedData as MechInteractionSynchronizedData,
 )
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
@@ -116,7 +119,7 @@ class Event(Enum):
     SKIP_EVALUATION = "skip_evaluation"
 
 
-class SynchronizedData(BaseSynchronizedData):
+class SynchronizedData(MechInteractionSynchronizedData):
     """
     Class to represent the synchronized data.
 
@@ -177,20 +180,6 @@ class SynchronizedData(BaseSynchronizedData):
     def are_keepers_set(self) -> bool:
         """Check whether keepers are set."""
         return self.db.get("most_voted_keeper_addresses", None) is not None
-
-    @property
-    def mech_requests(self) -> List[MechMetadata]:
-        """Get the mech requests."""
-        serialized = self.db.get("mech_requests", "[]")
-        requests = json.loads(serialized)
-        return [MechMetadata(**metadata_item) for metadata_item in requests]
-
-    @property
-    def mech_responses(self) -> List[MechInteractionResponse]:
-        """Get the mech responses."""
-        serialized = self.db.get("mech_responses", "[]")
-        responses = json.loads(serialized)
-        return [MechInteractionResponse(**response_item) for response_item in responses]
 
 
 class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
