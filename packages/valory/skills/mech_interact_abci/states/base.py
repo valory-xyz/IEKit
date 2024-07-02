@@ -96,15 +96,17 @@ class SynchronizedData(TxSynchronizedData):
     @property
     def mech_requests(self) -> List[MechMetadata]:
         """Get the mech requests."""
-        serialized = self.db.get("mech_requests", "[]")
-        requests = json.loads(serialized)
+        requests = self.db.get("mech_requests", "[]")
+        if isinstance(requests, str):
+            requests = json.loads(requests)
         return [MechMetadata(**metadata_item) for metadata_item in requests]
 
     @property
     def mech_responses(self) -> List[MechInteractionResponse]:
         """Get the mech responses."""
-        serialized = self.db.get("mech_responses", "[]")
-        responses = json.loads(serialized)
+        responses = self.db.get("mech_responses", "[]")
+        if isinstance(responses, str):
+            responses = json.loads(responses)
         return [MechInteractionResponse(**response_item) for response_item in responses]
 
     @property
