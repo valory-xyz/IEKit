@@ -26,7 +26,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u
 - valory/ceramic_read_abci:0.1.0:bafybeibvml34iwm63ttvgxgotlpcvqcoawxsj5qbychzj4kzhq22jqd6ly
 - valory/generic_scoring_abci:0.1.0:bafybeiar3ipky234yhryprzywadkqefv6lyz6cbpk4l77qpal5phtdtyea
-- valory/twitter_scoring_abci:0.1.0:bafybeial4x7viasyoy54ivlp6chjbkjk43jh4hcnrnn62jckzqas7g7sn4
+- valory/twitter_scoring_abci:0.1.0:bafybeiawyi2x5rpf4bbkwfbepxspa4a4xnd4nhnzddqwlqqjs3hdf7jvqe
 - valory/ceramic_write_abci:0.1.0:bafybeic5ksadhrxg2c33t6zyuohy4o35vfqoylccnhhqne26mityto32my
 - valory/dynamic_nft_abci:0.1.0:bafybeibdw5mfqhhzeh3brn2n7tslegr4rm75oyy5bh5wa6ngmhhvmuwmlq
 - valory/registration_abci:0.1.0:bafybeibc7duasoaw5b4ene5oxfba2dmdzstsrws6ipi57ymgdtoxjadn54
@@ -37,7 +37,7 @@ skills:
 - valory/llm_abci:0.1.0:bafybeibmckwphs5zqdfnutktwgq7bxfw2auhsxezoopkep5dadkuwqvwgy
 - valory/twitter_write_abci:0.1.0:bafybeid377kr5f3dmb5nyhvucglyaaqkuhthxkfosgl54zskwmsuwz56ie
 - valory/olas_week_abci:0.1.0:bafybeiaug7rxvmw5wrsgl6xn6gzhvnmsh5beetr4r3ts3whzqz564g3nee
-- valory/mech_interact_abci:0.1.0:bafybeigx23onudeungri7epfkpu4ixwrrpee6uv7xunx2a76yixdwykksa
+- valory/mech_interact_abci:0.1.0:bafybeigto5ssrbrbqmeoc6wijcly2klmrhfcnaioa5u3wsofdm7bccowcq
 behaviours:
   main:
     args: {}
