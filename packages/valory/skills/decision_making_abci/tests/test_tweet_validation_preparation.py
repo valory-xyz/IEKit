@@ -19,8 +19,9 @@
 # ------------------------------------------------------------------------------
 """Test tweet validation preparation tasks."""
 
-import unittest
+from dataclasses import dataclass
 from datetime import datetime, timezone
+from typing import Any, Optional
 from unittest.mock import MagicMock, call, patch
 
 import pytest
@@ -29,9 +30,26 @@ from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.tweet_validation_preparation import (
     TweetValidationPreparation,
 )
+from packages.valory.skills.decision_making_abci.tests import centaur_configs
+from packages.valory.skills.decision_making_abci.tests.centaur_configs import (
+    DISABLED_CENTAUR,
+    ENABLED_CENTAUR,
+)
 
 
-DUMMY_CENTAURS_DATA = [
+@dataclass
+class TweetValidationTestCase:
+    """TweetValidationTestCase"""
+
+    name: str
+    tweet_validation_preparation_class: Any
+    exception_message: Any
+    centaur_configs: Optional[Any] = None
+    logger_message: Optional[Any] = None
+
+
+DUMMY_CENTAURS_DATA = [ENABLED_CENTAUR, DISABLED_CENTAUR]
+DUMMY_CENTAURS_DATA_B = [
     {
         "id": "4e77a3b1-5762-4782-830e-0e56c6c05c6f",
         "name": "Dummy Centaur",
@@ -133,95 +151,166 @@ DUMMY_CENTAURS_DATA = [
 ]
 
 
-class TestTweetValidationPreparation(unittest.TestCase):
-    """Test the WeekInOlasCreatePreparation class."""
+class BaseTweetValidationPreparationTest:
+    """Base class for TweetValidationPreparation tests."""
 
-    def setUp(self):
-        """Set up the tests."""
+    def set_up(self):
+        """Set up the class."""
         self.behaviour = MagicMock()
         self.synchronized_data = MagicMock()
-        self.mock_tweet_validation_preparation = TweetValidationPreparation(
+        self.synchronized_data.centaurs_data = DUMMY_CENTAURS_DATA
+
+    def create_tweet_validation_object(self, tweet_validation_preparation_class):
+        """Create the tweet validation object."""
+        self.mock_tweet_validation_preparation = tweet_validation_preparation_class(
             datetime.now(timezone.utc), self.behaviour, self.synchronized_data
         )
-        self.mock_tweet_validation_preparation.logger = MagicMock()
 
-    def test_check_extra_conditions(self):
+        self.mock_tweet_validation_preparation.behaviour.context.logger.info = (
+            MagicMock()
+        )
+        self.mock_tweet_validation_preparation.logger.info = MagicMock()
+
+    def check_extra_conditions_test(self, test_case: TweetValidationTestCase):
         """Test the check_extra_conditions method."""
         gen = self.mock_tweet_validation_preparation.check_extra_conditions()
         next(gen)
-        with pytest.raises(StopIteration):
-            self.assertTrue(next(gen))
+        with pytest.raises(StopIteration) as excinfo:
+            next(gen)
 
-    def test_check_extra_conditions_incorrect_centaur_id(self):
-        """Test the check_extra_conditions method with incorrect centaur id."""
-        self.mock_tweet_validation_preparation.synchronized_data.current_centaur_index = (
-            None
+        exception_message = test_case.exception_message
+        assert str(exception_message) in str(excinfo.value)
+
+    def _post_task_base_test(self, test_case: TweetValidationTestCase):
+        """Test the _post_task method."""
+        gen = self.mock_tweet_validation_preparation._post_task()
+
+        next(gen)
+
+        with pytest.raises(StopIteration) as excinfo:
+            next(gen)
+        self.mock_tweet_validation_preparation.behaviour.context.logger.info.assert_called_with(
+            test_case.logger_message
         )
-        gen = self.mock_tweet_validation_preparation.check_extra_conditions()
-        next(gen)
-        with pytest.raises(StopIteration):
-            self.assertFalse(next(gen))
+        exception_message = test_case.exception_message
+        assert str(exception_message) in str(excinfo.value)
 
-    def test_check_extra_conditions_not_twitter_on_centaur_id_to_secrets(self):
-        """Test the check_extra_conditions method when 'twitter' not in centaur id to secrets."""
-        self.mock_tweet_validation_preparation.params.centaur_id_to_secrets = {
-            "dummy_data": "dummy_data"
-        }
-        gen = self.mock_tweet_validation_preparation.check_extra_conditions()
-        next(gen)
-        with pytest.raises(StopIteration):
-            self.assertFalse(next(gen))
-
-    def test_check_extra_conditions_secrets_not_match(self):
-        """Test the check_extra_conditions method when secrets doesn't match."""
-        self.mock_tweet_validation_preparation.params.centaur_id_to_secrets = {
-            "dummy_data": "dummy_data"
-        }
-        gen = self.mock_tweet_validation_preparation.check_extra_conditions()
-        next(gen)
-        with pytest.raises(StopIteration):
-            self.assertFalse(next(gen))
-
-    @patch(
-        "packages.valory.skills.decision_making_abci.tasks.tweet_validation_preparation.TweetValidationPreparation.is_contract"
-    )
-    def test__pre_task(self, mock_is_contract):
+    def _pre_task_base_test(self, test_case: TweetValidationTestCase):
         """Test the _pre_task method."""
-        mock_is_contract.return_value = {"is_contract": True}
         self.mock_tweet_validation_preparation.synchronized_data.centaurs_data = (
-            DUMMY_CENTAURS_DATA
+            DUMMY_CENTAURS_DATA_B
         )
         self.mock_tweet_validation_preparation.synchronized_data.current_centaur_index = (
             0
         )
         gen = self.mock_tweet_validation_preparation._pre_task()
         next(gen)
-        calls = [
-            call("Checking tweet proposal: My agreed tweet: dummy"),
-            call("The tweet has been posted already"),
-            call("The proposal has been already verified"),
-        ]
+        calls = test_case.logger_message
         self.mock_tweet_validation_preparation.logger.info.assert_has_calls(
             calls, any_order=True
         )
         with pytest.raises(StopIteration) as excinfo:
             next(gen)
-        assert str(
-            (
-                {
-                    "centaurs_data": self.mock_tweet_validation_preparation.synchronized_data.centaurs_data,
-                    "has_centaurs_changes": True,
-                },
-                Event.TWEET_VALIDATION.value,
-            )
-        ) in str(excinfo.value)
 
-    def test__post_task(self):
+        exception_message = test_case.exception_message
+        assert str(exception_message) in str(excinfo.value)
+
+
+class TestTweetValidationPreparation(BaseTweetValidationPreparationTest):
+    """Test the TweetValidationPreparation class."""
+
+    @pytest.mark.parametrize(
+        "test_case",
+        [
+            TweetValidationTestCase(
+                name="Centaur ID to secrets missing id",
+                tweet_validation_preparation_class=TweetValidationPreparation,
+                exception_message=False,
+                centaur_configs=centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_ID,
+            ),
+            TweetValidationTestCase(
+                name="Centaur ID to secrets missing twitter",
+                tweet_validation_preparation_class=TweetValidationPreparation,
+                exception_message=False,
+                centaur_configs=centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_TWITTER,
+            ),
+            TweetValidationTestCase(
+                name="Centaur ID to secrets missing twitter key",
+                tweet_validation_preparation_class=TweetValidationPreparation,
+                exception_message=False,
+                centaur_configs=centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_TWITTER_KEY,
+            ),
+            TweetValidationTestCase(
+                name="Happy Path",
+                tweet_validation_preparation_class=TweetValidationPreparation,
+                exception_message=True,
+                centaur_configs=centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_OK,
+            ),
+        ],
+    )
+    def test_check_extra_conditions(self, test_case: TweetValidationTestCase):
+        """Test the check_extra_conditions method when the centaur id is not in centaur id to secrets."""
+        self.set_up()
+        self.create_tweet_validation_object(
+            test_case.tweet_validation_preparation_class
+        )
+        self.mock_tweet_validation_preparation.params.centaur_id_to_secrets = (
+            test_case.centaur_configs
+        )
+        self.check_extra_conditions_test(test_case)
+
+    @pytest.mark.parametrize(
+        "test_case",
+        [
+            TweetValidationTestCase(
+                name="Happy Path",
+                tweet_validation_preparation_class=TweetValidationPreparation,
+                exception_message=({}, None),
+                logger_message="Nothing to do",
+            )
+        ],
+    )
+    def test__post_task(self, test_case: TweetValidationTestCase):
         """Test the _post_task method."""
-        gen = self.mock_tweet_validation_preparation._post_task()
-        next(gen)
-        with pytest.raises(
-            StopIteration,
-        ) as excinfo:
-            next(gen)
-        assert str(({}, None)) in str(excinfo.value)
+        self.set_up()
+        self.create_tweet_validation_object(
+            test_case.tweet_validation_preparation_class
+        )
+        self._post_task_base_test(test_case)
+
+    @pytest.mark.parametrize(
+        "test_case",
+        [
+            TweetValidationTestCase(
+                name="Happy Path",
+                tweet_validation_preparation_class=TweetValidationPreparation,
+                exception_message=(
+                    {
+                        "centaurs_data": DUMMY_CENTAURS_DATA_B,
+                        "has_centaurs_changes": True,
+                    },
+                    Event.TWEET_VALIDATION.value,
+                ),
+                logger_message=[
+                    call("Checking tweet proposal: My agreed tweet: dummy"),
+                    call("The tweet has been posted already"),
+                    call("The proposal has been already verified"),
+                ],
+            )
+        ],
+    )
+    @patch(
+        "packages.valory.skills.decision_making_abci.tasks.tweet_validation_preparation.TweetValidationPreparation.is_contract"
+    )
+    def test__pre_task(
+        self,
+        mock_is_contract,
+        test_case: TweetValidationTestCase,
+    ):
+        """Test the _post_task method."""
+        mock_is_contract.return_value = {"is_contract": True}
+        self.set_up()
+        self.create_tweet_validation_object(
+            test_case.tweet_validation_preparation_class
+        )
+        self._pre_task_base_test(test_case)

@@ -72,13 +72,17 @@ class TestFinishedPipelinePreparation(unittest.TestCase):
         gen = self.mock_finished_pipeline_preparation._pre_task()
         self.assertIsInstance(gen, type((lambda: (yield))()))
         next(gen)
-        with pytest.raises(StopIteration):
-            assert next(gen) == {
-                "current_centaur_index": self.mock_finished_pipeline_preparation.get_next_centaur_index()
-            }, Event.NEXT_CENTAUR.value
-            self.mock_finished_pipeline_preparation.logger.info.assert_called_with(
-                f"Next centaur index: {self.mock_finished_pipeline_preparation.get_next_centaur_index()} [{len(self.mock_finished_pipeline_preparation.synchronized_data.centaurs_data)}]"
-            )
+        with pytest.raises(StopIteration) as excinfo:
+            next(gen)
+
+        exception_message = {
+            "current_centaur_index": self.mock_finished_pipeline_preparation.get_next_centaur_index()
+        }, Event.NEXT_CENTAUR.value
+        assert str(exception_message) in str(excinfo.value)
+
+        self.mock_finished_pipeline_preparation.logger.info.assert_called_with(
+            f"Next centaur index: {self.mock_finished_pipeline_preparation.get_next_centaur_index()} [{len(self.mock_finished_pipeline_preparation.synchronized_data.centaurs_data)}]"
+        )
 
     def test_get_next_centaur_index(self):
         """Test get_next_centaur_index."""
