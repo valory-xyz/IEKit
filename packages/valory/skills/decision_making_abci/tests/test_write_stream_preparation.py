@@ -55,16 +55,12 @@ class WriteStreamTestCase:
 class BaseWriteStreamPreparationTest:
     """Base class for WriteStreamPreparation tests."""
 
-    def set_up(self):
-        """Set up the class."""
-        self.behaviour = MagicMock()
-        self.synchronized_data = MagicMock()
-        self.synchronized_data.centaurs_data = DUMMY_CENTAURS_DATA
-
     def create_write_stream_object(self, write_stream_preparation_class):
         """Create the write stream object."""
+        synchronized_data = MagicMock()
+        synchronized_data.centaurs_data = DUMMY_CENTAURS_DATA
         self.mock_write_stream_preparation = write_stream_preparation_class(
-            datetime.now(timezone.utc), self.behaviour, self.synchronized_data
+            datetime.now(timezone.utc), MagicMock(), synchronized_data
         )
 
         self.mock_write_stream_preparation.logger.info = MagicMock()
@@ -115,7 +111,6 @@ class TestWriteStreamPreparation(BaseWriteStreamPreparationTest):
     )
     def test_check_extra_conditions(self, test_case: WriteStreamTestCase):
         """Test the check_extra_conditions method."""
-        self.set_up()
         self.create_write_stream_object(test_case.write_stream_preparation_class)
         self.check_extra_conditions_test(test_case)
 
@@ -140,8 +135,6 @@ class TestOrbisPreparation(BaseWriteStreamPreparationTest):
         self, mock_check_extra_conditions, test_case: WriteStreamTestCase
     ):
         """Test the check_extra_conditions method when not proceed."""
-
-        self.set_up()
         self.create_write_stream_object(test_case.write_stream_preparation_class)
         mock_check_extra_conditions.return_value = iter(
             [
@@ -181,7 +174,6 @@ class TestOrbisPreparation(BaseWriteStreamPreparationTest):
     )
     def test_check_extra_conditions(self, test_case: WriteStreamTestCase):
         """Test the check_extra_conditions method when the centaur id is not in centaur id to secrets."""
-        self.set_up()
         self.create_write_stream_object(test_case.write_stream_preparation_class)
         self.mock_write_stream_preparation.params.centaur_id_to_secrets = (
             test_case.centaur_configs
@@ -206,7 +198,6 @@ class TestOrbisPreparation(BaseWriteStreamPreparationTest):
     )
     def test__post_task(self, test_case: WriteStreamTestCase):
         """Test the _post_task method."""
-        self.set_up()
         self.create_write_stream_object(test_case.write_stream_preparation_class)
         self._post_task_base_test(test_case)
 
@@ -226,7 +217,6 @@ class TestDailyOrbisPreparation(BaseWriteStreamPreparationTest):
     )
     def test__post_task(self, test_case: WriteStreamTestCase):
         """Test the _post_task method."""
-        self.set_up()
         self.create_write_stream_object(test_case.write_stream_preparation_class)
         self._post_task_base_test(test_case)
 
@@ -248,7 +238,6 @@ class TestDailyOrbisPreparation(BaseWriteStreamPreparationTest):
     )
     def test__pre_task(self, test_case: WriteStreamTestCase):
         """Test the _post_task method."""
-        self.set_up()
         self.create_write_stream_object(test_case.write_stream_preparation_class)
         self._pre_task_base_test(test_case)
 
@@ -275,7 +264,6 @@ class TestUpdateCentaursPreparation(BaseWriteStreamPreparationTest):
         test_case: WriteStreamTestCase,
     ):
         """Test the check_extra_conditions method."""
-        self.set_up()
         self.create_write_stream_object(test_case.write_stream_preparation_class)
         mock_check_extra_conditions.return_value = iter(
             [
@@ -299,7 +287,6 @@ class TestUpdateCentaursPreparation(BaseWriteStreamPreparationTest):
         test_case: WriteStreamTestCase,
     ):
         """Test the check_extra_conditions method."""
-        self.set_up()
         self.create_write_stream_object(test_case.write_stream_preparation_class)
         self.mock_write_stream_preparation.synchronized_data.has_centaurs_changes = (
             False
@@ -323,7 +310,6 @@ class TestUpdateCentaursPreparation(BaseWriteStreamPreparationTest):
     )
     def test__post_task(self, test_case: WriteStreamTestCase):
         """Test the _post_task method."""
-        self.set_up()
         self.create_write_stream_object(test_case.write_stream_preparation_class)
         self._post_task_base_test(test_case)
 
@@ -345,7 +331,6 @@ class TestUpdateCentaursPreparation(BaseWriteStreamPreparationTest):
     )
     def test__pre_task(self, test_case: WriteStreamTestCase):
         """Test the _post_task method."""
-        self.set_up()
         self.create_write_stream_object(test_case.write_stream_preparation_class)
         self._pre_task_base_test(test_case)
 
@@ -372,7 +357,6 @@ class TestWriteContributeDBPreparation(BaseWriteStreamPreparationTest):
         test_case: WriteStreamTestCase,
     ):
         """Test the check_extra_conditions method."""
-        self.set_up()
         self.create_write_stream_object(test_case.write_stream_preparation_class)
         mock_check_extra_conditions.return_value = iter(
             [
@@ -396,7 +380,6 @@ class TestWriteContributeDBPreparation(BaseWriteStreamPreparationTest):
         test_case: WriteStreamTestCase,
     ):
         """Test the check_extra_conditions method."""
-        self.set_up()
         self.create_write_stream_object(test_case.write_stream_preparation_class)
         self.mock_write_stream_preparation.synchronized_data.pending_write = True
         self.check_extra_conditions_test(test_case)
@@ -418,7 +401,6 @@ class TestWriteContributeDBPreparation(BaseWriteStreamPreparationTest):
     )
     def test__post_task(self, test_case: WriteStreamTestCase):
         """Test the _post_task method."""
-        self.set_up()
         self.create_write_stream_object(test_case.write_stream_preparation_class)
         self._post_task_base_test(test_case)
 
@@ -439,6 +421,5 @@ class TestWriteContributeDBPreparation(BaseWriteStreamPreparationTest):
     )
     def test__pre_task(self, test_case: WriteStreamTestCase):
         """Test the _post_task method."""
-        self.set_up()
         self.create_write_stream_object(test_case.write_stream_preparation_class)
         self._pre_task_base_test(test_case)
