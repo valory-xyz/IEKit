@@ -43,9 +43,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeieeaseuy5rbbw465knz27vccvpkfge43q7isl7fkdlfapwd7bpi24
 - valory/abstract_round_abci:0.1.0:bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u
-- valory/impact_evaluator_abci:0.1.0:bafybeifoez36b6nmv7t24an7mwo766dzlnunjlxv6tbtrxhecny7nlwn5e
-- valory/generic_scoring_abci:0.1.0:bafybeifdxbzkgrwebxvfrjobo5ygq27enpoud2hr6isqah6unmwo7nrhmm
-- valory/twitter_scoring_abci:0.1.0:bafybeichyzcynnqytdt5qznb6czx7p35jx6flzhnxf7k3zx6bp3p56pzvi
+- valory/impact_evaluator_abci:0.1.0:bafybeifn3a77hbh4ycbk773nr6iw46s5findv6glcxiss2v66ig3re4fzy
+- valory/generic_scoring_abci:0.1.0:bafybeiar3ipky234yhryprzywadkqefv6lyz6cbpk4l77qpal5phtdtyea
+- valory/twitter_scoring_abci:0.1.0:bafybeiawyi2x5rpf4bbkwfbepxspa4a4xnd4nhnzddqwlqqjs3hdf7jvqe
 - valory/ceramic_read_abci:0.1.0:bafybeibvml34iwm63ttvgxgotlpcvqcoawxsj5qbychzj4kzhq22jqd6ly
 - valory/ceramic_write_abci:0.1.0:bafybeic5ksadhrxg2c33t6zyuohy4o35vfqoylccnhhqne26mityto32my
 - valory/dynamic_nft_abci:0.1.0:bafybeic6vp7jx64dwkdxpj3hytybfk46bswwarqvfplyntzbnxkisuke4e
@@ -57,7 +57,7 @@ skills:
 - valory/decision_making_abci:0.1.0:bafybeig24in5fftg5ohcwnwyfjsnhvfnsml32jfmnwpfqc6t47p6w4qozi
 - valory/llm_abci:0.1.0:bafybeibmckwphs5zqdfnutktwgq7bxfw2auhsxezoopkep5dadkuwqvwgy
 - valory/olas_week_abci:0.1.0:bafybeie4gw2juabbgdb46tf2n46flb3rrcvlk3gexkexmczisqhuz3k35y
-- valory/mech_interact_abci:0.1.0:bafybeigx23onudeungri7epfkpu4ixwrrpee6uv7xunx2a76yixdwykksa
+- valory/mech_interact_abci:0.1.0:bafybeigto5ssrbrbqmeoc6wijcly2klmrhfcnaioa5u3wsofdm7bccowcq
 default_ledger: ethereum
 required_ledgers:
 - ethereum
