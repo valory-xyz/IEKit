@@ -58,7 +58,6 @@ class BaseWriteStreamPreparationTest:
     def create_write_stream_object(self, write_stream_preparation_class):
         """Create the write stream object."""
         synchronized_data = MagicMock()
-        synchronized_data.centaurs_data = DUMMY_CENTAURS_DATA
         self.mock_write_stream_preparation = write_stream_preparation_class(
             datetime.now(timezone.utc), MagicMock(), synchronized_data
         )
@@ -143,82 +142,9 @@ class TestOrbisPreparation(BaseWriteStreamPreparationTest):
         )
         self.check_extra_conditions_test(test_case)
 
-    @pytest.mark.parametrize(
-        "test_case",
-        [
-            WriteStreamTestCase(
-                name="Centaur ID to secrets missing id",
-                write_stream_preparation_class=OrbisPreparation,
-                exception_message=False,
-                centaur_configs=centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_ID,
-            ),
-            WriteStreamTestCase(
-                name="Centaur ID to secrets missing orbis",
-                write_stream_preparation_class=OrbisPreparation,
-                exception_message=False,
-                centaur_configs=centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_ORBIS,
-            ),
-            WriteStreamTestCase(
-                name="Centaur ID to secrets missing orbis key",
-                write_stream_preparation_class=OrbisPreparation,
-                exception_message=False,
-                centaur_configs=centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_ORBIS_KEY,
-            ),
-            WriteStreamTestCase(
-                name="Happy Path",
-                write_stream_preparation_class=OrbisPreparation,
-                exception_message=True,
-                centaur_configs=centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_OK,
-            ),
-        ],
-    )
-    def test_check_extra_conditions(self, test_case: WriteStreamTestCase):
-        """Test the check_extra_conditions method when the centaur id is not in centaur id to secrets."""
-        self.create_write_stream_object(test_case.write_stream_preparation_class)
-        self.mock_write_stream_preparation.params.centaur_id_to_secrets = (
-            test_case.centaur_configs
-        )
-        self.check_extra_conditions_test(test_case)
-
-    @pytest.mark.parametrize(
-        "test_case",
-        [
-            WriteStreamTestCase(
-                name="Happy Path",
-                write_stream_preparation_class=OrbisPreparation,
-                exception_message=(
-                    {
-                        "centaurs_data": DUMMY_CENTAURS_DATA,
-                        "has_centaurs_changes": True,
-                    },
-                    None,
-                ),
-            )
-        ],
-    )
-    def test__post_task(self, test_case: WriteStreamTestCase):
-        """Test the _post_task method."""
-        self.create_write_stream_object(test_case.write_stream_preparation_class)
-        self._post_task_base_test(test_case)
-
 
 class TestDailyOrbisPreparation(BaseWriteStreamPreparationTest):
     """Test the DailyOrbisPreparation class."""
-
-    @pytest.mark.parametrize(
-        "test_case",
-        [
-            WriteStreamTestCase(
-                name="Happy Path",
-                write_stream_preparation_class=DailyOrbisPreparation,
-                exception_message=({"centaurs_data": DUMMY_CENTAURS_DATA}, None),
-            )
-        ],
-    )
-    def test__post_task(self, test_case: WriteStreamTestCase):
-        """Test the _post_task method."""
-        self.create_write_stream_object(test_case.write_stream_preparation_class)
-        self._post_task_base_test(test_case)
 
     @pytest.mark.parametrize(
         "test_case",
