@@ -105,11 +105,15 @@ class TestTaskPreparation(unittest.TestCase):
         """Test check_conditions when the task is disabled."""
 
         self.mock_task_preparation.enabled = False
-        for value in self.mock_task_preparation.check_conditions():
-            assert not value
-            self.mock_task_preparation.logger.info.assert_called_with(
-                f"[{self.__class__.__name__}]: task is disabled"
-            )
+        gen = self.mock_task_preparation.check_conditions()
+
+        with pytest.raises(StopIteration) as excinfo:
+            next(gen)
+        exception_message = False
+        assert str(exception_message) in str(excinfo.value)
+        self.mock_task_preparation.logger.info.assert_called_with(
+            "[TaskPreparation]: task is disabled"
+        )
 
     def test_check_conditions_daily_task_already_ran_today(
         self,
@@ -118,11 +122,15 @@ class TestTaskPreparation(unittest.TestCase):
 
         self.mock_task_preparation.daily = True
         self.mock_task_preparation.last_run = datetime.now(timezone.utc)
-        for value in self.mock_task_preparation.check_conditions():
-            assert not value
-            self.mock_task_preparation.logger.info.assert_called_with(
-                f"[{self.__class__.__name__}]: task is a daily task and was already ran today"
-            )
+        gen = self.mock_task_preparation.check_conditions()
+
+        with pytest.raises(StopIteration) as excinfo:
+            next(gen)
+        exception_message = False
+        assert str(exception_message) in str(excinfo.value)
+        self.mock_task_preparation.logger.info.assert_called_with(
+            "[TaskPreparation]: task is a daily task and was already ran today"
+        )
 
     def test_check_conditions_weekly_task_wrong_day(
         self,
@@ -132,11 +140,16 @@ class TestTaskPreparation(unittest.TestCase):
         self.mock_task_preparation.weekly = (
             datetime.now(timezone.utc).weekday() + 1
         ) % 7  # Tomorrow's weekday
-        for value in self.mock_task_preparation.check_conditions():
-            assert not value
-            self.mock_task_preparation.logger.info.assert_called_with(
-                f"[{self.__class__.__name__}]: task is a weekly task and today is not the right day"
-            )
+
+        gen = self.mock_task_preparation.check_conditions()
+
+        with pytest.raises(StopIteration) as excinfo:
+            next(gen)
+        exception_message = False
+        assert str(exception_message) in str(excinfo.value)
+        self.mock_task_preparation.logger.info.assert_called_with(
+            f"[TaskPreparation]: task is a weekly task but today is not the configured run day: {self.mock_task_preparation.weekly - 1} != {self.mock_task_preparation.weekly}"
+        )
 
     def test_check_conditions_weekly_task_already_ran_today(
         self,
@@ -145,11 +158,15 @@ class TestTaskPreparation(unittest.TestCase):
 
         self.mock_task_preparation.weekly = datetime.now(timezone.utc).weekday()
         self.mock_task_preparation.last_run = datetime.now(timezone.utc)
-        for value in self.mock_task_preparation.check_conditions():
-            assert not value
-            self.mock_task_preparation.logger.info.assert_called_with(
-                f"[{self.__class__.__name__}]: task is a weekly task and was already ran today"
-            )
+        gen = self.mock_task_preparation.check_conditions()
+
+        with pytest.raises(StopIteration) as excinfo:
+            next(gen)
+        exception_message = False
+        assert str(exception_message) in str(excinfo.value)
+        self.mock_task_preparation.logger.info.assert_called_with(
+            "[TaskPreparation]: task is a weekly task and was already ran less than a day ago"
+        )
 
     def test_check_conditions_not_time_to_run_yet(
         self,
@@ -160,11 +177,15 @@ class TestTaskPreparation(unittest.TestCase):
         self.mock_task_preparation.run_hour_utc = (
             datetime.now(timezone.utc).hour + 1
         )  # Next hour
-        for value in self.mock_task_preparation.check_conditions():
-            assert not value
-            self.mock_task_preparation.logger.info.assert_called_with(
-                f"[{self.__class__.__name__}]: task is a daily task but it is not time to run yet"
-            )
+        gen = self.mock_task_preparation.check_conditions()
+
+        with pytest.raises(StopIteration) as excinfo:
+            next(gen)
+        exception_message = False
+        assert str(exception_message) in str(excinfo.value)
+        self.mock_task_preparation.logger.info.assert_called_with(
+            f"[TaskPreparation]: not time to run yet [{self.mock_task_preparation.now_utc.hour}!={self.mock_task_preparation.run_hour_utc}]"
+        )
 
     def test_check_conditions_extra_conditions_raises_not_implemented(
         self,
