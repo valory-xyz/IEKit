@@ -20,7 +20,7 @@
 
 """This package contains centaur data for tests."""
 
-import datetime
+from datetime import datetime, timezone
 from copy import deepcopy
 
 
@@ -33,14 +33,14 @@ ENABLED_CENTAUR = {
                 "daily": True,
                 "enabled": True,
                 "last_run": None,
-                "run_hour_utc": datetime.datetime.utcnow().hour,
+                "run_hour_utc": datetime.utcnow().hour,
             },
             "scheduled_tweet": {"daily": False, "enabled": True},
             "daily_orbis": {
                 "daily": True,
                 "enabled": True,
                 "last_run": None,
-                "run_hour_utc": datetime.datetime.utcnow().hour,
+                "run_hour_utc": datetime.utcnow().hour,
             },
         }
     },
@@ -177,13 +177,13 @@ del NO_ACTIONS["actions"]
 
 NO_TIME_TO_RUN = deepcopy(ENABLED_CENTAUR)
 NO_TIME_TO_RUN["configuration"]["plugins"]["daily_tweet"]["run_hour_utc"] = (
-    datetime.datetime.utcnow().hour + 12
+    datetime.utcnow().hour + 12
 )
 
 ALREADY_RAN = deepcopy(ENABLED_CENTAUR)
 ALREADY_RAN["configuration"]["plugins"]["daily_tweet"]["last_run"] = (
-    datetime.datetime.utcnow()
-    .replace(tzinfo=datetime.timezone.utc)
+    datetime.utcnow()
+    .replace(tzinfo=timezone.utc)
     .strftime("%Y-%m-%d %H:%M:%S %Z")
 )
 
