@@ -20,7 +20,6 @@
 
 """Test twitter preparation tasks."""
 from copy import copy, deepcopy
-from pprint import pprint
 
 import pytest
 
@@ -42,7 +41,7 @@ DUMMY_CENTAURS_DATA = [deepcopy(centaur_configs.ENABLED_CENTAUR)]
 
 twitter_action = {
     "actorAddress": "did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX",
-    "outputUrl": f"https://twitter.com/launchcentaurs/status/dummy_id_1",
+    "outputUrl": "https://twitter.com/launchcentaurs/status/dummy_id_1",
     "description": "posted to Twitter",
     "timestamp": NOW_UTC.timestamp(),
 }
@@ -113,6 +112,7 @@ class BaseTwitterPreparationTest(BaseTaskTest):
     """Base class for TwitterPreparation tests."""
 
     def get_tweet_test(self, test_case: TaskTestCase):
+        """Base test for get_tweet method."""
         self.set_up()
         self.create_task_preparation_object(test_case)
         self.mock_task_preparation_object.synchronized_data.update(
@@ -228,6 +228,8 @@ class TestTwitterPreparation(BaseTwitterPreparationTest):
         super()._post_task_base_test(test_case)
 
     def get_tweet_test(self, test_case: TaskTestCase):
+        """Test for get_tweet method."""
+
         self.set_up()
         self.create_task_preparation_object(test_case)
         with pytest.raises(NotImplementedError):
@@ -313,7 +315,6 @@ class TestDailyTweetPreparation(BaseTwitterPreparationTest):
             TaskTestCase(
                 name="Happy Path",
                 task_preparation_class=DailyTweetPreparation,
-                # centaur_id_to_secrets=centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_OK,
                 exception_message=(
                     {
                         "write_data": [
@@ -592,7 +593,6 @@ class TestScheduledTweetPreparation(BaseTwitterPreparationTest):
         """Test get_pending_tweets."""
         self.set_up()
         self.create_task_preparation_object(test_case)
-        pprint(test_case.initial_data["synchronized_data"])
         gen = self.mock_task_preparation_object.get_pending_tweets()
 
         with pytest.raises(StopIteration) as excinfo:

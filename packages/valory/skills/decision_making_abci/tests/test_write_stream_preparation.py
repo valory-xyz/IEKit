@@ -19,28 +19,16 @@
 # ------------------------------------------------------------------------------
 """Test write stream preparation tasks."""
 from copy import copy, deepcopy
-from dataclasses import dataclass
-from datetime import datetime, timezone
-from pathlib import Path
-from typing import Any, Optional, Type
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
-from packages.valory.skills.abstract_round_abci.base import AbciApp, AbciAppDB
-from packages.valory.skills.abstract_round_abci.test_tools.base import (
-    FSMBehaviourBaseCase,
-)
-from packages.valory.skills.decision_making_abci.behaviours import (
-    DecisionMakingBehaviour,
-)
-from packages.valory.skills.decision_making_abci.rounds import Event, SynchronizedData
+from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.write_stream_preparation import (
     DailyOrbisPreparation,
     OrbisPreparation,
     UpdateCentaursPreparation,
     WriteContributeDBPreparation,
-    WriteStreamPreparation,
 )
 from packages.valory.skills.decision_making_abci.test_tools.tasks import (
     BaseTaskTest,
@@ -54,7 +42,7 @@ DUMMY_CENTAURS_DATA = [deepcopy(centaur_configs.ENABLED_CENTAUR)]
 
 orbis_action = {
     "actorAddress": "did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX",
-    "outputUrl": f"https://app.orbis.club/post/dummy_stream_id",
+    "outputUrl": "https://app.orbis.club/post/dummy_stream_id",
     "description": "posted to Orbis",
     "timestamp": NOW_UTC.timestamp(),
 }

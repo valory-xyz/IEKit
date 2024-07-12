@@ -17,4 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Tests package for decision_making_abci task tests."""
+"""Test tools package for decision_making_abci base tests."""
