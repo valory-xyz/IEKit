@@ -90,7 +90,7 @@ class CeramicReadBaseBehaviour(BaseBehaviour, ABC):
         previous_cid_str = api_data["commits"][-1]["cid"]
 
         # Rebuild the current data
-        data = build_data_from_commits(api_data["commits"])
+        data = yield from build_data_from_commits(api_data["commits"])
 
         return {
             "genesis_cid_str": genesis_cid_str,
