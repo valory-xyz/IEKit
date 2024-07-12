@@ -24,8 +24,10 @@ fingerprint:
   tasks/twitter_preparation.py: bafybeicottvm2prcpzvqk53ohxx4hukwuisr4uh47gctasikls6rlkmmuq
   tasks/week_in_olas_preparations.py: bafybeidmx64rnkhfcqnsx7qwmcwz6s5okxbqwi4ztnfrrsfaxgsb6vdb3i
   tasks/write_stream_preparation.py: bafybeiatdcckbobkaawnuphcgvjx2kgcuil7dtbunfpje7pfjd26gd2es4
+  test_tools/__init__.py: bafybeiagwxhcqhvnfhf7yejawmjkle6c7eb4o4hjoy363dahmnyq22xmua
+  test_tools/tasks.py: bafybeihxocopkylvhoud6hbdbve3v7zd4yr7rssjeytg2muwvph4jxojby
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
-  tests/centaur_configs.py: bafybeibpaghsahe4yi6o2s6x6sdluuid2kawe54kpnlruwdpqqavkmfbde
+  tests/centaur_configs.py: bafybeidcvt7pqrxxnk54z2gotvosk64zifyfaeijg2wevfhua2grjajxua
   tests/test_behaviours.py: bafybeigt4ifqyyw23ejypquaqgecjrgmvtrgxustwmzucolgm6kr5gzdnu
   tests/test_ceramic_db.py: bafybeihfkxlugegbexqukuc6uo33m4fvo5hskqlpx2ez24lh47juradr4m
   tests/test_dialogues.py: bafybeihxzcyy7xvg4lte4bv5hy2h4mozdzwvyaa36feu3oxv67jfvsyuoi
@@ -39,8 +41,9 @@ fingerprint:
   tests/test_score_preparations.py: bafybeifjen2tfj4uhoztsgdqdpojuhawfjjcxlaefkjj6r3dh56o4vsmdy
   tests/test_task_preparations.py: bafybeiepe62lrny6bcelifaquzb3vvom5sjpirkykl7qnook7ul7bauckm
   tests/test_tweet_validation_preparation.py: bafybeids7ztoukmhe4emgzb2fe42me33meh5mi5bjetalo3euhegpmuzu4
+  tests/test_twitter_preparation.py: bafybeid3t6ttmyq2clknweqgdrhv43op7rrogtc44vki2qmvmmn3tvgt3u
   tests/test_week_in_olas_preparations.py: bafybeiejncsbtxcetrrdztw2beavgt3fgzlkqmqncy5drhjpflmo4sstte
-  tests/test_write_stream_preparation.py: bafybeicqa2z3ayknw5m7wwprjugc5tiqvl3s6nloim6aegb4v3zqpwk45e
+  tests/test_write_stream_preparation.py: bafybeifzlseuzlsam6yamrkeu4p2kmyhfqtoe5mdp4zt5ubfecgbyel6ke
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
