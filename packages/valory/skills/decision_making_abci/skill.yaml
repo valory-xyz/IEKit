@@ -40,7 +40,7 @@ fingerprint:
   tests/test_task_preparations.py: bafybeiepe62lrny6bcelifaquzb3vvom5sjpirkykl7qnook7ul7bauckm
   tests/test_tweet_validation_preparation.py: bafybeids7ztoukmhe4emgzb2fe42me33meh5mi5bjetalo3euhegpmuzu4
   tests/test_week_in_olas_preparations.py: bafybeiejncsbtxcetrrdztw2beavgt3fgzlkqmqncy5drhjpflmo4sstte
-  tests/test_write_stream_preparation.py: bafybeihmtwbrquwo2npr3cgejf5fpg6dvvoklmk73fmoibq5bth24pljga
+  tests/test_write_stream_preparation.py: bafybeicqa2z3ayknw5m7wwprjugc5tiqvl3s6nloim6aegb4v3zqpwk45e
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
