@@ -18,7 +18,7 @@
 #
 # ------------------------------------------------------------------------------
 """Test write stream preparation tasks."""
-from copy import deepcopy, copy
+from copy import copy, deepcopy
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -28,8 +28,12 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from packages.valory.skills.abstract_round_abci.base import AbciApp, AbciAppDB
-from packages.valory.skills.abstract_round_abci.test_tools.base import FSMBehaviourBaseCase
-from packages.valory.skills.decision_making_abci.behaviours import DecisionMakingBehaviour
+from packages.valory.skills.abstract_round_abci.test_tools.base import (
+    FSMBehaviourBaseCase,
+)
+from packages.valory.skills.decision_making_abci.behaviours import (
+    DecisionMakingBehaviour,
+)
 from packages.valory.skills.decision_making_abci.rounds import Event, SynchronizedData
 from packages.valory.skills.decision_making_abci.tasks.write_stream_preparation import (
     DailyOrbisPreparation,
@@ -38,18 +42,22 @@ from packages.valory.skills.decision_making_abci.tasks.write_stream_preparation 
     WriteContributeDBPreparation,
     WriteStreamPreparation,
 )
-from packages.valory.skills.decision_making_abci.test_tools.tasks import BaseTaskTest, TaskTestCase, NOW_UTC
+from packages.valory.skills.decision_making_abci.test_tools.tasks import (
+    BaseTaskTest,
+    NOW_UTC,
+    TaskTestCase,
+)
 from packages.valory.skills.decision_making_abci.tests import centaur_configs
 
 
 DUMMY_CENTAURS_DATA = [deepcopy(centaur_configs.ENABLED_CENTAUR)]
 
 orbis_action = {
-            "actorAddress": "did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX",
-            "outputUrl": f"https://app.orbis.club/post/dummy_stream_id",
-            "description": "posted to Orbis",
-            "timestamp": NOW_UTC.timestamp(),
-        }
+    "actorAddress": "did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX",
+    "outputUrl": f"https://app.orbis.club/post/dummy_stream_id",
+    "description": "posted to Orbis",
+    "timestamp": NOW_UTC.timestamp(),
+}
 
 DUMMY_CENTAURS_DATA_ACTIONS = deepcopy(DUMMY_CENTAURS_DATA)
 DUMMY_CENTAURS_DATA_ACTIONS[0]["actions"].append(orbis_action)
@@ -58,7 +66,10 @@ DUMMY_CENTAURS_DATA_NO_ACTIONS = [deepcopy(centaur_configs.NO_ACTIONS)]
 DUMMY_CENTAURS_DATA_NO_ACTIONS[0]["actions"] = orbis_action
 
 DUMMY_CENTAURS_DATA_DAILY_ORBIS = deepcopy(DUMMY_CENTAURS_DATA)
-DUMMY_CENTAURS_DATA_DAILY_ORBIS[0]["configuration"]["plugins"]["daily_orbis"]["last_run"] = NOW_UTC.strftime("%Y-%m-%d %H:%M:%S %Z")
+DUMMY_CENTAURS_DATA_DAILY_ORBIS[0]["configuration"]["plugins"]["daily_orbis"][
+    "last_run"
+] = NOW_UTC.strftime("%Y-%m-%d %H:%M:%S %Z")
+
 
 class TestOrbisPreparation(BaseTaskTest):
     """Test the OrbisPreparation class."""
@@ -95,7 +106,9 @@ class TestOrbisPreparation(BaseTaskTest):
                 task_preparation_class=OrbisPreparation,
                 exception_message=False,
                 initial_data={
-                    "centaur_id_to_secrets": deepcopy(centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_ID),
+                    "centaur_id_to_secrets": deepcopy(
+                        centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_ID
+                    ),
                     "synchronized_data": {"centaurs_data": copy(DUMMY_CENTAURS_DATA)},
                 },
             ),
@@ -106,7 +119,7 @@ class TestOrbisPreparation(BaseTaskTest):
                 initial_data={
                     "centaur_id_to_secrets": centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_ORBIS,
                     "synchronized_data": {"centaurs_data": DUMMY_CENTAURS_DATA},
-                }
+                },
             ),
             TaskTestCase(
                 name="Centaur ID to secrets missing orbis key",
@@ -115,7 +128,7 @@ class TestOrbisPreparation(BaseTaskTest):
                 initial_data={
                     "centaur_id_to_secrets": centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_ORBIS_KEY,
                     "synchronized_data": {"centaurs_data": DUMMY_CENTAURS_DATA},
-                }
+                },
             ),
             TaskTestCase(
                 name="Happy Path",
@@ -131,6 +144,7 @@ class TestOrbisPreparation(BaseTaskTest):
     def test_check_extra_conditions(self, test_case: TaskTestCase):
         """Test the check_extra_conditions method when the centaur id is not in centaur id to secrets."""
         super().check_extra_conditions_test(test_case)
+
     #
     @pytest.mark.parametrize(
         "test_case",
@@ -147,10 +161,9 @@ class TestOrbisPreparation(BaseTaskTest):
                 ),
                 initial_data={
                     "centaur_id_to_secrets": centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_OK,
-                    "synchronized_data": {
-                        "centaurs_data": DUMMY_CENTAURS_DATA},
-                        "write_results": [{"stream_id": "dummy_stream_id"}],
-                }
+                    "synchronized_data": {"centaurs_data": DUMMY_CENTAURS_DATA},
+                    "write_results": [{"stream_id": "dummy_stream_id"}],
+                },
             )
         ],
     )
@@ -176,10 +189,9 @@ class TestDailyOrbisPreparation(BaseTaskTest):
                 ),
                 initial_data={
                     "centaur_id_to_secrets": centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_OK,
-                    "synchronized_data": {
-                        "centaurs_data": DUMMY_CENTAURS_DATA},
-                        "write_results": [{"stream_id": "dummy_stream_id"}],
-                }
+                    "synchronized_data": {"centaurs_data": DUMMY_CENTAURS_DATA},
+                    "write_results": [{"stream_id": "dummy_stream_id"}],
+                },
             )
         ],
     )
@@ -197,7 +209,10 @@ class TestDailyOrbisPreparation(BaseTaskTest):
                     "centaur_id_to_secrets": centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_OK,
                     "synchronized_data": {
                         "centaurs_data": DUMMY_CENTAURS_DATA,
-                        "daily_tweet": {"text": "dummy text", "media_hashes": "dummy media hashes"},
+                        "daily_tweet": {
+                            "text": "dummy text",
+                            "media_hashes": "dummy media hashes",
+                        },
                     },
                     "write_results": [{"stream_id": "dummy_stream_id"}],
                 },
@@ -218,7 +233,10 @@ class TestDailyOrbisPreparation(BaseTaskTest):
             {
                 "op": "create",
                 "data": {
-                    "body": {"text": "dummy text", "media_hashes": "dummy media hashes"},
+                    "body": {
+                        "text": "dummy text",
+                        "media_hashes": "dummy media hashes",
+                    },
                     "context": "z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX",
                 },
                 "extra_metadata": {
@@ -249,7 +267,7 @@ class TestUpdateCentaursPreparation(BaseTaskTest):
         "packages.valory.skills.decision_making_abci.tasks.write_stream_preparation.WriteStreamPreparation.check_extra_conditions"
     )
     def test_check_extra_conditions_not_proceed(
-            self, mock_check_extra_conditions, test_case: TaskTestCase
+        self, mock_check_extra_conditions, test_case: TaskTestCase
     ):
         """Test the check_extra_conditions method when not proceed."""
         mock_check_extra_conditions.return_value = iter(
@@ -277,8 +295,6 @@ class TestUpdateCentaursPreparation(BaseTaskTest):
         """Test the check_extra_conditions method when the centaur id is not in centaur id to secrets."""
         super().check_extra_conditions_test(test_case)
 
-
-
     @pytest.mark.parametrize(
         "test_case",
         [
@@ -286,15 +302,15 @@ class TestUpdateCentaursPreparation(BaseTaskTest):
                 name="Happy Path",
                 task_preparation_class=UpdateCentaursPreparation,
                 exception_message=(
-                        {
-                            "has_centaurs_changes": False,
-                        },
-                        None,
+                    {
+                        "has_centaurs_changes": False,
+                    },
+                    None,
                 ),
                 initial_data={
                     "centaur_id_to_secrets": centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_OK,
                     "synchronized_data": {"centaurs_data": DUMMY_CENTAURS_DATA},
-                }
+                },
             )
         ],
     )
@@ -315,11 +331,11 @@ class TestUpdateCentaursPreparation(BaseTaskTest):
                     },
                 },
                 exception_message=(
-                        {
-                            "write_results": [],
-                            "is_data_on_sync_db": False,
-                        },
-                        Event.UPDATE_CENTAURS.value,
+                    {
+                        "write_results": [],
+                        "is_data_on_sync_db": False,
+                    },
+                    Event.UPDATE_CENTAURS.value,
                 ),
             ),
         ],
@@ -327,13 +343,15 @@ class TestUpdateCentaursPreparation(BaseTaskTest):
     def test__pre_task(self, test_case: TaskTestCase):
         """Test the _post_task method."""
         super()._pre_task_base_test(test_case)
-        assert self.mock_task_preparation_object.behaviour.context.state.ceramic_data == [{
-            "op": "update",
-            "stream_id": "dummy_centaurs_stream_id",
-            "data": DUMMY_CENTAURS_DATA,
-            "did_str": "did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX",
-            "did_seed": None,
-        }]
+        assert self.mock_task_preparation_object.behaviour.context.state.ceramic_data == [
+            {
+                "op": "update",
+                "stream_id": "dummy_centaurs_stream_id",
+                "data": DUMMY_CENTAURS_DATA,
+                "did_str": "did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX",
+                "did_seed": None,
+            }
+        ]
 
 
 class TestWriteContributeDBPreparation(BaseTaskTest):
@@ -395,10 +413,10 @@ class TestWriteContributeDBPreparation(BaseTaskTest):
                     },
                 },
                 exception_message=(
-                        {
-                            "is_data_on_sync_db": False,
-                        },
-                        Event.WRITE_CONTRIBUTE_DB.value,
+                    {
+                        "is_data_on_sync_db": False,
+                    },
+                    Event.WRITE_CONTRIBUTE_DB.value,
                 ),
             ),
         ],
@@ -411,15 +429,15 @@ class TestWriteContributeDBPreparation(BaseTaskTest):
                 "op": "update",
                 "stream_id": "ceramic_db_stream_id",
                 "data": {
-                    'module_data': {
-                        'dynamic_nft': {},
-                        'generic': {'latest_update_id': 0},
-                        'twitter': {
-                            'current_period': '1970-01-01',
-                            'latest_mention_tweet_id': 0
-                        }
+                    "module_data": {
+                        "dynamic_nft": {},
+                        "generic": {"latest_update_id": 0},
+                        "twitter": {
+                            "current_period": "1970-01-01",
+                            "latest_mention_tweet_id": 0,
+                        },
                     },
-                    'users': {}
+                    "users": {},
                 },
                 "did_str": "did:key:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX",
                 "did_seed": None,
@@ -433,19 +451,18 @@ class TestWriteContributeDBPreparation(BaseTaskTest):
                 name="Happy Path",
                 task_preparation_class=WriteContributeDBPreparation,
                 exception_message=(
-                        {
-                            "pending_write": False,
-                        },
-                        None,
+                    {
+                        "pending_write": False,
+                    },
+                    None,
                 ),
                 initial_data={
                     "centaur_id_to_secrets": centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_OK,
                     "synchronized_data": {"centaurs_data": DUMMY_CENTAURS_DATA},
-                }
+                },
             )
         ],
     )
     def test__post_task(self, test_case: TaskTestCase):
         """Test the _post_task method."""
         super()._post_task_base_test(test_case)
-

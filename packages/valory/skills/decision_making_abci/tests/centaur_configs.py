@@ -20,8 +20,8 @@
 
 """This package contains centaur data for tests."""
 
-from datetime import datetime, timezone
 from copy import deepcopy
+from datetime import datetime, timezone
 
 
 ENABLED_CENTAUR = {
@@ -182,9 +182,7 @@ NO_TIME_TO_RUN["configuration"]["plugins"]["daily_tweet"]["run_hour_utc"] = (
 
 ALREADY_RAN = deepcopy(ENABLED_CENTAUR)
 ALREADY_RAN["configuration"]["plugins"]["daily_tweet"]["last_run"] = (
-    datetime.utcnow()
-    .replace(tzinfo=timezone.utc)
-    .strftime("%Y-%m-%d %H:%M:%S %Z")
+    datetime.utcnow().replace(tzinfo=timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
 )
 
 
