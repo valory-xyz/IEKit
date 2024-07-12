@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -338,6 +338,10 @@ class TestStreamWriteBehaviourSender(BaseCeramicWriteTest):
             ),
         )
 
+        # necessary for the build_data_from_commits
+        for _ in range(50):
+            self.behaviour.act_wrapper()
+
         # Write data call
         if "write_data" in kwargs:
             self.mock_http_request(
@@ -640,6 +644,10 @@ class TestStreamWriteBehaviourApiError(BaseCeramicWriteTest):
             ),
         )
 
+        # necessary for the build_data_from_commits
+        for _ in range(50):
+            self.behaviour.act_wrapper()
+
         # Write data call (only if read was succesful)
         if kwargs.get("read_data")["status"] == 200:
             self.mock_http_request(
@@ -830,6 +838,11 @@ class TestVerificationBehaviour(BaseCeramicWriteTest):
                 body=kwargs.get("body").encode(),
             ),
         )
+
+        # necessary for the build_data_from_commits
+        for _ in range(50):
+            self.behaviour.act_wrapper()
+
         self.complete(test_case.event)
 
 
@@ -912,4 +925,9 @@ class TestVerificationBehaviourApiError(BaseCeramicWriteTest):
                 body=kwargs.get("body").encode(),
             ),
         )
+
+        # necessary for the build_data_from_commits
+        for _ in range(50):
+            self.behaviour.act_wrapper()
+
         self.complete(test_case.event)

@@ -104,7 +104,8 @@ class Ceramic:
         previous_cid_str = data["commits"][-1]["cid"]
 
         # Rebuild the current data
-        return build_data_from_commits(data["commits"]), genesis_cid_str, previous_cid_str
+        commit_data = yield from build_data_from_commits(data["commits"])
+        return commit_data, genesis_cid_str, previous_cid_str
 
     def create_stream(self, did: str, did_seed: str, data: dict, extra_metadata: dict = {}) -> str:
         """Create a stream"""

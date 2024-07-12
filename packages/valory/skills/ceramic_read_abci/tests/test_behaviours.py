@@ -272,6 +272,10 @@ class TestStreamReadBehaviour(BaseCeramicReadTest):
             ),
         )
 
+        # necessary for the build_data_from_commits
+        for _ in range(50):
+            self.behaviour.act_wrapper()
+
         self.complete(test_case.event)
 
 

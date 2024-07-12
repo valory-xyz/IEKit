@@ -23,6 +23,7 @@ import hashlib
 import json
 import os
 from base64 import b64decode, b64encode, urlsafe_b64decode, urlsafe_b64encode
+from typing import Generator
 
 import dag_cbor
 import jsonpatch
@@ -101,12 +102,17 @@ def sign_ed25519(payload: dict, did: str, seed: str):
     return json.dumps(signature_data, sort_keys=True)
 
 
-def build_data_from_commits(commits):
+def build_data_from_commits(commits) -> Generator:
     """Rebuild the current data from the diff patches"""
 
     # Iterate over the commits and get the data diffs
     patches = []
     for commit in commits:
+        # this loop might take a long time
+        # we do not want to starve the rest of the behaviour
+        # we yield which freezes this loop here until the
+        # it's caller sends a tick to it
+        yield
         # Skip anchor commits
         if "linkedBlock" not in commit["value"].keys():
             continue  # pragma: no cover
@@ -125,17 +131,30 @@ def build_data_from_commits(commits):
 
     # If the first patch only contains operations, we start with an empty object.
     # In other case, the first patch is the base content.
-    if all(
-        type(ops) == dict
-        and all(field in ops.keys() for field in ["op", "value", "path"])
-        for ops in patches[0]
-    ):
+    valid = True
+    for ops in patches[0]:
+        # this loop also might take a long time
+        yield
+
+        if not isinstance(ops, dict):
+            valid = False
+            break
+        for field in ["op", "value", "path"]:
+            if field not in ops:
+                valid = False
+                break
+        if not valid:
+            break
+
+    if valid:
         content = {}
     else:
         content = patches.pop(0)
 
     for patch in patches:
         content = jsonpatch.apply_patch(content, patch)
+        # this loop also might take a long time
+        yield
 
     return content
 
