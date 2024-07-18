@@ -29,7 +29,7 @@ contracts: []
 protocols:
 - valory/twitter:0.1.0:bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u
+- valory/abstract_round_abci:0.1.0:bafybeie7wgjvmht3jaacn5ilkxc3ktb5gxvctivl3ko3jbpgmtxv2ogm3y
 behaviours:
   main:
     args: {}

@@ -12,11 +12,15 @@ fingerprint:
   dialogues.py: bafybeia7zebqkgbubzenskcrgjocgyd2pc3q5yxcjddte4emys32qt6xpm
   fsm_specification.yaml: bafybeienycmc4m3wurhlsuj7hfumrsx5id3qfdn6eisoze4gdzeeojlrbu
   handlers.py: bafybeialoqm2byetvqqrjujhk3qzgdgsrzmhakmzwdop2cr24kswipl6ti
-  models.py: bafybeigtoewmf4czfn2wfzh5jrer46plir3fqubcbono6pmebiq5bipdjy
+  models.py: bafybeifdf3wx5dhkp6diybogeynug7solhpxz3ff7gg4yancuqoasqhree
   payloads.py: bafybeietg3ceghstjx5bytqv2t377k5pyww3cdq7zg7d7lxhscwmfelai4
   prompts.py: bafybeiaod4e6knvmjl6jjqnlpcushy6iab4sfax2tevskxuirfu36afeta
   rounds.py: bafybeiffkf7c6lriymvheyxufyiwaaswkpxjjxpgvc25jrpglenc2rhje4
   tests/__init__.py: bafybeidq5udnnehzozdjfpk3kdckymq4jvuwmvsjkhpr3ngggc3dhv4uza
+  tests/test_behaviours.py: bafybeigxpqt5p6sbakw7zsuizl7fofe62miiztj2f35frmazbnxy4lygua
+  tests/test_dialogues.py: bafybeidogs4455nqgl54wj6ed6zh6jzmsg4aaavpibeqexs5fx3um57e7a
+  tests/test_handlers.py: bafybeiggkevxvq52fotuwg265xrqfqmfoe3jjamvxdldxlnonu77ctioua
+  tests/test_models.py: bafybeigtk3gexs7ukeeojbkcawkouuq3mav56f5oi5wbt7q3yzd6do6buq
   tests/test_payloads.py: bafybeif6aj5cjp7uhcvuxa4s2zuqk6s53oxsbx5uxlpudgu7aqhqn7djvy
   tests/test_rounds.py: bafybeiei2srj4ggs3pln7vxxt4walhrtsegveimxdcbckyng2i6wv53vy4
 fingerprint_ignore_patterns: []
@@ -26,8 +30,8 @@ contracts: []
 protocols:
 - valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u
-- valory/decision_making_abci:0.1.0:bafybeigsywkfb4lujy4y2c5tsmr2iulq7s6uad7uv2fbiwv7awxz5wfbi4
+- valory/abstract_round_abci:0.1.0:bafybeie7wgjvmht3jaacn5ilkxc3ktb5gxvctivl3ko3jbpgmtxv2ogm3y
+- valory/decision_making_abci:0.1.0:bafybeidbiut2ptq5st4npib5ugoocumljkxurkwuvszgnyip2v5zn7kdyq
 behaviours:
   main:
     args: {}
