@@ -50,10 +50,10 @@
         "connection/valory/p2p_libp2p_client/0.1.0": "bafybeid3xg5k2ol5adflqloy75ibgljmol6xsvzvezebsg7oudxeeolz7e",
         "connection/valory/http_server/0.22.0": "bafybeihpgu56ovmq4npazdbh6y6ru5i7zuv6wvdglpxavsckyih56smu7m",
         "skill/valory/abstract_abci/0.1.0": "bafybeieeaseuy5rbbw465knz27vccvpkfge43q7isl7fkdlfapwd7bpi24",
-        "skill/valory/reset_pause_abci/0.1.0": "bafybeigrdlxed3xlsnxtjhnsbl3cojruihxcqx4jxhgivkd5i2fkjncgba",
-        "skill/valory/registration_abci/0.1.0": "bafybeibc7duasoaw5b4ene5oxfba2dmdzstsrws6ipi57ymgdtoxjadn54",
-        "skill/valory/abstract_round_abci/0.1.0": "bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u",
-        "skill/valory/termination_abci/0.1.0": "bafybeib5l7jhew5ic6iq24dd23nidcoimzqkrk556gqywhoziatj33zvwm",
-        "skill/valory/transaction_settlement_abci/0.1.0": "bafybeic7q7recyka272udwcupblwbkc3jkodgp74fvcdxb7urametg5dae"
+        "skill/valory/reset_pause_abci/0.1.0": "bafybeihknfm47yvdsnkiu2jt44na5ikasihwqp3gh7c2pbpgiyxlhhlyr4",
+        "skill/valory/registration_abci/0.1.0": "bafybeiea6rkbewokurqjxvfqf4hfiyy3543kb23n7lca32osp42njzoie4",
+        "skill/valory/abstract_round_abci/0.1.0": "bafybeie7wgjvmht3jaacn5ilkxc3ktb5gxvctivl3ko3jbpgmtxv2ogm3y",
+        "skill/valory/termination_abci/0.1.0": "bafybeigjmibnmhbs26qtv2df7xef6tph3ig6p5jgcoaeoubucph4422uha",
+        "skill/valory/transaction_settlement_abci/0.1.0": "bafybeidle3ubrqak7crzomkpqm3kq5apbae5q4gf23d6oolvlfmvvcefrm"
     }
 }
