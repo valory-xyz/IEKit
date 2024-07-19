@@ -28,8 +28,8 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeie7wgjvmht3jaacn5ilkxc3ktb5gxvctivl3ko3jbpgmtxv2ogm3y
-- valory/ceramic_read_abci:0.1.0:bafybeiaajinrt5mgxncgtvvuj3o7ef4nl2s4oqptugznno52halbws27h4
+- valory/abstract_round_abci:0.1.0:bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u
+- valory/ceramic_read_abci:0.1.0:bafybeiede3ehp4bfpbk23gncj52goq62rd3rm5wwlbyaexxrfohucdcpia
 behaviours:
   main:
     args: {}
