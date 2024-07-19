@@ -27,8 +27,13 @@ from typing import Any, Dict, Optional, Type, cast
 from unittest.mock import patch
 
 import pytest
+from aea.configurations.data_types import PublicId
 from aea.exceptions import AEAActException
 
+from packages.valory.connections.openai.connection import (
+    PUBLIC_ID as LLM_CONNECTION_PUBLIC_ID,
+)
+from packages.valory.protocols.llm import LlmMessage
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.valory.skills.abstract_round_abci.behaviour_utils import (
     BaseBehaviour,
@@ -915,9 +920,7 @@ class TestOlasWeekEvaluationBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        most_voted_keeper_address=[
-                            "test_agent_address"
-                        ],
+                        most_voted_keeper_address="test_agent_address",
                         weekly_tweets=DUMMY_WEEKLY_TWEETS
                     ),
                 event=Event.DONE,
