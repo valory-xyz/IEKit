@@ -25,7 +25,7 @@ import random
 import re
 from abc import ABC
 from datetime import date, datetime, timedelta
-from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
+from typing import Any, Dict, Generator, List, Optional, Set, Tuple, Type, cast
 
 from twitter_text import parse_tweet
 
@@ -467,16 +467,6 @@ class OlasWeekTweetCollectionBehaviour(OlasWeekBaseBehaviour):
         number_of_tweets_remaining_today = (
             self.params.max_tweet_pulls_allowed - number_of_tweets_pulled_today
         )
-        if number_of_tweets_remaining_today <= 0:
-            self.context.logger.info(
-                "Cannot retrieve tweets, max number of tweets reached for today"
-            )
-            return {
-                "tweets": None,
-                "error": ERROR_API_LIMITS,
-                "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
-                "sleep_until": self.synchronized_data.sleep_until,
-            }
 
         # Calculate the starting time (7 days ago)
         now_ts = cast(
@@ -633,7 +623,7 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
         """Indicates if the current agent is one of the sender or not."""
         return (
             self.context.agent_address
-            != self.synchronized_data.most_voted_keeper_address
+            not in self.synchronized_data.most_voted_keeper_addresses
         )
 
     def async_act(self) -> Generator[None, None, None]:
@@ -678,7 +668,6 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
             )
 
             week_number, year = self.get_week_number_and_year()
-
             summary_tweets = yield from self.evaluate_summary(text, week_number, year)
 
             sender = self.context.agent_address
@@ -693,7 +682,7 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
 
         self.set_done()
 
-    def get_week_number_and_year(self) -> int:
+    def get_week_number_and_year(self) -> Tuple[Any, Any]:
         """Gets the olas week number"""
         current_date = date.today()
         iso_calendar = current_date.isocalendar()

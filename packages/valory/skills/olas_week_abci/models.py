@@ -73,7 +73,7 @@ class OpenAICalls:
         return self._calls_made_in_window >= self._calls_allowed_in_window
 
     def reset(self, current_time: float) -> None:
-        """Reset the window if required.."""
+        """Reset the window if required."""
         if not self.has_window_expired(current_time=current_time):
             return
         self._calls_made_in_window = 0
