@@ -297,18 +297,10 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
 
     def complete(self, event: Event) -> None:
         """Complete test"""
-        print(1)
         self.behaviour.act_wrapper()
-        print(2)
         self.mock_a2a_transaction()
-        print(3)
         self._test_done_flag_set()
         self.end_round(done_event=event)
-
-        print(
-            f"CURRENT BEHAVIOUR: {self.behaviour.current_behaviour.auto_behaviour_id()}"
-        )
-        print(f"BEHAVIOUR CLASS: {self.behaviour_class.auto_behaviour_id()}")
         assert (
             self.behaviour.current_behaviour.auto_behaviour_id()  # type: ignore
             == self.next_behaviour_class.auto_behaviour_id()
@@ -540,23 +532,30 @@ class TestTweetCollectionBehaviourSerial(BaseBehaviourTest):
             ceramic_db.load(test_case.ceramic_db)
         self.fast_forward(test_case.initial_data, ceramic_db)
         self.behaviour.act_wrapper()
-        for i in range(len(kwargs.get("request_urls"))):
-            self.mock_http_request(
-                request_kwargs=dict(
-                    method="GET",
-                    headers=kwargs.get("request_headers")[i],
-                    version="",
-                    url=kwargs.get("request_urls")[i],
-                ),
-                response_kwargs=dict(
-                    version="",
-                    status_code=kwargs.get("status_code"),
-                    status_text="",
-                    body=kwargs.get("response_bodies")[i].encode(),
-                    url=kwargs.get("response_urls")[i],
-                ),
-            )
+        # for i in range(len(kwargs.get("request_urls"))):
+        #     self.mock_http_request(
+        #         request_kwargs=dict(
+        #             method="GET",
+        #             headers=kwargs.get("request_headers")[i],
+        #             version="",
+        #             url=kwargs.get("request_urls")[i],
+        #         ),
+        #         response_kwargs=dict(
+        #             version="",
+        #             status_code=kwargs.get("status_code"),
+        #             status_text="",
+        #             body=kwargs.get("response_bodies")[i].encode(),
+        #             url=kwargs.get("response_urls")[i],
+        #         ),
+        #     )
         self.complete(test_case.event)
+
+    def test_not_sender(self):
+        """Test the not sender act."""
+
+        assert not self.fast_forward({"most_voted_keeper_addresses": ["dummy_address", "dummy_address"]})
+        self.behaviour.act_wrapper()
+        self._test_done_flag_set()
 
 
 class TestTweetsCollectionBehaviourAPIError(BaseBehaviourTest):
@@ -898,3 +897,37 @@ class TestOlasWeekSelectKeepersBehaviour(BaseBehaviourTest):
 
         exception_message = "Cannot continue if all the keepers have been blacklisted!"
         assert exception_message in str(excinfo.value)
+
+
+class TestOlasWeekEvaluationBehaviour(BaseBehaviourTest):
+    """Test evaluation behaviour."""
+    path_to_skill = PACKAGE_DIR
+
+    behaviour_class = OlasWeekEvaluationBehaviour
+
+    @pytest.mark.parametrize(
+        "test_case",
+        [
+            BehaviourTestCase(
+                name="Happy path",
+                initial_data=dict(
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                        most_voted_keeper_address=[
+                            "test_agent_address"
+                        ],
+                        weekly_tweets=DUMMY_WEEKLY_TWEETS
+                    ),
+                event=Event.DONE,
+                next_behaviour_class=OlasWeekDecisionMakingBehaviour,
+            ),
+        ]
+    )
+    def test_run(self, test_case: BehaviourTestCase) -> None:
+        """Run tests."""
+
+        self.next_behaviour_class = test_case.next_behaviour_class
+        self.fast_forward(test_case.initial_data)
+        self.complete(test_case.event)
