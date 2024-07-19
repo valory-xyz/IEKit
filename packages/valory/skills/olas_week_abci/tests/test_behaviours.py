@@ -27,7 +27,6 @@ from typing import Any, Dict, Optional, Type, cast
 from unittest.mock import patch
 
 import pytest
-from aea.configurations.data_types import PublicId
 from aea.exceptions import AEAActException
 
 from packages.valory.connections.openai.connection import (
@@ -311,6 +310,41 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
             == self.next_behaviour_class.auto_behaviour_id()
         )
 
+    def mock_llm_request(self, request_kwargs: Dict, response_kwargs: Dict) -> None:
+        """
+        Mock LLM request.
+
+        :param request_kwargs: keyword arguments for request check.
+        :param response_kwargs: keyword arguments for mock response.
+        """
+
+        self.assert_quantity_in_outbox(1)
+        actual_llm_message = self.get_message_from_outbox()
+        assert actual_llm_message is not None, "No message in outbox."  # nosec
+        has_attributes, error_str = self.message_has_attributes(
+            actual_message=actual_llm_message,
+            message_type=LlmMessage,
+            to=str(LLM_CONNECTION_PUBLIC_ID),
+            sender=str(self.skill.skill_context.skill_id),
+            **request_kwargs,
+        )
+
+        assert has_attributes, error_str  # nosec
+        incoming_message = self.build_incoming_message(
+            message_type=LlmMessage,
+            dialogue_reference=(
+                actual_llm_message.dialogue_reference[0],
+                "stub",
+            ),
+            target=actual_llm_message.message_id,
+            message_id=-1,
+            to=str(self.skill.skill_context.skill_id),
+            sender=str(LLM_CONNECTION_PUBLIC_ID),
+            **response_kwargs,
+        )
+        self.llm_handler.handle(incoming_message)
+        self.behaviour.act_wrapper()
+
 
 class TestOlasWeekOpenAICallCheckBehaviour(BaseBehaviourTest):
     """Tests OlasWeekOpenAICallCheckBehaviour"""
@@ -537,28 +571,14 @@ class TestTweetCollectionBehaviourSerial(BaseBehaviourTest):
             ceramic_db.load(test_case.ceramic_db)
         self.fast_forward(test_case.initial_data, ceramic_db)
         self.behaviour.act_wrapper()
-        # for i in range(len(kwargs.get("request_urls"))):
-        #     self.mock_http_request(
-        #         request_kwargs=dict(
-        #             method="GET",
-        #             headers=kwargs.get("request_headers")[i],
-        #             version="",
-        #             url=kwargs.get("request_urls")[i],
-        #         ),
-        #         response_kwargs=dict(
-        #             version="",
-        #             status_code=kwargs.get("status_code"),
-        #             status_text="",
-        #             body=kwargs.get("response_bodies")[i].encode(),
-        #             url=kwargs.get("response_urls")[i],
-        #         ),
-        #     )
         self.complete(test_case.event)
 
     def test_not_sender(self):
         """Test the not sender act."""
 
-        assert not self.fast_forward({"most_voted_keeper_addresses": ["dummy_address", "dummy_address"]})
+        assert not self.fast_forward(
+            {"most_voted_keeper_addresses": ["not_my_address", "not_my_address"]}
+        )
         self.behaviour.act_wrapper()
         self._test_done_flag_set()
 
@@ -906,6 +926,7 @@ class TestOlasWeekSelectKeepersBehaviour(BaseBehaviourTest):
 
 class TestOlasWeekEvaluationBehaviour(BaseBehaviourTest):
     """Test evaluation behaviour."""
+
     path_to_skill = PACKAGE_DIR
 
     behaviour_class = OlasWeekEvaluationBehaviour
@@ -916,21 +937,36 @@ class TestOlasWeekEvaluationBehaviour(BaseBehaviourTest):
             BehaviourTestCase(
                 name="Happy path",
                 initial_data=dict(
-                        most_voted_keeper_addresses=[
-                            "test_agent_address",
-                            "test_agent_address",
-                        ],
-                        most_voted_keeper_address="test_agent_address",
-                        weekly_tweets=DUMMY_WEEKLY_TWEETS
-                    ),
+                    most_voted_keeper_addresses=[
+                        "test_agent_address",
+                        "test_agent_address",
+                    ],
+                    weekly_tweets=DUMMY_WEEKLY_TWEETS,
+                ),
                 event=Event.DONE,
                 next_behaviour_class=OlasWeekDecisionMakingBehaviour,
             ),
-        ]
+        ],
     )
     def test_run(self, test_case: BehaviourTestCase) -> None:
         """Run tests."""
 
         self.next_behaviour_class = test_case.next_behaviour_class
         self.fast_forward(test_case.initial_data)
+        self.behaviour.act_wrapper()
+        self.mock_llm_request(
+            request_kwargs=dict(performative=LlmMessage.Performative.REQUEST),
+            response_kwargs=dict(
+                performative=LlmMessage.Performative.RESPONSE, value="dummy"
+            ),
+        )
         self.complete(test_case.event)
+
+    def test_not_sender(self):
+        """Test the not sender act."""
+
+        assert not self.fast_forward(
+            {"most_voted_keeper_addresses": ["not_my_address", "not_my_address"]}
+        )
+        self.behaviour.act_wrapper()
+        self._test_done_flag_set()
