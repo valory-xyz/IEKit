@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -23,8 +23,14 @@ from datetime import datetime
 import pytest
 
 from packages.valory.skills.abstract_round_abci.test_tools.base import DummyContext
-from packages.valory.skills.abstract_round_abci.tests.test_models import BASE_DUMMY_PARAMS
-from packages.valory.skills.twitter_scoring_abci.models import SharedState, OpenAICalls, Params
+from packages.valory.skills.abstract_round_abci.tests.test_models import (
+    BASE_DUMMY_PARAMS,
+)
+from packages.valory.skills.twitter_scoring_abci.models import (
+    OpenAICalls,
+    Params,
+    SharedState,
+)
 
 
 class TestSharedState:
@@ -33,6 +39,7 @@ class TestSharedState:
     def test_initialization(self) -> None:
         """Test initialization."""
         SharedState(name="", skill_context=DummyContext())
+
 
 class TestOpenAICalls:
     """Test OpanAICalls of TwitterScoringAbci."""

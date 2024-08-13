@@ -494,28 +494,28 @@ class TestMentionsCollectionBehaviourSerial(BaseBehaviourTest):
                 },
             ),
             (
-                    BehaviourTestCase(
-                        "15 minute window limit",
-                        initial_data=dict(
-                            most_voted_keeper_addresses=[
-                                "test_agent_address",
-                                "test_agent_address",
-                            ],
-                            sleep_until=datetime.now().timestamp() + 200.00
-                        ),
-                        event=Event.DONE,
-                        ceramic_db={
-                            "module_data": {
-                                "twitter": {
-                                    "number_of_tweets_pulled_today": 10000,
-                                    "last_tweet_pull_window_reset": 1993903085,
-                                }
-                            }
-                        },
+                BehaviourTestCase(
+                    "15 minute window limit",
+                    initial_data=dict(
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                        sleep_until=datetime.now().timestamp() + 200.00,
                     ),
-                    {
-                        "request_urls": [],
+                    event=Event.DONE,
+                    ceramic_db={
+                        "module_data": {
+                            "twitter": {
+                                "number_of_tweets_pulled_today": 10000,
+                                "last_tweet_pull_window_reset": 1993903085,
+                            }
+                        }
                     },
+                ),
+                {
+                    "request_urls": [],
+                },
             ),
         ],
     )
@@ -1240,10 +1240,7 @@ class BaseSelectKeepersBehaviourTest(BaseBehaviourTest):
     select_keeper_behaviour_class: Type[BaseBehaviour]
     next_behaviour_class: Type[BaseBehaviour]
 
-    def select_keeper_test(
-        self,
-        test_case
-    ) -> None:
+    def select_keeper_test(self, test_case) -> None:
         """Test select keeper agent."""
         participants = [self.skill.skill_context.agent_address, "a_1", "a_2"]
         self.fast_forward_to_behaviour(
@@ -1300,10 +1297,8 @@ class TestTwitterSelectKeepersCeramicBehaviour(BaseSelectKeepersBehaviourTest):
             ),
         ],
     )
-    def test_select_keeper(
-        self,
-        test_case
-    ) -> None:
+    def test_select_keeper(self, test_case) -> None:
+        """Test select keeper."""
         super().select_keeper_test(test_case)
 
     def test_select_keeper_blacklisted(self) -> None:
