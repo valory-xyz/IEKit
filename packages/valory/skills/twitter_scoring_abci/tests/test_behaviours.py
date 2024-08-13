@@ -26,6 +26,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional, Type, cast
 
 import pytest
+from aea.exceptions import AEAActException
 
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.valory.skills.abstract_round_abci.behaviour_utils import (
@@ -492,6 +493,30 @@ class TestMentionsCollectionBehaviourSerial(BaseBehaviourTest):
                     "request_urls": [],
                 },
             ),
+            (
+                BehaviourTestCase(
+                    "15 minute window limit",
+                    initial_data=dict(
+                        most_voted_keeper_addresses=[
+                            "test_agent_address",
+                            "test_agent_address",
+                        ],
+                        sleep_until=datetime.now().timestamp() + 200.00,
+                    ),
+                    event=Event.DONE,
+                    ceramic_db={
+                        "module_data": {
+                            "twitter": {
+                                "number_of_tweets_pulled_today": 10000,
+                                "last_tweet_pull_window_reset": 1993903085,
+                            }
+                        }
+                    },
+                ),
+                {
+                    "request_urls": [],
+                },
+            ),
         ],
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
@@ -827,6 +852,15 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                 ),
             )
         self.complete(test_case.event)
+
+    def test_not_sender(self):
+        """Test the not sender act."""
+
+        assert not self.fast_forward(
+            {"most_voted_keeper_addresses": ["not_my_address", "not_my_address"]}
+        )
+        self.behaviour.act_wrapper()
+        self._test_done_flag_set()
 
 
 class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
@@ -1206,9 +1240,7 @@ class BaseSelectKeepersBehaviourTest(BaseBehaviourTest):
     select_keeper_behaviour_class: Type[BaseBehaviour]
     next_behaviour_class: Type[BaseBehaviour]
 
-    def test_select_keeper(
-        self,
-    ) -> None:
+    def select_keeper_test(self, test_case) -> None:
         """Test select keeper agent."""
         participants = [self.skill.skill_context.agent_address, "a_1", "a_2"]
         self.fast_forward_to_behaviour(
@@ -1222,6 +1254,9 @@ class BaseSelectKeepersBehaviourTest(BaseBehaviourTest):
                             "56cbde9e9bbcbdcaf92f183c678eaa5288581f06b1c9c7f884ce911776727688"
                         ],
                         most_voted_keeper_addresses=[["a_1", "a_2"]],
+                        blacklisted_keepers=test_case.initial_data[
+                            "blacklisted_keepers"
+                        ],
                     ),
                 )
             ),
@@ -1246,3 +1281,63 @@ class TestTwitterSelectKeepersCeramicBehaviour(BaseSelectKeepersBehaviourTest):
 
     select_keeper_behaviour_class = TwitterSelectKeepersBehaviour
     next_behaviour_class = TwitterDecisionMakingBehaviour
+
+    @pytest.mark.parametrize(
+        "test_case",
+        [
+            BehaviourTestCase(
+                name="Happy path",
+                initial_data={"blacklisted_keepers": []},
+                event=Event.DONE,
+            ),
+            BehaviourTestCase(
+                name="Happy path",
+                initial_data={"blacklisted_keepers": ["a_1"]},
+                event=Event.DONE,
+            ),
+        ],
+    )
+    def test_select_keeper(self, test_case) -> None:
+        """Test select keeper."""
+        super().select_keeper_test(test_case)
+
+    def test_select_keeper_blacklisted(self) -> None:
+        """Test select keeper agent when all agents are blacklisted."""
+        self.select_keeper_behaviour_class = TwitterSelectKeepersBehaviour
+        self.next_behaviour_class = TwitterDecisionMakingBehaviour
+        participants = [
+            self.skill.skill_context.agent_address,
+            "a_0123456789012345678901234567890123456789",
+            "a_1234567890123456789012345678901234567890",
+        ]
+
+        self.fast_forward_to_behaviour(
+            behaviour=self.behaviour,
+            behaviour_id=self.select_keeper_behaviour_class.auto_behaviour_id(),
+            synchronized_data=SynchronizedData(
+                AbciAppDB(
+                    setup_data=dict(
+                        participants=[participants],
+                        most_voted_randomness=[
+                            "56cbde9e9bbcbdcaf92f183c678eaa5288581f06b1c9c7f884ce911776727688"
+                        ],
+                        most_voted_keeper_addresses=[["a_1", "a_2"]],
+                        blacklisted_keepers=[
+                            "a_0123456789012345678901234567890123456789a_1234567890123456789012345678901234567890test_agent_address"
+                        ],
+                    ),
+                )
+            ),
+        )
+        assert (
+            cast(
+                BaseBehaviour,
+                cast(BaseBehaviour, self.behaviour.current_behaviour),
+            ).behaviour_id
+            == self.select_keeper_behaviour_class.auto_behaviour_id()
+        )
+        with pytest.raises(AEAActException) as excinfo:
+            self.behaviour.act_wrapper()
+
+        exception_message = "Cannot continue if all the keepers have been blacklisted!"
+        assert exception_message in str(excinfo.value)
