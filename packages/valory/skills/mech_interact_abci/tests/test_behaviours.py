@@ -126,6 +126,12 @@ class TestMechRequestBehaviour(BaseMechInteractTest):
                     "Happy path - no mech request",
                     initial_data=dict(mech_requests=[]),
                     event=Event.DONE,
+                    return_value={
+                        "ledger": None,
+                        "contract": None,
+                        "metadata_hash": None,
+                        "multisend_safe_tx_hash": None
+                    }
                 ),
                 {},
             ),
@@ -194,8 +200,6 @@ class TestMechRequestBehaviour(BaseMechInteractTest):
                 dummy_generator(test_case.return_value["multisend_safe_tx_hash"])
             ):
                 self.behaviour.act_wrapper()
-                # self.behaviour.act_wrapper()
-                # self.behaviour.act_wrapper()
                 self.complete(test_case.event)
 
 
