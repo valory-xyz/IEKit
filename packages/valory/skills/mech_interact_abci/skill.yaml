@@ -25,7 +25,7 @@ fingerprint:
   states/request.py: bafybeifdkqn4o2tx57yflnxfhy6eoy42z7bdpadcevre64aw7l2hh2kpjy
   states/response.py: bafybeibaxnp2oxwjptoq7qzm6o7ww2qrdj2vnxzg2qt523vz2ftqzx5hyi
   tests/__init__.py: bafybeifojfnffwlsv6aiku25nwyjwm7h4m45yci3fgmaawpeoyoogzonum
-  tests/test_behaviours.py: bafybeidj7git7zaego7k75eejtxlr3usj6wnnqisu7urqwvalpwh5w7nyq
+  tests/test_behaviours.py: bafybeid34kv6ho6xzynppy3olrsuoau5ia6gpxy5ii4wkog2piqn2rmfre
   tests/test_dialogues.py: bafybeig6uzk7fklieyxapemiobdvv5tyx7hgdkdpl4vnacohgw2ecphdpq
   tests/test_handlers.py: bafybeidwrmekr5tydmehvkolyksw37sah5js7buy3ca5fxkpgkppmgb3wi
   tests/test_models.py: bafybeifakxkpvq6p6nkva3kpy7odnefvjnjurcva5anwlxv6qlo6agxtyu
