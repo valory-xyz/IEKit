@@ -20,7 +20,7 @@
 """This module contains the response state of the mech interaction abci app."""
 
 import json
-from typing import Any, Dict, Generator, List, Optional, Callable
+from typing import Any, Callable, Dict, Generator, List, Optional
 
 from web3.constants import ADDRESS_ZERO
 

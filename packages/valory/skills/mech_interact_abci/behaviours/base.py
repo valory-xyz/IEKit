@@ -35,7 +35,11 @@ from packages.valory.skills.abstract_round_abci.behaviour_utils import (
     BaseBehaviour,
     TimeoutException,
 )
-from packages.valory.skills.mech_interact_abci.models import MechParams, MultisendBatch, MechMarketplaceConfig
+from packages.valory.skills.mech_interact_abci.models import (
+    MechMarketplaceConfig,
+    MechParams,
+    MultisendBatch,
+)
 from packages.valory.skills.mech_interact_abci.states.base import SynchronizedData
 
 

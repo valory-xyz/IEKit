@@ -392,7 +392,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
     def _build_request_data(self) -> WaitableConditionType:
         """Get the request tx data encoded."""
-        if  self.params.use_mech_marketplace:
+        if self.params.use_mech_marketplace:
             status = yield from self._mech_marketplace_contract_interact(
                 "get_request_data",
                 "data",

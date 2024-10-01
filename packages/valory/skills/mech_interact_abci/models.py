@@ -20,7 +20,7 @@
 """This module contains the models for the abci skill of MechInteractAbciApp."""
 
 from dataclasses import dataclass
-from typing import Any, Optional, Dict
+from typing import Any, Dict, Optional
 
 from aea.exceptions import enforce
 from hexbytes import HexBytes
@@ -72,7 +72,9 @@ class MechMarketplaceConfig:
                 "priority_mech_staking_instance_address"
             ],
             priority_mech_service_id=data["priority_mech_service_id"],
-            requester_staking_instance_address=data["requester_staking_instance_address"],
+            requester_staking_instance_address=data[
+                "requester_staking_instance_address"
+            ],
             response_timeout=data["response_timeout"],
         )
 
@@ -101,12 +103,13 @@ class MechParams(BaseParams):
             "mech_interaction_sleep_time", kwargs, int
         )
         self.use_mech_marketplace = self._ensure("use_mech_marketplace", kwargs, bool)
-        self.mech_marketplace_config: MechMarketplaceConfig = MechMarketplaceConfig.from_dict(
-            kwargs["mech_marketplace_config"]
+        self.mech_marketplace_config: MechMarketplaceConfig = (
+            MechMarketplaceConfig.from_dict(kwargs["mech_marketplace_config"])
         )
         enforce(
             not self.use_mech_marketplace
-            or self.mech_contract_address == self.mech_marketplace_config.priority_mech_address,
+            or self.mech_contract_address
+            == self.mech_marketplace_config.priority_mech_address,
             "The mech contract address must be the same as the priority mech address when using the marketplace.",
         )
         super().__init__(*args, **kwargs)
