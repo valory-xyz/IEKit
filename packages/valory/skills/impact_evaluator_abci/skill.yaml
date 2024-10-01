@@ -26,7 +26,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u
 - valory/ceramic_read_abci:0.1.0:bafybeiede3ehp4bfpbk23gncj52goq62rd3rm5wwlbyaexxrfohucdcpia
 - valory/generic_scoring_abci:0.1.0:bafybeidxytbreu7sudoggnfjxpbfxsxwbis6dipokkq6uo23xaautnwca4
-- valory/twitter_scoring_abci:0.1.0:bafybeiedultjq4wokxuchbr4nv7m3y3mqq6qwtir6m5epggnbgew6yb24i
+- valory/twitter_scoring_abci:0.1.0:bafybeiabxbr7nqubb6dhgfb4tsjxxonetjavtogkpte5menkbsubv55lwe
 - valory/ceramic_write_abci:0.1.0:bafybeiemid3ipekyqupbqpfw55g7b2wwx56g2ita73rjalk6fyqgneroam
 - valory/dynamic_nft_abci:0.1.0:bafybeietq6nqkeze6esw5dwa4cjajluzd2tvg24hlg2pihxz2v67vxorpu
 - valory/registration_abci:0.1.0:bafybeibc7duasoaw5b4ene5oxfba2dmdzstsrws6ipi57ymgdtoxjadn54
@@ -37,7 +37,7 @@ skills:
 - valory/llm_abci:0.1.0:bafybeibmckwphs5zqdfnutktwgq7bxfw2auhsxezoopkep5dadkuwqvwgy
 - valory/twitter_write_abci:0.1.0:bafybeid377kr5f3dmb5nyhvucglyaaqkuhthxkfosgl54zskwmsuwz56ie
 - valory/olas_week_abci:0.1.0:bafybeifvhx6issf3xzesjihtbl63ymfrdvzfp4lqrg7liesyes4aiaydfm
-- valory/mech_interact_abci:0.1.0:bafybeigto5ssrbrbqmeoc6wijcly2klmrhfcnaioa5u3wsofdm7bccowcq
+- valory/mech_interact_abci:0.1.0:bafybeifmc5starczahh6axluasfoh7owqr4y7ivse2phspcrmx4mqpo4ti
 behaviours:
   main:
     args: {}
@@ -199,6 +199,14 @@ models:
       tweet_consensus_veolas: 2000000
       mech_chain_id: gnosis
       mech_interaction_sleep_time: 10
+      use_mech_marketplace: false
+      mech_marketplace_config:
+        mech_marketplace_address: '0x0000000000000000000000000000000000000000'
+        priority_mech_address: '0x0000000000000000000000000000000000000000'
+        priority_mech_staking_instance_address: '0x0000000000000000000000000000000000000000'
+        priority_mech_service_id: 0
+        requester_staking_instance_address: '0x0000000000000000000000000000000000000000'
+        response_timeout: 300
     class_name: Params
   randomness_api:
     args:

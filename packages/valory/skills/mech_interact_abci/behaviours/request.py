@@ -392,13 +392,28 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
     def _build_request_data(self) -> WaitableConditionType:
         """Get the request tx data encoded."""
-        status = yield from self._mech_contract_interact(
-            "get_request_data",
-            "data",
-            get_name(MechRequestBehaviour.request_data),
-            request_data=self._v1_hex_truncated,
-            chain_id=self.params.mech_chain_id,
-        )
+        if  self.params.use_mech_marketplace:
+            status = yield from self._mech_marketplace_contract_interact(
+                "get_request_data",
+                "data",
+                get_name(MechRequestBehaviour.request_data),
+                request_data=self._v1_hex_truncated,
+                priority_mech=self.mech_marketplace_config.priority_mech_address,
+                priority_mech_staking_instance=self.mech_marketplace_config.priority_mech_staking_instance_address,
+                priority_mech_service_id=self.mech_marketplace_config.priority_mech_service_id,
+                requester_staking_instance=self.mech_marketplace_config.requester_staking_instance_address,
+                requester_service_id=self.params.on_chain_service_id,
+                response_timeout=self.mech_marketplace_config.response_timeout,
+                chain_id=self.params.mech_chain_id,
+            )
+        else:
+            status = yield from self._mech_contract_interact(
+                "get_request_data",
+                "data",
+                get_name(MechRequestBehaviour.request_data),
+                request_data=self._v1_hex_truncated,
+                chain_id=self.params.mech_chain_id,
+            )
 
         if status:
             batch = MultisendBatch(

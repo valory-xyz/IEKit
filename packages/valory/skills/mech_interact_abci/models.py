@@ -20,7 +20,7 @@
 """This module contains the models for the abci skill of MechInteractAbciApp."""
 
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any, Optional, Dict
 
 from aea.exceptions import enforce
 from hexbytes import HexBytes
@@ -51,6 +51,32 @@ class SharedState(BaseSharedState):
     abci_app_cls = MechInteractAbciApp
 
 
+@dataclass(frozen=True)
+class MechMarketplaceConfig:
+    """The configuration for the Mech marketplace."""
+
+    mech_marketplace_address: str
+    priority_mech_address: str
+    priority_mech_staking_instance_address: str
+    priority_mech_service_id: int
+    requester_staking_instance_address: str
+    response_timeout: int
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "MechMarketplaceConfig":
+        """Create an instance from a dictionary."""
+        return cls(
+            mech_marketplace_address=data["mech_marketplace_address"],
+            priority_mech_address=data["priority_mech_address"],
+            priority_mech_staking_instance_address=data[
+                "priority_mech_staking_instance_address"
+            ],
+            priority_mech_service_id=data["priority_mech_service_id"],
+            requester_staking_instance_address=data["requester_staking_instance_address"],
+            response_timeout=data["response_timeout"],
+        )
+
+
 class MechParams(BaseParams):
     """The mech interact abci skill's parameters."""
 
@@ -73,6 +99,15 @@ class MechParams(BaseParams):
         )
         self.mech_interaction_sleep_time: int = self._ensure(
             "mech_interaction_sleep_time", kwargs, int
+        )
+        self.use_mech_marketplace = self._ensure("use_mech_marketplace", kwargs, bool)
+        self.mech_marketplace_config: MechMarketplaceConfig = MechMarketplaceConfig.from_dict(
+            kwargs["mech_marketplace_config"]
+        )
+        enforce(
+            not self.use_mech_marketplace
+            or self.mech_contract_address == self.mech_marketplace_config.priority_mech_address,
+            "The mech contract address must be the same as the priority mech address when using the marketplace.",
         )
         super().__init__(*args, **kwargs)
 

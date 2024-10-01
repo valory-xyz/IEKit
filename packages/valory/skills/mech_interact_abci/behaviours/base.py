@@ -28,13 +28,14 @@ from typing import Any, Callable, Generator, List, Optional, cast
 from aea.configurations.data_types import PublicId
 
 from packages.valory.contracts.mech.contract import Mech
+from packages.valory.contracts.mech_marketplace.contract import MechMarketplace
 from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 from packages.valory.skills.abstract_round_abci.behaviour_utils import (
     BaseBehaviour,
     TimeoutException,
 )
-from packages.valory.skills.mech_interact_abci.models import MechParams, MultisendBatch
+from packages.valory.skills.mech_interact_abci.models import MechParams, MultisendBatch, MechMarketplaceConfig
 from packages.valory.skills.mech_interact_abci.states.base import SynchronizedData
 
 
@@ -60,6 +61,11 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
     def params(self) -> MechParams:
         """Return the params."""
         return cast(MechParams, self.context.params)
+
+    @property
+    def mech_marketplace_config(self) -> MechMarketplaceConfig:
+        """Return the mech marketplace config."""
+        return cast(MechMarketplaceConfig, self.context.params.mech_marketplace_config)
 
     def default_error(
         self, contract_id: str, contract_callable: str, response_msg: ContractApiMessage
@@ -134,6 +140,25 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
             performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
             contract_address=self.params.mech_contract_address,
             contract_public_id=Mech.contract_id,
+            contract_callable=contract_callable,
+            data_key=data_key,
+            placeholder=placeholder,
+            **kwargs,
+        )
+        return status
+
+    def _mech_marketplace_contract_interact(
+        self,
+        contract_callable: str,
+        data_key: str,
+        placeholder: str,
+        **kwargs: Any,
+    ) -> WaitableConditionType:
+        """Interact with the mech marketplace contract."""
+        status = yield from self.contract_interact(
+            performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
+            contract_address=self.params.mech_marketplace_config.mech_marketplace_address,
+            contract_public_id=MechMarketplace.contract_id,
             contract_callable=contract_callable,
             data_key=data_key,
             placeholder=placeholder,
