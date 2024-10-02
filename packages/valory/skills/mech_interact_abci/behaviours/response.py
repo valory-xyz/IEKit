@@ -140,9 +140,9 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
     def mech_contract_interact(self) -> Callable[..., WaitableConditionType]:
         """Interact with the mech contract."""
         if self.params.use_mech_marketplace:
-            return self._mech_contract_interact
+            return self._mech_marketplace_contract_interact
 
-        return self._mech_marketplace_contract_interact
+        return self._mech_contract_interact
 
     def _process_request_event(self) -> WaitableConditionType:
         """Process the request event."""

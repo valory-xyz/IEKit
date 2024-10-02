@@ -10,8 +10,8 @@ fingerprint:
   __init__.py: bafybeidf3nlv5fpvfy4libtscayhirdw64shgmhfmvjiftjmjkmhu7auxq
   behaviours/__init__.py: bafybeie3zsi6p3yanz5mqwpkdrcgywaqvkit3hdintsb4awnvalgxpxa4i
   behaviours/base.py: bafybeif4dvt4p5wfh6q3ybqwnzy62lbr3vqy322sr3wm6pkcrha2ggin6q
-  behaviours/request.py: bafybeier3sfvnfrvhqmzqpsfojgc634u6epp7brcpuqcqdevfabuetehzi
-  behaviours/response.py: bafybeigddtfvbn7mfgzs7lynsmbz7yub3gashzheuw4qkbi74zzcoqan34
+  behaviours/request.py: bafybeihaevbnfn66atdutf7rt7v3lw3vbw3tr4bugfdssebtmydgnuvjyq
+  behaviours/response.py: bafybeibigqdtdxxzufx7cclzjrafszg2lb6y5ommp3jzbyoit735wtm7tq
   behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
   dialogues.py: bafybeigjmyzd2bx6mgqiet2c223k6wkc5jk7kdkstbhpaxlqxatey26tlm
   fsm_specification.yaml: bafybeiapzwz6zcneelc2b2wrcb7cae7x6vbthmf6a57cm4mv6hucp67lz4
@@ -38,7 +38,7 @@ contracts:
 - valory/mech:0.1.0:bafybeiejfjfoxqggghcme43sx53q5gruefrws3k2jam2opkxl5uzffoarm
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/erc20:0.1.0:bafybeid2p2jyvjjlcsqugnawksdzsca6ljghpqbp2kfi3cxuxoy2233dbi
-- valory/mech_marketplace:0.1.0:bafybeifwdspmtfejoxp2m3czapkqsgiuyyjv3qr3pds5v3erwtlcntqjpq
+- valory/mech_marketplace:0.1.0:bafybeidvlagoy4wvuyr2zq2ycpnpwokn4yhhaiqpf46pccb3um7hugbgta
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 - valory/ledger_api:1.0.0:bafybeihdk6psr4guxmbcrc26jr2cbgzpd5aljkqvpwo64bvaz7tdti2oni

@@ -201,7 +201,6 @@ class MechMarketplace(Contract):
         :return: a dictionary with the request id and the data.
         """
         contract_address = ledger_api.api.to_checksum_address(contract_address)
-        contract_address = ledger_api.api.to_checksum_address(contract_address)
         contract_instance = cls.get_instance(ledger_api, contract_address)
         res = cls._process_event(
             ledger_api, contract_instance, tx_hash, expected_logs, "MarketplaceDeliver", "requestId", "data"

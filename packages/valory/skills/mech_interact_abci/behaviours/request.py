@@ -416,8 +416,13 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             )
 
         if status:
+            to = (
+                self.mech_marketplace_config.mech_marketplace_address
+                if self.params.use_mech_marketplace
+                else self.params.mech_contract_address
+            )
             batch = MultisendBatch(
-                to=self.params.mech_contract_address,
+                to=to,
                 data=HexBytes(self.request_data),
                 value=self.price,
             )
