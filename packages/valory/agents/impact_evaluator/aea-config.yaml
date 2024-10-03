@@ -29,7 +29,7 @@ contracts:
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/service_registry:0.1.0:bafybeiaop64kwdoetxtedoehabmsalojmms7ihuoqcdwxtwb2hk5i6bzye
 - valory/veolas_delegation:0.1.0:bafybeieicrbkito2hglwvd4j2cbq3etxpm3rrzfyx5kqqe34fu7q5aftye
-- valory/mech_marketplace:0.1.0:bafybeihoua45b2yrmf2aeg2dgdddnt2qrxxxppfj476of6kinow3jkfmza
+- valory/mech_marketplace:0.1.0:bafybeiba7kh3wygwtpyf7oo3sili6givzo2gyadhbb66rvwsokswsywvuu
 protocols:
 - open_aea/signing:1.0.0:bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi
 - valory/abci:0.1.0:bafybeiaqmp7kocbfdboksayeqhkbrynvlfzsx4uy4x6nohywnmaig4an7u
@@ -44,9 +44,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeieeaseuy5rbbw465knz27vccvpkfge43q7isl7fkdlfapwd7bpi24
 - valory/abstract_round_abci:0.1.0:bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u
-- valory/impact_evaluator_abci:0.1.0:bafybeicim42sehbr63a54hke3cfpwii2ycutz575xip4zv725v4fjgubtu
+- valory/impact_evaluator_abci:0.1.0:bafybeiafhuuwpdwvsu6a2yiv2ndwl4szzpx54xbb3ovb6dza7s62ttdf3u
 - valory/generic_scoring_abci:0.1.0:bafybeidxytbreu7sudoggnfjxpbfxsxwbis6dipokkq6uo23xaautnwca4
-- valory/twitter_scoring_abci:0.1.0:bafybeidymo2h5hyufu3tb6a6drukzboplsvpql3r4efrvnhr4u7tyxs7le
+- valory/twitter_scoring_abci:0.1.0:bafybeig5aj7uj45x2yqbj2hmxeqbgoywjfmmrzout3c3vwizwhjp7udl3y
 - valory/ceramic_read_abci:0.1.0:bafybeiede3ehp4bfpbk23gncj52goq62rd3rm5wwlbyaexxrfohucdcpia
 - valory/ceramic_write_abci:0.1.0:bafybeiemid3ipekyqupbqpfw55g7b2wwx56g2ita73rjalk6fyqgneroam
 - valory/dynamic_nft_abci:0.1.0:bafybeietq6nqkeze6esw5dwa4cjajluzd2tvg24hlg2pihxz2v67vxorpu
@@ -58,7 +58,7 @@ skills:
 - valory/decision_making_abci:0.1.0:bafybeigsywkfb4lujy4y2c5tsmr2iulq7s6uad7uv2fbiwv7awxz5wfbi4
 - valory/llm_abci:0.1.0:bafybeibmckwphs5zqdfnutktwgq7bxfw2auhsxezoopkep5dadkuwqvwgy
 - valory/olas_week_abci:0.1.0:bafybeifvhx6issf3xzesjihtbl63ymfrdvzfp4lqrg7liesyes4aiaydfm
-- valory/mech_interact_abci:0.1.0:bafybeigin6mqxyktr4m5bjvv43l2yqadtztbcxoj6zohdkl77rlzwdnwxu
+- valory/mech_interact_abci:0.1.0:bafybeid6m3i5ofq7vuogqapdnoshhq7mswmudhvfcr2craw25fdwtoe3lm
 default_ledger: ethereum
 required_ledgers:
 - ethereum

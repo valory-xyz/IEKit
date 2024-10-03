@@ -68,19 +68,6 @@ class MechMarketplace(Contract):
             return data, None
 
     @classmethod
-    def get_price(
-        cls,
-        ledger_api: EthereumApi,
-        contract_address: str,
-        **kwargs: Any
-    ) -> JSONLike:
-        """Get the price of a request."""
-        contract_address = ledger_api.api.to_checksum_address(contract_address)
-        contract_instance = cls.get_instance(ledger_api, contract_address)
-        price = ledger_api.contract_method_call(contract_instance, "price")
-        return dict(price=price)
-
-    @classmethod
     def get_request_data(
         cls,
         ledger_api: LedgerApi,
