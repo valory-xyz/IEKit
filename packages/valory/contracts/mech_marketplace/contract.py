@@ -192,7 +192,7 @@ class MechMarketplace(Contract):
         **kwargs: Any
     ) -> JSONLike:
         """
-        Process the request receipt to get the requestId and the delivered data if the `Deliver` event has been emitted.
+        Process the request receipt to get the requestId and the delivered data if the `MarketplaceDeliver` event has been emitted.
 
         :param ledger_api: the ledger apis.
         :param contract_address: the contract address.
@@ -233,7 +233,7 @@ class MechMarketplace(Contract):
         timeout: float = FIVE_MINUTES,
         **kwargs: Any
     ) -> JSONLike:
-        """Filter the `Deliver` events emitted by the contract and get the data of the given `request_id`."""
+        """Filter the `MarketplaceDeliver` events emitted by the contract and get the data of the given `request_id`."""
         contract_address = ledger_api.api.to_checksum_address(contract_address)
         ledger_api = cast(EthereumApi, ledger_api)
 
@@ -271,40 +271,3 @@ class MechMarketplace(Contract):
             return {"error": err}
 
         return data
-
-    @classmethod
-    def get_mech_id(
-        cls,
-        ledger_api: EthereumApi,
-        contract_address: str,
-        **kwargs: Any
-    ) -> JSONLike:
-        """Get the price of a request."""
-        contract_address = ledger_api.api.to_checksum_address(contract_address)
-        contract_instance = cls.get_instance(ledger_api, contract_address)
-        mech_id = ledger_api.contract_method_call(contract_instance, "tokenId")
-        return dict(id=mech_id)
-
-    @classmethod
-    def get_requests_count(
-        cls,
-        ledger_api: EthereumApi,
-        contract_address: str,
-        address: str,
-        **kwargs: Any
-    ) -> JSONLike:
-        """Get the requests count."""
-        contract_address = ledger_api.api.to_checksum_address(contract_address)
-        address = ledger_api.api.to_checksum_address(address)
-        contract_instance = cls.get_instance(ledger_api, contract_address)
-        requests_count = contract_instance.functions.getRequestsCount(address).call()
-        return {"requests_count": requests_count}
-
-    @classmethod
-    def get_pending_requests(cls, ledger_api: EthereumApi, contract_address: str, sender_address: str, **kwargs: Any) -> JSONLike:
-        """Get the pending requests."""
-        contract_address = ledger_api.api.to_checksum_address(contract_address)
-        sender_address = ledger_api.api.to_checksum_address(sender_address)
-        contract_instance = cls.get_instance(ledger_api, contract_address)
-        pending_requests = contract_instance.functions.mapUndeliveredRequestsCounts(sender_address).call()
-        return {"pending_requests": pending_requests}
