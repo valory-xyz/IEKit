@@ -9,14 +9,14 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeidf3nlv5fpvfy4libtscayhirdw64shgmhfmvjiftjmjkmhu7auxq
   behaviours/__init__.py: bafybeie3zsi6p3yanz5mqwpkdrcgywaqvkit3hdintsb4awnvalgxpxa4i
-  behaviours/base.py: bafybeibiun7xv7ucg3ysrfxmnbsjxz2jsda4xlr6gdihsfs6foqkkz55li
-  behaviours/request.py: bafybeige7yjjrjun6atkfi2kjec7y3cll56ziwjdoz36tx25kjeyc2cboi
-  behaviours/response.py: bafybeigquse6twwelumj346kt4nptyxwlkyfcrlnws5tggwle5aghh4uxu
+  behaviours/base.py: bafybeif4dvt4p5wfh6q3ybqwnzy62lbr3vqy322sr3wm6pkcrha2ggin6q
+  behaviours/request.py: bafybeihaevbnfn66atdutf7rt7v3lw3vbw3tr4bugfdssebtmydgnuvjyq
+  behaviours/response.py: bafybeibigqdtdxxzufx7cclzjrafszg2lb6y5ommp3jzbyoit735wtm7tq
   behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
   dialogues.py: bafybeigjmyzd2bx6mgqiet2c223k6wkc5jk7kdkstbhpaxlqxatey26tlm
   fsm_specification.yaml: bafybeiapzwz6zcneelc2b2wrcb7cae7x6vbthmf6a57cm4mv6hucp67lz4
   handlers.py: bafybeiduy2nwkqdynainuimkjulcv7u2qq6iglkuut3gfurkckydapitg4
-  models.py: bafybeicvivxyrae7rjew4c6h5ivo3vj6v4qgvbdurz3rgobctvrxbsssmu
+  models.py: bafybeidfes4ovzsyntxvqtx55qi2tznmllhzznf5qmozi52zrukiyrtbni
   payloads.py: bafybeihhnbwsnaqxcltqxp4camiw3tz7gcymrdvxhmqlk4nww24tujiy7q
   rounds.py: bafybeif7taciv6pqupb7xuewurqssziplbjeobbv4d7ea3vbngz3kpjnee
   states/__init__.py: bafybeie34wx5znr2hxwh3gs2fchmbeuzjcfnraymdvtzjaxaq5zsiw233q
@@ -38,6 +38,7 @@ contracts:
 - valory/mech:0.1.0:bafybeiejfjfoxqggghcme43sx53q5gruefrws3k2jam2opkxl5uzffoarm
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/erc20:0.1.0:bafybeid2p2jyvjjlcsqugnawksdzsca6ljghpqbp2kfi3cxuxoy2233dbi
+- valory/mech_marketplace:0.1.0:bafybeiba7kh3wygwtpyf7oo3sili6givzo2gyadhbb66rvwsokswsywvuu
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 - valory/ledger_api:1.0.0:bafybeihdk6psr4guxmbcrc26jr2cbgzpd5aljkqvpwo64bvaz7tdti2oni
@@ -157,6 +158,14 @@ models:
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
       mech_interaction_sleep_time: 10
+      use_mech_marketplace: false
+      mech_marketplace_config:
+        mech_marketplace_address: '0x0000000000000000000000000000000000000000'
+        priority_mech_address: '0x0000000000000000000000000000000000000000'
+        priority_mech_staking_instance_address: '0x0000000000000000000000000000000000000000'
+        priority_mech_service_id: 0
+        requester_staking_instance_address: '0x0000000000000000000000000000000000000000'
+        response_timeout: 300
     class_name: Params
   mech_response:
     args:

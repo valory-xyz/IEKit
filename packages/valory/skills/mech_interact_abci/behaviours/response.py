@@ -20,7 +20,7 @@
 """This module contains the response state of the mech interaction abci app."""
 
 import json
-from typing import Any, Dict, Generator, List, Optional
+from typing import Any, Callable, Dict, Generator, List, Optional
 
 from web3.constants import ADDRESS_ZERO
 
@@ -136,9 +136,17 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
         return result
 
+    @property
+    def mech_contract_interact(self) -> Callable[..., WaitableConditionType]:
+        """Interact with the mech contract."""
+        if self.params.use_mech_marketplace:
+            return self._mech_marketplace_contract_interact
+
+        return self._mech_contract_interact
+
     def _process_request_event(self) -> WaitableConditionType:
         """Process the request event."""
-        result = yield from self._mech_contract_interact(
+        result = yield from self.mech_contract_interact(
             contract_callable="process_request_event",
             data_key="results",
             placeholder=get_name(MechResponseBehaviour.requests),
@@ -155,7 +163,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             f"Filtering the mech's events from block {self.from_block} "
             f"for a response to our request with id {request_id!r}."
         )
-        result = yield from self._mech_contract_interact(
+        result = yield from self.mech_contract_interact(
             contract_callable="get_response",
             data_key="data",
             placeholder=get_name(MechResponseBehaviour.response_hex),
