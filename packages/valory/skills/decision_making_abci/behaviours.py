@@ -37,6 +37,9 @@ from packages.valory.skills.decision_making_abci.rounds import (
     Event,
     SynchronizedData,
 )
+from packages.valory.skills.decision_making_abci.tasks.campaign_validation_preparation import (
+    CampaignValidationPreparation,
+)
 from packages.valory.skills.decision_making_abci.tasks.finished_pipeline_preparation import (
     FinishedPipelinePreparation,
 )
@@ -112,6 +115,10 @@ previous_event_to_task_preparation_cls = {
     },
     Event.FORCE_DB_UPDATE.value: {
         "prev": ScheduledTweetPreparation,
+        "next": CampaignValidationPreparation,
+    },
+    Event.CAMPAIGN_VALIDATION.value: {
+        "prev": CampaignValidationPreparation,
         "next": UpdateCentaursPreparation,
     },
     Event.UPDATE_CENTAURS.value: {
