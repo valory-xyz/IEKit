@@ -7,13 +7,14 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
-  behaviours.py: bafybeicnr3dz54m24w7hjdchrxum66uj2izbt7xsrjsekszjspbhviro2i
+  behaviours.py: bafybeia2o2743mku7dm4fhdvnnyvlleenue5vx2oh6b5ee45sd3v23u4za
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
-  fsm_specification.yaml: bafybeihqaaud54lucsousv5dbbn3mbqro3ryel3hxpzz33xkvf47tq4yhe
+  fsm_specification.yaml: bafybeia6duw3hggqwmibgd7peyujlzsr36wvazmkjprtl6ftc4ak3txp2a
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
   models.py: bafybeiamnja3xeuunvktlu3hkbbt5gu636enyo5tpvqa7vipaf2lzo7t3a
   payloads.py: bafybeif5bomwy74bwnphsk6bty6qb6efugvjnnopsz7qjunpe6gtgjaxya
-  rounds.py: bafybeieiu5bkpjvis2eksnviemwyxnhua6wjkk2eifw6u3y7gdag57tqva
+  rounds.py: bafybeifq7mmtmth4wc74ewtungudfe27szvlymg2jleqcpci3b3nihq3yy
+  tasks/campaign_validation_preparation.py: bafybeieboym3p4qyoxf5qa7ujqlo3gjidvhoulkc35pka4gs6kcaxiuj4u
   tasks/finished_pipeline_preparation.py: bafybeid652b53p7mtsbj3ksko3g2eezvg4nut2vukwvnfhxyfi4zkx3dym
   tasks/llm_preparation.py: bafybeicugz52rdzznqpyachi7kkkhco2umztca2zgpdkhv7py4xazo44se
   tasks/read_stream_preparation.py: bafybeicmjasiyecopfweobodzbmn3tbluu5q724uzzqkit6urn3lb5q354

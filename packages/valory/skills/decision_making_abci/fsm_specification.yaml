@@ -1,4 +1,5 @@
 alphabet_in:
+- CAMPAIGN_VALIDATION
 - DAILY_ORBIS
 - DAILY_TWEET
 - DONE
@@ -46,6 +47,7 @@ states:
 - FinishedDecisionMakingWriteOrbisRound
 - FinishedDecisionMakingWriteTwitterRound
 transition_func:
+    (DecisionMakingRound, CAMPAIGN_VALIDATION): DecisionMakingRound
     (DecisionMakingRound, DAILY_ORBIS): FinishedDecisionMakingWriteOrbisRound
     (DecisionMakingRound, DAILY_TWEET): FinishedDecisionMakingWriteTwitterRound
     (DecisionMakingRound, DONE): FinishedDecisionMakingDoneRound
