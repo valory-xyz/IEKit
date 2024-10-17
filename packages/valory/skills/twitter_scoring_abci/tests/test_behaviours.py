@@ -40,6 +40,9 @@ from packages.valory.skills.abstract_round_abci.test_tools.common import (
     BaseRandomnessBehaviourTest,
 )
 from packages.valory.skills.decision_making_abci.models import CeramicDBBase
+from packages.valory.skills.decision_making_abci.tests.test_behaviours import (
+    DUMMY_CENTAURS_DATA,
+)
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
     DBUpdateBehaviour,
     PostMechRequestBehaviour,
@@ -67,7 +70,7 @@ PACKAGE_DIR = Path(__file__).parent.parent
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 TWITTER_MENTIONS_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id=0"
-TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=%23olas&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id=0"
+TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=#OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id=0"
 
 DUMMY_MENTIONS_RESPONSE = {
     "data": [
@@ -563,6 +566,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
+                        centaurs_data=DUMMY_CENTAURS_DATA,
                     ),
                     event=Event.DONE,
                 ),
@@ -593,6 +597,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
+                        centaurs_data=DUMMY_CENTAURS_DATA,
                     ),
                     event=Event.DONE,
                 ),
@@ -626,6 +631,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
+                        centaurs_data=DUMMY_CENTAURS_DATA,
                     ),
                     event=Event.DONE,
                 ),
@@ -880,6 +886,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
+                        centaurs_data=DUMMY_CENTAURS_DATA,
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -902,6 +909,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
+                        centaurs_data=DUMMY_CENTAURS_DATA,
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -925,6 +933,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
+                        centaurs_data=DUMMY_CENTAURS_DATA,
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -946,6 +955,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
+                        centaurs_data=DUMMY_CENTAURS_DATA,
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -1164,36 +1174,42 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
                                 "points": 900,
                                 "username": "dummy",
                                 "text": "dummy text",
+                                "created_at": "2024-05-31T08:26:53.000Z",
                             },
                             "2": {
                                 "author_id": "2",
                                 "points": 900,
                                 "username": "dummy_2",
                                 "text": "dummy text",
+                                "created_at": "2024-05-31T08:26:53.000Z",
                             },
                             "3": {
                                 "author_id": "3",
                                 "points": 900,
                                 "username": "dummy_3",
                                 "text": "I'm linking my wallet to @Autonolas Contribute: 0x0000000000000000000000000000000000000000",
+                                "created_at": "2024-05-31T08:26:53.000Z",
                             },
                             "4": {
                                 "author_id": "1",
                                 "points": 10000,  # too many points during this period
                                 "username": "dummy",
                                 "text": "dummy text",
+                                "created_at": "2024-05-31T08:26:53.000Z",
                             },
                             "5": {
                                 "author_id": "4",
                                 "points": 900,
                                 "username": "dummy_4",
                                 "text": "I'm linking my wallet to @Autonolas Contribute:\n0x4F4715CA99C973A55303bc4a5f3e3acBb9fF75DB\n\nStart contributing to #OlasNetwork: https://t.co/4ocCNGEtyG",
+                                "created_at": "2024-05-31T08:26:53.000Z",
                             },
                         },
                         latest_mention_tweet_id=1,
                         latest_hashtag_tweet_id=1,
                         number_of_tweets_pulled_today=1,
                         last_tweet_pull_window_reset=1993903085,  # in 10 years
+                        centaurs_data=DUMMY_CENTAURS_DATA,
                     ),
                     event=Event.DONE,
                     ceramic_db={
