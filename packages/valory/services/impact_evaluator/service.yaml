@@ -140,6 +140,8 @@ extra:
           priority_mech_service_id: ${PRIORITY_MECH_SERVICE_ID:int:0}
           requester_staking_instance_address: ${REQUESTER_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
           response_timeout: ${RESPONSE_TIMEOUT:int:300}
+        checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:60}
+        staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -235,6 +237,8 @@ extra:
           priority_mech_service_id: ${PRIORITY_MECH_SERVICE_ID:int:0}
           requester_staking_instance_address: ${REQUESTER_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
           response_timeout: ${RESPONSE_TIMEOUT:int:300}
+        checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:60}
+        staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -330,6 +334,8 @@ extra:
           priority_mech_service_id: ${PRIORITY_MECH_SERVICE_ID:int:0}
           requester_staking_instance_address: ${REQUESTER_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
           response_timeout: ${RESPONSE_TIMEOUT:int:300}
+        checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:60}
+        staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -429,6 +435,8 @@ extra:
           priority_mech_service_id: ${PRIORITY_MECH_SERVICE_ID:int:0}
           requester_staking_instance_address: ${REQUESTER_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
           response_timeout: ${RESPONSE_TIMEOUT:int:300}
+        checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:60}
+        staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}

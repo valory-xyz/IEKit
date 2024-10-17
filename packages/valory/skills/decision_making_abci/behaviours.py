@@ -54,6 +54,10 @@ from packages.valory.skills.decision_making_abci.tasks.read_stream_preparation i
 from packages.valory.skills.decision_making_abci.tasks.score_preparations import (
     ScorePreparation,
 )
+from packages.valory.skills.decision_making_abci.tasks.staking import (
+    StakingActivityPreparation,
+    StakingCheckpointPreparation,
+)
 from packages.valory.skills.decision_making_abci.tasks.tweet_validation_preparation import (
     TweetValidationPreparation,
 )
@@ -113,12 +117,21 @@ previous_event_to_task_preparation_cls = {
         "prev": ScheduledTweetPreparation,
         "next": UpdateCentaursPreparation,
     },
+    # Hack to force the db update after tweet update without tweeting
     Event.FORCE_DB_UPDATE.value: {
         "prev": ScheduledTweetPreparation,
         "next": CampaignValidationPreparation,
     },
     Event.CAMPAIGN_VALIDATION.value: {
         "prev": CampaignValidationPreparation,
+        "next": StakingActivityPreparation,
+    },
+    Event.STAKING_ACTIVITY.value: {
+        "prev": StakingActivityPreparation,
+        "next": StakingCheckpointPreparation,
+    },
+    Event.STAKING_CHECKPOINT.value: {
+        "prev": StakingCheckpointPreparation,
         "next": UpdateCentaursPreparation,
     },
     Event.UPDATE_CENTAURS.value: {
@@ -216,9 +229,7 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
             if not previous_task_skipped:
                 previous_task_preparation = (
                     previous_task_preparation_cls(
-                        now_utc,
-                        self,
-                        self.synchronized_data,
+                        now_utc, self, self.synchronized_data, self.context
                     )
                     if previous_task_preparation_cls
                     else None
@@ -245,6 +256,7 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
                         synchronized_data_class=SynchronizedData,
                         **post_updates,
                     ),
+                    self.context,
                 )
                 if next_task_preparation_cls
                 else None

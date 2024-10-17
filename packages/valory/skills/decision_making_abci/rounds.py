@@ -60,6 +60,8 @@ class Event(Enum):
     TWEET_VALIDATION = "tweet_validation"
     FORCE_DB_UPDATE = "force_db_update"
     CAMPAIGN_VALIDATION = "campaign_validation"
+    STAKING_ACTIVITY = "staking_activiy"
+    STAKING_CHECKPOINT = "staking_checkpoint"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -227,6 +229,14 @@ class FinishedDecisionMakingWeekInOlasRound(DegenerateRound):
     """FinishedDecisionMakingWeekInOlasRound"""
 
 
+class FinishedDecisionMakingActivityRound(DegenerateRound):
+    """FinishedDecisionMakingActivityRound"""
+
+
+class FinishedDecisionMakingCheckpointRound(DegenerateRound):
+    """FinishedDecisionMakingCheckpointRound"""
+
+
 class DecisionMakingAbciApp(AbciApp[Event]):
     """DecisionMakingAbciApp"""
 
@@ -252,6 +262,8 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.NO_MAJORITY: DecisionMakingRound,
             Event.ROUND_TIMEOUT: DecisionMakingRound,
             Event.CAMPAIGN_VALIDATION: DecisionMakingRound,
+            Event.STAKING_ACTIVITY: FinishedDecisionMakingActivityRound,
+            Event.STAKING_CHECKPOINT: FinishedDecisionMakingCheckpointRound,
         },
         FinishedDecisionMakingReadCentaursRound: {},
         FinishedDecisionMakingLLMRound: {},
@@ -264,6 +276,8 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingWriteContributeDBRound: {},
         FinishedDecisionMakingReadManualPointsRound: {},
         FinishedDecisionMakingWeekInOlasRound: {},
+        FinishedDecisionMakingActivityRound: {},
+        FinishedDecisionMakingCheckpointRound: {},
     }
     final_states: Set[AppState] = {
         FinishedDecisionMakingReadCentaursRound,
@@ -277,6 +291,8 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingWriteContributeDBRound,
         FinishedDecisionMakingReadManualPointsRound,
         FinishedDecisionMakingWeekInOlasRound,
+        FinishedDecisionMakingActivityRound,
+        FinishedDecisionMakingCheckpointRound,
     }
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,

@@ -269,6 +269,8 @@ models:
         priority_mech_service_id: ${int:0}
         requester_staking_instance_address: ${str:0x0000000000000000000000000000000000000000}
         response_timeout: ${int:300}
+      checkpoint_threshold_minutes: ${int:60}
+      staking_activity_threshold: ${int:5}
   randomness_api:
     args:
       api_id: cloudflare
