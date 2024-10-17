@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeibjmaxplflre553p27hpajvuxyjdpqxmfg4omg2nl6zy5sflhnmri
+agent: valory/impact_evaluator:0.1.0:bafybeia7r6lassaxecrwnuuydgex7lbeq7twc3e5zeby453wd6ktxkse2m
 number_of_agents: 4
 deployment:
   agent:
@@ -132,14 +132,6 @@ extra:
         termination_from_block: ${TERMINATION_FROM_BLOCK:int:19717045}
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
         mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
-        use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:false}
-        mech_marketplace_config:
-          mech_marketplace_address: ${MECH_MARKETPLACE_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          priority_mech_address: ${PRIORITY_MECH_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          priority_mech_staking_instance_address: ${PRIORITY_MECH_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          priority_mech_service_id: ${PRIORITY_MECH_SERVICE_ID:int:0}
-          requester_staking_instance_address: ${REQUESTER_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          response_timeout: ${RESPONSE_TIMEOUT:int:300}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -227,14 +219,6 @@ extra:
         termination_from_block: ${TERMINATION_FROM_BLOCK:int:19717045}
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
         mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
-        use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:false}
-        mech_marketplace_config:
-          mech_marketplace_address: ${MECH_MARKETPLACE_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          priority_mech_address: ${PRIORITY_MECH_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          priority_mech_staking_instance_address: ${PRIORITY_MECH_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          priority_mech_service_id: ${PRIORITY_MECH_SERVICE_ID:int:0}
-          requester_staking_instance_address: ${REQUESTER_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          response_timeout: ${RESPONSE_TIMEOUT:int:300}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -322,14 +306,6 @@ extra:
         termination_from_block: ${TERMINATION_FROM_BLOCK:int:19717045}
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
         mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
-        use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:false}
-        mech_marketplace_config:
-          mech_marketplace_address: ${MECH_MARKETPLACE_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          priority_mech_address: ${PRIORITY_MECH_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          priority_mech_staking_instance_address: ${PRIORITY_MECH_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          priority_mech_service_id: ${PRIORITY_MECH_SERVICE_ID:int:0}
-          requester_staking_instance_address: ${REQUESTER_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          response_timeout: ${RESPONSE_TIMEOUT:int:300}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -421,14 +397,6 @@ extra:
         termination_from_block: ${TERMINATION_FROM_BLOCK:int:19717045}
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
         mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
-        use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:false}
-        mech_marketplace_config:
-          mech_marketplace_address: ${MECH_MARKETPLACE_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          priority_mech_address: ${PRIORITY_MECH_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          priority_mech_staking_instance_address: ${PRIORITY_MECH_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          priority_mech_service_id: ${PRIORITY_MECH_SERVICE_ID:int:0}
-          requester_staking_instance_address: ${REQUESTER_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          response_timeout: ${RESPONSE_TIMEOUT:int:300}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
