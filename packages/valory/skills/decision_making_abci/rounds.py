@@ -59,6 +59,7 @@ class Event(Enum):
     WEEK_IN_OLAS_CREATE = "week_in_olas_create"
     TWEET_VALIDATION = "tweet_validation"
     FORCE_DB_UPDATE = "force_db_update"
+    CAMPAIGN_VALIDATION = "campaign_validation"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -153,7 +154,7 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
             # Event.NO_MAJORITY, Event.DONE, Event.UPDATE_CENTAURS, Event.READ_CENTAURS,
             # Event.SCHEDULED_TWEET, Event.LLM, Event.DAILY_ORBIS, Event.DAILY_TWEET, Event.NEXT_CENTAUR
             # Event.SCORE, Event.READ_CONTRIBUTE_DB, Event.READ_MANUAL_POINTS, Event.WRITE_CONTRIBUTE_DB
-            # Event.WEEK_IN_OLAS_CREATE, Event.TWEET_VALIDATION, Event.FORCE_DB_UPDATE
+            # Event.WEEK_IN_OLAS_CREATE, Event.TWEET_VALIDATION, Event.FORCE_DB_UPDATE, Event.CAMPAIGN_VALIDATION
 
             payload = json.loads(self.most_voted_payload)
             event = Event(payload["event"])
@@ -250,6 +251,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.DONE: FinishedDecisionMakingDoneRound,
             Event.NO_MAJORITY: DecisionMakingRound,
             Event.ROUND_TIMEOUT: DecisionMakingRound,
+            Event.CAMPAIGN_VALIDATION: DecisionMakingRound,
         },
         FinishedDecisionMakingReadCentaursRound: {},
         FinishedDecisionMakingLLMRound: {},

@@ -1,5 +1,6 @@
 alphabet_in:
 - API_ERROR
+- CAMPAIGN_VALIDATION
 - CHECK_HISTORY
 - CHECK_LATE_ARRIVING_MESSAGE
 - CHECK_TIMEOUT
@@ -124,6 +125,7 @@ transition_func:
     (DBUpdateRound, DONE): TwitterDecisionMakingRound
     (DBUpdateRound, NO_MAJORITY): DBUpdateRound
     (DBUpdateRound, ROUND_TIMEOUT): DBUpdateRound
+    (DecisionMakingRound, CAMPAIGN_VALIDATION): DecisionMakingRound
     (DecisionMakingRound, DAILY_ORBIS): RandomnessRound
     (DecisionMakingRound, DAILY_TWEET): RandomnessTwitterRound
     (DecisionMakingRound, DONE): ResetAndPauseRound
