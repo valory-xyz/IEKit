@@ -81,6 +81,15 @@ ENABLED_CENTAUR = {
                 },
             ]
         },
+        "twitter_campaigns": {
+            "campaigns": [
+                {
+                    "id": "dummy_id",
+                    "hashtag": "OlasNetwork",
+                    "status": "live",
+                }
+            ]
+        },
     },
     "actions": [
         {
@@ -132,6 +141,15 @@ DISABLED_CENTAUR = {
         "daily_orbis": {},
         "daily_tweet": {},
         "scheduled_tweet": {"tweets": []},
+        "twitter_campaigns": {
+            "campaigns": [
+                {
+                    "id": "dummy_id",
+                    "hashtag": "OlasNetwork",
+                    "status": "live",
+                }
+            ]
+        },
     },
     "actions": [
         {

@@ -26,7 +26,7 @@ import re
 from abc import ABC
 from dataclasses import asdict
 from datetime import datetime
-from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
+from typing import Dict, Generator, List, Optional, Set, Tuple, Type, Union, cast
 
 from web3 import Web3
 
@@ -155,6 +155,30 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
 
         # Window has not expired and we have not reached the max number of tweets
         return False, number_of_tweets_pulled_today, last_tweet_pull_window_reset
+
+    def get_active_hashtags(self) -> List[str]:
+        """Get the active campaigns"""
+        centaurs_data = self.synchronized_data.centaurs_data
+        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
+        active_hashtags = [
+            f"#{campaign['hashtag'].replace('#', '').strip()}"
+            for campaign in current_centaur["plugins_data"]["twitter_campaigns"][
+                "campaigns"
+            ]
+            if campaign["status"] == "live"
+        ]
+        return active_hashtags
+
+
+def get_campaign(tweet: Union[str, List[str]], campaigns: List[str]) -> Optional[str]:
+    """Get the campaing a tweet belongs to"""
+    # Handle threads
+    if isinstance(tweet, list):
+        tweet = (" ").join(tweet)
+    matches = [campaign for campaign in campaigns if campaign in tweet]
+    return (
+        matches[0] if matches else None
+    )  # For now, we will return only the first campaign that matches
 
 
 class TwitterRandomnessBehaviour(RandomnessBehaviour):
@@ -675,9 +699,15 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
         next_tweet_id = (
             int(latest_hashtag_tweet_id) + 1 if int(latest_hashtag_tweet_id) != 0 else 0
         )
+
+        # Dynamicaly build the search query using the hashtags in the centaurs stream
+        active_hashtags = self.get_active_hashtags()
+        search_query = " OR ".join(active_hashtags)
+
         api_args = self.params.twitter_search_args.replace(
-            "{since_id}", str(next_tweet_id)
+            "{search_query}", str(search_query)
         )
+        api_args = api_args.replace("{since_id}", str(next_tweet_id))
         api_args = api_args.replace(
             "{max_results}", str(number_of_tweets_remaining_today)
         )
@@ -999,6 +1029,8 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             )
             ceramic_db_copy.reset_period_points()
 
+        active_hashtags = self.get_active_hashtags()
+
         # Update data
         for tweet_id, tweet in tweets.items():
             if "points" not in tweet:
@@ -1028,17 +1060,22 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             current_period_points += new_points
 
             # Store the tweet id and awarded points
-            tweet_id_to_points = {} if not user else user.get("tweet_id_to_points", {})
-            if tweet_id not in tweet_id_to_points:
+            user_tweets = {} if not user else user.get("tweets", {})
+            if tweet_id not in user_tweets:
                 # Keep in mind that we store the updated points if the user has reached max_points_per_period
-                tweet_id_to_points[tweet_id] = new_points
+                campaign = get_campaign(tweet["text"], active_hashtags)
+                user_tweets[tweet_id] = {
+                    "points": new_points,
+                    "campaign": campaign,
+                    "timestamp": tweet["created_at"],
+                }
 
             # User data to update
             user_data = {
                 "points": int(new_points),
                 "twitter_handle": twitter_name,
                 "current_period_points": int(current_period_points),
-                "tweet_id_to_points": tweet_id_to_points,
+                "tweets": user_tweets,
             }
 
             # If this is a registration

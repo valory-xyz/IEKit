@@ -8,16 +8,16 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
-  behaviours.py: bafybeifchonz4zghkztye742qtv4xrt63kylidcftfkkf5wbqturcuhzwy
+  behaviours.py: bafybeieo37gbxs2x42dtmczqcdti6rnpveqr6bfdeeny3thgj4jnazfxyq
   dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
   fsm_specification.yaml: bafybeihbq2olrdqx2x5lcvypxyi44ecog4nntsvw2v6oeab4imvj5nz6ae
   handlers.py: bafybeid3nqvcyotqj5g5hlgrz57nf7vpjysmgvsxe3p7644f4z5dcwqn6u
   models.py: bafybeihrwlkjzhxktcmtj4uqzzobukf4mpyt7ba73pcpldk4i76pofaei4
   payloads.py: bafybeidb2qiw26b5fhyxujseibbo2ji5zo54auhyelllsqnj7zn5sbc3pi
   prompts.py: bafybeieiuqn427bgwfnzynxf3vtqfpvmqqscs5tyw4oibfofwropifotke
-  rounds.py: bafybeiaagovav46xwg3wc5i4dqm7jgmvfyleb5w6molu7h6oputf7qaufy
+  rounds.py: bafybeieklx2bx5ampjtszvg75hacxexigvlf4idsxfgwwrok77hy52f7ja
   tests/__init__.py: bafybeidwzzd4ejsyf3aryd5kmrvd63h7ajgqyrxphmfaacvpjnneacejay
-  tests/test_behaviours.py: bafybeieeqcviow5jzm4dq4sdveoop4mdmywip4d25mgitbnazd67zqk4y4
+  tests/test_behaviours.py: bafybeie726gd2x3xrad2ka7hlxfbkszvp4p3mwzwirbvmq4qgdbhcrf65u
   tests/test_dialogues.py: bafybeiheyq7klonzb7rnjub2i22h7bmsnoimn2pq4j7ofikt3yovstvgt4
   tests/test_handlers.py: bafybeigevirvi3saepukke2zmp334btgsdxhj55o2vawj3hqam63miirg4
   tests/test_models.py: bafybeicz5jqlkgs7ffw6hdtvo6674t6uvwup5ffeqat2hvjl5yi2fttxoy
@@ -30,7 +30,7 @@ protocols:
 - valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u
-- valory/decision_making_abci:0.1.0:bafybeic6lqvgroya7fkrpfw6lthstg3fd4fc34d7foz4yqfkgoqifkwpcq
+- valory/decision_making_abci:0.1.0:bafybeig4r3l4xuvuahggqkhxqdfooijgptdmocksy3zpg24slxshxwxu6a
 - valory/mech_interact_abci:0.1.0:bafybeid6m3i5ofq7vuogqapdnoshhq7mswmudhvfcr2craw25fdwtoe3lm
 behaviours:
   main:
@@ -138,7 +138,7 @@ models:
       twitter_max_pages: 1
       max_tweet_pulls_allowed: 80
       twitter_search_endpoint: 2/tweets/search/recent?
-      twitter_search_args: query=%23olas&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
+      twitter_search_args: query={search_query}&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
       openai_call_window_size: 3600.0
       openai_calls_allowed_in_window: 100
       max_points_per_period: 5000

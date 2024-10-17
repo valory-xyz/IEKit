@@ -181,6 +181,16 @@ class SynchronizedData(MechInteractionSynchronizedData):
         """Check whether keepers are set."""
         return self.db.get("most_voted_keeper_addresses", None) is not None
 
+    @property
+    def centaurs_data(self) -> list:
+        """Get the centaurs_data."""
+        return cast(list, self.db.get("centaurs_data", []))
+
+    @property
+    def current_centaur_index(self) -> int:
+        """Gets the current_centaur_index."""
+        return cast(int, self.db.get("current_centaur_index", 0))
+
 
 class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
     """TwitterDecisionMakingRound"""

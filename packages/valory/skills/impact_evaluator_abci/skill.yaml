@@ -25,18 +25,18 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u
 - valory/ceramic_read_abci:0.1.0:bafybeiede3ehp4bfpbk23gncj52goq62rd3rm5wwlbyaexxrfohucdcpia
-- valory/generic_scoring_abci:0.1.0:bafybeiekqv5nxatywqmp354vqr4znheufkdacg7fz5mfrpuvzsqpbf2r4m
-- valory/twitter_scoring_abci:0.1.0:bafybeial7apdt4fkwlqk2iyh2eeeabsnjfop62sba2ikdlymtruoroqsde
+- valory/generic_scoring_abci:0.1.0:bafybeietbnmr6desp4wbuvnqzaz6xemqiuajevdfjskg5ty6n3f7wfaa6e
+- valory/twitter_scoring_abci:0.1.0:bafybeihzctqfchoynwsipart3swsjlywpnjbymrey3acbxfs7in36bogiu
 - valory/ceramic_write_abci:0.1.0:bafybeiemid3ipekyqupbqpfw55g7b2wwx56g2ita73rjalk6fyqgneroam
-- valory/dynamic_nft_abci:0.1.0:bafybeihmidbntbfxafuxo7lfqbaco24simgkfl6bw5coggilcknccg7qx4
+- valory/dynamic_nft_abci:0.1.0:bafybeigvyxinbhxvkg3pcx3l5pniliei7xjy7shqbbc7hwsscvcc7zlq2q
 - valory/registration_abci:0.1.0:bafybeibc7duasoaw5b4ene5oxfba2dmdzstsrws6ipi57ymgdtoxjadn54
 - valory/reset_pause_abci:0.1.0:bafybeigrdlxed3xlsnxtjhnsbl3cojruihxcqx4jxhgivkd5i2fkjncgba
 - valory/termination_abci:0.1.0:bafybeib5l7jhew5ic6iq24dd23nidcoimzqkrk556gqywhoziatj33zvwm
 - valory/transaction_settlement_abci:0.1.0:bafybeic7q7recyka272udwcupblwbkc3jkodgp74fvcdxb7urametg5dae
-- valory/decision_making_abci:0.1.0:bafybeic6lqvgroya7fkrpfw6lthstg3fd4fc34d7foz4yqfkgoqifkwpcq
+- valory/decision_making_abci:0.1.0:bafybeig4r3l4xuvuahggqkhxqdfooijgptdmocksy3zpg24slxshxwxu6a
 - valory/llm_abci:0.1.0:bafybeibmckwphs5zqdfnutktwgq7bxfw2auhsxezoopkep5dadkuwqvwgy
 - valory/twitter_write_abci:0.1.0:bafybeid377kr5f3dmb5nyhvucglyaaqkuhthxkfosgl54zskwmsuwz56ie
-- valory/olas_week_abci:0.1.0:bafybeigsidnwwj5lpxiv2zusc3cfjwe4gukl5ntj6nl2z36bvcerkdtp5a
+- valory/olas_week_abci:0.1.0:bafybeieab2af2oklizkdj5dorljrahejixeadiaguksi5fr6tnmtncu75e
 - valory/mech_interact_abci:0.1.0:bafybeid6m3i5ofq7vuogqapdnoshhq7mswmudhvfcr2craw25fdwtoe3lm
 behaviours:
   main:
@@ -170,7 +170,7 @@ models:
       twitter_max_pages: 1
       max_tweet_pulls_allowed: 80
       twitter_search_endpoint: 2/tweets/search/recent?
-      twitter_search_args: query=%23olas&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
+      twitter_search_args: query={search_query}&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
       twitter_tweets_endpoint: 2/users/1450081635559428107/tweets?
       twitter_tweets_args: tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}
       openai_call_window_size: 3600.0

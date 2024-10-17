@@ -35,7 +35,7 @@ DEFAULT_DATA = {
     "discord_id": None,
     "discord_handle": None,
     "current_period_points": 0,
-    "tweet_id_to_points": {},
+    "tweets": {},
 }
 
 
@@ -102,14 +102,14 @@ def test_merge_by_wallet():
         "wallet_address": "dummy_address",
         "points": 10,
         "current_period_points": 20,
-        "tweet_id_to_points": {"1": 100, "2": 200},
+        "tweets": {"1": {"points": 100}, "2": {"points": 200}},
     }
     user_b = {
         "discord_id": "dummy_discord_id",
         "wallet_address": "dummy_address",
         "points": 10,
         "current_period_points": 15,
-        "tweet_id_to_points": {"2": 200, "3": 300},
+        "tweets": {"2": {"points": 200}, "3": {"points": 300}},
     }
     db.create_user(user_a)
     db.create_user(user_b)
@@ -124,7 +124,7 @@ def test_merge_by_wallet():
         "twitter_handle": None,
         "discord_handle": None,
         "current_period_points": 20,
-        "tweet_id_to_points": {"1": 100, "2": 200, "3": 300},
+        "tweets": {"1": {"points": 100}, "2": {"points": 200}, "3": {"points": 300}},
     }
 
 
@@ -147,14 +147,14 @@ def test_reset_period_points():
         "wallet_address": "dummy_address",
         "points": 10,
         "current_period_points": 20,
-        "tweet_id_to_points": {"1": 100, "2": 200},
+        "tweets": {"1": {"points": 100}, "2": {"points": 200}},
     }
     user_b = {
         "discord_id": "dummy_discord_id",
         "wallet_address": "dummy_address",
         "points": 10,
         "current_period_points": 15,
-        "tweet_id_to_points": {"2": 200, "3": 300},
+        "tweets": {"2": {"points": 200}, "3": {"points": 300}},
     }
     db.create_user(user_a)
     db.create_user(user_b)
@@ -171,13 +171,13 @@ def test_diff():
         "wallet_address": "dummy_address",
         "points": 10,
         "current_period_points": 20,
-        "tweet_id_to_points": {"1": 100, "2": 200},
+        "tweets": {"1": {"points": 100}, "2": {"points": 200}},
     }
     user_b = {  # same data as user_a but in different order
         "current_period_points": 20,
         "wallet_address": "dummy_address",
         "points": 10,
-        "tweet_id_to_points": {"1": 100, "2": 200},
+        "tweets": {"1": {"points": 100}, "2": {"points": 200}},
         "twitter_id": "dummy_twitter_id",
     }
     db_a.create_user(user_a)

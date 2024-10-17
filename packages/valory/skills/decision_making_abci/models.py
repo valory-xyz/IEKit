@@ -102,7 +102,7 @@ class CeramicDBBase:
         "token_id",
         "points",
         "current_period_points",
-        "tweet_id_to_points",
+        "tweets",
     }
 
     def __init__(self) -> None:
@@ -144,7 +144,7 @@ class CeramicDBBase:
         for field in fields:
             if field in ("points", "current_period_points"):
                 new_user[field] = user_data.get(field, 0)
-            elif field in ("tweet_id_to_points",):
+            elif field in ("tweets",):
                 new_user[field] = user_data.get(field, {})
             else:
                 new_user[field] = user_data.get(field, None)
@@ -231,8 +231,8 @@ class CeramicDBBase:
                     if field == "current_period_points":
                         values = [max(values)]
 
-                    # We merge the tweet_id_to_points
-                    if field == "tweet_id_to_points":
+                    # We merge the tweets
+                    if field == "tweets":
                         for value in values[1:]:
                             values[0].update(value)  # type: ignore
                         values = [values[0]]

@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeiapvvoxxfhdgsrhvxp64o7htuiieufirauqeogozsulc5elzsp5nm
+agent: valory/impact_evaluator:0.1.0:bafybeicskafntstpkej5xhe7ocoks6vg4uzxn43qwqi3jsh7dfgp3blshy
 number_of_agents: 4
 deployment:
   agent:
@@ -105,7 +105,7 @@ extra:
         twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
         max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query={search_query}&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
         twitter_tweets_args: ${TWITTER_TWEETS_ARGS:str:tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
         tx_timeout: 10.0
@@ -200,7 +200,7 @@ extra:
         twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
         max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query={search_query}&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
         twitter_tweets_args: ${TWITTER_TWEETS_ARGS:str:tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
         tx_timeout: 10.0
@@ -295,7 +295,7 @@ extra:
         twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
         max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query={search_query}&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
         twitter_tweets_args: ${TWITTER_TWEETS_ARGS:str:tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
         tx_timeout: 10.0
@@ -392,7 +392,7 @@ extra:
         twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
         max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query={search_query}&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
         twitter_tweets_args: ${TWITTER_TWEETS_ARGS:str:tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
         tx_timeout: 10.0
