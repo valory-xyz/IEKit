@@ -32,6 +32,7 @@ import packages.valory.skills.mech_interact_abci.states.response as MechResponse
 import packages.valory.skills.olas_week_abci.rounds as WeekInOlasAbciApp
 import packages.valory.skills.registration_abci.rounds as RegistrationAbci
 import packages.valory.skills.reset_pause_abci.rounds as ResetAndPauseAbci
+import packages.valory.skills.staking_abci.rounds as StakingAbci
 import packages.valory.skills.transaction_settlement_abci.rounds as TxSettlementAbci
 import packages.valory.skills.twitter_scoring_abci.rounds as TwitterScoringAbci
 import packages.valory.skills.twitter_write_abci.rounds as TwitterWriteAbciApp
@@ -65,8 +66,11 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     GenericScoringAbci.FinishedGenericScoringRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     TwitterScoringAbci.FinishedTwitterCollectionRound: MechRequestStates.MechRequestRound,
     MechFinalStates.FinishedMechRequestRound: TxSettlementAbci.RandomnessTransactionSubmissionRound,
-    TxSettlementAbci.FinishedTransactionSubmissionRound: MechResponseStates.MechResponseRound,
+    TxSettlementAbci.FinishedTransactionSubmissionRound: DecisionMakingAbci.PostTxDecisionMakingRound,
     TxSettlementAbci.FailedRound: MechRequestStates.MechRequestRound,
+    DecisionMakingAbci.FinishedPostMechResponseRound: MechResponseStates.MechResponseRound,
+    DecisionMakingAbci.FinishedPostActivityUpdateRound: StakingAbci.ActiviyUpdatePreparationRound,
+    DecisionMakingAbci.FinishedPostCheckpointRound: DecisionMakingAbci.DecisionMakingRound,
     MechFinalStates.FinishedMechResponseRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     MechFinalStates.FinishedMechRequestSkipRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     MechFinalStates.FinishedMechResponseTimeoutRound: MechResponseStates.MechResponseRound,

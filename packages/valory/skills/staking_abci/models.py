@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,22 +17,25 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the DecisionMakingAbciApp."""
+"""This module contains the shared state for the abci skill of StakingAbciApp."""
 
-from dataclasses import dataclass
+from packages.valory.skills.abstract_round_abci.models import BaseParams
+from packages.valory.skills.abstract_round_abci.models import (
+    BenchmarkTool as BaseBenchmarkTool,
+)
+from packages.valory.skills.abstract_round_abci.models import Requests as BaseRequests
+from packages.valory.skills.abstract_round_abci.models import (
+    SharedState as BaseSharedState,
+)
+from packages.valory.skills.staking_abci.rounds import StakingAbciApp
 
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
+
+class SharedState(BaseSharedState):
+    """Keep the current shared state of the skill."""
+
+    abci_app_cls = StakingAbciApp
 
 
-@dataclass(frozen=True)
-class DecisionMakingPayload(BaseTxPayload):
-    """Represent a transaction payload for the DecisionMakingRound."""
-
-    content: str
-
-
-@dataclass(frozen=True)
-class PostTxDecisionPayload(BaseTxPayload):
-    """Represent a transaction payload for the PostTxDecisionRound."""
-
-    event: str
+Params = BaseParams
+Requests = BaseRequests
+BenchmarkTool = BaseBenchmarkTool

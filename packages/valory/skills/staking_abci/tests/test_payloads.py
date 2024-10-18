@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,22 +17,36 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the DecisionMakingAbciApp."""
+"""This package contains payload tests for the StakingAbciApp."""
 
 from dataclasses import dataclass
+from typing import Hashable, Type
 
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
+import pytest
+
+from packages.valory.skills.staking_abci.payloads import (
+    ActivityScorePayload,
+    ActiviyUpdatePreparationPayload,
+    BaseTxPayload,
+    CheckpointPreparationPayload,
+)
 
 
-@dataclass(frozen=True)
-class DecisionMakingPayload(BaseTxPayload):
-    """Represent a transaction payload for the DecisionMakingRound."""
+@dataclass
+class PayloadTestCase:
+    """PayloadTestCase"""
 
-    content: str
+    name: str
+    payload_cls: Type[BaseTxPayload]
+    content: Hashable
 
 
-@dataclass(frozen=True)
-class PostTxDecisionPayload(BaseTxPayload):
-    """Represent a transaction payload for the PostTxDecisionRound."""
+# TODO: provide test cases
+@pytest.mark.parametrize("test_case", [])
+def test_payloads(test_case: PayloadTestCase) -> None:
+    """Tests for StakingAbciApp payloads"""
 
-    event: str
+    payload = test_case.payload_cls(sender="sender", content=test_case.content)
+    assert payload.sender == "sender"
+    assert payload.from_json(payload.json) == payload
+

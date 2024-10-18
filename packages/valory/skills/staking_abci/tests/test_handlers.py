@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,22 +17,11 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the DecisionMakingAbciApp."""
+"""Test the handlers.py module of the Staking."""
 
-from dataclasses import dataclass
-
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
+import packages.valory.skills.staking_abci.handlers  # noqa
 
 
-@dataclass(frozen=True)
-class DecisionMakingPayload(BaseTxPayload):
-    """Represent a transaction payload for the DecisionMakingRound."""
+def test_import() -> None:
+    """Test that the 'handlers.py' of the Staking can be imported."""
 
-    content: str
-
-
-@dataclass(frozen=True)
-class PostTxDecisionPayload(BaseTxPayload):
-    """Represent a transaction payload for the PostTxDecisionRound."""
-
-    event: str
