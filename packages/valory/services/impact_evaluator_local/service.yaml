@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeicskafntstpkej5xhe7ocoks6vg4uzxn43qwqi3jsh7dfgp3blshy
+agent: valory/impact_evaluator:0.1.0:bafybeihqyxsag3kp56kf7z4z3h5trsdywcihipxrg6uyerbvdumcfwz25u
 number_of_agents: 1
 deployment:
   agent:
@@ -136,6 +136,8 @@ models:
         response_timeout: ${RESPONSE_TIMEOUT:int:300}
       checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:60}
       staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
+      staking_contract_address: ${STAKING_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
+      activity_contract_address: ${ACTIVITY_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
   randomness_api:
     args:
       url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}

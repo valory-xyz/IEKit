@@ -20,6 +20,7 @@
 """This module contains the transaction payloads of the StakingAbciApp."""
 
 from dataclasses import dataclass
+from typing import Optional
 
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
@@ -28,12 +29,21 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 class ActivityScorePayload(BaseTxPayload):
     """Represent a transaction payload for the ActivityScoreRound."""
 
+    activity_updates: str
+    last_processed_tweet: int
+
 
 @dataclass(frozen=True)
 class ActiviyUpdatePreparationPayload(BaseTxPayload):
     """Represent a transaction payload for the ActiviyUpdatePreparationRound."""
 
+    tx_submitter: Optional[str] = None
+    tx_hash: Optional[str] = None
+
 
 @dataclass(frozen=True)
 class CheckpointPreparationPayload(BaseTxPayload):
     """Represent a transaction payload for the CheckpointPreparationRound."""
+
+    tx_submitter: Optional[str] = None
+    tx_hash: Optional[str] = None

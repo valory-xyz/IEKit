@@ -19,6 +19,8 @@
 
 """This module contains the shared state for the abci skill of StakingAbciApp."""
 
+from typing import Any
+
 from packages.valory.skills.abstract_round_abci.models import BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
@@ -36,6 +38,19 @@ class SharedState(BaseSharedState):
     abci_app_cls = StakingAbciApp
 
 
-Params = BaseParams
+class Params(BaseParams):
+    """Parameters."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the parameters object."""
+
+        self.staking_contract_address = self._ensure(
+            "staking_contract_address", kwargs, int
+        )
+        self.activity_contract_address = self._ensure(
+            "activity_contract_address", kwargs, int
+        )
+        super().__init__(*args, **kwargs)
+
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool

@@ -20,16 +20,18 @@
 """This package contains the rounds of StakingAbciApp."""
 
 from enum import Enum
-from typing import Dict, FrozenSet, List, Optional, Set, Tuple
+from typing import Dict, FrozenSet, Optional, Set, Tuple
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
-    AbstractRound,
     AppState,
     BaseSynchronizedData,
+    CollectSameUntilThresholdRound,
     DegenerateRound,
+    DeserializedCollection,
     EventToTimeout,
+    get_name,
 )
 from packages.valory.skills.staking_abci.payloads import (
     ActivityScorePayload,
@@ -53,58 +55,83 @@ class SynchronizedData(BaseSynchronizedData):
     This data is replicated by the tendermint application.
     """
 
+    @property
+    def activity_updates(self) -> Optional[Dict]:
+        """Get the activity_updates."""
+        return self.db.get("activity_updates")
 
-class ActivityScoreRound(AbstractRound):
+    @property
+    def last_processed_tweet(self) -> Optional[int]:
+        """Get the last_processed_tweet."""
+        return self.db.get("last_processed_tweet", None)
+
+    @property
+    def most_voted_tx_hash(self) -> Optional[float]:
+        """Get the token most_voted_tx_hash."""
+        return self.db.get("most_voted_tx_hash", None)
+
+    @property
+    def tx_submitter(self) -> str:
+        """Get the round that submitted a tx to transaction_settlement_abci."""
+        return str(self.db.get_strict("tx_submitter"))
+
+    @property
+    def participant_to_activity(self) -> DeserializedCollection:
+        """Agent to payload mapping for the DataPullRound."""
+        return self._get_deserialized("participant_to_activity")
+
+    @property
+    def participant_to_update(self) -> DeserializedCollection:
+        """Agent to payload mapping for the DataPullRound."""
+        return self._get_deserialized("participant_to_update")
+
+    @property
+    def participant_to_checkpoint(self) -> DeserializedCollection:
+        """Agent to payload mapping for the DataPullRound."""
+        return self._get_deserialized("participant_to_checkpoint")
+
+
+
+class ActivityScoreRound(CollectSameUntilThresholdRound):
     """ActivityScoreRound"""
 
     payload_class = ActivityScorePayload
-    payload_attribute = ""  # TODO: update
     synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    collection_key = get_name(SynchronizedData.participant_to_activity)
+    selection_key = (
+        get_name(SynchronizedData.activity_updates),
+        get_name(SynchronizedData.last_processed_tweet),
+    )
 
-    # TODO: replace AbstractRound with one of CollectDifferentUntilAllRound,
-    # CollectSameUntilAllRound, CollectSameUntilThresholdRound,
-    # CollectDifferentUntilThresholdRound, OnlyKeeperSendsRound, VotingRound,
-    # from packages/valory/skills/abstract_round_abci/base.py
-    # or implement the methods
 
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
-        """Process the end of the block."""
-        raise NotImplementedError
-
-class ActiviyUpdatePreparationRound(AbstractRound):
+class ActiviyUpdatePreparationRound(CollectSameUntilThresholdRound):
     """ActiviyUpdatePreparationRound"""
 
     payload_class = ActiviyUpdatePreparationPayload
-    payload_attribute = ""  # TODO: update
     synchronized_data_class = SynchronizedData
-
-    # TODO: replace AbstractRound with one of CollectDifferentUntilAllRound,
-    # CollectSameUntilAllRound, CollectSameUntilThresholdRound,
-    # CollectDifferentUntilThresholdRound, OnlyKeeperSendsRound, VotingRound,
-    # from packages/valory/skills/abstract_round_abci/base.py
-    # or implement the methods
-
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
-        """Process the end of the block."""
-        raise NotImplementedError
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    collection_key = get_name(SynchronizedData.participant_to_update)
+    selection_key = (
+        get_name(SynchronizedData.tx_submitter),
+        get_name(SynchronizedData.most_voted_tx_hash),
+    )
 
 
-class CheckpointPreparationRound(AbstractRound):
+class CheckpointPreparationRound(CollectSameUntilThresholdRound):
     """CheckpointPreparationRound"""
 
     payload_class = CheckpointPreparationPayload
-    payload_attribute = ""  # TODO: update
     synchronized_data_class = SynchronizedData
-
-    # TODO: replace AbstractRound with one of CollectDifferentUntilAllRound,
-    # CollectSameUntilAllRound, CollectSameUntilThresholdRound,
-    # CollectDifferentUntilThresholdRound, OnlyKeeperSendsRound, VotingRound,
-    # from packages/valory/skills/abstract_round_abci/base.py
-    # or implement the methods
-
-    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
-        """Process the end of the block."""
-        raise NotImplementedError
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    collection_key = get_name(SynchronizedData.participant_to_checkpoint)
+    selection_key = (
+        get_name(SynchronizedData.tx_submitter),
+        get_name(SynchronizedData.most_voted_tx_hash),
+    )
 
 
 class FinishedActiviyUpdatePreparationRound(DegenerateRound):
