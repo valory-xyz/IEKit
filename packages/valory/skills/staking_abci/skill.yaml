@@ -1,45 +1,37 @@
-name: dynamic_nft_abci
+name: staking_abci
 author: valory
 version: 0.1.0
 type: skill
-description: A skill that dynamically updates NFT images according to user scores.
+description: The scaffold skill is a scaffold for your own skill implementation.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeiasfbratsbsxyji2k2xeft3jdqaajwqskjsvbjsqht4mrew6wb2km
-  behaviours.py: bafybeieczpv7gqtmh55bf2lpufeayl5d7j36gtcxjglf6la7rwxpm27rwe
-  dialogues.py: bafybeiabtq2to7x6bbbnxzrvupz5rky4b6k73y2lw5dmclb6xx74nuzxe4
-  fsm_specification.yaml: bafybeibkm4iniyjt7ofqredclpvvudtfjbmuatccnblygvqnfucsuymbxy
-  handlers.py: bafybeicpbrshsdvbysuekfuzdfe6ek5peqldvvht4r53g4rv6yvarl35mm
-  models.py: bafybeifcsahmyl53nw7wft5ykkq2rrsx6wocdhgofofnbr2zg64gtk6szy
-  payloads.py: bafybeiggpj2qmh73nlr2rscisscxovf7bfrczlut7k33jujvutzgszjcwi
-  rounds.py: bafybeidmlfpt6x3clbb647egq7gjjjsvbubts2cc6mnon2lp54djsz7spm
-  tests/__init__.py: bafybeidxte5jeugotf25yogfbsoivyokeqffrvzo7lqgspm4kzrgbhvc3u
-  tests/test_behaviours.py: bafybeig5lhgywijd3gcooujztrxy5ihfny5ddcxw2awqtoo245y2xcgtam
-  tests/test_dialogues.py: bafybeigybvptoehtw2o2jbudvyxggo5yr4pyqic7m732sha4xtaaxnfdpe
-  tests/test_handlers.py: bafybeihtowiu7nfirjkievt36vjtjdougyfjgjnjga2flmna3ztvf3qilm
-  tests/test_models.py: bafybeietgyqb5rsbnzqgzcsgm2pu2qcadu7rr7akxscfmegtghc5aguz44
-  tests/test_payloads.py: bafybeifpwaozt6s56uctvfmkdmcuxqawmvhu5skgyfu3ekegqd3iz7v2nm
-  tests/test_rounds.py: bafybeifj5mqzrl2d5jykqdgletlhytaw2yidnshgyejxmyeunh6cqshje4
+  __init__.py: bafybeie3oujhxxdr5s2lvc6cosbysezqycagw5mbwvxjw24k3dzcbtgg5m
+  behaviours.py: bafybeiglsf4uzo5zz5zlfmqobkacsk3cpl7ser25tgjpxu3btryzgdjqye
+  dialogues.py: bafybeifmmpyiwetlcgykczsq4dgwvm7tipdupf2rwcndg5cmtm7jfoxwxm
+  fsm_specification.yaml: bafybeiaqql72hzaexljr54gxc7lagnl7cfovvmb3w36bvbbjvlomeddhcy
+  handlers.py: bafybeiaufft2fwbbjbbc77md6xkq7prnzzi2nkkm2fipapgx54myabmb7y
+  models.py: bafybeiczuwr2g437dyqrjwktzglmapf25xel5t43bioxsg7it6lztq3kxu
+  payloads.py: bafybeibskgzp346aoi2v7ctsge5gpd75533mr42bwc3v65a5lgyvuwxf44
+  rounds.py: bafybeid6df2imu4ti2koqigdu3g4faqkru5ao6mqxqfe5qp6zz6ci3q6uu
 fingerprint_ignore_patterns: []
-connections:
-- valory/http_server:0.22.0:bafybeihpgu56ovmq4npazdbh6y6ru5i7zuv6wvdglpxavsckyih56smu7m
+connections: []
 contracts:
-- valory/dynamic_contribution:0.1.0:bafybeia4qhu3u3fl6gx5vk7ue3qadbcliltuvcx46zsxcffq7phsb54rbq
+- valory/gnosis_safe:0.1.0:bafybeih3ropivth4wn7zbzudisx3qezbht5jyndd4w7az7fq634lpozoge
+- valory/staking:0.1.0:bafybeicaxc4vvc4ytopmr5cgbhgmpmg5qczr5trasdcezolm7ryinlwcpm
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
-- valory/http:1.0.0:bafybeifugzl63kfdmwrxwphrnrhj7bn6iruxieme3a4ntzejf6kmtuwmae
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u
-- valory/decision_making_abci:0.1.0:bafybeicxtxczon2cupzklsnjgpssg6bgppgvxvwkxowfmf7k24sdycjffm
+- valory/transaction_settlement_abci:0.1.0:bafybeic7q7recyka272udwcupblwbkc3jkodgp74fvcdxb7urametg5dae
 behaviours:
   main:
     args: {}
-    class_name: DynamicNFTRoundBehaviour
+    class_name: StakingRoundBehaviour
 handlers:
   abci:
     args: {}
-    class_name: ABCIRoundHandler
+    class_name: ABCIHandler
   contract_api:
     args: {}
     class_name: ContractApiHandler
@@ -80,16 +72,11 @@ models:
     class_name: LedgerApiDialogues
   params:
     args:
-      multisend_address: '0x0000000000000000000000000000000000000000'
-      termination_sleep: 900
-      keeper_allowed_retries: 3
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
-      dynamic_contribution_contract_address: '0x5FbDB2315678afecb367f032d93F642f64180aa3'
-      earliest_block_to_monitor: 8053690
+      finalize_timeout: 60.0
       genesis_config:
-        genesis_time: '2022-09-26T00:00:00.000000000Z'
         chain_id: chain-c4daS1
         consensus_params:
           block:
@@ -97,35 +84,36 @@ models:
             max_gas: '-1'
             time_iota_ms: '1000'
           evidence:
-            max_age_num_blocks: '100000'
             max_age_duration: '172800000000000'
+            max_age_num_blocks: '100000'
             max_bytes: '1048576'
           validator:
             pub_key_types:
             - ed25519
           version: {}
+        genesis_time: '2022-05-20T16:00:21.735122717Z'
         voting_power: '10'
+      history_check_timeout: 1205
+      ipfs_domain_name: null
+      keeper_allowed_retries: 3
       keeper_timeout: 30.0
       max_attempts: 10
       max_healthcheck: 120
-      reset_pause_duration: 10
       on_chain_service_id: null
-      points_to_image_hashes: '{"0": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm",
-        "100": "bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q", "50000":
-        "bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4", "100000": "bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy",
-        "150000": "bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
       request_retry_delay: 1.0
       request_timeout: 10.0
+      reset_pause_duration: 10
       reset_tendermint_after: 2
       retry_attempts: 400
       retry_timeout: 3
       round_timeout_seconds: 30.0
-      service_id: contribution_service
+      service_id: staking
       service_registry_address: null
       setup:
-        all_participants: []
-        safe_contract_address: '0x0000000000000000000000000000000000000000'
+        all_participants:
+        - '0x0000000000000000000000000000000000000000'
         consensus_threshold: null
+        safe_contract_address: '0x0000000000000000000000000000000000000000'
       share_tm_config_on_startup: false
       sleep_time: 1
       tendermint_check_sleep_delay: 3
@@ -133,17 +121,16 @@ models:
       tendermint_max_retries: 5
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
-      token_uri_base: https://pfp.staging.autonolas.tech/
       tx_timeout: 10.0
       use_termination: false
       validate_timeout: 1205
-      finalize_timeout: 60.0
-      history_check_timeout: 1205
       use_slashing: false
       slash_cooldown_hours: 3
       slash_threshold_amount: 10000000000000000
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
+      staking_contract_address: '0x0000000000000000000000000000000000000000'
+      activity_contract_address: '0x0000000000000000000000000000000000000000'
     class_name: Params
   requests:
     args: {}
@@ -157,8 +144,6 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
-  ceramic_db:
-    args: {}
-    class_name: CeramicDB
 dependencies: {}
 is_abstract: true
+customs: []

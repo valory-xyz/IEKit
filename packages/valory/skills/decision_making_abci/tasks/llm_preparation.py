@@ -52,12 +52,14 @@ class LLMPreparation(TaskPreparation):
             self.now_utc,
             self.behaviour,
             self.synchronized_data,
+            self.context,
         ).check_conditions()
 
         run_daily_orbis = yield from DailyOrbisPreparation(
             self.now_utc,
             self.behaviour,
             self.synchronized_data,
+            self.context,
         ).check_conditions()
 
         if not run_daily_tweet and not run_daily_orbis:

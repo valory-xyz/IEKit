@@ -138,11 +138,12 @@ fix-abci-app-specs:
 	autonomy analyse fsm-specs --update --app-class DynamicNFTAbciApp --package packages/valory/skills/dynamic_nft_abci/ || (echo "Failed to check dynamic_nft_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class LLMAbciApp --package packages/valory/skills/llm_abci/ || (echo "Failed to check llm_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class TwitterWriteAbciApp --package packages/valory/skills/twitter_write_abci/ || (echo "Failed to check twitter_write_abci abci consistency" && exit 1)
-	autonomy analyse fsm-specs --update --app-class ImpactEvaluatorSkillAbciApp --package packages/valory/skills/impact_evaluator_abci/ || (echo "Failed to check impact_evaluator_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class WeekInOlasAbciApp --package packages/valory/skills/olas_week_abci/ || (echo "Failed to check olas_week_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class MechInteractAbciApp --package packages/valory/skills/mech_interact_abci/ || (echo "Failed to check mech_interact_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class FarcasterWriteAbciApp --package packages/valory/skills/farcaster_write_abci/ || (echo "Failed to check farcaster_write_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class FarcasterTestSkillAbciApp --package packages/valory/skills/farcaster_test_abci/ || (echo "Failed to check farcaster_test_abci abci consistency" && exit 1)
+	autonomy analyse fsm-specs --update --app-class StakingAbciApp --package packages/valory/skills/staking_abci/ || (echo "Failed to check staking_abci abci consistency" && exit 1)
+	autonomy analyse fsm-specs --update --app-class ImpactEvaluatorSkillAbciApp --package packages/valory/skills/impact_evaluator_abci/ || (echo "Failed to check impact_evaluator_abci abci consistency" && exit 1)
 
 
 .PHONY: all-linters

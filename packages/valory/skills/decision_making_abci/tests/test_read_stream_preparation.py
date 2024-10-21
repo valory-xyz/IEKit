@@ -58,12 +58,16 @@ class BaseReadStreamPreparation:
             "mock_ceramic_data": "mock_ceramic_data"
         }
         self.synchronized_data = MagicMock()
+        self.context = MagicMock()
 
     def create_read_stream_object(self, read_stream_class):
         """Create an instance of the appropriate read stream class."""
         # Create an instance of ReadStreamPreparation
         self.mock_read_stream_preparation = read_stream_class(
-            datetime.now(timezone.utc), self.behaviour, self.synchronized_data
+            datetime.now(timezone.utc),
+            self.behaviour,
+            self.synchronized_data,
+            self.context,
         )
 
     def base_test_check_extra_conditions(self):

@@ -17,22 +17,4 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the DecisionMakingAbciApp."""
-
-from dataclasses import dataclass
-
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
-
-
-@dataclass(frozen=True)
-class DecisionMakingPayload(BaseTxPayload):
-    """Represent a transaction payload for the DecisionMakingRound."""
-
-    content: str
-
-
-@dataclass(frozen=True)
-class PostTxDecisionPayload(BaseTxPayload):
-    """Represent a transaction payload for the PostTxDecisionRound."""
-
-    event: str
+"""This module contains the support resources for an ERC20 token."""

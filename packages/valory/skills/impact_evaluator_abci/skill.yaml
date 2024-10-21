@@ -7,10 +7,10 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
-  behaviours.py: bafybeibdq5p4zi47nsycpcjs7ouw2fjxqjn7hgbd4aalp7yumdhnmlfufq
-  composition.py: bafybeifwmregxn3ibbln3dfkqpmyl5iznfwzepplkjwduoxramikzv6p34
+  behaviours.py: bafybeiciogdifxopcplhlbnpuftwqh5zo4bubyimx7b4r5vfcdtpv5vhpq
+  composition.py: bafybeid2p6odi5rkmmgf5p73w2jacfwdii5r6gdglahhxgqwgvornmc2ki
   dialogues.py: bafybeigjknz4qqynbsltjje46gidg4rftsqw6ybjwegz24wetmycutpzh4
-  fsm_specification.yaml: bafybeibucwb5rwfkalzigiaizsmreenepiba3aen3zxdl23mjidf5mzabi
+  fsm_specification.yaml: bafybeiainj5n52zzpg2p7vhmgmwnfvx5th3xjhk5lnuy3upkbjori246yq
   handlers.py: bafybeidkli6fphcmdgwsys4lkyf3fx6fbawet4nt2pnixfypzijhg6b3ze
   models.py: bafybeif7kujqjk77j7xnnat7lpi7ldgqzh2tp5xhojdjqentfg3s4md6y4
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
@@ -25,19 +25,20 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u
 - valory/ceramic_read_abci:0.1.0:bafybeiede3ehp4bfpbk23gncj52goq62rd3rm5wwlbyaexxrfohucdcpia
-- valory/generic_scoring_abci:0.1.0:bafybeietbnmr6desp4wbuvnqzaz6xemqiuajevdfjskg5ty6n3f7wfaa6e
-- valory/twitter_scoring_abci:0.1.0:bafybeihzctqfchoynwsipart3swsjlywpnjbymrey3acbxfs7in36bogiu
+- valory/generic_scoring_abci:0.1.0:bafybeicesheeji3rxwpphquthazqy75uuuuur36ctsncerxvbzqc6in35a
+- valory/twitter_scoring_abci:0.1.0:bafybeiclxf23jmu5qll6cmluoari63p5fjsyyebjtd2kryenlthfnqerl4
 - valory/ceramic_write_abci:0.1.0:bafybeiemid3ipekyqupbqpfw55g7b2wwx56g2ita73rjalk6fyqgneroam
-- valory/dynamic_nft_abci:0.1.0:bafybeigvyxinbhxvkg3pcx3l5pniliei7xjy7shqbbc7hwsscvcc7zlq2q
+- valory/dynamic_nft_abci:0.1.0:bafybeiasrv3tx6failm73zwo4wwzw7bee4f4ypod5zoosppjjlhwpevvay
 - valory/registration_abci:0.1.0:bafybeibc7duasoaw5b4ene5oxfba2dmdzstsrws6ipi57ymgdtoxjadn54
 - valory/reset_pause_abci:0.1.0:bafybeigrdlxed3xlsnxtjhnsbl3cojruihxcqx4jxhgivkd5i2fkjncgba
 - valory/termination_abci:0.1.0:bafybeib5l7jhew5ic6iq24dd23nidcoimzqkrk556gqywhoziatj33zvwm
 - valory/transaction_settlement_abci:0.1.0:bafybeic7q7recyka272udwcupblwbkc3jkodgp74fvcdxb7urametg5dae
-- valory/decision_making_abci:0.1.0:bafybeig4r3l4xuvuahggqkhxqdfooijgptdmocksy3zpg24slxshxwxu6a
+- valory/decision_making_abci:0.1.0:bafybeicxtxczon2cupzklsnjgpssg6bgppgvxvwkxowfmf7k24sdycjffm
 - valory/llm_abci:0.1.0:bafybeibmckwphs5zqdfnutktwgq7bxfw2auhsxezoopkep5dadkuwqvwgy
 - valory/twitter_write_abci:0.1.0:bafybeid377kr5f3dmb5nyhvucglyaaqkuhthxkfosgl54zskwmsuwz56ie
-- valory/olas_week_abci:0.1.0:bafybeieab2af2oklizkdj5dorljrahejixeadiaguksi5fr6tnmtncu75e
+- valory/olas_week_abci:0.1.0:bafybeiaratytbfjtot3ggp75ck4ae2rusuzxj2vewa6upwjeqwzxskff7u
 - valory/mech_interact_abci:0.1.0:bafybeid6m3i5ofq7vuogqapdnoshhq7mswmudhvfcr2craw25fdwtoe3lm
+- valory/staking_abci:0.1.0:bafybeifrx27rachlkmugqyspf64xvctn6ettrqvzp4y7v2atklilbrhiie
 behaviours:
   main:
     args: {}
@@ -207,6 +208,10 @@ models:
         priority_mech_service_id: 0
         requester_staking_instance_address: '0x0000000000000000000000000000000000000000'
         response_timeout: 300
+      checkpoint_threshold_minutes: 60
+      staking_activity_threshold: 5
+      staking_contract_address: '0x0000000000000000000000000000000000000000'
+      activity_contract_address: '0x0000000000000000000000000000000000000000'
     class_name: Params
   randomness_api:
     args:

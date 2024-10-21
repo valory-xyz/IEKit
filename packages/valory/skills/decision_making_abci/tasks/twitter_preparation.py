@@ -145,9 +145,9 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
     task_name = "scheduled_tweet"
     task_event = Event.SCHEDULED_TWEET.value
 
-    def __init__(self, now_utc, behaviour, synchronized_data) -> None:
+    def __init__(self, now_utc, behaviour, synchronized_data, context) -> None:
         """Init"""
-        super().__init__(now_utc, behaviour, synchronized_data)
+        super().__init__(now_utc, behaviour, synchronized_data, context)
         self.pending_tweets = []
         self.tweets_need_update = False
         self.updated_tweets = None

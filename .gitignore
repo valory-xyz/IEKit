@@ -45,7 +45,6 @@ impact_evaluator
 !packages/valory/services/impact_evaluator
 
 temp/
-.1env
 
 impact_evaluator_local/
 

@@ -63,12 +63,16 @@ class BaseTestLLMPreparation:
         self.behaviour.state = {}
         self.behaviour.context.ceramic_db = MagicMock()
         self.synchronized_data = MagicMock()
+        self.context = MagicMock()
         self.synchronized_data.centaurs_data = DUMMY_CENTAURS_DATA
         self.synchronized_data.current_centaur_index = 0
 
         # Create an instance of LLMPreparation
         self.mock_llm_preparation = LLMPreparation(
-            datetime.now(timezone.utc), self.behaviour, self.synchronized_data
+            datetime.now(timezone.utc),
+            self.behaviour,
+            self.synchronized_data,
+            self.context,
         )
 
         self.mock_llm_preparation.logger.info = MagicMock()
