@@ -49,7 +49,7 @@ from packages.valory.skills.termination_abci.rounds import (
 
 
 # Here we define how the transition between the FSMs should happen
-# more information here: https://docs.autonolas.network/fsm_app_introduction/#composition-of-fsm-apps
+# more information here: https://docs.autonolas.network/open-autonomy/key_concepts/fsm_app_introduction/?h=composition#composition-of-fsm-apps
 abci_app_transition_mapping: AbciAppTransitionMapping = {
     RegistrationAbci.FinishedRegistrationRound: DecisionMakingAbci.DecisionMakingRound,
     DecisionMakingAbci.FinishedDecisionMakingReadCentaursRound: CeramicReadAbci.StreamReadRound,
@@ -68,6 +68,8 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     MechFinalStates.FinishedMechRequestRound: TxSettlementAbci.RandomnessTransactionSubmissionRound,
     TxSettlementAbci.FinishedTransactionSubmissionRound: DecisionMakingAbci.PostTxDecisionMakingRound,
     TxSettlementAbci.FailedRound: MechRequestStates.MechRequestRound,
+    DecisionMakingAbci.FinishedDecisionMakingActivityRound: StakingAbci.ActivityScoreRound,
+    DecisionMakingAbci.FinishedDecisionMakingCheckpointRound: StakingAbci.CheckpointPreparationRound,
     DecisionMakingAbci.FinishedPostMechResponseRound: MechResponseStates.MechResponseRound,
     DecisionMakingAbci.FinishedPostActivityUpdateRound: StakingAbci.ActiviyUpdatePreparationRound,
     DecisionMakingAbci.FinishedPostCheckpointRound: DecisionMakingAbci.DecisionMakingRound,
@@ -108,6 +110,7 @@ ImpactEvaluatorSkillAbciApp = chain(
         WeekInOlasAbciApp.WeekInOlasAbciApp,
         TxSettlementAbci.TransactionSubmissionAbciApp,
         MechInteractAbci.MechInteractAbciApp,
+        StakingAbci.StakingAbciApp,
     ),
     abci_app_transition_mapping,
 ).add_background_app(termination_config)

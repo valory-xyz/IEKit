@@ -168,6 +168,7 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
             # Event.SCHEDULED_TWEET, Event.LLM, Event.DAILY_ORBIS, Event.DAILY_TWEET, Event.NEXT_CENTAUR
             # Event.SCORE, Event.READ_CONTRIBUTE_DB, Event.READ_MANUAL_POINTS, Event.WRITE_CONTRIBUTE_DB
             # Event.WEEK_IN_OLAS_CREATE, Event.TWEET_VALIDATION, Event.FORCE_DB_UPDATE, Event.CAMPAIGN_VALIDATION
+            # Event.STAKING_ACTIVITY, Event.STAKING_CHECKPOINT
 
             payload = json.loads(self.most_voted_payload)
             event = Event(payload["event"])
@@ -207,10 +208,8 @@ class PostTxDecisionMakingRound(CollectSameUntilThresholdRound):
         if self.threshold_reached:
             # We reference all the events here to prevent the check-abciapp-specs tool from complaining
             # since this round receives the event via payload
-            # Event.NO_MAJORITY, Event.DONE, Event.UPDATE_CENTAURS, Event.READ_CENTAURS,
-            # Event.SCHEDULED_TWEET, Event.LLM, Event.DAILY_ORBIS, Event.DAILY_TWEET, Event.NEXT_CENTAUR
-            # Event.SCORE, Event.READ_CONTRIBUTE_DB, Event.READ_MANUAL_POINTS, Event.WRITE_CONTRIBUTE_DB
-            # Event.WEEK_IN_OLAS_CREATE, Event.TWEET_VALIDATION, Event.FORCE_DB_UPDATE, Event.CAMPAIGN_VALIDATION
+            # Event.DONE, Event.NO_MAJORITY
+            # Event.POST_TX_MECH, Event.POST_TX_ACTIVITY_UPDATE, Event.POST_TX_CHECKPOINT
 
             event = Event(self.most_voted_payload)
             return self.synchronized_data, event
@@ -290,7 +289,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
     """DecisionMakingAbciApp"""
 
     initial_round_cls: AppState = DecisionMakingRound
-    initial_states: Set[AppState] = {DecisionMakingRound}
+    initial_states: Set[AppState] = {DecisionMakingRound, PostTxDecisionMakingRound}
     transition_function: AbciAppTransitionFunction = {
         DecisionMakingRound: {
             Event.READ_CENTAURS: FinishedDecisionMakingReadCentaursRound,
@@ -319,6 +318,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.POST_TX_ACTIVITY_UPDATE: FinishedPostActivityUpdateRound,
             Event.POST_TX_CHECKPOINT: FinishedPostCheckpointRound,
             Event.DONE: PostTxDecisionMakingRound,
+            Event.NO_MAJORITY: PostTxDecisionMakingRound,
         },
         FinishedDecisionMakingReadCentaursRound: {},
         FinishedDecisionMakingLLMRound: {},
@@ -361,6 +361,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
     cross_period_persisted_keys: FrozenSet[str] = frozenset()
     db_pre_conditions: Dict[AppState, Set[str]] = {
         DecisionMakingRound: set(),
+        PostTxDecisionMakingRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedDecisionMakingReadCentaursRound: set(),

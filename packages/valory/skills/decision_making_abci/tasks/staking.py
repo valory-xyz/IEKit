@@ -19,9 +19,6 @@
 
 """This package contains the logic for task preparations."""
 
-from datetime import datetime
-
-from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,

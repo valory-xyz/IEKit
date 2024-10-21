@@ -46,6 +46,7 @@ class Event(Enum):
     ROUND_TIMEOUT = "round_timeout"
     NO_MAJORITY = "no_majority"
     DONE = "done"
+    CONTINUE_UPDATING = "continue_updating"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -105,6 +106,10 @@ class ActivityScoreRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.last_processed_tweet),
     )
 
+    # We reference all the events here to prevent the check-abciapp-specs tool from complaining
+    # since this round receives the event via payload
+    # Event.DONE, Event.NO_MAJORITY, Event.ROUND_TIMEOUT
+
 
 class ActiviyUpdatePreparationRound(CollectSameUntilThresholdRound):
     """ActiviyUpdatePreparationRound"""
@@ -118,6 +123,10 @@ class ActiviyUpdatePreparationRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.tx_submitter),
         get_name(SynchronizedData.most_voted_tx_hash),
     )
+
+    # We reference all the events here to prevent the check-abciapp-specs tool from complaining
+    # since this round receives the event via payload
+    # Event.NO_MAJORITY, Event.ROUND_TIMEOUT, Event.CONTINUE_UPDATING, Event.DONE
 
 
 class CheckpointPreparationRound(CollectSameUntilThresholdRound):
@@ -133,9 +142,17 @@ class CheckpointPreparationRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.most_voted_tx_hash),
     )
 
+    # We reference all the events here to prevent the check-abciapp-specs tool from complaining
+    # since this round receives the event via payload
+    # Event.DONE, Event.NO_MAJORITY, Event.ROUND_TIMEOUT
 
-class FinishedActiviyUpdatePreparationRound(DegenerateRound):
-    """FinishedActiviyUpdatePreparationRound"""
+
+class FinishedActiviyUpdatePreparationContinueRound(DegenerateRound):
+    """FinishedActiviyUpdatePreparationContinueRound"""
+
+
+class FinishedActiviyUpdatePreparationEndRound(DegenerateRound):
+    """FinishedActiviyUpdatePreparationEndRound"""
 
 
 class FinishedCheckpointPreparationRound(DegenerateRound):
@@ -146,7 +163,7 @@ class StakingAbciApp(AbciApp[Event]):
     """StakingAbciApp"""
 
     initial_round_cls: AppState = ActivityScoreRound
-    initial_states: Set[AppState] = {CheckpointPreparationRound, ActivityScoreRound}
+    initial_states: Set[AppState] = {CheckpointPreparationRound, ActivityScoreRound, ActiviyUpdatePreparationRound}
     transition_function: AbciAppTransitionFunction = {
         ActivityScoreRound: {
             Event.DONE: ActiviyUpdatePreparationRound,
@@ -154,7 +171,8 @@ class StakingAbciApp(AbciApp[Event]):
             Event.ROUND_TIMEOUT: ActivityScoreRound
         },
         ActiviyUpdatePreparationRound: {
-            Event.DONE: FinishedActiviyUpdatePreparationRound,
+            Event.CONTINUE_UPDATING: FinishedActiviyUpdatePreparationContinueRound,
+            Event.DONE: FinishedActiviyUpdatePreparationEndRound,
             Event.NO_MAJORITY: ActiviyUpdatePreparationRound,
             Event.ROUND_TIMEOUT: ActiviyUpdatePreparationRound
         },
@@ -163,17 +181,20 @@ class StakingAbciApp(AbciApp[Event]):
             Event.NO_MAJORITY: CheckpointPreparationRound,
             Event.ROUND_TIMEOUT: CheckpointPreparationRound
         },
-        FinishedActiviyUpdatePreparationRound: {},
+        FinishedActiviyUpdatePreparationContinueRound: {},
+        FinishedActiviyUpdatePreparationEndRound: {},
         FinishedCheckpointPreparationRound: {}
     }
-    final_states: Set[AppState] = {FinishedCheckpointPreparationRound, FinishedActiviyUpdatePreparationRound}
+    final_states: Set[AppState] = {FinishedCheckpointPreparationRound, FinishedActiviyUpdatePreparationContinueRound, FinishedActiviyUpdatePreparationEndRound}
     event_to_timeout: EventToTimeout = {}
     cross_period_persisted_keys: FrozenSet[str] = frozenset()
     db_pre_conditions: Dict[AppState, Set[str]] = {
         CheckpointPreparationRound: set(),
     	ActivityScoreRound: set(),
+        ActiviyUpdatePreparationRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedCheckpointPreparationRound: set(),
-    	FinishedActiviyUpdatePreparationRound: set(),
+    	FinishedActiviyUpdatePreparationContinueRound: set(),
+        FinishedActiviyUpdatePreparationEndRound: set(),
     }
