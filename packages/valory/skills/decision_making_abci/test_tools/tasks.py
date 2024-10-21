@@ -71,11 +71,15 @@ class BaseTaskTest(FSMBehaviourBaseCase):
         self.synchronized_data = SynchronizedData(
             AbciAppDB(setup_data=AbciAppDB.data_to_lists({}))
         )
+        self.context = MagicMock()
 
     def create_task_preparation_object(self, test_case: TaskTestCase):
         """Create the write stream object."""
         self.mock_task_preparation_object = test_case.task_preparation_class(
-            datetime.now(timezone.utc), self.behaviour, self.synchronized_data
+            datetime.now(timezone.utc),
+            self.behaviour,
+            self.synchronized_data,
+            self.context,
         )
         if test_case.initial_data:
             self.mock_task_preparation_object.synchronized_data.update(

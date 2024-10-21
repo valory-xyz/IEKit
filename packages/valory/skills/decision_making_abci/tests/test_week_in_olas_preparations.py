@@ -38,8 +38,12 @@ class TestWeekInOlasPreparation(unittest.TestCase):
         """Set up the tests."""
         self.behaviour = MagicMock()
         self.synchronized_data = MagicMock()
+        self.context = MagicMock()
         self.mock_week_in_olas_create_preparation = WeekInOlasCreatePreparation(
-            datetime.now(timezone.utc), self.behaviour, self.synchronized_data
+            datetime.now(timezone.utc),
+            self.behaviour,
+            self.synchronized_data,
+            self.context,
         )
 
     def test_check_extra_conditions(self):
