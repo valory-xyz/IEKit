@@ -11,14 +11,14 @@ fingerprint:
   dialogues.py: bafybeifmmpyiwetlcgykczsq4dgwvm7tipdupf2rwcndg5cmtm7jfoxwxm
   fsm_specification.yaml: bafybeiaqql72hzaexljr54gxc7lagnl7cfovvmb3w36bvbbjvlomeddhcy
   handlers.py: bafybeiaufft2fwbbjbbc77md6xkq7prnzzi2nkkm2fipapgx54myabmb7y
-  models.py: bafybeifloi53xa7t646lfaircbnrnyw6fg5sye5izqe2b6drvqhc6pgzg4
+  models.py: bafybeiczuwr2g437dyqrjwktzglmapf25xel5t43bioxsg7it6lztq3kxu
   payloads.py: bafybeibskgzp346aoi2v7ctsge5gpd75533mr42bwc3v65a5lgyvuwxf44
   rounds.py: bafybeid6df2imu4ti2koqigdu3g4faqkru5ao6mqxqfe5qp6zz6ci3q6uu
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
 - valory/gnosis_safe:0.1.0:bafybeih3ropivth4wn7zbzudisx3qezbht5jyndd4w7az7fq634lpozoge
-- valory/staking:0.1.0:bafybeiavmzmwaxuh7v54ovy53eikjkczk3eplcetwhlzhgmjwnar3rhcgy
+- valory/staking:0.1.0:bafybeicaxc4vvc4ytopmr5cgbhgmpmg5qczr5trasdcezolm7ryinlwcpm
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 skills:
@@ -122,7 +122,13 @@ models:
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
       tx_timeout: 10.0
+      use_termination: false
       validate_timeout: 1205
+      use_slashing: false
+      slash_cooldown_hours: 3
+      slash_threshold_amount: 10000000000000000
+      light_slash_unit_amount: 5000000000000000
+      serious_slash_unit_amount: 8000000000000000
       staking_contract_address: '0x0000000000000000000000000000000000000000'
       activity_contract_address: '0x0000000000000000000000000000000000000000'
     class_name: Params
@@ -139,5 +145,5 @@ models:
     args: {}
     class_name: TendermintDialogues
 dependencies: {}
-is_abstract: false
+is_abstract: true
 customs: []

@@ -8,6 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeiclvbed42bmvsm3qqxosfu4kxbc6vuhxaant2od2hmszpkznh3z74
   __init__.py: bafybeif5vpc3dfrlxlch7brbhmdwksabyzddpfqgm56vdbbkek3t3br6ke
+  build/staking.json: bafybeiemn5b5nszuss7xj6lmvmjuendltp6wz7ubihdvd7c6wqw4bohbpa
   contract.py: bafybeia7pbadkoagullommqgvedhrsqvvikakiktqpim63vctqlot4wave
 fingerprint_ignore_patterns: []
 contracts: []

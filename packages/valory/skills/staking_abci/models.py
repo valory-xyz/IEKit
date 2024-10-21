@@ -45,10 +45,10 @@ class Params(BaseParams):
         """Initialize the parameters object."""
 
         self.staking_contract_address = self._ensure(
-            "staking_contract_address", kwargs, int
+            "staking_contract_address", kwargs, str
         )
         self.activity_contract_address = self._ensure(
-            "activity_contract_address", kwargs, int
+            "activity_contract_address", kwargs, str
         )
         super().__init__(*args, **kwargs)
 
