@@ -44,21 +44,22 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeieeaseuy5rbbw465knz27vccvpkfge43q7isl7fkdlfapwd7bpi24
 - valory/abstract_round_abci:0.1.0:bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u
-- valory/impact_evaluator_abci:0.1.0:bafybeifvxpsolfxaakxs2diwpfj6gkh2i3huvtgncgkwdgogzwltbofbjy
-- valory/generic_scoring_abci:0.1.0:bafybeietbnmr6desp4wbuvnqzaz6xemqiuajevdfjskg5ty6n3f7wfaa6e
-- valory/twitter_scoring_abci:0.1.0:bafybeihzctqfchoynwsipart3swsjlywpnjbymrey3acbxfs7in36bogiu
+- valory/impact_evaluator_abci:0.1.0:bafybeiaqct2mmgr6bs7mdecseirxnojqrmz2ro5gpiugdg7mlvvowwrdiq
+- valory/generic_scoring_abci:0.1.0:bafybeicesheeji3rxwpphquthazqy75uuuuur36ctsncerxvbzqc6in35a
+- valory/twitter_scoring_abci:0.1.0:bafybeiclxf23jmu5qll6cmluoari63p5fjsyyebjtd2kryenlthfnqerl4
 - valory/ceramic_read_abci:0.1.0:bafybeiede3ehp4bfpbk23gncj52goq62rd3rm5wwlbyaexxrfohucdcpia
 - valory/ceramic_write_abci:0.1.0:bafybeiemid3ipekyqupbqpfw55g7b2wwx56g2ita73rjalk6fyqgneroam
-- valory/dynamic_nft_abci:0.1.0:bafybeigvyxinbhxvkg3pcx3l5pniliei7xjy7shqbbc7hwsscvcc7zlq2q
+- valory/dynamic_nft_abci:0.1.0:bafybeiasrv3tx6failm73zwo4wwzw7bee4f4ypod5zoosppjjlhwpevvay
 - valory/registration_abci:0.1.0:bafybeibc7duasoaw5b4ene5oxfba2dmdzstsrws6ipi57ymgdtoxjadn54
 - valory/reset_pause_abci:0.1.0:bafybeigrdlxed3xlsnxtjhnsbl3cojruihxcqx4jxhgivkd5i2fkjncgba
 - valory/termination_abci:0.1.0:bafybeib5l7jhew5ic6iq24dd23nidcoimzqkrk556gqywhoziatj33zvwm
 - valory/transaction_settlement_abci:0.1.0:bafybeic7q7recyka272udwcupblwbkc3jkodgp74fvcdxb7urametg5dae
 - valory/twitter_write_abci:0.1.0:bafybeid377kr5f3dmb5nyhvucglyaaqkuhthxkfosgl54zskwmsuwz56ie
-- valory/decision_making_abci:0.1.0:bafybeig4r3l4xuvuahggqkhxqdfooijgptdmocksy3zpg24slxshxwxu6a
+- valory/decision_making_abci:0.1.0:bafybeicxtxczon2cupzklsnjgpssg6bgppgvxvwkxowfmf7k24sdycjffm
 - valory/llm_abci:0.1.0:bafybeibmckwphs5zqdfnutktwgq7bxfw2auhsxezoopkep5dadkuwqvwgy
-- valory/olas_week_abci:0.1.0:bafybeieab2af2oklizkdj5dorljrahejixeadiaguksi5fr6tnmtncu75e
+- valory/olas_week_abci:0.1.0:bafybeiaratytbfjtot3ggp75ck4ae2rusuzxj2vewa6upwjeqwzxskff7u
 - valory/mech_interact_abci:0.1.0:bafybeid6m3i5ofq7vuogqapdnoshhq7mswmudhvfcr2craw25fdwtoe3lm
+- valory/staking_abci:0.1.0:bafybeifrx27rachlkmugqyspf64xvctn6ettrqvzp4y7v2atklilbrhiie
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -269,6 +270,10 @@ models:
         priority_mech_service_id: ${int:0}
         requester_staking_instance_address: ${str:0x0000000000000000000000000000000000000000}
         response_timeout: ${int:300}
+      checkpoint_threshold_minutes: ${int:60}
+      staking_activity_threshold: ${int:5}
+      staking_contract_address: ${str:0x0000000000000000000000000000000000000000}
+      activity_contract_address: ${str:0x0000000000000000000000000000000000000000}
   randomness_api:
     args:
       api_id: cloudflare

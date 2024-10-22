@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,22 +17,33 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the DecisionMakingAbciApp."""
+"""This module contains the transaction payloads of the StakingAbciApp."""
 
 from dataclasses import dataclass
+from typing import Optional
 
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 
 @dataclass(frozen=True)
-class DecisionMakingPayload(BaseTxPayload):
-    """Represent a transaction payload for the DecisionMakingRound."""
+class ActivityScorePayload(BaseTxPayload):
+    """Represent a transaction payload for the ActivityScoreRound."""
 
-    content: str
+    activity_updates: str
+    last_processed_tweet: int
 
 
 @dataclass(frozen=True)
-class PostTxDecisionPayload(BaseTxPayload):
-    """Represent a transaction payload for the PostTxDecisionRound."""
+class ActiviyUpdatePreparationPayload(BaseTxPayload):
+    """Represent a transaction payload for the ActiviyUpdatePreparationRound."""
 
-    event: str
+    tx_submitter: Optional[str] = None
+    tx_hash: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class CheckpointPreparationPayload(BaseTxPayload):
+    """Represent a transaction payload for the CheckpointPreparationRound."""
+
+    tx_submitter: Optional[str] = None
+    tx_hash: Optional[str] = None

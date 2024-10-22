@@ -5,6 +5,7 @@ alphabet_in:
 - CHECK_LATE_ARRIVING_MESSAGE
 - CHECK_TIMEOUT
 - CONTINUE
+- CONTINUE_UPDATING
 - CONTRACT_ERROR
 - DAILY_ORBIS
 - DAILY_TWEET
@@ -31,6 +32,9 @@ alphabet_in:
 - NO_MAJORITY
 - OPENAI_CALL_CHECK
 - POST_MECH
+- POST_TX_ACTIVITY_UPDATE
+- POST_TX_CHECKPOINT
+- POST_TX_MECH
 - PRE_MECH
 - READ_CENTAURS
 - READ_CONTRIBUTE_DB
@@ -47,6 +51,8 @@ alphabet_in:
 - SELECT_KEEPERS
 - SKIP_EVALUATION
 - SKIP_REQUEST
+- STAKING_ACTIVITY
+- STAKING_CHECKPOINT
 - SUSPICIOUS_ACTIVITY
 - TWEET_EVALUATION_ROUND_TIMEOUT
 - TWEET_VALIDATION
@@ -56,18 +62,27 @@ alphabet_in:
 - WEEK_IN_OLAS_CREATE
 - WRITE_CONTRIBUTE_DB
 default_start_state: RegistrationStartupRound
-final_states: []
+final_states:
+- FinishedActiviyUpdatePreparationContinueRound
+- FinishedActiviyUpdatePreparationEndRound
+- FinishedCheckpointPreparationRound
 label: ImpactEvaluatorSkillAbciApp
 start_states:
 - RegistrationRound
 - RegistrationStartupRound
 states:
+- ActivityScoreRound
+- ActiviyUpdatePreparationRound
 - CheckLateTxHashesRound
 - CheckTransactionHistoryRound
+- CheckpointPreparationRound
 - CollectSignatureRound
 - DBUpdateRound
 - DecisionMakingRound
 - FinalizationRound
+- FinishedActiviyUpdatePreparationContinueRound
+- FinishedActiviyUpdatePreparationEndRound
+- FinishedCheckpointPreparationRound
 - GenericScoringRound
 - LLMRandomnessRound
 - LLMRound
@@ -81,6 +96,7 @@ states:
 - OlasWeekSelectKeepersRound
 - OlasWeekTweetCollectionRound
 - PostMechRequestRound
+- PostTxDecisionMakingRound
 - PreMechRequestRound
 - RandomnessRound
 - RandomnessTransactionSubmissionRound
@@ -107,18 +123,28 @@ states:
 - ValidateTransactionRound
 - VerificationRound
 transition_func:
+    (ActivityScoreRound, DONE): ActiviyUpdatePreparationRound
+    (ActivityScoreRound, NO_MAJORITY): ActivityScoreRound
+    (ActivityScoreRound, ROUND_TIMEOUT): ActivityScoreRound
+    (ActiviyUpdatePreparationRound, CONTINUE_UPDATING): FinishedActiviyUpdatePreparationContinueRound
+    (ActiviyUpdatePreparationRound, DONE): FinishedActiviyUpdatePreparationEndRound
+    (ActiviyUpdatePreparationRound, NO_MAJORITY): ActiviyUpdatePreparationRound
+    (ActiviyUpdatePreparationRound, ROUND_TIMEOUT): ActiviyUpdatePreparationRound
     (CheckLateTxHashesRound, CHECK_LATE_ARRIVING_MESSAGE): SynchronizeLateMessagesRound
     (CheckLateTxHashesRound, CHECK_TIMEOUT): CheckLateTxHashesRound
-    (CheckLateTxHashesRound, DONE): MechResponseRound
+    (CheckLateTxHashesRound, DONE): PostTxDecisionMakingRound
     (CheckLateTxHashesRound, NEGATIVE): MechRequestRound
     (CheckLateTxHashesRound, NONE): MechRequestRound
     (CheckLateTxHashesRound, NO_MAJORITY): MechRequestRound
     (CheckTransactionHistoryRound, CHECK_LATE_ARRIVING_MESSAGE): SynchronizeLateMessagesRound
     (CheckTransactionHistoryRound, CHECK_TIMEOUT): CheckTransactionHistoryRound
-    (CheckTransactionHistoryRound, DONE): MechResponseRound
+    (CheckTransactionHistoryRound, DONE): PostTxDecisionMakingRound
     (CheckTransactionHistoryRound, NEGATIVE): SelectKeeperTransactionSubmissionBRound
     (CheckTransactionHistoryRound, NONE): MechRequestRound
     (CheckTransactionHistoryRound, NO_MAJORITY): CheckTransactionHistoryRound
+    (CheckpointPreparationRound, DONE): FinishedCheckpointPreparationRound
+    (CheckpointPreparationRound, NO_MAJORITY): CheckpointPreparationRound
+    (CheckpointPreparationRound, ROUND_TIMEOUT): CheckpointPreparationRound
     (CollectSignatureRound, DONE): FinalizationRound
     (CollectSignatureRound, NO_MAJORITY): ResetRound
     (CollectSignatureRound, ROUND_TIMEOUT): CollectSignatureRound
@@ -139,6 +165,8 @@ transition_func:
     (DecisionMakingRound, ROUND_TIMEOUT): DecisionMakingRound
     (DecisionMakingRound, SCHEDULED_TWEET): RandomnessTwitterRound
     (DecisionMakingRound, SCORE): GenericScoringRound
+    (DecisionMakingRound, STAKING_ACTIVITY): ActivityScoreRound
+    (DecisionMakingRound, STAKING_CHECKPOINT): CheckpointPreparationRound
     (DecisionMakingRound, TWEET_VALIDATION): DecisionMakingRound
     (DecisionMakingRound, UPDATE_CENTAURS): RandomnessRound
     (DecisionMakingRound, WEEK_IN_OLAS_CREATE): OlasWeekDecisionMakingRound
@@ -198,6 +226,11 @@ transition_func:
     (PostMechRequestRound, DONE): TwitterDecisionMakingRound
     (PostMechRequestRound, NO_MAJORITY): PostMechRequestRound
     (PostMechRequestRound, ROUND_TIMEOUT): PreMechRequestRound
+    (PostTxDecisionMakingRound, DONE): PostTxDecisionMakingRound
+    (PostTxDecisionMakingRound, NO_MAJORITY): PostTxDecisionMakingRound
+    (PostTxDecisionMakingRound, POST_TX_ACTIVITY_UPDATE): ActiviyUpdatePreparationRound
+    (PostTxDecisionMakingRound, POST_TX_CHECKPOINT): DecisionMakingRound
+    (PostTxDecisionMakingRound, POST_TX_MECH): MechResponseRound
     (PreMechRequestRound, DONE): MechRequestRound
     (PreMechRequestRound, NO_MAJORITY): PreMechRequestRound
     (PreMechRequestRound, ROUND_TIMEOUT): PreMechRequestRound
@@ -289,7 +322,7 @@ transition_func:
     (TwitterWriteRound, CONTINUE): TwitterWriteRound
     (TwitterWriteRound, DONE): DecisionMakingRound
     (TwitterWriteRound, ROUND_TIMEOUT): RandomnessTwitterRound
-    (ValidateTransactionRound, DONE): MechResponseRound
+    (ValidateTransactionRound, DONE): PostTxDecisionMakingRound
     (ValidateTransactionRound, NEGATIVE): CheckTransactionHistoryRound
     (ValidateTransactionRound, NONE): SelectKeeperTransactionSubmissionBRound
     (ValidateTransactionRound, NO_MAJORITY): ValidateTransactionRound

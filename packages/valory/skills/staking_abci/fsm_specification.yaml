@@ -1,0 +1,33 @@
+alphabet_in:
+- CONTINUE_UPDATING
+- DONE
+- NO_MAJORITY
+- ROUND_TIMEOUT
+default_start_state: ActivityScoreRound
+final_states:
+- FinishedActiviyUpdatePreparationContinueRound
+- FinishedActiviyUpdatePreparationEndRound
+- FinishedCheckpointPreparationRound
+label: StakingAbciApp
+start_states:
+- ActivityScoreRound
+- ActiviyUpdatePreparationRound
+- CheckpointPreparationRound
+states:
+- ActivityScoreRound
+- ActiviyUpdatePreparationRound
+- CheckpointPreparationRound
+- FinishedActiviyUpdatePreparationContinueRound
+- FinishedActiviyUpdatePreparationEndRound
+- FinishedCheckpointPreparationRound
+transition_func:
+    (ActivityScoreRound, DONE): ActiviyUpdatePreparationRound
+    (ActivityScoreRound, NO_MAJORITY): ActivityScoreRound
+    (ActivityScoreRound, ROUND_TIMEOUT): ActivityScoreRound
+    (ActiviyUpdatePreparationRound, CONTINUE_UPDATING): FinishedActiviyUpdatePreparationContinueRound
+    (ActiviyUpdatePreparationRound, DONE): FinishedActiviyUpdatePreparationEndRound
+    (ActiviyUpdatePreparationRound, NO_MAJORITY): ActiviyUpdatePreparationRound
+    (ActiviyUpdatePreparationRound, ROUND_TIMEOUT): ActiviyUpdatePreparationRound
+    (CheckpointPreparationRound, DONE): FinishedCheckpointPreparationRound
+    (CheckpointPreparationRound, NO_MAJORITY): CheckpointPreparationRound
+    (CheckpointPreparationRound, ROUND_TIMEOUT): CheckpointPreparationRound

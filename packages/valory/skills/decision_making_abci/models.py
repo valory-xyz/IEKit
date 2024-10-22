@@ -83,6 +83,12 @@ class Params(BaseParams):
         self.tweet_consensus_veolas = self._ensure(
             "tweet_consensus_veolas", kwargs, int
         )
+        self.checkpoint_threshold_minutes = self._ensure(
+            "checkpoint_threshold_minutes", kwargs, int
+        )
+        self.staking_activity_threshold = self._ensure(
+            "staking_activity_threshold", kwargs, int
+        )
         super().__init__(*args, **kwargs)
 
 
