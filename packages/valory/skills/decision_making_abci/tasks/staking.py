@@ -42,6 +42,9 @@ class StakingPreparation(TaskPreparation):
         if minutes_since_last_run > self.params.checkpoint_threshold_minutes:
             return True
 
+        # If the epoch is about to end, we run the staking skill
+        # TODO
+
         return False
 
     def _pre_task(self):
@@ -75,7 +78,7 @@ class StakingActivityPreparation(StakingPreparation):
         """Check user staking threshold"""
         yield
 
-        # If enough users have passed the rewards threshold, we run the activity update
+        # If enough users have pending updates, we run the activity update
         pending_updates = self.count_pending_updates()
         if pending_updates > self.params.staking_activity_threshold:
             return True

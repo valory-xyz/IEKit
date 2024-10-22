@@ -5,7 +5,6 @@ alphabet_in:
 - CHECK_LATE_ARRIVING_MESSAGE
 - CHECK_TIMEOUT
 - CONTINUE
-- CONTINUE_UPDATING
 - CONTRACT_ERROR
 - DAILY_ORBIS
 - DAILY_TWEET
@@ -36,6 +35,7 @@ alphabet_in:
 - POST_TX_CHECKPOINT
 - POST_TX_MECH
 - PRE_MECH
+- PROCESS_UPDATES
 - READ_CENTAURS
 - READ_CONTRIBUTE_DB
 - READ_MANUAL_POINTS
@@ -62,10 +62,7 @@ alphabet_in:
 - WEEK_IN_OLAS_CREATE
 - WRITE_CONTRIBUTE_DB
 default_start_state: RegistrationStartupRound
-final_states:
-- FinishedActiviyUpdatePreparationContinueRound
-- FinishedActiviyUpdatePreparationEndRound
-- FinishedCheckpointPreparationRound
+final_states: []
 label: ImpactEvaluatorSkillAbciApp
 start_states:
 - RegistrationRound
@@ -80,9 +77,6 @@ states:
 - DBUpdateRound
 - DecisionMakingRound
 - FinalizationRound
-- FinishedActiviyUpdatePreparationContinueRound
-- FinishedActiviyUpdatePreparationEndRound
-- FinishedCheckpointPreparationRound
 - GenericScoringRound
 - LLMRandomnessRound
 - LLMRound
@@ -123,11 +117,11 @@ states:
 - ValidateTransactionRound
 - VerificationRound
 transition_func:
-    (ActivityScoreRound, DONE): ActiviyUpdatePreparationRound
+    (ActivityScoreRound, DONE): DecisionMakingRound
     (ActivityScoreRound, NO_MAJORITY): ActivityScoreRound
+    (ActivityScoreRound, PROCESS_UPDATES): ActiviyUpdatePreparationRound
     (ActivityScoreRound, ROUND_TIMEOUT): ActivityScoreRound
-    (ActiviyUpdatePreparationRound, CONTINUE_UPDATING): FinishedActiviyUpdatePreparationContinueRound
-    (ActiviyUpdatePreparationRound, DONE): FinishedActiviyUpdatePreparationEndRound
+    (ActiviyUpdatePreparationRound, DONE): RandomnessTransactionSubmissionRound
     (ActiviyUpdatePreparationRound, NO_MAJORITY): ActiviyUpdatePreparationRound
     (ActiviyUpdatePreparationRound, ROUND_TIMEOUT): ActiviyUpdatePreparationRound
     (CheckLateTxHashesRound, CHECK_LATE_ARRIVING_MESSAGE): SynchronizeLateMessagesRound
@@ -142,7 +136,7 @@ transition_func:
     (CheckTransactionHistoryRound, NEGATIVE): SelectKeeperTransactionSubmissionBRound
     (CheckTransactionHistoryRound, NONE): MechRequestRound
     (CheckTransactionHistoryRound, NO_MAJORITY): CheckTransactionHistoryRound
-    (CheckpointPreparationRound, DONE): FinishedCheckpointPreparationRound
+    (CheckpointPreparationRound, DONE): RandomnessTransactionSubmissionRound
     (CheckpointPreparationRound, NO_MAJORITY): CheckpointPreparationRound
     (CheckpointPreparationRound, ROUND_TIMEOUT): CheckpointPreparationRound
     (CollectSignatureRound, DONE): FinalizationRound
@@ -228,7 +222,7 @@ transition_func:
     (PostMechRequestRound, ROUND_TIMEOUT): PreMechRequestRound
     (PostTxDecisionMakingRound, DONE): PostTxDecisionMakingRound
     (PostTxDecisionMakingRound, NO_MAJORITY): PostTxDecisionMakingRound
-    (PostTxDecisionMakingRound, POST_TX_ACTIVITY_UPDATE): ActiviyUpdatePreparationRound
+    (PostTxDecisionMakingRound, POST_TX_ACTIVITY_UPDATE): ActivityScoreRound
     (PostTxDecisionMakingRound, POST_TX_CHECKPOINT): DecisionMakingRound
     (PostTxDecisionMakingRound, POST_TX_MECH): MechResponseRound
     (PreMechRequestRound, DONE): MechRequestRound

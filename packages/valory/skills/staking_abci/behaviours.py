@@ -55,7 +55,7 @@ from packages.valory.skills.transaction_settlement_abci.rounds import TX_HASH_LE
 ZERO_VALUE = 0
 EMPTY_CALL_DATA = b"0x"
 SAFE_GAS = 0
-GNOSIS_CHAIN_ID = "gnosis"
+BASE_CHAIN_ID = "base"
 
 
 class StakingBaseBehaviour(BaseBehaviour, ABC):
@@ -95,7 +95,7 @@ class StakingBaseBehaviour(BaseBehaviour, ABC):
             value=value,
             data=data,
             safe_tx_gas=SAFE_GAS,
-            chain_id=GNOSIS_CHAIN_ID,
+            chain_id=BASE_CHAIN_ID,
             operation=operation,
         )
 
@@ -144,12 +144,31 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
+
             sender = self.context.agent_address
-            activity_updates, last_processed_tweet = self.get_activity_updates()
+
+            pending_write = False
+            activity_updates = None
+            latest_activity_tweet_id = None
+
+            # Check whether we just came back from settling an update
+            if self.synchronized_data.tx_submitter == ActiviyUpdatePreparationBehaviour.auto_behaviour_id():
+                # Update the last processed tweet on the model, and mark for Ceramic update
+                self.context.ceramic_db.data["module_data"]["staking"][
+                    "latest_activity_tweet_id"
+                ] = self.synchronized_data.latest_activity_tweet_id
+                pending_write = True
+                self.context.logger.info(f"Last activity tweet id set to {self.synchronized_data.latest_activity_tweet_id}. Ceramic marked for update.")
+
+            # Process new updates
+            else:
+                activity_updates, latest_activity_tweet_id = self.get_activity_updates()
+
             payload = ActivityScorePayload(
                 sender=sender,
                 activity_updates=json.dumps(activity_updates, sort_keys=True),
-                last_processed_tweet=last_processed_tweet
+                latest_activity_tweet_id=latest_activity_tweet_id,
+                pending_write=pending_write
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -172,9 +191,7 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
 
         for user in ceramic_db_copy.data["users"]:
 
-            new_tweets = 0
-
-            for tweet_id in user["tweets"].keys():
+             for tweet_id, tweet_data in user["tweets"].items():
                 tweet_id = int(tweet_id)
 
                 # Skip old tweets
@@ -186,11 +203,10 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
                     last_processed_tweet = tweet_id
 
                 # Increase activity count
-                new_tweets += 1
-
-            # Add the user activity
-            if new_tweets:
-                updates[user["service_multisig"]] = new_tweets
+                if user["service_multisig"] not in updates:
+                    updates[user["service_multisig"]] = tweet_data["points"]
+                else:
+                    updates[user["service_multisig"]] += tweet_data["points"]
 
         return updates, last_processed_tweet
 
@@ -233,7 +249,7 @@ class ActiviyUpdatePreparationBehaviour(StakingBaseBehaviour):
             contract_id=str(Staking.contract_id),
             contract_callable="build_activity_update_tx",
             updates=self.synchronized_data.activity_updates,
-            chain_id=GNOSIS_CHAIN_ID,
+            chain_id=BASE_CHAIN_ID,
         )
 
         # Check that the response is what we expect
@@ -296,7 +312,7 @@ class CheckpointPreparationBehaviour(StakingBaseBehaviour):
             contract_address=self.params.staking_contract_address,
             contract_id=str(Staking.contract_id),
             contract_callable="build_checkpoint_tx",
-            chain_id=GNOSIS_CHAIN_ID,
+            chain_id=BASE_CHAIN_ID,
         )
 
         # Check that the response is what we expect

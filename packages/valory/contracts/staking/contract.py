@@ -54,5 +54,5 @@ class Staking(Contract):
     ) -> Dict[str, bytes]:
         """Build an ERC20 approval."""
         contract_instance = cls.get_instance(ledger_api, contract_address)
-        data = contract_instance.encodeABI("update", args=(updates,))
+        data = contract_instance.encodeABI("increaseActivity", args=(updates,))
         return {"data": bytes.fromhex(data[2:])}

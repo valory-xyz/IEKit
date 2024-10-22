@@ -29,8 +29,9 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 class ActivityScorePayload(BaseTxPayload):
     """Represent a transaction payload for the ActivityScoreRound."""
 
-    activity_updates: str
-    last_processed_tweet: int
+    activity_updates: Optional[str]
+    latest_activity_tweet_id: Optional[int]
+    pending_write: bool
 
 
 @dataclass(frozen=True)
