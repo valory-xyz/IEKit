@@ -20,7 +20,7 @@
 """This package contains the rounds of StakingAbciApp."""
 
 from enum import Enum
-from typing import Dict, FrozenSet, Optional, Set, Tuple
+from typing import Dict, FrozenSet, Optional, Set, Tuple, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
@@ -46,7 +46,7 @@ class Event(Enum):
     ROUND_TIMEOUT = "round_timeout"
     NO_MAJORITY = "no_majority"
     DONE = "done"
-    CONTINUE_UPDATING = "continue_updating"
+    PROCESS_UPDATES = "process_updates"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -62,9 +62,9 @@ class SynchronizedData(BaseSynchronizedData):
         return self.db.get("activity_updates")
 
     @property
-    def last_processed_tweet(self) -> Optional[int]:
-        """Get the last_processed_tweet."""
-        return self.db.get("last_processed_tweet", None)
+    def latest_activity_tweet_id(self) -> Optional[int]:
+        """Get the latest_activity_tweet_id."""
+        return self.db.get("latest_activity_tweet_id", None)
 
     @property
     def most_voted_tx_hash(self) -> Optional[float]:
@@ -77,11 +77,6 @@ class SynchronizedData(BaseSynchronizedData):
         return str(self.db.get_strict("tx_submitter"))
 
     @property
-    def participant_to_activity(self) -> DeserializedCollection:
-        """Agent to payload mapping for the DataPullRound."""
-        return self._get_deserialized("participant_to_activity")
-
-    @property
     def participant_to_update(self) -> DeserializedCollection:
         """Agent to payload mapping for the DataPullRound."""
         return self._get_deserialized("participant_to_update")
@@ -91,6 +86,11 @@ class SynchronizedData(BaseSynchronizedData):
         """Agent to payload mapping for the DataPullRound."""
         return self._get_deserialized("participant_to_checkpoint")
 
+    @property
+    def pending_write(self) -> bool:
+        """Checks whether there are changes pending to be written to Ceramic."""
+        return cast(bool, self.db.get("pending_write", False))
+
 
 
 class ActivityScoreRound(CollectSameUntilThresholdRound):
@@ -98,17 +98,45 @@ class ActivityScoreRound(CollectSameUntilThresholdRound):
 
     payload_class = ActivityScorePayload
     synchronized_data_class = SynchronizedData
-    done_event = Event.DONE
-    no_majority_event = Event.NO_MAJORITY
-    collection_key = get_name(SynchronizedData.participant_to_activity)
+
     selection_key = (
         get_name(SynchronizedData.activity_updates),
-        get_name(SynchronizedData.last_processed_tweet),
+        get_name(SynchronizedData.latest_activity_tweet_id),
     )
 
-    # We reference all the events here to prevent the check-abciapp-specs tool from complaining
-    # since this round receives the event via payload
-    # Event.DONE, Event.NO_MAJORITY, Event.ROUND_TIMEOUT
+    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
+        """Process the end of the block."""
+        if self.threshold_reached:
+            payload = self.most_voted_payload
+
+            # We have finished with the activity update
+            # Mark Ceramic for a write
+            if payload.pending_write:
+                synchronized_data = self.synchronized_data.update(
+                    synchronized_data_class=SynchronizedData,
+                    **{
+                        get_name(SynchronizedData.pending_write): True,
+                    },
+                )
+
+                return synchronized_data, Event.DONE
+
+            # Prepare the update transaction
+            synchronized_data = self.synchronized_data.update(
+                synchronized_data_class=SynchronizedData,
+                **{
+                    get_name(SynchronizedData.activity_updates): payload.activity_updates,
+                    get_name(SynchronizedData.latest_activity_tweet_id): payload.latest_activity_tweet_id,
+                },
+            )
+            return synchronized_data, Event.PROCESS_UPDATES
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
+        return None
+
+        # Event.ROUND_TIMEOUT
 
 
 class ActiviyUpdatePreparationRound(CollectSameUntilThresholdRound):
@@ -126,7 +154,7 @@ class ActiviyUpdatePreparationRound(CollectSameUntilThresholdRound):
 
     # We reference all the events here to prevent the check-abciapp-specs tool from complaining
     # since this round receives the event via payload
-    # Event.NO_MAJORITY, Event.ROUND_TIMEOUT, Event.CONTINUE_UPDATING, Event.DONE
+    # Event.NO_MAJORITY, Event.ROUND_TIMEOUT, Event.DONE
 
 
 class CheckpointPreparationRound(CollectSameUntilThresholdRound):
@@ -147,12 +175,12 @@ class CheckpointPreparationRound(CollectSameUntilThresholdRound):
     # Event.DONE, Event.NO_MAJORITY, Event.ROUND_TIMEOUT
 
 
-class FinishedActiviyUpdatePreparationContinueRound(DegenerateRound):
-    """FinishedActiviyUpdatePreparationContinueRound"""
+class FinishedActiviyUpdatePreparationRound(DegenerateRound):
+    """FinishedActiviyUpdatePreparationRound"""
 
 
-class FinishedActiviyUpdatePreparationEndRound(DegenerateRound):
-    """FinishedActiviyUpdatePreparationEndRound"""
+class FinishedActivityRound(DegenerateRound):
+    """FinishedActivityRound"""
 
 
 class FinishedCheckpointPreparationRound(DegenerateRound):
@@ -163,16 +191,16 @@ class StakingAbciApp(AbciApp[Event]):
     """StakingAbciApp"""
 
     initial_round_cls: AppState = ActivityScoreRound
-    initial_states: Set[AppState] = {CheckpointPreparationRound, ActivityScoreRound, ActiviyUpdatePreparationRound}
+    initial_states: Set[AppState] = {CheckpointPreparationRound, ActivityScoreRound}
     transition_function: AbciAppTransitionFunction = {
         ActivityScoreRound: {
-            Event.DONE: ActiviyUpdatePreparationRound,
+            Event.DONE: FinishedActivityRound,
+            Event.PROCESS_UPDATES: ActiviyUpdatePreparationRound,
             Event.NO_MAJORITY: ActivityScoreRound,
             Event.ROUND_TIMEOUT: ActivityScoreRound
         },
         ActiviyUpdatePreparationRound: {
-            Event.CONTINUE_UPDATING: FinishedActiviyUpdatePreparationContinueRound,
-            Event.DONE: FinishedActiviyUpdatePreparationEndRound,
+            Event.DONE: FinishedActiviyUpdatePreparationRound,
             Event.NO_MAJORITY: ActiviyUpdatePreparationRound,
             Event.ROUND_TIMEOUT: ActiviyUpdatePreparationRound
         },
@@ -181,20 +209,19 @@ class StakingAbciApp(AbciApp[Event]):
             Event.NO_MAJORITY: CheckpointPreparationRound,
             Event.ROUND_TIMEOUT: CheckpointPreparationRound
         },
-        FinishedActiviyUpdatePreparationContinueRound: {},
-        FinishedActiviyUpdatePreparationEndRound: {},
+        FinishedActiviyUpdatePreparationRound: {},
+        FinishedActivityRound: {},
         FinishedCheckpointPreparationRound: {}
     }
-    final_states: Set[AppState] = {FinishedCheckpointPreparationRound, FinishedActiviyUpdatePreparationContinueRound, FinishedActiviyUpdatePreparationEndRound}
+    final_states: Set[AppState] = {FinishedCheckpointPreparationRound, FinishedActiviyUpdatePreparationRound, FinishedActivityRound}
     event_to_timeout: EventToTimeout = {}
     cross_period_persisted_keys: FrozenSet[str] = frozenset()
     db_pre_conditions: Dict[AppState, Set[str]] = {
         CheckpointPreparationRound: set(),
     	ActivityScoreRound: set(),
-        ActiviyUpdatePreparationRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedCheckpointPreparationRound: set(),
-    	FinishedActiviyUpdatePreparationContinueRound: set(),
-        FinishedActiviyUpdatePreparationEndRound: set(),
+        FinishedCheckpointPreparationRound: {"most_voted_tx_hash"},
+    	FinishedActiviyUpdatePreparationRound: {"most_voted_tx_hash"},
+        FinishedActivityRound: set(),
     }
