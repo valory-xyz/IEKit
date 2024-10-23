@@ -51,6 +51,7 @@ connections: []
 contracts:
 - valory/veolas_delegation:0.1.0:bafybeieicrbkito2hglwvd4j2cbq3etxpm3rrzfyx5kqqe34fu7q5aftye
 - valory/compatibility_fallback_handler:0.1.0:bafybeihr5y3243pctx334stsprpsmt6sssygw2jepx7fa23yofgwpp7jt4
+- valory/staking:0.1.0:bafybeigvbjd33jy5k753ksksp5dkiqk6e5y5vmn66fqd5ibjiwgwzioybm
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 skills:
