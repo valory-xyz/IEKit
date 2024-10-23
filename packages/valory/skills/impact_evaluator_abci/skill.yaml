@@ -212,6 +212,7 @@ models:
       staking_activity_threshold: 5
       staking_contract_address: '0x0000000000000000000000000000000000000000'
       activity_contract_address: '0x0000000000000000000000000000000000000000'
+      epoch_end_threshold_minutes: 20
     class_name: Params
   randomness_api:
     args:

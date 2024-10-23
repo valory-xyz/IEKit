@@ -144,6 +144,7 @@ extra:
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
         staking_contract_address: ${STAKING_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
         activity_contract_address: ${ACTIVITY_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
+        epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -243,6 +244,7 @@ extra:
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
         staking_contract_address: ${STAKING_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
         activity_contract_address: ${ACTIVITY_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
+        epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -342,6 +344,7 @@ extra:
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
         staking_contract_address: ${STAKING_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
         activity_contract_address: ${ACTIVITY_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
+        epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -445,6 +448,7 @@ extra:
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
         staking_contract_address: ${STAKING_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
         activity_contract_address: ${ACTIVITY_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
+        epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}

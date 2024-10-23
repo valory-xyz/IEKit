@@ -19,11 +19,16 @@
 
 """This package contains the logic for task preparations."""
 
+import datetime
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
 )
-
+from packages.valory.contracts.staking.contract import (
+    Staking,
+)
+from packages.valory.protocols.contract_api import ContractApiMessage
+from datetime import datetime
 
 class StakingPreparation(TaskPreparation):
     """StakingPreparation"""
@@ -40,10 +45,14 @@ class StakingPreparation(TaskPreparation):
         # If too much time has passed since last execution, we run the staking skill
         minutes_since_last_run = (self.now_utc - self.last_run).total_seconds() / 60
         if minutes_since_last_run > self.params.checkpoint_threshold_minutes:
+            self.context.logger.info("Too much time has passed since last execution.")
             return True
 
         # If the epoch is about to end, we run the staking skill
-        # TODO
+        is_epoch_ending = yield from self.is_epoch_ending()
+        if is_epoch_ending:
+            self.context.logger.info("Epoch is about to end.")
+            return True
 
         return False
 
@@ -67,6 +76,33 @@ class StakingPreparation(TaskPreparation):
         yield
         return updates, None
 
+    def is_epoch_ending(self):
+        """Check if the epoch is ending"""
+
+        # Call get_code
+        contract_api_msg = yield from self.behaviour.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
+            contract_address=self.params.staking_contract_address,
+            contract_id=str(Staking.contract_id),
+            contract_callable="get_epoch_end",
+        )
+        if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
+            self.behaviour.context.logger.error(
+                f"Error getting the epoch end: [{contract_api_msg.performative}]"
+            )
+            return False
+
+        epoch_end_ts = contract_api_msg.state.body["epoch_end"]
+        epoch_end = datetime.fromtimestamp(epoch_end_ts)
+
+        # Should not happen, but if the epoch has ended, we do not care about calling
+        if self.now_utc > epoch_end:
+            return False
+
+        is_epoch_ending = (epoch_end - self.now_utc).total_seconds() < self.params.epoch_end_threshold_minutes * 60
+
+        return is_epoch_ending
+
 
 class StakingActivityPreparation(StakingPreparation):
     """StakingActivityPreparation"""
@@ -81,6 +117,7 @@ class StakingActivityPreparation(StakingPreparation):
         # If enough users have pending updates, we run the activity update
         pending_updates = self.count_pending_updates()
         if pending_updates > self.params.staking_activity_threshold:
+            self.context.logger.info("There are enough pending updates. Executing...")
             return True
 
         # If the checkpoint is about to be called and there's pending updates, we run the activity update
@@ -105,7 +142,7 @@ class StakingActivityPreparation(StakingPreparation):
             ]
         )
 
-        for user in ceramic_db.users:
+        for user in ceramic_db.data.users:
             sorted_tweet_ids = list(
                 sorted([int(i) for i in user.get("tweets", {}).keys()])
             )

@@ -274,6 +274,7 @@ models:
       staking_activity_threshold: ${int:5}
       staking_contract_address: ${str:0x0000000000000000000000000000000000000000}
       activity_contract_address: ${str:0x0000000000000000000000000000000000000000}
+      epoch_end_threshold_minutes: ${int:20}
   randomness_api:
     args:
       api_id: cloudflare
