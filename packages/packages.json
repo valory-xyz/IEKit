@@ -28,8 +28,8 @@
         "skill/valory/farcaster_test_abci/0.1.0": "bafybeigpplppmyct7tfmlgahxqaxlnejtdz3hsdwkhbwlwpfy3mksatixm",
         "agent/valory/impact_evaluator/0.1.0": "bafybeiefoc4c2daz32wptiuznwn2pdznl3aiss4ckl25xqet46o2ixjwnq",
         "agent/valory/farcaster_test/0.1.0": "bafybeib2wpj3i4iwed23ep76r37jpp2r7zdi4uehlri2hxyhhrssni6ojy",
-        "service/valory/impact_evaluator/0.1.0": "bafybeifjdyevnvofr4ttoi7khq352hu2drnx4ajswhytonyuvegsckylma",
-        "service/valory/impact_evaluator_local/0.1.0": "bafybeidzdqvnenviy4z3m6crdcaxeiyiaj6duqunqntcb7mgirv5irlubm"
+        "service/valory/impact_evaluator/0.1.0": "bafybeidqxfalin7m5efm5qlyrqfqchwbrgtjlxgpptiku4rorrjucvnqpi",
+        "service/valory/impact_evaluator_local/0.1.0": "bafybeicd3pyhetvongyfzvzoxihxjqj3ta2i77c33bm27axeacfdm4lxty"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi",
