@@ -135,9 +135,11 @@ class StakingActivityPreparation(StakingPreparation):
         # A staked user needs to be updated if they have sent at least a new tweet
         ceramic_db = self.context.ceramic_db
 
-        latest_activity_tweet_id = int(ceramic_db.data["module_data"]["staking_activiy"][
-            "latest_activity_tweet_id"
-        ])
+        latest_activity_tweet_id = int(
+            ceramic_db.data["module_data"]["staking_activiy"][
+                "latest_activity_tweet_id"
+            ]
+        )
 
         for user in ceramic_db.data.users:
             sorted_tweet_ids = list(
