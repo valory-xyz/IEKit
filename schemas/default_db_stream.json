@@ -1,5 +1,23 @@
 {
-    "users": {},
+    "users": {
+        "2146": {
+            "points": 101500,
+            "token_id": "187",
+            "discord_id": null,
+            "twitter_id": "1761132611533934592",
+            "discord_handle": null,
+            "twitter_handle": "tsunami_0x",
+            "wallet_address": null,
+            "service_multisig": null,
+            "tweets": {
+                "1773360094882697540": {
+                    "points": 100,
+                    "campaign": "OlasNetwork",
+                    "timestamp": "1761132611533934592"
+                }
+            }
+        }
+    },
     "module_data": {
         "generic": {
             "latest_update_id": "0"
@@ -13,6 +31,9 @@
         },
         "dynamic_nft": {
             "last_parsed_block": "0"
+        },
+        "staking_activiy": {
+            "latest_activity_tweet_id": "1753121332232061266"
         }
     }
 }
