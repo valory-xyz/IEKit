@@ -146,10 +146,11 @@ In order to run a local demo service based on the IEKit:
 6. Run the service.
 
     ```bash
-    cd abci_build
+    cd abci_build_{uuid}
     autonomy deploy run
     ```
 
+    Where `{uuid}` is a 4-character random hash.
     You can cancel the local execution at any time by pressing ++ctrl+c++.
 
 7. Check that the service is running. Open a separate terminal and execute the command below. You should see the service transitioning along different states.

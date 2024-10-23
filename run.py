@@ -40,6 +40,12 @@ def run_agent():
     subprocess.run(["autonomy", "issue-certificates"])
     subprocess.run(["aea", "-s", "run"])
 
+def find_abci_build_folder(directory):
+    for folder in os.listdir(directory):
+        if folder.startswith("abci_build_") and os.path.isdir(os.path.join(directory, folder)):
+            return folder
+    return None
+
 def run_service():
     # Set env vars
     load_dotenv(dotenv_path=Path(".env"))
@@ -63,7 +69,10 @@ def run_service():
     p = None
     try:
         # p = subprocess.run(["autonomy", "deploy", "run", "--build-dir", "abci_build/"])
-        p = subprocess.Popen(["autonomy", "deploy", "run", "--build-dir", "abci_build/"], shell=False)
+        abci_folder = find_abci_build_folder(os.curdir)
+        if abci_folder is None:
+            raise Exception("Could not find abci_build folder!")
+        p = subprocess.Popen(["autonomy", "deploy", "run", "--build-dir", abci_folder], shell=False)
     except KeyboardInterrupt:
         p.send_signal(signal.SIGINT)
         p.wait()
