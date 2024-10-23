@@ -183,11 +183,11 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
         updates = {}
         ceramic_db_copy = self.context.ceramic_db.copy()
 
-        latest_activity_tweet_id = int(ceramic_db_copy.data["module_data"]["staking"][
+        latest_activity_tweet_id = int(ceramic_db_copy.data["module_data"]["staking_activiy"][
             "latest_activity_tweet_id"
         ])
 
-        last_processed_tweet = latest_activity_tweet_id
+        latest_processed_tweet = latest_activity_tweet_id
 
         for user in ceramic_db_copy.data["users"]:
 
@@ -201,8 +201,8 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
                     continue
 
                 # Update the last_processed_tweet
-                if tweet_id > last_processed_tweet:
-                    last_processed_tweet = tweet_id
+                if tweet_id > latest_processed_tweet:
+                    latest_processed_tweet = tweet_id
 
                 # Increase activity count
                 new_tweets += 1
@@ -211,7 +211,7 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
             if new_tweets:
                 updates[user["service_multisig"]] = new_tweets
 
-        return updates, last_processed_tweet
+        return updates, latest_processed_tweet
 
 
 class ActiviyUpdatePreparationBehaviour(StakingBaseBehaviour):

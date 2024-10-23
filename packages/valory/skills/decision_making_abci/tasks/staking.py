@@ -32,7 +32,7 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 class StakingPreparation(TaskPreparation):
     """StakingPreparation"""
 
-    task_name = "staking_preparation"
+    task_name = None
 
     def check_extra_conditions(self):
         """Check whether it is time to call the checkpoint"""
@@ -134,14 +134,10 @@ class StakingActivityPreparation(StakingPreparation):
 
         # A staked user needs to be updated if they have sent at least a new tweet
         ceramic_db = self.context.ceramic_db
-        centaurs_data = self.synchronized_data.centaurs_data
-        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
 
-        last_processed_tweet = int(
-            current_centaur["configuration"]["plugins"][self.task_name][
-                "last_processed_tweet"
-            ]
-        )
+        latest_activity_tweet_id = int(ceramic_db.data["module_data"]["staking_activiy"][
+            "latest_activity_tweet_id"
+        ])
 
         for user in ceramic_db.data.users:
             sorted_tweet_ids = list(
@@ -153,7 +149,7 @@ class StakingActivityPreparation(StakingPreparation):
                 continue
 
             # If the latest tweet id is higher than the last processed tweet, it means this tweet is newer
-            if sorted_tweet_ids[-1] > last_processed_tweet:
+            if sorted_tweet_ids[-1] > latest_activity_tweet_id:
                 updates += 1
 
         return updates
