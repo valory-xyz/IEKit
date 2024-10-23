@@ -89,6 +89,9 @@ class Params(BaseParams):
         self.staking_activity_threshold = self._ensure(
             "staking_activity_threshold", kwargs, int
         )
+        self.epoch_end_threshold_minutes = self._ensure(
+            "epoch_end_threshold_minutes", kwargs, int
+        )
         super().__init__(*args, **kwargs)
 
 

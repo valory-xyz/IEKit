@@ -56,3 +56,16 @@ class Staking(Contract):
         contract_instance = cls.get_instance(ledger_api, contract_address)
         data = contract_instance.encodeABI("increaseActivity", args=(updates,))
         return {"data": bytes.fromhex(data[2:])}
+
+    @classmethod
+    def get_epoch_end(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+    ) -> Dict:
+        """Get the epoch end."""
+        contract_instance = cls.get_instance(ledger_api, contract_address)
+        liveness = contract_instance.functions.livenessPeriod().call()
+        checpoint_ts = contract_instance.functions.tsCheckpoint().call()
+        epoch_end = checpoint_ts + liveness
+        return dict(epoch_end=epoch_end)

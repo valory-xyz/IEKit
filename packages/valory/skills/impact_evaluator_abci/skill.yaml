@@ -25,20 +25,20 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u
 - valory/ceramic_read_abci:0.1.0:bafybeiede3ehp4bfpbk23gncj52goq62rd3rm5wwlbyaexxrfohucdcpia
-- valory/generic_scoring_abci:0.1.0:bafybeihjdgcsmand23dlrea2oga4ootolpe6ddv256qb2qcm3foko7zo6e
-- valory/twitter_scoring_abci:0.1.0:bafybeieskndevywsjfbch3mw2l63vn76ufugtgx5pneqotng64ihtbfghy
+- valory/generic_scoring_abci:0.1.0:bafybeigtodqkfuipdtxeegjelwulzvwy4idoqcj4wmupfet6n27omllkkq
+- valory/twitter_scoring_abci:0.1.0:bafybeiaenfyvccnhip3qu7rkbraxejsvae4poiek74en7gam2aln6zuudy
 - valory/ceramic_write_abci:0.1.0:bafybeiemid3ipekyqupbqpfw55g7b2wwx56g2ita73rjalk6fyqgneroam
-- valory/dynamic_nft_abci:0.1.0:bafybeiblwwxl3zg3ctjxijaouhygddzywhhiqupm4b6p6ionboelcwgai4
+- valory/dynamic_nft_abci:0.1.0:bafybeifun5jkmdwir4chn3i5s3igp2qlzjscuxgjb7qto6f7bwtqbxmwfi
 - valory/registration_abci:0.1.0:bafybeibc7duasoaw5b4ene5oxfba2dmdzstsrws6ipi57ymgdtoxjadn54
 - valory/reset_pause_abci:0.1.0:bafybeigrdlxed3xlsnxtjhnsbl3cojruihxcqx4jxhgivkd5i2fkjncgba
 - valory/termination_abci:0.1.0:bafybeib5l7jhew5ic6iq24dd23nidcoimzqkrk556gqywhoziatj33zvwm
 - valory/transaction_settlement_abci:0.1.0:bafybeic7q7recyka272udwcupblwbkc3jkodgp74fvcdxb7urametg5dae
-- valory/decision_making_abci:0.1.0:bafybeigrcet4dsg4s2mbr7arkmljkhob2v5lydoqir5jgghex3u7qaavp4
+- valory/decision_making_abci:0.1.0:bafybeign2jlrcjw4vqtdagoahj64rnj4u333uaau2z63adoktf6qwyknk4
 - valory/llm_abci:0.1.0:bafybeibmckwphs5zqdfnutktwgq7bxfw2auhsxezoopkep5dadkuwqvwgy
 - valory/twitter_write_abci:0.1.0:bafybeid377kr5f3dmb5nyhvucglyaaqkuhthxkfosgl54zskwmsuwz56ie
-- valory/olas_week_abci:0.1.0:bafybeid6tqp6pynbjnyyhuzcfjdllpfp5ppcwrprddsej52hvjnxhi6xhu
+- valory/olas_week_abci:0.1.0:bafybeihvad4mx4dio3g76lbm4ahz7ijjo2c63obwe2sybk5lfmlwzsyfo4
 - valory/mech_interact_abci:0.1.0:bafybeid6m3i5ofq7vuogqapdnoshhq7mswmudhvfcr2craw25fdwtoe3lm
-- valory/staking_abci:0.1.0:bafybeibecgbedfhwalzumwiynqrwvaolh7iy4cw4imuxgkltbvcvvabvmi
+- valory/staking_abci:0.1.0:bafybeia2n6k272f2vo6fe7nvorspw7ciq2osxyniqim5wyeohn2okv7eym
 behaviours:
   main:
     args: {}
@@ -212,6 +212,7 @@ models:
       staking_activity_threshold: 5
       staking_contract_address: '0x0000000000000000000000000000000000000000'
       activity_contract_address: '0x0000000000000000000000000000000000000000'
+      epoch_end_threshold_minutes: 20
     class_name: Params
   randomness_api:
     args:

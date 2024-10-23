@@ -191,7 +191,9 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
 
         for user in ceramic_db_copy.data["users"]:
 
-             for tweet_id, tweet_data in user["tweets"].items():
+            new_tweets = 0
+
+            for tweet_id in user["tweets"].keys():
                 tweet_id = int(tweet_id)
 
                 # Skip old tweets
@@ -203,10 +205,11 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
                     last_processed_tweet = tweet_id
 
                 # Increase activity count
-                if user["service_multisig"] not in updates:
-                    updates[user["service_multisig"]] = tweet_data["points"]
-                else:
-                    updates[user["service_multisig"]] += tweet_data["points"]
+                new_tweets += 1
+
+            # Add the user activity
+            if new_tweets:
+                updates[user["service_multisig"]] = new_tweets
 
         return updates, last_processed_tweet
 
