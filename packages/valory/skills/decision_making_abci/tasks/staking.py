@@ -19,16 +19,15 @@
 
 """This package contains the logic for task preparations."""
 
-import datetime
+from datetime import datetime
+
+from packages.valory.contracts.staking.contract import Staking
+from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
 )
-from packages.valory.contracts.staking.contract import (
-    Staking,
-)
-from packages.valory.protocols.contract_api import ContractApiMessage
-from datetime import datetime
+
 
 class StakingPreparation(TaskPreparation):
     """StakingPreparation"""
@@ -99,7 +98,9 @@ class StakingPreparation(TaskPreparation):
         if self.now_utc > epoch_end:
             return False
 
-        is_epoch_ending = (epoch_end - self.now_utc).total_seconds() < self.params.epoch_end_threshold_minutes * 60
+        is_epoch_ending = (
+            epoch_end - self.now_utc
+        ).total_seconds() < self.params.epoch_end_threshold_minutes * 60
 
         return is_epoch_ending
 
