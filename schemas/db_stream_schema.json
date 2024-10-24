@@ -1,6 +1,22 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
     "definitions": {
+        "tweet": {
+            "type": "object",
+            "properties": {
+                "points": {
+                    "type": "integer"
+                },
+                "campaign": {
+                    "type": ["string", "null"]
+                },
+                "timestamp": {
+                    "type": ["integer", "null"]
+                }
+            },
+            "required": ["points", "campaign", "timestamp"],
+            "additionalProperties": false
+        },
         "user": {
             "type": "object",
             "properties": {
@@ -28,14 +44,16 @@
                 "current_period_points": {
                     "type": "integer"
                 },
+                "service_multisig": {
+                    "type": ["string", "null"]
+                },
                 "tweets": {
                     "type": "object",
                     "patternProperties": {
                         "^[0-9]+$": {
-                          "type": "integer"
+                            "$ref": "#/definitions/tweet"
                         }
-                    },
-                    "additionalProperties": false
+                    }
                 }
             },
             "required": ["points", "token_id", "discord_id", "twitter_id", "discord_handle", "twitter_handle", "wallet_address", "current_period_points", "tweets"],
@@ -95,6 +113,16 @@
                         }
                     },
                     "required": ["last_parsed_block"],
+                    "additionalProperties": false
+                },
+                "staking_activiy": {
+                    "type": "object",
+                    "properties": {
+                        "latest_activity_tweet_id": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["latest_activity_tweet_id"],
                     "additionalProperties": false
                 }
             },
