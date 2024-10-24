@@ -31,7 +31,7 @@ In order to run a local demo service based on the IEKit:
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeifjdyevnvofr4ttoi7khq352hu2drnx4ajswhytonyuvegsckylma --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeidqxfalin7m5efm5qlyrqfqchwbrgtjlxgpptiku4rorrjucvnqpi --service
     ```
 
 3. Build the Docker image of the service agents
@@ -146,10 +146,11 @@ In order to run a local demo service based on the IEKit:
 6. Run the service.
 
     ```bash
-    cd abci_build
+    cd abci_build_{uuid}
     autonomy deploy run
     ```
 
+    Where `{uuid}` is a 4-character random hash.
     You can cancel the local execution at any time by pressing ++ctrl+c++.
 
 7. Check that the service is running. Open a separate terminal and execute the command below. You should see the service transitioning along different states.
