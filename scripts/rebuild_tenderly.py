@@ -1,3 +1,25 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# ------------------------------------------------------------------------------
+#
+#   Copyright 2021-2024 Valory AG
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+# ------------------------------------------------------------------------------
+
+"""This script handles adding and removing vnets on Tenderly"""
+
 # Recreate Tenderly networks.
 #
 # Requires two files ".env" and "tenderly_vnets.json":
@@ -25,9 +47,10 @@ import json
 import os
 import random
 import re
-import requests
 import string
-from typing import Tuple, Optional
+from typing import Optional, Tuple
+
+import requests
 from dotenv import load_dotenv
 
 
@@ -111,7 +134,7 @@ def _create_vnet(
 
 def _generate_vnet_slug(preffix: str="vnet", length: int=4):
     characters = string.ascii_lowercase
-    return preffix + '-' + ''.join(random.choice(characters) for _ in range(length))
+    return preffix + '-' + ''.join(random.choice(characters) for _ in range(length))  # nosec
 
 
 def _update_bash_variable(file_path: str, variable_name: str, new_value: str):
@@ -134,6 +157,7 @@ def _update_bash_variable(file_path: str, variable_name: str, new_value: str):
 
 
 def main() -> None:
+    """Main"""
     print("Recreating Tenderly Networks")
 
     account_slug = os.getenv("TENDERLY_ACCOUNT_SLUG")

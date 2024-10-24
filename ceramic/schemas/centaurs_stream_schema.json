@@ -280,7 +280,7 @@
                     "enum" : ["proposed", "voting", "scheduled", "live", "ended", "void"]
                 }
             },
-            "required": ["request_id", "createdDate", "text", "posted", "proposer", "voters",  "executionAttempts", "action_id"],
+            "required": ["id", "hashtag", "start_ts", "end_ts", "proposer", "voters",  "status"],
             "additionalProperties": false
         },
         "centaur": {
@@ -341,7 +341,7 @@
                                     "$ref": "#/definitions/twitter_campaigns_config"
                                 },
                                 "staking_activiy": {
-                                    "$ref": "#/definitions/staking_activiy_config"
+                                    "$ref": "#/definitions/staking_activity_config"
                                 },
                                 "staking_checkpoint": {
                                     "$ref": "#/definitions/staking_checkpoint_config"

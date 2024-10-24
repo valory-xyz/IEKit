@@ -17,12 +17,12 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains code to handle migrations on Ceramic."""
+"""This package contains code to read Contribute streams on Ceramic."""
 
 from ceramic import Ceramic
 import os
 import dotenv
-from scripts.streams import *
+from streams import *
 import json
 
 dotenv.load_dotenv()
