@@ -122,6 +122,42 @@
             "required": ["weekly", "enabled", "last_run", "run_hour_utc"],
             "additionalProperties": false
         },
+        "twitter_campaigns_config": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            },
+            "required": ["enabled"],
+            "additionalProperties": false
+        },
+        "staking_activity_config": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "last_run": {
+                    "type": ["integer", "null", "string"]
+                }
+            },
+            "required": ["enabled", "last_run"],
+            "additionalProperties": false
+        },
+        "staking_checkpoint_config": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "last_run": {
+                    "type": ["integer", "null", "string"]
+                }
+            },
+            "required": ["enabled", "last_run"],
+            "additionalProperties": false
+        },
         "executionAttempt": {
             "type": "object",
             "properties": {
@@ -213,6 +249,40 @@
             "required": ["request_id", "createdDate", "text", "posted", "proposer", "voters",  "executionAttempts", "action_id"],
             "additionalProperties": false
         },
+        "twitter_campaign_data": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "hashtag": {
+                    "type": "string"
+                },
+                "start_ts": {
+                    "type": "integer"
+                },
+                "end_ts": {
+                    "type": "integer"
+                },
+                "proposer": {
+                    "$ref": "#/definitions/proposer"
+                },
+                "voters": {
+                    "type": "array",
+                    "items": {
+                        "items": {
+                            "$ref": "#/definitions/voter"
+                        }
+                    }
+                },
+                "status": {
+                    "type": "string",
+                    "enum" : ["proposed", "voting", "scheduled", "live", "ended", "void"]
+                }
+            },
+            "required": ["id", "hashtag", "start_ts", "end_ts", "proposer", "voters",  "status"],
+            "additionalProperties": false
+        },
         "centaur": {
             "type": "object",
             "properties": {
@@ -266,6 +336,15 @@
                                 },
                                 "week_in_olas": {
                                     "$ref": "#/definitions/week_in_olas_config"
+                                },
+                                "twitter_campaigns": {
+                                    "$ref": "#/definitions/twitter_campaigns_config"
+                                },
+                                "staking_activiy": {
+                                    "$ref": "#/definitions/staking_activity_config"
+                                },
+                                "staking_checkpoint": {
+                                    "$ref": "#/definitions/staking_checkpoint_config"
                                 }
                             },
                             "required": ["daily_tweet", "scheduled_tweet", "daily_orbis", "week_in_olas"],
@@ -301,6 +380,19 @@
                                 }
                             },
                             "required": ["tweets"],
+                            "additionalProperties": false
+                        },
+                        "twitter_campaigns": {
+                            "type": "object",
+                            "properties": {
+                                "campaigns": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/twitter_campaign_data"
+                                    }
+                                }
+                            },
+                            "required": ["campaigns"],
                             "additionalProperties": false
                         }
                     },

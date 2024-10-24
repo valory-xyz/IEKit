@@ -20,7 +20,7 @@
 """This package contains code to handle streams on Ceramic."""
 
 import requests
-from packages.valory.skills.ceramic_read_abci.ceramic.payloads import build_genesis_payload, build_commit_payload, build_data_from_commits
+from payloads import build_genesis_payload, build_commit_payload, build_data_from_commits
 
 # Glaze quick start
 # https://developers.ceramic.network/build/cli/quick-start/#__tabbed_1_1
@@ -51,16 +51,24 @@ class Ceramic:
     def __init__(self, url_base=DEFAULT_URL_BASE) -> None:
         """Init"""
         self.url_base = url_base
+        if self.url_base.endswith("/"):
+            self.url_base = self.url_base[:-1]
 
     def _make_request(self, url: str, request_type: str="get", json_data: dict={}):
         """Handle requests"""
         response = None
-        try:
-            response = getattr(requests, request_type)(url)
-        except AttributeError as exc:
-            raise ValueError(f"Request method '{request_type}' not supported") from exc
+        if request_type not in ("get", "post", "delete"):
+            raise ValueError(f"Request method '{request_type}' not supported")
+        if request_type == "get":
+            response = requests.get(url)
+        if request_type == "post":
+            response = requests.post(url, json=json_data)
+        if request_type == "delete":
+            response = requests.delete(url)
         if not response:
-            return response.status_code, None
+            print(response.status_code)
+            print(response.json())
+            return None, None
         headers = response.headers.get("content-type")
         data = response.json() if headers and "application/json" in headers else {}
         return response.status_code, data
@@ -96,16 +104,14 @@ class Ceramic:
         if code != HTTP_OK or not data:
             print(f"Error fetching data from stream {stream_id}")
             return None, None, None
-        # import json
-        # print(json.dumps(data, indent=4))
-        # Extract first and last commit info
 
+        # Extract first and last commit info
         genesis_cid_str = data["commits"][0]["cid"]
         previous_cid_str = data["commits"][-1]["cid"]
 
         # Rebuild the current data
-        commit_data = yield from build_data_from_commits(data["commits"])
-        return commit_data, genesis_cid_str, previous_cid_str
+        data =  build_data_from_commits(data["commits"]), genesis_cid_str, previous_cid_str
+        return data
 
     def create_stream(self, did: str, did_seed: str, data: dict, extra_metadata: dict = {}) -> str:
         """Create a stream"""
@@ -117,7 +123,8 @@ class Ceramic:
         if code != HTTP_OK or not data:
             print(f"Error creating stream: {data}")
 
-        return data['streamId']
+        print(f"Created stream {data['streamId']}")
+        return data["streamId"]
 
     def update_stream(self, did: str, did_seed: str, stream_id: str, new_data: dict) -> None:
         """Update a stream"""
