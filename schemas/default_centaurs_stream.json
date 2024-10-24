@@ -12,6 +12,34 @@
             "daily_tweet": {},
             "scheduled_tweet": {
                 "tweets": []
+            },
+            "twitter_campaigns": {
+                "campaigns": [
+                    {
+                        "id": "123456789",
+                        "hashtag": "dummy",
+                        "start_ts": 1729693101,
+                        "end_ts": 1729693101,
+                        "proposer": {
+                            "address": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",
+                            "verified": true,
+                            "signature": ""
+                        },
+                        "voters": [
+                            {
+                                "address": "0xD566B174c7C799124646e5e1b06f15bF406c47f5",
+                                "signature": "0x0d637da293f4822977c3fe26589c85ef94110905ec84b5f61980bbf42f10cb466a1191db3b2a7500bca45997cc8b37ddf37da7a76f928fc86d8e44b662b412f71b",
+                                "votingPower": 148482.42050878357
+                            },
+                            {
+                                "address": "0x6CF807bb1dEE8E2D4C55E8Cf6C875544edB2fCFe",
+                                "signature": "0x94ad975b960eb20a9a8c8064b443c0d8df7863ccf0d75491e28fa1c6c8e801b61bc1e71dd8fdb7b00a125586009d303e8c2200c311c76014c9957283774792581c",
+                                "votingPower": 18030273.1048828
+                            }
+                        ],
+                        "status": "proposed"
+                    }
+                ]
             }
         },
         "configuration": {
@@ -37,6 +65,17 @@
                 "scheduled_tweet": {
                     "daily": false,
                     "enabled": true
+                },
+                "twitter_campaigns": {
+                    "enabled": true
+                },
+                "staking_activiy": {
+                    "enabled": true,
+                    "last_run": null
+                },
+                "staking_checkpoint": {
+                    "enabled": true,
+                    "last_run": null
                 }
             },
             "memberWhitelist": []

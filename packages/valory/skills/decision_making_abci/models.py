@@ -112,6 +112,7 @@ class CeramicDBBase:
         "points",
         "current_period_points",
         "tweets",
+        "service_multisig",
     }
 
     def __init__(self) -> None:
@@ -133,6 +134,7 @@ class CeramicDBBase:
                     },
                     "dynamic_nft": {},
                     "generic": {"latest_update_id": 0},
+                    "staking_activiy": {"latest_activity_tweet_id": "0"},
                 },
             }
         )
@@ -244,6 +246,11 @@ class CeramicDBBase:
                     if field == "tweets":
                         for value in values[1:]:
                             values[0].update(value)  # type: ignore
+                        values = [values[0]]
+
+                    # Merge the multisigs
+                    # We have no way to tell which one we should keep
+                    if field == "service_multisig":
                         values = [values[0]]
 
                     # Check whether all values are the same
