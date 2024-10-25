@@ -30,6 +30,8 @@ from typing import Dict, Generator, List, Optional, Set, Tuple, Type, Union, cas
 
 from web3 import Web3
 
+from packages.valory.contracts.staking.contract import Staking
+from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
@@ -168,6 +170,24 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
             if campaign["status"] == "live"
         ]
         return active_hashtags
+
+    def get_staking_epoch(self) -> Generator[None, None, Optional[int]]:
+        """Get the staking epoch"""
+
+        contract_api_msg = yield from self.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
+            contract_address=self.params.staking_contract_address,
+            contract_id=str(Staking.contract_id),
+            contract_callable="get_epoch",
+        )
+        if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
+            self.context.logger.error(
+                f"Error getting the epoch: [{contract_api_msg.performative}]"
+            )
+            return None
+
+        epoch = cast(int, contract_api_msg.state.body["epoch"])
+        return epoch
 
 
 def get_campaign(tweet: Union[str, List[str]], campaigns: List[str]) -> Optional[str]:
@@ -992,11 +1012,10 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             sender = self.context.agent_address
+            ceramic_diff = yield from self.get_update_diff()
             payload = DBUpdatePayload(
                 sender=sender,
-                content=json.dumps(
-                    {"ceramic_diff": self.get_update_diff()}, sort_keys=True
-                ),
+                content=json.dumps({"ceramic_diff": ceramic_diff}, sort_keys=True),
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -1005,7 +1024,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         self.set_done()
 
-    def get_update_diff(self) -> Dict:
+    def get_update_diff(self) -> Generator[None, None, Dict]:
         """Calculate the new content of the DB"""
 
         tweets = self.synchronized_data.tweets
@@ -1030,6 +1049,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             ceramic_db_copy.reset_period_points()
 
         active_hashtags = self.get_active_hashtags()
+
+        # Get the staking epoch
+        epoch = yield from self.get_staking_epoch()
 
         # Update data
         for tweet_id, tweet in tweets.items():
@@ -1067,6 +1089,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 user_tweets[tweet_id] = {
                     "points": new_points,
                     "campaign": campaign,
+                    "epoch": epoch,
                     "timestamp": tweet["created_at"],
                 }
 

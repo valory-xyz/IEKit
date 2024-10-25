@@ -78,7 +78,6 @@ class StakingPreparation(TaskPreparation):
     def is_epoch_ending(self):
         """Check if the epoch is ending"""
 
-        # Call get_code
         contract_api_msg = yield from self.behaviour.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
             contract_address=self.params.staking_contract_address,

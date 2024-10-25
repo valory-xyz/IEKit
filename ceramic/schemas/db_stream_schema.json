@@ -10,11 +10,14 @@
                 "campaign": {
                     "type": ["string", "null"]
                 },
+                "epoch": {
+                    "type": ["integer", "null"]
+                },
                 "timestamp": {
                     "type": ["integer", "null"]
                 }
             },
-            "required": ["points", "campaign", "timestamp"],
+            "required": ["points", "campaign", "epoch", "timestamp"],
             "additionalProperties": false
         },
         "user": {

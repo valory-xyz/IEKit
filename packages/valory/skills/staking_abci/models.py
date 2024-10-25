@@ -44,8 +44,8 @@ class Params(BaseParams):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the parameters object."""
 
-        self.staking_contract_address = self._ensure(
-            "staking_contract_address", kwargs, str
+        self.staking_contract_address = kwargs.get(
+            "staking_contract_address"
         )
         self.activity_contract_address = self._ensure(
             "activity_contract_address", kwargs, str
