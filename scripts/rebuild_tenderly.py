@@ -37,6 +37,16 @@
     #         "admin_rpc": "value",  # AUTO-UPDATED, DON'T INCLUDE ON FIRST RUN
     #         "public_rpc": "value", # AUTO-UPDATED, DON'T INCLUDE ON FIRST RUN
     #         "vnet_slug": "value"   # AUTO-UPDATED, DON'T INCLUDE ON FIRST RUN
+    #         "wallets": {           # OPTIONAL, JUST FOR PRE-FUNDING WALLETS
+    #             "addresses": {
+    #                 "address_1_tag": "address_1_address",
+    #                 "address_2_tag": "address_2_address",
+    #             },
+    #             "funds": {
+    #                 "native": 100,
+    #                 "0xcE11e14225575945b8E6Dc0D4F2dD4C570f79d9f": 100
+    #             }
+    #         },
     #     },
     #
     #     ... (other networks, as required)
@@ -156,6 +166,51 @@ def _update_bash_variable(file_path: str, variable_name: str, new_value: str):
         file.writelines(updated_lines)
 
 
+def _fund_wallet(
+    admin_rpc: str,
+    wallet_addresses: list[str],
+    amount: int,
+    native_or_token_address: str = "native"
+) -> None:
+    print(f"Funding wallets {wallet_addresses} with token {native_or_token_address}...")
+    if native_or_token_address == "native":
+        json_data = {
+            "jsonrpc": "2.0",
+            "method": "tenderly_setBalance",
+            "params": [
+                wallet_addresses,
+                hex(int(amount * 1E18)),  # to wei
+            ],
+            "id": "1234"
+        }
+    else:
+        json_data = {
+            "jsonrpc": "2.0",
+            "method": "tenderly_setErc20Balance",
+            "params": [
+                native_or_token_address,
+                wallet_addresses,
+                hex(int(amount * 1E18)),  # to wei
+            ],
+            "id": "1234"
+        }
+
+    response = requests.post(
+        url=admin_rpc,
+        timeout=300,
+        headers={
+            "Content-Type": "application/json"
+        },
+        json=json_data
+    )
+    if response.status_code != 200:
+        print(response.status_code)
+        try:
+            print(response.json())
+        except requests.exceptions.JSONDecodeError:
+            pass
+
+
 def main() -> None:
     """Main"""
     print("Recreating Tenderly Networks")
@@ -205,6 +260,18 @@ def main() -> None:
         # Save file
         with open(TENDERLY_VNETS_JSON, 'w', encoding='utf-8') as file:
             json.dump(vnet_ids, file, ensure_ascii=False, indent=4)
+
+        # Fund wallets
+        wallets = vnet_ids[key].get("wallets", {})
+        for fund_type, amount in wallets["funds"].items():
+            native_or_token_address = "native" if fund_type == "native" else fund_type
+
+            _fund_wallet(
+                admin_rpc=vnet_ids[key]["admin_rpc"],
+                wallet_addresses=list(wallets["addresses"].values()),
+                amount=amount,
+                native_or_token_address=native_or_token_address
+            )
 
     # OPTIONAL - Update variables on bash file
     # bash_file = "run_operate.sh"
