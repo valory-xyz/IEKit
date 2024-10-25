@@ -9,7 +9,7 @@ coverage.xml
 htmlcov
 *.egg-info
 Pipfile.lock
-abci_build/
+abci_build_*/
 keys.json
 leak_report
 packages/valory/connections/*

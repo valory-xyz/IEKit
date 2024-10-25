@@ -16,21 +16,20 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections:
 - valory/http_server:0.22.0:bafybeihpgu56ovmq4npazdbh6y6ru5i7zuv6wvdglpxavsckyih56smu7m
-- valory/abci:0.1.0:bafybeia6etkacvqend7xj6viejkqgo7ozu3yn4yg3qezfthf2xhrjjwse4
+- valory/abci:0.1.0:bafybeidwzuxshijqibwxsuepyi4d7l332p3cz3fz47se7373bvry2jo624
 - valory/http_client:0.23.0:bafybeihi772xgzpqeipp3fhmvpct4y6e6tpjp4sogwqrnf3wqspgeilg4u
-- valory/ledger:0.19.0:bafybeig7woeog4srdby75hpjkmx4rhpkzncbf4h2pm5r6varsp26pf2uhu
+- valory/ledger:0.19.0:bafybeigntoericenpzvwejqfuc3kqzo2pscs76qoygg5dbj6f4zxusru5e
 - valory/p2p_libp2p_client:0.1.0:bafybeid3xg5k2ol5adflqloy75ibgljmol6xsvzvezebsg7oudxeeolz7e
 - valory/openai:0.1.0:bafybeigyehjbahya5mp7vyp5tjvn36rey4btvzskp3ql3mgxp3zu6gwq5a
-- valory/twitter:0.1.0:bafybeidcalgczvpoq6l2uh7kkfblwxmytm6bicmsxub7pevu2k46sp7mky
+- valory/twitter:0.1.0:bafybeigw3hjuvzvgrcqtp2bul3jkvnh6ud5z7kh2433og3pvdv7umrqhsq
 contracts:
-- valory/dynamic_contribution:0.1.0:bafybeia4qhu3u3fl6gx5vk7ue3qadbcliltuvcx46zsxcffq7phsb54rbq
-- valory/gnosis_safe:0.1.0:bafybeih3ropivth4wn7zbzudisx3qezbht5jyndd4w7az7fq634lpozoge
-- valory/gnosis_safe_proxy_factory:0.1.0:bafybeieg57u3z7cdlmdamad5e6lk7kmsli2zurzkg3sl4y7lhekcu4y3au
+- valory/dynamic_contribution:0.1.0:bafybeif6pns4ooribp7xdnvwz22ut7irtfycdh6em3um62nyye2wp5qkvm
+- valory/gnosis_safe:0.1.0:bafybeic4gynbobop65yqs7qpskrxtiso4xcammzwcwtad5u3rq3vs4to4q
+- valory/gnosis_safe_proxy_factory:0.1.0:bafybeielk5hjzg6xwjmoerr43f6cpd2awiblwpflussamt6ceihjm6icrm
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
-- valory/service_registry:0.1.0:bafybeiaop64kwdoetxtedoehabmsalojmms7ihuoqcdwxtwb2hk5i6bzye
-- valory/veolas_delegation:0.1.0:bafybeieicrbkito2hglwvd4j2cbq3etxpm3rrzfyx5kqqe34fu7q5aftye
-- valory/mech_marketplace:0.1.0:bafybeiba7kh3wygwtpyf7oo3sili6givzo2gyadhbb66rvwsokswsywvuu
-- valory/staking:0.1.0:bafybeieb25uttcfg5huill2ljnre7b3og7sq2c2boqeq2nz743xm4vvjku
+- valory/service_registry:0.1.0:bafybeibsknutrkm226mvfwrtg26tmychqwipdxt53hhz6ct2u77vect6ty
+- valory/veolas_delegation:0.1.0:bafybeibtbvvcxvrrkkgyen5ardevicnj4xf7facm4cl2cghtucifs3utuu
+- valory/mech_marketplace:0.1.0:bafybeic24274gst5khiu7hgg6dyczhffb4vp6luc5eenzpejw7deyxgpvq
 protocols:
 - open_aea/signing:1.0.0:bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi
 - valory/abci:0.1.0:bafybeiaqmp7kocbfdboksayeqhkbrynvlfzsx4uy4x6nohywnmaig4an7u
@@ -43,24 +42,23 @@ protocols:
 - valory/tendermint:0.1.0:bafybeig4mi3vmlv5zpbjbfuzcgida6j5f2nhrpedxicmrrfjweqc5r7cra
 - valory/twitter:0.1.0:bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4
 skills:
-- valory/abstract_abci:0.1.0:bafybeieeaseuy5rbbw465knz27vccvpkfge43q7isl7fkdlfapwd7bpi24
-- valory/abstract_round_abci:0.1.0:bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u
-- valory/impact_evaluator_abci:0.1.0:bafybeifn7dit3ypolddax5d2lkwd6vvbhpymzmwokooawkplyamuybx5cy
-- valory/generic_scoring_abci:0.1.0:bafybeiaktr6gvjsi2wzpiokwbywtp5nlnepmb5xaijbpletnwp2ugkvzwy
-- valory/twitter_scoring_abci:0.1.0:bafybeif56o3muruivhrzyd7dl7sd24tz5orugbb2zlg4f4hb7q5y7jog34
-- valory/ceramic_read_abci:0.1.0:bafybeiede3ehp4bfpbk23gncj52goq62rd3rm5wwlbyaexxrfohucdcpia
-- valory/ceramic_write_abci:0.1.0:bafybeiemid3ipekyqupbqpfw55g7b2wwx56g2ita73rjalk6fyqgneroam
-- valory/dynamic_nft_abci:0.1.0:bafybeiecp266ulpuwqhdzdlornaibjdm4r7ac2yp3tfmqolfif4dciysty
-- valory/registration_abci:0.1.0:bafybeibc7duasoaw5b4ene5oxfba2dmdzstsrws6ipi57ymgdtoxjadn54
-- valory/reset_pause_abci:0.1.0:bafybeigrdlxed3xlsnxtjhnsbl3cojruihxcqx4jxhgivkd5i2fkjncgba
-- valory/termination_abci:0.1.0:bafybeib5l7jhew5ic6iq24dd23nidcoimzqkrk556gqywhoziatj33zvwm
-- valory/transaction_settlement_abci:0.1.0:bafybeic7q7recyka272udwcupblwbkc3jkodgp74fvcdxb7urametg5dae
-- valory/twitter_write_abci:0.1.0:bafybeid377kr5f3dmb5nyhvucglyaaqkuhthxkfosgl54zskwmsuwz56ie
-- valory/decision_making_abci:0.1.0:bafybeickd6vtmskusmsmcaw6w2nbbxtq3hqthvb7zmiwvmmvf54hovyi5e
-- valory/llm_abci:0.1.0:bafybeibmckwphs5zqdfnutktwgq7bxfw2auhsxezoopkep5dadkuwqvwgy
-- valory/olas_week_abci:0.1.0:bafybeifdjcwtnvuhiz3adf4po2lf4h45h32unp3uzzyswuuzuaxibslj3u
-- valory/mech_interact_abci:0.1.0:bafybeid6m3i5ofq7vuogqapdnoshhq7mswmudhvfcr2craw25fdwtoe3lm
-- valory/staking_abci:0.1.0:bafybeifb53nl35k4hhptzq2tbazsby3itlemcc6k2pjpy4j6piirevogoy
+- valory/abstract_abci:0.1.0:bafybeiavqebeazhyu2zcl33bslr6gntdogqu6ek5xmlq4qp2vuf3kwv4cu
+- valory/abstract_round_abci:0.1.0:bafybeigax5gzud6ytq3wypajqwzlfwhpuegcma7q5b7m534kgu7vfmfaaq
+- valory/impact_evaluator_abci:0.1.0:bafybeifyfg37soiylxhrxgh33rm2oqlmubfozjptdaque46l3m5zwimml4
+- valory/generic_scoring_abci:0.1.0:bafybeibtwf45lognpq32edxgseqdlwqa57ocj32tac7dxmvael7p5j4gba
+- valory/twitter_scoring_abci:0.1.0:bafybeic37xv7lj6xjjj3c6byfcfjjqatl6hf5p2h4dbedemvz6muas57gi
+- valory/ceramic_read_abci:0.1.0:bafybeighekjiyrgxmqw4sendgt7dqmv7cvotyqebvnoitkkus7unldtnaq
+- valory/ceramic_write_abci:0.1.0:bafybeifxipx7qph6yy4dzjoe7nedod4ki3cok7gsbq752sjsdh5ifwh3uu
+- valory/dynamic_nft_abci:0.1.0:bafybeiey2ixhwgq6etfifijkfpfluu7buda2fkgly2j6du4czynghezvpi
+- valory/registration_abci:0.1.0:bafybeia5lthveosdhvkpyp43w3uyeji35zt7i3qzhhy2to5br4sgpwa3nm
+- valory/reset_pause_abci:0.1.0:bafybeiag7sfbfmsvimrwurfo5w5lfmglm6doq7kcoibwuno3evr4asagqm
+- valory/termination_abci:0.1.0:bafybeid5c7otiex2dgiywsle2rhdmnur3mflcskd32mxn7ex34ldplddxy
+- valory/transaction_settlement_abci:0.1.0:bafybeieyk527zcyrcenkacxbwywvloukjntenksdacxqzgg3stqxmrpyii
+- valory/twitter_write_abci:0.1.0:bafybeiapz7bwkrdkwoho4apwvtje2klwr2vmubp22eoc2minycwicenwwm
+- valory/decision_making_abci:0.1.0:bafybeihzugccf7o6j5qbflk4zu2lbijsh224okzw2ijecwhe5fe7gibsz4
+- valory/llm_abci:0.1.0:bafybeih4s7yhl5lwmo45g4ergrh3ms37lmwa2eeqh72ecdd7v2pkmwkibu
+- valory/olas_week_abci:0.1.0:bafybeiasyyzs4qhzm5lonvc5syagjmupoqnu3obgilxzcdu35mw5d7a7zq
+- valory/mech_interact_abci:0.1.0:bafybeiaablgvyql6psl6sckopuhzsunmr66amlm4nuueik2fkdvd6cwdtq
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -92,7 +90,7 @@ logging_config:
 skill_exception_policy: stop_and_exit
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==1.53.0
+    version: ==1.58.0
 default_connection: null
 ---
 public_id: valory/openai:0.1.0

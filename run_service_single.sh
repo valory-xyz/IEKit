@@ -29,4 +29,5 @@ cp $REPO_PATH/keys1.json ./keys.json
 autonomy deploy build -ltm
 
 # Run the deployment
-autonomy deploy run --build-dir abci_build/
+folder_name=$(ls -d abci_build_????/)
+autonomy deploy run --build-dir $folder_name
