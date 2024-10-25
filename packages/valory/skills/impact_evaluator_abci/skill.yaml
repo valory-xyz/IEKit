@@ -34,9 +34,9 @@ skills:
 - valory/termination_abci:0.1.0:bafybeid5c7otiex2dgiywsle2rhdmnur3mflcskd32mxn7ex34ldplddxy
 - valory/transaction_settlement_abci:0.1.0:bafybeieyk527zcyrcenkacxbwywvloukjntenksdacxqzgg3stqxmrpyii
 - valory/decision_making_abci:0.1.0:bafybeibl6q3qokzxlbbde3l4ah3mdwbui34e3izahfpwm4zmnzscao4t2e
-- valory/llm_abci:0.1.0:bafybeih4s7yhl5lwmo45g4ergrh3ms37lmwa2eeqh72ecdd7v2pkmwkibu
-- valory/twitter_write_abci:0.1.0:bafybeiapz7bwkrdkwoho4apwvtje2klwr2vmubp22eoc2minycwicenwwm
-- valory/olas_week_abci:0.1.0:bafybeicoblvlni6dnespzbmzgx32lf4p73sxzofssljeelu6z2o3bxlydm
+- valory/llm_abci:0.1.0:bafybeibozwsd4o23sffha7ljmknmh2qaqmfmhariw7p4w3mi6gslrziqwu
+- valory/twitter_write_abci:0.1.0:bafybeieri7rujdum573jpfbqbbsxg3wnbumnr5pj7rjiwhgzh3jg2wv5ay
+- valory/olas_week_abci:0.1.0:bafybeidgqvtpdzvxllttdz6bqmsfxrmyd2ltbg5yoge5q7eh4wm7wysaoa
 - valory/mech_interact_abci:0.1.0:bafybeiaablgvyql6psl6sckopuhzsunmr66amlm4nuueik2fkdvd6cwdtq
 behaviours:
   main:
@@ -212,6 +212,7 @@ models:
       staking_contract_address: '0x0000000000000000000000000000000000000000'
       activity_contract_address: '0x0000000000000000000000000000000000000000'
       epoch_end_threshold_minutes: 20
+      safe_contract_address_base: '0x0000000000000000000000000000000000000000'
     class_name: Params
   randomness_api:
     args:

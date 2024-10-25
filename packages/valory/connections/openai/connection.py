@@ -125,7 +125,7 @@ class OpenaiConnection(BaseSyncConnection):
                 "max_tokens",
                 "temperature",
                 "request_timeout",
-                "use_staging_api",
+                "use_openai_staging_api",
                 "staging_api"
             )
         }
@@ -213,7 +213,7 @@ class OpenaiConnection(BaseSyncConnection):
         engine = self.openai_settings["engine"]
 
         # Call the staging API
-        if self.openai_settings["use_staging_api"]:
+        if self.openai_settings["use_twitter_staging_api"]:
             url = self.openai_settings["staging_api"]
             response = requests.post(
                 url,

@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeiaargh7scuhmiduzvjiavva5wl73lrehslumeu3l7xsfndajgp77i
+agent: valory/impact_evaluator:0.1.0:bafybeibzozqieu5mcsgocjccealca3kac33xrbq4gctcb2jmtlj5ailu6a
 number_of_agents: 4
 deployment:
   agent:
@@ -145,6 +145,7 @@ extra:
         staking_contract_address: ${STAKING_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
         activity_contract_address: ${ACTIVITY_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
         epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
+        safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x0000000000000000000000000000000000000000}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -245,6 +246,7 @@ extra:
         staking_contract_address: ${STAKING_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
         activity_contract_address: ${ACTIVITY_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
         epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
+        safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x0000000000000000000000000000000000000000}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -345,6 +347,7 @@ extra:
         staking_contract_address: ${STAKING_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
         activity_contract_address: ${ACTIVITY_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
         epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
+        safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x0000000000000000000000000000000000000000}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -449,6 +452,7 @@ extra:
         staking_contract_address: ${STAKING_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
         activity_contract_address: ${ACTIVITY_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
         epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
+        safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x0000000000000000000000000000000000000000}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -462,11 +466,32 @@ config:
       chain_id: ${ETHEREUM_LEDGER_CHAIN_ID:int:1}
       poa_chain: ${ETHEREUM_LEDGER_IS_POA_CHAIN:bool:false}
       default_gas_price_strategy: ${ETHEREUM_LEDGER_PRICING:str:eip1559}
+      gas_price_strategies: &id001
+        gas_station:
+          gas_price_api_key: null
+          gas_price_strategy: fast
+        eip1559:
+          max_gas_fast: 1500
+          fee_history_blocks: 10
+          fee_history_percentile: 5
+          default_priority_fee: ${DEFAULT_PRIORITY_FEE:int:30000000}
+          fallback_estimate:
+            maxFeePerGas: 20000000000
+            maxPriorityFeePerGas: 3000000000
+            baseFee: null
+          priority_fee_increase_boundary: 200
     gnosis:
       address: ${GNOSIS_LEDGER_RPC:str:http://host.docker.internal:8545}
       chain_id: ${GNOSIS_LEDGER_CHAIN_ID:int:100}
       poa_chain: ${GNOSIS_LEDGER_IS_POA_CHAIN:bool:false}
       default_gas_price_strategy: ${GNOSIS_LEDGER_PRICING:str:eip1559}
+      gas_price_strategies: *id001
+    base:
+      address: ${BASE_LEDGER_RPC:str:http://host.docker.internal:8545}
+      chain_id: ${BASE_LEDGER_CHAIN_ID:int:100}
+      poa_chain: ${BASE_LEDGER_IS_POA_CHAIN:bool:false}
+      default_gas_price_strategy: ${BASE_LEDGER_PRICING:str:eip1559}
+      gas_price_strategies: *id001
 ---
 public_id: valory/p2p_libp2p_client:0.1.0
 type: connection
@@ -491,32 +516,32 @@ type: connection
     max_tokens: ${MAX_TOKENS:int:1000}
     openai_api_key: ${OPENAI_API_KEY_0:str:null}
     temperature: ${TEMPERATURE:float:0.7}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_OPENAI:str:http://host.docker.internal:5000/openai}
+    use_openai_staging_api: ${USE_OPENAI_STAGING_API:bool:false}
+    openai_staging_api: ${OPENAI_STAGING_API:str:http://host.docker.internal:5000/openai}
 1:
   config:
     engine: ${ENGINE:str:gpt-4}
     max_tokens: ${MAX_TOKENS:int:1000}
     openai_api_key: ${OPENAI_API_KEY_1:str:null}
     temperature: ${TEMPERATURE:float:0.7}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_OPENAI:str:http://host.docker.internal:5000/openai}
+    use_openai_staging_api: ${USE_OPENAI_STAGING_API:bool:false}
+    openai_staging_api: ${OPENAI_STAGING_API:str:http://host.docker.internal:5000/openai}
 2:
   config:
     engine: ${ENGINE:str:gpt-4}
     max_tokens: ${MAX_TOKENS:int:1000}
     openai_api_key: ${OPENAI_API_KEY_2:str:null}
     temperature: ${TEMPERATURE:float:0.7}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_OPENAI:str:http://host.docker.internal:5000/openai}
+    use_openai_staging_api: ${USE_OPENAI_STAGING_API:bool:false}
+    openai_staging_api: ${OPENAI_STAGING_API:str:http://host.docker.internal:5000/openai}
 3:
   config:
     engine: ${ENGINE:str:gpt-4}
     max_tokens: ${MAX_TOKENS:int:1000}
     openai_api_key: ${OPENAI_API_KEY_3:str:null}
     temperature: ${TEMPERATURE:float:0.7}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_OPENAI:str:http://host.docker.internal:5000/openai}
+    use_openai_staging_api: ${USE_OPENAI_STAGING_API:bool:false}
+    openai_staging_api: ${OPENAI_STAGING_API:str:http://host.docker.internal:5000/openai}
 ---
 public_id: valory/twitter:0.1.0
 type: connection
@@ -527,8 +552,8 @@ type: connection
     auth_token: ${AUTH_TOKEN:str:<auth_token>}
     consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
     consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
+    use_openai_staging_api: ${use_openai_staging_api:bool:false}
+    twitter_staging_api: ${TWITTER_STAGING_API:str:http://host.docker.internal:5000/twitter/create_tweet}
 1:
   config:
     access_secret: ${ACCESS_SECRET:str:<access_secret>}
@@ -536,8 +561,8 @@ type: connection
     auth_token: ${AUTH_TOKEN:str:<auth_token>}
     consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
     consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
+    use_openai_staging_api: ${use_openai_staging_api:bool:false}
+    twitter_staging_api: ${TWITTER_STAGING_API:str:http://host.docker.internal:5000/twitter/create_tweet}
 2:
   config:
     access_secret: ${ACCESS_SECRET:str:<access_secret>}
@@ -545,8 +570,8 @@ type: connection
     auth_token: ${AUTH_TOKEN:str:<auth_token>}
     consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
     consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
+    use_openai_staging_api: ${use_openai_staging_api:bool:false}
+    twitter_staging_api: ${TWITTER_STAGING_API:str:http://host.docker.internal:5000/twitter/create_tweet}
 3:
   config:
     access_secret: ${ACCESS_SECRET:str:<access_secret>}
@@ -554,5 +579,5 @@ type: connection
     auth_token: ${AUTH_TOKEN:str:<auth_token>}
     consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
     consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
+    use_openai_staging_api: ${use_openai_staging_api:bool:false}
+    twitter_staging_api: ${TWITTER_STAGING_API:str:http://host.docker.internal:5000/twitter/create_tweet}

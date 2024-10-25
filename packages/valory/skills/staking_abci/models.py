@@ -50,6 +50,9 @@ class Params(BaseParams):
         self.activity_contract_address = self._ensure(
             "activity_contract_address", kwargs, str
         )
+        self.safe_contract_address_base = self._ensure(
+            "safe_contract_address_base", kwargs, str
+        )
         super().__init__(*args, **kwargs)
 
 Requests = BaseRequests

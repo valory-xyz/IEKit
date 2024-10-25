@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeiaargh7scuhmiduzvjiavva5wl73lrehslumeu3l7xsfndajgp77i
+agent: valory/impact_evaluator:0.1.0:bafybeibzozqieu5mcsgocjccealca3kac33xrbq4gctcb2jmtlj5ailu6a
 number_of_agents: 1
 deployment:
   agent:
@@ -139,6 +139,7 @@ models:
       staking_contract_address: ${STAKING_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
       activity_contract_address: ${ACTIVITY_CONTRACT_ADDRESS:str:0x0000000000000000000000000000000000000000}
       epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
+      safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x0000000000000000000000000000000000000000}
   randomness_api:
     args:
       url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -181,32 +182,32 @@ type: connection
     max_tokens: ${MAX_TOKENS:int:1000}
     openai_api_key: ${OPENAI_API_KEY_0:str:null}
     temperature: ${TEMPERATURE:float:0.7}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_OPENAI:str:http://host.docker.internal:5000/openai}
+    use_twitter_staging_api: ${USE_TWITTER_STAGING_API:bool:false}
+    twitter_staging_api: ${OPENAI_STAGING_API:str:http://host.docker.internal:5000/openai}
 1:
   config:
     engine: ${ENGINE:str:gpt-4}
     max_tokens: ${MAX_TOKENS:int:1000}
     openai_api_key: ${OPENAI_API_KEY_1:str:null}
     temperature: ${TEMPERATURE:float:0.7}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_OPENAI:str:http://host.docker.internal:5000/openai}
+    use_twitter_staging_api: ${USE_TWITTER_STAGING_API:bool:false}
+    twitter_staging_api: ${OPENAI_STAGING_API:str:http://host.docker.internal:5000/openai}
 2:
   config:
     engine: ${ENGINE:str:gpt-4}
     max_tokens: ${MAX_TOKENS:int:1000}
     openai_api_key: ${OPENAI_API_KEY_2:str:null}
     temperature: ${TEMPERATURE:float:0.7}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_OPENAI:str:http://host.docker.internal:5000/openai}
+    use_twitter_staging_api: ${USE_TWITTER_STAGING_API:bool:false}
+    twitter_staging_api: ${OPENAI_STAGING_API:str:http://host.docker.internal:5000/openai}
 3:
   config:
     engine: ${ENGINE:str:gpt-4}
     max_tokens: ${MAX_TOKENS:int:1000}
     openai_api_key: ${OPENAI_API_KEY_3:str:null}
     temperature: ${TEMPERATURE:float:0.7}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_OPENAI:str:http://host.docker.internal:5000/openai}
+    use_twitter_staging_api: ${USE_TWITTER_STAGING_API:bool:false}
+    twitter_staging_api: ${OPENAI_STAGING_API:str:http://host.docker.internal:5000/openai}
 ---
 public_id: valory/twitter:0.1.0
 type: connection
@@ -217,8 +218,8 @@ type: connection
     auth_token: ${AUTH_TOKEN:str:<auth_token>}
     consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
     consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
+    use_twitter_staging_api: ${USE_TWITTER_STAGING_API:bool:false}
+    twitter_staging_api: ${TWITTER_STAGING_API:str:http://host.docker.internal:5000/twitter/create_tweet}
 1:
   config:
     access_secret: ${ACCESS_SECRET:str:<access_secret>}
@@ -226,8 +227,8 @@ type: connection
     auth_token: ${AUTH_TOKEN:str:<auth_token>}
     consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
     consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
+    use_twitter_staging_api: ${USE_TWITTER_STAGING_API:bool:false}
+    twitter_staging_api: ${TWITTER_STAGING_API:str:http://host.docker.internal:5000/twitter/create_tweet}
 2:
   config:
     access_secret: ${ACCESS_SECRET:str:<access_secret>}
@@ -235,8 +236,8 @@ type: connection
     auth_token: ${AUTH_TOKEN:str:<auth_token>}
     consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
     consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
+    use_twitter_staging_api: ${USE_TWITTER_STAGING_API:bool:false}
+    twitter_staging_api: ${TWITTER_STAGING_API:str:http://host.docker.internal:5000/twitter/create_tweet}
 3:
   config:
     access_secret: ${ACCESS_SECRET:str:<access_secret>}
@@ -244,5 +245,5 @@ type: connection
     auth_token: ${AUTH_TOKEN:str:<auth_token>}
     consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
     consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
+    use_twitter_staging_api: ${USE_TWITTER_STAGING_API:bool:false}
+    twitter_staging_api: ${TWITTER_STAGING_API:str:http://host.docker.internal:5000/twitter/create_tweet}

@@ -82,13 +82,13 @@ class StakingBaseBehaviour(BaseBehaviour, ABC):
         """Prepares and returns the safe tx hash for a multisend tx."""
 
         self.context.logger.info(
-            f"Preparing Safe transaction [{self.synchronized_data.safe_contract_address}]"
+            f"Preparing Safe transaction [{self.params.safe_contract_address_base}]"
         )
 
         # Prepare the safe transaction
         response_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
-            contract_address=self.synchronized_data.safe_contract_address,
+            contract_address=self.params.safe_contract_address_base,
             contract_id=str(GnosisSafeContract.contract_id),
             contract_callable="get_raw_safe_transaction_hash",
             to_address=to_address,

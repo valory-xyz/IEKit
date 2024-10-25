@@ -7,11 +7,11 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeie3oujhxxdr5s2lvc6cosbysezqycagw5mbwvxjw24k3dzcbtgg5m
-  behaviours.py: bafybeigk6fzzis6h7boxtuu3xxekpyajsu4myw4oj5pnzuhwovmdww5dwm
+  behaviours.py: bafybeih3z5hkrcgdnbz2erx6ffywnsqslcynszltyrvh4axglp6klfev64
   dialogues.py: bafybeifmmpyiwetlcgykczsq4dgwvm7tipdupf2rwcndg5cmtm7jfoxwxm
   fsm_specification.yaml: bafybeigq65aaewekx2zjh4qkmonexjj4j4mfwjrjhvzdsfezmm3iip6fum
   handlers.py: bafybeiaufft2fwbbjbbc77md6xkq7prnzzi2nkkm2fipapgx54myabmb7y
-  models.py: bafybeibq6tiyioz3b2prtphb2vz5kp5lkdvkp22rypqse7enutdkxvtirm
+  models.py: bafybeifzsq7stmajfyikchr7dsybfvg4cea4sygdrhgy4pvfngizxjl7s4
   payloads.py: bafybeihs7i2akxemb7feduip4fojyqwa5gkcggzh4ogtsrlkmdcdcxzmdq
   rounds.py: bafybeibhwh63rjpxdvvaipu6qlncpq3mx4vmf4r43nldqp5f7ojtvfztje
 fingerprint_ignore_patterns: []
@@ -131,6 +131,7 @@ models:
       serious_slash_unit_amount: 8000000000000000
       staking_contract_address: '0x0000000000000000000000000000000000000000'
       activity_contract_address: '0x0000000000000000000000000000000000000000'
+      safe_contract_address_base: '0x0000000000000000000000000000000000000000'
     class_name: Params
   requests:
     args: {}
