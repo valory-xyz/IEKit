@@ -166,14 +166,14 @@ def _update_bash_variable(file_path: str, variable_name: str, new_value: str):
         file.writelines(updated_lines)
 
 
-def _fund_wallet(
+def _fund_wallet(  # nosec
     admin_rpc: str,
     wallet_addresses: list[str],
     amount: int,
     native_or_token_address: str = "native"
 ) -> None:
     print(f"Funding wallets {wallet_addresses} with token {native_or_token_address}...")
-    if native_or_token_address == "native":
+    if native_or_token_address == "native":  # nosec
         json_data = {
             "jsonrpc": "2.0",
             "method": "tenderly_setBalance",
@@ -211,7 +211,7 @@ def _fund_wallet(
             pass
 
 
-def main() -> None:
+def main() -> None:  # pylint: disable=too-many-locals
     """Main"""
     print("Recreating Tenderly Networks")
 
