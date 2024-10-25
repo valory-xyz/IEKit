@@ -124,6 +124,7 @@ for user_id, user_data in user_db["users"].items():
     for tweet_id, points in user_data["tweet_id_to_points"].items():
         tweets[tweet_id] = {
             "points": points,
+            "epoch": None,
             "campaign": None,
             "timestamp": None,
         }

@@ -105,6 +105,7 @@ class Params(BaseParams):
             openai_call_window_size=self.openai_call_window_size,
             openai_calls_allowed_in_window=self.openai_calls_allowed_in_window,
         )
+        self.staking_contract_address = kwargs.get("staking_contract_address")
         super().__init__(*args, **kwargs)
 
 

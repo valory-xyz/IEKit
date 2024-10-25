@@ -25,9 +25,11 @@ fingerprint:
   tests/test_rounds.py: bafybeicrcjopci23cwdqrl64iewpfeqne26ekbb6rvyzqphoj5gxj3jfam
 fingerprint_ignore_patterns: []
 connections: []
-contracts: []
+contracts:
+- valory/staking:0.1.0:bafybeigvbjd33jy5k753ksksp5dkiqk6e5y5vmn66fqd5ibjiwgwzioybm
 protocols:
 - valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
+- valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u
 - valory/decision_making_abci:0.1.0:bafybeibmxd5gqdkn2lng3caato6shtrod4nxqrvm3cky674uj3nuds34sy

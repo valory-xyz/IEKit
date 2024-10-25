@@ -69,3 +69,14 @@ class Staking(Contract):
         checpoint_ts = contract_instance.functions.tsCheckpoint().call()
         epoch_end = checpoint_ts + liveness
         return dict(epoch_end=epoch_end)
+
+    @classmethod
+    def get_epoch(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+    ) -> Dict:
+        """Get the epoch."""
+        contract_instance = cls.get_instance(ledger_api, contract_address)
+        epoch = contract_instance.functions.epochCounter().call()
+        return dict(epoch=epoch)

@@ -27,7 +27,10 @@ from typing import Any, Dict, Optional, Type, cast
 
 import pytest
 from aea.exceptions import AEAActException
+from aea.helpers.transaction.base import State
 
+from packages.valory.contracts.staking.contract import Staking
+from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.valory.skills.abstract_round_abci.behaviour_utils import (
     BaseBehaviour,
@@ -1237,6 +1240,17 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
             ceramic_db.load(test_case.ceramic_db)
         self.fast_forward(test_case.initial_data, ceramic_db)
         self.behaviour.act_wrapper()
+        self.mock_contract_api_request(
+            request_kwargs=dict(
+                performative=ContractApiMessage.Performative.GET_STATE,
+            ),
+            contract_id=str(Staking.contract_id),
+            response_kwargs=dict(
+                performative=ContractApiMessage.Performative.STATE,
+                callable="get_cast_vote_data",
+                state=State(ledger_id="ethereum", body={"epoch": 1}),
+            ),
+        )
         self.complete(test_case.event)
 
 

@@ -251,7 +251,7 @@ class CeramicDBBase:
                     # Merge the multisigs
                     # We have no way to tell which one we should keep
                     if field == "service_multisig":
-                        values = [values[0]]
+                        values = [values[0] if values else None]
 
                     # Check whether all values are the same
                     if len(values) > 1:
