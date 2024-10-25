@@ -25,13 +25,13 @@ fingerprint:
   tests/test_rounds.py: bafybeiei2srj4ggs3pln7vxxt4walhrtsegveimxdcbckyng2i6wv53vy4
 fingerprint_ignore_patterns: []
 connections:
-- valory/openai:0.1.0:bafybeifrhpjpjfakvczitcmrmcqhzdejn5szue5w22is3a4ued5f2rvkum
+- valory/openai:0.1.0:bafybeicpsov3f5pbqoypcwc52cbzc7e6jkta5lsxugcsirzkx3bgaypegu
 contracts: []
 protocols:
 - valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeigax5gzud6ytq3wypajqwzlfwhpuegcma7q5b7m534kgu7vfmfaaq
-- valory/decision_making_abci:0.1.0:bafybeibl6q3qokzxlbbde3l4ah3mdwbui34e3izahfpwm4zmnzscao4t2e
+- valory/decision_making_abci:0.1.0:bafybeiedfuviy345p42j2anjafk72nsgfwvyyl42xjcb5sxregype6ql4i
 behaviours:
   main:
     args: {}

@@ -50,6 +50,7 @@ fingerprint_ignore_patterns: []
 connections: []
 contracts:
 - valory/veolas_delegation:0.1.0:bafybeibtbvvcxvrrkkgyen5ardevicnj4xf7facm4cl2cghtucifs3utuu
+- valory/staking:0.1.0:bafybeibusc5wuye4qwz53znjqrtfzf6sdnpo3s4hp53huffgbzyi2wc4za
 - valory/compatibility_fallback_handler:0.1.0:bafybeigq6rfpfkuerdbaxsm57cvq4ipwdj6qgeyufn57ufpphifgnobh4q
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i

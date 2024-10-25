@@ -25,19 +25,20 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeigax5gzud6ytq3wypajqwzlfwhpuegcma7q5b7m534kgu7vfmfaaq
 - valory/ceramic_read_abci:0.1.0:bafybeighekjiyrgxmqw4sendgt7dqmv7cvotyqebvnoitkkus7unldtnaq
-- valory/generic_scoring_abci:0.1.0:bafybeig2ancvby5vcz6psk5jychz34ghmcyei6zk2icvhdgcutlm3dub6e
-- valory/twitter_scoring_abci:0.1.0:bafybeidqasmrihgkiqmv6b7evdypr5ysvsvh3nq6rt4iizexjx4b4p6rii
+- valory/generic_scoring_abci:0.1.0:bafybeic2aa2q6sqwn6i2i7kb4i7pvwmuh62gofb2annodb6pw7b3i7wqly
+- valory/twitter_scoring_abci:0.1.0:bafybeigszh6xr2arecz2vlalep3egkp553an5b2suazcqlr42kegx2fzje
 - valory/ceramic_write_abci:0.1.0:bafybeifxipx7qph6yy4dzjoe7nedod4ki3cok7gsbq752sjsdh5ifwh3uu
-- valory/dynamic_nft_abci:0.1.0:bafybeiczqhfj54tf63csboszqstwqxs6fimbyfpv23spmst5lrf2rjsu4y
+- valory/dynamic_nft_abci:0.1.0:bafybeicqqt2oq47ytba3freihi2o5o5yvdxcmp3z626bbizl44jxylnmde
 - valory/registration_abci:0.1.0:bafybeia5lthveosdhvkpyp43w3uyeji35zt7i3qzhhy2to5br4sgpwa3nm
 - valory/reset_pause_abci:0.1.0:bafybeiag7sfbfmsvimrwurfo5w5lfmglm6doq7kcoibwuno3evr4asagqm
 - valory/termination_abci:0.1.0:bafybeid5c7otiex2dgiywsle2rhdmnur3mflcskd32mxn7ex34ldplddxy
 - valory/transaction_settlement_abci:0.1.0:bafybeieyk527zcyrcenkacxbwywvloukjntenksdacxqzgg3stqxmrpyii
-- valory/decision_making_abci:0.1.0:bafybeibl6q3qokzxlbbde3l4ah3mdwbui34e3izahfpwm4zmnzscao4t2e
-- valory/llm_abci:0.1.0:bafybeibozwsd4o23sffha7ljmknmh2qaqmfmhariw7p4w3mi6gslrziqwu
-- valory/twitter_write_abci:0.1.0:bafybeieri7rujdum573jpfbqbbsxg3wnbumnr5pj7rjiwhgzh3jg2wv5ay
-- valory/olas_week_abci:0.1.0:bafybeidgqvtpdzvxllttdz6bqmsfxrmyd2ltbg5yoge5q7eh4wm7wysaoa
+- valory/decision_making_abci:0.1.0:bafybeiedfuviy345p42j2anjafk72nsgfwvyyl42xjcb5sxregype6ql4i
+- valory/llm_abci:0.1.0:bafybeiaqnub4qvsl4qrf4g3m6gym55d5yif5lnjp6brgwyjsyuxbvc7d6e
+- valory/twitter_write_abci:0.1.0:bafybeibhzwvkl7y6djxz4xjdh563su56usjlpjzs3p6fql42wm2gjhijlm
+- valory/olas_week_abci:0.1.0:bafybeif3aak7o5m6xaifpwpgpe2uv4t5v63qgmmwe3adlg7ucfby54syma
 - valory/mech_interact_abci:0.1.0:bafybeiaablgvyql6psl6sckopuhzsunmr66amlm4nuueik2fkdvd6cwdtq
+- valory/staking_abci:0.1.0:bafybeia2hoc4e7pbeh6druofgyk7ao3wuqp6zwqtnzk4ade4qr5ippw7ni
 behaviours:
   main:
     args: {}

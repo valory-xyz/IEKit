@@ -214,7 +214,7 @@ class OpenaiConnection(BaseSyncConnection):
 
         # Call the staging API
         if self.openai_settings["use_twitter_staging_api"]:
-            url = self.openai_settings["staging_api"]
+            url = self.openai_settings["openai_staging_api"]
             response = requests.post(
                 url,
                 json={"engine": engine, "prompt": formatted_prompt},
