@@ -189,7 +189,12 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
 
         latest_processed_tweet = latest_activity_tweet_id
 
-        for user in ceramic_db_copy.data["users"]:
+        for user in ceramic_db_copy.data["users"].values():
+
+            # Skip the user if there is no service multisig
+            # This means the user has not staked
+            if not user.get("service_multisig", None):
+                continue
 
             new_tweets = 0
 

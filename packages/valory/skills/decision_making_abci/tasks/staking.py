@@ -42,8 +42,15 @@ class StakingPreparation(TaskPreparation):
         yield
 
         # If too much time has passed since last execution, we run the staking skill
-        minutes_since_last_run = (self.now_utc - self.last_run).total_seconds() / 60
-        if minutes_since_last_run > self.params.checkpoint_threshold_minutes:
+        minutes_since_last_run = (
+            (self.now_utc - self.last_run).total_seconds() / 60
+            if self.last_run
+            else None
+        )
+        if (
+            minutes_since_last_run is None
+            or minutes_since_last_run > self.params.checkpoint_threshold_minutes
+        ):
             self.context.logger.info("Too much time has passed since last execution.")
             return True
 
@@ -117,12 +124,22 @@ class StakingActivityPreparation(StakingPreparation):
         # If enough users have pending updates, we run the activity update
         pending_updates = self.count_pending_updates()
         if pending_updates > self.params.staking_activity_threshold:
-            self.context.logger.info("There are enough pending updates. Executing...")
+            self.context.logger.info(
+                f"There are enough pending updates [{pending_updates}]. Executing..."
+            )
             return True
 
         # If the checkpoint is about to be called and there's pending updates, we run the activity update
-        if super().check_extra_conditions() and pending_updates > 0:
+        is_checkpoint_ready = yield from super().check_extra_conditions()
+        if is_checkpoint_ready and pending_updates > 0:
+            self.context.logger.info(
+                "The checkpoint is about to be called. Executing..."
+            )
             return True
+
+        self.context.logger.info(
+            f"Not enough updates pending to trigger the activity update [threshold={self.params.staking_activity_threshold}]"
+        )
 
         return False
 
@@ -140,7 +157,12 @@ class StakingActivityPreparation(StakingPreparation):
             ]
         )
 
-        for user in ceramic_db.data.users:
+        for user in ceramic_db.data["users"].values():
+            # Skip the user if there is no service multisig
+            # This means the user has not staked
+            # if not user.get("service_multisig", None):
+            #     continue
+
             sorted_tweet_ids = list(
                 sorted([int(i) for i in user.get("tweets", {}).keys()])
             )
@@ -152,6 +174,10 @@ class StakingActivityPreparation(StakingPreparation):
             # If the latest tweet id is higher than the last processed tweet, it means this tweet is newer
             if sorted_tweet_ids[-1] > latest_activity_tweet_id:
                 updates += 1
+
+        self.context.logger.info(
+            f"There are {updates} pending activity updates since tweet {latest_activity_tweet_id}"
+        )
 
         return updates
 

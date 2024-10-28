@@ -72,9 +72,9 @@ class SynchronizedData(BaseSynchronizedData):
         return self.db.get("most_voted_tx_hash", None)
 
     @property
-    def tx_submitter(self) -> str:
+    def tx_submitter(self) -> Optional[str]:
         """Get the round that submitted a tx to transaction_settlement_abci."""
-        return str(self.db.get_strict("tx_submitter"))
+        return self.db.get("tx_submitter", None)
 
     @property
     def participant_to_update(self) -> DeserializedCollection:
@@ -102,12 +102,15 @@ class ActivityScoreRound(CollectSameUntilThresholdRound):
     selection_key = (
         get_name(SynchronizedData.activity_updates),
         get_name(SynchronizedData.latest_activity_tweet_id),
+        get_name(SynchronizedData.pending_write),
     )
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
-            payload = self.most_voted_payload
+
+            # Instantiate the payload using the most voted values
+            payload = ActivityScorePayload(*(("dummy_sender",) + self.most_voted_payload_values))
 
             # We have finished with the activity update
             # Mark Ceramic for a write

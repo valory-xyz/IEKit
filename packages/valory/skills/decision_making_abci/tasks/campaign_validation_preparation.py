@@ -19,7 +19,7 @@
 
 """This package contains the logic for task preparations."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Generator, Optional, cast
 
 from packages.valory.contracts.veolas_delegation.contract import (
@@ -64,7 +64,7 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
 
             # Get campaign start and end times
             start_time = datetime.fromtimestamp(campaign["start_ts"])
-            end_time = datetime.fromtimestamp(campaign["end_ts"])
+            end_time = datetime.fromtimestamp(campaign["end_ts"], tz=timezone.utc)
 
             # Validate pending campaigns
             if campaign["status"] == "proposed":
