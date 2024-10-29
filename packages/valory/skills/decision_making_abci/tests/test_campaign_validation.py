@@ -47,6 +47,10 @@ class CampaignValidationTestCase:
     name: str
     campaign_validation_preparation_class: Any
     exception_message: Any
+    campaign_index: int
+    end_status: str
+    has_updates: bool
+    proposer_verified: bool
     centaur_configs: Optional[Any] = None
     logger_message: Optional[Any] = None
 
@@ -105,7 +109,7 @@ class TestTweetValidationPreparation(BaseCampaignValidationPreparationTest):
         "test_case",
         [
             CampaignValidationTestCase(
-                name="Happy Path",
+                name="Proposed to voting",
                 campaign_validation_preparation_class=CampaignValidationPreparation,
                 exception_message=(
                     {
@@ -115,7 +119,27 @@ class TestTweetValidationPreparation(BaseCampaignValidationPreparationTest):
                     Event.TWEET_VALIDATION.value,
                 ),
                 logger_message=[],
-            )
+                campaign_index=0,
+                has_updates=True,
+                end_status="voting",
+                proposer_verified=True,
+            ),
+            # CampaignValidationTestCase(
+            #     name="Proposed to void",
+            #     campaign_validation_preparation_class=CampaignValidationPreparation,
+            #     exception_message=(
+            #         {
+            #             "centaurs_data": DUMMY_CENTAURS_DATA,
+            #             "has_centaurs_changes": True,
+            #         },
+            #         Event.TWEET_VALIDATION.value,
+            #     ),
+            #     logger_message=[],
+            #     campaign_index=1,
+            #     has_updates=True,
+            #     end_status="void",
+            #     proposer_verified=False,
+            # )
         ],
     )
     @patch(
@@ -135,12 +159,11 @@ class TestTweetValidationPreparation(BaseCampaignValidationPreparationTest):
         updates, event = self._pre_task_base_test(test_case)
 
         assert event == Event.TWEET_VALIDATION.value
-        assert updates["has_centaurs_changes"] is True
+        assert updates["has_centaurs_changes"] is test_case.has_updates
 
-        campaigns = updates["centaurs_data"][0]["plugins_data"]["twitter_campaigns"][
-            "campaigns"
-        ]
+        campaigns = updates["centaurs_data"][test_case.campaign_index]["plugins_data"][
+            "twitter_campaigns"
+        ]["campaigns"]
 
-        # Campaign 0 moves from proposed to voting
-        assert campaigns[0]["proposer"]["verified"] is True
-        assert campaigns[0]["status"] == "voting"
+        assert campaigns[0]["proposer"]["verified"] is test_case.proposer_verified
+        assert campaigns[0]["status"] == test_case.end_status

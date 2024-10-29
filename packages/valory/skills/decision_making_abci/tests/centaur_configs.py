@@ -124,20 +124,7 @@ ENABLED_CENTAUR = {
                             "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
                         ),
                     },
-                    "voters": [
-                        {
-                            "address": list(DUMMY_ACCOUNTS.keys())[0],
-                            "signature": sign_campaign_vote(
-                                "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
-                            ),
-                        },
-                        {
-                            "address": list(DUMMY_ACCOUNTS.keys())[1],
-                            "signature": sign_campaign_vote(
-                                "OlasNetwork", list(DUMMY_ACCOUNTS.values())[1]
-                            ),
-                        },
-                    ],
+                    "voters": [],
                     "status": "proposed",
                 },
                 # {
@@ -152,10 +139,7 @@ ENABLED_CENTAUR = {
                 #             "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
                 #         ),
                 #     },
-                #     "voters": [
-                #         {"0x6c6766E04eF971367D27E720d1d161a9B495D647": 0},
-                #         {"0x7885d121ed8Aa3c919AA4d407F197Dc29E33cAf0": 0},
-                #     ],
+                #     "voters": [],
                 #     "status": "proposed",
                 # },
                 # {
