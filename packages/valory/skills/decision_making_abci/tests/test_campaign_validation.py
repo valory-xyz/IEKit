@@ -22,7 +22,7 @@
 
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, Optional
+from typing import Any, Dict, Optional
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -31,12 +31,12 @@ from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.campaign_validation_preparation import (
     CampaignValidationPreparation,
 )
-from packages.valory.skills.decision_making_abci.tests import centaur_configs
+from packages.valory.skills.decision_making_abci.tests.centaur_configs import *
 
 
 DUMMY_CENTAURS_DATA = [
-    centaur_configs.ENABLED_CENTAUR,
-    centaur_configs.DISABLED_CENTAUR,
+    ENABLED_CENTAUR,
+    DISABLED_CENTAUR,
 ]
 
 
@@ -45,9 +45,9 @@ class CampaignValidationTestCase:
     """CampaignValidationTestCase"""
 
     name: str
+    campaign: Dict
     campaign_validation_preparation_class: Any
     exception_message: Any
-    campaign_index: int
     end_status: str
     has_updates: bool
     proposer_verified: bool
@@ -58,11 +58,14 @@ class CampaignValidationTestCase:
 class BaseCampaignValidationPreparationTest:
     """Base class for BaseCampaignValidationPreparationTest tests."""
 
-    def set_up(self):
+    def set_up(self, campaign):
         """Set up the class."""
         self.behaviour = MagicMock()
         self.synchronized_data = MagicMock()
         self.synchronized_data.centaurs_data = DUMMY_CENTAURS_DATA
+        self.synchronized_data.centaurs_data[0]["plugins_data"]["twitter_campaigns"][
+            "campaigns"
+        ] = [campaign]
         self.context = MagicMock()
 
     def create_tweet_validation_object(self, campaign_validation_preparation_class):
@@ -110,6 +113,7 @@ class TestTweetValidationPreparation(BaseCampaignValidationPreparationTest):
         [
             CampaignValidationTestCase(
                 name="Proposed to voting",
+                campaign=PROPOSED_TO_VOTING_CAMPAIGN,
                 campaign_validation_preparation_class=CampaignValidationPreparation,
                 exception_message=(
                     {
@@ -119,27 +123,26 @@ class TestTweetValidationPreparation(BaseCampaignValidationPreparationTest):
                     Event.TWEET_VALIDATION.value,
                 ),
                 logger_message=[],
-                campaign_index=0,
                 has_updates=True,
                 end_status="voting",
                 proposer_verified=True,
             ),
-            # CampaignValidationTestCase(
-            #     name="Proposed to void",
-            #     campaign_validation_preparation_class=CampaignValidationPreparation,
-            #     exception_message=(
-            #         {
-            #             "centaurs_data": DUMMY_CENTAURS_DATA,
-            #             "has_centaurs_changes": True,
-            #         },
-            #         Event.TWEET_VALIDATION.value,
-            #     ),
-            #     logger_message=[],
-            #     campaign_index=1,
-            #     has_updates=True,
-            #     end_status="void",
-            #     proposer_verified=False,
-            # )
+            CampaignValidationTestCase(
+                name="Proposed to void",
+                campaign=PROPOSED_TO_VOID_CAMPAIGN,
+                campaign_validation_preparation_class=CampaignValidationPreparation,
+                exception_message=(
+                    {
+                        "centaurs_data": DUMMY_CENTAURS_DATA,
+                        "has_centaurs_changes": True,
+                    },
+                    Event.TWEET_VALIDATION.value,
+                ),
+                logger_message=[],
+                has_updates=True,
+                end_status="void",
+                proposer_verified=False,
+            ),
         ],
     )
     @patch(
@@ -152,7 +155,7 @@ class TestTweetValidationPreparation(BaseCampaignValidationPreparationTest):
     ):
         """Test the _post_task method."""
         mock_is_contract.return_value = {"is_contract": False}
-        self.set_up()
+        self.set_up(test_case.campaign)
         self.create_tweet_validation_object(
             test_case.campaign_validation_preparation_class
         )
@@ -161,9 +164,9 @@ class TestTweetValidationPreparation(BaseCampaignValidationPreparationTest):
         assert event == Event.TWEET_VALIDATION.value
         assert updates["has_centaurs_changes"] is test_case.has_updates
 
-        campaigns = updates["centaurs_data"][test_case.campaign_index]["plugins_data"][
-            "twitter_campaigns"
-        ]["campaigns"]
+        campaigns = updates["centaurs_data"][0]["plugins_data"]["twitter_campaigns"][
+            "campaigns"
+        ]
 
         assert campaigns[0]["proposer"]["verified"] is test_case.proposer_verified
         assert campaigns[0]["status"] == test_case.end_status

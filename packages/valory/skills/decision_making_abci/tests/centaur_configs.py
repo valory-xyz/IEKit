@@ -110,114 +110,7 @@ ENABLED_CENTAUR = {
                 },
             ]
         },
-        "twitter_campaigns": {
-            "campaigns": [
-                {
-                    "id": "proposed_to_voting",
-                    "hashtag": "OlasNetwork",
-                    "start_ts": 1729693101,
-                    "end_ts": 1729693101,
-                    "proposer": {
-                        "address": list(DUMMY_ACCOUNTS.keys())[0],
-                        "verified": None,
-                        "signature": sign_campaign_proposal(
-                            "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
-                        ),
-                    },
-                    "voters": [],
-                    "status": "proposed",
-                },
-                # {
-                #     "id": "proposed_to_void",
-                #     "hashtag": "OlasNetwork",
-                #     "start_ts": 1729693101,
-                #     "end_ts": 1729693101,
-                #     "proposer": {
-                #         "address": list(DUMMY_ACCOUNTS.keys())[0],
-                #         "verified": None,
-                #         "signature": sign_campaign_proposal(
-                #             "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
-                #         ),
-                #     },
-                #     "voters": [],
-                #     "status": "proposed",
-                # },
-                # {
-                #     "id": "voting_to_scheduled",
-                #     "hashtag": "OlasNetwork",
-                #     "start_ts": 1729693101,
-                #     "end_ts": 1729693101,
-                #     "proposer": {
-                #         "address": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",
-                #         "verified": False,
-                #         "signature": sign_campaign_proposal(
-                #             "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
-                #         ),
-                #     },
-                #     "voters": [
-                #         {
-                #             "address": list(DUMMY_ACCOUNTS.keys())[0],
-                #             "signature": sign_campaign_vote(
-                #                 "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
-                #             ),
-                #         },
-                #         {
-                #             "address": list(DUMMY_ACCOUNTS.keys())[1],
-                #             "signature": sign_campaign_vote(
-                #                 "OlasNetwork", list(DUMMY_ACCOUNTS.values())[1]
-                #             ),
-                #         },
-                #     ],
-                #     "status": "proposed",
-                # },
-                # {
-                #     "id": "voting_to_void",
-                #     "hashtag": "OlasNetwork",
-                #     "start_ts": 1729693101,
-                #     "end_ts": 1729693101,
-                #     "proposer": {
-                #         "address": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",
-                #         "verified": False,
-                #         "signature": sign_campaign_proposal(
-                #             "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
-                #         ),
-                #     },
-                #     "voters": [
-                #         {
-                #             "address": list(DUMMY_ACCOUNTS.keys())[0],
-                #             "signature": sign_campaign_vote(
-                #                 "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
-                #             ),
-                #         },
-                #         {
-                #             "address": list(DUMMY_ACCOUNTS.keys())[1],
-                #             "signature": sign_campaign_vote(
-                #                 "OlasNetwork", list(DUMMY_ACCOUNTS.values())[1]
-                #             ),
-                #         },
-                #     ],
-                #     "status": "void",
-                # },
-                # {
-                #     "id": "scheduled_to_live",
-                #     "hashtag": "OlasNetwork",
-                #     "start_ts": 1729693101,
-                #     "end_ts": 1729693101,
-                #     "status": "scheduled",
-                # },
-                # {
-                #     "id": "live_to_ended",
-                #     "hashtag": "OlasNetwork",
-                #     "start_ts": 1729693101,
-                #     "end_ts": 1729693101,
-                #     "status": "live",
-                # },
-                # {
-                #     "id": "ended",
-                #     "status": "ended",
-                # },
-            ]
-        },
+        "twitter_campaigns": {"campaigns": []},
     },
     "actions": [
         {
@@ -400,3 +293,109 @@ DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_ORBIS_KEY = {
         },
     }
 }
+
+
+PROPOSED_TO_VOTING_CAMPAIGN = {
+    "id": "proposed_to_voting",
+    "hashtag": "OlasNetwork",
+    "start_ts": 1729693101,
+    "end_ts": 1729693101,
+    "proposer": {
+        "address": list(DUMMY_ACCOUNTS.keys())[0],
+        "verified": None,
+        "signature": sign_campaign_proposal(
+            "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
+        ),
+    },
+    "voters": [],
+    "status": "proposed",
+}
+
+PROPOSED_TO_VOID_CAMPAIGN = {
+    "id": "proposed_to_void",
+    "hashtag": "OlasNetwork",
+    "start_ts": 1729693101,
+    "end_ts": 1729693101,
+    "proposer": {
+        "address": list(DUMMY_ACCOUNTS.keys())[0],
+        "verified": None,
+        "signature": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",
+    },
+    "voters": [],
+    "status": "proposed",
+}
+
+# {
+#     "id": "voting_to_scheduled",
+#     "hashtag": "OlasNetwork",
+#     "start_ts": 1729693101,
+#     "end_ts": 1729693101,
+#     "proposer": {
+#         "address": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",
+#         "verified": False,
+#         "signature": sign_campaign_proposal(
+#             "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
+#         ),
+#     },
+#     "voters": [
+#         {
+#             "address": list(DUMMY_ACCOUNTS.keys())[0],
+#             "signature": sign_campaign_vote(
+#                 "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
+#             ),
+#         },
+#         {
+#             "address": list(DUMMY_ACCOUNTS.keys())[1],
+#             "signature": sign_campaign_vote(
+#                 "OlasNetwork", list(DUMMY_ACCOUNTS.values())[1]
+#             ),
+#         },
+#     ],
+#     "status": "proposed",
+# },
+# {
+#     "id": "voting_to_void",
+#     "hashtag": "OlasNetwork",
+#     "start_ts": 1729693101,
+#     "end_ts": 1729693101,
+#     "proposer": {
+#         "address": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",
+#         "verified": False,
+#         "signature": sign_campaign_proposal(
+#             "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
+#         ),
+#     },
+#     "voters": [
+#         {
+#             "address": list(DUMMY_ACCOUNTS.keys())[0],
+#             "signature": sign_campaign_vote(
+#                 "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
+#             ),
+#         },
+#         {
+#             "address": list(DUMMY_ACCOUNTS.keys())[1],
+#             "signature": sign_campaign_vote(
+#                 "OlasNetwork", list(DUMMY_ACCOUNTS.values())[1]
+#             ),
+#         },
+#     ],
+#     "status": "void",
+# },
+# {
+#     "id": "scheduled_to_live",
+#     "hashtag": "OlasNetwork",
+#     "start_ts": 1729693101,
+#     "end_ts": 1729693101,
+#     "status": "scheduled",
+# },
+# {
+#     "id": "live_to_ended",
+#     "hashtag": "OlasNetwork",
+#     "start_ts": 1729693101,
+#     "end_ts": 1729693101,
+#     "status": "live",
+# },
+# {
+#     "id": "ended",
+#     "status": "ended",
+# },
