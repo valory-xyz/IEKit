@@ -22,8 +22,10 @@
 
 from copy import deepcopy
 from datetime import datetime, timezone
+
 from eth_account import messages
 from web3.auto import w3
+
 
 DUMMY_ACCOUNTS = {
     "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf": "0x0000000000000000000000000000000000000000000000000000000000000001",
@@ -116,8 +118,8 @@ ENABLED_CENTAUR = {
                     "start_ts": 1729693101,
                     "end_ts": 1729693101,
                     "proposer": {
-                        "address": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",
-                        "verified": False,
+                        "address": list(DUMMY_ACCOUNTS.keys())[0],
+                        "verified": None,
                         "signature": sign_campaign_proposal(
                             "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
                         ),

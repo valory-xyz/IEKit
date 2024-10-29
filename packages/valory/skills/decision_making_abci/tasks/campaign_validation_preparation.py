@@ -75,7 +75,6 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
                     campaign["proposer"]["address"],
                     campaign["proposer"]["signature"],
                 )
-                import pdb;pdb.set_trace()
                 self.logger.info(f"Is the proposer signature valid? {is_valid}")
 
                 campaign["proposer"]["verified"] = is_valid

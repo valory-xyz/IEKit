@@ -21,17 +21,22 @@
 """Test the campaign validation preparation tasks"""
 
 import unittest
+from dataclasses import dataclass
 from datetime import datetime, timezone
-from unittest.mock import MagicMock
-from unittest.mock import patch
+from typing import Any, Optional
+from unittest.mock import MagicMock, call, patch
+
 import pytest
 
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.campaign_validation_preparation import (
     CampaignValidationPreparation,
 )
+from packages.valory.skills.decision_making_abci.tasks.signature_validation import (
+    SignatureValidationMixin,
+)
 from packages.valory.skills.decision_making_abci.tests import centaur_configs
-from packages.valory.skills.decision_making_abci.tasks.signature_validation import SignatureValidationMixin
+
 
 DUMMY_CENTAURS_DATA = [
     centaur_configs.ENABLED_CENTAUR,
@@ -39,64 +44,127 @@ DUMMY_CENTAURS_DATA = [
 ]
 
 
-class TestCampaignValidationPreparation(unittest.TestCase):
-    """Test the FinishedPipeliTestCampaignValidationPreparationnePreparation class."""
+@dataclass
+class CampaignValidationTestCase:
+    """CampaignValidationTestCase"""
 
-    def setUp(self):
-        """Set up the tests."""
-        # Create the mock behaviour
+    name: str
+    campaign_validation_preparation_class: Any
+    exception_message: Any
+    centaur_configs: Optional[Any] = None
+    logger_message: Optional[Any] = None
+
+
+class BaseCampaignValidationPreparationTest:
+    """Base class for BaseCampaignValidationPreparationTest tests."""
+
+    def set_up(self):
+        """Set up the class."""
         self.behaviour = MagicMock()
-        self.behaviour.params = {}
-        self.behaviour.context.logger = MagicMock()
-        self.behaviour.state = {}
-        self.behaviour.context.ceramic_db = MagicMock()
         self.synchronized_data = MagicMock()
-        self.context = MagicMock()
         self.synchronized_data.centaurs_data = DUMMY_CENTAURS_DATA
-        self.synchronized_data.current_centaur_index = 0
+        self.context = MagicMock()
 
-        # Create an instance of CampaignValidationPreparation
-        self.mock_campaign_validation_preparation = CampaignValidationPreparation(
-            datetime.now(timezone.utc),
-            self.behaviour,
-            self.synchronized_data,
-            self.context,
+    def create_tweet_validation_object(self, campaign_validation_preparation_class):
+        """Create the tweet validation object."""
+        self.mock_campaign_validation_preparation = (
+            campaign_validation_preparation_class(
+                datetime.now(timezone.utc),
+                self.behaviour,
+                self.synchronized_data,
+                self.context,
+            )
         )
 
-    @patch("packages.valory.skills.decision_making_abci.tasks.signature_validation.SignatureValidationMixin.validate_signature")
-    def test_pre_task(self, mock_validate_signature):
-        """Test pre_task"""
+        self.mock_campaign_validation_preparation.behaviour.context.logger.info = (
+            MagicMock()
+        )
+        self.mock_campaign_validation_preparation.logger.info = MagicMock()
 
-        # Configurar el generador para que devuelva False indefinidamente
-        mock_validate_signature.return_value = MagicMock()
-        mock_validate_signature.return_value.__iter__.return_value = iter([False, False, False])
+    def check_extra_conditions_test(self, test_case: CampaignValidationTestCase):
+        """Test the check_extra_conditions method."""
+        gen = self.mock_campaign_validation_preparation.check_extra_conditions()
+        next(gen)
+        with pytest.raises(StopIteration) as excinfo:
+            next(gen)
 
+        exception_message = test_case.exception_message
+        assert str(exception_message) in str(excinfo.value)
+
+    def _post_task_base_test(self, test_case: CampaignValidationTestCase):
+        """Test the _post_task method."""
+        gen = self.mock_campaign_validation_preparation._post_task()
+
+        next(gen)
+
+        with pytest.raises(StopIteration) as excinfo:
+            next(gen)
+        self.mock_campaign_validation_preparation.behaviour.context.logger.info.assert_called_with(
+            test_case.logger_message
+        )
+        exception_message = test_case.exception_message
+        assert str(exception_message) in str(excinfo.value)
+
+    def _pre_task_base_test(self, test_case: CampaignValidationTestCase):
+        """Test the _pre_task method."""
+        self.mock_campaign_validation_preparation.synchronized_data.centaurs_data = (
+            DUMMY_CENTAURS_DATA
+        )
+        self.mock_campaign_validation_preparation.synchronized_data.current_centaur_index = (
+            0
+        )
         gen = self.mock_campaign_validation_preparation._pre_task()
-        updates = next(gen)
+        next(gen)
+        calls = test_case.logger_message
+        self.mock_campaign_validation_preparation.logger.info.assert_has_calls(
+            calls, any_order=True
+        )
+        with pytest.raises(StopIteration):
+            next(gen)
+
+        updates, event = test_case.exception_message
+        return updates, event
 
 
+class TestTweetValidationPreparation(BaseCampaignValidationPreparationTest):
+    """Test the TweetValidationPreparation class."""
 
-    # def test_check_extra_conditions(self):
-    #     """Test check_extra_conditions."""
-    #     gen = self.mock_campaign_validation_preparation.check_extra_conditions()
-    #     self.assertIsInstance(gen, type((lambda: (yield))()))
-    #     next(gen)
-    #     with pytest.raises(StopIteration):
-    #         assert next(gen)
-
-    # def test__pre_task(self):
-    #     """Test _pre_task."""
-    #     gen = self.mock_campaign_validation_preparation._pre_task()
-    #     self.assertIsInstance(gen, type((lambda: (yield))()))
-    #     next(gen)
-    #     with pytest.raises(StopIteration) as excinfo:
-    #         next(gen)
-
-    #     exception_message = {
-    #         "current_centaur_index": self.mock_campaign_validation_preparation.get_next_centaur_index()
-    #     }, Event.NEXT_CENTAUR.value
-    #     assert str(exception_message) in str(excinfo.value)
-
-    #     self.mock_campaign_validation_preparation.logger.info.assert_called_with(
-    #         f"Next centaur index: {self.mock_campaign_validation_preparation.get_next_centaur_index()} [{len(self.mock_campaign_validation_preparation.synchronized_data.centaurs_data)}]"
-    #     )
+    @pytest.mark.parametrize(
+        "test_case",
+        [
+            CampaignValidationTestCase(
+                name="Happy Path",
+                campaign_validation_preparation_class=CampaignValidationPreparation,
+                exception_message=(
+                    {
+                        "centaurs_data": DUMMY_CENTAURS_DATA,
+                        "has_centaurs_changes": True,
+                    },
+                    Event.TWEET_VALIDATION.value,
+                ),
+                logger_message=[],
+            )
+        ],
+    )
+    @patch(
+        "packages.valory.skills.decision_making_abci.tasks.campaign_validation_preparation.CampaignValidationPreparation.is_contract"
+    )
+    def test__pre_task(
+        self,
+        mock_is_contract,
+        test_case: CampaignValidationTestCase,
+    ):
+        """Test the _post_task method."""
+        mock_is_contract.return_value = {"is_contract": False}
+        self.set_up()
+        self.create_tweet_validation_object(
+            test_case.campaign_validation_preparation_class
+        )
+        updates, event = self._pre_task_base_test(test_case)
+        assert event == Event.TWEET_VALIDATION.value
+        assert updates["has_centaurs_changes"] == True
+        campaign = updates["centaurs_data"][0]["plugins_data"]["twitter_campaigns"][
+            "campaigns"
+        ][0]
+        assert campaign["proposer"]["verified"] == True
+        assert campaign["status"] == "voting"
