@@ -722,6 +722,18 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
         # Dynamicaly build the search query using the hashtags in the centaurs stream
         active_hashtags = self.get_active_hashtags()
+
+        # TODO: If there are no active campaigns, skip this
+        # If we do this, we also need to handle the case where we've been a lot of
+        # time without pulling tweets -> pagination, API limits, etc...
+        # if not active_hashtags:
+        #     return {
+        #         "tweets": {},
+        #         "latest_hashtag_tweet_id": int(latest_hashtag_tweet_id),
+        #         "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
+        #         "sleep_until": None,  # we reset this on a successful request
+        #     }
+
         search_query = " OR ".join(active_hashtags)
 
         api_args = self.params.twitter_search_args.replace(

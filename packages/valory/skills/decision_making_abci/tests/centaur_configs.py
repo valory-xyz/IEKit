@@ -22,6 +22,33 @@
 
 from copy import deepcopy
 from datetime import datetime, timezone
+from eth_account import messages
+from web3.auto import w3
+
+DUMMY_ACCOUNTS = {
+    "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf": "0x0000000000000000000000000000000000000000000000000000000000000001",
+    "0x2B5AD5c4795c026514f8317c7a215E218DcCD6cF": "0x0000000000000000000000000000000000000000000000000000000000000002",
+}
+
+
+def sign_message(message_text, private_key):
+    """Sign a message"""
+    message_hash = messages.defunct_hash_message(text=message_text)
+    signed_message = w3.eth.account.signHash(message_hash, private_key=private_key)
+    signature = signed_message.signature.hex()
+    return signature
+
+
+def sign_campaign_proposal(hashtag, private_key):
+    """Sign a campaign proposal"""
+    message = f"I am signing a message to verify that I propose a campaign starting with {hashtag[:10]}"
+    return sign_message(message, private_key)
+
+
+def sign_campaign_vote(hashtag, private_key):
+    """Sign a campaign vote"""
+    message = f"I am signing a message to verify that I approve a campaign starting with {hashtag[:10]}"
+    return sign_message(message, private_key)
 
 
 ENABLED_CENTAUR = {
@@ -84,10 +111,122 @@ ENABLED_CENTAUR = {
         "twitter_campaigns": {
             "campaigns": [
                 {
-                    "id": "dummy_id",
+                    "id": "proposed_to_void",
                     "hashtag": "OlasNetwork",
-                    "status": "live",
-                }
+                    "start_ts": 1729693101,
+                    "end_ts": 1729693101,
+                    "proposer": {
+                        "address": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",
+                        "verified": False,
+                        "signature": sign_campaign_proposal(
+                            "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
+                        ),
+                    },
+                    "voters": [
+                        {
+                            "address": list(DUMMY_ACCOUNTS.keys())[0],
+                            "signature": sign_campaign_vote(
+                                "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
+                            ),
+                        },
+                        {
+                            "address": list(DUMMY_ACCOUNTS.keys())[1],
+                            "signature": sign_campaign_vote(
+                                "OlasNetwork", list(DUMMY_ACCOUNTS.values())[1]
+                            ),
+                        },
+                    ],
+                    "status": "proposed",
+                },
+                # {
+                #     "id": "proposed_to_voting",
+                #     "hashtag": "OlasNetwork",
+                #     "start_ts": 1729693101,
+                #     "end_ts": 1729693101,
+                #     "proposer": {
+                #         "address": "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf",
+                #         "signature": "0x37904bcb8b6e11ae894856c1d722209397e548219f000fc172f9a58a064718dd634fa00ace138383dfe807f479a0cf22588edb3fd61bfea2f85378a7513c6cc41c",
+                #         "verified": None,
+                #     },
+                #     "voters": [
+                #         {"0x6c6766E04eF971367D27E720d1d161a9B495D647": 0},
+                #         {"0x7885d121ed8Aa3c919AA4d407F197Dc29E33cAf0": 0},
+                #     ],
+                # },
+                # {
+                #     "id": "voting_to_scheduled",
+                #     "hashtag": "OlasNetwork",
+                #     "start_ts": 1729693101,
+                #     "end_ts": 1729693101,
+                #     "proposer": {
+                #         "address": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",
+                #         "verified": False,
+                #         "signature": sign_campaign_proposal(
+                #             "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
+                #         ),
+                #     },
+                #     "voters": [
+                #         {
+                #             "address": list(DUMMY_ACCOUNTS.keys())[0],
+                #             "signature": sign_campaign_vote(
+                #                 "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
+                #             ),
+                #         },
+                #         {
+                #             "address": list(DUMMY_ACCOUNTS.keys())[1],
+                #             "signature": sign_campaign_vote(
+                #                 "OlasNetwork", list(DUMMY_ACCOUNTS.values())[1]
+                #             ),
+                #         },
+                #     ],
+                #     "status": "proposed",
+                # },
+                # {
+                #     "id": "voting_to_void",
+                #     "hashtag": "OlasNetwork",
+                #     "start_ts": 1729693101,
+                #     "end_ts": 1729693101,
+                #     "proposer": {
+                #         "address": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",
+                #         "verified": False,
+                #         "signature": sign_campaign_proposal(
+                #             "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
+                #         ),
+                #     },
+                #     "voters": [
+                #         {
+                #             "address": list(DUMMY_ACCOUNTS.keys())[0],
+                #             "signature": sign_campaign_vote(
+                #                 "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
+                #             ),
+                #         },
+                #         {
+                #             "address": list(DUMMY_ACCOUNTS.keys())[1],
+                #             "signature": sign_campaign_vote(
+                #                 "OlasNetwork", list(DUMMY_ACCOUNTS.values())[1]
+                #             ),
+                #         },
+                #     ],
+                #     "status": "void",
+                # },
+                # {
+                #     "id": "scheduled_to_live",
+                #     "hashtag": "OlasNetwork",
+                #     "start_ts": 1729693101,
+                #     "end_ts": 1729693101,
+                #     "status": "scheduled",
+                # },
+                # {
+                #     "id": "live_to_ended",
+                #     "hashtag": "OlasNetwork",
+                #     "start_ts": 1729693101,
+                #     "end_ts": 1729693101,
+                #     "status": "live",
+                # },
+                # {
+                #     "id": "ended",
+                #     "status": "ended",
+                # },
             ]
         },
     },
