@@ -113,7 +113,7 @@ ENABLED_CENTAUR = {
         "twitter_campaigns": {
             "campaigns": [
                 {
-                    "id": "proposed_to_void",
+                    "id": "proposed_to_voting",
                     "hashtag": "OlasNetwork",
                     "start_ts": 1729693101,
                     "end_ts": 1729693101,
@@ -141,19 +141,22 @@ ENABLED_CENTAUR = {
                     "status": "proposed",
                 },
                 # {
-                #     "id": "proposed_to_voting",
+                #     "id": "proposed_to_void",
                 #     "hashtag": "OlasNetwork",
                 #     "start_ts": 1729693101,
                 #     "end_ts": 1729693101,
                 #     "proposer": {
-                #         "address": "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf",
-                #         "signature": "0x37904bcb8b6e11ae894856c1d722209397e548219f000fc172f9a58a064718dd634fa00ace138383dfe807f479a0cf22588edb3fd61bfea2f85378a7513c6cc41c",
+                #         "address": list(DUMMY_ACCOUNTS.keys())[0],
                 #         "verified": None,
+                #         "signature": sign_campaign_proposal(
+                #             "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
+                #         ),
                 #     },
                 #     "voters": [
                 #         {"0x6c6766E04eF971367D27E720d1d161a9B495D647": 0},
                 #         {"0x7885d121ed8Aa3c919AA4d407F197Dc29E33cAf0": 0},
                 #     ],
+                #     "status": "proposed",
                 # },
                 # {
                 #     "id": "voting_to_scheduled",

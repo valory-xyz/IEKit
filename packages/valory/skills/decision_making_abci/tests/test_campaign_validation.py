@@ -20,20 +20,16 @@
 
 """Test the campaign validation preparation tasks"""
 
-import unittest
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Optional
-from unittest.mock import MagicMock, call, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.campaign_validation_preparation import (
     CampaignValidationPreparation,
-)
-from packages.valory.skills.decision_making_abci.tasks.signature_validation import (
-    SignatureValidationMixin,
 )
 from packages.valory.skills.decision_making_abci.tests import centaur_configs
 
@@ -81,30 +77,6 @@ class BaseCampaignValidationPreparationTest:
         )
         self.mock_campaign_validation_preparation.logger.info = MagicMock()
 
-    def check_extra_conditions_test(self, test_case: CampaignValidationTestCase):
-        """Test the check_extra_conditions method."""
-        gen = self.mock_campaign_validation_preparation.check_extra_conditions()
-        next(gen)
-        with pytest.raises(StopIteration) as excinfo:
-            next(gen)
-
-        exception_message = test_case.exception_message
-        assert str(exception_message) in str(excinfo.value)
-
-    def _post_task_base_test(self, test_case: CampaignValidationTestCase):
-        """Test the _post_task method."""
-        gen = self.mock_campaign_validation_preparation._post_task()
-
-        next(gen)
-
-        with pytest.raises(StopIteration) as excinfo:
-            next(gen)
-        self.mock_campaign_validation_preparation.behaviour.context.logger.info.assert_called_with(
-            test_case.logger_message
-        )
-        exception_message = test_case.exception_message
-        assert str(exception_message) in str(excinfo.value)
-
     def _pre_task_base_test(self, test_case: CampaignValidationTestCase):
         """Test the _pre_task method."""
         self.mock_campaign_validation_preparation.synchronized_data.centaurs_data = (
@@ -149,7 +121,7 @@ class TestTweetValidationPreparation(BaseCampaignValidationPreparationTest):
     @patch(
         "packages.valory.skills.decision_making_abci.tasks.campaign_validation_preparation.CampaignValidationPreparation.is_contract"
     )
-    def test__pre_task(
+    def test_pre_task(
         self,
         mock_is_contract,
         test_case: CampaignValidationTestCase,
@@ -161,10 +133,14 @@ class TestTweetValidationPreparation(BaseCampaignValidationPreparationTest):
             test_case.campaign_validation_preparation_class
         )
         updates, event = self._pre_task_base_test(test_case)
+
         assert event == Event.TWEET_VALIDATION.value
-        assert updates["has_centaurs_changes"] == True
-        campaign = updates["centaurs_data"][0]["plugins_data"]["twitter_campaigns"][
+        assert updates["has_centaurs_changes"] is True
+
+        campaigns = updates["centaurs_data"][0]["plugins_data"]["twitter_campaigns"][
             "campaigns"
-        ][0]
-        assert campaign["proposer"]["verified"] == True
-        assert campaign["status"] == "voting"
+        ]
+
+        # Campaign 0 moves from proposed to voting
+        assert campaigns[0]["proposer"]["verified"] is True
+        assert campaigns[0]["status"] == "voting"
