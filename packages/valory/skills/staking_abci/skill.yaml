@@ -7,18 +7,18 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeie3oujhxxdr5s2lvc6cosbysezqycagw5mbwvxjw24k3dzcbtgg5m
-  behaviours.py: bafybeib2zvg5s5rdl433z75zpjohkm3skk6wh7uufajssnfmu2n4lhrc7q
+  behaviours.py: bafybeifhf3fqbtfnnnjwu7tc2hmly2ek2nny2uegvjsqivn5ztawqsm5ni
   dialogues.py: bafybeifmmpyiwetlcgykczsq4dgwvm7tipdupf2rwcndg5cmtm7jfoxwxm
   fsm_specification.yaml: bafybeigq65aaewekx2zjh4qkmonexjj4j4mfwjrjhvzdsfezmm3iip6fum
   handlers.py: bafybeiaufft2fwbbjbbc77md6xkq7prnzzi2nkkm2fipapgx54myabmb7y
-  models.py: bafybeifzsq7stmajfyikchr7dsybfvg4cea4sygdrhgy4pvfngizxjl7s4
+  models.py: bafybeihqdn7wex4xpzg2klfpgb2in7ovs62cp3baxxfehbdc6zd66gudfy
   payloads.py: bafybeihs7i2akxemb7feduip4fojyqwa5gkcggzh4ogtsrlkmdcdcxzmdq
   rounds.py: bafybeifgcrr6wskf2kd4aaoqutz6z7jimtqt4e3zvxzw5z3wkvyao63pyy
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
 - valory/gnosis_safe:0.1.0:bafybeic4gynbobop65yqs7qpskrxtiso4xcammzwcwtad5u3rq3vs4to4q
-- valory/staking:0.1.0:bafybeie3dorlun6f4k25m2z44ncssqlr2bkek3nxzdsd6yrv7jpeoukiei
+- valory/staking:0.1.0:bafybeidwbv36kxxdvy5dw7r6w3ulclcc3xabctjhkuvpu6ycbnuesev7aq
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 skills:
@@ -129,7 +129,10 @@ models:
       slash_threshold_amount: 10000000000000000
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
-      staking_contract_addresses: ["0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F","0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb","0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8"]
+      staking_contract_addresses:
+      - '0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F'
+      - '0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb'
+      - '0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8'
       contributors_contract_address: '0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94'
       safe_contract_address_base: '0x0000000000000000000000000000000000000000'
       multisend_address: '0x0000000000000000000000000000000000000000'
