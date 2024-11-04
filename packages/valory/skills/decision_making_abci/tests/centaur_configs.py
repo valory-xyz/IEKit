@@ -62,14 +62,14 @@ ENABLED_CENTAUR = {
                 "daily": True,
                 "enabled": True,
                 "last_run": None,
-                "run_hour_utc": datetime.utcnow().hour,
+                "run_hour_utc": datetime.now(tz=timezone.utc).hour,
             },
             "scheduled_tweet": {"daily": False, "enabled": True},
             "daily_orbis": {
                 "daily": True,
                 "enabled": True,
                 "last_run": None,
-                "run_hour_utc": datetime.utcnow().hour,
+                "run_hour_utc": datetime.now(tz=timezone.utc).hour,
             },
         }
     },
@@ -216,14 +216,13 @@ del NO_ACTIONS["actions"]
 
 NO_TIME_TO_RUN = deepcopy(ENABLED_CENTAUR)
 NO_TIME_TO_RUN["configuration"]["plugins"]["daily_tweet"]["run_hour_utc"] = (
-    datetime.utcnow().hour + 12
+    datetime.now(tz=timezone.utc).hour + 12
 )
 
 ALREADY_RAN = deepcopy(ENABLED_CENTAUR)
 ALREADY_RAN["configuration"]["plugins"]["daily_tweet"]["last_run"] = (
-    datetime.utcnow().replace(tzinfo=timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
+    datetime.now(tz=timezone.utc).replace(tzinfo=timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
 )
-
 
 DUMMY_CENTAUR_ID_TO_SECRETS_OK = {
     "4e77a3b1-5762-4782-830e-0e56c6c05c6f": {
@@ -294,12 +293,13 @@ DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_ORBIS_KEY = {
     }
 }
 
+NOW_TS = int(datetime.now(tz=timezone.utc).timestamp())
 
 PROPOSED_TO_VOTING_CAMPAIGN = {
     "id": "proposed_to_voting",
     "hashtag": "OlasNetwork",
-    "start_ts": 1729693101,
-    "end_ts": 1729693101,
+    "start_ts": 0,
+    "end_ts": 0,
     "proposer": {
         "address": list(DUMMY_ACCOUNTS.keys())[0],
         "verified": None,
@@ -314,88 +314,85 @@ PROPOSED_TO_VOTING_CAMPAIGN = {
 PROPOSED_TO_VOID_CAMPAIGN = {
     "id": "proposed_to_void",
     "hashtag": "OlasNetwork",
-    "start_ts": 1729693101,
-    "end_ts": 1729693101,
+    "start_ts": 0,
+    "end_ts": 0,
     "proposer": {
         "address": list(DUMMY_ACCOUNTS.keys())[0],
         "verified": None,
-        "signature": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",
+        "signature": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",  # invalid signature
     },
     "voters": [],
     "status": "proposed",
 }
 
-# {
-#     "id": "voting_to_scheduled",
-#     "hashtag": "OlasNetwork",
-#     "start_ts": 1729693101,
-#     "end_ts": 1729693101,
-#     "proposer": {
-#         "address": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",
-#         "verified": False,
-#         "signature": sign_campaign_proposal(
-#             "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
-#         ),
-#     },
-#     "voters": [
-#         {
-#             "address": list(DUMMY_ACCOUNTS.keys())[0],
-#             "signature": sign_campaign_vote(
-#                 "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
-#             ),
-#         },
-#         {
-#             "address": list(DUMMY_ACCOUNTS.keys())[1],
-#             "signature": sign_campaign_vote(
-#                 "OlasNetwork", list(DUMMY_ACCOUNTS.values())[1]
-#             ),
-#         },
-#     ],
-#     "status": "proposed",
-# },
-# {
-#     "id": "voting_to_void",
-#     "hashtag": "OlasNetwork",
-#     "start_ts": 1729693101,
-#     "end_ts": 1729693101,
-#     "proposer": {
-#         "address": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",
-#         "verified": False,
-#         "signature": sign_campaign_proposal(
-#             "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
-#         ),
-#     },
-#     "voters": [
-#         {
-#             "address": list(DUMMY_ACCOUNTS.keys())[0],
-#             "signature": sign_campaign_vote(
-#                 "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
-#             ),
-#         },
-#         {
-#             "address": list(DUMMY_ACCOUNTS.keys())[1],
-#             "signature": sign_campaign_vote(
-#                 "OlasNetwork", list(DUMMY_ACCOUNTS.values())[1]
-#             ),
-#         },
-#     ],
-#     "status": "void",
-# },
-# {
-#     "id": "scheduled_to_live",
-#     "hashtag": "OlasNetwork",
-#     "start_ts": 1729693101,
-#     "end_ts": 1729693101,
-#     "status": "scheduled",
-# },
-# {
-#     "id": "live_to_ended",
-#     "hashtag": "OlasNetwork",
-#     "start_ts": 1729693101,
-#     "end_ts": 1729693101,
-#     "status": "live",
-# },
-# {
-#     "id": "ended",
-#     "status": "ended",
-# },
+VOTING_TO_VOID_CAMPAIGN = {
+    "id": "proposed_to_void",
+    "hashtag": "OlasNetwork",
+    "start_ts": NOW_TS, # start time reached without votes
+    "end_ts": 0,
+    "proposer": {
+        "address": list(DUMMY_ACCOUNTS.keys())[0],
+        "verified": True,
+        "signature": sign_campaign_proposal(
+            "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
+        ),
+    },
+    "voters": [],
+    "status": "voting",
+}
+
+VOTING_TO_SCHEDULED_CAMPAIGN = {
+    "id": "proposed_to_void",
+    "hashtag": "OlasNetwork",
+    "start_ts": NOW_TS + 1000,
+    "end_ts": NOW_TS + 2000,
+    "proposer": {
+        "address": list(DUMMY_ACCOUNTS.keys())[0],
+        "verified": True,
+        "signature": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",
+    },
+    "voters": [],
+    "status": "voting",
+}
+
+SCHEDULED_TO_LIVE_CAMPAIGN = {
+    "id": "proposed_to_void",
+    "hashtag": "OlasNetwork",
+    "start_ts": NOW_TS,
+    "end_ts": NOW_TS + 1000,
+    "proposer": {
+        "address": list(DUMMY_ACCOUNTS.keys())[0],
+        "verified": True,
+        "signature": "",
+    },
+    "voters": [],
+    "status": "scheduled",
+}
+
+LIVE_TO_ENDED_CAMPAIGN = {
+    "id": "proposed_to_void",
+    "hashtag": "OlasNetwork",
+    "start_ts": 0,
+    "end_ts": NOW_TS,
+    "proposer": {
+        "address": list(DUMMY_ACCOUNTS.keys())[0],
+        "verified": True,
+        "signature": "",
+    },
+    "voters": [],
+    "status": "live",
+}
+
+ENDED_TO_ENDED_CAMPAIGN = {
+    "id": "proposed_to_void",
+    "hashtag": "OlasNetwork",
+    "start_ts": 0,
+    "end_ts": NOW_TS,
+    "proposer": {
+        "address": list(DUMMY_ACCOUNTS.keys())[0],
+        "verified": True,
+        "signature": "",
+    },
+    "voters": [],
+    "status": "ended",
+}

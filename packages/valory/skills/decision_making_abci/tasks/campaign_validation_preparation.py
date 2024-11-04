@@ -63,7 +63,7 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
             )
 
             # Get campaign start and end times
-            start_time = datetime.fromtimestamp(campaign["start_ts"])
+            start_time = datetime.fromtimestamp(campaign["start_ts"], tz=timezone.utc)
             end_time = datetime.fromtimestamp(campaign["end_ts"], tz=timezone.utc)
 
             # Validate pending campaigns
