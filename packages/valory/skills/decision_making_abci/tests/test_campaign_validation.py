@@ -53,6 +53,7 @@ class CampaignValidationTestCase:
     proposer_verified: bool
     centaur_configs: Optional[Any] = None
     logger_message: Optional[Any] = None
+    yields: bool = True
 
 
 class BaseCampaignValidationPreparationTest:
@@ -67,6 +68,10 @@ class BaseCampaignValidationPreparationTest:
             "campaigns"
         ] = [campaign]
         self.context = MagicMock()
+
+        # Modify the consensus veolas power to force consensus
+        self.behaviour.params.tweet_consensus_veolas = 0
+
 
     def create_tweet_validation_object(self, campaign_validation_preparation_class):
         """Create the tweet validation object."""
@@ -93,7 +98,8 @@ class BaseCampaignValidationPreparationTest:
             0
         )
         gen = self.mock_campaign_validation_preparation._pre_task()
-        next(gen)
+        if test_case.yields:
+            next(gen)
         calls = test_case.logger_message
         self.mock_campaign_validation_preparation.logger.info.assert_has_calls(
             calls, any_order=True
@@ -142,6 +148,91 @@ class TestTweetValidationPreparation(BaseCampaignValidationPreparationTest):
                 has_updates=True,
                 end_status="void",
                 proposer_verified=False,
+            ),
+            CampaignValidationTestCase(
+                name="Voting to void",
+                campaign=VOTING_TO_VOID_CAMPAIGN,
+                campaign_validation_preparation_class=CampaignValidationPreparation,
+                exception_message=(
+                    {
+                        "centaurs_data": DUMMY_CENTAURS_DATA,
+                        "has_centaurs_changes": True,
+                    },
+                    Event.TWEET_VALIDATION.value,
+                ),
+                logger_message=[],
+                has_updates=True,
+                end_status="void",
+                proposer_verified=True,
+                yields=False,
+            ),
+            CampaignValidationTestCase(
+                name="Voting to scheduled",
+                campaign=VOTING_TO_SCHEDULED_CAMPAIGN,
+                campaign_validation_preparation_class=CampaignValidationPreparation,
+                exception_message=(
+                    {
+                        "centaurs_data": DUMMY_CENTAURS_DATA,
+                        "has_centaurs_changes": True,
+                    },
+                    Event.TWEET_VALIDATION.value,
+                ),
+                logger_message=[],
+                has_updates=True,
+                end_status="scheduled",
+                proposer_verified=True,
+                yields=False,
+            ),
+            CampaignValidationTestCase(
+                name="Scheduled to live",
+                campaign=SCHEDULED_TO_LIVE_CAMPAIGN,
+                campaign_validation_preparation_class=CampaignValidationPreparation,
+                exception_message=(
+                    {
+                        "centaurs_data": DUMMY_CENTAURS_DATA,
+                        "has_centaurs_changes": True,
+                    },
+                    Event.TWEET_VALIDATION.value,
+                ),
+                logger_message=[],
+                has_updates=True,
+                end_status="live",
+                proposer_verified=True,
+                yields=False,
+            ),
+            CampaignValidationTestCase(
+                name="Live to ended",
+                campaign=LIVE_TO_ENDED_CAMPAIGN,
+                campaign_validation_preparation_class=CampaignValidationPreparation,
+                exception_message=(
+                    {
+                        "centaurs_data": DUMMY_CENTAURS_DATA,
+                        "has_centaurs_changes": True,
+                    },
+                    Event.TWEET_VALIDATION.value,
+                ),
+                logger_message=[],
+                has_updates=True,
+                end_status="ended",
+                proposer_verified=True,
+                yields=False,
+            ),
+            CampaignValidationTestCase(
+                name="Ended to ended",
+                campaign=ENDED_TO_ENDED_CAMPAIGN,
+                campaign_validation_preparation_class=CampaignValidationPreparation,
+                exception_message=(
+                    {
+                        "centaurs_data": DUMMY_CENTAURS_DATA,
+                        "has_centaurs_changes": False,
+                    },
+                    Event.TWEET_VALIDATION.value,
+                ),
+                logger_message=[],
+                has_updates=False,
+                end_status="ended",
+                proposer_verified=True,
+                yields=False,
             ),
         ],
     )

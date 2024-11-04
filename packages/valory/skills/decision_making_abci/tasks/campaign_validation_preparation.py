@@ -51,6 +51,7 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
         centaurs_data = self.synchronized_data.centaurs_data
         current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
         updates = {}
+        has_centaurs_changes = True
 
         for campaign in current_centaur["plugins_data"]["twitter_campaigns"][
             "campaigns"
@@ -113,9 +114,10 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
 
             # Ignore void and finished states
             else:
+                has_centaurs_changes = False
                 self.logger.info("The campaign does not need to be updated")
 
-            updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
+            updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": has_centaurs_changes}
 
         return updates, self.task_event
 
