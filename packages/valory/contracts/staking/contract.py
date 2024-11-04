@@ -24,9 +24,65 @@ from typing import Dict
 from aea.configurations.base import PublicId
 from aea.contracts.base import Contract
 from aea.crypto.base import LedgerApi
+from web3 import Web3
 
 
 PUBLIC_ID = PublicId.from_str("valory/staking:0.1.0")
+
+CONTRIBUTORS_ABI = [
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "multisigs",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "activityChanges",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "increaseActivity",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "mapAccountServiceInfo",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "socialId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "serviceId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "multisig",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "stakingInstance",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+]
 
 
 class Staking(Contract):
@@ -53,7 +109,10 @@ class Staking(Contract):
         updates: Dict[str, int]
     ) -> Dict[str, bytes]:
         """Build an ERC20 approval."""
-        contract_instance = cls.get_instance(ledger_api, contract_address)
+        # This method is defined on the Contributors contract, not the staking one
+        contract_instance = ledger_api.api.eth.contract(
+            Web3.to_checksum_address(contract_address), abi=CONTRIBUTORS_ABI
+        )
         data = contract_instance.encodeABI("increaseActivity", args=(updates,))
         return {"data": bytes.fromhex(data[2:])}
 
@@ -80,3 +139,28 @@ class Staking(Contract):
         contract_instance = cls.get_instance(ledger_api, contract_address)
         epoch = contract_instance.functions.epochCounter().call()
         return dict(epoch=epoch)
+
+    @classmethod
+    def get_service_ids(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+    ) -> Dict:
+        """Get the service id list."""
+        contract_instance = cls.get_instance(ledger_api, contract_address)
+        service_ids = contract_instance.functions.getServiceIds().call()
+        return dict(service_ids=service_ids)
+
+    @classmethod
+    def get_account_to_service_map(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+    ) -> Dict:
+        """Get the account to service map."""
+        # This method is defined on the Contributors contract, not the staking one
+        contract_instance = ledger_api.api.eth.contract(
+            Web3.to_checksum_address(contract_address), abi=CONTRIBUTORS_ABI
+        )
+        account_to_services = contract_instance.functions.mapAccountServiceInfo().call()
+        return dict(account_to_services=account_to_services)
