@@ -156,11 +156,17 @@ class Staking(Contract):
         cls,
         ledger_api: LedgerApi,
         contract_address: str,
+        wallet_address
     ) -> Dict:
         """Get the account to service map."""
         # This method is defined on the Contributors contract, not the staking one
         contract_instance = ledger_api.api.eth.contract(
             Web3.to_checksum_address(contract_address), abi=CONTRIBUTORS_ABI
         )
-        account_to_services = contract_instance.functions.mapAccountServiceInfo().call()
-        return dict(account_to_services=account_to_services)
+        social_id, service_id, multisig_address, staking_contract_address = contract_instance.functions.mapAccountServiceInfo(wallet_address).call()
+        return dict(
+            social_id=social_id,
+            service_id=service_id,
+            multisig_address=multisig_address,
+            staking_contract_address=staking_contract_address
+        )

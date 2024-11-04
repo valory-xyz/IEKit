@@ -27,6 +27,10 @@ from packages.valory.contracts.gnosis_safe.contract import (
     GnosisSafeContract,
     SafeOperation,
 )
+from packages.valory.contracts.multisend.contract import (
+    MultiSendContract,
+    MultiSendOperation,
+)
 from packages.valory.contracts.staking.contract import Staking
 from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
@@ -134,6 +138,23 @@ class StakingBaseBehaviour(BaseBehaviour, ABC):
 
         return safe_tx_hash
 
+    def get_staked_services(self, staking_contract_address: str) -> Generator[None, None, Optional[List]]:
+        """Get the services staked on a contract"""
+
+        contract_api_msg = yield from self.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
+            contract_address=staking_contract_address,
+            contract_id=str(Staking.contract_id),
+            contract_callable="get_service_ids",
+        )
+        if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
+            self.context.logger.error(
+                f"Error getting the service ids: [{contract_api_msg.performative}]"
+            )
+            return None
+
+        service_ids = cast(str, contract_api_msg.state.body["service_ids"])
+        return service_ids
 
 class ActivityScoreBehaviour(StakingBaseBehaviour):
     """ActivityScoreBehaviour"""
@@ -311,38 +332,83 @@ class CheckpointPreparationBehaviour(StakingBaseBehaviour):
     def get_checkpoint_hash(self) -> Generator[None, None, Optional[str]]:
         """Prepare the checkpoint tx"""
         self.context.logger.info(
-            "Preparing checkpoint call"
+            "Preparing checkpoint calls"
         )
 
-        # Use the contract api to interact with the staking contract
-        response_msg = yield from self.get_contract_api_response(
+        multi_send_txs = []
+
+        for staking_contract_address in self.params.staking_contract_addresses:
+
+            # Check if there is some service staked on this contract
+            services_staked = yield from self.get_staked_services(staking_contract_address)
+            if not services_staked:
+                continue
+
+            # Use the contract api to interact with the staking contract
+            response_msg = yield from self.get_contract_api_response(
+                performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
+                contract_address=staking_contract_address,
+                contract_id=str(Staking.contract_id),
+                contract_callable="build_checkpoint_tx",
+                chain_id=BASE_CHAIN_ID,
+            )
+
+            # Check that the response is what we expect
+            if response_msg.performative != ContractApiMessage.Performative.RAW_TRANSACTION:
+                self.context.logger.error(
+                    f"Error while preparing the checkpoint call: {response_msg}"
+                )
+                return None
+
+            data_bytes = cast(bytes, response_msg.raw_transaction.body.get("data", None))
+
+            if data_bytes is None:
+                self.context.logger.error(
+                    f"Error while preparing the checkpoint call: {response_msg}"
+                )
+                return None
+
+            multi_send_txs.append(
+                {
+                    "operation": MultiSendOperation.CALL,
+                    "to": staking_contract_address,
+                    "value": ZERO_VALUE,
+                    "data": data_bytes,
+                }
+            )
+
+        # Multisend call
+        contract_api_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
-            contract_address=self.params.staking_contract_address,
-            contract_id=str(Staking.contract_id),
-            contract_callable="build_checkpoint_tx",
+            contract_address=self.params.multisend_address,
+            contract_id=str(MultiSendContract.contract_id),
+            contract_callable="get_tx_data",
+            multi_send_txs=multi_send_txs,
             chain_id=BASE_CHAIN_ID,
         )
 
-        # Check that the response is what we expect
-        if response_msg.performative != ContractApiMessage.Performative.RAW_TRANSACTION:
+        # Check for errors
+        if (
+            contract_api_msg.performative
+            != ContractApiMessage.Performative.RAW_TRANSACTION
+        ):
             self.context.logger.error(
-                f"Error while preparing the checkpoint call: {response_msg}"
+                f"Could not get Multisend tx hash. "
+                f"Expected: {ContractApiMessage.Performative.RAW_TRANSACTION.value}, "
+                f"Actual: {contract_api_msg.performative.value}"
             )
             return None
 
-        data_bytes = cast(bytes, response_msg.raw_transaction.body.get("data", None))
-
-        # Ensure that the balance is not None
-        if data_bytes is None:
-            self.context.logger.error(
-                f"Error while preparing the checkpoint call: {response_msg}"
-            )
-            return None
+        # Extract the multisend data and strip the 0x
+        multisend_data = cast(str, contract_api_msg.raw_transaction.body["data"])[2:]
+        self.context.logger.info(f"Multisend data is {multisend_data}")
 
         # Prepare the safe transaction
         safe_tx_hash = yield from self._build_safe_tx_hash(
-            to_address=self.params.staking_contract_address,
-            data=data_bytes
+            to_address=self.params.multisend_address,
+            value=ZERO_VALUE,  # the safe is not moving any native value into the multisend
+            data=bytes.fromhex(multisend_data),
+            operation=SafeOperation.DELEGATE_CALL.value
         )
 
         return safe_tx_hash

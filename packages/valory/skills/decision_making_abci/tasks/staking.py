@@ -55,10 +55,11 @@ class StakingPreparation(TaskPreparation):
             return True
 
         # If the epoch is about to end, we run the staking skill
-        is_epoch_ending = yield from self.is_epoch_ending()
-        if is_epoch_ending:
-            self.context.logger.info("Epoch is about to end.")
-            return True
+        for staking_contract_address in self.params.staking_contract_addresses:
+            is_epoch_ending = yield from self.is_epoch_ending(staking_contract_address)
+            if is_epoch_ending:
+                self.context.logger.info("Epoch is about to end.")
+                return True
 
         return False
 
@@ -82,12 +83,12 @@ class StakingPreparation(TaskPreparation):
         yield
         return updates, None
 
-    def is_epoch_ending(self):
+    def is_epoch_ending(self, staking_contract_address):
         """Check if the epoch is ending"""
 
         contract_api_msg = yield from self.behaviour.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
-            contract_address=self.params.staking_contract_address,
+            contract_address=staking_contract_address,
             contract_id=str(Staking.contract_id),
             contract_callable="get_epoch_end",
         )
