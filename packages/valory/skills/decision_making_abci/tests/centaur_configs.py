@@ -221,7 +221,9 @@ NO_TIME_TO_RUN["configuration"]["plugins"]["daily_tweet"]["run_hour_utc"] = (
 
 ALREADY_RAN = deepcopy(ENABLED_CENTAUR)
 ALREADY_RAN["configuration"]["plugins"]["daily_tweet"]["last_run"] = (
-    datetime.now(tz=timezone.utc).replace(tzinfo=timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
+    datetime.now(tz=timezone.utc)
+    .replace(tzinfo=timezone.utc)
+    .strftime("%Y-%m-%d %H:%M:%S %Z")
 )
 
 DUMMY_CENTAUR_ID_TO_SECRETS_OK = {
@@ -328,7 +330,7 @@ PROPOSED_TO_VOID_CAMPAIGN = {
 VOTING_TO_VOID_CAMPAIGN = {
     "id": "proposed_to_void",
     "hashtag": "OlasNetwork",
-    "start_ts": NOW_TS, # start time reached without votes
+    "start_ts": NOW_TS,  # start time reached without votes
     "end_ts": 0,
     "proposer": {
         "address": list(DUMMY_ACCOUNTS.keys())[0],

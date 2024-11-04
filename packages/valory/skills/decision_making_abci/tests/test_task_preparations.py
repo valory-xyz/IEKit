@@ -92,7 +92,10 @@ class TestTaskPreparation(unittest.TestCase):
         assert self.mock_task_preparation.daily
         assert self.mock_task_preparation.weekly
         assert not self.mock_task_preparation.last_run
-        assert self.mock_task_preparation.run_hour_utc == datetime.now(tz=timezone.utc).hour
+        assert (
+            self.mock_task_preparation.run_hour_utc
+            == datetime.now(tz=timezone.utc).hour
+        )
 
     def test_log_config(self):
         """Test the log_config method."""

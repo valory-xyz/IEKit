@@ -117,7 +117,10 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
                 has_centaurs_changes = False
                 self.logger.info("The campaign does not need to be updated")
 
-            updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": has_centaurs_changes}
+            updates = {
+                "centaurs_data": centaurs_data,
+                "has_centaurs_changes": has_centaurs_changes,
+            }
 
         return updates, self.task_event
 

@@ -72,7 +72,6 @@ class BaseCampaignValidationPreparationTest:
         # Modify the consensus veolas power to force consensus
         self.behaviour.params.tweet_consensus_veolas = 0
 
-
     def create_tweet_validation_object(self, campaign_validation_preparation_class):
         """Create the tweet validation object."""
         self.mock_campaign_validation_preparation = (
