@@ -31,7 +31,7 @@ fingerprint:
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
   tests/centaur_configs.py: bafybeicls7d2n7ntrfn4bvkycgq7d7aacftcedfaukr43npjfxjmecbyyq
   tests/test_behaviours.py: bafybeigt4ifqyyw23ejypquaqgecjrgmvtrgxustwmzucolgm6kr5gzdnu
-  tests/test_campaign_validation.py: bafybeihqpe6wzerzrqsg72hbjqmoikar2a4pwx4upcjjrsaq5pqwjts2dm
+  tests/test_campaign_validation.py: bafybeid745ps5z5bgujkwbku6ci3gx6mobo6m3sbqxkiut67ffcsx5ueuy
   tests/test_ceramic_db.py: bafybeiagqozytjjc7kclucfgblgeoq3fjq676ump6lpirhiu3e5z2brbz4
   tests/test_dialogues.py: bafybeihxzcyy7xvg4lte4bv5hy2h4mozdzwvyaa36feu3oxv67jfvsyuoi
   tests/test_finished_pipeline_preparation.py: bafybeidlz77tnfif5ajq4ikrlo4mv7ssy3wghvkwolyid3f3dd3scfbblq
@@ -51,7 +51,7 @@ fingerprint_ignore_patterns: []
 connections: []
 contracts:
 - valory/veolas_delegation:0.1.0:bafybeibtbvvcxvrrkkgyen5ardevicnj4xf7facm4cl2cghtucifs3utuu
-- valory/staking:0.1.0:bafybeibusc5wuye4qwz53znjqrtfzf6sdnpo3s4hp53huffgbzyi2wc4za
+- valory/staking:0.1.0:bafybeie3dorlun6f4k25m2z44ncssqlr2bkek3nxzdsd6yrv7jpeoukiei
 - valory/compatibility_fallback_handler:0.1.0:bafybeigq6rfpfkuerdbaxsm57cvq4ipwdj6qgeyufn57ufpphifgnobh4q
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i

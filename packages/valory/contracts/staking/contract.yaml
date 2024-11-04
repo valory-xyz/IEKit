@@ -8,8 +8,8 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeiclvbed42bmvsm3qqxosfu4kxbc6vuhxaant2od2hmszpkznh3z74
   __init__.py: bafybeif5vpc3dfrlxlch7brbhmdwksabyzddpfqgm56vdbbkek3t3br6ke
-  build/staking.json: bafybeiemn5b5nszuss7xj6lmvmjuendltp6wz7ubihdvd7c6wqw4bohbpa
-  contract.py: bafybeid5b3s6wsry7hiws3yz2mwckmm2yld36tu6ygelwsyrgezdtmweju
+  build/staking.json: bafybeig3p2ys5ddydakqgya54rioqdmh2rhwnkqwwuakla4an4rzifgqfy
+  contract.py: bafybeiets4qemxez33hoqw6xdt6dcgfgwp76l2f6bk6nazfxklohajnyta
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: Staking
