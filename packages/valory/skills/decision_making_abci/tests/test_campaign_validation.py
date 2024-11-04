@@ -31,7 +31,17 @@ from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.campaign_validation_preparation import (
     CampaignValidationPreparation,
 )
-from packages.valory.skills.decision_making_abci.tests.centaur_configs import *
+from packages.valory.skills.decision_making_abci.tests.centaur_configs import (
+    DISABLED_CENTAUR,
+    ENABLED_CENTAUR,
+    ENDED_TO_ENDED_CAMPAIGN,
+    LIVE_TO_ENDED_CAMPAIGN,
+    PROPOSED_TO_VOID_CAMPAIGN,
+    PROPOSED_TO_VOTING_CAMPAIGN,
+    SCHEDULED_TO_LIVE_CAMPAIGN,
+    VOTING_TO_SCHEDULED_CAMPAIGN,
+    VOTING_TO_VOID_CAMPAIGN,
+)
 
 
 DUMMY_CENTAURS_DATA = [

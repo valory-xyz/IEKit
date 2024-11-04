@@ -726,13 +726,13 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
         # TODO: If there are no active campaigns, skip this
         # If we do this, we also need to handle the case where we've been a lot of
         # time without pulling tweets -> pagination, API limits, etc...
-        # if not active_hashtags:
-        #     return {
-        #         "tweets": {},
-        #         "latest_hashtag_tweet_id": int(latest_hashtag_tweet_id),
-        #         "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
-        #         "sleep_until": None,  # we reset this on a successful request
-        #     }
+        # if not active_hashtags: # noqa:E800
+        #     return {  # noqa:E800
+        #         "tweets": {},  # noqa:E800
+        #         "latest_hashtag_tweet_id": int(latest_hashtag_tweet_id),  # noqa:E800
+        #         "number_of_tweets_pulled_today": number_of_tweets_pulled_today,  # noqa:E800
+        #         "sleep_until": None,  # we reset this on a successful request  # noqa:E800
+        #     }  # noqa:E800
 
         search_query = " OR ".join(active_hashtags)
 
