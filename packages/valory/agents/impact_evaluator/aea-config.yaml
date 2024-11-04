@@ -294,7 +294,7 @@ models:
       checkpoint_threshold_minutes: ${int:120}
       staking_activity_threshold: ${int:5}
       staking_contract_address: ${str:0x0000000000000000000000000000000000000000}
-      activity_contract_address: ${str:0x0000000000000000000000000000000000000000}
+      contributors_contract_address: ${str:0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94}
       epoch_end_threshold_minutes: ${int:20}
       safe_contract_address_base: ${str:0x0000000000000000000000000000000000000000}
   randomness_api:

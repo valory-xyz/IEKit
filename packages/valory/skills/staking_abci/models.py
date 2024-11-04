@@ -47,8 +47,8 @@ class Params(BaseParams):
         self.staking_contract_address = kwargs.get(
             "staking_contract_address"
         )
-        self.activity_contract_address = self._ensure(
-            "activity_contract_address", kwargs, str
+        self.contributors_contract_address = self._ensure(
+            "contributors_contract_address", kwargs, str
         )
         self.safe_contract_address_base = self._ensure(
             "safe_contract_address_base", kwargs, str
