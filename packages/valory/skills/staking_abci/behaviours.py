@@ -21,7 +21,7 @@
 
 import json
 from abc import ABC
-from typing import Dict, Generator, Optional, Set, Tuple, Type, cast
+from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
 
 from packages.valory.contracts.gnosis_safe.contract import (
     GnosisSafeContract,

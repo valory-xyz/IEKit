@@ -8,7 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeiclvbed42bmvsm3qqxosfu4kxbc6vuhxaant2od2hmszpkznh3z74
   __init__.py: bafybeif5vpc3dfrlxlch7brbhmdwksabyzddpfqgm56vdbbkek3t3br6ke
-  build/staking.json: bafybeig3p2ys5ddydakqgya54rioqdmh2rhwnkqwwuakla4an4rzifgqfy
+  build/staking.json: bafybeia2o6m3k6uwrz5qua5dcmljc3tfd477yjw6lsmfzoyjrjohtffuie
   contract.py: bafybeifiybo3qaass7f7w2shovzcodudowfpthqdbbm6bnmnzoohjhhkii
 fingerprint_ignore_patterns: []
 contracts: []
@@ -17,6 +17,6 @@ contract_interface_paths:
   ethereum: build/staking.json
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==1.58.0
+    version: ==1.59.0
   web3:
     version: <7,>=6.0.0
