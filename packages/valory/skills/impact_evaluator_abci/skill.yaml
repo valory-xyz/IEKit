@@ -25,20 +25,20 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeibiw4oqwqvo4jccwz5fb73iardzychgvcl66tceiildohoju2ikti
 - valory/ceramic_read_abci:0.1.0:bafybeigz7rzfls3niv3urfb4z4vwr525ooxveelgg3djpvkg5jzetxlm2u
-- valory/generic_scoring_abci:0.1.0:bafybeiewj4e5j7fv5n2nmzcgfgujitraxgdz2vhx7do6xmxcrrjuoarweu
-- valory/twitter_scoring_abci:0.1.0:bafybeifm45fnqjmwe7jh3zrjdahk47bk74ufsm2q5a6gd5vl5iiwt4hyta
+- valory/generic_scoring_abci:0.1.0:bafybeibmoga57dtghn2nz6mjdsxh3dtgvmrqu2ogwb6l2x7qzsbspyo7im
+- valory/twitter_scoring_abci:0.1.0:bafybeiapn5h5pruqojjkd3ffxzglf5tojcdqdwm2fkzng3rjukgmg5lhsi
 - valory/ceramic_write_abci:0.1.0:bafybeic6c3iub3nsr5tmr7g5vzoixbin6w64ewudfiq6u4r2fiqwbg753i
-- valory/dynamic_nft_abci:0.1.0:bafybeihqls4burt7lpsj7ivdchafo7imbgjzvmegl7d5r6f5z2mgpznata
+- valory/dynamic_nft_abci:0.1.0:bafybeidpp5g2wz53awdu4l37oiqctlgthvn7nuhxqnomiicvccdlsrtydy
 - valory/registration_abci:0.1.0:bafybeib3n6vqkfbrcubcbliebjnuwyywdinxkbzt76n6gbn2kg7ace47dq
 - valory/reset_pause_abci:0.1.0:bafybeihkj6lmaypspyxe5qqrjgnolyck62pyvqoylr24ab6ue4steqcw7e
 - valory/termination_abci:0.1.0:bafybeifi2uodnrjsrivj53g3sjutocmyusbx6mlsb6oanqdyt2mfbyvusy
 - valory/transaction_settlement_abci:0.1.0:bafybeigh2vkt74jrad5gtsczrgqcuhcqe7jkgjy7jdw56yamlzwwnaymjy
-- valory/decision_making_abci:0.1.0:bafybeidh4xrhr4ontoadwixesng4ze6j7cygfaadwrwsmesqrfpmh5zcse
+- valory/decision_making_abci:0.1.0:bafybeidjjntuhccn6yhcbiilunjh3db27ntdp26xq7vvgip6ekg2zegeqq
 - valory/llm_abci:0.1.0:bafybeiefgahdm4ulrcdyx37ucm2e35tx5epbbre6gcbpbwlmuk46apwcta
 - valory/twitter_write_abci:0.1.0:bafybeibp7zai2qwvfjd5fgpayx44x5c2zshbukpobvz2la7ws2l5f5fjde
-- valory/olas_week_abci:0.1.0:bafybeieotn5tbyhlme7yjobk3rdfscdvwask3rzapx3h65aywuwullbrrm
+- valory/olas_week_abci:0.1.0:bafybeifjvwjgviqsq6cjgnbkrqjaqsys2zjzydyby5kityvla5mjckcgza
 - valory/mech_interact_abci:0.1.0:bafybeihkq76ydcia6vellezmbqkkyazefc6is5d42ytl4aoiowlp5rbdfm
-- valory/staking_abci:0.1.0:bafybeibvdjym7s532pdypsmvq45b3jumnrvp7sw4tw6k4eqzb525x62tka
+- valory/staking_abci:0.1.0:bafybeiciwhfiavtkvqyb7qtidyu5jkfh25dlsqsghezgmwa6olbypfiaxy
 behaviours:
   main:
     args: {}

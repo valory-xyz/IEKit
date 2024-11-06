@@ -27,7 +27,7 @@ from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
 )
-
+from packages.valory.skills.staking_abci.behaviours import get_activity_updates
 
 class StakingPreparation(TaskPreparation):
     """StakingPreparation"""
@@ -122,8 +122,19 @@ class StakingActivityPreparation(StakingPreparation):
         """Check user staking threshold"""
         yield
 
+        ceramic_db = self.context.ceramic_db
+        latest_activity_tweet_id = int(
+            ceramic_db.data["module_data"]["staking_activiy"][
+                "latest_activity_tweet_id"
+            ]
+        )
+        updates, _ = get_activity_updates(
+            ceramic_db.data["users"],
+            latest_activity_tweet_id
+        )
+        pending_updates = len(updates)
+
         # If enough users have pending updates, we run the activity update
-        pending_updates = self.count_pending_updates()
         if pending_updates > self.params.staking_activity_threshold:
             self.context.logger.info(
                 f"There are enough pending updates [{pending_updates}]. Executing..."
@@ -143,44 +154,6 @@ class StakingActivityPreparation(StakingPreparation):
         )
 
         return False
-
-    def count_pending_updates(self) -> int:
-        """Counts the number of staked users that need to be updated"""
-
-        updates = 0
-
-        # A staked user needs to be updated if they have sent at least a new tweet
-        ceramic_db = self.context.ceramic_db
-
-        latest_activity_tweet_id = int(
-            ceramic_db.data["module_data"]["staking_activiy"][
-                "latest_activity_tweet_id"
-            ]
-        )
-
-        for user in ceramic_db.data["users"].values():
-            # Skip the user if there is no service multisig
-            # This means the user has not staked
-            # if not user.get("service_multisig", None):
-            #     continue
-
-            sorted_tweet_ids = list(
-                sorted([int(i) for i in user.get("tweets", {}).keys()])
-            )
-
-            # No tweets
-            if not sorted_tweet_ids:
-                continue
-
-            # If the latest tweet id is higher than the last processed tweet, it means this tweet is newer
-            if sorted_tweet_ids[-1] > latest_activity_tweet_id:
-                updates += 1
-
-        self.context.logger.info(
-            f"There are {updates} pending activity updates since tweet {latest_activity_tweet_id}"
-        )
-
-        return updates
 
 
 class StakingCheckpointPreparation(StakingPreparation):

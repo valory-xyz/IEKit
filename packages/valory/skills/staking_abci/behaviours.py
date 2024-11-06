@@ -61,6 +61,41 @@ EMPTY_CALL_DATA = b"0x"
 SAFE_GAS = 0
 BASE_CHAIN_ID = "base"
 
+def get_activity_updates(users: Dict, latest_activity_tweet_id: int) -> Tuple[Dict, int]:
+    """Get the latest activity updates"""
+
+    updates = {}
+    latest_processed_tweet = latest_activity_tweet_id
+
+    for user in users.values():
+
+        # Skip the user if there is no service multisig
+        # This means the user has not staked
+        if not user.get("service_multisig", None):
+            continue
+
+        new_tweets = 0
+
+        for tweet_id in user["tweets"].keys():
+            tweet_id = int(tweet_id)
+
+            # Skip old tweets
+            if tweet_id <= latest_activity_tweet_id:
+                continue
+
+            # Update the last_processed_tweet
+            if tweet_id > latest_processed_tweet:
+                latest_processed_tweet = tweet_id
+
+            # Increase activity count
+            new_tweets += 1
+
+        # Add the user activity
+        if new_tweets:
+            updates[user["service_multisig"]] = new_tweets
+
+    return updates, latest_processed_tweet
+
 
 class StakingBaseBehaviour(BaseBehaviour, ABC):
     """Base behaviour for the staking_abci skill."""
@@ -183,7 +218,14 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
 
             # Process new updates
             else:
-                activity_updates, latest_activity_tweet_id = self.get_activity_updates()
+                ceramic_db_copy = self.context.ceramic_db.copy()
+                latest_activity_tweet_id = int(ceramic_db_copy.data["module_data"]["staking_activiy"][
+                    "latest_activity_tweet_id"
+                ])
+                activity_updates, latest_activity_tweet_id = get_activity_updates(
+                    ceramic_db_copy.data["users"],
+                    latest_activity_tweet_id
+                )
 
             payload = ActivityScorePayload(
                 sender=sender,
@@ -197,47 +239,6 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
             yield from self.wait_until_round_end()
 
         self.set_done()
-
-    def get_activity_updates(self) -> Tuple[Dict, int]:
-        """Get the latest activity updates"""
-
-        updates = {}
-        ceramic_db_copy = self.context.ceramic_db.copy()
-
-        latest_activity_tweet_id = int(ceramic_db_copy.data["module_data"]["staking_activiy"][
-            "latest_activity_tweet_id"
-        ])
-
-        latest_processed_tweet = latest_activity_tweet_id
-
-        for user in ceramic_db_copy.data["users"].values():
-
-            # Skip the user if there is no service multisig
-            # This means the user has not staked
-            if not user.get("service_multisig", None):
-                continue
-
-            new_tweets = 0
-
-            for tweet_id in user["tweets"].keys():
-                tweet_id = int(tweet_id)
-
-                # Skip old tweets
-                if tweet_id <= latest_activity_tweet_id:
-                    continue
-
-                # Update the last_processed_tweet
-                if tweet_id > latest_processed_tweet:
-                    latest_processed_tweet = tweet_id
-
-                # Increase activity count
-                new_tweets += 1
-
-            # Add the user activity
-            if new_tweets:
-                updates[user["service_multisig"]] = new_tweets
-
-        return updates, latest_processed_tweet
 
 
 class ActiviyUpdatePreparationBehaviour(StakingBaseBehaviour):

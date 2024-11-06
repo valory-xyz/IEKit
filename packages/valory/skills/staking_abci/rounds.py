@@ -21,7 +21,7 @@
 
 from enum import Enum
 from typing import Dict, FrozenSet, Optional, Set, Tuple, cast
-
+import json
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,
@@ -57,9 +57,9 @@ class SynchronizedData(BaseSynchronizedData):
     """
 
     @property
-    def activity_updates(self) -> Optional[Dict]:
+    def activity_updates(self) -> Dict:
         """Get the activity_updates."""
-        return self.db.get("activity_updates")
+        return json.loads(cast(str, self.db.get("activity_updates")))
 
     @property
     def latest_activity_tweet_id(self) -> Optional[int]:
