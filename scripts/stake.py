@@ -18,6 +18,7 @@
 #
 # ------------------------------------------------------------------------------
 
+"""Testing script to stake an account"""
 
 import json
 import os
@@ -27,15 +28,27 @@ import dotenv
 from web3 import Web3
 
 
+# Get the fork
 dotenv.load_dotenv(".env")
-
 RPC = os.getenv("BASE_LEDGER_RPC")
 web3 = Web3(Web3.HTTPProvider(RPC))
+
+
+def load_contract(contract_name, contract_address):
+    """Load a contract"""
+
+    with open(Path("scripts", f"{contract_name}.json"), "r", encoding="utf-8") as abi_file:
+        abi = json.load(abi_file)
+
+    return web3.eth.contract(
+        address=web3.to_checksum_address(contract_address),
+        abi=abi
+    )
 
 def main():
     """Main"""
 
-    # Load
+    # Load the wallet
     with open(Path("keys.json"), "r", encoding="utf-8") as keys_file:
         keys = json.load(keys_file)
         wallet_address = keys[0]["address"]
@@ -44,23 +57,10 @@ def main():
         native_balance = web3.eth.get_balance(wallet_address) / 1e18
         print(f"Wallet has {native_balance} ETH")
 
-
-    def load_contract(contract_name, contract_address):
-        """Load a contract"""
-
-        with open(Path("scripts", f"{contract_name}.json"), "r", encoding="utf-8") as abi_file:
-            abi = json.load(abi_file)
-
-        return web3.eth.contract(
-            address=web3.to_checksum_address(contract_address),
-            abi=abi
-        )
-
-    # Load contracts
+    # Load the contracts
     olas_contract = load_contract("Olas", "0x54330d28ca3357F294334BDC454a032e7f353416")
     contribute_manager_contract = load_contract("ContributeManager", "0xaea9ef993d8a1A164397642648DF43F053d43D85")
     staking_contract_address = "0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F"
-
 
     # Approve OLAS
     transaction = olas_contract.functions.approve(
