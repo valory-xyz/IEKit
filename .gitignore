@@ -36,7 +36,7 @@ packages/open_aea
 .vscode/
 .coverage*
 
-*.env
+.env
 
 ethereum_private_key.txt
 
