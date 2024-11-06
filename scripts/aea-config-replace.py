@@ -66,6 +66,9 @@ PATH_TO_VAR = {
     # OpenAI
     "config/use_openai_staging_api": "USE_OPENAI_STAGING_API",
     "config/openai_staging_api": "OPENAI_STAGING_API",
+
+    # Staking
+    "models/params/args/staking_activity_threshold": "STAKING_ACTIVITY_THRESHOLD",
 }
 
 CONFIG_REGEX = r"\${.*?:(.*)}"
