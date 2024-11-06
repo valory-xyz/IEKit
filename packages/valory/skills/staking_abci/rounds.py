@@ -19,9 +19,10 @@
 
 """This package contains the rounds of StakingAbciApp."""
 
+import json
 from enum import Enum
 from typing import Dict, FrozenSet, Optional, Set, Tuple, cast
-import json
+
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
     AbciAppTransitionFunction,

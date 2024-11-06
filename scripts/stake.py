@@ -1,8 +1,10 @@
-from web3 import Web3
 import json
-from pathlib import Path
-import dotenv
 import os
+from pathlib import Path
+
+import dotenv
+from web3 import Web3
+
 
 dotenv.load_dotenv(".env")
 

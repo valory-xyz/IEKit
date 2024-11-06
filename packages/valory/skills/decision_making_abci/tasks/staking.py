@@ -29,6 +29,7 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 )
 from packages.valory.skills.staking_abci.behaviours import get_activity_updates
 
+
 class StakingPreparation(TaskPreparation):
     """StakingPreparation"""
 
@@ -129,8 +130,7 @@ class StakingActivityPreparation(StakingPreparation):
             ]
         )
         updates, _ = get_activity_updates(
-            ceramic_db.data["users"],
-            latest_activity_tweet_id
+            ceramic_db.data["users"], latest_activity_tweet_id
         )
         pending_updates = len(updates)
 
