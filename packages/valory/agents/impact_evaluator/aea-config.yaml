@@ -285,13 +285,7 @@ models:
       mech_chain_id: ${str:gnosis}
       mech_interaction_sleep_time: ${int:10}
       use_mech_marketplace: ${bool:false}
-      mech_marketplace_config:
-        mech_marketplace_address: ${str:0x0000000000000000000000000000000000000000}
-        priority_mech_address: ${str:0x0000000000000000000000000000000000000000}
-        priority_mech_staking_instance_address: ${str:0x0000000000000000000000000000000000000000}
-        priority_mech_service_id: ${int:0}
-        requester_staking_instance_address: ${str:0x0000000000000000000000000000000000000000}
-        response_timeout: ${int:300}
+      mech_marketplace_config: ${dict:{"mech_marketplace_address":"0x0000000000000000000000000000000000000000","priority_mech_address":"0x0000000000000000000000000000000000000000","priority_mech_staking_instance_address":"0x0000000000000000000000000000000000000000","priority_mech_service_id":0,"requester_staking_instance_address":"0x0000000000000000000000000000000000000000","response_timeout":300}}
       checkpoint_threshold_minutes: ${int:120}
       staking_activity_threshold: ${int:5}
       staking_contract_addresses: ${list:["0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F","0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb","0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8"]}
