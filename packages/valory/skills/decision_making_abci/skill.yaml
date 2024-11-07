@@ -20,7 +20,7 @@ fingerprint:
   tasks/read_stream_preparation.py: bafybeicmjasiyecopfweobodzbmn3tbluu5q724uzzqkit6urn3lb5q354
   tasks/score_preparations.py: bafybeie7cfot24zcyod5becz6t5lasvva77httfkw57qmvgjk35d3qluxa
   tasks/signature_validation.py: bafybeihbwrv72hnh3ytko2i5oszqgdky2j6h2wse45wvuhf2j32lo2tsjy
-  tasks/staking.py: bafybeihdo3mzhqq7ri54bwzn5q72mwb7zvlifb6evak7wy4ucuowuu63wa
+  tasks/staking.py: bafybeiddgg3zaiwhed7sydvyywcbog4trjulnz6gm5u5yj5guendb7mneq
   tasks/task_preparations.py: bafybeibcddfroaabxljtqpg53z2yy2fqdb6e4uiwuwvykpkj4msqjgybmi
   tasks/tweet_validation_preparation.py: bafybeif3wbfskiyuij7unx72euklms7owrzwzgdu462xatvypalm6xrgca
   tasks/twitter_preparation.py: bafybeicn7stcvmd6oex55dwptwxpikpssbcwnj2d3xkercikg5nlzqh4k4
@@ -52,12 +52,13 @@ connections: []
 contracts:
 - valory/veolas_delegation:0.1.0:bafybeihxyctwgxszfxfzfjaqedsyplx35cujjot4ayjguuu2nfa4hesl74
 - valory/compatibility_fallback_handler:0.1.0:bafybeiem3j5mautdeb7cfwix7jfespittlfbmm2tseficlshbx7iwyxebe
-- valory/staking:0.1.0:bafybeiacp4j7rzva7uxah7ixbjfcy2ojtfuxa3sq5wca3lds37kqomcz3q
+- valory/staking:0.1.0:bafybeigrdux7644dtfgci4wqpa4u63nczxy2qpvar3dnegmb3notidnydi
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeibiw4oqwqvo4jccwz5fb73iardzychgvcl66tceiildohoju2ikti
 - valory/ceramic_read_abci:0.1.0:bafybeigz7rzfls3niv3urfb4z4vwr525ooxveelgg3djpvkg5jzetxlm2u
+- valory/staking_abci:0.1.0:bafybeibpxynu3xsjokjig2whnhu3rk3fx7zaz67zbyz4uyxqa2ysv7glke
 behaviours:
   main:
     args: {}
