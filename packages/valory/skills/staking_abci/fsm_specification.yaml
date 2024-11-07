@@ -6,7 +6,7 @@ alphabet_in:
 default_start_state: ActivityScoreRound
 final_states:
 - FinishedActivityRound
-- FinishedActiviyUpdatePreparationRound
+- FinishedActivityUpdatePreparationRound
 - FinishedCheckpointPreparationRound
 label: StakingAbciApp
 start_states:
@@ -14,19 +14,19 @@ start_states:
 - CheckpointPreparationRound
 states:
 - ActivityScoreRound
-- ActiviyUpdatePreparationRound
+- ActivityUpdatePreparationRound
 - CheckpointPreparationRound
 - FinishedActivityRound
-- FinishedActiviyUpdatePreparationRound
+- FinishedActivityUpdatePreparationRound
 - FinishedCheckpointPreparationRound
 transition_func:
     (ActivityScoreRound, DONE): FinishedActivityRound
     (ActivityScoreRound, NO_MAJORITY): ActivityScoreRound
-    (ActivityScoreRound, PROCESS_UPDATES): ActiviyUpdatePreparationRound
+    (ActivityScoreRound, PROCESS_UPDATES): ActivityUpdatePreparationRound
     (ActivityScoreRound, ROUND_TIMEOUT): ActivityScoreRound
-    (ActiviyUpdatePreparationRound, DONE): FinishedActiviyUpdatePreparationRound
-    (ActiviyUpdatePreparationRound, NO_MAJORITY): ActiviyUpdatePreparationRound
-    (ActiviyUpdatePreparationRound, ROUND_TIMEOUT): ActiviyUpdatePreparationRound
+    (ActivityUpdatePreparationRound, DONE): FinishedActivityUpdatePreparationRound
+    (ActivityUpdatePreparationRound, NO_MAJORITY): ActivityUpdatePreparationRound
+    (ActivityUpdatePreparationRound, ROUND_TIMEOUT): ActivityUpdatePreparationRound
     (CheckpointPreparationRound, DONE): FinishedCheckpointPreparationRound
     (CheckpointPreparationRound, NO_MAJORITY): CheckpointPreparationRound
     (CheckpointPreparationRound, ROUND_TIMEOUT): CheckpointPreparationRound

@@ -42,8 +42,8 @@ from packages.valory.skills.staking_abci.models import Params
 from packages.valory.skills.staking_abci.rounds import (
     ActivityScorePayload,
     ActivityScoreRound,
-    ActiviyUpdatePreparationPayload,
-    ActiviyUpdatePreparationRound,
+    ActivityUpdatePreparationPayload,
+    ActivityUpdatePreparationRound,
     CheckpointPreparationPayload,
     CheckpointPreparationRound,
     StakingAbciApp,
@@ -212,7 +212,7 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
             latest_activity_tweet_id = None
 
             # Check whether we just came back from settling an update
-            if self.synchronized_data.tx_submitter == ActiviyUpdatePreparationBehaviour.auto_behaviour_id():
+            if self.synchronized_data.tx_submitter == ActivityUpdatePreparationBehaviour.auto_behaviour_id():
                 # Update the last processed tweet on the model, and mark for Ceramic update
                 self.context.ceramic_db.data["module_data"]["staking_activity"][
                     "latest_activity_tweet_id"
@@ -246,10 +246,10 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
         self.set_done()
 
 
-class ActiviyUpdatePreparationBehaviour(StakingBaseBehaviour):
-    """ActiviyUpdatePreparationBehaviour"""
+class ActivityUpdatePreparationBehaviour(StakingBaseBehaviour):
+    """ActivityUpdatePreparationBehaviour"""
 
-    matching_round: Type[AbstractRound] = ActiviyUpdatePreparationRound
+    matching_round: Type[AbstractRound] = ActivityUpdatePreparationRound
 
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
@@ -257,7 +257,7 @@ class ActiviyUpdatePreparationBehaviour(StakingBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             sender = self.context.agent_address
             tx_hash = yield from self.get_activity_update_hash()
-            payload = ActiviyUpdatePreparationPayload(
+            payload = ActivityUpdatePreparationPayload(
                 sender=sender,
                 tx_submitter=self.auto_behaviour_id(),
                 tx_hash=tx_hash,
@@ -429,6 +429,6 @@ class StakingRoundBehaviour(AbstractRoundBehaviour):
     abci_app_cls = StakingAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
         ActivityScoreBehaviour,
-        ActiviyUpdatePreparationBehaviour,
+        ActivityUpdatePreparationBehaviour,
         CheckpointPreparationBehaviour
     ]

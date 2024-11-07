@@ -69,7 +69,7 @@ start_states:
 - RegistrationStartupRound
 states:
 - ActivityScoreRound
-- ActiviyUpdatePreparationRound
+- ActivityUpdatePreparationRound
 - CheckLateTxHashesRound
 - CheckTransactionHistoryRound
 - CheckpointPreparationRound
@@ -119,11 +119,11 @@ states:
 transition_func:
     (ActivityScoreRound, DONE): DecisionMakingRound
     (ActivityScoreRound, NO_MAJORITY): ActivityScoreRound
-    (ActivityScoreRound, PROCESS_UPDATES): ActiviyUpdatePreparationRound
+    (ActivityScoreRound, PROCESS_UPDATES): ActivityUpdatePreparationRound
     (ActivityScoreRound, ROUND_TIMEOUT): ActivityScoreRound
-    (ActiviyUpdatePreparationRound, DONE): RandomnessTransactionSubmissionRound
-    (ActiviyUpdatePreparationRound, NO_MAJORITY): ActiviyUpdatePreparationRound
-    (ActiviyUpdatePreparationRound, ROUND_TIMEOUT): ActiviyUpdatePreparationRound
+    (ActivityUpdatePreparationRound, DONE): RandomnessTransactionSubmissionRound
+    (ActivityUpdatePreparationRound, NO_MAJORITY): ActivityUpdatePreparationRound
+    (ActivityUpdatePreparationRound, ROUND_TIMEOUT): ActivityUpdatePreparationRound
     (CheckLateTxHashesRound, CHECK_LATE_ARRIVING_MESSAGE): SynchronizeLateMessagesRound
     (CheckLateTxHashesRound, CHECK_TIMEOUT): CheckLateTxHashesRound
     (CheckLateTxHashesRound, DONE): PostTxDecisionMakingRound

@@ -74,7 +74,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     DecisionMakingAbci.FinishedPostActivityUpdateRound: StakingAbci.ActivityScoreRound,
     DecisionMakingAbci.FinishedPostCheckpointRound: DecisionMakingAbci.DecisionMakingRound,
     StakingAbci.FinishedActivityRound: DecisionMakingAbci.DecisionMakingRound,
-    StakingAbci.FinishedActiviyUpdatePreparationRound: TxSettlementAbci.RandomnessTransactionSubmissionRound,
+    StakingAbci.FinishedActivityUpdatePreparationRound: TxSettlementAbci.RandomnessTransactionSubmissionRound,
     StakingAbci.FinishedCheckpointPreparationRound: TxSettlementAbci.RandomnessTransactionSubmissionRound,
     MechFinalStates.FinishedMechResponseRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     MechFinalStates.FinishedMechRequestSkipRound: TwitterScoringAbci.TwitterDecisionMakingRound,

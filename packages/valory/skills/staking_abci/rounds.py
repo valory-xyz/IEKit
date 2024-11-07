@@ -36,7 +36,7 @@ from packages.valory.skills.abstract_round_abci.base import (
 )
 from packages.valory.skills.staking_abci.payloads import (
     ActivityScorePayload,
-    ActiviyUpdatePreparationPayload,
+    ActivityUpdatePreparationPayload,
     CheckpointPreparationPayload,
 )
 
@@ -147,10 +147,10 @@ class ActivityScoreRound(CollectSameUntilThresholdRound):
         # Event.ROUND_TIMEOUT
 
 
-class ActiviyUpdatePreparationRound(CollectSameUntilThresholdRound):
-    """ActiviyUpdatePreparationRound"""
+class ActivityUpdatePreparationRound(CollectSameUntilThresholdRound):
+    """ActivityUpdatePreparationRound"""
 
-    payload_class = ActiviyUpdatePreparationPayload
+    payload_class = ActivityUpdatePreparationPayload
     synchronized_data_class = SynchronizedData
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
@@ -187,8 +187,8 @@ class CheckpointPreparationRound(CollectSameUntilThresholdRound):
     # Event.DONE, Event.NO_MAJORITY, Event.ROUND_TIMEOUT
 
 
-class FinishedActiviyUpdatePreparationRound(DegenerateRound):
-    """FinishedActiviyUpdatePreparationRound"""
+class FinishedActivityUpdatePreparationRound(DegenerateRound):
+    """FinishedActivityUpdatePreparationRound"""
 
 
 class FinishedActivityRound(DegenerateRound):
@@ -207,25 +207,25 @@ class StakingAbciApp(AbciApp[Event]):
     transition_function: AbciAppTransitionFunction = {
         ActivityScoreRound: {
             Event.DONE: FinishedActivityRound,
-            Event.PROCESS_UPDATES: ActiviyUpdatePreparationRound,
+            Event.PROCESS_UPDATES: ActivityUpdatePreparationRound,
             Event.NO_MAJORITY: ActivityScoreRound,
             Event.ROUND_TIMEOUT: ActivityScoreRound
         },
-        ActiviyUpdatePreparationRound: {
-            Event.DONE: FinishedActiviyUpdatePreparationRound,
-            Event.NO_MAJORITY: ActiviyUpdatePreparationRound,
-            Event.ROUND_TIMEOUT: ActiviyUpdatePreparationRound
+        ActivityUpdatePreparationRound: {
+            Event.DONE: FinishedActivityUpdatePreparationRound,
+            Event.NO_MAJORITY: ActivityUpdatePreparationRound,
+            Event.ROUND_TIMEOUT: ActivityUpdatePreparationRound
         },
         CheckpointPreparationRound: {
             Event.DONE: FinishedCheckpointPreparationRound,
             Event.NO_MAJORITY: CheckpointPreparationRound,
             Event.ROUND_TIMEOUT: CheckpointPreparationRound
         },
-        FinishedActiviyUpdatePreparationRound: {},
+        FinishedActivityUpdatePreparationRound: {},
         FinishedActivityRound: {},
         FinishedCheckpointPreparationRound: {}
     }
-    final_states: Set[AppState] = {FinishedCheckpointPreparationRound, FinishedActiviyUpdatePreparationRound, FinishedActivityRound}
+    final_states: Set[AppState] = {FinishedCheckpointPreparationRound, FinishedActivityUpdatePreparationRound, FinishedActivityRound}
     event_to_timeout: EventToTimeout = {}
     cross_period_persisted_keys: FrozenSet[str] = frozenset()
     db_pre_conditions: Dict[AppState, Set[str]] = {
@@ -234,6 +234,6 @@ class StakingAbciApp(AbciApp[Event]):
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedCheckpointPreparationRound: {"most_voted_tx_hash"},
-    	FinishedActiviyUpdatePreparationRound: {"most_voted_tx_hash"},
+    	FinishedActivityUpdatePreparationRound: {"most_voted_tx_hash"},
         FinishedActivityRound: set(),
     }

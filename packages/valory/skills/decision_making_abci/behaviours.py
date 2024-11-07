@@ -338,7 +338,7 @@ class PostTxDecisionMakingBehaviour(DecisionMakingBaseBehaviour):
 
         self.context.logger.info(f"Transcation submitter was {tx_submitter}")
 
-        if tx_submitter == "activiy_update_preparation_behaviour":
+        if tx_submitter == "activity_update_preparation_behaviour":
             return Event.POST_TX_ACTIVITY_UPDATE.value
 
         if tx_submitter == "checkpoint_preparation_behaviour":

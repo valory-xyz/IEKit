@@ -35,8 +35,8 @@ class ActivityScorePayload(BaseTxPayload):
 
 
 @dataclass(frozen=True)
-class ActiviyUpdatePreparationPayload(BaseTxPayload):
-    """Represent a transaction payload for the ActiviyUpdatePreparationRound."""
+class ActivityUpdatePreparationPayload(BaseTxPayload):
+    """Represent a transaction payload for the ActivityUpdatePreparationRound."""
 
     tx_submitter: Optional[str] = None
     tx_hash: Optional[str] = None
