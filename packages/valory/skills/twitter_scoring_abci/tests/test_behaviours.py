@@ -306,7 +306,16 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
     @classmethod
     def setup_class(cls, **kwargs: Any) -> None:
         """Setup class"""
-        super().setup_class(param_overrides={"twitter_max_pages": 10})
+        super().setup_class(
+            param_overrides={
+                "twitter_max_pages": 10,
+                "staking_contract_addresses": [
+                    "0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F",
+                    "0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb",
+                    "0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8",
+                ],
+            }
+        )
         cls.llm_handler = cls._skill.skill_context.handlers.llm
 
     def fast_forward(
@@ -1240,17 +1249,39 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
             ceramic_db.load(test_case.ceramic_db)
         self.fast_forward(test_case.initial_data, ceramic_db)
         self.behaviour.act_wrapper()
-        self.mock_contract_api_request(
-            request_kwargs=dict(
-                performative=ContractApiMessage.Performative.GET_STATE,
-            ),
-            contract_id=str(Staking.contract_id),
-            response_kwargs=dict(
-                performative=ContractApiMessage.Performative.STATE,
-                callable="get_cast_vote_data",
-                state=State(ledger_id="ethereum", body={"epoch": 1}),
-            ),
-        )
+
+        #  3 staking contracts
+        for _ in range(3):
+            self.mock_contract_api_request(
+                request_kwargs=dict(
+                    performative=ContractApiMessage.Performative.GET_STATE,
+                ),
+                contract_id=str(Staking.contract_id),
+                response_kwargs=dict(
+                    performative=ContractApiMessage.Performative.STATE,
+                    callable="get_epoch",
+                    state=State(ledger_id="ethereum", body={"epoch": 1}),
+                ),
+            )
+
+        # 2 tweets with wallets linked
+        for _ in range(2):
+            self.mock_contract_api_request(
+                request_kwargs=dict(
+                    performative=ContractApiMessage.Performative.GET_STATE,
+                ),
+                contract_id=str(Staking.contract_id),
+                response_kwargs=dict(
+                    performative=ContractApiMessage.Performative.STATE,
+                    callable="get_account_to_service_map",
+                    state=State(
+                        ledger_id="ethereum",
+                        body={
+                            "staking_contract_address": "0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F"
+                        },
+                    ),
+                ),
+            )
         self.complete(test_case.event)
 
 

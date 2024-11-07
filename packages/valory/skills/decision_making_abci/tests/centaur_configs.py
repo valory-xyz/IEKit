@@ -110,7 +110,11 @@ ENABLED_CENTAUR = {
                 },
             ]
         },
-        "twitter_campaigns": {"campaigns": []},
+        "twitter_campaigns": {
+            "campaigns": [
+                {"id": "123456789", "hashtag": "OlasNetwork", "status": "live"}
+            ]
+        },
     },
     "actions": [
         {
