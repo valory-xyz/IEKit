@@ -20,6 +20,7 @@
 """This package contains round behaviours of TwitterScoringAbciApp."""
 
 import json
+from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -581,7 +582,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=DUMMY_CENTAURS_DATA,
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.DONE,
                 ),
@@ -612,7 +613,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=DUMMY_CENTAURS_DATA,
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.DONE,
                 ),
@@ -646,7 +647,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=DUMMY_CENTAURS_DATA,
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.DONE,
                 ),
@@ -901,7 +902,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=DUMMY_CENTAURS_DATA,
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -924,7 +925,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=DUMMY_CENTAURS_DATA,
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -948,7 +949,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=DUMMY_CENTAURS_DATA,
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -970,7 +971,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=DUMMY_CENTAURS_DATA,
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -1224,7 +1225,7 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
                         latest_hashtag_tweet_id=1,
                         number_of_tweets_pulled_today=1,
                         last_tweet_pull_window_reset=1993903085,  # in 10 years
-                        centaurs_data=DUMMY_CENTAURS_DATA,
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.DONE,
                     ceramic_db={
