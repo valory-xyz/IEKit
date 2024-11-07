@@ -135,9 +135,9 @@ class StakingActivityPreparation(StakingPreparation):
         pending_updates = len(updates)
 
         # If enough users have pending updates, we run the activity update
-        if pending_updates > self.params.staking_activity_threshold:
+        if pending_updates >= self.params.staking_activity_threshold:
             self.context.logger.info(
-                f"There are enough pending updates [{pending_updates}]. Executing..."
+                f"There are enough pending activity updates [{pending_updates}]. Executing..."
             )
             return True
 
@@ -150,7 +150,7 @@ class StakingActivityPreparation(StakingPreparation):
             return True
 
         self.context.logger.info(
-            f"Not enough updates pending to trigger the activity update [threshold={self.params.staking_activity_threshold}]"
+            f"Not enough updates pending ({pending_updates}) to trigger the activity update [threshold={self.params.staking_activity_threshold}]"
         )
 
         return False
