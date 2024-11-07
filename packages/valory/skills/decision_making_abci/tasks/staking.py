@@ -19,7 +19,7 @@
 
 """This package contains the logic for task preparations."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from packages.valory.contracts.staking.contract import Staking
 from packages.valory.protocols.contract_api import ContractApiMessage
@@ -27,7 +27,7 @@ from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
 )
-from packages.valory.skills.staking_abci.behaviours import get_activity_updates
+from packages.valory.skills.staking_abci.behaviours import BASE_CHAIN_ID, get_activity_updates
 
 
 class StakingPreparation(TaskPreparation):
@@ -62,6 +62,7 @@ class StakingPreparation(TaskPreparation):
                 self.context.logger.info("Epoch is about to end.")
                 return True
 
+        self.context.logger.info("Not time to call the checkpoint yet.")
         return False
 
     def _pre_task(self):
@@ -92,6 +93,7 @@ class StakingPreparation(TaskPreparation):
             contract_address=staking_contract_address,
             contract_id=str(Staking.contract_id),
             contract_callable="get_epoch_end",
+            chain_id=BASE_CHAIN_ID
         )
         if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
             self.behaviour.context.logger.error(
@@ -100,7 +102,7 @@ class StakingPreparation(TaskPreparation):
             return False
 
         epoch_end_ts = contract_api_msg.state.body["epoch_end"]
-        epoch_end = datetime.fromtimestamp(epoch_end_ts)
+        epoch_end = datetime.fromtimestamp(epoch_end_ts, tz=timezone.utc)
 
         # Should not happen, but if the epoch has ended, we do not care about calling
         if self.now_utc > epoch_end:
