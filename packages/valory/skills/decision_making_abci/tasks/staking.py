@@ -27,7 +27,10 @@ from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
 )
-from packages.valory.skills.staking_abci.behaviours import BASE_CHAIN_ID, get_activity_updates
+from packages.valory.skills.staking_abci.behaviours import (
+    BASE_CHAIN_ID,
+    get_activity_updates,
+)
 
 
 class StakingPreparation(TaskPreparation):
@@ -93,7 +96,7 @@ class StakingPreparation(TaskPreparation):
             contract_address=staking_contract_address,
             contract_id=str(Staking.contract_id),
             contract_callable="get_epoch_end",
-            chain_id=BASE_CHAIN_ID
+            chain_id=BASE_CHAIN_ID,
         )
         if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
             self.behaviour.context.logger.error(
