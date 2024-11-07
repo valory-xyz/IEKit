@@ -3,7 +3,7 @@ import json
 import os
 import dotenv
 
-dotenv.load_dotenv()
+dotenv.load_dotenv(override=True)
 
 ceramic = Ceramic(os.getenv("CERAMIC_API_BASE"))
 

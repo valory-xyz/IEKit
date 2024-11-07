@@ -8,7 +8,7 @@ import json
 MAX_USERS_PER_COMMIT = 250
 MAX_TWEETS_PER_COMMIT = 100
 
-dotenv.load_dotenv()
+dotenv.load_dotenv(override=True)
 
 ceramic = Ceramic(os.getenv("CERAMIC_API_BASE"))
 ceramic_did_str = "did:key:" + str(os.getenv("CERAMIC_DID_STR"))

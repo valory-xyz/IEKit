@@ -66,7 +66,7 @@ from dotenv import load_dotenv
 
 TENDERLY_VNETS_JSON = "tenderly_vnets.json"
 
-load_dotenv()
+load_dotenv(override=True)
 
 
 def _delete_vnet(

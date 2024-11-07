@@ -110,7 +110,7 @@ def find_and_replace(config, path, new_value):
 
 def main() -> None:
     """Main"""
-    load_dotenv()
+    load_dotenv(override=True)
 
     # Load the aea config
     with open(Path(AGENT_NAME, "aea-config.yaml"), "r", encoding="utf-8") as file:
