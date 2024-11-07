@@ -48,6 +48,7 @@ PATH_TO_VAR = {
     "config/ledger_apis/ethereum/gas_price_strategies/eip1559/default_priority_fee": "DEFAULT_PRIORITY_FEE",
     "models/params/args/setup/safe_contract_address": "SAFE_CONTRACT_ADDRESS",
     "models/params/args/safe_contract_address_base": "SAFE_CONTRACT_ADDRESS_BASE",
+    "models/params/args/safe_contract_address_gnosis": "SAFE_CONTRACT_ADDRESS_GNOSIS",
     "models/params/args/transaction_service_url": "TRANSACTION_SERVICE_URL",
 
     # Ceramic

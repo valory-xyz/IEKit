@@ -159,6 +159,7 @@ class ActiviyUpdatePreparationRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.tx_submitter),
         get_name(SynchronizedData.most_voted_tx_hash),
         get_name(SynchronizedData.chain_id),
+        get_name(SynchronizedData.safe_contract_address),
     )
 
     # We reference all the events here to prevent the check-abciapp-specs tool from complaining
@@ -178,6 +179,7 @@ class CheckpointPreparationRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.tx_submitter),
         get_name(SynchronizedData.most_voted_tx_hash),
         get_name(SynchronizedData.chain_id),
+        get_name(SynchronizedData.safe_contract_address),
     )
 
     # We reference all the events here to prevent the check-abciapp-specs tool from complaining

@@ -112,6 +112,7 @@ class MechParams(BaseParams):
             == self.mech_marketplace_config.priority_mech_address,
             "The mech contract address must be the same as the priority mech address when using the marketplace.",
         )
+        self.safe_contract_address_gnosis: str = self._ensure("safe_contract_address_gnosis", kwargs, str)
         super().__init__(*args, **kwargs)
 
     @property

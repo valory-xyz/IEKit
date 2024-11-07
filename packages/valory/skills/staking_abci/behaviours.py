@@ -257,7 +257,8 @@ class ActiviyUpdatePreparationBehaviour(StakingBaseBehaviour):
             payload = ActiviyUpdatePreparationPayload(
                 sender=sender,
                 tx_submitter=self.auto_behaviour_id(),
-                tx_hash=tx_hash
+                tx_hash=tx_hash,
+                safe_contract_address=self.params.safe_contract_address_base
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -323,7 +324,8 @@ class CheckpointPreparationBehaviour(StakingBaseBehaviour):
             payload = CheckpointPreparationPayload(
                 sender=sender,
                 tx_submitter=self.auto_behaviour_id(),
-                tx_hash=tx_hash
+                tx_hash=tx_hash,
+                safe_contract_address=self.params.safe_contract_address_base
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
