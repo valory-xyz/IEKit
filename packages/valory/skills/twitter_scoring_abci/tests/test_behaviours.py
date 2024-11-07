@@ -43,9 +43,7 @@ from packages.valory.skills.abstract_round_abci.test_tools.common import (
     BaseRandomnessBehaviourTest,
 )
 from packages.valory.skills.decision_making_abci.models import CeramicDBBase
-from packages.valory.skills.decision_making_abci.tests.test_behaviours import (
-    DUMMY_CENTAURS_DATA,
-)
+from packages.valory.skills.decision_making_abci.tests import centaur_configs
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
     DBUpdateBehaviour,
     PostMechRequestBehaviour,
@@ -68,6 +66,11 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     TwitterScoringAbciApp,
 )
 
+
+DUMMY_CENTAURS_DATA = [
+    centaur_configs.ENABLED_CENTAUR,
+    centaur_configs.DISABLED_CENTAUR,
+]
 
 PACKAGE_DIR = Path(__file__).parent.parent
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
@@ -689,7 +692,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
 
 
 class TestHashtagsCollectionBehaviourSerial(BaseBehaviourTest):
-    """Tests BinanceObservationBehaviour"""
+    """TestHashtagsCollectionBehaviourSerial"""
 
     behaviour_class = TwitterHashtagsCollectionBehaviour
     next_behaviour_class = TwitterDecisionMakingBehaviour
