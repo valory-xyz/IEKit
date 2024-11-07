@@ -113,8 +113,8 @@ class Staking(Contract):
         contract_instance = ledger_api.api.eth.contract(
             Web3.to_checksum_address(contract_address), abi=CONTRIBUTORS_ABI
         )
-        multisigs = list(updates.keys())
-        activity_changes = list(updates.values())
+        multisigs = [Web3.to_checksum_address(a) for a in updates.keys()]
+        activity_changes = [int(v) for v in updates.values()]
         data = contract_instance.encodeABI("increaseActivity", args=(multisigs,activity_changes))
         return {"data": bytes.fromhex(data[2:])}
 
