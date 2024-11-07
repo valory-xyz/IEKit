@@ -44,11 +44,11 @@ CONTRIBUTE_PROD_MANUAL_STREAM_ID = "kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81
 
 # Schemas
 # -----------------------------------------------------------------------------------------------------------------------
-CONTRIBUTE_DB_SCHEMA_COMMIT = "k3y52l7qbv1fry96i9zjr3gnkvql6dv0l6tt914tq66tnkj8063a1vs8yoojzj94w"  # Until Oct 24th 2024
-# CONTRIBUTE_DB_SCHEMA_COMMIT = "k3y52l7qbv1frxmokadx9ct3egvd2pfkopk9pzyia5iqib4tcq0g4zpbfe5wy318g"  # Oct 24th 2024
+# CONTRIBUTE_DB_SCHEMA_COMMIT = "k3y52l7qbv1fry96i9zjr3gnkvql6dv0l6tt914tq66tnkj8063a1vs8yoojzj94w"  # Until Oct 24th 2024
+CONTRIBUTE_DB_SCHEMA_COMMIT = "k3y52l7qbv1frxzpb4q5uneiceulmutusjkd45k4gg20b7r56lhrm4hkyj164lw5c"  # Nov 7h 2024
 
-CONTRIBUTE_CENTAURS_SCHEMA_COMMIT = "k3y52l7qbv1fry9bsoowbfvmjegm6ao5llv5p4dlppzt7ghyqsy87jk0b9m489qf4"  # Until Oct 24th 2024
-# CONTRIBUTE_CENTAURS_SCHEMA_COMMIT = "k3y52l7qbv1frybx3mnuqvs6lp4d53wdygae7lfnyc55ih5cob70ceu0bfwhk1e68"  # Oct 24th 2024
+# CONTRIBUTE_CENTAURS_SCHEMA_COMMIT = "k3y52l7qbv1fry9bsoowbfvmjegm6ao5llv5p4dlppzt7ghyqsy87jk0b9m489qf4"  # Until Oct 24th 2024
+CONTRIBUTE_CENTAURS_SCHEMA_COMMIT = "k3y52l7qbv1frybx3mnuqvs6lp4d53wdygae7lfnyc55ih5cob70ceu0bfwhk1e68"  # Oct 24th 2024
 
 CONTRIBUTE_GENERIC_SCHEMA_COMMIT = "k3y52l7qbv1fryi4j4lctbrusprz7vrip3l4ywga8e4rgpezqeplvq82s7p07teyo"
 

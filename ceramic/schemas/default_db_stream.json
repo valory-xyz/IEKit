@@ -9,6 +9,7 @@
             "twitter_handle": "tsunami_0x",
             "wallet_address": null,
             "service_multisig": null,
+            "service_id": null,
             "tweets": {
                 "1773360094882697540": {
                     "points": 100,

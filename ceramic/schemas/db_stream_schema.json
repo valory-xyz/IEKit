@@ -50,6 +50,9 @@
                 "service_multisig": {
                     "type": ["string", "null"]
                 },
+                "service_id": {
+                    "type": ["string", "null"]
+                },
                 "tweets": {
                     "type": "object",
                     "patternProperties": {
@@ -59,7 +62,7 @@
                     }
                 }
             },
-            "required": ["points", "token_id", "discord_id", "twitter_id", "discord_handle", "twitter_handle", "wallet_address", "current_period_points", "tweets"],
+            "required": ["points", "token_id", "discord_id", "twitter_id", "discord_handle", "twitter_handle", "wallet_address", "current_period_points", "tweets", "service_multisig", "service_id"],
             "additionalProperties": false
         }
     },

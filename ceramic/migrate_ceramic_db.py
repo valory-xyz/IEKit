@@ -34,7 +34,7 @@ ceramic = Ceramic(os.getenv("CERAMIC_API_BASE"))
 ceramic_did_str = "did:key:" + str(os.getenv("CERAMIC_DID_STR"))
 ceramic_did_seed = os.getenv("CERAMIC_DID_SEED")
 
-MAX_USERS_PER_COMMIT = 250
+MAX_USERS_PER_COMMIT = 200
 MAX_TWEETS_PER_COMMIT = 100
 
 LOCAL_READ = False  # load from the local machine instead of Ceramic
@@ -116,8 +116,9 @@ user_db["module_data"]["staking_activiy"] = {
 
 for user_id, user_data in user_db["users"].items():
 
-    # Initialize the service multisig
+    # Initialize the service multisig and id
     user_data["service_multisig"] = None
+    user_data["service_id"] = None
 
     # Convert tweets
     tweets = {}
