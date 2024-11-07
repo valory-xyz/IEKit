@@ -110,7 +110,7 @@ else:
 print("Updating the users db format...")
 
 # Add the new module data
-user_db["module_data"]["staking_activiy"] = {
+user_db["module_data"]["staking_activity"] = {
     "latest_activity_tweet_id": user_db["module_data"]["twitter"]["latest_hashtag_tweet_id"]
 }
 
@@ -196,7 +196,7 @@ centaurs_db[0]["plugins_data"]["twitter_campaigns"] = {
 centaurs_db[0]["configuration"]["plugins"]["twitter_campaigns"] = {
     "enabled": True
 }
-centaurs_db[0]["configuration"]["plugins"]["staking_activiy"] = {
+centaurs_db[0]["configuration"]["plugins"]["staking_activity"] = {
     "enabled": True,
     "last_run": None
 }

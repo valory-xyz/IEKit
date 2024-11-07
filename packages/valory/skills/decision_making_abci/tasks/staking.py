@@ -116,7 +116,7 @@ class StakingPreparation(TaskPreparation):
 class StakingActivityPreparation(StakingPreparation):
     """StakingActivityPreparation"""
 
-    task_name = "staking_activiy"
+    task_name = "staking_activity"
     task_event = Event.STAKING_ACTIVITY.value
 
     def check_extra_conditions(self):
@@ -125,7 +125,7 @@ class StakingActivityPreparation(StakingPreparation):
 
         ceramic_db = self.context.ceramic_db
         latest_activity_tweet_id = int(
-            ceramic_db.data["module_data"]["staking_activiy"][
+            ceramic_db.data["module_data"]["staking_activity"][
                 "latest_activity_tweet_id"
             ]
         )

@@ -121,7 +121,7 @@
                     "required": ["last_parsed_block"],
                     "additionalProperties": false
                 },
-                "staking_activiy": {
+                "staking_activity": {
                     "type": "object",
                     "properties": {
                         "latest_activity_tweet_id": {

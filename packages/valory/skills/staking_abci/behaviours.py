@@ -214,7 +214,7 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
             # Check whether we just came back from settling an update
             if self.synchronized_data.tx_submitter == ActiviyUpdatePreparationBehaviour.auto_behaviour_id():
                 # Update the last processed tweet on the model, and mark for Ceramic update
-                self.context.ceramic_db.data["module_data"]["staking_activiy"][
+                self.context.ceramic_db.data["module_data"]["staking_activity"][
                     "latest_activity_tweet_id"
                 ] = self.synchronized_data.latest_activity_tweet_id
                 pending_write = True
@@ -223,7 +223,7 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
             # Process new updates
             else:
                 ceramic_db_copy = self.context.ceramic_db.copy()
-                latest_activity_tweet_id = int(ceramic_db_copy.data["module_data"]["staking_activiy"][
+                latest_activity_tweet_id = int(ceramic_db_copy.data["module_data"]["staking_activity"][
                     "latest_activity_tweet_id"
                 ])
                 activity_updates, latest_activity_tweet_id = get_activity_updates(

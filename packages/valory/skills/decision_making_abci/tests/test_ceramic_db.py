@@ -52,7 +52,7 @@ def test_create_empty():
             },
             "dynamic_nft": {},
             "generic": {"latest_update_id": 0},
-            "staking_activiy": {"latest_activity_tweet_id": "0"},
+            "staking_activity": {"latest_activity_tweet_id": "0"},
         },
     }
 
