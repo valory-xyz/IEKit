@@ -334,17 +334,18 @@ class PostTxDecisionMakingBehaviour(DecisionMakingBaseBehaviour):
     def get_event(self) -> str:
         """Get the next event"""
 
-        if self.synchronized_data.tx_submitter == "mech_request_round":
-            return Event.POST_TX_MECH.value
+        tx_submitter = self.synchronized_data.tx_submitter
 
-        if self.synchronized_data.tx_submitter == "activity_update":
+        self.context.logger.info(f"Transcation submitter was {tx_submitter}")
+
+        if tx_submitter == "activiy_update_preparation_behaviour":
             return Event.POST_TX_ACTIVITY_UPDATE.value
 
-        if self.synchronized_data.tx_submitter == "checkpoint":
+        if tx_submitter == "checkpoint_preparation_behaviour":
             return Event.POST_TX_CHECKPOINT.value
 
-        # We should never reach this point or we will enter an endless loop
-        return Event.DONE.value
+        # This is a mech request
+        return Event.POST_TX_MECH.value
 
 
 class DecisionMakingRoundBehaviour(AbstractRoundBehaviour):

@@ -176,12 +176,12 @@ class StakingBaseBehaviour(BaseBehaviour, ABC):
 
     def get_staked_services(self, staking_contract_address: str) -> Generator[None, None, Optional[List]]:
         """Get the services staked on a contract"""
-
         contract_api_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
             contract_address=staking_contract_address,
             contract_id=str(Staking.contract_id),
             contract_callable="get_service_ids",
+            chain_id=BASE_CHAIN_ID,
         )
         if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
             self.context.logger.error(
@@ -190,6 +190,9 @@ class StakingBaseBehaviour(BaseBehaviour, ABC):
             return None
 
         service_ids = cast(str, contract_api_msg.state.body["service_ids"])
+
+        self.context.logger.info(f"Got {len(service_ids)} staked services for contract {staking_contract_address}")
+
         return service_ids
 
 class ActivityScoreBehaviour(StakingBaseBehaviour):
@@ -211,7 +214,7 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
             # Check whether we just came back from settling an update
             if self.synchronized_data.tx_submitter == ActiviyUpdatePreparationBehaviour.auto_behaviour_id():
                 # Update the last processed tweet on the model, and mark for Ceramic update
-                self.context.ceramic_db.data["module_data"]["staking"][
+                self.context.ceramic_db.data["module_data"]["staking_activiy"][
                     "latest_activity_tweet_id"
                 ] = self.synchronized_data.latest_activity_tweet_id
                 pending_write = True
