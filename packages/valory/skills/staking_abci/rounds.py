@@ -92,6 +92,10 @@ class SynchronizedData(BaseSynchronizedData):
         """Checks whether there are changes pending to be written to Ceramic."""
         return cast(bool, self.db.get("pending_write", False))
 
+    @property
+    def chain_id(self) -> Optional[str]:
+        """Get the chain name where to send the transactions to."""
+        return cast(str, self.db.get("chain_id", None))
 
 
 class ActivityScoreRound(CollectSameUntilThresholdRound):
@@ -154,6 +158,7 @@ class ActiviyUpdatePreparationRound(CollectSameUntilThresholdRound):
     selection_key = (
         get_name(SynchronizedData.tx_submitter),
         get_name(SynchronizedData.most_voted_tx_hash),
+        get_name(SynchronizedData.chain_id),
     )
 
     # We reference all the events here to prevent the check-abciapp-specs tool from complaining
@@ -172,6 +177,7 @@ class CheckpointPreparationRound(CollectSameUntilThresholdRound):
     selection_key = (
         get_name(SynchronizedData.tx_submitter),
         get_name(SynchronizedData.most_voted_tx_hash),
+        get_name(SynchronizedData.chain_id),
     )
 
     # We reference all the events here to prevent the check-abciapp-specs tool from complaining

@@ -40,6 +40,7 @@ class ActiviyUpdatePreparationPayload(BaseTxPayload):
 
     tx_submitter: Optional[str] = None
     tx_hash: Optional[str] = None
+    chain_id: str = "base"
 
 
 @dataclass(frozen=True)
@@ -48,3 +49,4 @@ class CheckpointPreparationPayload(BaseTxPayload):
 
     tx_submitter: Optional[str] = None
     tx_hash: Optional[str] = None
+    chain_id: str = "base"

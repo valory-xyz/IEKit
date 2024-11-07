@@ -92,6 +92,7 @@ def get_activity_updates(users: Dict, latest_activity_tweet_id: int) -> Tuple[Di
 
         # Add the user activity
         if new_tweets:
+            print(f"User {user['twitter_handle']} has {new_tweets} new tweets")
             updates[user["service_multisig"]] = new_tweets
 
     return updates, latest_processed_tweet
@@ -226,6 +227,7 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
                     ceramic_db_copy.data["users"],
                     latest_activity_tweet_id
                 )
+                self.context.logger.info(f"Processing activity updates: {activity_updates}")
 
             payload = ActivityScorePayload(
                 sender=sender,
@@ -269,7 +271,7 @@ class ActiviyUpdatePreparationBehaviour(StakingBaseBehaviour):
         """Prepare the activity update tx"""
 
         self.context.logger.info(
-            "Preparing activity update call"
+            f"Preparing activity update call: {self.synchronized_data.activity_updates}"
         )
 
         # Use the contract api to interact with the activity tracker contract
