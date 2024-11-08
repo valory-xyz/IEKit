@@ -178,8 +178,34 @@ print("Updating the db format...")
 centaurs_db[0]["plugins_data"]["twitter_campaigns"] = {
     "campaigns": [
         {
-            "id": "default-campaign",
+            "id": "OlasNetwork",
             "hashtag": "OlasNetwork",
+            "start_ts": 0,
+            "end_ts": 4885453704,
+            "proposer": {
+                "address": "",
+                "verified": True,
+                "signature": ""
+            },
+            "voters": [],
+            "status": "live"
+        },
+        {
+            "id": "StakeWithPearl",
+            "hashtag": "StakeWithPearl",
+            "start_ts": 0,
+            "end_ts": 4885453704,
+            "proposer": {
+                "address": "",
+                "verified": True,
+                "signature": ""
+            },
+            "voters": [],
+            "status": "live"
+        },
+        {
+            "id": "AgentsUnleashed",
+            "hashtag": "AgentsUnleashed",
             "start_ts": 0,
             "end_ts": 4885453704,
             "proposer": {
