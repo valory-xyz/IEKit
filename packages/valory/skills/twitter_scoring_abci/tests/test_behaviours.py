@@ -20,6 +20,7 @@
 """This package contains round behaviours of TwitterScoringAbciApp."""
 
 import json
+from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -27,7 +28,10 @@ from typing import Any, Dict, Optional, Type, cast
 
 import pytest
 from aea.exceptions import AEAActException
+from aea.helpers.transaction.base import State
 
+from packages.valory.contracts.staking.contract import Staking
+from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.abstract_round_abci.base import AbciAppDB
 from packages.valory.skills.abstract_round_abci.behaviour_utils import (
     BaseBehaviour,
@@ -40,6 +44,7 @@ from packages.valory.skills.abstract_round_abci.test_tools.common import (
     BaseRandomnessBehaviourTest,
 )
 from packages.valory.skills.decision_making_abci.models import CeramicDBBase
+from packages.valory.skills.decision_making_abci.tests import centaur_configs
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
     DBUpdateBehaviour,
     PostMechRequestBehaviour,
@@ -63,11 +68,16 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
 )
 
 
+DUMMY_CENTAURS_DATA = [
+    centaur_configs.ENABLED_CENTAUR,
+    centaur_configs.DISABLED_CENTAUR,
+]
+
 PACKAGE_DIR = Path(__file__).parent.parent
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 TWITTER_MENTIONS_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id=0"
-TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=%23olas&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id=0"
+TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=#OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id=0"
 
 DUMMY_MENTIONS_RESPONSE = {
     "data": [
@@ -300,7 +310,16 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
     @classmethod
     def setup_class(cls, **kwargs: Any) -> None:
         """Setup class"""
-        super().setup_class(param_overrides={"twitter_max_pages": 10})
+        super().setup_class(
+            param_overrides={
+                "twitter_max_pages": 10,
+                "staking_contract_addresses": [
+                    "0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F",
+                    "0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb",
+                    "0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8",
+                ],
+            }
+        )
         cls.llm_handler = cls._skill.skill_context.handlers.llm
 
     def fast_forward(
@@ -563,6 +582,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.DONE,
                 ),
@@ -593,6 +613,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.DONE,
                 ),
@@ -626,6 +647,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.DONE,
                 ),
@@ -671,7 +693,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
 
 
 class TestHashtagsCollectionBehaviourSerial(BaseBehaviourTest):
-    """Tests BinanceObservationBehaviour"""
+    """TestHashtagsCollectionBehaviourSerial"""
 
     behaviour_class = TwitterHashtagsCollectionBehaviour
     next_behaviour_class = TwitterDecisionMakingBehaviour
@@ -880,6 +902,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -902,6 +925,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -925,6 +949,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -946,6 +971,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -1164,36 +1190,42 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
                                 "points": 900,
                                 "username": "dummy",
                                 "text": "dummy text",
+                                "created_at": "2024-05-31T08:26:53.000Z",
                             },
                             "2": {
                                 "author_id": "2",
                                 "points": 900,
                                 "username": "dummy_2",
                                 "text": "dummy text",
+                                "created_at": "2024-05-31T08:26:53.000Z",
                             },
                             "3": {
                                 "author_id": "3",
                                 "points": 900,
                                 "username": "dummy_3",
                                 "text": "I'm linking my wallet to @Autonolas Contribute: 0x0000000000000000000000000000000000000000",
+                                "created_at": "2024-05-31T08:26:53.000Z",
                             },
                             "4": {
                                 "author_id": "1",
                                 "points": 10000,  # too many points during this period
                                 "username": "dummy",
                                 "text": "dummy text",
+                                "created_at": "2024-05-31T08:26:53.000Z",
                             },
                             "5": {
                                 "author_id": "4",
                                 "points": 900,
                                 "username": "dummy_4",
                                 "text": "I'm linking my wallet to @Autonolas Contribute:\n0x4F4715CA99C973A55303bc4a5f3e3acBb9fF75DB\n\nStart contributing to #OlasNetwork: https://t.co/4ocCNGEtyG",
+                                "created_at": "2024-05-31T08:26:53.000Z",
                             },
                         },
                         latest_mention_tweet_id=1,
                         latest_hashtag_tweet_id=1,
                         number_of_tweets_pulled_today=1,
                         last_tweet_pull_window_reset=1993903085,  # in 10 years
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.DONE,
                     ceramic_db={
@@ -1221,6 +1253,39 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
             ceramic_db.load(test_case.ceramic_db)
         self.fast_forward(test_case.initial_data, ceramic_db)
         self.behaviour.act_wrapper()
+
+        #  3 staking contracts
+        for _ in range(3):
+            self.mock_contract_api_request(
+                request_kwargs=dict(
+                    performative=ContractApiMessage.Performative.GET_STATE,
+                ),
+                contract_id=str(Staking.contract_id),
+                response_kwargs=dict(
+                    performative=ContractApiMessage.Performative.STATE,
+                    callable="get_epoch",
+                    state=State(ledger_id="ethereum", body={"epoch": 1}),
+                ),
+            )
+
+        # 2 tweets with wallets linked
+        for _ in range(2):
+            self.mock_contract_api_request(
+                request_kwargs=dict(
+                    performative=ContractApiMessage.Performative.GET_STATE,
+                ),
+                contract_id=str(Staking.contract_id),
+                response_kwargs=dict(
+                    performative=ContractApiMessage.Performative.STATE,
+                    callable="get_account_to_service_map",
+                    state=State(
+                        ledger_id="ethereum",
+                        body={
+                            "staking_contract_address": "0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F"
+                        },
+                    ),
+                ),
+            )
         self.complete(test_case.event)
 
 

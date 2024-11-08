@@ -36,7 +36,7 @@ packages/open_aea
 .vscode/
 .coverage*
 
-*.env
+.env
 
 ethereum_private_key.txt
 
@@ -45,10 +45,13 @@ impact_evaluator
 !packages/valory/services/impact_evaluator
 
 temp/
-.1env
 
 impact_evaluator_local/
 
 farcaster_test/
 !packages/valory/agents/farcaster_test/
 keys1.json
+
+tenderly_vnets.json
+
+stream.json

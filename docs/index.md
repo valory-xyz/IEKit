@@ -31,7 +31,7 @@ In order to run a local demo service based on the IEKit:
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeibl36ffncrdy5eizmwecjqtu4f75wyqtj62saaocmw3simkr55tuq --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeiezhi6fv37z4d5bx2hs7eoifcx7zjeoozybrijlfjzpdkcgvvsq74 --service
     ```
 
 3. Build the Docker image of the service agents
@@ -97,12 +97,12 @@ In order to run a local demo service based on the IEKit:
         USE_ACN=false
         TWITTER_TWEETS_ARGS=tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=10&start_time={start_time}
         DEFAULT_CHAIN_ID=gnosis
-        USE_STAGING_API=true
+        USE_TWITTER_STAGING_API=true
         TWITTER_API_BASE=https://api.twitter.com/
         TWITTER_MENTIONS_ENDPOINT=twitter/2/users/1/mentions?
         TWITTER_SEARCH_ENDPOINT=twitter/2/tweets/search/recent?
         MECH_CONTRACT_ADDRESS=0x77af31De935740567Cf4fF1986D04B2c964A786a
-        STAGING_API_TWITTER=http://host.docker.internal:5000/twitter/create_tweet
+        TWITTER_STAGING_API=http://host.docker.internal:5000/twitter/create_tweet
         TRANSACTION_SERVICE_URL=https://safe-transaction-goerli.safe.global/api/v1/messages/{message_hash}/
         USE_TERMINATION=false
         POINTS_TO_IMAGE_HASHES='{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'

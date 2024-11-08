@@ -32,6 +32,7 @@ import packages.valory.skills.mech_interact_abci.states.response as MechResponse
 import packages.valory.skills.olas_week_abci.rounds as WeekInOlasAbciApp
 import packages.valory.skills.registration_abci.rounds as RegistrationAbci
 import packages.valory.skills.reset_pause_abci.rounds as ResetAndPauseAbci
+import packages.valory.skills.staking_abci.rounds as StakingAbci
 import packages.valory.skills.transaction_settlement_abci.rounds as TxSettlementAbci
 import packages.valory.skills.twitter_scoring_abci.rounds as TwitterScoringAbci
 import packages.valory.skills.twitter_write_abci.rounds as TwitterWriteAbciApp
@@ -48,7 +49,7 @@ from packages.valory.skills.termination_abci.rounds import (
 
 
 # Here we define how the transition between the FSMs should happen
-# more information here: https://docs.autonolas.network/fsm_app_introduction/#composition-of-fsm-apps
+# more information here: https://docs.autonolas.network/open-autonomy/key_concepts/fsm_app_introduction/?h=composition#composition-of-fsm-apps
 abci_app_transition_mapping: AbciAppTransitionMapping = {
     RegistrationAbci.FinishedRegistrationRound: DecisionMakingAbci.DecisionMakingRound,
     DecisionMakingAbci.FinishedDecisionMakingReadCentaursRound: CeramicReadAbci.StreamReadRound,
@@ -65,8 +66,16 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     GenericScoringAbci.FinishedGenericScoringRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     TwitterScoringAbci.FinishedTwitterCollectionRound: MechRequestStates.MechRequestRound,
     MechFinalStates.FinishedMechRequestRound: TxSettlementAbci.RandomnessTransactionSubmissionRound,
-    TxSettlementAbci.FinishedTransactionSubmissionRound: MechResponseStates.MechResponseRound,
+    TxSettlementAbci.FinishedTransactionSubmissionRound: DecisionMakingAbci.PostTxDecisionMakingRound,
     TxSettlementAbci.FailedRound: MechRequestStates.MechRequestRound,
+    DecisionMakingAbci.FinishedDecisionMakingActivityRound: StakingAbci.ActivityScoreRound,
+    DecisionMakingAbci.FinishedDecisionMakingCheckpointRound: StakingAbci.CheckpointPreparationRound,
+    DecisionMakingAbci.FinishedPostMechResponseRound: MechResponseStates.MechResponseRound,
+    DecisionMakingAbci.FinishedPostActivityUpdateRound: StakingAbci.ActivityScoreRound,
+    DecisionMakingAbci.FinishedPostCheckpointRound: DecisionMakingAbci.DecisionMakingRound,
+    StakingAbci.FinishedActivityRound: DecisionMakingAbci.DecisionMakingRound,
+    StakingAbci.FinishedActivityUpdatePreparationRound: TxSettlementAbci.RandomnessTransactionSubmissionRound,
+    StakingAbci.FinishedCheckpointPreparationRound: TxSettlementAbci.RandomnessTransactionSubmissionRound,
     MechFinalStates.FinishedMechResponseRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     MechFinalStates.FinishedMechRequestSkipRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     MechFinalStates.FinishedMechResponseTimeoutRound: MechResponseStates.MechResponseRound,
@@ -104,6 +113,7 @@ ImpactEvaluatorSkillAbciApp = chain(
         WeekInOlasAbciApp.WeekInOlasAbciApp,
         TxSettlementAbci.TransactionSubmissionAbciApp,
         MechInteractAbci.MechInteractAbciApp,
+        StakingAbci.StakingAbciApp,
     ),
     abci_app_transition_mapping,
 ).add_background_app(termination_config)

@@ -30,7 +30,7 @@ class TaskPreparation:
     task_name = None
     task_event = None
 
-    def __init__(self, now_utc, behaviour, synchronized_data) -> None:
+    def __init__(self, now_utc, behaviour, synchronized_data, context) -> None:
         """Init"""
         self.name = ""
         self.behaviour = behaviour
@@ -40,6 +40,7 @@ class TaskPreparation:
         self.state = behaviour.state
         self.ceramic_db = behaviour.context.ceramic_db
         self.now_utc = now_utc
+        self.context = context
 
         self.logger.info(f"Instantiated task {self.__class__.__name__}")
         self.set_config()
@@ -68,8 +69,7 @@ class TaskPreparation:
                 datetime.strptime(
                     plugin_config["last_run"], "%Y-%m-%d %H:%M:%S %Z"
                 ).replace(tzinfo=timezone.utc)
-                if (self.daily or (self.weekly is not None))
-                and plugin_config["last_run"]
+                if plugin_config.get("last_run", None)
                 else None
             )
             self.run_hour_utc = (

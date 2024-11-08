@@ -51,12 +51,16 @@ class TestFinishedPipelinePreparation(unittest.TestCase):
         self.behaviour.state = {}
         self.behaviour.context.ceramic_db = MagicMock()
         self.synchronized_data = MagicMock()
+        self.context = MagicMock()
         self.synchronized_data.centaurs_data = DUMMY_CENTAURS_DATA
         self.synchronized_data.current_centaur_index = 0
 
         # Create an instance of FinishedPipelinePreparation
         self.mock_finished_pipeline_preparation = FinishedPipelinePreparation(
-            datetime.now(timezone.utc), self.behaviour, self.synchronized_data
+            datetime.now(timezone.utc),
+            self.behaviour,
+            self.synchronized_data,
+            self.context,
         )
 
     def test_check_extra_conditions(self):

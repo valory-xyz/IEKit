@@ -59,14 +59,14 @@ DUMMY_CENTAURS_DATA_B = [
                     "daily": True,
                     "enabled": True,
                     "last_run": None,
-                    "run_hour_utc": datetime.utcnow().hour,
+                    "run_hour_utc": datetime.now(tz=timezone.utc).hour,
                 },
                 "scheduled_tweet": {"daily": False, "enabled": True},
                 "daily_orbis": {
                     "daily": True,
                     "enabled": True,
                     "last_run": None,
-                    "run_hour_utc": datetime.utcnow().hour,
+                    "run_hour_utc": datetime.now(tz=timezone.utc).hour,
                 },
             }
         },
@@ -159,11 +159,15 @@ class BaseTweetValidationPreparationTest:
         self.behaviour = MagicMock()
         self.synchronized_data = MagicMock()
         self.synchronized_data.centaurs_data = DUMMY_CENTAURS_DATA
+        self.context = MagicMock()
 
     def create_tweet_validation_object(self, tweet_validation_preparation_class):
         """Create the tweet validation object."""
         self.mock_tweet_validation_preparation = tweet_validation_preparation_class(
-            datetime.now(timezone.utc), self.behaviour, self.synchronized_data
+            datetime.now(timezone.utc),
+            self.behaviour,
+            self.synchronized_data,
+            self.context,
         )
 
         self.mock_tweet_validation_preparation.behaviour.context.logger.info = (

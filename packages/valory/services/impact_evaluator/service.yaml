@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeids7befnrqb6byjbhoi6mp4wju4iaxwl6zluwwsvkf3ge65qfc3ua
+agent: valory/impact_evaluator:0.1.0:bafybeihz7ixk26mfjgb3v2tf7b6ewgy6epe5tftfkq5mkfi5zwdlnakgva
 number_of_agents: 4
 deployment:
   agent:
@@ -105,7 +105,7 @@ extra:
         twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
         max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query={search_query}&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
         twitter_tweets_args: ${TWITTER_TWEETS_ARGS:str:tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
         tx_timeout: 10.0
@@ -133,13 +133,14 @@ extra:
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
         mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
         use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:false}
-        mech_marketplace_config:
-          mech_marketplace_address: ${MECH_MARKETPLACE_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          priority_mech_address: ${PRIORITY_MECH_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          priority_mech_staking_instance_address: ${PRIORITY_MECH_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          priority_mech_service_id: ${PRIORITY_MECH_SERVICE_ID:int:0}
-          requester_staking_instance_address: ${REQUESTER_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
-          response_timeout: ${RESPONSE_TIMEOUT:int:300}
+        mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x0000000000000000000000000000000000000000","priority_mech_address":"0x0000000000000000000000000000000000000000","priority_mech_staking_instance_address":"0x0000000000000000000000000000000000000000","priority_mech_service_id":0,"requester_staking_instance_address":"0x0000000000000000000000000000000000000000","response_timeout":300}}
+        checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
+        staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
+        staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F","0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb","0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8"]}
+        contributors_contract_address: ${CONTRIBUTORS_CONTRACT_ADDRESS:str:0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94}
+        epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
+        safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x3316b59A6c4C3ee2920EecE0B02A6d40AAa6b9c9}
+        safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -200,7 +201,7 @@ extra:
         twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
         max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query={search_query}&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
         twitter_tweets_args: ${TWITTER_TWEETS_ARGS:str:tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
         tx_timeout: 10.0
@@ -235,6 +236,13 @@ extra:
           priority_mech_service_id: ${PRIORITY_MECH_SERVICE_ID:int:0}
           requester_staking_instance_address: ${REQUESTER_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
           response_timeout: ${RESPONSE_TIMEOUT:int:300}
+        checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
+        staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
+        staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F","0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb","0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8"]}
+        contributors_contract_address: ${CONTRIBUTORS_CONTRACT_ADDRESS:str:0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94}
+        epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
+        safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x3316b59A6c4C3ee2920EecE0B02A6d40AAa6b9c9}
+        safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -295,7 +303,7 @@ extra:
         twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
         max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query={search_query}&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
         twitter_tweets_args: ${TWITTER_TWEETS_ARGS:str:tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
         tx_timeout: 10.0
@@ -330,6 +338,13 @@ extra:
           priority_mech_service_id: ${PRIORITY_MECH_SERVICE_ID:int:0}
           requester_staking_instance_address: ${REQUESTER_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
           response_timeout: ${RESPONSE_TIMEOUT:int:300}
+        checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
+        staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
+        staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F","0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb","0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8"]}
+        contributors_contract_address: ${CONTRIBUTORS_CONTRACT_ADDRESS:str:0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94}
+        epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
+        safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x3316b59A6c4C3ee2920EecE0B02A6d40AAa6b9c9}
+        safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -361,7 +376,7 @@ extra:
         max_healthcheck: 120
         multisend_address: ${MULTISEND_ADDRESS:str:0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761}
         termination_sleep: ${TERMINATION_SLEEP:int:900}
-        init_fallback_gas: 0
+        init_fallback_gas: ${INIT_FALLBACK_GAS:int:0}
         keeper_allowed_retries: 3
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
         on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:6}
@@ -392,7 +407,7 @@ extra:
         twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
         max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
-        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
+        twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query={search_query}&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
         twitter_tweets_args: ${TWITTER_TWEETS_ARGS:str:tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}}
         tx_timeout: 10.0
@@ -429,6 +444,13 @@ extra:
           priority_mech_service_id: ${PRIORITY_MECH_SERVICE_ID:int:0}
           requester_staking_instance_address: ${REQUESTER_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
           response_timeout: ${RESPONSE_TIMEOUT:int:300}
+        checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
+        staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
+        staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F","0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb","0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8"]}
+        contributors_contract_address: ${CONTRIBUTORS_CONTRACT_ADDRESS:str:0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94}
+        epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
+        safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x3316b59A6c4C3ee2920EecE0B02A6d40AAa6b9c9}
+        safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -442,11 +464,32 @@ config:
       chain_id: ${ETHEREUM_LEDGER_CHAIN_ID:int:1}
       poa_chain: ${ETHEREUM_LEDGER_IS_POA_CHAIN:bool:false}
       default_gas_price_strategy: ${ETHEREUM_LEDGER_PRICING:str:eip1559}
+      gas_price_strategies: &id001
+        gas_station:
+          gas_price_api_key: null
+          gas_price_strategy: fast
+        eip1559:
+          max_gas_fast: 1500
+          fee_history_blocks: 10
+          fee_history_percentile: 5
+          default_priority_fee: ${DEFAULT_PRIORITY_FEE:int:30000000}
+          fallback_estimate:
+            maxFeePerGas: 20000000000
+            maxPriorityFeePerGas: 3000000000
+            baseFee: null
+          priority_fee_increase_boundary: 200
     gnosis:
       address: ${GNOSIS_LEDGER_RPC:str:http://host.docker.internal:8545}
       chain_id: ${GNOSIS_LEDGER_CHAIN_ID:int:100}
       poa_chain: ${GNOSIS_LEDGER_IS_POA_CHAIN:bool:false}
       default_gas_price_strategy: ${GNOSIS_LEDGER_PRICING:str:eip1559}
+      gas_price_strategies: *id001
+    base:
+      address: ${BASE_LEDGER_RPC:str:http://host.docker.internal:8545}
+      chain_id: ${BASE_LEDGER_CHAIN_ID:int:100}
+      poa_chain: ${BASE_LEDGER_IS_POA_CHAIN:bool:false}
+      default_gas_price_strategy: ${BASE_LEDGER_PRICING:str:eip1559}
+      gas_price_strategies: *id001
 ---
 public_id: valory/p2p_libp2p_client:0.1.0
 type: connection
@@ -471,32 +514,32 @@ type: connection
     max_tokens: ${MAX_TOKENS:int:1000}
     openai_api_key: ${OPENAI_API_KEY_0:str:null}
     temperature: ${TEMPERATURE:float:0.7}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_OPENAI:str:http://host.docker.internal:5000/openai}
+    use_openai_staging_api: ${USE_OPENAI_STAGING_API:bool:false}
+    openai_staging_api: ${OPENAI_STAGING_API:str:http://host.docker.internal:5000/openai}
 1:
   config:
     engine: ${ENGINE:str:gpt-4}
     max_tokens: ${MAX_TOKENS:int:1000}
     openai_api_key: ${OPENAI_API_KEY_1:str:null}
     temperature: ${TEMPERATURE:float:0.7}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_OPENAI:str:http://host.docker.internal:5000/openai}
+    use_openai_staging_api: ${USE_OPENAI_STAGING_API:bool:false}
+    openai_staging_api: ${OPENAI_STAGING_API:str:http://host.docker.internal:5000/openai}
 2:
   config:
     engine: ${ENGINE:str:gpt-4}
     max_tokens: ${MAX_TOKENS:int:1000}
     openai_api_key: ${OPENAI_API_KEY_2:str:null}
     temperature: ${TEMPERATURE:float:0.7}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_OPENAI:str:http://host.docker.internal:5000/openai}
+    use_openai_staging_api: ${USE_OPENAI_STAGING_API:bool:false}
+    openai_staging_api: ${OPENAI_STAGING_API:str:http://host.docker.internal:5000/openai}
 3:
   config:
     engine: ${ENGINE:str:gpt-4}
     max_tokens: ${MAX_TOKENS:int:1000}
     openai_api_key: ${OPENAI_API_KEY_3:str:null}
     temperature: ${TEMPERATURE:float:0.7}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_OPENAI:str:http://host.docker.internal:5000/openai}
+    use_openai_staging_api: ${USE_OPENAI_STAGING_API:bool:false}
+    openai_staging_api: ${OPENAI_STAGING_API:str:http://host.docker.internal:5000/openai}
 ---
 public_id: valory/twitter:0.1.0
 type: connection
@@ -507,8 +550,8 @@ type: connection
     auth_token: ${AUTH_TOKEN:str:<auth_token>}
     consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
     consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
+    use_twitter_staging_api: ${USE_TWITTER_STAGING_API:bool:false}
+    twitter_staging_api: ${TWITTER_STAGING_API:str:http://host.docker.internal:5000/twitter/create_tweet}
 1:
   config:
     access_secret: ${ACCESS_SECRET:str:<access_secret>}
@@ -516,8 +559,8 @@ type: connection
     auth_token: ${AUTH_TOKEN:str:<auth_token>}
     consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
     consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
+    use_twitter_staging_api: ${USE_TWITTER_STAGING_API:bool:false}
+    twitter_staging_api: ${TWITTER_STAGING_API:str:http://host.docker.internal:5000/twitter/create_tweet}
 2:
   config:
     access_secret: ${ACCESS_SECRET:str:<access_secret>}
@@ -525,8 +568,8 @@ type: connection
     auth_token: ${AUTH_TOKEN:str:<auth_token>}
     consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
     consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
+    use_twitter_staging_api: ${USE_TWITTER_STAGING_API:bool:false}
+    twitter_staging_api: ${TWITTER_STAGING_API:str:http://host.docker.internal:5000/twitter/create_tweet}
 3:
   config:
     access_secret: ${ACCESS_SECRET:str:<access_secret>}
@@ -534,5 +577,5 @@ type: connection
     auth_token: ${AUTH_TOKEN:str:<auth_token>}
     consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
     consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_staging_api: ${USE_STAGING_API:bool:false}
-    staging_api: ${STAGING_API_TWITTER:str:http://host.docker.internal:5000/twitter/create_tweet}
+    use_twitter_staging_api: ${USE_TWITTER_STAGING_API:bool:false}
+    twitter_staging_api: ${TWITTER_STAGING_API:str:http://host.docker.internal:5000/twitter/create_tweet}

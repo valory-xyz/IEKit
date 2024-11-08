@@ -83,6 +83,15 @@ class Params(BaseParams):
         self.tweet_consensus_veolas = self._ensure(
             "tweet_consensus_veolas", kwargs, int
         )
+        self.checkpoint_threshold_minutes = self._ensure(
+            "checkpoint_threshold_minutes", kwargs, int
+        )
+        self.staking_activity_threshold = self._ensure(
+            "staking_activity_threshold", kwargs, int
+        )
+        self.epoch_end_threshold_minutes = self._ensure(
+            "epoch_end_threshold_minutes", kwargs, int
+        )
         super().__init__(*args, **kwargs)
 
 
@@ -102,7 +111,8 @@ class CeramicDBBase:
         "token_id",
         "points",
         "current_period_points",
-        "tweet_id_to_points",
+        "tweets",
+        "service_multisig",
     }
 
     def __init__(self) -> None:
@@ -124,6 +134,7 @@ class CeramicDBBase:
                     },
                     "dynamic_nft": {},
                     "generic": {"latest_update_id": 0},
+                    "staking_activity": {"latest_activity_tweet_id": "0"},
                 },
             }
         )
@@ -144,7 +155,7 @@ class CeramicDBBase:
         for field in fields:
             if field in ("points", "current_period_points"):
                 new_user[field] = user_data.get(field, 0)
-            elif field in ("tweet_id_to_points",):
+            elif field in ("tweets",):
                 new_user[field] = user_data.get(field, {})
             else:
                 new_user[field] = user_data.get(field, None)
@@ -231,11 +242,16 @@ class CeramicDBBase:
                     if field == "current_period_points":
                         values = [max(values)]
 
-                    # We merge the tweet_id_to_points
-                    if field == "tweet_id_to_points":
+                    # We merge the tweets
+                    if field == "tweets":
                         for value in values[1:]:
                             values[0].update(value)  # type: ignore
                         values = [values[0]]
+
+                    # Merge the multisigs
+                    # We have no way to tell which one we should keep
+                    if field == "service_multisig":
+                        values = [values[0] if values else None]
 
                     # Check whether all values are the same
                     if len(values) > 1:

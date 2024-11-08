@@ -7,12 +7,12 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
-  behaviours.py: bafybeibdq5p4zi47nsycpcjs7ouw2fjxqjn7hgbd4aalp7yumdhnmlfufq
-  composition.py: bafybeifwmregxn3ibbln3dfkqpmyl5iznfwzepplkjwduoxramikzv6p34
+  behaviours.py: bafybeiciogdifxopcplhlbnpuftwqh5zo4bubyimx7b4r5vfcdtpv5vhpq
+  composition.py: bafybeibumunfp56hvztyvgk4m64fmddfm4evgdacvbek464oexm665nwvy
   dialogues.py: bafybeigjknz4qqynbsltjje46gidg4rftsqw6ybjwegz24wetmycutpzh4
-  fsm_specification.yaml: bafybeigxkqdtkr5vldnvd3izkjejtvv5l5fura5dwfljllpoblsc6nty6u
+  fsm_specification.yaml: bafybeibgb5o2idctxri6ykl7iva2j6brwgn56mdz2pl5onsbz2p63t2vce
   handlers.py: bafybeidkli6fphcmdgwsys4lkyf3fx6fbawet4nt2pnixfypzijhg6b3ze
-  models.py: bafybeif7kujqjk77j7xnnat7lpi7ldgqzh2tp5xhojdjqentfg3s4md6y4
+  models.py: bafybeif7unc573kd5bpot3vjfmoktbkeervsms72cqobd52y74txcwq55y
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
   tests/test_behaviours.py: bafybeifkazsevd6vsfaapulouxepez3rl24y3rxgja5zhmj7s323zdjlmq
   tests/test_dialogues.py: bafybeieaos2byphju6i6xvytppqqcuqqvnpilnflsy73l3wqazzjttbg7m
@@ -25,19 +25,20 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeibiw4oqwqvo4jccwz5fb73iardzychgvcl66tceiildohoju2ikti
 - valory/ceramic_read_abci:0.1.0:bafybeigz7rzfls3niv3urfb4z4vwr525ooxveelgg3djpvkg5jzetxlm2u
-- valory/generic_scoring_abci:0.1.0:bafybeiev6mitpmn6knsn72uzmk6qphekrkk7wgftqssqi2p3ji3qnm5pve
-- valory/twitter_scoring_abci:0.1.0:bafybeibdmuy3z2y5nkaeqpzjcbnhd6qv5dtbjrjcdj3ggn6w6cbzjojuwe
+- valory/generic_scoring_abci:0.1.0:bafybeieq7m5puqjfgk73tewe5psmnibo7dud7bzhh6ra6xmavsfb3uyjxy
+- valory/twitter_scoring_abci:0.1.0:bafybeieqatd7xaayqnrijub4irvdpmwqufuvzz47zvsbff5panrw4kf37u
 - valory/ceramic_write_abci:0.1.0:bafybeic6c3iub3nsr5tmr7g5vzoixbin6w64ewudfiq6u4r2fiqwbg753i
-- valory/dynamic_nft_abci:0.1.0:bafybeicqtyvbybyewgc5sr5jqyg3envk4d3id5duq27kpbmfqrxrwgtzg4
+- valory/dynamic_nft_abci:0.1.0:bafybeiefzzoht5se6g25dz7m5reag74alwgiuwpfhnyjuxs4cfosysrmey
 - valory/registration_abci:0.1.0:bafybeib3n6vqkfbrcubcbliebjnuwyywdinxkbzt76n6gbn2kg7ace47dq
 - valory/reset_pause_abci:0.1.0:bafybeihkj6lmaypspyxe5qqrjgnolyck62pyvqoylr24ab6ue4steqcw7e
 - valory/termination_abci:0.1.0:bafybeifi2uodnrjsrivj53g3sjutocmyusbx6mlsb6oanqdyt2mfbyvusy
 - valory/transaction_settlement_abci:0.1.0:bafybeigh2vkt74jrad5gtsczrgqcuhcqe7jkgjy7jdw56yamlzwwnaymjy
-- valory/decision_making_abci:0.1.0:bafybeigddurqavteoy2jrbko5nybiw63kh3zifx4xojjr7rdpne2252nua
-- valory/llm_abci:0.1.0:bafybeifyb4yyg5lbfjjf4yt5pyuab366pgwbnqawfemf7odzu2aiyictxa
-- valory/twitter_write_abci:0.1.0:bafybeiatxq45gddbpmua5skqouxws2myl24w7ir7xzchr4lzukgkcvzfgi
-- valory/olas_week_abci:0.1.0:bafybeidczfyqbwmtv66tn2yeqkh242hjo5q2snafpcctnblp7cd4of5hua
-- valory/mech_interact_abci:0.1.0:bafybeihkq76ydcia6vellezmbqkkyazefc6is5d42ytl4aoiowlp5rbdfm
+- valory/decision_making_abci:0.1.0:bafybeic2tkfgwofeqcr2xvpsk7cjdsqfl5ac7ek7mrune6yvve4fqiepou
+- valory/llm_abci:0.1.0:bafybeiefgahdm4ulrcdyx37ucm2e35tx5epbbre6gcbpbwlmuk46apwcta
+- valory/twitter_write_abci:0.1.0:bafybeibp7zai2qwvfjd5fgpayx44x5c2zshbukpobvz2la7ws2l5f5fjde
+- valory/olas_week_abci:0.1.0:bafybeidujp6exzjqywecfvaeg37ptxtg4fh6mhqr2yfbvet3hyzut5mum4
+- valory/mech_interact_abci:0.1.0:bafybeidaevbuo3srnvjtjnumqn6gjkcqogj5rmvl2dcwygvvhhskba4yza
+- valory/staking_abci:0.1.0:bafybeidgmviq6inwwjachktoeddmyuo7iyg7yfyhvhvy3znndkvuuudllq
 behaviours:
   main:
     args: {}
@@ -170,7 +171,7 @@ models:
       twitter_max_pages: 1
       max_tweet_pulls_allowed: 80
       twitter_search_endpoint: 2/tweets/search/recent?
-      twitter_search_args: query=%23olas&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
+      twitter_search_args: query={search_query}&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
       twitter_tweets_endpoint: 2/users/1450081635559428107/tweets?
       twitter_tweets_args: tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}
       openai_call_window_size: 3600.0
@@ -207,6 +208,16 @@ models:
         priority_mech_service_id: 0
         requester_staking_instance_address: '0x0000000000000000000000000000000000000000'
         response_timeout: 300
+      checkpoint_threshold_minutes: 60
+      staking_activity_threshold: 5
+      staking_contract_addresses:
+      - '0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F'
+      - '0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb'
+      - '0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8'
+      contributors_contract_address: '0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94'
+      epoch_end_threshold_minutes: 20
+      safe_contract_address_base: '0x0000000000000000000000000000000000000000'
+      safe_contract_address_gnosis: '0x0000000000000000000000000000000000000000'
     class_name: Params
   randomness_api:
     args:

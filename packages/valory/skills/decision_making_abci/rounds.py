@@ -32,7 +32,10 @@ from packages.valory.skills.abstract_round_abci.base import (
     DegenerateRound,
     EventToTimeout,
 )
-from packages.valory.skills.decision_making_abci.payloads import DecisionMakingPayload
+from packages.valory.skills.decision_making_abci.payloads import (
+    DecisionMakingPayload,
+    PostTxDecisionPayload,
+)
 
 
 TWEET_LENGTH = 280
@@ -59,6 +62,12 @@ class Event(Enum):
     WEEK_IN_OLAS_CREATE = "week_in_olas_create"
     TWEET_VALIDATION = "tweet_validation"
     FORCE_DB_UPDATE = "force_db_update"
+    CAMPAIGN_VALIDATION = "campaign_validation"
+    STAKING_ACTIVITY = "staking_activity"
+    STAKING_CHECKPOINT = "staking_checkpoint"
+    POST_TX_MECH = "post_tx_mech"
+    POST_TX_ACTIVITY_UPDATE = "post_tx_activity_update"
+    POST_TX_CHECKPOINT = "post_tx_checkpoint"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -138,6 +147,11 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the write_results."""
         return cast(list, self.db.get("write_results", []))
 
+    @property
+    def tx_submitter(self) -> str:
+        """Get the tx_submitter."""
+        return cast(str, self.db.get("tx_submitter"))
+
 
 class DecisionMakingRound(CollectSameUntilThresholdRound):
     """DecisionMakingRound"""
@@ -153,7 +167,8 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
             # Event.NO_MAJORITY, Event.DONE, Event.UPDATE_CENTAURS, Event.READ_CENTAURS,
             # Event.SCHEDULED_TWEET, Event.LLM, Event.DAILY_ORBIS, Event.DAILY_TWEET, Event.NEXT_CENTAUR
             # Event.SCORE, Event.READ_CONTRIBUTE_DB, Event.READ_MANUAL_POINTS, Event.WRITE_CONTRIBUTE_DB
-            # Event.WEEK_IN_OLAS_CREATE, Event.TWEET_VALIDATION, Event.FORCE_DB_UPDATE
+            # Event.WEEK_IN_OLAS_CREATE, Event.TWEET_VALIDATION, Event.FORCE_DB_UPDATE, Event.CAMPAIGN_VALIDATION
+            # Event.STAKING_ACTIVITY, Event.STAKING_CHECKPOINT
 
             payload = json.loads(self.most_voted_payload)
             event = Event(payload["event"])
@@ -174,6 +189,30 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
                     **{**payload["updates"], "previous_decision_event": event.value}
                 )
             return synchronized_data, event
+
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
+        return None
+
+
+class PostTxDecisionMakingRound(CollectSameUntilThresholdRound):
+    """PostTxDecisionMakingRound"""
+
+    payload_class = PostTxDecisionPayload
+    synchronized_data_class = SynchronizedData
+
+    def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
+        """Process the end of the block."""
+        if self.threshold_reached:
+            # We reference all the events here to prevent the check-abciapp-specs tool from complaining
+            # since this round receives the event via payload
+            # Event.DONE, Event.NO_MAJORITY
+            # Event.POST_TX_MECH, Event.POST_TX_ACTIVITY_UPDATE, Event.POST_TX_CHECKPOINT
+
+            event = Event(self.most_voted_payload)
+            return self.synchronized_data, event
 
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
@@ -226,11 +265,31 @@ class FinishedDecisionMakingWeekInOlasRound(DegenerateRound):
     """FinishedDecisionMakingWeekInOlasRound"""
 
 
+class FinishedDecisionMakingActivityRound(DegenerateRound):
+    """FinishedDecisionMakingActivityRound"""
+
+
+class FinishedDecisionMakingCheckpointRound(DegenerateRound):
+    """FinishedDecisionMakingCheckpointRound"""
+
+
+class FinishedPostMechResponseRound(DegenerateRound):
+    """FinishedPostMechResponseRound"""
+
+
+class FinishedPostActivityUpdateRound(DegenerateRound):
+    """FinishedPostActivityUpdateRound"""
+
+
+class FinishedPostCheckpointRound(DegenerateRound):
+    """FinishedPostCheckpointRound"""
+
+
 class DecisionMakingAbciApp(AbciApp[Event]):
     """DecisionMakingAbciApp"""
 
     initial_round_cls: AppState = DecisionMakingRound
-    initial_states: Set[AppState] = {DecisionMakingRound}
+    initial_states: Set[AppState] = {DecisionMakingRound, PostTxDecisionMakingRound}
     transition_function: AbciAppTransitionFunction = {
         DecisionMakingRound: {
             Event.READ_CENTAURS: FinishedDecisionMakingReadCentaursRound,
@@ -250,6 +309,16 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.DONE: FinishedDecisionMakingDoneRound,
             Event.NO_MAJORITY: DecisionMakingRound,
             Event.ROUND_TIMEOUT: DecisionMakingRound,
+            Event.CAMPAIGN_VALIDATION: DecisionMakingRound,
+            Event.STAKING_ACTIVITY: FinishedDecisionMakingActivityRound,
+            Event.STAKING_CHECKPOINT: FinishedDecisionMakingCheckpointRound,
+        },
+        PostTxDecisionMakingRound: {
+            Event.POST_TX_MECH: FinishedPostMechResponseRound,
+            Event.POST_TX_ACTIVITY_UPDATE: FinishedPostActivityUpdateRound,
+            Event.POST_TX_CHECKPOINT: FinishedPostCheckpointRound,
+            Event.DONE: PostTxDecisionMakingRound,
+            Event.NO_MAJORITY: PostTxDecisionMakingRound,
         },
         FinishedDecisionMakingReadCentaursRound: {},
         FinishedDecisionMakingLLMRound: {},
@@ -262,6 +331,11 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingWriteContributeDBRound: {},
         FinishedDecisionMakingReadManualPointsRound: {},
         FinishedDecisionMakingWeekInOlasRound: {},
+        FinishedDecisionMakingActivityRound: {},
+        FinishedDecisionMakingCheckpointRound: {},
+        FinishedPostMechResponseRound: {},
+        FinishedPostActivityUpdateRound: {},
+        FinishedPostCheckpointRound: {},
     }
     final_states: Set[AppState] = {
         FinishedDecisionMakingReadCentaursRound,
@@ -275,6 +349,11 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingWriteContributeDBRound,
         FinishedDecisionMakingReadManualPointsRound,
         FinishedDecisionMakingWeekInOlasRound,
+        FinishedDecisionMakingActivityRound,
+        FinishedDecisionMakingCheckpointRound,
+        FinishedPostMechResponseRound,
+        FinishedPostActivityUpdateRound,
+        FinishedPostCheckpointRound,
     }
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
@@ -282,6 +361,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
     cross_period_persisted_keys: FrozenSet[str] = frozenset()
     db_pre_conditions: Dict[AppState, Set[str]] = {
         DecisionMakingRound: set(),
+        PostTxDecisionMakingRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedDecisionMakingReadCentaursRound: set(),
@@ -295,4 +375,9 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingWriteContributeDBRound: set(),
         FinishedDecisionMakingReadManualPointsRound: set(),
         FinishedDecisionMakingWeekInOlasRound: set(),
+        FinishedDecisionMakingActivityRound: set(),
+        FinishedDecisionMakingCheckpointRound: set(),
+        FinishedPostMechResponseRound: set(),
+        FinishedPostActivityUpdateRound: set(),
+        FinishedPostCheckpointRound: set(),
     }

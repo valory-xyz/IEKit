@@ -107,8 +107,8 @@ class TwitterConnection(BaseSyncConnection):
         self.auth_token = self.configuration.config["auth_token"]
         self.access_secret = self.configuration.config["access_secret"]
         self.access_token = self.configuration.config["access_token"]
-        self.use_staging_api = self.configuration.config["use_staging_api"]
-        self.staging_api = self.configuration.config["staging_api"]
+        self.use_twitter_staging_api = self.configuration.config["use_twitter_staging_api"]
+        self.staging_api = self.configuration.config["twitter_staging_api"]
         self.ipfs_tool = IPFSTool()
         self.twitter_cli = None
         self.twitter_api = None
@@ -205,7 +205,7 @@ class TwitterConnection(BaseSyncConnection):
         self.logger.info(f"Processed media ids: {thread_media_ids}")
 
         # Call the staging API
-        if self.use_staging_api:
+        if self.use_twitter_staging_api:
             url = f"{self.staging_api}/twitter/create_tweet"
 
             self.logger.info(

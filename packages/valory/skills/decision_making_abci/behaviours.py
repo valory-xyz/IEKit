@@ -35,7 +35,12 @@ from packages.valory.skills.decision_making_abci.rounds import (
     DecisionMakingPayload,
     DecisionMakingRound,
     Event,
+    PostTxDecisionMakingRound,
+    PostTxDecisionPayload,
     SynchronizedData,
+)
+from packages.valory.skills.decision_making_abci.tasks.campaign_validation_preparation import (
+    CampaignValidationPreparation,
 )
 from packages.valory.skills.decision_making_abci.tasks.finished_pipeline_preparation import (
     FinishedPipelinePreparation,
@@ -50,6 +55,10 @@ from packages.valory.skills.decision_making_abci.tasks.read_stream_preparation i
 )
 from packages.valory.skills.decision_making_abci.tasks.score_preparations import (
     ScorePreparation,
+)
+from packages.valory.skills.decision_making_abci.tasks.staking import (
+    StakingActivityPreparation,
+    StakingCheckpointPreparation,
 )
 from packages.valory.skills.decision_making_abci.tasks.tweet_validation_preparation import (
     TweetValidationPreparation,
@@ -110,8 +119,21 @@ previous_event_to_task_preparation_cls = {
         "prev": ScheduledTweetPreparation,
         "next": UpdateCentaursPreparation,
     },
+    # Hack to force the db update after tweet update without tweeting
     Event.FORCE_DB_UPDATE.value: {
         "prev": ScheduledTweetPreparation,
+        "next": CampaignValidationPreparation,
+    },
+    Event.CAMPAIGN_VALIDATION.value: {
+        "prev": CampaignValidationPreparation,
+        "next": StakingActivityPreparation,
+    },
+    Event.STAKING_ACTIVITY.value: {
+        "prev": StakingActivityPreparation,
+        "next": StakingCheckpointPreparation,
+    },
+    Event.STAKING_CHECKPOINT.value: {
+        "prev": StakingCheckpointPreparation,
         "next": UpdateCentaursPreparation,
     },
     Event.UPDATE_CENTAURS.value: {
@@ -209,9 +231,7 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
             if not previous_task_skipped:
                 previous_task_preparation = (
                     previous_task_preparation_cls(
-                        now_utc,
-                        self,
-                        self.synchronized_data,
+                        now_utc, self, self.synchronized_data, self.context
                     )
                     if previous_task_preparation_cls
                     else None
@@ -238,6 +258,7 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
                         synchronized_data_class=SynchronizedData,
                         **post_updates,
                     ),
+                    self.context,
                 )
                 if next_task_preparation_cls
                 else None
@@ -291,9 +312,48 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
         return now_utc
 
 
+class PostTxDecisionMakingBehaviour(DecisionMakingBaseBehaviour):
+    """PostTxDecisionMakingBehaviour"""
+
+    matching_round: Type[AbstractRound] = PostTxDecisionMakingRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            event = self.get_event()
+            sender = self.context.agent_address
+            payload = PostTxDecisionPayload(sender=sender, event=event)
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
+
+    def get_event(self) -> str:
+        """Get the next event"""
+
+        tx_submitter = self.synchronized_data.tx_submitter
+
+        self.context.logger.info(f"Transcation submitter was {tx_submitter}")
+
+        if tx_submitter == "activity_update_preparation_behaviour":
+            return Event.POST_TX_ACTIVITY_UPDATE.value
+
+        if tx_submitter == "checkpoint_preparation_behaviour":
+            return Event.POST_TX_CHECKPOINT.value
+
+        # This is a mech request
+        return Event.POST_TX_MECH.value
+
+
 class DecisionMakingRoundBehaviour(AbstractRoundBehaviour):
     """DecisionMakingRoundBehaviour"""
 
     initial_behaviour_cls = DecisionMakingBehaviour
     abci_app_cls = DecisionMakingAbciApp  # type: ignore
-    behaviours: Set[Type[BaseBehaviour]] = [DecisionMakingBehaviour]
+    behaviours: Set[Type[BaseBehaviour]] = [
+        DecisionMakingBehaviour,
+        PostTxDecisionMakingBehaviour,
+    ]

@@ -22,7 +22,7 @@ autonomy init --reset --author valory --remote --ipfs --ipfs-node "/dns/registry
 autonomy build-image
 
 # Copy .env file
-# cp $REPO_PATH/.1env ./.env
+cp $REPO_PATH/.env .
 
 # Copy the keys and build the deployment
 cp $REPO_PATH/keys1.json ./keys.json

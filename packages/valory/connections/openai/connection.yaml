@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiagnziswj5tll4yzx63u4hvat4yieoaaqt5b67chvvqxg5th5mxz4
-  connection.py: bafybeidbhxjopa7r4h6fz5xrvldjmfet5vi2zucfmdnplei3ttnb743r7u
+  connection.py: bafybeihf6qxqzg6q6nn6jstmes7mezdtfwwl3ghmsvdfq2nw4qn4qf5uva
   readme.md: bafybeibqbvpfn6i2w7vxk2m65gizd2hcofu7mdzp2yusx7uupelztme724
 fingerprint_ignore_patterns: []
 connections: []
@@ -19,8 +19,8 @@ config:
   max_tokens: 500
   openai_api_key: null
   temperature: 0.7
-  use_staging_api: false
-  staging_api: http://host.docker.internal:5000/openai
+  use_openai_staging_api: false
+  openai_staging_api: http://host.docker.internal:5000/openai
 excluded_protocols: []
 restricted_to_protocols: []
 dependencies:

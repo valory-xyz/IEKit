@@ -38,8 +38,12 @@ class TestScorePreparation(unittest.TestCase):
         """Set up the tests."""
         self.behaviour = MagicMock()
         self.synchronized_data = MagicMock()
+        self.context = MagicMock()
         self.mock_score_preparation = ScorePreparation(
-            datetime.now(timezone.utc), self.behaviour, self.synchronized_data
+            datetime.now(timezone.utc),
+            self.behaviour,
+            self.synchronized_data,
+            self.context,
         )
 
     def test_check_extra_conditions(self):

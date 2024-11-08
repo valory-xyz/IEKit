@@ -473,6 +473,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     None,
                     None,
                     self.params.mech_chain_id,
+                    self.params.safe_contract_address_gnosis,
                     None,
                     None,
                 )
@@ -494,6 +495,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     self.tx_hex,
                     self.price,
                     self.params.mech_chain_id,
+                    self.params.safe_contract_address_gnosis,
                     *serialized_data,
                 )
         yield from self.finish_behaviour(payload)

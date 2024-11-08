@@ -35,7 +35,8 @@ DEFAULT_DATA = {
     "discord_id": None,
     "discord_handle": None,
     "current_period_points": 0,
-    "tweet_id_to_points": {},
+    "tweets": {},
+    "service_multisig": None,
 }
 
 
@@ -51,6 +52,7 @@ def test_create_empty():
             },
             "dynamic_nft": {},
             "generic": {"latest_update_id": 0},
+            "staking_activity": {"latest_activity_tweet_id": "0"},
         },
     }
 
@@ -102,14 +104,16 @@ def test_merge_by_wallet():
         "wallet_address": "dummy_address",
         "points": 10,
         "current_period_points": 20,
-        "tweet_id_to_points": {"1": 100, "2": 200},
+        "tweets": {"1": {"points": 100}, "2": {"points": 200}},
+        "service_multisig": "dummy_multisig",
     }
     user_b = {
         "discord_id": "dummy_discord_id",
         "wallet_address": "dummy_address",
         "points": 10,
         "current_period_points": 15,
-        "tweet_id_to_points": {"2": 200, "3": 300},
+        "tweets": {"2": {"points": 200}, "3": {"points": 300}},
+        "service_multisig": None,
     }
     db.create_user(user_a)
     db.create_user(user_b)
@@ -124,15 +128,24 @@ def test_merge_by_wallet():
         "twitter_handle": None,
         "discord_handle": None,
         "current_period_points": 20,
-        "tweet_id_to_points": {"1": 100, "2": 200, "3": 300},
+        "tweets": {"1": {"points": 100}, "2": {"points": 200}, "3": {"points": 300}},
+        "service_multisig": "dummy_multisig",
     }
 
 
 def test_merge_by_wallet_raises():
     """Test CeramicDBBase"""
     db = CeramicDBBase()
-    user_a = {"twitter_id": "dummy_twitter_id", "wallet_address": "dummy_address"}
-    user_b = {"twitter_id": "dummy_twitter_id_2", "wallet_address": "dummy_address"}
+    user_a = {
+        "twitter_id": "dummy_twitter_id",
+        "wallet_address": "dummy_address",
+        "service_multisig": None,
+    }
+    user_b = {
+        "twitter_id": "dummy_twitter_id_2",
+        "wallet_address": "dummy_address",
+        "service_multisig": None,
+    }
     db.create_user(user_a)
     db.create_user(user_b)
     with pytest.raises(ValueError):
@@ -147,14 +160,14 @@ def test_reset_period_points():
         "wallet_address": "dummy_address",
         "points": 10,
         "current_period_points": 20,
-        "tweet_id_to_points": {"1": 100, "2": 200},
+        "tweets": {"1": {"points": 100}, "2": {"points": 200}},
     }
     user_b = {
         "discord_id": "dummy_discord_id",
         "wallet_address": "dummy_address",
         "points": 10,
         "current_period_points": 15,
-        "tweet_id_to_points": {"2": 200, "3": 300},
+        "tweets": {"2": {"points": 200}, "3": {"points": 300}},
     }
     db.create_user(user_a)
     db.create_user(user_b)
@@ -171,13 +184,13 @@ def test_diff():
         "wallet_address": "dummy_address",
         "points": 10,
         "current_period_points": 20,
-        "tweet_id_to_points": {"1": 100, "2": 200},
+        "tweets": {"1": {"points": 100}, "2": {"points": 200}},
     }
     user_b = {  # same data as user_a but in different order
         "current_period_points": 20,
         "wallet_address": "dummy_address",
         "points": 10,
-        "tweet_id_to_points": {"1": 100, "2": 200},
+        "tweets": {"1": {"points": 100}, "2": {"points": 200}},
         "twitter_id": "dummy_twitter_id",
     }
     db_a.create_user(user_a)

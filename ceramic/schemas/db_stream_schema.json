@@ -1,6 +1,25 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
     "definitions": {
+        "tweet": {
+            "type": "object",
+            "properties": {
+                "points": {
+                    "type": "integer"
+                },
+                "campaign": {
+                    "type": ["string", "null"]
+                },
+                "epoch": {
+                    "type": ["integer", "null"]
+                },
+                "timestamp": {
+                    "type": ["integer", "null"]
+                }
+            },
+            "required": ["points", "campaign", "epoch", "timestamp"],
+            "additionalProperties": false
+        },
         "user": {
             "type": "object",
             "properties": {
@@ -28,17 +47,22 @@
                 "current_period_points": {
                     "type": "integer"
                 },
-                "tweet_id_to_points": {
+                "service_multisig": {
+                    "type": ["string", "null"]
+                },
+                "service_id": {
+                    "type": ["string", "null"]
+                },
+                "tweets": {
                     "type": "object",
                     "patternProperties": {
                         "^[0-9]+$": {
-                          "type": "integer"
+                            "$ref": "#/definitions/tweet"
                         }
-                    },
-                    "additionalProperties": false
+                    }
                 }
             },
-            "required": ["points", "token_id", "discord_id", "twitter_id", "discord_handle", "twitter_handle", "wallet_address", "current_period_points", "tweet_id_to_points"],
+            "required": ["points", "token_id", "discord_id", "twitter_id", "discord_handle", "twitter_handle", "wallet_address", "current_period_points", "tweets", "service_multisig", "service_id"],
             "additionalProperties": false
         }
     },
@@ -95,6 +119,16 @@
                         }
                     },
                     "required": ["last_parsed_block"],
+                    "additionalProperties": false
+                },
+                "staking_activity": {
+                    "type": "object",
+                    "properties": {
+                        "latest_activity_tweet_id": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["latest_activity_tweet_id"],
                     "additionalProperties": false
                 }
             },

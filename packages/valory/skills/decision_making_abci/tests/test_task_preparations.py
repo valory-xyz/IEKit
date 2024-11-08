@@ -43,11 +43,15 @@ class TestTaskPreparation(unittest.TestCase):
         self.behaviour.state = {}
         self.behaviour.context.ceramic_db = MagicMock()
         self.synchronized_data = MagicMock()
+        self.context = MagicMock()
         self.synchronized_data.centaurs_data = {}
 
         # Create an instance of TaskPreparation
         self.mock_task_preparation = TaskPreparation(
-            datetime.now(timezone.utc), self.behaviour, self.synchronized_data
+            datetime.now(timezone.utc),
+            self.behaviour,
+            self.synchronized_data,
+            self.context,
         )
 
     def test_set_config_with_no_centaur_data(self):
@@ -76,7 +80,7 @@ class TestTaskPreparation(unittest.TestCase):
                             "daily": True,
                             "weekly": True,
                             "last_run": None,
-                            "run_hour_utc": datetime.utcnow().hour,
+                            "run_hour_utc": datetime.now(tz=timezone.utc).hour,
                         }
                     }
                 },
@@ -88,7 +92,10 @@ class TestTaskPreparation(unittest.TestCase):
         assert self.mock_task_preparation.daily
         assert self.mock_task_preparation.weekly
         assert not self.mock_task_preparation.last_run
-        assert self.mock_task_preparation.run_hour_utc == datetime.utcnow().hour
+        assert (
+            self.mock_task_preparation.run_hour_utc
+            == datetime.now(tz=timezone.utc).hour
+        )
 
     def test_log_config(self):
         """Test the log_config method."""
