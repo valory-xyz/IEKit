@@ -28,13 +28,13 @@ import jsonschema
 from pathlib import Path
 from copy import deepcopy
 
-dotenv.load_dotenv()
+dotenv.load_dotenv(override=True)
 
 ceramic = Ceramic(os.getenv("CERAMIC_API_BASE"))
 ceramic_did_str = "did:key:" + str(os.getenv("CERAMIC_DID_STR"))
 ceramic_did_seed = os.getenv("CERAMIC_DID_SEED")
 
-MAX_USERS_PER_COMMIT = 250
+MAX_USERS_PER_COMMIT = 200
 MAX_TWEETS_PER_COMMIT = 100
 
 LOCAL_READ = False  # load from the local machine instead of Ceramic
@@ -110,14 +110,15 @@ else:
 print("Updating the users db format...")
 
 # Add the new module data
-user_db["module_data"]["staking_activiy"] = {
+user_db["module_data"]["staking_activity"] = {
     "latest_activity_tweet_id": user_db["module_data"]["twitter"]["latest_hashtag_tweet_id"]
 }
 
 for user_id, user_data in user_db["users"].items():
 
-    # Initialize the service multisig
+    # Initialize the service multisig and id
     user_data["service_multisig"] = None
+    user_data["service_id"] = None
 
     # Convert tweets
     tweets = {}
@@ -195,7 +196,7 @@ centaurs_db[0]["plugins_data"]["twitter_campaigns"] = {
 centaurs_db[0]["configuration"]["plugins"]["twitter_campaigns"] = {
     "enabled": True
 }
-centaurs_db[0]["configuration"]["plugins"]["staking_activiy"] = {
+centaurs_db[0]["configuration"]["plugins"]["staking_activity"] = {
     "enabled": True,
     "last_run": None
 }

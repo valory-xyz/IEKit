@@ -59,14 +59,14 @@ DUMMY_CENTAURS_DATA_B = [
                     "daily": True,
                     "enabled": True,
                     "last_run": None,
-                    "run_hour_utc": datetime.utcnow().hour,
+                    "run_hour_utc": datetime.now(tz=timezone.utc).hour,
                 },
                 "scheduled_tweet": {"daily": False, "enabled": True},
                 "daily_orbis": {
                     "daily": True,
                     "enabled": True,
                     "last_run": None,
-                    "run_hour_utc": datetime.utcnow().hour,
+                    "run_hour_utc": datetime.now(tz=timezone.utc).hour,
                 },
             }
         },

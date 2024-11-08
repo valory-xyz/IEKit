@@ -33,6 +33,7 @@ class MechRequestPayload(BaseTxPayload):
     tx_hash: Optional[str]
     price: Optional[int]
     chain_id: Optional[str]
+    safe_contract_address: Optional[str]
     mech_requests: Optional[str]
     mech_responses: Optional[str]
 

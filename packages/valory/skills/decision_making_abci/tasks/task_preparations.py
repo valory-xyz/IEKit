@@ -69,8 +69,7 @@ class TaskPreparation:
                 datetime.strptime(
                     plugin_config["last_run"], "%Y-%m-%d %H:%M:%S %Z"
                 ).replace(tzinfo=timezone.utc)
-                if (self.daily or (self.weekly is not None))
-                and plugin_config["last_run"]
+                if plugin_config.get("last_run", None)
                 else None
             )
             self.run_hour_utc = (

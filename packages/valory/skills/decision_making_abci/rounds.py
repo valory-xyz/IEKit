@@ -63,7 +63,7 @@ class Event(Enum):
     TWEET_VALIDATION = "tweet_validation"
     FORCE_DB_UPDATE = "force_db_update"
     CAMPAIGN_VALIDATION = "campaign_validation"
-    STAKING_ACTIVITY = "staking_activiy"
+    STAKING_ACTIVITY = "staking_activity"
     STAKING_CHECKPOINT = "staking_checkpoint"
     POST_TX_MECH = "post_tx_mech"
     POST_TX_ACTIVITY_UPDATE = "post_tx_activity_update"

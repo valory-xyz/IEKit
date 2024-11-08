@@ -19,7 +19,7 @@
 
 """This package contains the logic for task preparations."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Generator, Optional, cast
 
 from packages.valory.contracts.veolas_delegation.contract import (
@@ -51,6 +51,7 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
         centaurs_data = self.synchronized_data.centaurs_data
         current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
         updates = {}
+        has_centaurs_changes = True
 
         for campaign in current_centaur["plugins_data"]["twitter_campaigns"][
             "campaigns"
@@ -63,8 +64,8 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
             )
 
             # Get campaign start and end times
-            start_time = datetime.fromtimestamp(campaign["start_ts"])
-            end_time = datetime.fromtimestamp(campaign["end_ts"])
+            start_time = datetime.fromtimestamp(campaign["start_ts"], tz=timezone.utc)
+            end_time = datetime.fromtimestamp(campaign["end_ts"], tz=timezone.utc)
 
             # Validate pending campaigns
             if campaign["status"] == "proposed":
@@ -113,9 +114,13 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
 
             # Ignore void and finished states
             else:
+                has_centaurs_changes = False
                 self.logger.info("The campaign does not need to be updated")
 
-            updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
+            updates = {
+                "centaurs_data": centaurs_data,
+                "has_centaurs_changes": has_centaurs_changes,
+            }
 
         return updates, self.task_event
 

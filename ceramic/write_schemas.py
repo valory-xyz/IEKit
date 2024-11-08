@@ -4,7 +4,7 @@ import dotenv
 import os
 from pathlib import Path
 
-dotenv.load_dotenv()
+dotenv.load_dotenv(override=True)
 
 ceramic = Ceramic(os.getenv("CERAMIC_API_BASE"))
 ceramic_did_str = "did:key:" + str(os.getenv("CERAMIC_DID_STR"))

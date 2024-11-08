@@ -20,6 +20,7 @@
 """This package contains round behaviours of TwitterScoringAbciApp."""
 
 import json
+from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -43,9 +44,7 @@ from packages.valory.skills.abstract_round_abci.test_tools.common import (
     BaseRandomnessBehaviourTest,
 )
 from packages.valory.skills.decision_making_abci.models import CeramicDBBase
-from packages.valory.skills.decision_making_abci.tests.test_behaviours import (
-    DUMMY_CENTAURS_DATA,
-)
+from packages.valory.skills.decision_making_abci.tests import centaur_configs
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
     DBUpdateBehaviour,
     PostMechRequestBehaviour,
@@ -68,6 +67,11 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     TwitterScoringAbciApp,
 )
 
+
+DUMMY_CENTAURS_DATA = [
+    centaur_configs.ENABLED_CENTAUR,
+    centaur_configs.DISABLED_CENTAUR,
+]
 
 PACKAGE_DIR = Path(__file__).parent.parent
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
@@ -306,7 +310,16 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
     @classmethod
     def setup_class(cls, **kwargs: Any) -> None:
         """Setup class"""
-        super().setup_class(param_overrides={"twitter_max_pages": 10})
+        super().setup_class(
+            param_overrides={
+                "twitter_max_pages": 10,
+                "staking_contract_addresses": [
+                    "0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F",
+                    "0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb",
+                    "0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8",
+                ],
+            }
+        )
         cls.llm_handler = cls._skill.skill_context.handlers.llm
 
     def fast_forward(
@@ -569,7 +582,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=DUMMY_CENTAURS_DATA,
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.DONE,
                 ),
@@ -600,7 +613,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=DUMMY_CENTAURS_DATA,
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.DONE,
                 ),
@@ -634,7 +647,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=DUMMY_CENTAURS_DATA,
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.DONE,
                 ),
@@ -680,7 +693,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
 
 
 class TestHashtagsCollectionBehaviourSerial(BaseBehaviourTest):
-    """Tests BinanceObservationBehaviour"""
+    """TestHashtagsCollectionBehaviourSerial"""
 
     behaviour_class = TwitterHashtagsCollectionBehaviour
     next_behaviour_class = TwitterDecisionMakingBehaviour
@@ -889,7 +902,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=DUMMY_CENTAURS_DATA,
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -912,7 +925,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=DUMMY_CENTAURS_DATA,
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -936,7 +949,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=DUMMY_CENTAURS_DATA,
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -958,7 +971,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=DUMMY_CENTAURS_DATA,
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.API_ERROR,
                 ),
@@ -1212,7 +1225,7 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
                         latest_hashtag_tweet_id=1,
                         number_of_tweets_pulled_today=1,
                         last_tweet_pull_window_reset=1993903085,  # in 10 years
-                        centaurs_data=DUMMY_CENTAURS_DATA,
+                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.DONE,
                     ceramic_db={
@@ -1240,17 +1253,39 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
             ceramic_db.load(test_case.ceramic_db)
         self.fast_forward(test_case.initial_data, ceramic_db)
         self.behaviour.act_wrapper()
-        self.mock_contract_api_request(
-            request_kwargs=dict(
-                performative=ContractApiMessage.Performative.GET_STATE,
-            ),
-            contract_id=str(Staking.contract_id),
-            response_kwargs=dict(
-                performative=ContractApiMessage.Performative.STATE,
-                callable="get_cast_vote_data",
-                state=State(ledger_id="ethereum", body={"epoch": 1}),
-            ),
-        )
+
+        #  3 staking contracts
+        for _ in range(3):
+            self.mock_contract_api_request(
+                request_kwargs=dict(
+                    performative=ContractApiMessage.Performative.GET_STATE,
+                ),
+                contract_id=str(Staking.contract_id),
+                response_kwargs=dict(
+                    performative=ContractApiMessage.Performative.STATE,
+                    callable="get_epoch",
+                    state=State(ledger_id="ethereum", body={"epoch": 1}),
+                ),
+            )
+
+        # 2 tweets with wallets linked
+        for _ in range(2):
+            self.mock_contract_api_request(
+                request_kwargs=dict(
+                    performative=ContractApiMessage.Performative.GET_STATE,
+                ),
+                contract_id=str(Staking.contract_id),
+                response_kwargs=dict(
+                    performative=ContractApiMessage.Performative.STATE,
+                    callable="get_account_to_service_map",
+                    state=State(
+                        ledger_id="ethereum",
+                        body={
+                            "staking_contract_address": "0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F"
+                        },
+                    ),
+                ),
+            )
         self.complete(test_case.event)
 
 

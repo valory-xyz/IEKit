@@ -24,14 +24,14 @@ In order to run a local demo service based on the IEKit:
     mkdir your_workspace && cd your_workspace
     touch Pipfile && pipenv --python 3.10 && pipenv shell
 
-    pipenv install open-autonomy[all]==0.14.14.post1
+    pipenv install open-autonomy[all]==0.18.2
     autonomy init --remote --ipfs --reset --author=your_name
     ```
 
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeigfvchg32yg2mdmgiryhbkfpwxbenwfrvwpk7hgdlok6ah4iv6ave --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeie2x4dtn26c5wcfpfctmuzmjtjzt5oo3apkxhjvf265f5jt6etz34 --service
     ```
 
 3. Build the Docker image of the service agents
@@ -97,12 +97,12 @@ In order to run a local demo service based on the IEKit:
         USE_ACN=false
         TWITTER_TWEETS_ARGS=tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=10&start_time={start_time}
         DEFAULT_CHAIN_ID=gnosis
-        USE_STAGING_API=true
+        USE_TWITTER_STAGING_API=true
         TWITTER_API_BASE=https://api.twitter.com/
         TWITTER_MENTIONS_ENDPOINT=twitter/2/users/1/mentions?
         TWITTER_SEARCH_ENDPOINT=twitter/2/tweets/search/recent?
         MECH_CONTRACT_ADDRESS=0x77af31De935740567Cf4fF1986D04B2c964A786a
-        STAGING_API_TWITTER=http://host.docker.internal:5000/twitter/create_tweet
+        TWITTER_STAGING_API=http://host.docker.internal:5000/twitter/create_tweet
         TRANSACTION_SERVICE_URL=https://safe-transaction-goerli.safe.global/api/v1/messages/{message_hash}/
         USE_TERMINATION=false
         POINTS_TO_IMAGE_HASHES='{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
@@ -146,10 +146,11 @@ In order to run a local demo service based on the IEKit:
 6. Run the service.
 
     ```bash
-    cd abci_build
+    cd abci_build_{uuid}
     autonomy deploy run
     ```
 
+    Where `{uuid}` is a 4-character random hash.
     You can cancel the local execution at any time by pressing ++ctrl+c++.
 
 7. Check that the service is running. Open a separate terminal and execute the command below. You should see the service transitioning along different states.

@@ -171,12 +171,14 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
         ]
         return active_hashtags
 
-    def get_staking_epoch(self) -> Generator[None, None, Optional[int]]:
+    def get_staking_epoch(
+        self, staking_contract_address
+    ) -> Generator[None, None, Optional[int]]:
         """Get the staking epoch"""
 
         contract_api_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
-            contract_address=self.params.staking_contract_address,
+            contract_address=staking_contract_address,
             contract_id=str(Staking.contract_id),
             contract_callable="get_epoch",
         )
@@ -188,6 +190,29 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
 
         epoch = cast(int, contract_api_msg.state.body["epoch"])
         return epoch
+
+    def get_staking_contract(
+        self, wallet_address
+    ) -> Generator[None, None, Optional[str]]:
+        """Get the staking contract where a user is staked"""
+
+        contract_api_msg = yield from self.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
+            contract_address=self.params.contributors_contract_address,
+            contract_id=str(Staking.contract_id),
+            contract_callable="get_account_to_service_map",
+            wallet_address=wallet_address,
+        )
+        if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
+            self.context.logger.error(
+                f"Error getting the epoch: [{contract_api_msg.performative}]"
+            )
+            return None
+
+        staking_contract_address = cast(
+            str, contract_api_msg.state.body["staking_contract_address"]
+        )
+        return staking_contract_address
 
 
 def get_campaign(tweet: Union[str, List[str]], campaigns: List[str]) -> Optional[str]:
@@ -722,6 +747,18 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
         # Dynamicaly build the search query using the hashtags in the centaurs stream
         active_hashtags = self.get_active_hashtags()
+
+        # TODO: If there are no active campaigns, skip this
+        # If we do this, we also need to handle the case where we've been a lot of
+        # time without pulling tweets -> pagination, API limits, etc...
+        # if not active_hashtags: # noqa:E800
+        #     return {  # noqa:E800
+        #         "tweets": {},  # noqa:E800
+        #         "latest_hashtag_tweet_id": int(latest_hashtag_tweet_id),  # noqa:E800
+        #         "number_of_tweets_pulled_today": number_of_tweets_pulled_today,  # noqa:E800
+        #         "sleep_until": None,  # we reset this on a successful request  # noqa:E800
+        #     }  # noqa:E800
+
         search_query = " OR ".join(active_hashtags)
 
         api_args = self.params.twitter_search_args.replace(
@@ -1051,7 +1088,10 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         active_hashtags = self.get_active_hashtags()
 
         # Get the staking epoch
-        epoch = yield from self.get_staking_epoch()
+        staking_contract_to_epoch = {}
+        for staking_contract_address in self.params.staking_contract_addresses:
+            epoch = yield from self.get_staking_epoch(staking_contract_address)
+            staking_contract_to_epoch[staking_contract_address] = epoch
 
         # Update data
         for tweet_id, tweet in tweets.items():
@@ -1080,6 +1120,18 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 self.context.logger.info(f"Updated points for this tweet: {new_points}")
 
             current_period_points += new_points
+
+            # Get the user staking contract and epoch (if the user is staked)
+            epoch = None
+            if wallet_address:
+                staking_contract_address = yield from self.get_staking_contract(
+                    wallet_address
+                )
+                epoch = (
+                    staking_contract_to_epoch[staking_contract_address]
+                    if staking_contract_address
+                    else None
+                )
 
             # Store the tweet id and awarded points
             user_tweets = {} if not user else user.get("tweets", {})

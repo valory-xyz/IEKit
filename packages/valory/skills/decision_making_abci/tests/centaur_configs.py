@@ -23,6 +23,35 @@
 from copy import deepcopy
 from datetime import datetime, timezone
 
+from eth_account import messages
+from web3.auto import w3
+
+
+DUMMY_ACCOUNTS = {
+    "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf": "0x0000000000000000000000000000000000000000000000000000000000000001",
+    "0x2B5AD5c4795c026514f8317c7a215E218DcCD6cF": "0x0000000000000000000000000000000000000000000000000000000000000002",
+}
+
+
+def sign_message(message_text, private_key):
+    """Sign a message"""
+    message_hash = messages.defunct_hash_message(text=message_text)
+    signed_message = w3.eth.account.signHash(message_hash, private_key=private_key)
+    signature = signed_message.signature.hex()
+    return signature
+
+
+def sign_campaign_proposal(hashtag, private_key):
+    """Sign a campaign proposal"""
+    message = f"I am signing a message to verify that I propose a campaign starting with {hashtag[:10]}"
+    return sign_message(message, private_key)
+
+
+def sign_campaign_vote(hashtag, private_key):
+    """Sign a campaign vote"""
+    message = f"I am signing a message to verify that I approve a campaign starting with {hashtag[:10]}"
+    return sign_message(message, private_key)
+
 
 ENABLED_CENTAUR = {
     "id": "4e77a3b1-5762-4782-830e-0e56c6c05c6f",
@@ -33,14 +62,14 @@ ENABLED_CENTAUR = {
                 "daily": True,
                 "enabled": True,
                 "last_run": None,
-                "run_hour_utc": datetime.utcnow().hour,
+                "run_hour_utc": datetime.now(tz=timezone.utc).hour,
             },
             "scheduled_tweet": {"daily": False, "enabled": True},
             "daily_orbis": {
                 "daily": True,
                 "enabled": True,
                 "last_run": None,
-                "run_hour_utc": datetime.utcnow().hour,
+                "run_hour_utc": datetime.now(tz=timezone.utc).hour,
             },
         }
     },
@@ -83,11 +112,7 @@ ENABLED_CENTAUR = {
         },
         "twitter_campaigns": {
             "campaigns": [
-                {
-                    "id": "dummy_id",
-                    "hashtag": "OlasNetwork",
-                    "status": "live",
-                }
+                {"id": "123456789", "hashtag": "OlasNetwork", "status": "live"}
             ]
         },
     },
@@ -195,14 +220,15 @@ del NO_ACTIONS["actions"]
 
 NO_TIME_TO_RUN = deepcopy(ENABLED_CENTAUR)
 NO_TIME_TO_RUN["configuration"]["plugins"]["daily_tweet"]["run_hour_utc"] = (
-    datetime.utcnow().hour + 12
+    datetime.now(tz=timezone.utc).hour + 12
 )
 
 ALREADY_RAN = deepcopy(ENABLED_CENTAUR)
 ALREADY_RAN["configuration"]["plugins"]["daily_tweet"]["last_run"] = (
-    datetime.utcnow().replace(tzinfo=timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
+    datetime.now(tz=timezone.utc)
+    .replace(tzinfo=timezone.utc)
+    .strftime("%Y-%m-%d %H:%M:%S %Z")
 )
-
 
 DUMMY_CENTAUR_ID_TO_SECRETS_OK = {
     "4e77a3b1-5762-4782-830e-0e56c6c05c6f": {
@@ -271,4 +297,108 @@ DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_ORBIS_KEY = {
             "access_secret": "dummy_access_secret",
         },
     }
+}
+
+NOW_TS = int(datetime.now(tz=timezone.utc).timestamp())
+
+PROPOSED_TO_VOTING_CAMPAIGN = {
+    "id": "proposed_to_voting",
+    "hashtag": "OlasNetwork",
+    "start_ts": 0,
+    "end_ts": 0,
+    "proposer": {
+        "address": list(DUMMY_ACCOUNTS.keys())[0],
+        "verified": None,
+        "signature": sign_campaign_proposal(
+            "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
+        ),
+    },
+    "voters": [],
+    "status": "proposed",
+}
+
+PROPOSED_TO_VOID_CAMPAIGN = {
+    "id": "proposed_to_void",
+    "hashtag": "OlasNetwork",
+    "start_ts": 0,
+    "end_ts": 0,
+    "proposer": {
+        "address": list(DUMMY_ACCOUNTS.keys())[0],
+        "verified": None,
+        "signature": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",  # invalid signature
+    },
+    "voters": [],
+    "status": "proposed",
+}
+
+VOTING_TO_VOID_CAMPAIGN = {
+    "id": "proposed_to_void",
+    "hashtag": "OlasNetwork",
+    "start_ts": NOW_TS,  # start time reached without votes
+    "end_ts": 0,
+    "proposer": {
+        "address": list(DUMMY_ACCOUNTS.keys())[0],
+        "verified": True,
+        "signature": sign_campaign_proposal(
+            "OlasNetwork", list(DUMMY_ACCOUNTS.values())[0]
+        ),
+    },
+    "voters": [],
+    "status": "voting",
+}
+
+VOTING_TO_SCHEDULED_CAMPAIGN = {
+    "id": "proposed_to_void",
+    "hashtag": "OlasNetwork",
+    "start_ts": NOW_TS + 1000,
+    "end_ts": NOW_TS + 2000,
+    "proposer": {
+        "address": list(DUMMY_ACCOUNTS.keys())[0],
+        "verified": True,
+        "signature": "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A",
+    },
+    "voters": [],
+    "status": "voting",
+}
+
+SCHEDULED_TO_LIVE_CAMPAIGN = {
+    "id": "proposed_to_void",
+    "hashtag": "OlasNetwork",
+    "start_ts": NOW_TS,
+    "end_ts": NOW_TS + 1000,
+    "proposer": {
+        "address": list(DUMMY_ACCOUNTS.keys())[0],
+        "verified": True,
+        "signature": "",
+    },
+    "voters": [],
+    "status": "scheduled",
+}
+
+LIVE_TO_ENDED_CAMPAIGN = {
+    "id": "proposed_to_void",
+    "hashtag": "OlasNetwork",
+    "start_ts": 0,
+    "end_ts": NOW_TS,
+    "proposer": {
+        "address": list(DUMMY_ACCOUNTS.keys())[0],
+        "verified": True,
+        "signature": "",
+    },
+    "voters": [],
+    "status": "live",
+}
+
+ENDED_TO_ENDED_CAMPAIGN = {
+    "id": "proposed_to_void",
+    "hashtag": "OlasNetwork",
+    "start_ts": 0,
+    "end_ts": NOW_TS,
+    "proposer": {
+        "address": list(DUMMY_ACCOUNTS.keys())[0],
+        "verified": True,
+        "signature": "",
+    },
+    "voters": [],
+    "status": "ended",
 }

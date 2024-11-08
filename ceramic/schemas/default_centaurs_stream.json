@@ -69,7 +69,7 @@
                 "twitter_campaigns": {
                     "enabled": true
                 },
-                "staking_activiy": {
+                "staking_activity": {
                     "enabled": true,
                     "last_run": null
                 },

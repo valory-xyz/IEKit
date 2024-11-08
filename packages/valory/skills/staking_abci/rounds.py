@@ -19,6 +19,7 @@
 
 """This package contains the rounds of StakingAbciApp."""
 
+import json
 from enum import Enum
 from typing import Dict, FrozenSet, Optional, Set, Tuple, cast
 
@@ -35,7 +36,7 @@ from packages.valory.skills.abstract_round_abci.base import (
 )
 from packages.valory.skills.staking_abci.payloads import (
     ActivityScorePayload,
-    ActiviyUpdatePreparationPayload,
+    ActivityUpdatePreparationPayload,
     CheckpointPreparationPayload,
 )
 
@@ -57,9 +58,9 @@ class SynchronizedData(BaseSynchronizedData):
     """
 
     @property
-    def activity_updates(self) -> Optional[Dict]:
+    def activity_updates(self) -> Dict:
         """Get the activity_updates."""
-        return self.db.get("activity_updates")
+        return json.loads(cast(str, self.db.get("activity_updates")))
 
     @property
     def latest_activity_tweet_id(self) -> Optional[int]:
@@ -72,9 +73,9 @@ class SynchronizedData(BaseSynchronizedData):
         return self.db.get("most_voted_tx_hash", None)
 
     @property
-    def tx_submitter(self) -> str:
+    def tx_submitter(self) -> Optional[str]:
         """Get the round that submitted a tx to transaction_settlement_abci."""
-        return str(self.db.get_strict("tx_submitter"))
+        return self.db.get("tx_submitter", None)
 
     @property
     def participant_to_update(self) -> DeserializedCollection:
@@ -91,6 +92,10 @@ class SynchronizedData(BaseSynchronizedData):
         """Checks whether there are changes pending to be written to Ceramic."""
         return cast(bool, self.db.get("pending_write", False))
 
+    @property
+    def chain_id(self) -> Optional[str]:
+        """Get the chain name where to send the transactions to."""
+        return cast(str, self.db.get("chain_id", None))
 
 
 class ActivityScoreRound(CollectSameUntilThresholdRound):
@@ -102,12 +107,15 @@ class ActivityScoreRound(CollectSameUntilThresholdRound):
     selection_key = (
         get_name(SynchronizedData.activity_updates),
         get_name(SynchronizedData.latest_activity_tweet_id),
+        get_name(SynchronizedData.pending_write),
     )
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
-            payload = self.most_voted_payload
+
+            # Instantiate the payload using the most voted values
+            payload = ActivityScorePayload(*(("dummy_sender",) + self.most_voted_payload_values))
 
             # We have finished with the activity update
             # Mark Ceramic for a write
@@ -139,10 +147,10 @@ class ActivityScoreRound(CollectSameUntilThresholdRound):
         # Event.ROUND_TIMEOUT
 
 
-class ActiviyUpdatePreparationRound(CollectSameUntilThresholdRound):
-    """ActiviyUpdatePreparationRound"""
+class ActivityUpdatePreparationRound(CollectSameUntilThresholdRound):
+    """ActivityUpdatePreparationRound"""
 
-    payload_class = ActiviyUpdatePreparationPayload
+    payload_class = ActivityUpdatePreparationPayload
     synchronized_data_class = SynchronizedData
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
@@ -150,6 +158,8 @@ class ActiviyUpdatePreparationRound(CollectSameUntilThresholdRound):
     selection_key = (
         get_name(SynchronizedData.tx_submitter),
         get_name(SynchronizedData.most_voted_tx_hash),
+        get_name(SynchronizedData.chain_id),
+        get_name(SynchronizedData.safe_contract_address),
     )
 
     # We reference all the events here to prevent the check-abciapp-specs tool from complaining
@@ -168,6 +178,8 @@ class CheckpointPreparationRound(CollectSameUntilThresholdRound):
     selection_key = (
         get_name(SynchronizedData.tx_submitter),
         get_name(SynchronizedData.most_voted_tx_hash),
+        get_name(SynchronizedData.chain_id),
+        get_name(SynchronizedData.safe_contract_address),
     )
 
     # We reference all the events here to prevent the check-abciapp-specs tool from complaining
@@ -175,8 +187,8 @@ class CheckpointPreparationRound(CollectSameUntilThresholdRound):
     # Event.DONE, Event.NO_MAJORITY, Event.ROUND_TIMEOUT
 
 
-class FinishedActiviyUpdatePreparationRound(DegenerateRound):
-    """FinishedActiviyUpdatePreparationRound"""
+class FinishedActivityUpdatePreparationRound(DegenerateRound):
+    """FinishedActivityUpdatePreparationRound"""
 
 
 class FinishedActivityRound(DegenerateRound):
@@ -195,25 +207,25 @@ class StakingAbciApp(AbciApp[Event]):
     transition_function: AbciAppTransitionFunction = {
         ActivityScoreRound: {
             Event.DONE: FinishedActivityRound,
-            Event.PROCESS_UPDATES: ActiviyUpdatePreparationRound,
+            Event.PROCESS_UPDATES: ActivityUpdatePreparationRound,
             Event.NO_MAJORITY: ActivityScoreRound,
             Event.ROUND_TIMEOUT: ActivityScoreRound
         },
-        ActiviyUpdatePreparationRound: {
-            Event.DONE: FinishedActiviyUpdatePreparationRound,
-            Event.NO_MAJORITY: ActiviyUpdatePreparationRound,
-            Event.ROUND_TIMEOUT: ActiviyUpdatePreparationRound
+        ActivityUpdatePreparationRound: {
+            Event.DONE: FinishedActivityUpdatePreparationRound,
+            Event.NO_MAJORITY: ActivityUpdatePreparationRound,
+            Event.ROUND_TIMEOUT: ActivityUpdatePreparationRound
         },
         CheckpointPreparationRound: {
             Event.DONE: FinishedCheckpointPreparationRound,
             Event.NO_MAJORITY: CheckpointPreparationRound,
             Event.ROUND_TIMEOUT: CheckpointPreparationRound
         },
-        FinishedActiviyUpdatePreparationRound: {},
+        FinishedActivityUpdatePreparationRound: {},
         FinishedActivityRound: {},
         FinishedCheckpointPreparationRound: {}
     }
-    final_states: Set[AppState] = {FinishedCheckpointPreparationRound, FinishedActiviyUpdatePreparationRound, FinishedActivityRound}
+    final_states: Set[AppState] = {FinishedCheckpointPreparationRound, FinishedActivityUpdatePreparationRound, FinishedActivityRound}
     event_to_timeout: EventToTimeout = {}
     cross_period_persisted_keys: FrozenSet[str] = frozenset()
     db_pre_conditions: Dict[AppState, Set[str]] = {
@@ -222,6 +234,6 @@ class StakingAbciApp(AbciApp[Event]):
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedCheckpointPreparationRound: {"most_voted_tx_hash"},
-    	FinishedActiviyUpdatePreparationRound: {"most_voted_tx_hash"},
+    	FinishedActivityUpdatePreparationRound: {"most_voted_tx_hash"},
         FinishedActivityRound: set(),
     }

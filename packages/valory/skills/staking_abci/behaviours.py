@@ -21,11 +21,15 @@
 
 import json
 from abc import ABC
-from typing import Dict, Generator, Optional, Set, Tuple, Type, cast
+from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
 
 from packages.valory.contracts.gnosis_safe.contract import (
     GnosisSafeContract,
     SafeOperation,
+)
+from packages.valory.contracts.multisend.contract import (
+    MultiSendContract,
+    MultiSendOperation,
 )
 from packages.valory.contracts.staking.contract import Staking
 from packages.valory.protocols.contract_api import ContractApiMessage
@@ -38,8 +42,8 @@ from packages.valory.skills.staking_abci.models import Params
 from packages.valory.skills.staking_abci.rounds import (
     ActivityScorePayload,
     ActivityScoreRound,
-    ActiviyUpdatePreparationPayload,
-    ActiviyUpdatePreparationRound,
+    ActivityUpdatePreparationPayload,
+    ActivityUpdatePreparationRound,
     CheckpointPreparationPayload,
     CheckpointPreparationRound,
     StakingAbciApp,
@@ -56,6 +60,42 @@ ZERO_VALUE = 0
 EMPTY_CALL_DATA = b"0x"
 SAFE_GAS = 0
 BASE_CHAIN_ID = "base"
+
+def get_activity_updates(users: Dict, latest_activity_tweet_id: int) -> Tuple[Dict, int]:
+    """Get the latest activity updates"""
+
+    updates = {}
+    latest_processed_tweet = latest_activity_tweet_id
+
+    for user in users.values():
+
+        # Skip the user if there is no service multisig
+        # This means the user has not staked
+        if not user.get("service_multisig", None):
+            continue
+
+        new_tweets = 0
+
+        for tweet_id in user["tweets"].keys():
+            tweet_id = int(tweet_id)
+
+            # Skip old tweets
+            if tweet_id <= latest_activity_tweet_id:
+                continue
+
+            # Update the last_processed_tweet
+            if tweet_id > latest_processed_tweet:
+                latest_processed_tweet = tweet_id
+
+            # Increase activity count
+            new_tweets += 1
+
+        # Add the user activity
+        if new_tweets:
+            print(f"User {user['twitter_handle']} has {new_tweets} new tweets")
+            updates[user["service_multisig"]] = new_tweets
+
+    return updates, latest_processed_tweet
 
 
 class StakingBaseBehaviour(BaseBehaviour, ABC):
@@ -82,13 +122,13 @@ class StakingBaseBehaviour(BaseBehaviour, ABC):
         """Prepares and returns the safe tx hash for a multisend tx."""
 
         self.context.logger.info(
-            f"Preparing Safe transaction [{self.synchronized_data.safe_contract_address}]"
+            f"Preparing Safe transaction [{self.params.safe_contract_address_base}]"
         )
 
         # Prepare the safe transaction
         response_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
-            contract_address=self.synchronized_data.safe_contract_address,
+            contract_address=self.params.safe_contract_address_base,
             contract_id=str(GnosisSafeContract.contract_id),
             contract_callable="get_raw_safe_transaction_hash",
             to_address=to_address,
@@ -134,6 +174,26 @@ class StakingBaseBehaviour(BaseBehaviour, ABC):
 
         return safe_tx_hash
 
+    def get_staked_services(self, staking_contract_address: str) -> Generator[None, None, Optional[List]]:
+        """Get the services staked on a contract"""
+        contract_api_msg = yield from self.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
+            contract_address=staking_contract_address,
+            contract_id=str(Staking.contract_id),
+            contract_callable="get_service_ids",
+            chain_id=BASE_CHAIN_ID,
+        )
+        if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
+            self.context.logger.error(
+                f"Error getting the service ids: [{contract_api_msg.performative}]"
+            )
+            return None
+
+        service_ids = cast(str, contract_api_msg.state.body["service_ids"])
+
+        self.context.logger.info(f"Got {len(service_ids)} staked services for contract {staking_contract_address}")
+
+        return service_ids
 
 class ActivityScoreBehaviour(StakingBaseBehaviour):
     """ActivityScoreBehaviour"""
@@ -152,9 +212,9 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
             latest_activity_tweet_id = None
 
             # Check whether we just came back from settling an update
-            if self.synchronized_data.tx_submitter == ActiviyUpdatePreparationBehaviour.auto_behaviour_id():
+            if self.synchronized_data.tx_submitter == ActivityUpdatePreparationBehaviour.auto_behaviour_id():
                 # Update the last processed tweet on the model, and mark for Ceramic update
-                self.context.ceramic_db.data["module_data"]["staking"][
+                self.context.ceramic_db.data["module_data"]["staking_activity"][
                     "latest_activity_tweet_id"
                 ] = self.synchronized_data.latest_activity_tweet_id
                 pending_write = True
@@ -162,7 +222,15 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
 
             # Process new updates
             else:
-                activity_updates, latest_activity_tweet_id = self.get_activity_updates()
+                ceramic_db_copy = self.context.ceramic_db.copy()
+                latest_activity_tweet_id = int(ceramic_db_copy.data["module_data"]["staking_activity"][
+                    "latest_activity_tweet_id"
+                ])
+                activity_updates, latest_activity_tweet_id = get_activity_updates(
+                    ceramic_db_copy.data["users"],
+                    latest_activity_tweet_id
+                )
+                self.context.logger.info(f"Processing activity updates: {activity_updates}")
 
             payload = ActivityScorePayload(
                 sender=sender,
@@ -177,47 +245,11 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
 
         self.set_done()
 
-    def get_activity_updates(self) -> Tuple[Dict, int]:
-        """Get the latest activity updates"""
 
-        updates = {}
-        ceramic_db_copy = self.context.ceramic_db.copy()
+class ActivityUpdatePreparationBehaviour(StakingBaseBehaviour):
+    """ActivityUpdatePreparationBehaviour"""
 
-        latest_activity_tweet_id = int(ceramic_db_copy.data["module_data"]["staking_activiy"][
-            "latest_activity_tweet_id"
-        ])
-
-        latest_processed_tweet = latest_activity_tweet_id
-
-        for user in ceramic_db_copy.data["users"]:
-
-            new_tweets = 0
-
-            for tweet_id in user["tweets"].keys():
-                tweet_id = int(tweet_id)
-
-                # Skip old tweets
-                if tweet_id <= latest_activity_tweet_id:
-                    continue
-
-                # Update the last_processed_tweet
-                if tweet_id > latest_processed_tweet:
-                    latest_processed_tweet = tweet_id
-
-                # Increase activity count
-                new_tweets += 1
-
-            # Add the user activity
-            if new_tweets:
-                updates[user["service_multisig"]] = new_tweets
-
-        return updates, latest_processed_tweet
-
-
-class ActiviyUpdatePreparationBehaviour(StakingBaseBehaviour):
-    """ActiviyUpdatePreparationBehaviour"""
-
-    matching_round: Type[AbstractRound] = ActiviyUpdatePreparationRound
+    matching_round: Type[AbstractRound] = ActivityUpdatePreparationRound
 
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
@@ -225,10 +257,11 @@ class ActiviyUpdatePreparationBehaviour(StakingBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             sender = self.context.agent_address
             tx_hash = yield from self.get_activity_update_hash()
-            payload = ActiviyUpdatePreparationPayload(
+            payload = ActivityUpdatePreparationPayload(
                 sender=sender,
                 tx_submitter=self.auto_behaviour_id(),
-                tx_hash=tx_hash
+                tx_hash=tx_hash,
+                safe_contract_address=self.params.safe_contract_address_base
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -242,13 +275,13 @@ class ActiviyUpdatePreparationBehaviour(StakingBaseBehaviour):
         """Prepare the activity update tx"""
 
         self.context.logger.info(
-            "Preparing activity update call"
+            f"Preparing activity update call: {self.synchronized_data.activity_updates}"
         )
 
         # Use the contract api to interact with the activity tracker contract
         response_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
-            contract_address=self.params.activity_contract_address,
+            contract_address=self.params.contributors_contract_address,
             contract_id=str(Staking.contract_id),
             contract_callable="build_activity_update_tx",
             updates=self.synchronized_data.activity_updates,
@@ -273,7 +306,7 @@ class ActiviyUpdatePreparationBehaviour(StakingBaseBehaviour):
 
         # Prepare the safe transaction
         safe_tx_hash = yield from self._build_safe_tx_hash(
-            to_address=self.params.activity_contract_address,
+            to_address=self.params.contributors_contract_address,
             data=data_bytes
         )
 
@@ -294,7 +327,8 @@ class CheckpointPreparationBehaviour(StakingBaseBehaviour):
             payload = CheckpointPreparationPayload(
                 sender=sender,
                 tx_submitter=self.auto_behaviour_id(),
-                tx_hash=tx_hash
+                tx_hash=tx_hash,
+                safe_contract_address=self.params.safe_contract_address_base
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -306,38 +340,83 @@ class CheckpointPreparationBehaviour(StakingBaseBehaviour):
     def get_checkpoint_hash(self) -> Generator[None, None, Optional[str]]:
         """Prepare the checkpoint tx"""
         self.context.logger.info(
-            "Preparing checkpoint call"
+            "Preparing checkpoint calls"
         )
 
-        # Use the contract api to interact with the staking contract
-        response_msg = yield from self.get_contract_api_response(
+        multi_send_txs = []
+
+        for staking_contract_address in self.params.staking_contract_addresses:
+
+            # Check if there is some service staked on this contract
+            services_staked = yield from self.get_staked_services(staking_contract_address)
+            if not services_staked:
+                continue
+
+            # Use the contract api to interact with the staking contract
+            response_msg = yield from self.get_contract_api_response(
+                performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
+                contract_address=staking_contract_address,
+                contract_id=str(Staking.contract_id),
+                contract_callable="build_checkpoint_tx",
+                chain_id=BASE_CHAIN_ID,
+            )
+
+            # Check that the response is what we expect
+            if response_msg.performative != ContractApiMessage.Performative.RAW_TRANSACTION:
+                self.context.logger.error(
+                    f"Error while preparing the checkpoint call: {response_msg}"
+                )
+                return None
+
+            data_bytes = cast(bytes, response_msg.raw_transaction.body.get("data", None))
+
+            if data_bytes is None:
+                self.context.logger.error(
+                    f"Error while preparing the checkpoint call: {response_msg}"
+                )
+                return None
+
+            multi_send_txs.append(
+                {
+                    "operation": MultiSendOperation.CALL,
+                    "to": staking_contract_address,
+                    "value": ZERO_VALUE,
+                    "data": data_bytes,
+                }
+            )
+
+        # Multisend call
+        contract_api_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
-            contract_address=self.params.staking_contract_address,
-            contract_id=str(Staking.contract_id),
-            contract_callable="build_checkpoint_tx",
+            contract_address=self.params.multisend_address,
+            contract_id=str(MultiSendContract.contract_id),
+            contract_callable="get_tx_data",
+            multi_send_txs=multi_send_txs,
             chain_id=BASE_CHAIN_ID,
         )
 
-        # Check that the response is what we expect
-        if response_msg.performative != ContractApiMessage.Performative.RAW_TRANSACTION:
+        # Check for errors
+        if (
+            contract_api_msg.performative
+            != ContractApiMessage.Performative.RAW_TRANSACTION
+        ):
             self.context.logger.error(
-                f"Error while preparing the checkpoint call: {response_msg}"
+                f"Could not get Multisend tx hash. "
+                f"Expected: {ContractApiMessage.Performative.RAW_TRANSACTION.value}, "
+                f"Actual: {contract_api_msg.performative.value}"
             )
             return None
 
-        data_bytes = cast(bytes, response_msg.raw_transaction.body.get("data", None))
-
-        # Ensure that the balance is not None
-        if data_bytes is None:
-            self.context.logger.error(
-                f"Error while preparing the checkpoint call: {response_msg}"
-            )
-            return None
+        # Extract the multisend data and strip the 0x
+        multisend_data = cast(str, contract_api_msg.raw_transaction.body["data"])[2:]
+        self.context.logger.info(f"Multisend data is {multisend_data}")
 
         # Prepare the safe transaction
         safe_tx_hash = yield from self._build_safe_tx_hash(
-            to_address=self.params.staking_contract_address,
-            data=data_bytes
+            to_address=self.params.multisend_address,
+            value=ZERO_VALUE,  # the safe is not moving any native value into the multisend
+            data=bytes.fromhex(multisend_data),
+            operation=SafeOperation.DELEGATE_CALL.value
         )
 
         return safe_tx_hash
@@ -350,6 +429,6 @@ class StakingRoundBehaviour(AbstractRoundBehaviour):
     abci_app_cls = StakingAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [
         ActivityScoreBehaviour,
-        ActiviyUpdatePreparationBehaviour,
+        ActivityUpdatePreparationBehaviour,
         CheckpointPreparationBehaviour
     ]

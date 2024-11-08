@@ -9,7 +9,7 @@ coverage.xml
 htmlcov
 *.egg-info
 Pipfile.lock
-abci_build/
+abci_build_*/
 keys.json
 leak_report
 packages/valory/connections/*
@@ -36,7 +36,7 @@ packages/open_aea
 .vscode/
 .coverage*
 
-*.env
+.env
 
 ethereum_private_key.txt
 
@@ -53,3 +53,5 @@ farcaster_test/
 keys1.json
 
 tenderly_vnets.json
+
+stream.json

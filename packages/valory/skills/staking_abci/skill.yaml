@@ -7,23 +7,24 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeie3oujhxxdr5s2lvc6cosbysezqycagw5mbwvxjw24k3dzcbtgg5m
-  behaviours.py: bafybeigk6fzzis6h7boxtuu3xxekpyajsu4myw4oj5pnzuhwovmdww5dwm
+  behaviours.py: bafybeifgvkf4o7mr6o3z7j7anc6i7744jrirnrpjekki4ejuvk5weevol4
   dialogues.py: bafybeifmmpyiwetlcgykczsq4dgwvm7tipdupf2rwcndg5cmtm7jfoxwxm
-  fsm_specification.yaml: bafybeigq65aaewekx2zjh4qkmonexjj4j4mfwjrjhvzdsfezmm3iip6fum
+  fsm_specification.yaml: bafybeidnl3i5e6xb7axpzg323xcj62rksrzvopuivcjnxkktcolanr2anu
   handlers.py: bafybeiaufft2fwbbjbbc77md6xkq7prnzzi2nkkm2fipapgx54myabmb7y
-  models.py: bafybeibq6tiyioz3b2prtphb2vz5kp5lkdvkp22rypqse7enutdkxvtirm
-  payloads.py: bafybeihs7i2akxemb7feduip4fojyqwa5gkcggzh4ogtsrlkmdcdcxzmdq
-  rounds.py: bafybeibhwh63rjpxdvvaipu6qlncpq3mx4vmf4r43nldqp5f7ojtvfztje
+  models.py: bafybeihqdn7wex4xpzg2klfpgb2in7ovs62cp3baxxfehbdc6zd66gudfy
+  payloads.py: bafybeiclrg7nkgeshnqyzcsq3dk75zavdofuktveuv5butjzi65k63m3si
+  rounds.py: bafybeibr53dvrmdqzxmhqhyfabocj4o4h3zabi6kxfm422mquol5pjvcgu
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/gnosis_safe:0.1.0:bafybeih3ropivth4wn7zbzudisx3qezbht5jyndd4w7az7fq634lpozoge
-- valory/staking:0.1.0:bafybeieb25uttcfg5huill2ljnre7b3og7sq2c2boqeq2nz743xm4vvjku
+- valory/gnosis_safe:0.1.0:bafybeiaw4yr7ubqlp63iz5wxqep3a5fokqs3kqva7sp2nsqg355zzucqgm
+- valory/staking:0.1.0:bafybeigrdux7644dtfgci4wqpa4u63nczxy2qpvar3dnegmb3notidnydi
+- valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeib733xfbndtpvkf44mtk7oyodnficgloo6xhn7xmqxxeos33es65u
-- valory/transaction_settlement_abci:0.1.0:bafybeic7q7recyka272udwcupblwbkc3jkodgp74fvcdxb7urametg5dae
+- valory/abstract_round_abci:0.1.0:bafybeibiw4oqwqvo4jccwz5fb73iardzychgvcl66tceiildohoju2ikti
+- valory/transaction_settlement_abci:0.1.0:bafybeigh2vkt74jrad5gtsczrgqcuhcqe7jkgjy7jdw56yamlzwwnaymjy
 behaviours:
   main:
     args: {}
@@ -129,8 +130,13 @@ models:
       slash_threshold_amount: 10000000000000000
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
-      staking_contract_address: '0x0000000000000000000000000000000000000000'
-      activity_contract_address: '0x0000000000000000000000000000000000000000'
+      staking_contract_addresses:
+      - '0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F'
+      - '0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb'
+      - '0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8'
+      contributors_contract_address: '0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94'
+      safe_contract_address_base: '0x0000000000000000000000000000000000000000'
+      multisend_address: '0x0000000000000000000000000000000000000000'
     class_name: Params
   requests:
     args: {}

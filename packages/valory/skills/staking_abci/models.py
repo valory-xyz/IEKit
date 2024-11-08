@@ -44,12 +44,16 @@ class Params(BaseParams):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the parameters object."""
 
-        self.staking_contract_address = kwargs.get(
-            "staking_contract_address"
+        self.staking_contract_addresses = kwargs.get(
+            "staking_contract_addresses", []
         )
-        self.activity_contract_address = self._ensure(
-            "activity_contract_address", kwargs, str
+        self.contributors_contract_address = kwargs.get(
+            "contributors_contract_address"
         )
+        self.safe_contract_address_base = self._ensure(
+            "safe_contract_address_base", kwargs, str
+        )
+        self.multisend_address = kwargs.get("multisend_address", "")
         super().__init__(*args, **kwargs)
 
 Requests = BaseRequests

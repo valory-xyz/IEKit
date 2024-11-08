@@ -340,7 +340,7 @@
                                 "twitter_campaigns": {
                                     "$ref": "#/definitions/twitter_campaigns_config"
                                 },
-                                "staking_activiy": {
+                                "staking_activity": {
                                     "$ref": "#/definitions/staking_activity_config"
                                 },
                                 "staking_checkpoint": {

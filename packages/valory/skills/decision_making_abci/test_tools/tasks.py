@@ -40,7 +40,7 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 )
 
 
-NOW_UTC = datetime.utcnow()
+NOW_UTC = datetime.now(tz=timezone.utc)
 
 
 @dataclass
