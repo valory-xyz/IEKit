@@ -486,7 +486,7 @@ config:
       gas_price_strategies: *id001
     base:
       address: ${BASE_LEDGER_RPC:str:http://host.docker.internal:8545}
-      chain_id: ${BASE_LEDGER_CHAIN_ID:int:100}
+      chain_id: ${BASE_LEDGER_CHAIN_ID:int:8453}
       poa_chain: ${BASE_LEDGER_IS_POA_CHAIN:bool:false}
       default_gas_price_strategy: ${BASE_LEDGER_PRICING:str:eip1559}
       gas_price_strategies: *id001

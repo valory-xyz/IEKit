@@ -149,13 +149,13 @@ config:
           priority_fee_increase_boundary: 200
     gnosis:
       address: ${str:http://localhost:8545}
-      chain_id: ${int:1337}
+      chain_id: ${int:100}
       poa_chain: ${bool:false}
       default_gas_price_strategy: ${str:eip1559}
       gas_price_strategies: *id001
     base:
       address: ${str:http://localhost:8545}
-      chain_id: ${int:1337}
+      chain_id: ${int:8453}
       poa_chain: ${bool:false}
       default_gas_price_strategy: ${str:eip1559}
       gas_price_strategies: *id001
