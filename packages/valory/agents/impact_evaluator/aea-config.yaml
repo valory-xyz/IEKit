@@ -45,20 +45,20 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeieo7pe5wqjphs5izpz5aujjbubymlxub62b3rhx6yglu65ibalffu
 - valory/abstract_round_abci:0.1.0:bafybeibiw4oqwqvo4jccwz5fb73iardzychgvcl66tceiildohoju2ikti
-- valory/impact_evaluator_abci:0.1.0:bafybeifszzdlbkuc2wdvbd5dyqpnkly75d4z5qyzjwzfdpbals5s3sdcm4
-- valory/generic_scoring_abci:0.1.0:bafybeieq7m5puqjfgk73tewe5psmnibo7dud7bzhh6ra6xmavsfb3uyjxy
-- valory/twitter_scoring_abci:0.1.0:bafybeibzufdrxy3zq52j6wd5ewebfh2bpituqoeafqnnoukzvqzzbav7oy
+- valory/impact_evaluator_abci:0.1.0:bafybeiabl5vcxuz3v27ljdku6nu42nj4shxcswtwgg4e6q72iicc2xgj34
+- valory/generic_scoring_abci:0.1.0:bafybeiaihmptaalhpv55mzqdrg6asmclh7icw5vyqv3rio7gygocdx7doq
+- valory/twitter_scoring_abci:0.1.0:bafybeihitc6jjvemw6t6rth5nseegkjg3ymr4hooggk4g6rdsxa2au3fle
 - valory/ceramic_read_abci:0.1.0:bafybeigz7rzfls3niv3urfb4z4vwr525ooxveelgg3djpvkg5jzetxlm2u
 - valory/ceramic_write_abci:0.1.0:bafybeic6c3iub3nsr5tmr7g5vzoixbin6w64ewudfiq6u4r2fiqwbg753i
-- valory/dynamic_nft_abci:0.1.0:bafybeiefzzoht5se6g25dz7m5reag74alwgiuwpfhnyjuxs4cfosysrmey
+- valory/dynamic_nft_abci:0.1.0:bafybeihiujrp5papummfkfbabwuhziie2y5f3x7y2rats6i7iuncto3yhm
 - valory/registration_abci:0.1.0:bafybeib3n6vqkfbrcubcbliebjnuwyywdinxkbzt76n6gbn2kg7ace47dq
 - valory/reset_pause_abci:0.1.0:bafybeihkj6lmaypspyxe5qqrjgnolyck62pyvqoylr24ab6ue4steqcw7e
 - valory/termination_abci:0.1.0:bafybeifi2uodnrjsrivj53g3sjutocmyusbx6mlsb6oanqdyt2mfbyvusy
 - valory/transaction_settlement_abci:0.1.0:bafybeigh2vkt74jrad5gtsczrgqcuhcqe7jkgjy7jdw56yamlzwwnaymjy
 - valory/twitter_write_abci:0.1.0:bafybeibp7zai2qwvfjd5fgpayx44x5c2zshbukpobvz2la7ws2l5f5fjde
-- valory/decision_making_abci:0.1.0:bafybeic2tkfgwofeqcr2xvpsk7cjdsqfl5ac7ek7mrune6yvve4fqiepou
+- valory/decision_making_abci:0.1.0:bafybeiejtrllovij4ty56pczfgpnhohobqubr3qtw2oslvqxp2lwmibu4e
 - valory/llm_abci:0.1.0:bafybeib2k62hilwglfad33bzxkjlviw5bxwiw7z3rjvweyeamatdjznpeq
-- valory/olas_week_abci:0.1.0:bafybeib36ohnbn4otxlkrw4fx6tjysysd2rds7upqfbfk42rgp4xxxqeda
+- valory/olas_week_abci:0.1.0:bafybeibptel6eva6pfpzs6k7n7swrkx6imrlelfpuozygirvpkbucbzfii
 - valory/mech_interact_abci:0.1.0:bafybeidaevbuo3srnvjtjnumqn6gjkcqogj5rmvl2dcwygvvhhskba4yza
 - valory/staking_abci:0.1.0:bafybeidgmviq6inwwjachktoeddmyuo7iyg7yfyhvhvy3znndkvuuudllq
 default_ledger: ethereum

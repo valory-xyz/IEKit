@@ -120,8 +120,8 @@ class BaseCampaignValidationPreparationTest:
         return updates, event
 
 
-class TestTweetValidationPreparation(BaseCampaignValidationPreparationTest):
-    """Test the TweetValidationPreparation class."""
+class TestCampaignValidationPreparation(BaseCampaignValidationPreparationTest):
+    """Test the CampaignValidationPreparation class."""
 
     @pytest.mark.parametrize(
         "test_case",
@@ -259,7 +259,7 @@ class TestTweetValidationPreparation(BaseCampaignValidationPreparationTest):
         self.create_tweet_validation_object(
             test_case.campaign_validation_preparation_class
         )
-        updates, event = self._pre_task_base_test(test_case)
+        updates, event = yield from self._pre_task_base_test(test_case)
 
         assert event == Event.TWEET_VALIDATION.value
         assert updates["has_centaurs_changes"] is test_case.has_updates
