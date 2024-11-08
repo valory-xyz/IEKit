@@ -163,7 +163,7 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
         centaurs_data = self.synchronized_data.centaurs_data
         current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
         active_hashtags = [
-            f"#{campaign['hashtag'].replace('#', '').strip()}"
+            f"%23{campaign['hashtag'].replace('#', '').strip()}"  # %23 = hashtag
             for campaign in current_centaur["plugins_data"]["twitter_campaigns"][
                 "campaigns"
             ]
@@ -760,7 +760,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
         #         "sleep_until": None,  # we reset this on a successful request  # noqa:E800
         #     }  # noqa:E800
 
-        search_query = " OR ".join(active_hashtags)
+        search_query = "%20OR%20".join(active_hashtags)  # %20 = space
 
         api_args = self.params.twitter_search_args.replace(
             "{search_query}", str(search_query)
