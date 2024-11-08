@@ -48,6 +48,7 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
 
     def _pre_task(self):
         """Preparations before running the task"""
+        yield
         centaurs_data = self.synchronized_data.centaurs_data
         current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
         updates = {}
