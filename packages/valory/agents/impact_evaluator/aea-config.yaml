@@ -143,10 +143,10 @@ config:
           fee_history_percentile: 5
           default_priority_fee: ${int:30000000}
           fallback_estimate:
-            maxFeePerGas: 20000000000
-            maxPriorityFeePerGas: 3000000000
+            maxFeePerGas: ${int:20000000000}
+            maxPriorityFeePerGas: ${int:3000000000}
             baseFee: null
-          priority_fee_increase_boundary: 200
+          priority_fee_increase_boundary: ${int:200}
     gnosis:
       address: ${str:http://localhost:8545}
       chain_id: ${int:100}
@@ -162,10 +162,10 @@ config:
           fee_history_percentile: 5
           default_priority_fee: ${int:30000000}
           fallback_estimate:
-            maxFeePerGas: 20000000000
-            maxPriorityFeePerGas: 3000000000
+            maxFeePerGas: ${int:20000000000}
+            maxPriorityFeePerGas: ${int:3000000000}
             baseFee: null
-          priority_fee_increase_boundary: 200
+          priority_fee_increase_boundary: ${int:200}
     base:
       address: ${str:http://localhost:8545}
       chain_id: ${int:8453}
@@ -181,10 +181,10 @@ config:
           fee_history_percentile: 5
           default_priority_fee: ${int:30000000}
           fallback_estimate:
-            maxFeePerGas: 20000000000
-            maxPriorityFeePerGas: 3000000000
+            maxFeePerGas: ${int:20000000000}
+            maxPriorityFeePerGas: ${int:3000000000}
             baseFee: null
-          priority_fee_increase_boundary: 200
+          priority_fee_increase_boundary: ${int:200}
 ---
 public_id: valory/p2p_libp2p_client:0.1.0
 type: connection
