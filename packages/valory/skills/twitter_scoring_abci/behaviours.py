@@ -747,6 +747,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
         # Dynamicaly build the search query using the hashtags in the centaurs stream
         active_hashtags = self.get_active_hashtags()
+        self.context.logger.info(f"Active campaigns: {active_hashtags}")
 
         # TODO: If there are no active campaigns, skip this
         # If we do this, we also need to handle the case where we've been a lot of

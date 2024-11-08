@@ -45,17 +45,36 @@ class StakingPreparation(TaskPreparation):
         # because we want to ensure we always call activity tracking just right before we call the checkpoint
         yield
 
-        # If too much time has passed since last execution, we run the staking skill
-        minutes_since_last_run = (
-            (self.now_utc - self.last_run).total_seconds() / 60
-            if self.last_run
+        # Ensure we are getting the last run for the checkpoint call.
+        # This method is used by both the checkpoint and activity tasks.
+        # Activity is called everytime we are about to call the checkpoint,
+        # so we need to refer last_run to the checkpoint always.
+        checkpoint_config = self.synchronized_data.centaurs_data[
+            self.synchronized_data.current_centaur_index
+        ]["configuration"]["plugins"]["staking_checkpoint"]
+
+        checkpoint_last_run = (
+            datetime.strptime(
+                checkpoint_config["last_run"], "%Y-%m-%d %H:%M:%S %Z"
+            ).replace(tzinfo=timezone.utc)
+            if checkpoint_config.get("last_run", None)
+            else None
+        )
+
+        # If too much time has passed since last checkpoint execution, we run the staking skill
+        minutes_since_last_checkpoint_run = (
+            (self.now_utc - checkpoint_last_run).total_seconds() / 60
+            if checkpoint_last_run
             else None
         )
         if (
-            minutes_since_last_run is None
-            or minutes_since_last_run > self.params.checkpoint_threshold_minutes
+            minutes_since_last_checkpoint_run is None
+            or minutes_since_last_checkpoint_run
+            > self.params.checkpoint_threshold_minutes
         ):
-            self.context.logger.info("Too much time has passed since last execution.")
+            self.context.logger.info(
+                f"Too much time ({minutes_since_last_checkpoint_run}) has passed since last checkpoint execution."
+            )
             return True
 
         # If the epoch is about to end, we run the staking skill
