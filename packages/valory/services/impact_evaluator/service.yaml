@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeihz7ixk26mfjgb3v2tf7b6ewgy6epe5tftfkq5mkfi5zwdlnakgva
+agent: valory/impact_evaluator:0.1.0:bafybeibvbhfm5itgvwtddczmv6d3jre4vwjayassqwvbltxrsoxg5crceq
 number_of_agents: 4
 deployment:
   agent:
@@ -486,7 +486,7 @@ config:
       gas_price_strategies: *id001
     base:
       address: ${BASE_LEDGER_RPC:str:http://host.docker.internal:8545}
-      chain_id: ${BASE_LEDGER_CHAIN_ID:int:100}
+      chain_id: ${BASE_LEDGER_CHAIN_ID:int:8453}
       poa_chain: ${BASE_LEDGER_IS_POA_CHAIN:bool:false}
       default_gas_price_strategy: ${BASE_LEDGER_PRICING:str:eip1559}
       gas_price_strategies: *id001
