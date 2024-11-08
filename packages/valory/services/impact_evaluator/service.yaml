@@ -134,13 +134,13 @@ extra:
         mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
         use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:false}
         mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x0000000000000000000000000000000000000000","priority_mech_address":"0x0000000000000000000000000000000000000000","priority_mech_staking_instance_address":"0x0000000000000000000000000000000000000000","priority_mech_service_id":0,"requester_staking_instance_address":"0x0000000000000000000000000000000000000000","response_timeout":300}}
-        checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:120}
+        checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
         staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F","0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb","0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8"]}
         contributors_contract_address: ${CONTRIBUTORS_CONTRACT_ADDRESS:str:0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94}
         epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
-        safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x0000000000000000000000000000000000000000}
-        safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x0000000000000000000000000000000000000000}
+        safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x3316b59A6c4C3ee2920EecE0B02A6d40AAa6b9c9}
+        safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -236,13 +236,13 @@ extra:
           priority_mech_service_id: ${PRIORITY_MECH_SERVICE_ID:int:0}
           requester_staking_instance_address: ${REQUESTER_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
           response_timeout: ${RESPONSE_TIMEOUT:int:300}
-        checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:120}
+        checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
         staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F","0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb","0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8"]}
         contributors_contract_address: ${CONTRIBUTORS_CONTRACT_ADDRESS:str:0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94}
         epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
-        safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x0000000000000000000000000000000000000000}
-        safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x0000000000000000000000000000000000000000}
+        safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x3316b59A6c4C3ee2920EecE0B02A6d40AAa6b9c9}
+        safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -338,13 +338,13 @@ extra:
           priority_mech_service_id: ${PRIORITY_MECH_SERVICE_ID:int:0}
           requester_staking_instance_address: ${REQUESTER_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
           response_timeout: ${RESPONSE_TIMEOUT:int:300}
-        checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:120}
+        checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
         staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F","0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb","0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8"]}
         contributors_contract_address: ${CONTRIBUTORS_CONTRACT_ADDRESS:str:0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94}
         epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
-        safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x0000000000000000000000000000000000000000}
-        safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x0000000000000000000000000000000000000000}
+        safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x3316b59A6c4C3ee2920EecE0B02A6d40AAa6b9c9}
+        safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -444,13 +444,13 @@ extra:
           priority_mech_service_id: ${PRIORITY_MECH_SERVICE_ID:int:0}
           requester_staking_instance_address: ${REQUESTER_STAKING_INSTANCE_ADDRESS:str:0x0000000000000000000000000000000000000000}
           response_timeout: ${RESPONSE_TIMEOUT:int:300}
-        checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:120}
+        checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
         staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F","0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb","0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8"]}
         contributors_contract_address: ${CONTRIBUTORS_CONTRACT_ADDRESS:str:0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94}
         epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
-        safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x0000000000000000000000000000000000000000}
-        safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x0000000000000000000000000000000000000000}
+        safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x3316b59A6c4C3ee2920EecE0B02A6d40AAa6b9c9}
+        safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -550,7 +550,7 @@ type: connection
     auth_token: ${AUTH_TOKEN:str:<auth_token>}
     consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
     consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_openai_staging_api: ${use_openai_staging_api:bool:false}
+    use_twitter_staging_api: ${USE_TWITTER_STAGING_API:bool:false}
     twitter_staging_api: ${TWITTER_STAGING_API:str:http://host.docker.internal:5000/twitter/create_tweet}
 1:
   config:
@@ -559,7 +559,7 @@ type: connection
     auth_token: ${AUTH_TOKEN:str:<auth_token>}
     consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
     consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_openai_staging_api: ${use_openai_staging_api:bool:false}
+    use_twitter_staging_api: ${USE_TWITTER_STAGING_API:bool:false}
     twitter_staging_api: ${TWITTER_STAGING_API:str:http://host.docker.internal:5000/twitter/create_tweet}
 2:
   config:
@@ -568,7 +568,7 @@ type: connection
     auth_token: ${AUTH_TOKEN:str:<auth_token>}
     consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
     consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_openai_staging_api: ${use_openai_staging_api:bool:false}
+    use_twitter_staging_api: ${USE_TWITTER_STAGING_API:bool:false}
     twitter_staging_api: ${TWITTER_STAGING_API:str:http://host.docker.internal:5000/twitter/create_tweet}
 3:
   config:
@@ -577,5 +577,5 @@ type: connection
     auth_token: ${AUTH_TOKEN:str:<auth_token>}
     consumer_key: ${CONSUMER_KEY:str:<consumer_key>}
     consumer_secret: ${CONSUMER_SECRET:str:<consumer_secret>}
-    use_openai_staging_api: ${use_openai_staging_api:bool:false}
+    use_twitter_staging_api: ${USE_TWITTER_STAGING_API:bool:false}
     twitter_staging_api: ${TWITTER_STAGING_API:str:http://host.docker.internal:5000/twitter/create_tweet}
