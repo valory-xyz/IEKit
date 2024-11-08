@@ -133,7 +133,7 @@ config:
       chain_id: ${int:31337}
       poa_chain: ${bool:false}
       default_gas_price_strategy: ${str:eip1559}
-      gas_price_strategies: &id001
+      gas_price_strategies:
         gas_station:
           gas_price_api_key: null
           gas_price_strategy: fast
