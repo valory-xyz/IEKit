@@ -1143,7 +1143,11 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                     "points": new_points,
                     "campaign": campaign,
                     "epoch": epoch,
-                    "timestamp": int(tweet["created_at"]),
+                    "timestamp": int(
+                        datetime.fromisoformat(
+                            tweet["created_at"].replace("Z", "+00:00")
+                        ).timestamp()
+                    ),
                 }
 
             # User data to update
