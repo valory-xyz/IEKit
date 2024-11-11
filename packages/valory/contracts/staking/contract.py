@@ -165,7 +165,7 @@ class Staking(Contract):
         contract_instance = ledger_api.api.eth.contract(
             Web3.to_checksum_address(contract_address), abi=CONTRIBUTORS_ABI
         )
-        social_id, service_id, multisig_address, staking_contract_address = contract_instance.functions.mapAccountServiceInfo(wallet_address).call()
+        social_id, service_id, multisig_address, staking_contract_address = contract_instance.functions.mapAccountServiceInfo(Web3.to_checksum_address(wallet_address)).call()
         return dict(
             social_id=social_id,
             service_id=service_id,
