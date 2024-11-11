@@ -1088,6 +1088,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         active_hashtags = self.get_active_hashtags()
 
+        # Replace the encoded %23 for #
+        active_hashtags = [i.replace("%23", "#") for i in active_hashtags]
+
         # Get the staking epoch
         staking_contract_to_epoch = {}
         for staking_contract_address in self.params.staking_contract_addresses:
