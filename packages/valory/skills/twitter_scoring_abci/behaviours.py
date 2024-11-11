@@ -81,6 +81,7 @@ TWEET_RELATIONSHIP_TO_POINTS = {"LOW": 100, "AVERAGE": 200, "HIGH": 300}
 HTTP_OK = 200
 HTTP_TOO_MANY_REQUESTS = 429
 RETWEET_START = "RT @"
+BASE_CHAIN_ID = "base"
 
 
 def extract_headers(header_str: str) -> dict:
@@ -181,6 +182,7 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
             contract_address=staking_contract_address,
             contract_id=str(Staking.contract_id),
             contract_callable="get_epoch",
+            chain_id=BASE_CHAIN_ID
         )
         if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
             self.context.logger.error(f"Error getting the epoch: [{contract_api_msg}]")
@@ -200,6 +202,7 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
             contract_id=str(Staking.contract_id),
             contract_callable="get_account_to_service_map",
             wallet_address=wallet_address,
+            chain_id=BASE_CHAIN_ID
         )
         if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
             self.context.logger.error(
