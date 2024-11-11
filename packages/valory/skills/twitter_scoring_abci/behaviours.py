@@ -1147,7 +1147,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                         datetime.fromisoformat(
                             tweet["created_at"].replace("Z", "+00:00")
                         ).timestamp()
-                    ),
+                    )
+                    if "created_at" in tweet
+                    else None,
                 }
 
             # User data to update
