@@ -16,4 +16,4 @@ data, _, _ = ceramic.get_data(stream_id)
 with open("stream.json", "w", encoding="utf-8") as out_file:
     json.dump(data, out_file, indent=4)
 
-print("Done reading stream {stream_id}")
+print(f"Done reading stream {stream_id}")

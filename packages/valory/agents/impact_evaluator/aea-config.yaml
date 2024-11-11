@@ -133,7 +133,7 @@ config:
       chain_id: ${int:31337}
       poa_chain: ${bool:false}
       default_gas_price_strategy: ${str:eip1559}
-      gas_price_strategies:
+      gas_price_strategies: &id001
         gas_station:
           gas_price_api_key: null
           gas_price_strategy: fast
@@ -141,7 +141,7 @@ config:
           max_gas_fast: 1500
           fee_history_blocks: 10
           fee_history_percentile: 5
-          default_priority_fee: ${int:30000000}
+          default_priority_fee: ${int:null}
           fallback_estimate:
             maxFeePerGas: ${int:20000000000}
             maxPriorityFeePerGas: ${int:3000000000}
@@ -152,39 +152,13 @@ config:
       chain_id: ${int:100}
       poa_chain: ${bool:false}
       default_gas_price_strategy: ${str:eip1559}
-      gas_price_strategies:
-        gas_station:
-          gas_price_api_key: null
-          gas_price_strategy: fast
-        eip1559:
-          max_gas_fast: 1500
-          fee_history_blocks: 10
-          fee_history_percentile: 5
-          default_priority_fee: ${int:30000000}
-          fallback_estimate:
-            maxFeePerGas: ${int:20000000000}
-            maxPriorityFeePerGas: ${int:3000000000}
-            baseFee: null
-          priority_fee_increase_boundary: ${int:200}
+      gas_price_strategies: *id001
     base:
       address: ${str:http://localhost:8545}
       chain_id: ${int:8453}
       poa_chain: ${bool:false}
       default_gas_price_strategy: ${str:eip1559}
-      gas_price_strategies:
-        gas_station:
-          gas_price_api_key: null
-          gas_price_strategy: fast
-        eip1559:
-          max_gas_fast: 1500
-          fee_history_blocks: 10
-          fee_history_percentile: 5
-          default_priority_fee: ${int:30000000}
-          fallback_estimate:
-            maxFeePerGas: ${int:20000000000}
-            maxPriorityFeePerGas: ${int:3000000000}
-            baseFee: null
-          priority_fee_increase_boundary: ${int:200}
+      gas_price_strategies: *id001
 ---
 public_id: valory/p2p_libp2p_client:0.1.0
 type: connection

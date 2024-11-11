@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeig4y74umrsll4iahg4xslhfphq33ets4qr72a4kg7savt5mkockem
+agent: valory/impact_evaluator:0.1.0:bafybeigvu56ru4j3ivhd6tk34alqnjee4mysdrqsgb6k5vn2qca73zpd2u
 number_of_agents: 4
 deployment:
   agent:
@@ -454,10 +454,10 @@ config:
           max_gas_fast: 1500
           fee_history_blocks: 10
           fee_history_percentile: 5
-          default_priority_fee: ${DEFAULT_PRIORITY_FEE:int:30000000}
+          default_priority_fee: ${DEFAULT_PRIORITY_FEE:int:null}
           fallback_estimate:
-            maxFeePerGas: 20000000000
-            maxPriorityFeePerGas: 3000000000
+            maxFeePerGas: ${MAX_FEE_PER_GAS:20000000000}
+            maxPriorityFeePerGas: ${MAX_PRIORITY_FEE_PER_GAS:3000000000}
             baseFee: null
           priority_fee_increase_boundary: 200
     gnosis:
@@ -465,20 +465,7 @@ config:
       chain_id: ${GNOSIS_LEDGER_CHAIN_ID:int:100}
       poa_chain: ${GNOSIS_LEDGER_IS_POA_CHAIN:bool:false}
       default_gas_price_strategy: ${GNOSIS_LEDGER_PRICING:str:eip1559}
-      gas_price_strategies:
-        gas_station:
-          gas_price_api_key: null
-          gas_price_strategy: fast
-        eip1559:
-          max_gas_fast: 1500
-          fee_history_blocks: 10
-          fee_history_percentile: 5
-          default_priority_fee: ${DEFAULT_PRIORITY_FEE_GNOSIS:int:30000000}
-          fallback_estimate:
-            maxFeePerGas: ${MAX_FEE_PER_GAS_GNOSIS:int:20000000000}
-            maxPriorityFeePerGas: ${MAX_PRIORITY_FEE_PER_GAS_GNOSIS:int:3000000000}
-            baseFee: null
-          priority_fee_increase_boundary: ${PRIORITY_FEE_INCREASE_BOUNDARY_GNOSIS:int:200}
+      gas_price_strategies: *id001
     base:
       address: ${BASE_LEDGER_RPC:str:http://host.docker.internal:8545}
       chain_id: ${BASE_LEDGER_CHAIN_ID:int:8453}
