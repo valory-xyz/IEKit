@@ -113,6 +113,7 @@ class CeramicDBBase:
         "current_period_points",
         "tweets",
         "service_multisig",
+        "service_id",
     }
 
     def __init__(self) -> None:
