@@ -65,7 +65,7 @@ from packages.valory.skills.olas_week_abci.rounds import (
 
 PACKAGE_DIR = Path(__file__).parent.parent
 
-TWEETS_URL = "https://api.twitter.com/2/users/1450081635559428107/tweets?tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}"
+TWEETS_URL = "https://api.twitter.com/2/users/1450081635559428107/tweets?tweet.fields=author_id,created_at,conversation_id,public_metrics&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}"
 
 
 DUMMY_TWEETS_RESPONSE = {
