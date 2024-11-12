@@ -37,6 +37,7 @@ DEFAULT_DATA = {
     "current_period_points": 0,
     "tweets": {},
     "service_multisig": None,
+    "service_id": None,
 }
 
 
@@ -130,6 +131,7 @@ def test_merge_by_wallet():
         "current_period_points": 20,
         "tweets": {"1": {"points": 100}, "2": {"points": 200}, "3": {"points": 300}},
         "service_multisig": "dummy_multisig",
+        "service_id": None,
     }
 
 
