@@ -1234,6 +1234,7 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
                                 "twitter_id": "1",
                                 "points": 0,
                                 "wallet_address": None,
+                                "service_multisig": None,
                                 "token_id": None,
                                 "discord_id": None,
                             }
@@ -1268,24 +1269,6 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
                 ),
             )
 
-        # 2 tweets with wallets linked
-        for _ in range(2):
-            self.mock_contract_api_request(
-                request_kwargs=dict(
-                    performative=ContractApiMessage.Performative.GET_STATE,
-                ),
-                contract_id=str(Staking.contract_id),
-                response_kwargs=dict(
-                    performative=ContractApiMessage.Performative.STATE,
-                    callable="get_account_to_service_map",
-                    state=State(
-                        ledger_id="ethereum",
-                        body={
-                            "staking_contract_address": "0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F"
-                        },
-                    ),
-                ),
-            )
         self.complete(test_case.event)
 
 
