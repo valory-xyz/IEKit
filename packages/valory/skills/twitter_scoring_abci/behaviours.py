@@ -77,11 +77,20 @@ ADDRESS_REGEX = r"0x[a-fA-F0-9]{40}"
 TAGLINE = "I'm linking my wallet to @Autonolas Contribute:"
 DEFAULT_TWEET_POINTS = 100
 TWEET_QUALITY_TO_POINTS = {"LOW": 1, "AVERAGE": 2, "HIGH": 3}
-TWEET_RELATIONSHIP_TO_POINTS = {"LOW": 100, "AVERAGE": 200, "HIGH": 300}
+TWEET_RELATIONSHIP_TO_POINTS = {"LOW": 1, "AVERAGE": 2, "HIGH": 3}
 HTTP_OK = 200
 HTTP_TOO_MANY_REQUESTS = 429
 RETWEET_START = "RT @"
 BASE_CHAIN_ID = "base"
+
+
+def get_engagement(impressions: int) -> int:
+    """Engagement calculation"""
+    if impressions < 1e3:
+        return 1
+    if impressions < 1e4:
+        return 2
+    return 3
 
 
 def extract_headers(header_str: str) -> dict:
@@ -995,8 +1004,14 @@ class PostMechRequestBehaviour(TwitterScoringBaseBehaviour):
             for response in self.synchronized_data.mech_responses:
                 # The request has been responded
                 if response.nonce in tweets and response.result:
+                    engagement = get_engagement(
+                        tweets[response.nonce]
+                        .get("public_metrics", {})
+                        .get("impression_count", 0)
+                    )
+
                     self.context.logger.info(
-                        f"Received tweet evaluation response: {response.nonce} {response.result}"
+                        f"Received tweet evaluation response: {response.nonce} {response.result}.\nTweet engagement is {engagement}."
                     )
 
                     responses_to_remove.append(response.nonce)
@@ -1014,9 +1029,10 @@ class PostMechRequestBehaviour(TwitterScoringBaseBehaviour):
                                 "Evaluation data is not valid: key not valid"
                             )
                         else:
-                            points = (
+                            points = 100 * (
                                 TWEET_QUALITY_TO_POINTS[quality]
-                                * TWEET_RELATIONSHIP_TO_POINTS[relationship]
+                                + TWEET_RELATIONSHIP_TO_POINTS[relationship]
+                                + engagement
                             )
                     except Exception as e:
                         self.context.logger.error(
