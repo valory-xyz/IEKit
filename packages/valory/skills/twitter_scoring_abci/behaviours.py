@@ -1134,17 +1134,18 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             current_period_points += new_points
 
             # Get the user staking contract and epoch (if the user is staked)
-            service_multisig = user.get("service_multisig", None)
             epoch = None
-            if service_multisig and user.get("wallet_address", None):
-                staking_contract_address = yield from self.get_staking_contract(
-                    user["wallet_address"]
-                )
-                epoch = (
-                    staking_contract_to_epoch[staking_contract_address]
-                    if staking_contract_address
-                    else None
-                )
+            if user:
+                service_multisig = user.get("service_multisig", None)
+                if service_multisig and user.get("wallet_address", None):
+                    staking_contract_address = yield from self.get_staking_contract(
+                        user["wallet_address"]
+                    )
+                    epoch = (
+                        staking_contract_to_epoch[staking_contract_address]
+                        if staking_contract_address
+                        else None
+                    )
 
             # Store the tweet id and awarded points
             user_tweets = {} if not user else user.get("tweets", {})
