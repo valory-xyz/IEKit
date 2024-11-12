@@ -136,11 +136,11 @@ models:
       twitter_api_base: https://api.twitter.com/
       twitter_api_bearer_token: <default_bearer_token>
       twitter_mentions_endpoint: 2/users/1450081635559428107/mentions?
-      twitter_mentions_args: tweet.fields=author_id,created_at&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
+      twitter_mentions_args: tweet.fields=author_id,created_at,public_metrics&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
       twitter_max_pages: 1
       max_tweet_pulls_allowed: 80
       twitter_search_endpoint: 2/tweets/search/recent?
-      twitter_search_args: query={search_query}&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
+      twitter_search_args: query={search_query}&tweet.fields=author_id,created_at,conversation_id,public_metrics&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
       openai_call_window_size: 3600.0
       openai_calls_allowed_in_window: 100
       max_points_per_period: 5000
