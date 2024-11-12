@@ -221,7 +221,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
     def update_safe_balances(self) -> WaitableConditionType:
         """Check the safe's balance."""
-        account = self.synchronized_data.safe_contract_address
+        account = self.params.safe_contract_address_gnosis
         wallet = yield from self._get_native_balance(account)
         if wallet is None:
             return False
@@ -326,11 +326,11 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
     def _build_multisend_safe_tx_hash(self) -> WaitableConditionType:
         """Prepares and returns the safe tx hash for a multisend tx."""
         self.context.logger.info(
-            f"Building multisend safe tx hash: safe={self.synchronized_data.safe_contract_address}"
+            f"Building multisend safe tx hash: safe={self.params.safe_contract_address_gnosis}"
         )
         response_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
-            contract_address=self.synchronized_data.safe_contract_address,
+            contract_address=self.params.safe_contract_address_gnosis,
             contract_id=str(GnosisSafeContract.contract_id),
             contract_callable="get_raw_safe_transaction_hash",
             to_address=self.params.multisend_address,
