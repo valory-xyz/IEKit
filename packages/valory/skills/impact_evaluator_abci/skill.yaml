@@ -26,7 +26,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeibiw4oqwqvo4jccwz5fb73iardzychgvcl66tceiildohoju2ikti
 - valory/ceramic_read_abci:0.1.0:bafybeigz7rzfls3niv3urfb4z4vwr525ooxveelgg3djpvkg5jzetxlm2u
 - valory/generic_scoring_abci:0.1.0:bafybeiffup7abnyqjinsakjawzwr6t6pp32joiuoz4gara7jm7tlfo725q
-- valory/twitter_scoring_abci:0.1.0:bafybeigmwav5wgz27f4tzt7ilgw7ehow52lu4amu3jxqhwienbxif2medm
+- valory/twitter_scoring_abci:0.1.0:bafybeier6oydc5saiyt2e47moz3n54degmlq2ekcifeagc4ggfcj6aemna
 - valory/ceramic_write_abci:0.1.0:bafybeic6c3iub3nsr5tmr7g5vzoixbin6w64ewudfiq6u4r2fiqwbg753i
 - valory/dynamic_nft_abci:0.1.0:bafybeic7w6vqpt6rqlw6t7opzm3px2gwb6doo2a6etyyqueez24mbrcqqy
 - valory/registration_abci:0.1.0:bafybeib3n6vqkfbrcubcbliebjnuwyywdinxkbzt76n6gbn2kg7ace47dq
@@ -36,7 +36,7 @@ skills:
 - valory/decision_making_abci:0.1.0:bafybeidj3owli2etpxxfgpfevqis7mtlxmnujsrfqw3pwfq6zvfc5rhfy4
 - valory/llm_abci:0.1.0:bafybeib2k62hilwglfad33bzxkjlviw5bxwiw7z3rjvweyeamatdjznpeq
 - valory/twitter_write_abci:0.1.0:bafybeibp7zai2qwvfjd5fgpayx44x5c2zshbukpobvz2la7ws2l5f5fjde
-- valory/olas_week_abci:0.1.0:bafybeigtfaejaspebcdaeyrhhstkeowxysx7fwdhuli3rnj273qzzxl3by
+- valory/olas_week_abci:0.1.0:bafybeihtfb7c6m5ncznftfiww62pjwi3w2mkpzbjdwry5mf5msh5szzjt4
 - valory/mech_interact_abci:0.1.0:bafybeibzhywzwowfmebf4o2bppyjupdpjkdsawceetam4ac3lmh5yp22xy
 - valory/staking_abci:0.1.0:bafybeieutg3epfnqtaucw6rpkq7vzzt5pkziqt4zlpjmispz2gqzth45ay
 behaviours:
@@ -167,13 +167,13 @@ models:
       twitter_api_base: https://api.twitter.com/
       twitter_api_bearer_token: <default_bearer_token>
       twitter_mentions_endpoint: 2/users/1450081635559428107/mentions?
-      twitter_mentions_args: tweet.fields=author_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
+      twitter_mentions_args: tweet.fields=author_id,created_at,public_metrics&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
       twitter_max_pages: 1
       max_tweet_pulls_allowed: 80
       twitter_search_endpoint: 2/tweets/search/recent?
-      twitter_search_args: query={search_query}&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
+      twitter_search_args: query={search_query}&tweet.fields=author_id,created_at,conversation_id,public_metrics&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}
       twitter_tweets_endpoint: 2/users/1450081635559428107/tweets?
-      twitter_tweets_args: tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}
+      twitter_tweets_args: tweet.fields=author_id,created_at,conversation_id,public_metrics&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}
       openai_call_window_size: 3600.0
       openai_calls_allowed_in_window: 100
       max_points_per_period: 5000
