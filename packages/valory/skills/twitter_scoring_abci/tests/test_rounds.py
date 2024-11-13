@@ -145,6 +145,7 @@ class BaseTwitterScoringRoundTest(BaseCollectSameUntilThresholdRoundTest):
 
         self.synchronized_data.update(**test_case.initial_data)
         context_mock = mock.MagicMock()
+        context_mock.params.safe_contract_address_gnosis = "dummy_safe"
         if test_case.ceramic_db:
             context_mock.ceramic_db = test_case.ceramic_db
         test_round = self.round_class(

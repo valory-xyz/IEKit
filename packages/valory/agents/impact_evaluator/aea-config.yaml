@@ -45,9 +45,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeieo7pe5wqjphs5izpz5aujjbubymlxub62b3rhx6yglu65ibalffu
 - valory/abstract_round_abci:0.1.0:bafybeibiw4oqwqvo4jccwz5fb73iardzychgvcl66tceiildohoju2ikti
-- valory/impact_evaluator_abci:0.1.0:bafybeiblxwctj3dzgpn5ev6jpfcm73cdrwhjxetl35sjsyy5hpecbcmozi
+- valory/impact_evaluator_abci:0.1.0:bafybeicc4cvshbkhcuaevonh3drpw5iqzsnvdnntiwkogu7x6oeufmy2dy
 - valory/generic_scoring_abci:0.1.0:bafybeiffup7abnyqjinsakjawzwr6t6pp32joiuoz4gara7jm7tlfo725q
-- valory/twitter_scoring_abci:0.1.0:bafybeier6oydc5saiyt2e47moz3n54degmlq2ekcifeagc4ggfcj6aemna
+- valory/twitter_scoring_abci:0.1.0:bafybeibwbxtdz6ypba4vpkxg4esqs3f5ug5ljlwza7njyccoyzmx37dpdu
 - valory/ceramic_read_abci:0.1.0:bafybeigz7rzfls3niv3urfb4z4vwr525ooxveelgg3djpvkg5jzetxlm2u
 - valory/ceramic_write_abci:0.1.0:bafybeic6c3iub3nsr5tmr7g5vzoixbin6w64ewudfiq6u4r2fiqwbg753i
 - valory/dynamic_nft_abci:0.1.0:bafybeic7w6vqpt6rqlw6t7opzm3px2gwb6doo2a6etyyqueez24mbrcqqy
@@ -58,8 +58,8 @@ skills:
 - valory/twitter_write_abci:0.1.0:bafybeibp7zai2qwvfjd5fgpayx44x5c2zshbukpobvz2la7ws2l5f5fjde
 - valory/decision_making_abci:0.1.0:bafybeidj3owli2etpxxfgpfevqis7mtlxmnujsrfqw3pwfq6zvfc5rhfy4
 - valory/llm_abci:0.1.0:bafybeib2k62hilwglfad33bzxkjlviw5bxwiw7z3rjvweyeamatdjznpeq
-- valory/olas_week_abci:0.1.0:bafybeihtfb7c6m5ncznftfiww62pjwi3w2mkpzbjdwry5mf5msh5szzjt4
-- valory/mech_interact_abci:0.1.0:bafybeibzhywzwowfmebf4o2bppyjupdpjkdsawceetam4ac3lmh5yp22xy
+- valory/olas_week_abci:0.1.0:bafybeihsnuymbv3wb6yvmbxegd5usctbzakfz27255lnvxlhncxsu3s7xi
+- valory/mech_interact_abci:0.1.0:bafybeicpskytv7osu6bdpmcweemlsb4f3m6gldzpyoxgawkczsmvlrzgma
 - valory/staking_abci:0.1.0:bafybeieutg3epfnqtaucw6rpkq7vzzt5pkziqt4zlpjmispz2gqzth45ay
 default_ledger: ethereum
 required_ledgers:
@@ -267,7 +267,7 @@ models:
       finalize_timeout: 60.0
       history_check_timeout: 1205
       centaur_id_to_secrets: ${str:{}}
-      max_points_per_period: ${int:5000}
+      max_points_per_period: ${int:1000}
       use_slashing: ${bool:false}
       slash_cooldown_hours: ${int:3}
       slash_threshold_amount: ${int:10000000000000000}

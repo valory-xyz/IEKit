@@ -31,7 +31,7 @@ In order to run a local demo service based on the IEKit:
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeihbdws7fzicgmbvvrnwbaeuznqve7n7njt3nmcmznrynlcr7y5whq --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeihelzs5bn7o2c5kz3eotw5g2ga77laen3l2ohonb455b7uvqib74e --service
     ```
 
 3. Build the Docker image of the service agents
@@ -93,7 +93,7 @@ In order to run a local demo service based on the IEKit:
         EARLIEST_BLOCK_TO_MONITOR=16097553
         RESET_TENDERMINT_AFTER=5
         TWITTER_SEARCH_ARGS=query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id&user.fields=name&expansions=author_id&max_results=100&since_id={since_id}
-        MAX_POINTS_PER_PERIOD=5000
+        MAX_POINTS_PER_PERIOD=1000
         USE_ACN=false
         TWITTER_TWEETS_ARGS=tweet.fields=author_id,created_at,conversation_id,public_metrics&user.fields=name&expansions=author_id&max_results=10&start_time={start_time}
         DEFAULT_CHAIN_ID=gnosis

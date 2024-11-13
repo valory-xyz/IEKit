@@ -10,13 +10,13 @@ fingerprint:
   __init__.py: bafybeidf3nlv5fpvfy4libtscayhirdw64shgmhfmvjiftjmjkmhu7auxq
   behaviours/__init__.py: bafybeie3zsi6p3yanz5mqwpkdrcgywaqvkit3hdintsb4awnvalgxpxa4i
   behaviours/base.py: bafybeif4dvt4p5wfh6q3ybqwnzy62lbr3vqy322sr3wm6pkcrha2ggin6q
-  behaviours/request.py: bafybeidl25lhusageykea2u4lktjr3cqhj2jox3eo4t4nhor7hbi3h7bdq
+  behaviours/request.py: bafybeic7nul5iawujburikfdr544g23gxto2wb3jqs4it3kpqffp3fdgrq
   behaviours/response.py: bafybeibigqdtdxxzufx7cclzjrafszg2lb6y5ommp3jzbyoit735wtm7tq
   behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
   dialogues.py: bafybeigjmyzd2bx6mgqiet2c223k6wkc5jk7kdkstbhpaxlqxatey26tlm
   fsm_specification.yaml: bafybeiapzwz6zcneelc2b2wrcb7cae7x6vbthmf6a57cm4mv6hucp67lz4
   handlers.py: bafybeiduy2nwkqdynainuimkjulcv7u2qq6iglkuut3gfurkckydapitg4
-  models.py: bafybeihywx7wdzil4uuqsg5sllsary7nzpaimzq7742bledoanl3wmx5wi
+  models.py: bafybeidfes4ovzsyntxvqtx55qi2tznmllhzznf5qmozi52zrukiyrtbni
   payloads.py: bafybeie3s5irdmcggst5kmbm6duyhr4nm2qc67fkwznhrdskri4qzmkmla
   rounds.py: bafybeif7taciv6pqupb7xuewurqssziplbjeobbv4d7ea3vbngz3kpjnee
   states/__init__.py: bafybeie34wx5znr2hxwh3gs2fchmbeuzjcfnraymdvtzjaxaq5zsiw233q
@@ -147,7 +147,6 @@ models:
       validate_timeout: 1205
       multisend_batch_size: 50
       mech_contract_address: '0x77af31De935740567Cf4fF1986D04B2c964A786a'
-      safe_contract_address_gnosis: '0x0000000000000000000000000000000000000000'
       mech_request_price: null
       mech_chain_id: gnosis
       mech_wrapped_native_token_address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'

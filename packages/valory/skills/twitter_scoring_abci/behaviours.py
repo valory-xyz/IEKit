@@ -1029,11 +1029,16 @@ class PostMechRequestBehaviour(TwitterScoringBaseBehaviour):
                                 "Evaluation data is not valid: key not valid"
                             )
                         else:
-                            points = 100 * (
+                            # Tweet quality, relationship and engagement go from 1 to 3.
+                            # When we add the three of them, the total value goes from 3 to 9.
+                            # We want to scale that value up so it goes from 1 to 10.
+                            # (S - 3) / (9 - 3) = (X - 1) / (10 - 1) -> X = (3S - 7) / 2
+                            S = (
                                 TWEET_QUALITY_TO_POINTS[quality]
                                 + TWEET_RELATIONSHIP_TO_POINTS[relationship]
                                 + engagement
                             )
+                            points = 1.5 * S - 3.5
                     except Exception as e:
                         self.context.logger.error(
                             f"Evaluation data is not valid: exception {e}"

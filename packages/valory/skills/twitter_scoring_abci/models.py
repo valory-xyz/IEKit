@@ -107,6 +107,7 @@ class Params(BaseParams):
         )
         self.staking_contract_addresses = kwargs.get("staking_contract_addresses", [])
         self.contributors_contract_address = kwargs.get("contributors_contract_address")
+        self.safe_contract_address_gnosis = kwargs.get("safe_contract_address_gnosis")
         super().__init__(*args, **kwargs)
 
 
