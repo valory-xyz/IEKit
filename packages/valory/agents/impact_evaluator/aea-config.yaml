@@ -267,7 +267,7 @@ models:
       finalize_timeout: 60.0
       history_check_timeout: 1205
       centaur_id_to_secrets: ${str:{}}
-      max_points_per_period: ${int:5000}
+      max_points_per_period: ${int:1000}
       use_slashing: ${bool:false}
       slash_cooldown_hours: ${int:3}
       slash_threshold_amount: ${int:10000000000000000}
