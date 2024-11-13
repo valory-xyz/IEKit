@@ -20,6 +20,7 @@
 """This package contains the logic for task preparations."""
 
 from datetime import datetime, timezone
+from typing import Generator, Optional
 
 from packages.valory.contracts.staking.contract import Staking
 from packages.valory.protocols.contract_api import ContractApiMessage
@@ -79,9 +80,9 @@ class StakingPreparation(TaskPreparation):
 
         # If the epoch is about to end, we run the staking skill
         for staking_contract_address in self.params.staking_contract_addresses:
-            is_epoch_ending = yield from self.is_epoch_ending(staking_contract_address)
-            if is_epoch_ending:
-                self.context.logger.info("Epoch is about to end.")
+            has_epoch_ended = yield from self.has_epoch_ended(staking_contract_address)
+            if has_epoch_ended:
+                self.context.logger.info("Epoch has ended.")
                 return True
 
         self.context.logger.info("Not time to call the checkpoint yet.")
@@ -107,8 +108,10 @@ class StakingPreparation(TaskPreparation):
         yield
         return updates, None
 
-    def is_epoch_ending(self, staking_contract_address):
-        """Check if the epoch is ending"""
+    def get_epoch_end(
+        self, staking_contract_address
+    ) -> Generator[None, None, Optional[datetime]]:
+        """Get the epoch end"""
 
         contract_api_msg = yield from self.behaviour.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
@@ -121,10 +124,18 @@ class StakingPreparation(TaskPreparation):
             self.behaviour.context.logger.error(
                 f"Error getting the epoch end: [{contract_api_msg.performative}]"
             )
-            return False
+            return None
 
         epoch_end_ts = contract_api_msg.state.body["epoch_end"]
         epoch_end = datetime.fromtimestamp(epoch_end_ts, tz=timezone.utc)
+        return epoch_end
+
+    def is_epoch_ending(self, staking_contract_address) -> Generator[None, None, bool]:
+        """Check if the epoch is ending"""
+        epoch_end = yield from self.get_epoch_end(staking_contract_address)
+
+        if not epoch_end:
+            return False
 
         # Should not happen, but if the epoch has ended, we do not care about calling
         if self.now_utc > epoch_end:
@@ -135,6 +146,17 @@ class StakingPreparation(TaskPreparation):
         ).total_seconds() < self.params.epoch_end_threshold_minutes * 60
 
         return is_epoch_ending
+
+    def has_epoch_ended(self, staking_contract_address) -> Generator[None, None, bool]:
+        """Check if the epoch has ended"""
+        epoch_end = yield from self.get_epoch_end(staking_contract_address)
+
+        if not epoch_end:
+            return False
+
+        # If the epoch end is in the past, the epoch has ended and
+        # no one has called the checkpoint
+        return epoch_end < self.now_utc
 
 
 class StakingActivityPreparation(StakingPreparation):
