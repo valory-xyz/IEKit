@@ -127,8 +127,8 @@ class Staking(Contract):
         """Get the epoch end."""
         contract_instance = cls.get_instance(ledger_api, contract_address)
         liveness = contract_instance.functions.livenessPeriod().call()
-        checpoint_ts = contract_instance.functions.tsCheckpoint().call()
-        epoch_end = checpoint_ts + liveness
+        checkpoint_ts = contract_instance.functions.tsCheckpoint().call()
+        epoch_end = checkpoint_ts + liveness
         return dict(epoch_end=epoch_end)
 
     @classmethod
