@@ -1038,7 +1038,7 @@ class PostMechRequestBehaviour(TwitterScoringBaseBehaviour):
                                 + TWEET_RELATIONSHIP_TO_POINTS[relationship]
                                 + engagement
                             )
-                            points = 1.5 * S - 3.5
+                            points = int(100 * (1.5 * S - 3.5))
                     except Exception as e:
                         self.context.logger.error(
                             f"Evaluation data is not valid: exception {e}"
