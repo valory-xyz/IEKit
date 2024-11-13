@@ -147,7 +147,6 @@ models:
       validate_timeout: 1205
       multisend_batch_size: 50
       mech_contract_address: '0x77af31De935740567Cf4fF1986D04B2c964A786a'
-      safe_contract_address_gnosis: '0x0000000000000000000000000000000000000000'
       mech_request_price: null
       mech_chain_id: gnosis
       mech_wrapped_native_token_address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'

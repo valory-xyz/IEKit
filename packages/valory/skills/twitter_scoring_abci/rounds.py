@@ -537,6 +537,11 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
                     get_name(
                         SynchronizedData.performed_twitter_tasks
                     ): performed_twitter_tasks,
+                    # Overwrite safe address with the gnosis one before
+                    # a mech request
+                    get_name(
+                        SynchronizedData.safe_contract_address
+                    ): self.context.params.safe_contract_address_gnosis,
                 },
             )
             return synchronized_data, Event.DONE
