@@ -216,7 +216,7 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
                 # Update the last processed tweet on the model, and mark for Ceramic update
                 self.context.ceramic_db.data["module_data"]["staking_activity"][
                     "latest_activity_tweet_id"
-                ] = self.synchronized_data.latest_activity_tweet_id
+                ] = str(self.synchronized_data.latest_activity_tweet_id)  # store as string
                 pending_write = True
                 self.context.logger.info(f"Last activity tweet id set to {self.synchronized_data.latest_activity_tweet_id}. Ceramic marked for update.")
 
