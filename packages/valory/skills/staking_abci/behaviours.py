@@ -21,6 +21,7 @@
 
 import json
 from abc import ABC
+from datetime import datetime, timezone
 from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
 
 from packages.valory.contracts.gnosis_safe.contract import (
@@ -38,7 +39,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-from packages.valory.skills.staking_abci.models import Params
+from packages.valory.skills.staking_abci.models import Params, SharedState
 from packages.valory.skills.staking_abci.rounds import (
     ActivityScorePayload,
     ActivityScoreRound,
@@ -111,6 +112,10 @@ class StakingBaseBehaviour(BaseBehaviour, ABC):
         """Return the params."""
         return cast(Params, super().params)
 
+    @property
+    def local_state(self) -> SharedState:
+        """Return the state."""
+        return cast(SharedState, self.context.state)
 
     def _build_safe_tx_hash(
         self,
@@ -194,6 +199,55 @@ class StakingBaseBehaviour(BaseBehaviour, ABC):
         self.context.logger.info(f"Got {len(service_ids)} staked services for contract {staking_contract_address}")
 
         return service_ids
+
+    def _get_utc_time(self):
+        """Check if it is process time"""
+        now_utc = self.local_state.round_sequence.last_round_transition_timestamp
+
+        # Tendermint timestamps are expected to be UTC, but for some reason
+        # we are getting local time. We replace the hour and timezone.
+        # TODO: this hour replacement could be problematic in some time zones
+        now_utc = now_utc.replace(
+            hour=datetime.now(timezone.utc).hour, tzinfo=timezone.utc
+        )
+        now_utc_str = now_utc.strftime("%Y-%m-%d %H:%M:%S %Z")
+        self.context.logger.info(f"Now [UTC]: {now_utc_str}")
+
+        return now_utc
+
+    def get_epoch_end(
+        self, staking_contract_address
+    ) -> Generator[None, None, Optional[datetime]]:
+        """Get the epoch end"""
+
+        contract_api_msg = yield from self.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
+            contract_address=staking_contract_address,
+            contract_id=str(Staking.contract_id),
+            contract_callable="get_epoch_end",
+            chain_id=BASE_CHAIN_ID,
+        )
+        if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
+            self.context.logger.error(
+                f"Error getting the epoch end: [{contract_api_msg.performative}]"
+            )
+            return None
+
+        epoch_end_ts = cast(int, contract_api_msg.state.body["epoch_end"])
+        epoch_end = datetime.fromtimestamp(epoch_end_ts, tz=timezone.utc)
+        return epoch_end
+
+    def is_checkpoint_callable(self, staking_contract_address) -> Generator[None, None, bool]:
+        """Check if the epoch has ended"""
+        epoch_end = yield from self.get_epoch_end(staking_contract_address)
+
+        if not epoch_end:
+            return False
+
+        # If the epoch end is in the past, the epoch has ended and
+        # no one has called the checkpoint
+        return epoch_end < self._get_utc_time()
+
 
 class ActivityScoreBehaviour(StakingBaseBehaviour):
     """ActivityScoreBehaviour"""
@@ -350,6 +404,11 @@ class CheckpointPreparationBehaviour(StakingBaseBehaviour):
             # Check if there is some service staked on this contract
             services_staked = yield from self.get_staked_services(staking_contract_address)
             if not services_staked:
+                continue
+
+            # Check if this checkpoint needs to be called
+            is_checkpoint_callable = yield from self.is_checkpoint_callable(staking_contract_address)
+            if not is_checkpoint_callable:
                 continue
 
             # Use the contract api to interact with the staking contract

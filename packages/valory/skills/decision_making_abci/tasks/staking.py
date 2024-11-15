@@ -39,55 +39,6 @@ class StakingPreparation(TaskPreparation):
 
     task_name = None
 
-    def check_extra_conditions(self):
-        """Check whether it is time to call the checkpoint"""
-
-        # This check is common for both the activity tracking and the checkpoint
-        # because we want to ensure we always call activity tracking just right before we call the checkpoint
-        yield
-
-        # Ensure we are getting the last run for the checkpoint call.
-        # This method is used by both the checkpoint and activity tasks.
-        # Activity is called everytime we are about to call the checkpoint,
-        # so we need to refer last_run to the checkpoint always.
-        checkpoint_config = self.synchronized_data.centaurs_data[
-            self.synchronized_data.current_centaur_index
-        ]["configuration"]["plugins"]["staking_checkpoint"]
-
-        checkpoint_last_run = (
-            datetime.strptime(
-                checkpoint_config["last_run"], "%Y-%m-%d %H:%M:%S %Z"
-            ).replace(tzinfo=timezone.utc)
-            if checkpoint_config.get("last_run", None)
-            else None
-        )
-
-        # If too much time has passed since last checkpoint execution, we run the staking skill
-        minutes_since_last_checkpoint_run = (
-            (self.now_utc - checkpoint_last_run).total_seconds() / 60
-            if checkpoint_last_run
-            else None
-        )
-        if (
-            minutes_since_last_checkpoint_run is None
-            or minutes_since_last_checkpoint_run
-            > self.params.checkpoint_threshold_minutes
-        ):
-            self.context.logger.info(
-                f"Too much time ({minutes_since_last_checkpoint_run}) has passed since last checkpoint execution."
-            )
-            return True
-
-        # If the epoch is about to end, we run the staking skill
-        for staking_contract_address in self.params.staking_contract_addresses:
-            has_epoch_ended = yield from self.has_epoch_ended(staking_contract_address)
-            if has_epoch_ended:
-                self.context.logger.info("Epoch has ended.")
-                return True
-
-        self.context.logger.info("Not time to call the checkpoint yet.")
-        return False
-
     def _pre_task(self):
         """Preparations before running the task"""
         yield
@@ -137,7 +88,6 @@ class StakingPreparation(TaskPreparation):
         if not epoch_end:
             return False
 
-        # Should not happen, but if the epoch has ended, we do not care about calling
         if self.now_utc > epoch_end:
             return False
 
@@ -147,7 +97,9 @@ class StakingPreparation(TaskPreparation):
 
         return is_epoch_ending
 
-    def has_epoch_ended(self, staking_contract_address) -> Generator[None, None, bool]:
+    def is_checkpoint_callable(
+        self, staking_contract_address
+    ) -> Generator[None, None, bool]:
         """Check if the epoch has ended"""
         epoch_end = yield from self.get_epoch_end(staking_contract_address)
 
@@ -187,12 +139,16 @@ class StakingActivityPreparation(StakingPreparation):
             )
             return True
 
-        # If the checkpoint is about to be called and there's pending updates, we run the activity update
-        is_checkpoint_ready = yield from super().check_extra_conditions()
-        if is_checkpoint_ready and pending_updates > 0:
-            self.context.logger.info(
-                "The checkpoint is about to be called. Executing..."
-            )
+        # If there's some pending updates and the epoch is ending, we run the activity update
+        is_some_epoch_ending = False
+        for staking_contract_address in self.params.staking_contract_addresses:
+            is_epoch_ending = yield from self.is_epoch_ending(staking_contract_address)
+            if is_epoch_ending:
+                is_some_epoch_ending = True
+                break
+
+        if pending_updates > 0 and is_some_epoch_ending:
+            self.context.logger.info("Some epoch is ending. Executing...")
             return True
 
         self.context.logger.info(
@@ -207,3 +163,21 @@ class StakingCheckpointPreparation(StakingPreparation):
 
     task_name = "staking_checkpoint"
     task_event = Event.STAKING_CHECKPOINT.value
+
+    def check_extra_conditions(self):
+        """Check whether it is time to call the checkpoint"""
+
+        yield
+
+        for staking_contract_address in self.params.staking_contract_addresses:
+            is_checkpoint_callable = yield from self.is_checkpoint_callable(
+                staking_contract_address
+            )
+            if is_checkpoint_callable:
+                self.context.logger.info(
+                    f"Epoch has ended for contract {staking_contract_address} and no one called the checkpoint yet."
+                )
+                return True
+
+        self.context.logger.info("Not time to call the checkpoint yet.")
+        return False
