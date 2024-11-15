@@ -1,10 +1,10 @@
 site_name: product/iekit #Required format to work with monorepo including a specific route in the address.
-site_url: https://docs.autonolas.network/product/iekit/
+site_url: https://open-autonomy.docs.autonolas.tech/product/iekit/
 site_description: Autonolas ContributionKit developer documentation
 repo_url: https://github.com/valory-xyz/contribution-service
 site_author: developer@valory.xyz
 edit_uri: ""
-copyright:  Copyright &copy; 2021 - 2023 Valory AG 
+copyright:  Copyright &copy; 2021 - 2023 Valory AG
 
 
 strict: true
@@ -14,10 +14,10 @@ theme:
   name: 'material'
   language: en
   favicon: images/favicon.ico
-  logo: images/logo.svg  
+  logo: images/logo.svg
   icon:
     admonition:
-      abstract: material/book-open-variant  
+      abstract: material/book-open-variant
   features:
     - navigation.indexes
     - navigation.top
@@ -36,7 +36,7 @@ extra_css:
 
 
 nav:
-  - IEKit: 'index.md' 
+  - IEKit: 'index.md'
 
 
 plugins:
@@ -65,7 +65,7 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-  - def_list  
+  - def_list
   - md_in_html
   - toc:
       title: On this page
@@ -78,11 +78,11 @@ extra:
   open_aea_api: '[Open AEA API](https://open-aea.docs.autonolas.tech/api)'
   fsm_app: 'FSM App'
   open_autonomy: '[Open Autonomy](https://github.com/valory-xyz/open-autonomy)'
-  open_autonomy_api: '[Open Autonomy API](https://docs.autonolas.network)'
+  open_autonomy_api: '[Open Autonomy API](https://open-autonomy.docs.autonolas.tech)'
   open_aea_repository: '[Open AEA repository](https://github.com/valory-xyz/open-aea)'
   open_autonomy_repository: '[Open Autonomy repository](https://github.com/valory-xyz/open-autonomy)'
   autonolas_whitepaper: '[Autonolas Whitepaper](https://www.autonolas.network/documents/whitepaper/Whitepaper%20v1.0.pdf)'
-  autonolas_protocol: '[Autonolas Protocol](https://docs.autonolas.network/protocol)'
+  autonolas_protocol: '[Autonolas Protocol](https://open-autonomy.docs.autonolas.tech/protocol)'
   autonolas_protocol_registry_dapp_link: 'https://registry.olas.network'
   autonolas_protocol_registry_dapp: '[Autonolas Protocol web app](https://registry.olas.network)'
   autonolas_protocol_tokenomics_dapp: '[Autonolas Tokenomics web app](https://tokenomics.olas.network)'
