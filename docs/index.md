@@ -1,5 +1,5 @@
 ![IEKit](images/iekit.svg){ align=left }
-The Impact Evaluator Kit (IEKit) is an enhanced version of the [CoordinationKit](https://docs.autonolas.network/product/coordinationkit/), which leverages [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) to automate the tracking and rewarding of users' contributions on the ecosystem. We provide a demo agent service based on the IEKit which is designed to track contributions in the form of Twitter mentions of the Autonolas DAO ([@autonolas](https://twitter.com/autonolas)). Generic scores can be also read from a [Ceramic stream](https://developers.ceramic.network/docs/advanced/standards/stream-programs/). The demo service implements three main features:
+The Impact Evaluator Kit (IEKit) is an enhanced version of the [CoordinationKit](https://open-autonomy.docs.autonolas.tech/product/coordinationkit/), which leverages [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) to automate the tracking and rewarding of users' contributions on the ecosystem. We provide a demo agent service based on the IEKit which is designed to track contributions in the form of Twitter mentions of the Autonolas DAO ([@autonolas](https://twitter.com/autonolas)). Generic scores can be also read from a [Ceramic stream](https://developers.ceramic.network/docs/advanced/standards/stream-programs/). The demo service implements three main features:
 
 1. **Monitor for new users' registrations.** Reads registered users both from tweets that contain the `#olas` hashtag and also from a [Ceramic stream](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) that contains user data like discord ids and wallet addresses.
 
@@ -18,7 +18,7 @@ The service demonstrates the applicability of the IEKit to build a particular us
 
 In order to run a local demo service based on the IEKit:
 
-1. [Set up your system](https://docs.autonolas.network/open-autonomy/guides/set_up/) to work with the Open Autonomy framework. We recommend that you use these commands:
+1. [Set up your system](https://open-autonomy.docs.autonolas.tech/open-autonomy/guides/set_up/) to work with the Open Autonomy framework. We recommend that you use these commands:
 
     ```bash
     mkdir your_workspace && cd your_workspace

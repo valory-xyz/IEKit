@@ -29,7 +29,7 @@ from packages.valory.skills.abstract_round_abci.abci_app_chain import (
 
 
 # Here we define how the transition between the FSMs should happen
-# more information here: https://docs.autonolas.network/fsm_app_introduction/#composition-of-fsm-apps
+# more information here: https://open-autonomy.docs.autonolas.tech/fsm_app_introduction/#composition-of-fsm-apps
 abci_app_transition_mapping: AbciAppTransitionMapping = {
     RegistrationAbci.FinishedRegistrationRound: FarcasterWriteAbci.RandomnessFarcasterRound,
     FarcasterWriteAbci.FinishedFarcasterWriteRound: ResetAndPauseAbci.ResetAndPauseRound,
