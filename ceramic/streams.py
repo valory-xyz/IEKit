@@ -54,7 +54,8 @@ CONTRIBUTE_PROD_MANUAL_STREAM_ID = "kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81
 # Schemas
 # -----------------------------------------------------------------------------------------------------------------------
 # CONTRIBUTE_DB_SCHEMA_COMMIT = "k3y52l7qbv1fry96i9zjr3gnkvql6dv0l6tt914tq66tnkj8063a1vs8yoojzj94w"  # Until Oct 24th 2024
-CONTRIBUTE_DB_SCHEMA_COMMIT = "k3y52l7qbv1fry5k2yv5n7psv7r0vjdwz8072yacvyd84f4saht3lf7uh2tj00lq8" # Nov 8th 2024
+# CONTRIBUTE_DB_SCHEMA_COMMIT = "k3y52l7qbv1fry5k2yv5n7psv7r0vjdwz8072yacvyd84f4saht3lf7uh2tj00lq8" # Nov 8th 2024
+CONTRIBUTE_DB_SCHEMA_COMMIT = "k3y52l7qbv1fry9jmc66aov4jal1rfymv1e3xad2tw49e08ji85483hw2paoht6gw"   # Nov 19th 2024
 
 # CONTRIBUTE_CENTAURS_SCHEMA_COMMIT = "k3y52l7qbv1fry9bsoowbfvmjegm6ao5llv5p4dlppzt7ghyqsy87jk0b9m489qf4"  # Until Oct 24th 2024
 # CONTRIBUTE_CENTAURS_SCHEMA_COMMIT = "k3y52l7qbv1frybx3mnuqvs6lp4d53wdygae7lfnyc55ih5cob70ceu0bfwhk1e68"  # Oct 24th 2024

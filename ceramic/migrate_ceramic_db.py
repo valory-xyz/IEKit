@@ -34,7 +34,7 @@ ceramic = Ceramic(os.getenv("CERAMIC_API_BASE"))
 ceramic_did_str = "did:key:" + str(os.getenv("CERAMIC_DID_STR"))
 ceramic_did_seed = os.getenv("CERAMIC_DID_SEED")
 
-MAX_USERS_PER_COMMIT = 200
+MAX_USERS_PER_COMMIT = 100
 MAX_TWEETS_PER_COMMIT = 100
 
 LOCAL_READ = False  # load from the local machine instead of Ceramic
@@ -143,95 +143,39 @@ else:
 
 # -------------------------------------------------------------------------------------
 
-# # Load the centaurs db
-# print("Reading the centaurs db...")
+# Load the centaurs db
+print("Reading the centaurs db...")
 
-# if LOCAL_READ:
-#     with open("contribute_centaurs.json", "r", encoding="utf-8") as data_file:
-#         centaurs_db = json.load(data_file)
-# else:
-#     centaurs_db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_CENTAURS_STREAM_ID)
+if LOCAL_READ:
+    with open("contribute_centaurs.json", "r", encoding="utf-8") as data_file:
+        centaurs_db = json.load(data_file)
+else:
+    centaurs_db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_CENTAURS_STREAM_ID)
 
 
-# print("Updating the db format...")
+print("Updating the db format...")
+# Nothing to do
 
-# # Add the campaign data
-# centaurs_db[0]["plugins_data"]["twitter_campaigns"] = {
-#     "campaigns": [
-#         {
-#             "id": "OlasNetwork",
-#             "hashtag": "OlasNetwork",
-#             "start_ts": 0,
-#             "end_ts": 4885453704,
-#             "proposer": {
-#                 "address": "",
-#                 "verified": True,
-#                 "signature": ""
-#             },
-#             "voters": [],
-#             "status": "live"
-#         },
-#         {
-#             "id": "StakeWithPearl",
-#             "hashtag": "StakeWithPearl",
-#             "start_ts": 0,
-#             "end_ts": 4885453704,
-#             "proposer": {
-#                 "address": "",
-#                 "verified": True,
-#                 "signature": ""
-#             },
-#             "voters": [],
-#             "status": "live"
-#         },
-#         {
-#             "id": "AgentsUnleashed",
-#             "hashtag": "AgentsUnleashed",
-#             "start_ts": 0,
-#             "end_ts": 4885453704,
-#             "proposer": {
-#                 "address": "",
-#                 "verified": True,
-#                 "signature": ""
-#             },
-#             "voters": [],
-#             "status": "live"
-#         }
-#     ]
-# }
+# Validate the new data
+print("Validating the updated centaurs db...")
+with open(Path("ceramic", "schemas", "centaurs_stream_schema.json"), "r", encoding="utf-8") as data_file:
+    stream_schema = json.load(data_file)
+    jsonschema.validate(instance=centaurs_db, schema=stream_schema)
 
-# centaurs_db[0]["configuration"]["plugins"]["twitter_campaigns"] = {
-#     "enabled": True
-# }
-# centaurs_db[0]["configuration"]["plugins"]["staking_activity"] = {
-#     "enabled": True,
-#     "last_run": None
-# }
-# centaurs_db[0]["configuration"]["plugins"]["staking_checkpoint"] = {
-#     "enabled": True,
-#     "last_run": None
-# }
+# Write the new data
+print("Writing the updated centaurs db...")
 
-# # Validate the new data
-# print("Validating the updated centaurs db...")
-# with open(Path("ceramic", "schemas", "centaurs_stream_schema.json"), "r", encoding="utf-8") as data_file:
-#     stream_schema = json.load(data_file)
-#     jsonschema.validate(instance=centaurs_db, schema=stream_schema)
+if LOCAL_WRITE:
+    with open("contribute_centaurs_new.json", "w", encoding="utf-8") as data_file:
+        json.dump(centaurs_db, data_file, indent=4)
+else:
+    extra_metadata = {
+        "schema": CONTRIBUTE_CENTAURS_SCHEMA_COMMIT  # this is the schema commit, not stream id
+    }
 
-# # Write the new data
-# print("Writing the updated centaurs db...")
-
-# if LOCAL_WRITE:
-#     with open("contribute_centaurs_new.json", "w", encoding="utf-8") as data_file:
-#         json.dump(centaurs_db, data_file, indent=4)
-# else:
-#     extra_metadata = {
-#         "schema": CONTRIBUTE_CENTAURS_SCHEMA_COMMIT  # this is the schema commit, not stream id
-#     }
-
-#     stream_id = centaurs_db_batch_write(
-#         did=ceramic_did_str,
-#         did_seed=ceramic_did_seed,
-#         data=centaurs_db,
-#         extra_metadata=extra_metadata,
-#     )
+    stream_id = centaurs_db_batch_write(
+        did=ceramic_did_str,
+        did_seed=ceramic_did_seed,
+        data=centaurs_db,
+        extra_metadata=extra_metadata,
+    )
