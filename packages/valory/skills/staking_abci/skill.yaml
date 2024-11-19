@@ -137,6 +137,7 @@ models:
       contributors_contract_address: '0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94'
       safe_contract_address_base: '0x0000000000000000000000000000000000000000'
       multisend_address: '0x0000000000000000000000000000000000000000'
+      staking_rewards_required_points: 200
     class_name: Params
   requests:
     args: {}

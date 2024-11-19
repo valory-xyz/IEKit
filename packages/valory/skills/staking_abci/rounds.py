@@ -58,16 +58,6 @@ class SynchronizedData(BaseSynchronizedData):
     """
 
     @property
-    def activity_updates(self) -> Dict:
-        """Get the activity_updates."""
-        return json.loads(cast(str, self.db.get("activity_updates")))
-
-    @property
-    def latest_activity_tweet_id(self) -> Optional[int]:
-        """Get the latest_activity_tweet_id."""
-        return self.db.get("latest_activity_tweet_id", None)
-
-    @property
     def most_voted_tx_hash(self) -> Optional[float]:
         """Get the token most_voted_tx_hash."""
         return self.db.get("most_voted_tx_hash", None)
@@ -97,6 +87,15 @@ class SynchronizedData(BaseSynchronizedData):
         """Get the chain name where to send the transactions to."""
         return cast(str, self.db.get("chain_id", None))
 
+    @property
+    def staking_multisig_to_updates(self) -> Dict:
+        """Get the staking_multisig_to_updates."""
+        return json.loads(cast(str, self.db.get("staking_multisig_to_updates")))
+
+    @property
+    def staking_user_to_counted_tweets(self) -> Dict:
+        """Get the staking_user_to_counted_tweets."""
+        return json.loads(cast(str, self.db.get("staking_user_to_counted_tweets")))
 
 class ActivityScoreRound(CollectSameUntilThresholdRound):
     """ActivityScoreRound"""
@@ -105,8 +104,6 @@ class ActivityScoreRound(CollectSameUntilThresholdRound):
     synchronized_data_class = SynchronizedData
 
     selection_key = (
-        get_name(SynchronizedData.activity_updates),
-        get_name(SynchronizedData.latest_activity_tweet_id),
         get_name(SynchronizedData.pending_write),
     )
 
@@ -118,26 +115,22 @@ class ActivityScoreRound(CollectSameUntilThresholdRound):
             payload = ActivityScorePayload(*(("dummy_sender",) + self.most_voted_payload_values))
 
             # We have finished with the activity update
-            # Mark Ceramic for a write
+            # Mark Ceramic for a write and clean updates
             if payload.pending_write:
                 synchronized_data = self.synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
                     **{
                         get_name(SynchronizedData.pending_write): True,
+                        get_name(SynchronizedData.staking_multisig_to_updates): {},
+                        get_name(SynchronizedData.staking_user_to_counted_tweets): {},
                     },
                 )
 
                 return synchronized_data, Event.DONE
 
             # Prepare the update transaction
-            synchronized_data = self.synchronized_data.update(
-                synchronized_data_class=SynchronizedData,
-                **{
-                    get_name(SynchronizedData.activity_updates): payload.activity_updates,
-                    get_name(SynchronizedData.latest_activity_tweet_id): payload.latest_activity_tweet_id,
-                },
-            )
-            return synchronized_data, Event.PROCESS_UPDATES
+            return self.synchronized_data, Event.PROCESS_UPDATES
+
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
         ):

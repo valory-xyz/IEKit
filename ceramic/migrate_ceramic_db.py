@@ -109,32 +109,13 @@ else:
 
 print("Updating the users db format...")
 
-# Add the new module data
-user_db["module_data"]["staking_activity"] = {
-    "latest_activity_tweet_id": user_db["module_data"]["twitter"]["latest_hashtag_tweet_id"]
-}
+# Remove the module data
+del user_db["module_data"]["staking_activity"]
 
-for user_id, user_data in user_db["users"].items():
-
-    # Initialize the service multisig and id
-    user_data["service_multisig"] = None
-    user_data["service_id"] = None
-
-    # Convert tweets
-    tweets = {}
-    for tweet_id, points in user_data["tweet_id_to_points"].items():
-        tweets[tweet_id] = {
-            "points": points,
-            "epoch": None,
-            "campaign": None,
-            "timestamp": None,
-        }
-
-    # Remove old tweet_id_to_points
-    del user_data["tweet_id_to_points"]
-
-    # Add updated tweets
-    user_data["tweets"] = tweets
+for user_data in user_db["users"].values():
+    for tweet in user_data["tweets"].values():
+        # Initialize the counted_for_activity
+        tweet["counted_for_activity"] = False
 
 # Validate the new data
 print("Validating the updated users db...")
@@ -162,95 +143,95 @@ else:
 
 # -------------------------------------------------------------------------------------
 
-# Load the centaurs db
-print("Reading the centaurs db...")
+# # Load the centaurs db
+# print("Reading the centaurs db...")
 
-if LOCAL_READ:
-    with open("contribute_centaurs.json", "r", encoding="utf-8") as data_file:
-        centaurs_db = json.load(data_file)
-else:
-    centaurs_db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_CENTAURS_STREAM_ID)
+# if LOCAL_READ:
+#     with open("contribute_centaurs.json", "r", encoding="utf-8") as data_file:
+#         centaurs_db = json.load(data_file)
+# else:
+#     centaurs_db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_CENTAURS_STREAM_ID)
 
 
-print("Updating the db format...")
+# print("Updating the db format...")
 
-# Add the campaign data
-centaurs_db[0]["plugins_data"]["twitter_campaigns"] = {
-    "campaigns": [
-        {
-            "id": "OlasNetwork",
-            "hashtag": "OlasNetwork",
-            "start_ts": 0,
-            "end_ts": 4885453704,
-            "proposer": {
-                "address": "",
-                "verified": True,
-                "signature": ""
-            },
-            "voters": [],
-            "status": "live"
-        },
-        {
-            "id": "StakeWithPearl",
-            "hashtag": "StakeWithPearl",
-            "start_ts": 0,
-            "end_ts": 4885453704,
-            "proposer": {
-                "address": "",
-                "verified": True,
-                "signature": ""
-            },
-            "voters": [],
-            "status": "live"
-        },
-        {
-            "id": "AgentsUnleashed",
-            "hashtag": "AgentsUnleashed",
-            "start_ts": 0,
-            "end_ts": 4885453704,
-            "proposer": {
-                "address": "",
-                "verified": True,
-                "signature": ""
-            },
-            "voters": [],
-            "status": "live"
-        }
-    ]
-}
+# # Add the campaign data
+# centaurs_db[0]["plugins_data"]["twitter_campaigns"] = {
+#     "campaigns": [
+#         {
+#             "id": "OlasNetwork",
+#             "hashtag": "OlasNetwork",
+#             "start_ts": 0,
+#             "end_ts": 4885453704,
+#             "proposer": {
+#                 "address": "",
+#                 "verified": True,
+#                 "signature": ""
+#             },
+#             "voters": [],
+#             "status": "live"
+#         },
+#         {
+#             "id": "StakeWithPearl",
+#             "hashtag": "StakeWithPearl",
+#             "start_ts": 0,
+#             "end_ts": 4885453704,
+#             "proposer": {
+#                 "address": "",
+#                 "verified": True,
+#                 "signature": ""
+#             },
+#             "voters": [],
+#             "status": "live"
+#         },
+#         {
+#             "id": "AgentsUnleashed",
+#             "hashtag": "AgentsUnleashed",
+#             "start_ts": 0,
+#             "end_ts": 4885453704,
+#             "proposer": {
+#                 "address": "",
+#                 "verified": True,
+#                 "signature": ""
+#             },
+#             "voters": [],
+#             "status": "live"
+#         }
+#     ]
+# }
 
-centaurs_db[0]["configuration"]["plugins"]["twitter_campaigns"] = {
-    "enabled": True
-}
-centaurs_db[0]["configuration"]["plugins"]["staking_activity"] = {
-    "enabled": True,
-    "last_run": None
-}
-centaurs_db[0]["configuration"]["plugins"]["staking_checkpoint"] = {
-    "enabled": True,
-    "last_run": None
-}
+# centaurs_db[0]["configuration"]["plugins"]["twitter_campaigns"] = {
+#     "enabled": True
+# }
+# centaurs_db[0]["configuration"]["plugins"]["staking_activity"] = {
+#     "enabled": True,
+#     "last_run": None
+# }
+# centaurs_db[0]["configuration"]["plugins"]["staking_checkpoint"] = {
+#     "enabled": True,
+#     "last_run": None
+# }
 
-# Validate the new data
-print("Validating the updated centaurs db...")
-with open(Path("ceramic", "schemas", "centaurs_stream_schema.json"), "r", encoding="utf-8") as data_file:
-    stream_schema = json.load(data_file)
-    jsonschema.validate(instance=centaurs_db, schema=stream_schema)
+# # Validate the new data
+# print("Validating the updated centaurs db...")
+# with open(Path("ceramic", "schemas", "centaurs_stream_schema.json"), "r", encoding="utf-8") as data_file:
+#     stream_schema = json.load(data_file)
+#     jsonschema.validate(instance=centaurs_db, schema=stream_schema)
 
-# Write the new data
-print("Writing the updated centaurs db...")
+# # Write the new data
+# print("Writing the updated centaurs db...")
 
-if LOCAL_WRITE:
-    with open("contribute_centaurs_new.json", "w", encoding="utf-8") as data_file:
-        json.dump(centaurs_db, data_file, indent=4)
-else:
-    extra_metadata = {
-        "schema": CONTRIBUTE_CENTAURS_SCHEMA_COMMIT  # this is the schema commit, not stream id
-    }
+# if LOCAL_WRITE:
+#     with open("contribute_centaurs_new.json", "w", encoding="utf-8") as data_file:
+#         json.dump(centaurs_db, data_file, indent=4)
+# else:
+#     extra_metadata = {
+#         "schema": CONTRIBUTE_CENTAURS_SCHEMA_COMMIT  # this is the schema commit, not stream id
+#     }
 
-    stream_id = centaurs_db_batch_write(
-        did=ceramic_did_str,
-        did_seed=ceramic_did_seed,
-        data=centaurs_db,
-        extra_metadata=extra_metadata,
-    )
+#     stream_id = centaurs_db_batch_write(
+#         did=ceramic_did_str,
+#         did_seed=ceramic_did_seed,
+#         data=centaurs_db,
+#         extra_metadata=extra_metadata,
+#     )

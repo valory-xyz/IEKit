@@ -15,6 +15,9 @@
                 },
                 "timestamp": {
                     "type": ["integer", "null"]
+                },
+                "counted_for_activity": {
+                    "type": ["boolean"]
                 }
             },
             "required": ["points", "campaign", "epoch", "timestamp"],
