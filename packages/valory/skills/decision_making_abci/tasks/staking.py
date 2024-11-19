@@ -20,7 +20,7 @@
 """This package contains the logic for task preparations."""
 
 from datetime import datetime, timezone
-from typing import Generator, Optional
+from typing import Dict, Generator, List, Optional, Tuple, cast
 
 from packages.valory.contracts.staking.contract import Staking
 from packages.valory.protocols.contract_api import ContractApiMessage
@@ -156,7 +156,7 @@ class StakingPreparation(TaskPreparation):
     ) -> Generator[None, None, Optional[int]]:
         """Get the staking epoch"""
 
-        contract_api_msg = yield from self.get_contract_api_response(
+        contract_api_msg = yield from self.behaviour.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
             contract_address=staking_contract_address,
             contract_id=str(Staking.contract_id),
@@ -175,7 +175,7 @@ class StakingPreparation(TaskPreparation):
     ) -> Generator[None, None, Optional[str]]:
         """Get the staking contract where a user is staked"""
 
-        contract_api_msg = yield from self.get_contract_api_response(
+        contract_api_msg = yield from self.behaviour.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
             contract_address=self.params.contributors_contract_address,
             contract_id=str(Staking.contract_id),
@@ -222,11 +222,6 @@ class StakingActivityPreparation(StakingPreparation):
         yield
 
         ceramic_db = self.context.ceramic_db
-        latest_activity_tweet_id = int(
-            ceramic_db.data["module_data"]["staking_activity"][
-                "latest_activity_tweet_id"
-            ]
-        )
 
         # Get the current staking epochs
         staking_contract_to_epoch = {}
@@ -236,7 +231,10 @@ class StakingActivityPreparation(StakingPreparation):
 
         # Get the updates.
         # Store them as a property since we will use them in _pre_task() to return the updates
-        self.multisig_to_updates, self.user_to_counted_tweets = get_activity_updates(
+        (
+            self.multisig_to_updates,
+            self.user_to_counted_tweets,
+        ) = self.get_activity_updates(
             ceramic_db.data["users"], staking_contract_to_epoch
         )
         pending_updates = len(self.multisig_to_updates)
@@ -267,11 +265,11 @@ class StakingActivityPreparation(StakingPreparation):
         return False
 
     def get_activity_updates(
-        users: Dict, staking_contract_to_epoch: Dict
-    ) -> Tuple[Dict, Dict]:
+        self, users: Dict, staking_contract_to_epoch: Dict
+    ) -> Generator[None, None, Tuple[Dict, Dict]]:
         """Get the latest activity updates"""
 
-        user_to_updates = {}
+        multisig_to_updates = {}
         user_to_counted_tweets = {}
 
         for user_id, user_data in users.items():
@@ -285,7 +283,9 @@ class StakingActivityPreparation(StakingPreparation):
             service_multisig = user_data["service_multisig"]
 
             # Get this user's staking contract epoch
-            staking_contract = get_staking_contract(user_data["wallet_address"])
+            staking_contract = yield from self.get_staking_contract(
+                user_data["wallet_address"]
+            )
             this_epoch = staking_contract_to_epoch[staking_contract]
 
             # Get this epoch's tweets and points
@@ -294,19 +294,13 @@ class StakingActivityPreparation(StakingPreparation):
                 for k, v in user_data.get["tweets", {}].items()
                 if v["epoch"] == this_epoch
             }
-            this_epoch_counted_tweets = {
-                k: v for k, v in this_epoch_tweets.items() if t["counted_for_activity"]
-            }
             this_epoch_not_counted_tweets = {
                 k: v
                 for k, v in this_epoch_tweets.items()
-                if not t["counted_for_activity"]
+                if not v["counted_for_activity"]
             }
 
             this_epoch_points = sum(t["points"] for t in this_epoch_tweets.values())
-            this_epoch_counted_points = sum(
-                t["points"] for t in this_epoch_counted_points.values()
-            )
             this_epoch_not_counted_points = sum(
                 t["points"] for t in this_epoch_not_counted_tweets.values()
             )
