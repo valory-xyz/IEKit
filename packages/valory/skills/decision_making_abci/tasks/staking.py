@@ -289,10 +289,11 @@ class StakingActivityPreparation(StakingPreparation):
             this_epoch = staking_contract_to_epoch[staking_contract]
 
             # Get this epoch's tweets and points
+            # Also filter out tweets that do not belong to a campaign
             this_epoch_tweets = {
                 k: v
                 for k, v in user_data.get["tweets", {}].items()
-                if v["epoch"] == this_epoch
+                if v["epoch"] == this_epoch and v["campaign"]
             }
             this_epoch_not_counted_tweets = {
                 k: v
