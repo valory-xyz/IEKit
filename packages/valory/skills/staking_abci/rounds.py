@@ -90,12 +90,12 @@ class SynchronizedData(BaseSynchronizedData):
     @property
     def staking_multisig_to_updates(self) -> Dict:
         """Get the staking_multisig_to_updates."""
-        return json.loads(cast(str, self.db.get("staking_multisig_to_updates")))
+        return self.db.get("staking_multisig_to_updates")
 
     @property
     def staking_user_to_counted_tweets(self) -> Dict:
         """Get the staking_user_to_counted_tweets."""
-        return json.loads(cast(str, self.db.get("staking_user_to_counted_tweets")))
+        return self.db.get("staking_user_to_counted_tweets")
 
 class ActivityScoreRound(CollectSameUntilThresholdRound):
     """ActivityScoreRound"""

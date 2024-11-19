@@ -258,7 +258,7 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
 
             # Process new updates
             else:
-                self.context.logger.info(f"Processing activity updates")
+                self.context.logger.info("Processing activity updates")
 
             payload = ActivityScorePayload(
                 sender=sender,

@@ -292,7 +292,7 @@ class StakingActivityPreparation(StakingPreparation):
             # Also filter out tweets that do not belong to a campaign
             this_epoch_tweets = {
                 k: v
-                for k, v in user_data.get["tweets", {}].items()
+                for k, v in user_data.get("tweets", {}).items()
                 if v["epoch"] == this_epoch and v["campaign"]
             }
             this_epoch_not_counted_tweets = {
@@ -327,12 +327,18 @@ class StakingActivityPreparation(StakingPreparation):
             not_counted_tweet_id_to_points = {
                 k: v["points"] for k, v in this_epoch_not_counted_tweets.items()
             }
+
             (
                 multisig_to_updates[service_multisig],
                 user_to_counted_tweets[user_id],
             ) = group_tweets(
-                not_counted_tweet_id_to_points, this_epoch_not_counted_points
+                not_counted_tweet_id_to_points, points_pending_from_previous_run
             )
+
+        self.context.logger.info(f"Calculated activity updates: {multisig_to_updates}")
+        self.context.logger.info(
+            f"Tweets included in the potential update: {user_to_counted_tweets}"
+        )
 
         return multisig_to_updates, user_to_counted_tweets
 
