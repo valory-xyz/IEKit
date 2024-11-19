@@ -234,7 +234,7 @@ class StakingActivityPreparation(StakingPreparation):
         (
             self.multisig_to_updates,
             self.user_to_counted_tweets,
-        ) = self.get_activity_updates(
+        ) = yield from self.get_activity_updates(
             ceramic_db.data["users"], staking_contract_to_epoch
         )
         pending_updates = len(self.multisig_to_updates)
