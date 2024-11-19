@@ -212,25 +212,6 @@ class StakingBaseBehaviour(BaseBehaviour, ABC):
         # no one has called the checkpoint
         return epoch_end < self._get_utc_time()
 
-    def get_staking_epoch(
-        self, staking_contract_address
-    ) -> Generator[None, None, Optional[int]]:
-        """Get the staking epoch"""
-
-        contract_api_msg = yield from self.get_contract_api_response(
-            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
-            contract_address=staking_contract_address,
-            contract_id=str(Staking.contract_id),
-            contract_callable="get_epoch",
-            chain_id=BASE_CHAIN_ID,
-        )
-        if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
-            self.context.logger.error(f"Error getting the epoch: [{contract_api_msg}]")
-            return None
-
-        epoch = cast(int, contract_api_msg.state.body["epoch"])
-        return epoch
-
 
 class ActivityScoreBehaviour(StakingBaseBehaviour):
     """ActivityScoreBehaviour"""
