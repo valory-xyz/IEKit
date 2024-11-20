@@ -28,7 +28,8 @@
 # CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw148vyruw97oxmyhrz5h24j6yszmgkdjskrv5bpr2448qcm4brpig"  # May 10th 2024
 # CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw1477wwkgd6ydzdh5qo7nr4poscb8nz0dru1j1wcujgbdxei3it7a"  # Aug 12th 2024
 # CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw14aqbvmww6is7tiu4w6lr36csbmpx84wehtd1hegucp58udzkgcc"  # Nov 1st 2024
-CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw14a5qlhy9x2j4jq4jfittfgd1opl1ir2hg4zvk6fteimsclxvvg8"    # Nov 8th 2024
+# CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw14a5qlhy9x2j4jq4jfittfgd1opl1ir2hg4zvk6fteimsclxvvg8"  # Nov 8th 2024
+CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw147nzli6czhklr48yfj4qfkl1b431e2zpdybgpq0hnre5xia9qvn"    # Nov 20th 2024
 
 # Testing
 # CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw145kltsutvzqm81vr3pnkjucarc18erjrlxwzc56rxtt3h71wkds"  # Nov 7th 2024
