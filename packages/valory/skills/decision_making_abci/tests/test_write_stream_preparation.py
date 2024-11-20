@@ -424,7 +424,6 @@ class TestWriteContributeDBPreparation(BaseTaskTest):
                             "current_period": "1970-01-01",
                             "latest_mention_tweet_id": 0,
                         },
-                        "staking_activity": {"latest_activity_tweet_id": "0"},
                     },
                     "users": {},
                 },

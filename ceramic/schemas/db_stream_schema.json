@@ -123,16 +123,6 @@
                     },
                     "required": ["last_parsed_block"],
                     "additionalProperties": false
-                },
-                "staking_activity": {
-                    "type": "object",
-                    "properties": {
-                        "latest_activity_tweet_id": {
-                            "type": "string"
-                        }
-                    },
-                    "required": ["latest_activity_tweet_id"],
-                    "additionalProperties": false
                 }
             },
             "required": ["generic", "twitter", "dynamic_nft"],
