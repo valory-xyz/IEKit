@@ -7,13 +7,13 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeie3oujhxxdr5s2lvc6cosbysezqycagw5mbwvxjw24k3dzcbtgg5m
-  behaviours.py: bafybeiauzqxszxvo3heecygltjcq3yo4vdkgdefjpd4p5po4sjjvggrvkq
+  behaviours.py: bafybeie3cthrwyxixacwddcrqxiejywfgso4337zsvj37ug3fgjziin3e4
   dialogues.py: bafybeifmmpyiwetlcgykczsq4dgwvm7tipdupf2rwcndg5cmtm7jfoxwxm
   fsm_specification.yaml: bafybeidnl3i5e6xb7axpzg323xcj62rksrzvopuivcjnxkktcolanr2anu
   handlers.py: bafybeiaufft2fwbbjbbc77md6xkq7prnzzi2nkkm2fipapgx54myabmb7y
-  models.py: bafybeihqdn7wex4xpzg2klfpgb2in7ovs62cp3baxxfehbdc6zd66gudfy
-  payloads.py: bafybeiclrg7nkgeshnqyzcsq3dk75zavdofuktveuv5butjzi65k63m3si
-  rounds.py: bafybeibr53dvrmdqzxmhqhyfabocj4o4h3zabi6kxfm422mquol5pjvcgu
+  models.py: bafybeify7lbvfd3j7inw3g6nr4yjdm2acnug6oavlxfmesj34kqpirtmiq
+  payloads.py: bafybeihuq7ckt22lzpapef5pfj4yzhcxlcvwnwxt6ewtejrtia2klo7tuq
+  rounds.py: bafybeieji4b4ehw5mg4snhtoc2qcgey2t3s2zicsispgtdfm46fmajrudy
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
@@ -137,6 +137,7 @@ models:
       contributors_contract_address: '0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94'
       safe_contract_address_base: '0x0000000000000000000000000000000000000000'
       multisend_address: '0x0000000000000000000000000000000000000000'
+      staking_rewards_required_points: 200
     class_name: Params
   requests:
     args: {}

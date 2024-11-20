@@ -15,6 +15,9 @@
                 },
                 "timestamp": {
                     "type": ["integer", "null"]
+                },
+                "counted_for_activity": {
+                    "type": ["boolean"]
                 }
             },
             "required": ["points", "campaign", "epoch", "timestamp"],
@@ -119,16 +122,6 @@
                         }
                     },
                     "required": ["last_parsed_block"],
-                    "additionalProperties": false
-                },
-                "staking_activity": {
-                    "type": "object",
-                    "properties": {
-                        "latest_activity_tweet_id": {
-                            "type": "string"
-                        }
-                    },
-                    "required": ["latest_activity_tweet_id"],
                     "additionalProperties": false
                 }
             },

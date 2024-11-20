@@ -11,7 +11,7 @@ fingerprint:
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
   fsm_specification.yaml: bafybeidw4kakgv56qrlowz4efgtkh6jzopcdnkktjwuyiruaapgxbgw4me
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
-  models.py: bafybeidpzmu4srqtwqahpxcevbargmvi6tvz3xktlg2c7ws6xuhnbkrflq
+  models.py: bafybeiatvo5f3kt5euaeddnrhnkjoznarjnnscwn2vgr3hq3qdd5xtwcau
   payloads.py: bafybeic6jrms2xs2odykwwngr5yyqm6cus7cyihdbxux26glpq3573q3ay
   rounds.py: bafybeiboeza3rdqwynloozpuugdcw7s63ukkxsupwspc4mfhrhr6mu3tey
   tasks/campaign_validation_preparation.py: bafybeiafgc7lzgtl6qwo3qsdpskipm4qeby6c5nmltm4x4yp3zcwn5a6z4
@@ -20,7 +20,7 @@ fingerprint:
   tasks/read_stream_preparation.py: bafybeicmjasiyecopfweobodzbmn3tbluu5q724uzzqkit6urn3lb5q354
   tasks/score_preparations.py: bafybeie7cfot24zcyod5becz6t5lasvva77httfkw57qmvgjk35d3qluxa
   tasks/signature_validation.py: bafybeihbwrv72hnh3ytko2i5oszqgdky2j6h2wse45wvuhf2j32lo2tsjy
-  tasks/staking.py: bafybeiffboqqerm7iltlb6qkjxfehr3bwb4mljp4rlff6wuba3qhgadghu
+  tasks/staking.py: bafybeigkhawwqub36el3jrgiefostogk62axys2gqnuc2xkhlbltmvaohq
   tasks/task_preparations.py: bafybeihfm3ms665fvz2qwmhmcwgl2ws5mt62pykomowoxpm6a46jlqvsmu
   tasks/tweet_validation_preparation.py: bafybeif3wbfskiyuij7unx72euklms7owrzwzgdu462xatvypalm6xrgca
   tasks/twitter_preparation.py: bafybeicn7stcvmd6oex55dwptwxpikpssbcwnj2d3xkercikg5nlzqh4k4
@@ -32,7 +32,7 @@ fingerprint:
   tests/centaur_configs.py: bafybeigkr2n3l7ibtxtwf5w2t6fygxxt5headnic4lh6wrs6tcbb2ghqgi
   tests/test_behaviours.py: bafybeigt4ifqyyw23ejypquaqgecjrgmvtrgxustwmzucolgm6kr5gzdnu
   tests/test_campaign_validation.py: bafybeihpfaqjevuprse5uesw5ascbzyxylldcnpkjfuey7ytspriq2p5pu
-  tests/test_ceramic_db.py: bafybeih4jdyscu5zupjtwasw5xr5o5xv4wm7nii4xqrbhjgk7jspxdps7i
+  tests/test_ceramic_db.py: bafybeid44ytwdgnzjyarw3yirg6bz3ago7pdamufphjbh6rxa5d25zkdtq
   tests/test_dialogues.py: bafybeihxzcyy7xvg4lte4bv5hy2h4mozdzwvyaa36feu3oxv67jfvsyuoi
   tests/test_finished_pipeline_preparation.py: bafybeidlz77tnfif5ajq4ikrlo4mv7ssy3wghvkwolyid3f3dd3scfbblq
   tests/test_handlers.py: bafybeie6q3l6zyf356uvhldobhiir5ang5ybmi7lcao3556n3bnlpfqhfm
@@ -46,7 +46,7 @@ fingerprint:
   tests/test_tweet_validation_preparation.py: bafybeics3izi4k77wfbfo3vj5as662kdt5gnxmcfqquvbvppsvbe3kyt5q
   tests/test_twitter_preparation.py: bafybeidjcq6uxnni7j2gkx7w5umnq7r7ixqs277ecucqfx2dwzrnzqx74q
   tests/test_week_in_olas_preparations.py: bafybeibp4e66suzteiat75abiz4ivdk4miwkly7wgnbkfchd32abp2wr2i
-  tests/test_write_stream_preparation.py: bafybeic75px2cbffy2bv4wc3osrebwc2ij43at7gglg2vpmgz4vzqft7ze
+  tests/test_write_stream_preparation.py: bafybeifzlseuzlsam6yamrkeu4p2kmyhfqtoe5mdp4zt5ubfecgbyel6ke
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
@@ -58,7 +58,7 @@ protocols:
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeibiw4oqwqvo4jccwz5fb73iardzychgvcl66tceiildohoju2ikti
 - valory/ceramic_read_abci:0.1.0:bafybeigz7rzfls3niv3urfb4z4vwr525ooxveelgg3djpvkg5jzetxlm2u
-- valory/staking_abci:0.1.0:bafybeicb6hrw7f5f3dcrxgwir3wviwg44w3ncvkqszuq7jfqfqyzjc352y
+- valory/staking_abci:0.1.0:bafybeia25btekbiwi7tep6wzjlojc5g4msrxtfkhunuzlopjbjziactrje
 behaviours:
   main:
     args: {}

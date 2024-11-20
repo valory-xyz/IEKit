@@ -92,6 +92,7 @@ class Params(BaseParams):
         self.epoch_end_threshold_minutes = self._ensure(
             "epoch_end_threshold_minutes", kwargs, int
         )
+        self.staking_contract_addresses = kwargs.get("staking_contract_addresses", [])
         super().__init__(*args, **kwargs)
 
 
@@ -135,7 +136,6 @@ class CeramicDBBase:
                     },
                     "dynamic_nft": {},
                     "generic": {"latest_update_id": 0},
-                    "staking_activity": {"latest_activity_tweet_id": "0"},
                 },
             }
         )

@@ -62,42 +62,6 @@ EMPTY_CALL_DATA = b"0x"
 SAFE_GAS = 0
 BASE_CHAIN_ID = "base"
 
-def get_activity_updates(users: Dict, latest_activity_tweet_id: int) -> Tuple[Dict, int]:
-    """Get the latest activity updates"""
-
-    updates = {}
-    latest_processed_tweet = latest_activity_tweet_id
-
-    for user in users.values():
-
-        # Skip the user if there is no service multisig
-        # This means the user has not staked
-        if not user.get("service_multisig", None):
-            continue
-
-        new_tweets = 0
-
-        for tweet_id in user["tweets"].keys():
-            tweet_id = int(tweet_id)
-
-            # Skip old tweets
-            if tweet_id <= latest_activity_tweet_id:
-                continue
-
-            # Update the last_processed_tweet
-            if tweet_id > latest_processed_tweet:
-                latest_processed_tweet = tweet_id
-
-            # Increase activity count
-            new_tweets += 1
-
-        # Add the user activity
-        if new_tweets:
-            print(f"User {user['twitter_handle']} has {new_tweets} new tweets")
-            updates[user["service_multisig"]] = new_tweets
-
-    return updates, latest_processed_tweet
-
 
 class StakingBaseBehaviour(BaseBehaviour, ABC):
     """Base behaviour for the staking_abci skill."""
@@ -260,36 +224,25 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
             sender = self.context.agent_address
-
             pending_write = False
-            activity_updates = None
-            latest_activity_tweet_id = None
 
             # Check whether we just came back from settling an update
             if self.synchronized_data.tx_submitter == ActivityUpdatePreparationBehaviour.auto_behaviour_id():
-                # Update the last processed tweet on the model, and mark for Ceramic update
-                self.context.ceramic_db.data["module_data"]["staking_activity"][
-                    "latest_activity_tweet_id"
-                ] = str(self.synchronized_data.latest_activity_tweet_id)  # store as string
+                staking_user_to_counted_tweets = self.synchronized_data.staking_user_to_counted_tweets
+
+                # For each user, update the last processed tweet on the model, and mark for Ceramic update
+                for user_id, counter_tweets in staking_user_to_counted_tweets.items():
+                    for tweet_id in counter_tweets:
+                        self.context.ceramic_db.data["users"][user_id]["tweets"][tweet_id]["counted_for_activity"] = True
                 pending_write = True
-                self.context.logger.info(f"Last activity tweet id set to {self.synchronized_data.latest_activity_tweet_id}. Ceramic marked for update.")
+                self.context.logger.info(f"Tweets counted for activity: {staking_user_to_counted_tweets}. Ceramic marked for update.")
 
             # Process new updates
             else:
-                ceramic_db_copy = self.context.ceramic_db.copy()
-                latest_activity_tweet_id = int(ceramic_db_copy.data["module_data"]["staking_activity"][
-                    "latest_activity_tweet_id"
-                ])
-                activity_updates, latest_activity_tweet_id = get_activity_updates(
-                    ceramic_db_copy.data["users"],
-                    latest_activity_tweet_id
-                )
-                self.context.logger.info(f"Processing activity updates: {activity_updates}")
+                self.context.logger.info("Processing activity updates")
 
             payload = ActivityScorePayload(
                 sender=sender,
-                activity_updates=json.dumps(activity_updates, sort_keys=True),
-                latest_activity_tweet_id=latest_activity_tweet_id,
                 pending_write=pending_write
             )
 
@@ -329,7 +282,7 @@ class ActivityUpdatePreparationBehaviour(StakingBaseBehaviour):
         """Prepare the activity update tx"""
 
         self.context.logger.info(
-            f"Preparing activity update call: {self.synchronized_data.activity_updates}"
+            f"Preparing activity update call: {self.synchronized_data.staking_multisig_to_updates}"
         )
 
         # Use the contract api to interact with the activity tracker contract
@@ -338,7 +291,7 @@ class ActivityUpdatePreparationBehaviour(StakingBaseBehaviour):
             contract_address=self.params.contributors_contract_address,
             contract_id=str(Staking.contract_id),
             contract_callable="build_activity_update_tx",
-            updates=self.synchronized_data.activity_updates,
+            updates=self.synchronized_data.staking_multisig_to_updates,
             chain_id=BASE_CHAIN_ID,
         )
 

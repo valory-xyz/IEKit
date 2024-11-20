@@ -15,7 +15,8 @@
                     "points": 100,
                     "campaign": "OlasNetwork",
                     "epoch": 1,
-                    "timestamp": "1761132611533934592"
+                    "timestamp": "1761132611533934592",
+                    "counted_for_activity": false
                 }
             }
         }
@@ -33,9 +34,6 @@
         },
         "dynamic_nft": {
             "last_parsed_block": "0"
-        },
-        "staking_activity": {
-            "latest_activity_tweet_id": "1753121332232061266"
         }
     }
 }

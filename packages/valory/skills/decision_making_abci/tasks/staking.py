@@ -20,7 +20,7 @@
 """This package contains the logic for task preparations."""
 
 from datetime import datetime, timezone
-from typing import Generator, Optional
+from typing import Dict, Generator, List, Optional, Tuple, cast
 
 from packages.valory.contracts.staking.contract import Staking
 from packages.valory.protocols.contract_api import ContractApiMessage
@@ -28,10 +28,51 @@ from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
 )
-from packages.valory.skills.staking_abci.behaviours import (
-    BASE_CHAIN_ID,
-    get_activity_updates,
-)
+from packages.valory.skills.staking_abci.behaviours import BASE_CHAIN_ID
+
+
+POINTS_PER_ACTIVITY_UPDATE = 200
+
+
+def group_tweets(
+    tweet_id_to_points: Dict, pending_points: int
+) -> Tuple[int, List[str]]:
+    """Group tweets for the next update"""
+
+    # Add the pending points as another tweet
+    tweet_id_to_points["dummy_id"] = pending_points
+
+    selected_tweets = []
+    update_points = 0
+
+    # Sort the tweet dict, from more points to lest points
+    sorted_tweet_id_to_points = dict(
+        sorted(tweet_id_to_points.items(), key=lambda item: item[1], reverse=True)
+    )
+
+    while True:
+        # Stop when adding the remaining points does not produce a new update
+        selected_points = sum(
+            v for k, v in tweet_id_to_points.items() if k in selected_tweets
+        )
+        remainder_points = selected_points % POINTS_PER_ACTIVITY_UPDATE
+        remaining_points = sum(list(sorted_tweet_id_to_points.values()))
+        if remainder_points + remaining_points < POINTS_PER_ACTIVITY_UPDATE:
+            break
+
+        # Add the next tweet
+        tweet_id = list(sorted_tweet_id_to_points.keys())[0]
+        update_points += sorted_tweet_id_to_points[tweet_id]
+        if tweet_id != "dummy_id":
+            selected_tweets.append(tweet_id)
+
+        # Remove from the dict
+        del sorted_tweet_id_to_points[tweet_id]
+
+    # Calculate update
+    updates = int(update_points / POINTS_PER_ACTIVITY_UPDATE)
+
+    return updates, selected_tweets
 
 
 class StakingPreparation(TaskPreparation):
@@ -110,27 +151,93 @@ class StakingPreparation(TaskPreparation):
         # no one has called the checkpoint
         return epoch_end < self.now_utc
 
+    def get_staking_epoch(
+        self, staking_contract_address
+    ) -> Generator[None, None, Optional[int]]:
+        """Get the staking epoch"""
+
+        contract_api_msg = yield from self.behaviour.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
+            contract_address=staking_contract_address,
+            contract_id=str(Staking.contract_id),
+            contract_callable="get_epoch",
+            chain_id=BASE_CHAIN_ID,
+        )
+        if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
+            self.context.logger.error(f"Error getting the epoch: [{contract_api_msg}]")
+            return None
+
+        epoch = cast(int, contract_api_msg.state.body["epoch"])
+        return epoch
+
+    def get_staking_contract(
+        self, wallet_address
+    ) -> Generator[None, None, Optional[str]]:
+        """Get the staking contract where a user is staked"""
+
+        contract_api_msg = yield from self.behaviour.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
+            contract_address=self.params.contributors_contract_address,
+            contract_id=str(Staking.contract_id),
+            contract_callable="get_account_to_service_map",
+            wallet_address=wallet_address,
+            chain_id=BASE_CHAIN_ID,
+        )
+        if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
+            self.context.logger.error(
+                f"Error getting the epoch: [{contract_api_msg.performative}]"
+            )
+            return None
+
+        staking_contract_address = cast(
+            str, contract_api_msg.state.body["staking_contract_address"]
+        )
+
+        if staking_contract_address == "0x0000000000000000000000000000000000000000":
+            return None
+        return staking_contract_address
+
 
 class StakingActivityPreparation(StakingPreparation):
     """StakingActivityPreparation"""
 
     task_name = "staking_activity"
     task_event = Event.STAKING_ACTIVITY.value
+    multisig_to_updates = None
+    user_to_counted_tweets = None
+
+    def _pre_task(self):
+        """Preparations before running the task"""
+        yield
+        updates = {}
+        if self.multisig_to_updates:
+            updates = {
+                "staking_multisig_to_updates": self.multisig_to_updates,
+                "staking_user_to_counted_tweets": self.user_to_counted_tweets,
+            }
+        return updates, self.task_event
 
     def check_extra_conditions(self):
         """Check user staking threshold"""
         yield
 
         ceramic_db = self.context.ceramic_db
-        latest_activity_tweet_id = int(
-            ceramic_db.data["module_data"]["staking_activity"][
-                "latest_activity_tweet_id"
-            ]
+
+        # Get the current staking epochs
+        staking_contract_to_epoch = {}
+        for staking_contract_address in self.params.staking_contract_addresses:
+            epoch = yield from self.get_staking_epoch(staking_contract_address)
+            staking_contract_to_epoch[staking_contract_address] = epoch
+
+        # Get the updates.
+        # Store them as a property since we will use them in _pre_task() to return the updates
+        (
+            self.multisig_to_updates,
+            self.user_to_counted_tweets,
+        ) = yield from self.get_activity_updates(
+            ceramic_db.data["users"], staking_contract_to_epoch
         )
-        updates, _ = get_activity_updates(
-            ceramic_db.data["users"], latest_activity_tweet_id
-        )
-        pending_updates = len(updates)
+        pending_updates = len(self.multisig_to_updates)
 
         # If enough users have pending updates, we run the activity update
         if pending_updates >= self.params.staking_activity_threshold:
@@ -156,6 +263,84 @@ class StakingActivityPreparation(StakingPreparation):
         )
 
         return False
+
+    def get_activity_updates(
+        self, users: Dict, staking_contract_to_epoch: Dict
+    ) -> Generator[None, None, Tuple[Dict, Dict]]:
+        """Get the latest activity updates"""
+
+        multisig_to_updates = {}
+        user_to_counted_tweets = {}
+
+        for user_id, user_data in users.items():
+            # Skip the user if there is no service multisig or wallet
+            # This means the user has not staked
+            if not user_data.get("service_multisig", None) or not user_data.get(
+                "wallet_address", None
+            ):
+                continue
+
+            service_multisig = user_data["service_multisig"]
+
+            # Get this user's staking contract epoch
+            staking_contract = yield from self.get_staking_contract(
+                user_data["wallet_address"]
+            )
+            this_epoch = staking_contract_to_epoch[staking_contract]
+
+            # Get this epoch's tweets and points
+            # Also filter out tweets that do not belong to a campaign
+            this_epoch_tweets = {
+                k: v
+                for k, v in user_data.get("tweets", {}).items()
+                if v["epoch"] == this_epoch and v["campaign"]
+            }
+            this_epoch_not_counted_tweets = {
+                k: v
+                for k, v in this_epoch_tweets.items()
+                if not v["counted_for_activity"]
+            }
+
+            this_epoch_points = sum(t["points"] for t in this_epoch_tweets.values())
+            this_epoch_not_counted_points = sum(
+                t["points"] for t in this_epoch_not_counted_tweets.values()
+            )
+
+            # Since we count each POINTS_PER_ACTIVITY_UPDATE as one update, it can be the case
+            # that some partial points are pending from the previous activity update, i.e
+            # an user scored 2 tweets this epoch with [200, 300] points.
+            # If POINTS_PER_ACTIVITY_UPDATE=200, the activity update will add 2 updates.
+            # The remaining 100 points should be added to the next activity update (if any).
+            points_pending_from_previous_run = (
+                this_epoch_points % POINTS_PER_ACTIVITY_UPDATE
+            )
+
+            # Skip this user if there are not enough points for an update
+            if (
+                points_pending_from_previous_run + this_epoch_not_counted_points
+                < POINTS_PER_ACTIVITY_UPDATE
+            ):
+                continue
+
+            # Group tweets to build new updates. This is not evident and requires
+            # an algorithm that optimizes how to group them in order to maximize the number of updates for the user
+            not_counted_tweet_id_to_points = {
+                k: v["points"] for k, v in this_epoch_not_counted_tweets.items()
+            }
+
+            (
+                multisig_to_updates[service_multisig],
+                user_to_counted_tweets[user_id],
+            ) = group_tweets(
+                not_counted_tweet_id_to_points, points_pending_from_previous_run
+            )
+
+        self.context.logger.info(f"Calculated activity updates: {multisig_to_updates}")
+        self.context.logger.info(
+            f"Tweets included in the potential update: {user_to_counted_tweets}"
+        )
+
+        return multisig_to_updates, user_to_counted_tweets
 
 
 class StakingCheckpointPreparation(StakingPreparation):

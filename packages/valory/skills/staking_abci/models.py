@@ -54,6 +54,9 @@ class Params(BaseParams):
             "safe_contract_address_base", kwargs, str
         )
         self.multisend_address = kwargs.get("multisend_address", "")
+        self.staking_rewards_required_points = self._ensure(
+            "staking_rewards_required_points", kwargs, int
+        )
         super().__init__(*args, **kwargs)
 
 Requests = BaseRequests

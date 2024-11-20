@@ -34,7 +34,7 @@ ceramic = Ceramic(os.getenv("CERAMIC_API_BASE"))
 ceramic_did_str = "did:key:" + str(os.getenv("CERAMIC_DID_STR"))
 ceramic_did_seed = os.getenv("CERAMIC_DID_SEED")
 
-MAX_USERS_PER_COMMIT = 200
+MAX_USERS_PER_COMMIT = 100
 MAX_TWEETS_PER_COMMIT = 100
 
 LOCAL_READ = False  # load from the local machine instead of Ceramic
@@ -109,32 +109,13 @@ else:
 
 print("Updating the users db format...")
 
-# Add the new module data
-user_db["module_data"]["staking_activity"] = {
-    "latest_activity_tweet_id": user_db["module_data"]["twitter"]["latest_hashtag_tweet_id"]
-}
+# Remove the module data
+del user_db["module_data"]["staking_activity"]
 
-for user_id, user_data in user_db["users"].items():
-
-    # Initialize the service multisig and id
-    user_data["service_multisig"] = None
-    user_data["service_id"] = None
-
-    # Convert tweets
-    tweets = {}
-    for tweet_id, points in user_data["tweet_id_to_points"].items():
-        tweets[tweet_id] = {
-            "points": points,
-            "epoch": None,
-            "campaign": None,
-            "timestamp": None,
-        }
-
-    # Remove old tweet_id_to_points
-    del user_data["tweet_id_to_points"]
-
-    # Add updated tweets
-    user_data["tweets"] = tweets
+for user_data in user_db["users"].values():
+    for tweet in user_data["tweets"].values():
+        # Initialize the counted_for_activity
+        tweet["counted_for_activity"] = False
 
 # Validate the new data
 print("Validating the updated users db...")
@@ -173,63 +154,7 @@ else:
 
 
 print("Updating the db format...")
-
-# Add the campaign data
-centaurs_db[0]["plugins_data"]["twitter_campaigns"] = {
-    "campaigns": [
-        {
-            "id": "OlasNetwork",
-            "hashtag": "OlasNetwork",
-            "start_ts": 0,
-            "end_ts": 4885453704,
-            "proposer": {
-                "address": "",
-                "verified": True,
-                "signature": ""
-            },
-            "voters": [],
-            "status": "live"
-        },
-        {
-            "id": "StakeWithPearl",
-            "hashtag": "StakeWithPearl",
-            "start_ts": 0,
-            "end_ts": 4885453704,
-            "proposer": {
-                "address": "",
-                "verified": True,
-                "signature": ""
-            },
-            "voters": [],
-            "status": "live"
-        },
-        {
-            "id": "AgentsUnleashed",
-            "hashtag": "AgentsUnleashed",
-            "start_ts": 0,
-            "end_ts": 4885453704,
-            "proposer": {
-                "address": "",
-                "verified": True,
-                "signature": ""
-            },
-            "voters": [],
-            "status": "live"
-        }
-    ]
-}
-
-centaurs_db[0]["configuration"]["plugins"]["twitter_campaigns"] = {
-    "enabled": True
-}
-centaurs_db[0]["configuration"]["plugins"]["staking_activity"] = {
-    "enabled": True,
-    "last_run": None
-}
-centaurs_db[0]["configuration"]["plugins"]["staking_checkpoint"] = {
-    "enabled": True,
-    "last_run": None
-}
+# Nothing to do
 
 # Validate the new data
 print("Validating the updated centaurs db...")

@@ -74,6 +74,7 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
 
 ONE_DAY = 86400.0
 ADDRESS_REGEX = r"0x[a-fA-F0-9]{40}"
+MENTION_OR_HASHTAG_REGEX = r"(?:#\w+|@\w+)"
 TAGLINE = "I'm linking my wallet to @Autonolas Contribute:"
 DEFAULT_TWEET_POINTS = 100
 TWEET_QUALITY_TO_POINTS = {"LOW": 1, "AVERAGE": 2, "HIGH": 3}
@@ -82,6 +83,13 @@ HTTP_OK = 200
 HTTP_TOO_MANY_REQUESTS = 429
 RETWEET_START = "RT @"
 BASE_CHAIN_ID = "base"
+
+
+def is_minimal_effort_tweet(tweet: str) -> str:
+    """Remove mentions and hashtags from a tweet and checks whether there is more text"""
+    cleaned_tweet = re.sub(MENTION_OR_HASHTAG_REGEX, "", tweet).strip()
+    print(cleaned_tweet)
+    return len(cleaned_tweet) < 10
 
 
 def get_engagement(impressions: int) -> int:
@@ -618,6 +626,10 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
                 if tweet["text"].startswith(RETWEET_START):
                     continue
 
+                # Skip minimal effort tweets
+                if is_minimal_effort_tweet(tweet["text"]):
+                    continue
+
                 tweets[tweet["id"]] = tweet
 
                 # Set the author handle
@@ -897,6 +909,10 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
                 if tweet["text"].startswith(RETWEET_START):
                     continue
 
+                # Skip minimal effort tweets
+                if is_minimal_effort_tweet(tweet["text"]):
+                    continue
+
                 retrieved_tweets += 1
                 if tweet["id"] not in tweets:  # avoids duplicated tweets
                     tweets[tweet["id"]] = tweet
@@ -1116,6 +1132,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         # Replace the encoded %23 for #
         active_hashtags = [i.replace("%23", "#") for i in active_hashtags]
 
+        # Add the mention as a campaign
+        active_hashtags.append("@autonolas")
+
         # Get the staking epoch
         staking_contract_to_epoch = {}
         for staking_contract_address in self.params.staking_contract_addresses:
@@ -1184,6 +1203,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                     )
                     if "created_at" in tweet
                     else None,
+                    "counted_for_activity": False,
                 }
 
             # User data to update
