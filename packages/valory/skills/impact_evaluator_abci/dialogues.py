@@ -63,15 +63,17 @@ from packages.valory.skills.abstract_round_abci.dialogues import (
 )
 from packages.valory.skills.llm_abci.dialogues import LlmDialogue as BaseLlmDialogue
 from packages.valory.skills.llm_abci.dialogues import LlmDialogues as BaseLlmDialogues
+from packages.valory.skills.mech_interact_abci.dialogues import (
+    AcnDialogue as BaseAcnDialogue,
+)
+from packages.valory.skills.mech_interact_abci.dialogues import (
+    AcnDialogues as BaseAcnDialogues,
+)
 from packages.valory.skills.twitter_write_abci.dialogues import (
     TwitterDialogue as BaseTwitterDialogue,
 )
 from packages.valory.skills.twitter_write_abci.dialogues import (
     TwitterDialogues as BaseTwitterDialogues,
-)
-from packages.valory.skills.mech_interact_abci.dialogues import (
-    AcnDialogue as BaseAcnDialogue,
-    AcnDialogues as BaseAcnDialogues,
 )
 
 

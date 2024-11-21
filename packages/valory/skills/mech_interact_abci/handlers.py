@@ -18,8 +18,12 @@
 # ------------------------------------------------------------------------------
 
 """This module contains the handlers for the skill of MechInteractAbciApp."""
-from typing import Optional, cast
+from typing import cast
 
+from aea.protocols.base import Message
+from aea.skills.base import Handler
+
+from packages.valory.protocols.acn_data_share.message import AcnDataShareMessage
 from packages.valory.skills.abstract_round_abci.handlers import (
     ABCIRoundHandler as BaseABCIRoundHandler,
 )
@@ -41,10 +45,11 @@ from packages.valory.skills.abstract_round_abci.handlers import (
 from packages.valory.skills.abstract_round_abci.handlers import (
     TendermintHandler as BaseTendermintHandler,
 )
-from packages.valory.skills.mech_interact_abci.states.base import MechInteractionResponse, MECH_RESPONSE
-from packages.valory.protocols.acn_data_share.message import AcnDataShareMessage
-from aea.skills.base import Handler
-from aea.protocols.base import Message
+from packages.valory.skills.mech_interact_abci.states.base import (
+    MECH_RESPONSE,
+    MechInteractionResponse,
+)
+
 
 ABCIHandler = BaseABCIRoundHandler
 HttpHandler = BaseHttpHandler
@@ -54,11 +59,11 @@ ContractApiHandler = BaseContractApiHandler
 TendermintHandler = BaseTendermintHandler
 IpfsHandler = BaseIpfsHandler
 
+
 class AcnHandler(Handler):
     """The ACN response handler."""
 
     SUPPORTED_PROTOCOL = AcnDataShareMessage.protocol_id
-
 
     def setup(self) -> None:
         """Set up the handler."""

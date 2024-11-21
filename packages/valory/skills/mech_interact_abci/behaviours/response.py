@@ -22,7 +22,6 @@
 import json
 from typing import Any, Callable, Dict, Generator, List, Optional
 
-from autonomy.cli.mint import agent
 from web3.constants import ADDRESS_ZERO
 
 from packages.valory.contracts.mech.contract import Mech
@@ -37,8 +36,9 @@ from packages.valory.skills.mech_interact_abci.behaviours.request import V1_HEX_
 from packages.valory.skills.mech_interact_abci.models import MechResponseSpecs
 from packages.valory.skills.mech_interact_abci.payloads import MechResponsePayload
 from packages.valory.skills.mech_interact_abci.states.base import (
+    MECH_RESPONSE,
     MechInteractionResponse,
-    MechRequest, MECH_RESPONSE,
+    MechRequest,
 )
 from packages.valory.skills.mech_interact_abci.states.response import MechResponseRound
 
@@ -64,18 +64,18 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             error="The mech's response has not been set!"
         )
         self._is_valid_acn_sender: bool = False
-    
-    @property 
+
+    @property
     def current_mech_response(self) -> MechInteractionResponse:
         """Get the current mech response."""
         # accessing the agent shared state, NOT the behaviour's shared state
         return self.context.shared_state[MECH_RESPONSE]
-    
+
     @current_mech_response.setter
     def current_mech_response(self, response: MechInteractionResponse) -> None:
         """Set the current mech response."""
         self.context.shared_state[MECH_RESPONSE] = response
-    
+
     @property
     def from_block(self) -> int:
         """Get the block number in which the request to the mech was settled."""
@@ -181,7 +181,10 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
     def _get_response_hash(self) -> WaitableConditionType:
         """Get the hash of the response data."""
-        if self.params.use_acn_for_delivers and self.current_mech_response.response_data is not None:
+        if (
+            self.params.use_acn_for_delivers
+            and self.current_mech_response.response_data is not None
+        ):
             result = yield from self.agent_registry_contract_interact(
                 contract_callable="authenticate_sender",
                 data_key="is_valid",

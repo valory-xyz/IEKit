@@ -8,7 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeid3wfzglolebuo6jrrsopswzu4lk77bm76mvw3euizlsjtnt3wmgu
   build/AgentRegistry.json: bafybeicoe5elvvsv2neiirsdn4uddrilizmyib3x4mvpklr7olhj2kh4ue
-  contract.py: bafybeibfpknq5oohuar2yqmtjkhwyteymgwrauzyjm4vajcbmxecgjz4yy
+  contract.py: bafybeidci76lr4okeas3u4k5td5beu76hqjbxp43y3uikfl3vdelhhg6am
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: AgentRegistryContract

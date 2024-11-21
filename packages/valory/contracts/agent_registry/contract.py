@@ -18,7 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """This module contains the class to connect to the Agent Registry contract."""
-from typing import Dict, Any, cast
+from typing import Any, Dict, cast
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId

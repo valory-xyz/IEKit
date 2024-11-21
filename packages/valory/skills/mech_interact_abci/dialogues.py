@@ -20,9 +20,16 @@
 """This module contains the dialogues of the MechInteractAbciApp."""
 from typing import Any
 
+from aea.protocols.base import Address, Message
+from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 from aea.skills.base import Model
-from aea.protocols.base import Message, Address
 
+from packages.valory.protocols.acn_data_share.dialogues import (
+    AcnDataShareDialogue as BaseAcnDataShareDialogue,
+)
+from packages.valory.protocols.acn_data_share.dialogues import (
+    AcnDataShareDialogues as BaseAcnDataShareDialogues,
+)
 from packages.valory.skills.abstract_round_abci.dialogues import (
     AbciDialogue as BaseAbciDialogue,
 )
@@ -65,13 +72,6 @@ from packages.valory.skills.abstract_round_abci.dialogues import (
 from packages.valory.skills.abstract_round_abci.dialogues import (
     TendermintDialogues as BaseTendermintDialogues,
 )
-from packages.valory.protocols.acn_data_share.dialogues import (
-    AcnDataShareDialogue as BaseAcnDataShareDialogue,
-)
-from packages.valory.protocols.acn_data_share.dialogues import (
-    AcnDataShareDialogues as BaseAcnDataShareDialogues,
-)
-from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 
 
 AbciDialogue = BaseAbciDialogue
@@ -102,6 +102,7 @@ IpfsDialogue = BaseIpfsDialogue
 IpfsDialogues = BaseIpfsDialogues
 
 AcnDialogue = BaseAcnDataShareDialogue
+
 
 class AcnDialogues(Model, BaseAcnDataShareDialogues):
     """The dialogues class keeps track of all dialogues."""
