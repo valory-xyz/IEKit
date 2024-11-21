@@ -18,6 +18,10 @@
 # ------------------------------------------------------------------------------
 
 """This module contains the dialogues of the MechInteractAbciApp."""
+from typing import Any
+
+from aea.skills.base import Model
+from aea.protocols.base import Message, Address
 
 from packages.valory.skills.abstract_round_abci.dialogues import (
     AbciDialogue as BaseAbciDialogue,
@@ -61,6 +65,13 @@ from packages.valory.skills.abstract_round_abci.dialogues import (
 from packages.valory.skills.abstract_round_abci.dialogues import (
     TendermintDialogues as BaseTendermintDialogues,
 )
+from packages.valory.protocols.acn_data_share.dialogues import (
+    AcnDataShareDialogue as BaseAcnDataShareDialogue,
+)
+from packages.valory.protocols.acn_data_share.dialogues import (
+    AcnDataShareDialogues as BaseAcnDataShareDialogues,
+)
+from aea.protocols.dialogue.base import Dialogue as BaseDialogue
 
 
 AbciDialogue = BaseAbciDialogue
@@ -89,3 +100,33 @@ TendermintDialogues = BaseTendermintDialogues
 
 IpfsDialogue = BaseIpfsDialogue
 IpfsDialogues = BaseIpfsDialogues
+
+AcnDialogue = BaseAcnDataShareDialogue
+
+class AcnDialogues(Model, BaseAcnDataShareDialogues):
+    """The dialogues class keeps track of all dialogues."""
+
+    def __init__(self, **kwargs: Any) -> None:
+        """
+        Initialize dialogues.
+
+        :param kwargs: keyword arguments
+        """
+        Model.__init__(self, **kwargs)
+
+        def role_from_first_message(  # pylint: disable=unused-argument
+            message: Message, receiver_address: Address
+        ) -> BaseDialogue.Role:
+            """Infer the role of the agent from an incoming/outgoing first message
+
+            :param message: an incoming/outgoing first message
+            :param receiver_address: the address of the receiving agent
+            :return: The role of the agent
+            """
+            return AcnDialogue.Role.AGENT
+
+        BaseAcnDataShareDialogues.__init__(
+            self,
+            self_address=str(self.context.agent_address),
+            role_from_first_message=role_from_first_message,
+        )

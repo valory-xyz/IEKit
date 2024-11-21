@@ -69,6 +69,10 @@ from packages.valory.skills.twitter_write_abci.dialogues import (
 from packages.valory.skills.twitter_write_abci.dialogues import (
     TwitterDialogues as BaseTwitterDialogues,
 )
+from packages.valory.skills.mech_interact_abci.dialogues import (
+    AcnDialogue as BaseAcnDialogue,
+    AcnDialogues as BaseAcnDialogues,
+)
 
 
 AbciDialogue = BaseAbciDialogue
@@ -105,3 +109,6 @@ LlmDialogues = BaseLlmDialogues
 
 TwitterDialogue = BaseTwitterDialogue
 TwitterDialogues = BaseTwitterDialogues
+
+AcnDialogue = BaseAcnDialogue
+AcnDialogues = BaseAcnDialogues

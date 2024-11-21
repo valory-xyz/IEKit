@@ -106,6 +106,12 @@ class MechParams(BaseParams):
         self.mech_marketplace_config: MechMarketplaceConfig = (
             MechMarketplaceConfig.from_dict(kwargs["mech_marketplace_config"])
         )
+        self.agent_registry_address = kwargs.get("agent_registry_address", None)
+        enforce(
+            self.agent_registry_address is not None,
+            "Agent registry address not specified!",
+        )
+        self.use_acn_for_delivers = self._ensure("use_acn_for_delivers", kwargs, bool)
         enforce(
             not self.use_mech_marketplace
             or self.mech_contract_address

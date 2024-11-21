@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeibchcegxdutuzwch54mraki7x5lzemlwdycb4a2ytfm7fs2zlqreq
+agent: valory/impact_evaluator:0.1.0:bafybeih6hmctwgq2hmgd77gwq4dendmffeaa5ai4o3qwgkndsteflxtw4i
 number_of_agents: 4
 deployment:
   agent:
@@ -142,6 +142,8 @@ extra:
         safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x3316b59A6c4C3ee2920EecE0B02A6d40AAa6b9c9}
         safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
         staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
+        agent_registry_address: ${AGENT_REGISTRY_ADDRESS:str:0x0000000000000000000000000000000000000000}
+        use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -239,6 +241,8 @@ extra:
         safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x3316b59A6c4C3ee2920EecE0B02A6d40AAa6b9c9}
         safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
         staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
+        agent_registry_address: ${AGENT_REGISTRY_ADDRESS:str:0x0000000000000000000000000000000000000000}
+        use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
@@ -335,6 +339,8 @@ extra:
         epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
         safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x3316b59A6c4C3ee2920EecE0B02A6d40AAa6b9c9}
         safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
+        agent_registry_address: ${AGENT_REGISTRY_ADDRESS:str:0x0000000000000000000000000000000000000000}
+        use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
         staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
     randomness_api:
       args:
@@ -428,6 +434,8 @@ extra:
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
         mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
         use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:false}
+        agent_registry_address: ${AGENT_REGISTRY_ADDRESS:str:0x0000000000000000000000000000000000000000}
+        use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
         mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x0000000000000000000000000000000000000000","priority_mech_address":"0x0000000000000000000000000000000000000000","priority_mech_staking_instance_address":"0x0000000000000000000000000000000000000000","priority_mech_service_id":0,"requester_staking_instance_address":"0x0000000000000000000000000000000000000000","response_timeout":300}}
         checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}

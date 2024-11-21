@@ -199,7 +199,6 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             contract_id=str(ERC20.contract_id),
             contract_callable="check_balance",
             account=account,
-            chain_id=self.params.mech_chain_id,
         )
         if response_msg.performative != ContractApiMessage.Performative.RAW_TRANSACTION:
             self.context.logger.error(
@@ -249,7 +248,6 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             contract_id=str(ERC20.contract_id),
             contract_callable="build_withdraw_tx",
             amount=amount,
-            chain_id=self.params.mech_chain_id,
         )
 
         if response_msg.performative != ContractApiMessage.Performative.STATE:
@@ -475,7 +473,6 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     None,
                     None,
                     self.params.mech_chain_id,
-                    self.synchronized_data.safe_contract_address,
                     None,
                     None,
                 )
@@ -497,7 +494,6 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     self.tx_hex,
                     self.price,
                     self.params.mech_chain_id,
-                    self.synchronized_data.safe_contract_address,
                     *serialized_data,
                 )
         yield from self.finish_behaviour(payload)
