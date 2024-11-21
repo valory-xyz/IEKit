@@ -92,12 +92,7 @@ def sign_ed25519(payload: dict, did: str, seed: str):
     jws = JsonWebSignature()
     protected = {"alg": "EdDSA", "kid": did + "#" + did.split(":")[-1]}
     signature = jws.serialize_compact(protected, payload_b64decoded, key_ed25519)
-    signature_data = {
-        k: v
-        for k, v in zip(
-            ("protected", "payload", "signature"), signature.decode("utf-8").split(".")
-        )
-    }
+    signature_data = dict(zip(('protected', 'payload', 'signature'), signature.decode('utf-8').split('.')))
 
     return json.dumps(signature_data, sort_keys=True)
 

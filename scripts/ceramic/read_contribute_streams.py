@@ -18,31 +18,41 @@
 # ------------------------------------------------------------------------------
 
 """This package contains code to read Contribute streams on Ceramic."""
+# pylint: disable=import-error
 
 import json
 import os
 
 import dotenv
 from ceramic import Ceramic
-from streams import *
+from streams import (
+    CONTRIBUTE_PROD_CENTAURS_STREAM_ID,
+    CONTRIBUTE_PROD_DB_STREAM_ID,
+    CONTRIBUTE_PROD_MANUAL_STREAM_ID,
+)
 
 
 dotenv.load_dotenv(override=True)
 
-ceramic = Ceramic(os.getenv("CERAMIC_API_BASE"))
+def main():
+    """Main"""
+    ceramic = Ceramic(os.getenv("CERAMIC_API_BASE"))
+
+    # Users db
+    db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_DB_STREAM_ID)
+    with open("contribute_db.json", "w", encoding="utf-8") as of:
+        json.dump(db, of, indent=4)
+
+    # Centaurs db
+    centaurs, _, _ = ceramic.get_data(CONTRIBUTE_PROD_CENTAURS_STREAM_ID)
+    with open("contribute_centaurs.json", "w", encoding="utf-8") as of:
+        json.dump(centaurs, of, indent=4)
+
+    # Manual point db
+    points, _, _ = ceramic.get_data(CONTRIBUTE_PROD_MANUAL_STREAM_ID)
+    with open("contribute_generic_points.json", "w", encoding="utf-8") as of:
+        json.dump(points, of, indent=4)
 
 
-# Users db
-db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_DB_STREAM_ID)
-with open("contribute_db.json", "w", encoding="utf-8") as of:
-    json.dump(db, of, indent=4)
-
-# Centaurs db
-centaurs, _, _ = ceramic.get_data(CONTRIBUTE_PROD_CENTAURS_STREAM_ID)
-with open("contribute_centaurs.json", "w", encoding="utf-8") as of:
-    json.dump(centaurs, of, indent=4)
-
-# Manual point db
-points, _, _ = ceramic.get_data(CONTRIBUTE_PROD_MANUAL_STREAM_ID)
-with open("contribute_generic_points.json", "w", encoding="utf-8") as of:
-    json.dump(points, of, indent=4)
+if __name__ == "__main__":
+    main()

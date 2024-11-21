@@ -18,13 +18,20 @@
 #
 # ------------------------------------------------------------------------------
 
+"""This package contains code to clone streams on Ceramic."""
+# pylint: disable=import-error
 
 import os
 from copy import deepcopy
 
 import dotenv
 from ceramic import Ceramic
-from streams import *
+from streams import (
+    CONTRIBUTE_CENTAURS_SCHEMA_COMMIT,
+    CONTRIBUTE_DB_SCHEMA_COMMIT,
+    CONTRIBUTE_PROD_CENTAURS_STREAM_ID,
+    CONTRIBUTE_PROD_DB_STREAM_ID,
+)
 
 
 MAX_USERS_PER_COMMIT = 250
@@ -95,36 +102,42 @@ def centaurs_db_batch_write(did, did_seed, data, extra_metadata):
     return stream_id
 
 
-extra_metadata_db = {
-    "schema": CONTRIBUTE_DB_SCHEMA_COMMIT
-}
+def main():
+    """Main"""
+    extra_metadata_db = {
+        "schema": CONTRIBUTE_DB_SCHEMA_COMMIT
+    }
 
-extra_metadata_centaurs = {
-    "schema": CONTRIBUTE_CENTAURS_SCHEMA_COMMIT
-}
-
-
-# Get the prod data
-user_db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_DB_STREAM_ID)
-
-# Clone into a new stream
-stream_id = user_db_batch_write(
-    did=ceramic_did_str,
-    did_seed=ceramic_did_seed,
-    data=user_db,
-    extra_metadata=extra_metadata_db,
-)
-print(f"Contribute DB stream id: {stream_id}")
+    extra_metadata_centaurs = {
+        "schema": CONTRIBUTE_CENTAURS_SCHEMA_COMMIT
+    }
 
 
-# Get the prod data
-centaurs_db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_CENTAURS_STREAM_ID)
+    # Get the prod data
+    user_db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_DB_STREAM_ID)
 
-# Clone into a new stream
-stream_id = centaurs_db_batch_write(
-    did=ceramic_did_str,
-    did_seed=ceramic_did_seed,
-    data=centaurs_db,
-    extra_metadata=extra_metadata_centaurs,
-)
-print(f"Centaurs stream id: {stream_id}")
+    # Clone into a new stream
+    stream_id = user_db_batch_write(
+        did=ceramic_did_str,
+        did_seed=ceramic_did_seed,
+        data=user_db,
+        extra_metadata=extra_metadata_db,
+    )
+    print(f"Contribute DB stream id: {stream_id}")
+
+
+    # Get the prod data
+    centaurs_db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_CENTAURS_STREAM_ID)
+
+    # Clone into a new stream
+    stream_id = centaurs_db_batch_write(
+        did=ceramic_did_str,
+        did_seed=ceramic_did_seed,
+        data=centaurs_db,
+        extra_metadata=extra_metadata_centaurs,
+    )
+    print(f"Centaurs stream id: {stream_id}")
+
+
+if __name__ == "__main__":
+    main()

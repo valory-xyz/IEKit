@@ -18,6 +18,8 @@
 #
 # ------------------------------------------------------------------------------
 
+"""This package contains code to update streams on Ceramic."""
+# pylint: disable=import-error
 
 import json
 import os

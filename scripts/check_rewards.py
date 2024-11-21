@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """This package contains code to read Contribute streams on Ceramic."""
+# pylint: disable=import-error
 
 import json
 import os
@@ -99,10 +100,10 @@ def get_contract_by_address(staking_contract_address) -> Optional[Dict]:
 
 
 def load_contract(
-    contract_address: str, abi_file: Path, has_abi_key: bool = True
+    contract_address: str, abi_file_path: Path, has_abi_key: bool = True
 ) -> Contract:
     """Load a smart contract"""
-    with open(abi_file, "r", encoding="utf-8") as abi_file:
+    with open(abi_file_path, "r", encoding="utf-8") as abi_file:
         contract_abi = json.load(abi_file)
         if has_abi_key:
             contract_abi = contract_abi["abi"]
@@ -148,7 +149,7 @@ def get_contract_info() -> Dict:
 
     return contract_info
 
-def get_user_info(user_data, contract_info, contributors_contract) -> Dict:
+def get_user_info(user_data: Dict, contract_info: Dict, contributors_contract: Contract) -> Dict:  # pylint: disable=too-many-locals
     """Get user info"""
 
     user_wallet = user_data["wallet_address"]

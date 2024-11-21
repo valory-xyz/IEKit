@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """This package contains code to create streams on Ceramic."""
+# pylint: disable=import-error
 
 import json
 from dataclasses import dataclass
@@ -75,8 +76,8 @@ def create_streams(streams):
         print(f"Created stream {stream_id} with data:\n{stream_data}\n")
 
 
-if __name__ == "__main__":
-
+def main():
+    """Main"""
     streams = [
         Stream(
             name="CERAMIC_DB_STREAM_ID",
@@ -99,3 +100,7 @@ if __name__ == "__main__":
 
     env_vars = "\n".join([f"{stream.name}={stream.stream_id}" for stream in streams])
     print(f"Set your environment variables to\n{env_vars}")
+
+
+if __name__ == "__main__":
+    main()
