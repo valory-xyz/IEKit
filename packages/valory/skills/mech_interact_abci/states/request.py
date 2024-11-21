@@ -38,6 +38,7 @@ class MechRequestRound(MechInteractionRound):
         get_name(SynchronizedData.most_voted_tx_hash),
         get_name(SynchronizedData.mech_price),
         get_name(SynchronizedData.chain_id),
+        get_name(SynchronizedData.safe_contract_address),
         get_name(SynchronizedData.mech_requests),
         get_name(SynchronizedData.mech_responses),
     )
