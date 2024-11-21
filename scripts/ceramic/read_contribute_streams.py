@@ -19,11 +19,13 @@
 
 """This package contains code to read Contribute streams on Ceramic."""
 
-from ceramic import Ceramic
-import os
-import dotenv
-from streams import *
 import json
+import os
+
+import dotenv
+from ceramic import Ceramic
+from streams import *
+
 
 dotenv.load_dotenv(override=True)
 

@@ -20,7 +20,12 @@
 """This package contains code to handle streams on Ceramic."""
 
 import requests
-from payloads import build_genesis_payload, build_commit_payload, build_data_from_commits
+from payloads import (
+    build_commit_payload,
+    build_data_from_commits,
+    build_genesis_payload,
+)
+
 
 # Glaze quick start
 # https://developers.ceramic.network/build/cli/quick-start/#__tabbed_1_1

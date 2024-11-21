@@ -19,12 +19,14 @@
 
 """This package contains code to create streams on Ceramic."""
 
-from ceramic import Ceramic
-from pathlib import Path
 import json
-import jsonschema
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Optional
+
+import jsonschema
+from ceramic import Ceramic
+
 
 # Do not use the following keys for production
 # Create your own DID using tools from Ceramic, like the glaze suite:

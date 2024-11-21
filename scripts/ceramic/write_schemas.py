@@ -1,8 +1,10 @@
-from ceramic import Ceramic
 import json
-import dotenv
 import os
 from pathlib import Path
+
+import dotenv
+from ceramic import Ceramic
+
 
 dotenv.load_dotenv(override=True)
 

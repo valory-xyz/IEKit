@@ -19,14 +19,16 @@
 
 """This package contains code to handle migrations on Ceramic."""
 
-from ceramic import Ceramic
-import os
-import dotenv
-from streams import *
 import json
-import jsonschema
-from pathlib import Path
+import os
 from copy import deepcopy
+from pathlib import Path
+
+import dotenv
+import jsonschema
+from ceramic import Ceramic
+from streams import *
+
 
 dotenv.load_dotenv(override=True)
 

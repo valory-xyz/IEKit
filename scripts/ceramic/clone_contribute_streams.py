@@ -1,8 +1,10 @@
-from ceramic import Ceramic
-from copy import deepcopy
-from streams import *
 import os
+from copy import deepcopy
+
 import dotenv
+from ceramic import Ceramic
+from streams import *
+
 
 MAX_USERS_PER_COMMIT = 250
 MAX_TWEETS_PER_COMMIT = 100

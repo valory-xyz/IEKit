@@ -19,18 +19,20 @@
 
 """This package contains code to read Contribute streams on Ceramic."""
 
-from ceramic.ceramic import Ceramic
-import os
-import dotenv
-from ceramic.streams import CONTRIBUTE_PROD_DB_STREAM_ID
-from typing import Dict, Optional
 import json
+import os
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, Optional
+
+import dotenv
+from ceramic.ceramic import Ceramic
+from ceramic.streams import CONTRIBUTE_PROD_DB_STREAM_ID
 from rich.console import Console
 from rich.table import Table
-from datetime import datetime
 from web3 import Web3
 from web3.contract import Contract
-from pathlib import Path
+
 
 dotenv.load_dotenv(override=True)
 

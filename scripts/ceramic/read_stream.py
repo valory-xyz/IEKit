@@ -1,7 +1,9 @@
-from ceramic import Ceramic
 import json
 import os
+
 import dotenv
+from ceramic import Ceramic
+
 
 dotenv.load_dotenv(override=True)
 
