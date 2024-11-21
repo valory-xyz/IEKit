@@ -23,7 +23,7 @@
 from typing import Dict, Optional
 
 import requests
-from payloads import (
+from ceramic.payloads import (
     build_commit_payload,
     build_data_from_commits,
     build_genesis_payload,
@@ -50,11 +50,11 @@ def _make_request(url: str, request_type: str="get", json_data: Optional[Dict]=N
     if request_type not in ("get", "post", "delete"):
         raise ValueError(f"Request method '{request_type}' not supported")
     if request_type == "get":
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
     if request_type == "post":
-        response = requests.post(url, json=json_data)
+        response = requests.post(url, json=json_data, timeout=60)
     if request_type == "delete":
-        response = requests.delete(url)
+        response = requests.delete(url, timeout=60)
     if not response:
         print(response.status_code)
         print(response.json())

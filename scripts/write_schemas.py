@@ -26,7 +26,7 @@ import os
 from pathlib import Path
 
 import dotenv
-from ceramic import Ceramic
+from ceramic.ceramic import Ceramic
 
 
 dotenv.load_dotenv(override=True)
@@ -40,7 +40,7 @@ ceramic_did_seed = os.getenv("CERAMIC_DID_SEED")
 # --------------------------
 
 # Users db
-with open(Path("ceramic", "schemas", "db_stream_schema.json"), "r", encoding="utf-8") as inf:
+with open(Path("scripts", "ceramic", "schemas", "db_stream_schema.json"), "r", encoding="utf-8") as inf:
     schema = json.load(inf)
     stream_id = ceramic.create_stream(
         did=ceramic_did_str,
@@ -50,7 +50,7 @@ with open(Path("ceramic", "schemas", "db_stream_schema.json"), "r", encoding="ut
     print(f"db_stream_schema -> {stream_id}")
 
 # Centaurs db
-with open(Path("ceramic", "schemas", "centaurs_stream_schema.json"), "r", encoding="utf-8") as inf:
+with open(Path("scripts", "ceramic", "schemas", "centaurs_stream_schema.json"), "r", encoding="utf-8") as inf:
     schema = json.load(inf)
     stream_id = ceramic.create_stream(
         did=ceramic_did_str,
@@ -61,7 +61,7 @@ with open(Path("ceramic", "schemas", "centaurs_stream_schema.json"), "r", encodi
 
 
 # Manual points db
-with open(Path("ceramic", "schemas", "generic_points_stream_schema.json"), "r", encoding="utf-8") as inf:
+with open(Path("scripts", "ceramic", "schemas", "generic_points_stream_schema.json"), "r", encoding="utf-8") as inf:
     schema = json.load(inf)
     stream_id = ceramic.create_stream(
         did=ceramic_did_str,

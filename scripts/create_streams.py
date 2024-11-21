@@ -26,7 +26,7 @@ from pathlib import Path
 from typing import Optional
 
 import jsonschema
-from ceramic import Ceramic
+from ceramic.ceramic import Ceramic
 
 
 # Do not use the following keys for production
@@ -81,18 +81,18 @@ def main():
     streams = [
         Stream(
             name="CERAMIC_DB_STREAM_ID",
-            data_path=Path("ceramic", "schemas", "default_db_stream.json"),
-            schema_path=Path("ceramic", "schemas", "db_stream_schema.json")
+            data_path=Path("scripts", "ceramic", "schemas", "default_db_stream.json"),
+            schema_path=Path("scripts", "ceramic", "schemas", "db_stream_schema.json")
         ),
         Stream(
             name="CENTAURS_STREAM_ID",
-            data_path=Path("ceramic", "schemas", "default_centaurs_stream.json"),
-            schema_path=Path("ceramic", "schemas", "centaurs_stream_schema.json")
+            data_path=Path("scripts", "ceramic", "schemas", "default_centaurs_stream.json"),
+            schema_path=Path("scripts", "ceramic", "schemas", "centaurs_stream_schema.json")
         ),
         Stream(
             name="MANUAL_POINTS_STREAM_ID",
-            data_path=Path("ceramic", "schemas", "default_generic_points_stream.json"),
-            schema_path=Path("ceramic", "schemas", "generic_points_stream_schema.json")
+            data_path=Path("scripts", "ceramic", "schemas", "default_generic_points_stream.json"),
+            schema_path=Path("scripts", "ceramic", "schemas", "generic_points_stream_schema.json")
         )
     ]
 

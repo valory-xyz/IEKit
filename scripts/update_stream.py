@@ -25,7 +25,7 @@ import json
 import os
 
 import dotenv
-from ceramic import Ceramic
+from ceramic.ceramic import Ceramic
 
 
 dotenv.load_dotenv(override=True)
