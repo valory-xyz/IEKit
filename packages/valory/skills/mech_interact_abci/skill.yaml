@@ -13,14 +13,14 @@ fingerprint:
   behaviours/request.py: bafybeihaevbnfn66atdutf7rt7v3lw3vbw3tr4bugfdssebtmydgnuvjyq
   behaviours/response.py: bafybeicmcsl5ubv6qcsunfk2e3dn4i5nk2xaioioigzamvybmijftftxu4
   behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
-  dialogues.py: bafybeia72yo3nrsax67q5rolt4rvw47yufjxbitkukxgzlf4efxyx6ey4m
+  dialogues.py: bafybeicgtxsrzld6uyi2n455temnz6mj55irmxqxw55jxo4b6ud4rt7nsm
   fsm_specification.yaml: bafybeiapzwz6zcneelc2b2wrcb7cae7x6vbthmf6a57cm4mv6hucp67lz4
-  handlers.py: bafybeiel74gdyz4jiacl74dp5vsumcywrc6egzblyawdl3ezbux5vdnzve
+  handlers.py: bafybeieogcp4buhjommra3fkvyh3vwg3wzuepiwbn6qzr2b7zs27ghjxy4
   models.py: bafybeic7d7klfdczo2nww5kg2eyintz4dq3pap5ve4v5htelhp5ovqxn4i
   payloads.py: bafybeihhnbwsnaqxcltqxp4camiw3tz7gcymrdvxhmqlk4nww24tujiy7q
   rounds.py: bafybeif7taciv6pqupb7xuewurqssziplbjeobbv4d7ea3vbngz3kpjnee
   states/__init__.py: bafybeie34wx5znr2hxwh3gs2fchmbeuzjcfnraymdvtzjaxaq5zsiw233q
-  states/base.py: bafybeibriy4bex4bv3yjumkljbegengfm5zih4bmmz76ssjp5wqjc6dquy
+  states/base.py: bafybeieayzj3m22pnl27wwxer57c4guhzzjkgauczuswb74glfoxtt47uu
   states/final_states.py: bafybeihjntrbc666blxj4viz74y4p2hfc5e4vijs3bqng2k4vqbwkud7sq
   states/request.py: bafybeifdkqn4o2tx57yflnxfhy6eoy42z7bdpadcevre64aw7l2hh2kpjy
   states/response.py: bafybeibaxnp2oxwjptoq7qzm6o7ww2qrdj2vnxzg2qt523vz2ftqzx5hyi
@@ -39,11 +39,11 @@ contracts:
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/erc20:0.1.0:bafybeientdgpccdi7prtu4x53m5g3yugh5tuh5hnroylfz3wwzyjniqure
 - valory/mech_marketplace:0.1.0:bafybeicfuigpr65k4l2r5dbazzwh43yc6pfuy5mrkjkagmhmcp6ioktfay
-- valory/agent_registry:0.1.0:bafybeig75bhpudw4vvemwq5vfj6scho7zecillzqty5ezfpdmjdfcstcdq
+- valory/agent_registry:0.1.0:bafybeibboljpn2zevzxnpgflxj6ykxk4bpxegtzjts25ajliaoadz35mca
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 - valory/ledger_api:1.0.0:bafybeihdk6psr4guxmbcrc26jr2cbgzpd5aljkqvpwo64bvaz7tdti2oni
-- valory/acn_data_share:0.1.0:bafybeih5ydonnvrwvy2ygfqgfabkr47s4yw3uqxztmwyfprulwfsoe7ipq
+- valory/acn_data_share:0.1.0:bafybeidbvo3jdbt54pqk3foqfso4uim2vaea5abg6jzktomdeklh6sm2rq
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeigjddhk7epta7xpnfvv426xedff5abh4xlkwi6cqgp4vkutgkvydm
 - valory/transaction_settlement_abci:0.1.0:bafybeifmgmwdkx4esemxjacjwzqkqymkuklb5nehkwqkx7v335fllgswcq

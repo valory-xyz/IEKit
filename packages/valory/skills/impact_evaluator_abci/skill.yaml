@@ -9,9 +9,9 @@ fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
   behaviours.py: bafybeiciogdifxopcplhlbnpuftwqh5zo4bubyimx7b4r5vfcdtpv5vhpq
   composition.py: bafybeiguzgq3lhiax752jkp6w3ghspyhh4eltu5nwm6yb74ri3vbxflp74
-  dialogues.py: bafybeic4stua7eywznnzehr7iep46yl6sf5y3m7j7f5qxndf3lhma4xaoi
+  dialogues.py: bafybeigybns7lilv57day366bo6kri5ehu3nbrfjk6x7a7pz3xq4wc5r6e
   fsm_specification.yaml: bafybeibgb5o2idctxri6ykl7iva2j6brwgn56mdz2pl5onsbz2p63t2vce
-  handlers.py: bafybeidjtojisdg5ecd7rpmkde2l2zksp5yrwxqgwc233rsbppr2v7h7ca
+  handlers.py: bafybeihnfjtuusm65o76lr4q6rdawq6xjc7d7hywmcdabop7vgvuxdry3e
   models.py: bafybeif7unc573kd5bpot3vjfmoktbkeervsms72cqobd52y74txcwq55y
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
   tests/test_behaviours.py: bafybeifkazsevd6vsfaapulouxepez3rl24y3rxgja5zhmj7s323zdjlmq
@@ -26,7 +26,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeigjddhk7epta7xpnfvv426xedff5abh4xlkwi6cqgp4vkutgkvydm
 - valory/ceramic_read_abci:0.1.0:bafybeifqj2sjh5wxuwpbtzyrslr3zrbzxmfkhgjgvmsz33iso4x7avrbgq
 - valory/generic_scoring_abci:0.1.0:bafybeibbdvyjhjhzl6ydmfhukyrnzhpjgb6kwdr24z4sbr5mhbttsefffe
-- valory/twitter_scoring_abci:0.1.0:bafybeidxgtj2k3aef6ufcy7okuifxc6twl4u7nncpo3zq7gysjnfj36drq
+- valory/twitter_scoring_abci:0.1.0:bafybeihrdex3jt7m7eek4i6qcj3tdcbohj3ucpu7g43mynnbzn273nr74q
 - valory/ceramic_write_abci:0.1.0:bafybeif32xc5lz66wys33iod6r5zidm5mx7qvdtmtbyli46clzp4j3hcwe
 - valory/dynamic_nft_abci:0.1.0:bafybeidkmafxhg4br6dli4wgdrnpmlcvgxdzzzovmdgovjlvxkpa5dml7y
 - valory/registration_abci:0.1.0:bafybeiagi6e2h7kochmlemy5c5yk6hwn37tfxiqvk2en74jhowsdwlmrny
@@ -37,7 +37,7 @@ skills:
 - valory/llm_abci:0.1.0:bafybeicrsx2kf2kas3kkqhnfukgmvkvcbi3lnmjr2myqebgus6kalnuwoy
 - valory/twitter_write_abci:0.1.0:bafybeifcvl3sziqb57mgdv5awn3msjixpg3oukitiktunn5724b4fntzvm
 - valory/olas_week_abci:0.1.0:bafybeidonqmrlgmduglxvlid6auuonbknei2icq2ohjq72n6lzy3rvvviu
-- valory/mech_interact_abci:0.1.0:bafybeibjydrjtfzaqnniidi2eb5nc2r2vlyu3jk5t4hmzsaloqq5bhcij4
+- valory/mech_interact_abci:0.1.0:bafybeigydqefxval5xhuujm7nibatvl66m34oft3zhdw3qhpmq3xk27lae
 - valory/staking_abci:0.1.0:bafybeid3p7feiosrihulebnyfquptyskiwxs5eojfw2ekda6etl3xxollu
 behaviours:
   main:
