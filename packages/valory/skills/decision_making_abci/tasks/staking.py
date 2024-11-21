@@ -286,6 +286,10 @@ class StakingActivityPreparation(StakingPreparation):
             staking_contract = yield from self.get_staking_contract(
                 user_data["wallet_address"]
             )
+
+            if not staking_contract:
+                continue
+
             this_epoch = staking_contract_to_epoch[staking_contract]
 
             # Get this epoch's tweets and points
