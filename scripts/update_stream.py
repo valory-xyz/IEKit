@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -17,30 +18,34 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains code to read Contribute streams on Ceramic."""
+"""This package contains code to update streams on Ceramic."""
+# pylint: disable=import-error
 
-from ceramic import Ceramic
-import os
-import dotenv
-from streams import *
 import json
+import os
+
+import dotenv
+from ceramic.ceramic import Ceramic
+
 
 dotenv.load_dotenv(override=True)
 
 ceramic = Ceramic(os.getenv("CERAMIC_API_BASE"))
+ceramic_did_str = "did:key:" + str(os.getenv("CERAMIC_DID_STR"))
+ceramic_did_seed = os.getenv("CERAMIC_DID_SEED")
 
+stream_id = os.getenv("CERAMIC_DB_STREAM_ID")
 
-# Users db
-db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_DB_STREAM_ID)
-with open("contribute_db.json", "w", encoding="utf-8") as of:
-    json.dump(db, of, indent=4)
+# Load from json
+with open("stream.json", "r", encoding="utf-8") as inf:
+    new_data = json.load(inf)
 
-# Centaurs db
-centaurs, _, _ = ceramic.get_data(CONTRIBUTE_PROD_CENTAURS_STREAM_ID)
-with open("contribute_centaurs.json", "w", encoding="utf-8") as of:
-    json.dump(centaurs, of, indent=4)
+# Update stream
+ceramic.update_stream(
+    ceramic_did_str,
+    ceramic_did_seed,
+    stream_id,
+    new_data,
+)
 
-# Manual point db
-points, _, _ = ceramic.get_data(CONTRIBUTE_PROD_MANUAL_STREAM_ID)
-with open("contribute_generic_points.json", "w", encoding="utf-8") as of:
-    json.dump(points, of, indent=4)
+print("Done")

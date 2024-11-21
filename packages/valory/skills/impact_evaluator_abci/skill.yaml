@@ -25,18 +25,18 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeibiw4oqwqvo4jccwz5fb73iardzychgvcl66tceiildohoju2ikti
 - valory/ceramic_read_abci:0.1.0:bafybeigz7rzfls3niv3urfb4z4vwr525ooxveelgg3djpvkg5jzetxlm2u
-- valory/generic_scoring_abci:0.1.0:bafybeidfghwiknidk7su2wkf56dr66miqjvn5txp2vw2vy4ifweue7xrtm
-- valory/twitter_scoring_abci:0.1.0:bafybeihe5s7krhlyu3xjy5z6tq4x44kmquoby7mtjgssy2tlnbtxwlvrti
+- valory/generic_scoring_abci:0.1.0:bafybeibgttqow3dbtpm5si7dhkfqcv64twvuoosfj5ha53u7qb7ihupp6y
+- valory/twitter_scoring_abci:0.1.0:bafybeibdziydhsk47j7kphgkogzecbcxboouwgbfim3levf2c3oovvloje
 - valory/ceramic_write_abci:0.1.0:bafybeic6c3iub3nsr5tmr7g5vzoixbin6w64ewudfiq6u4r2fiqwbg753i
-- valory/dynamic_nft_abci:0.1.0:bafybeigxtox3vcdqcurgbgrfkz4i35kf4ujqmrhfvfbvzmnevtptlnwcou
+- valory/dynamic_nft_abci:0.1.0:bafybeianbjebbb2xkjrowirzoxkbgg6ugkqvivt6ehzvntyvat4wpzqgju
 - valory/registration_abci:0.1.0:bafybeib3n6vqkfbrcubcbliebjnuwyywdinxkbzt76n6gbn2kg7ace47dq
 - valory/reset_pause_abci:0.1.0:bafybeihkj6lmaypspyxe5qqrjgnolyck62pyvqoylr24ab6ue4steqcw7e
 - valory/termination_abci:0.1.0:bafybeifi2uodnrjsrivj53g3sjutocmyusbx6mlsb6oanqdyt2mfbyvusy
 - valory/transaction_settlement_abci:0.1.0:bafybeigh2vkt74jrad5gtsczrgqcuhcqe7jkgjy7jdw56yamlzwwnaymjy
-- valory/decision_making_abci:0.1.0:bafybeigap5a5cidz6rqqs3n3oaqrkaj23g5gs2zlhjswrcy27gna56zxdy
+- valory/decision_making_abci:0.1.0:bafybeieshkhwnqijyhqdw2z7ejnnal5c3crth2sdgujwbfgozdecllgeiq
 - valory/llm_abci:0.1.0:bafybeib2k62hilwglfad33bzxkjlviw5bxwiw7z3rjvweyeamatdjznpeq
 - valory/twitter_write_abci:0.1.0:bafybeibp7zai2qwvfjd5fgpayx44x5c2zshbukpobvz2la7ws2l5f5fjde
-- valory/olas_week_abci:0.1.0:bafybeicoxb6a77suh6oanas3nn734xxxm5r7cy62wc6lbh52mgjbxzxs4e
+- valory/olas_week_abci:0.1.0:bafybeifnc2642fhqsncuqwype465xbdfnwlrsdna3pikhxvupw4mdfkd3i
 - valory/mech_interact_abci:0.1.0:bafybeicpskytv7osu6bdpmcweemlsb4f3m6gldzpyoxgawkczsmvlrzgma
 - valory/staking_abci:0.1.0:bafybeia25btekbiwi7tep6wzjlojc5g4msrxtfkhunuzlopjbjziactrje
 behaviours:
@@ -215,7 +215,7 @@ models:
       - '0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb'
       - '0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8'
       contributors_contract_address: '0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94'
-      epoch_end_threshold_minutes: 20
+      epoch_end_threshold_minutes: 60
       safe_contract_address_base: '0x0000000000000000000000000000000000000000'
       safe_contract_address_gnosis: '0x0000000000000000000000000000000000000000'
       staking_rewards_required_points: 200

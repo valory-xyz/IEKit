@@ -18,13 +18,16 @@
 # ------------------------------------------------------------------------------
 
 """This package contains code to create streams on Ceramic."""
+# pylint: disable=import-error
 
-from ceramic import Ceramic
-from pathlib import Path
 import json
-import jsonschema
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Optional
+
+import jsonschema
+from ceramic.ceramic import Ceramic
+
 
 # Do not use the following keys for production
 # Create your own DID using tools from Ceramic, like the glaze suite:
@@ -73,23 +76,23 @@ def create_streams(streams):
         print(f"Created stream {stream_id} with data:\n{stream_data}\n")
 
 
-if __name__ == "__main__":
-
+def main():
+    """Main"""
     streams = [
         Stream(
             name="CERAMIC_DB_STREAM_ID",
-            data_path=Path("ceramic", "schemas", "default_db_stream.json"),
-            schema_path=Path("ceramic", "schemas", "db_stream_schema.json")
+            data_path=Path("scripts", "ceramic", "schemas", "default_db_stream.json"),
+            schema_path=Path("scripts", "ceramic", "schemas", "db_stream_schema.json")
         ),
         Stream(
             name="CENTAURS_STREAM_ID",
-            data_path=Path("ceramic", "schemas", "default_centaurs_stream.json"),
-            schema_path=Path("ceramic", "schemas", "centaurs_stream_schema.json")
+            data_path=Path("scripts", "ceramic", "schemas", "default_centaurs_stream.json"),
+            schema_path=Path("scripts", "ceramic", "schemas", "centaurs_stream_schema.json")
         ),
         Stream(
             name="MANUAL_POINTS_STREAM_ID",
-            data_path=Path("ceramic", "schemas", "default_generic_points_stream.json"),
-            schema_path=Path("ceramic", "schemas", "generic_points_stream_schema.json")
+            data_path=Path("scripts", "ceramic", "schemas", "default_generic_points_stream.json"),
+            schema_path=Path("scripts", "ceramic", "schemas", "generic_points_stream_schema.json")
         )
     ]
 
@@ -97,3 +100,7 @@ if __name__ == "__main__":
 
     env_vars = "\n".join([f"{stream.name}={stream.stream_id}" for stream in streams])
     print(f"Set your environment variables to\n{env_vars}")
+
+
+if __name__ == "__main__":
+    main()

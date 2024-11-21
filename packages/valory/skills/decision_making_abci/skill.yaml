@@ -180,7 +180,7 @@ models:
       tweet_consensus_veolas: 2000000
       checkpoint_threshold_minutes: 60
       staking_activity_threshold: 5
-      epoch_end_threshold_minutes: 20
+      epoch_end_threshold_minutes: 60
     class_name: Params
   requests:
     args: {}

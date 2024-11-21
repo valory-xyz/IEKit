@@ -63,4 +63,3 @@ CONTRIBUTE_DB_SCHEMA_COMMIT = "k3y52l7qbv1fry2qvj6qujxbyjz9eqwk7m682d5xujdg0d3dm
 CONTRIBUTE_CENTAURS_SCHEMA_COMMIT = "k3y52l7qbv1frxkjy7gks27qieu3n6q41h8pgvfevr8kwxkly0hdxzqssbsh2cd1c"  # Nov 8th 2024
 
 CONTRIBUTE_GENERIC_SCHEMA_COMMIT = "k3y52l7qbv1fryi4j4lctbrusprz7vrip3l4ywga8e4rgpezqeplvq82s7p07teyo"
-
