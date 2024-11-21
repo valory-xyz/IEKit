@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -17,28 +18,30 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains code to handle migrations on Ceramic."""
+"""This package contains code to clone streams on Ceramic."""
+# pylint: disable=import-error
 
-from ceramic import Ceramic
 import os
-import dotenv
-from streams import *
-import json
-import jsonschema
-from pathlib import Path
 from copy import deepcopy
+
+import dotenv
+from ceramic.ceramic import Ceramic
+from ceramic.streams import (
+    CONTRIBUTE_CENTAURS_SCHEMA_COMMIT,
+    CONTRIBUTE_DB_SCHEMA_COMMIT,
+    CONTRIBUTE_PROD_CENTAURS_STREAM_ID,
+    CONTRIBUTE_PROD_DB_STREAM_ID,
+)
+
+
+MAX_USERS_PER_COMMIT = 250
+MAX_TWEETS_PER_COMMIT = 100
 
 dotenv.load_dotenv(override=True)
 
 ceramic = Ceramic(os.getenv("CERAMIC_API_BASE"))
 ceramic_did_str = "did:key:" + str(os.getenv("CERAMIC_DID_STR"))
 ceramic_did_seed = os.getenv("CERAMIC_DID_SEED")
-
-MAX_USERS_PER_COMMIT = 100
-MAX_TWEETS_PER_COMMIT = 100
-
-LOCAL_READ = False  # load from the local machine instead of Ceramic
-LOCAL_WRITE = False  # write o the local machine instead of Ceramic
 
 
 def user_db_batch_write(did, did_seed, data, extra_metadata):
@@ -99,83 +102,42 @@ def centaurs_db_batch_write(did, did_seed, data, extra_metadata):
     return stream_id
 
 
-# Load the users db
-print("Reading the users db...")
-if LOCAL_READ:
-    with open("contribute_db.json", "r", encoding="utf-8") as data_file:
-        user_db = json.load(data_file)
-else:
-    user_db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_DB_STREAM_ID)
-
-print("Updating the users db format...")
-
-# Remove the module data
-del user_db["module_data"]["staking_activity"]
-
-for user_data in user_db["users"].values():
-    for tweet in user_data["tweets"].values():
-        # Initialize the counted_for_activity
-        tweet["counted_for_activity"] = False
-
-# Validate the new data
-print("Validating the updated users db...")
-with open(Path("ceramic", "schemas", "db_stream_schema.json"), "r", encoding="utf-8") as data_file:
-    stream_schema = json.load(data_file)
-    jsonschema.validate(instance=user_db, schema=stream_schema)
-
-# Write the new data
-print("Writing the updated users db...")
-
-if LOCAL_WRITE:
-    with open("contribute_db_new.json", "w", encoding="utf-8") as data_file:
-        json.dump(user_db, data_file, indent=4)
-else:
-    extra_metadata = {
-        "schema": CONTRIBUTE_DB_SCHEMA_COMMIT  # this is the schema commit, not stream id
+def main():
+    """Main"""
+    extra_metadata_db = {
+        "schema": CONTRIBUTE_DB_SCHEMA_COMMIT
     }
 
-    user_db_batch_write(
+    extra_metadata_centaurs = {
+        "schema": CONTRIBUTE_CENTAURS_SCHEMA_COMMIT
+    }
+
+
+    # Get the prod data
+    user_db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_DB_STREAM_ID)
+
+    # Clone into a new stream
+    stream_id = user_db_batch_write(
         did=ceramic_did_str,
         did_seed=ceramic_did_seed,
         data=user_db,
-        extra_metadata=extra_metadata,
+        extra_metadata=extra_metadata_db,
     )
+    print(f"Contribute DB stream id: {stream_id}")
 
-# -------------------------------------------------------------------------------------
 
-# Load the centaurs db
-print("Reading the centaurs db...")
-
-if LOCAL_READ:
-    with open("contribute_centaurs.json", "r", encoding="utf-8") as data_file:
-        centaurs_db = json.load(data_file)
-else:
+    # Get the prod data
     centaurs_db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_CENTAURS_STREAM_ID)
 
-
-print("Updating the db format...")
-# Nothing to do
-
-# Validate the new data
-print("Validating the updated centaurs db...")
-with open(Path("ceramic", "schemas", "centaurs_stream_schema.json"), "r", encoding="utf-8") as data_file:
-    stream_schema = json.load(data_file)
-    jsonschema.validate(instance=centaurs_db, schema=stream_schema)
-
-# Write the new data
-print("Writing the updated centaurs db...")
-
-if LOCAL_WRITE:
-    with open("contribute_centaurs_new.json", "w", encoding="utf-8") as data_file:
-        json.dump(centaurs_db, data_file, indent=4)
-else:
-    extra_metadata = {
-        "schema": CONTRIBUTE_CENTAURS_SCHEMA_COMMIT  # this is the schema commit, not stream id
-    }
-
+    # Clone into a new stream
     stream_id = centaurs_db_batch_write(
         did=ceramic_did_str,
         did_seed=ceramic_did_seed,
         data=centaurs_db,
-        extra_metadata=extra_metadata,
+        extra_metadata=extra_metadata_centaurs,
     )
+    print(f"Centaurs stream id: {stream_id}")
+
+
+if __name__ == "__main__":
+    main()
