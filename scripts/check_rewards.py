@@ -19,10 +19,10 @@
 
 """This package contains code to read Contribute streams on Ceramic."""
 
-from ceramic import Ceramic
+from ceramic.ceramic import Ceramic
 import os
 import dotenv
-from streams import CONTRIBUTE_PROD_DB_STREAM_ID
+from ceramic.streams import CONTRIBUTE_PROD_DB_STREAM_ID
 from typing import Dict, Optional
 import json
 from rich.console import Console
@@ -63,7 +63,7 @@ STAKING_CONTRACTS = {
     },
 }
 STAKING_ABI_FILE = Path("packages", "valory", "contracts", "staking", "build", "staking.json")
-CONTRIBUTORS_ABI_FILE = Path("ceramic", "contributors.json")
+CONTRIBUTORS_ABI_FILE = Path("scripts", "contributors.json")
 CONTRIBUTORS_PROXY_CONTRACT_ADDRESS = "0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94"
 
 
