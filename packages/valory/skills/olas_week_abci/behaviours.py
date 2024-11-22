@@ -71,12 +71,6 @@ from packages.valory.skills.olas_week_abci.rounds import (
 
 
 ONE_DAY = 86400.0
-ADDRESS_REGEX = r"0x[a-fA-F0-9]{40}"
-TAGLINE = "I'm linking my wallet to @Autonolas Contribute:"
-DEFAULT_TWEET_POINTS = 100
-TWEET_QUALITY_TO_POINTS = {"LOW": 1, "AVERAGE": 2, "HIGH": 3}
-TWEET_RELATIONSHIP_TO_POINTS = {"LOW": 100, "AVERAGE": 200, "HIGH": 300}
-HTTP_OK = 200
 HTTP_TOO_MANY_REQUESTS = 429
 MAX_TWEET_CHARS = 280
 HIGHLIGHT_REGEX = r"☴.*\n"
@@ -605,7 +599,7 @@ class OlasWeekTweetCollectionBehaviour(OlasWeekBaseBehaviour):
 
             break
 
-        self.context.logger.info(f"Got {len(tweets)} new tweets")
+        self.context.logger.info(f"Got {len(tweets)} new tweets: {tweets.keys()}")
 
         return {
             "tweets": list(tweets.values()),
@@ -714,7 +708,9 @@ class OlasWeekEvaluationBehaviour(OlasWeekBaseBehaviour):
         )
         data = llm_response_message.value
         self.openai_calls.increase_call_count()
-        self.context.logger.info(f"Got summary: {repr(data)}")
+        self.context.logger.info(
+            f"Got summary for week {week_number} year {year_abbreviation}:\n{repr(data)}"
+        )
         summary = build_thread(data, week_number, year_abbreviation)
         self.context.logger.info(f"Parsed summary: {summary}")
         return summary
