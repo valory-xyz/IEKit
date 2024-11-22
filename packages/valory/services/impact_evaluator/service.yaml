@@ -103,7 +103,7 @@ extra:
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id,created_at,public_metrics&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
-        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
+        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:120}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query={search_query}&tweet.fields=author_id,created_at,conversation_id,public_metrics&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
@@ -200,7 +200,7 @@ extra:
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id,created_at,public_metrics&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
-        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
+        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:120}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query={search_query}&tweet.fields=author_id,created_at,conversation_id,public_metrics&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
@@ -297,7 +297,7 @@ extra:
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id,created_at,public_metrics&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
-        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
+        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:120}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query={search_query}&tweet.fields=author_id,created_at,conversation_id,public_metrics&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
@@ -396,7 +396,7 @@ extra:
         twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
         twitter_mentions_args: ${TWITTER_MENTIONS_ARGS:str:tweet.fields=author_id,created_at,public_metrics&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_max_pages: ${TWITTER_MAX_PAGES:int:1}
-        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:80}
+        max_tweet_pulls_allowed: ${MAX_TWEET_PULLS_ALLOWED:int:120}
         twitter_search_endpoint: ${TWITTER_SEARCH_ENDPOINT:str:2/tweets/search/recent?}
         twitter_search_args: ${TWITTER_SEARCH_ARGS:str:query={search_query}&tweet.fields=author_id,created_at,conversation_id,public_metrics&user.fields=name&expansions=author_id&max_results=25&since_id={since_id}}
         twitter_tweets_endpoint: ${TWITTER_TWEETS_ENDPOINT:str:2/users/1450081635559428107/tweets?}
