@@ -34,9 +34,9 @@ skills:
 - valory/termination_abci:0.1.0:bafybeifi2uodnrjsrivj53g3sjutocmyusbx6mlsb6oanqdyt2mfbyvusy
 - valory/transaction_settlement_abci:0.1.0:bafybeigh2vkt74jrad5gtsczrgqcuhcqe7jkgjy7jdw56yamlzwwnaymjy
 - valory/decision_making_abci:0.1.0:bafybeieshkhwnqijyhqdw2z7ejnnal5c3crth2sdgujwbfgozdecllgeiq
-- valory/llm_abci:0.1.0:bafybeicezihjsqnyfgowf2plosv6dzs5q3qlcoyhyqjftsi4qcsonhwpnm
+- valory/llm_abci:0.1.0:bafybeihovy3j2sxfnlzjpxg7mgzgpr5c6z7kv7kqkl5d2jtlf7qqlzcifa
 - valory/twitter_write_abci:0.1.0:bafybeibp7zai2qwvfjd5fgpayx44x5c2zshbukpobvz2la7ws2l5f5fjde
-- valory/olas_week_abci:0.1.0:bafybeigcrkxc4jbv2d6yyn7y7efrfh52phfzwvd2eiaakz3y264kcshgh4
+- valory/olas_week_abci:0.1.0:bafybeiav2myq7csvcv7st47qwau6kqlo7foy5am46j72fkbvexlqlinq6m
 - valory/mech_interact_abci:0.1.0:bafybeicpskytv7osu6bdpmcweemlsb4f3m6gldzpyoxgawkczsmvlrzgma
 - valory/staking_abci:0.1.0:bafybeia25btekbiwi7tep6wzjlojc5g4msrxtfkhunuzlopjbjziactrje
 behaviours:
