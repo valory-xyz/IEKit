@@ -20,7 +20,7 @@ connections:
 - valory/http_client:0.23.0:bafybeihi772xgzpqeipp3fhmvpct4y6e6tpjp4sogwqrnf3wqspgeilg4u
 - valory/ledger:0.19.0:bafybeigntoericenpzvwejqfuc3kqzo2pscs76qoygg5dbj6f4zxusru5e
 - valory/p2p_libp2p_client:0.1.0:bafybeid3xg5k2ol5adflqloy75ibgljmol6xsvzvezebsg7oudxeeolz7e
-- valory/openai:0.1.0:bafybeib6bm45cfb7o4ixmf5iswzyb2mf6m5y6rogbt6romerhdrzc6vkya
+- valory/openai:0.1.0:bafybeibsevvadjkf4fdfbw23ett6e5l4whsxbiwzezdgbmlsin2jidbhcu
 - valory/twitter:0.1.0:bafybeiffqsvt3i37sd5qdsmpzf5i4hm37uosbobyogg5oyosovjs66buni
 contracts:
 - valory/dynamic_contribution:0.1.0:bafybeidlvppnbass74mammqf6r6sn24pt7obnig3gaafnmlwcvf65yn2ny
@@ -45,9 +45,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeieo7pe5wqjphs5izpz5aujjbubymlxub62b3rhx6yglu65ibalffu
 - valory/abstract_round_abci:0.1.0:bafybeibiw4oqwqvo4jccwz5fb73iardzychgvcl66tceiildohoju2ikti
-- valory/impact_evaluator_abci:0.1.0:bafybeibinbc7z5rjleev7ptqnk67jeuufdkmkrzgme3o2em6x6d75ut77i
+- valory/impact_evaluator_abci:0.1.0:bafybeidkyqcdfhtnnhiatvxllaqtki4ztolo2b5dilpfdbkv2bwvydzxja
 - valory/generic_scoring_abci:0.1.0:bafybeibgttqow3dbtpm5si7dhkfqcv64twvuoosfj5ha53u7qb7ihupp6y
-- valory/twitter_scoring_abci:0.1.0:bafybeibdziydhsk47j7kphgkogzecbcxboouwgbfim3levf2c3oovvloje
+- valory/twitter_scoring_abci:0.1.0:bafybeia4wyhhocmnpiiphwrlrln7rrql5jhcwlgrihf2m7uc7ccgjhg3hq
 - valory/ceramic_read_abci:0.1.0:bafybeigz7rzfls3niv3urfb4z4vwr525ooxveelgg3djpvkg5jzetxlm2u
 - valory/ceramic_write_abci:0.1.0:bafybeic6c3iub3nsr5tmr7g5vzoixbin6w64ewudfiq6u4r2fiqwbg753i
 - valory/dynamic_nft_abci:0.1.0:bafybeianbjebbb2xkjrowirzoxkbgg6ugkqvivt6ehzvntyvat4wpzqgju
@@ -57,8 +57,8 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeigh2vkt74jrad5gtsczrgqcuhcqe7jkgjy7jdw56yamlzwwnaymjy
 - valory/twitter_write_abci:0.1.0:bafybeibp7zai2qwvfjd5fgpayx44x5c2zshbukpobvz2la7ws2l5f5fjde
 - valory/decision_making_abci:0.1.0:bafybeieshkhwnqijyhqdw2z7ejnnal5c3crth2sdgujwbfgozdecllgeiq
-- valory/llm_abci:0.1.0:bafybeicezihjsqnyfgowf2plosv6dzs5q3qlcoyhyqjftsi4qcsonhwpnm
-- valory/olas_week_abci:0.1.0:bafybeiem2vz56ydmckpwriud4pt6w3iap5pepieqaqwmy4ghdqaaa53xs4
+- valory/llm_abci:0.1.0:bafybeihovy3j2sxfnlzjpxg7mgzgpr5c6z7kv7kqkl5d2jtlf7qqlzcifa
+- valory/olas_week_abci:0.1.0:bafybeiav2myq7csvcv7st47qwau6kqlo7foy5am46j72fkbvexlqlinq6m
 - valory/mech_interact_abci:0.1.0:bafybeicpskytv7osu6bdpmcweemlsb4f3m6gldzpyoxgawkczsmvlrzgma
 - valory/staking_abci:0.1.0:bafybeia25btekbiwi7tep6wzjlojc5g4msrxtfkhunuzlopjbjziactrje
 default_ledger: ethereum
@@ -254,7 +254,7 @@ models:
       twitter_mentions_endpoint: ${str:2/users/1450081635559428107/mentions?}
       twitter_mentions_args: ${str:tweet.fields=author_id,created_at,public_metrics&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
       twitter_max_pages: ${int:1}
-      max_tweet_pulls_allowed: ${int:80}
+      max_tweet_pulls_allowed: ${int:120}
       twitter_search_endpoint: ${str:2/tweets/search/recent?}
       twitter_search_args: ${str:query={search_query}&tweet.fields=author_id,created_at,conversation_id,public_metrics&user.fields=name&expansions=author_id&max_results={max_results}&since_id={since_id}}
       twitter_tweets_endpoint: ${str:2/users/1450081635559428107/tweets?}

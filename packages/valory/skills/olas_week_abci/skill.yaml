@@ -25,7 +25,7 @@ fingerprint:
   tests/test_rounds.py: bafybeiei2srj4ggs3pln7vxxt4walhrtsegveimxdcbckyng2i6wv53vy4
 fingerprint_ignore_patterns: []
 connections:
-- valory/openai:0.1.0:bafybeib6bm45cfb7o4ixmf5iswzyb2mf6m5y6rogbt6romerhdrzc6vkya
+- valory/openai:0.1.0:bafybeibsevvadjkf4fdfbw23ett6e5l4whsxbiwzezdgbmlsin2jidbhcu
 contracts: []
 protocols:
 - valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
@@ -136,7 +136,7 @@ models:
       twitter_tweets_endpoint: 2/users/1450081635559428107/tweets?
       twitter_tweets_args: tweet.fields=author_id,created_at,conversation_id,public_metrics&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}
       twitter_max_pages: 1
-      max_tweet_pulls_allowed: 80
+      max_tweet_pulls_allowed: 120
       openai_call_window_size: 3600.0
       openai_calls_allowed_in_window: 100
       validate_timeout: 1205
