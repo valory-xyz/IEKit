@@ -34,8 +34,8 @@ skills:
 - valory/termination_abci:0.1.0:bafybeiea67epwwgngp7b3wavs6hpkaxv6etyaps6g6325bchfnf354mibq
 - valory/transaction_settlement_abci:0.1.0:bafybeifmgmwdkx4esemxjacjwzqkqymkuklb5nehkwqkx7v335fllgswcq
 - valory/decision_making_abci:0.1.0:bafybeibvhg6nzs7os3c4enox6cc6ey42kkh62jrv5jpb5kpcjmykeblwmi
-- valory/llm_abci:0.1.0:bafybeiclq7xtvwy7cgqdpktv3emr67spc7ndjqnsso5getcf3yclh2rksq
-- valory/twitter_write_abci:0.1.0:bafybeic6oekzksyehrsfs7bu57qccz33qagz7mfdxtyor5opetpnhjaiui
+- valory/llm_abci:0.1.0:bafybeife2ymfi54jtoarjrwm3nszc4scnxfrkmfeo33rjvufyr66auicse
+- valory/twitter_write_abci:0.1.0:bafybeig4dc4cereyshk535pfpparvxiuaimdu4lsm3hnl5li7pxafho6lu
 - valory/olas_week_abci:0.1.0:bafybeiecbiznyj7ameijrpajwxcfmwt45edzjkfkrfnnhcwfb4fkdxbsuy
 - valory/mech_interact_abci:0.1.0:bafybeib4vn6m2yumwoclh5aatcdt5yxcjc5owxmxy5o7t3nfzormgwkr64
 - valory/staking_abci:0.1.0:bafybeiapp5q6x4mzmqa5l6t6nvnvo6ktoglnhaorncpipv3uxl5reqlwkm
