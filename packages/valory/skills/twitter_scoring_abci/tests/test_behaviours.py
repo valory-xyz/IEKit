@@ -379,7 +379,7 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
                 ),
                 {
                     "request_urls": [
-                        TWITTER_MENTIONS_URL.format(max_results=80),
+                        TWITTER_MENTIONS_URL.format(max_results=120),
                     ],
                     "request_headers": [
                         "Authorization: Bearer <default_bearer_token>\r\n",
@@ -408,8 +408,8 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
                 ),
                 {
                     "request_urls": [
-                        TWITTER_MENTIONS_URL.format(max_results=80),
-                        TWITTER_MENTIONS_URL.format(max_results=80)
+                        TWITTER_MENTIONS_URL.format(max_results=120),
+                        TWITTER_MENTIONS_URL.format(max_results=120)
                         + "&pagination_token=dummy_next_token",
                     ],
                     "request_headers": [
@@ -441,7 +441,7 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
                 ),
                 {
                     "request_urls": [
-                        TWITTER_MENTIONS_URL.format(max_results=80),
+                        TWITTER_MENTIONS_URL.format(max_results=120),
                     ],
                     "request_headers": [
                         "Authorization: Bearer <default_bearer_token>\r\n",
@@ -588,7 +588,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                 ),
                 {
                     "request_urls": [
-                        TWITTER_REGISTRATIONS_URL.format(max_results=80),
+                        TWITTER_REGISTRATIONS_URL.format(max_results=120),
                     ],
                     "request_headers": [
                         "Authorization: Bearer <default_bearer_token>\r\n",
@@ -619,8 +619,8 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                 ),
                 {
                     "request_urls": [
-                        TWITTER_REGISTRATIONS_URL.format(max_results=80),
-                        TWITTER_REGISTRATIONS_URL.format(max_results=80)
+                        TWITTER_REGISTRATIONS_URL.format(max_results=120),
+                        TWITTER_REGISTRATIONS_URL.format(max_results=120)
                         + "&pagination_token=dummy_next_token",
                     ],
                     "request_headers": [
@@ -653,7 +653,7 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
                 ),
                 {
                     "request_urls": [
-                        TWITTER_REGISTRATIONS_URL.format(max_results=80),
+                        TWITTER_REGISTRATIONS_URL.format(max_results=120),
                     ],
                     "request_headers": [
                         "Authorization: Bearer <default_bearer_token>\r\n",
@@ -774,7 +774,7 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL.format(max_results=80)],
+                    "urls": [TWITTER_MENTIONS_URL.format(max_results=120)],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE,
@@ -797,7 +797,7 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL.format(max_results=80)],
+                    "urls": [TWITTER_MENTIONS_URL.format(max_results=120)],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_DATA,
@@ -819,7 +819,7 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL.format(max_results=80)],
+                    "urls": [TWITTER_MENTIONS_URL.format(max_results=120)],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_META,
@@ -841,7 +841,7 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL.format(max_results=80)],
+                    "urls": [TWITTER_MENTIONS_URL.format(max_results=120)],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_INCLUDES,
@@ -908,7 +908,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                 ),
                 {
                     "urls": [
-                        TWITTER_REGISTRATIONS_URL.format(max_results=80),
+                        TWITTER_REGISTRATIONS_URL.format(max_results=120),
                     ],
                     "bodies": [
                         json.dumps(DUMMY_HASHTAGS_RESPONSE),
@@ -931,7 +931,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                 ),
                 {
                     "urls": [
-                        TWITTER_REGISTRATIONS_URL.format(max_results=80),
+                        TWITTER_REGISTRATIONS_URL.format(max_results=120),
                     ],
                     "bodies": [
                         json.dumps(
@@ -955,7 +955,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                 ),
                 {
                     "urls": [
-                        TWITTER_REGISTRATIONS_URL.format(max_results=80),
+                        TWITTER_REGISTRATIONS_URL.format(max_results=120),
                     ],
                     "bodies": [
                         json.dumps(DUMMY_REGISTRATIONS_RESPONSE_MISSING_META),
@@ -976,7 +976,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                     event=Event.API_ERROR,
                 ),
                 {
-                    "urls": [TWITTER_REGISTRATIONS_URL.format(max_results=80)],
+                    "urls": [TWITTER_REGISTRATIONS_URL.format(max_results=120)],
                     "bodies": [
                         json.dumps(
                             DUMMY_REGISTRATIONS_RESPONSE_MISSING_INCLUDES,
