@@ -73,6 +73,7 @@ class StreamReadRound(CollectSameUntilThresholdRound):
 
     payload_class = StreamReadPayload
     synchronized_data_class = SynchronizedData
+    required_class_attributes = ()
 
     ERROR_PAYLOAD = "ERROR_PAYLOAD"
 

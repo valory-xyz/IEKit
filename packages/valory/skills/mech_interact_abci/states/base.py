@@ -151,8 +151,4 @@ class MechInteractionRound(CollectSameUntilThresholdRound):
     synchronized_data_class = SynchronizedData
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
-
-    def _check_required_attributes(self) -> None:
-        """Check that required attributes are set."""
-        # skip the checks for this round
-        ...
+    required_class_attributes = ()

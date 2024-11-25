@@ -87,6 +87,7 @@ class LLMRandomnessRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.most_voted_randomness),
         get_name(SynchronizedData.most_voted_randomness),
     )
+    required_class_attributes = ()
 
 
 class LLMSelectKeeperRound(CollectSameUntilThresholdRound):
@@ -98,6 +99,7 @@ class LLMSelectKeeperRound(CollectSameUntilThresholdRound):
     no_majority_event = Event.NO_MAJORITY
     collection_key = get_name(SynchronizedData.participant_to_selection)
     selection_key = get_name(SynchronizedData.most_voted_keeper_address)
+    required_class_attributes = ()
 
 
 class LLMRound(OnlyKeeperSendsRound):
@@ -105,6 +107,7 @@ class LLMRound(OnlyKeeperSendsRound):
 
     payload_class = LLMPayload
     synchronized_data_class = SynchronizedData
+    required_class_attributes = ()
 
     def end_block(
         self,

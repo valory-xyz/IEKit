@@ -8,7 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeihrdg7ppm4zxmrbfscm7t6ftonw667zivzl3c6kwdtvpcwmugqr3i
   behaviours.py: bafybeiencqonbknwiptgpw6ab7hj4ba5if5ztolghcsqkymf3hmubjozxe
-  composition.py: bafybeihmrcstlclie5lk36wgquwti5gg2lv73sn7yhfzfzmw67pavbzbve
+  composition.py: bafybeihfifpt6r2zy7nxje5hurhz6kwxrkxx4gw6bspjumrzvbmegj5jw4
   dialogues.py: bafybeibhbdeicko6fq5pbzl5xm2bjbo4iwdkyyhwpepjnwbxyqbx6tx6hu
   fsm_specification.yaml: bafybeicj4ajbfschtxknkh6nbg4rjpejqykpo5twbyfd2iidmop5bvmad4
   handlers.py: bafybeigquxsw3z2v36ts4xmmxnuxyd3z2aaymccbp7ghtzhewhbfesw54y
@@ -21,7 +21,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeigjddhk7epta7xpnfvv426xedff5abh4xlkwi6cqgp4vkutgkvydm
 - valory/registration_abci:0.1.0:bafybeiagi6e2h7kochmlemy5c5yk6hwn37tfxiqvk2en74jhowsdwlmrny
 - valory/reset_pause_abci:0.1.0:bafybeiezfedmmseox3ce5aucxsiszdmvskrwwbtpb2a3vw3sbmc5jt7nri
-- valory/farcaster_write_abci:0.1.0:bafybeihkl6id4eehbcrblvk5st7crkknspdixvdl2avgrzvoqjktrrzoqu
+- valory/farcaster_write_abci:0.1.0:bafybeibbbfui3g2s63cg5vsvxqpzzdg2uxhd7a4ikwfo6dy7b2klqthvu4
 behaviours:
   main:
     args: {}

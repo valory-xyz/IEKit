@@ -112,6 +112,7 @@ class RandomnessRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.most_voted_randomness_round),
         get_name(SynchronizedData.most_voted_randomness),
     )
+    required_class_attributes = ()
 
 
 class SelectKeeperRound(CollectSameUntilThresholdRound):
@@ -123,6 +124,7 @@ class SelectKeeperRound(CollectSameUntilThresholdRound):
     no_majority_event = Event.NO_MAJORITY
     collection_key = get_name(SynchronizedData.participant_to_selection)
     selection_key = get_name(SynchronizedData.most_voted_keeper_address)
+    required_class_attributes = ()
 
 
 class StreamWriteRound(OnlyKeeperSendsRound):
@@ -132,6 +134,7 @@ class StreamWriteRound(OnlyKeeperSendsRound):
 
     payload_class = StreamWritePayload
     synchronized_data_class = SynchronizedData
+    required_class_attributes = ()
 
     def end_block(
         self,
@@ -182,6 +185,7 @@ class VerificationRound(CollectSameUntilThresholdRound):
 
     payload_class = VerificationPayload
     synchronized_data_class = SynchronizedData
+    required_class_attributes = ()
 
     ERROR_PAYLOAD = "error"
     SUCCCESS_PAYLOAD = "success"

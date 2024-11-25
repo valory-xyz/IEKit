@@ -86,6 +86,7 @@ class RandomnessTwitterRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.most_voted_randomness),
         get_name(SynchronizedData.most_voted_randomness),
     )
+    required_class_attributes = ()
 
 
 class SelectKeeperTwitterRound(CollectSameUntilThresholdRound):
@@ -97,6 +98,7 @@ class SelectKeeperTwitterRound(CollectSameUntilThresholdRound):
     no_majority_event = Event.NO_MAJORITY
     collection_key = get_name(SynchronizedData.participant_to_selection)
     selection_key = get_name(SynchronizedData.most_voted_keeper_address)
+    required_class_attributes = ()
 
 
 class TwitterWriteRound(OnlyKeeperSendsRound):
@@ -104,6 +106,7 @@ class TwitterWriteRound(OnlyKeeperSendsRound):
 
     payload_class = TwitterWritePayload
     synchronized_data_class = SynchronizedData
+    required_class_attributes = ()
 
     def end_block(
         self,
