@@ -158,6 +158,25 @@
             "required": ["enabled", "last_run"],
             "additionalProperties": false
         },
+        "staking_daa_config": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "daily": {
+                    "type": "boolean"
+                },
+                "last_run": {
+                    "type": ["integer", "null", "string"]
+                },
+                "run_hour_utc": {
+                    "type": "integer"
+                }
+            },
+            "required": ["enabled", "last_run", "daily", "run_hour_utc"],
+            "additionalProperties": false
+        },
         "executionAttempt": {
             "type": "object",
             "properties": {
@@ -345,9 +364,12 @@
                                 },
                                 "staking_checkpoint": {
                                     "$ref": "#/definitions/staking_checkpoint_config"
+                                },
+                                "staking_daa": {
+                                    "$ref": "#/definitions/staking_daa_config"
                                 }
                             },
-                            "required": ["daily_tweet", "scheduled_tweet", "daily_orbis", "week_in_olas"],
+                            "required": ["daily_tweet", "scheduled_tweet", "daily_orbis", "week_in_olas", "twitter_campaigns", "staking_activity", "staking_checkpoint", "staking_daa"],
                             "additionalProperties": false
                         },
                         "memberWhitelist": {

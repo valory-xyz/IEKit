@@ -68,6 +68,7 @@ class Event(Enum):
     POST_TX_MECH = "post_tx_mech"
     POST_TX_ACTIVITY_UPDATE = "post_tx_activity_update"
     POST_TX_CHECKPOINT = "post_tx_checkpoint"
+    STAKING_DAA_UPDATE = "staking_daa_update"
 
 
 class SynchronizedData(BaseSynchronizedData):

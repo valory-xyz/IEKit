@@ -164,7 +164,13 @@ def main():
 
 
     print("Updating the db format...")
-    # Nothing to do
+
+    centaurs_db["configuration"]["plugins"]["staking_daa"] = {
+        "enabled": True,
+        "daily": True,
+        "last_run": None,
+        "run_hour_utc": 12
+    }
 
     # Validate the new data
     print("Validating the updated centaurs db...")
