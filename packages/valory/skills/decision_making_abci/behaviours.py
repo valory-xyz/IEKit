@@ -349,6 +349,9 @@ class PostTxDecisionMakingBehaviour(DecisionMakingBaseBehaviour):
         if tx_submitter == "checkpoint_preparation_behaviour":
             return Event.POST_TX_CHECKPOINT.value
 
+        if tx_submitter == "daa_preparation_behaviour":
+            return Event.POST_TX_DAA.value
+
         # This is a mech request
         return Event.POST_TX_MECH.value
 

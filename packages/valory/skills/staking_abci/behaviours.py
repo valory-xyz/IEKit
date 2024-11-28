@@ -19,10 +19,9 @@
 
 """This package contains round behaviours of StakingMakingAbciApp."""
 
-import json
 from abc import ABC
 from datetime import datetime, timezone
-from typing import Dict, Generator, List, Optional, Set, Tuple, Type, cast
+from typing import Generator, List, Optional, Set, Type, cast
 
 from packages.valory.contracts.gnosis_safe.contract import (
     GnosisSafeContract,
@@ -49,6 +48,8 @@ from packages.valory.skills.staking_abci.rounds import (
     CheckpointPreparationRound,
     StakingAbciApp,
     SynchronizedData,
+    DAAPreparationPayload,
+    DAAPreparationRound
 )
 from packages.valory.skills.transaction_settlement_abci.payload_tools import (
     hash_payload_to_hex,
@@ -434,6 +435,36 @@ class CheckpointPreparationBehaviour(StakingBaseBehaviour):
         return safe_tx_hash
 
 
+class DAAPreparationBehaviour(StakingBaseBehaviour):
+    """DAAPreparationBehaviour"""
+
+    matching_round: Type[AbstractRound] = DAAPreparationRound
+
+    def async_act(self) -> Generator:
+        """Do the act, supporting asynchronous execution."""
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            sender = self.context.agent_address
+            tx_hash = yield from self.get_daa_hash()
+            payload = DAAPreparationPayload(
+                sender=sender,
+                tx_submitter=self.auto_behaviour_id(),
+                tx_hash=tx_hash,
+                safe_contract_address=self.params.safe_contract_address_base
+            )
+
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            yield from self.send_a2a_transaction(payload)
+            yield from self.wait_until_round_end()
+
+        self.set_done()
+
+    def get_daa_hash(self) -> Generator[None, None, Optional[str]]:
+        """Prepare the DAA update tx"""
+        self.context.logger.info(
+            "Preparing checkpoint calls"
+        )
+
 class StakingRoundBehaviour(AbstractRoundBehaviour):
     """StakingRoundBehaviour"""
 
@@ -442,5 +473,6 @@ class StakingRoundBehaviour(AbstractRoundBehaviour):
     behaviours: Set[Type[BaseBehaviour]] = [
         ActivityScoreBehaviour,
         ActivityUpdatePreparationBehaviour,
-        CheckpointPreparationBehaviour
+        CheckpointPreparationBehaviour,
+        DAAPreparationBehaviour
     ]

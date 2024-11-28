@@ -50,3 +50,13 @@ class CheckpointPreparationPayload(BaseTxPayload):
     tx_hash: Optional[str] = None
     chain_id: str = "base"
     safe_contract_address: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class DAAPreparationPayload(BaseTxPayload):
+    """Represent a transaction payload for the DAAPreparationRound."""
+
+    tx_submitter: Optional[str] = None
+    tx_hash: Optional[str] = None
+    chain_id: str = "base"
+    safe_contract_address: Optional[str] = None

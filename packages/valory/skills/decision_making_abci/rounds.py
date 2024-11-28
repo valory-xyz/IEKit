@@ -69,6 +69,7 @@ class Event(Enum):
     POST_TX_ACTIVITY_UPDATE = "post_tx_activity_update"
     POST_TX_CHECKPOINT = "post_tx_checkpoint"
     STAKING_DAA_UPDATE = "staking_daa_update"
+    POST_TX_DAA = "post_tx_daa"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -286,6 +287,10 @@ class FinishedPostCheckpointRound(DegenerateRound):
     """FinishedPostCheckpointRound"""
 
 
+class FinishedPostDAARound(DegenerateRound):
+    """FinishedPostDAARound"""
+
+
 class DecisionMakingAbciApp(AbciApp[Event]):
     """DecisionMakingAbciApp"""
 
@@ -318,6 +323,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.POST_TX_MECH: FinishedPostMechResponseRound,
             Event.POST_TX_ACTIVITY_UPDATE: FinishedPostActivityUpdateRound,
             Event.POST_TX_CHECKPOINT: FinishedPostCheckpointRound,
+            Event.POST_TX_DAA: FinishedPostDAARound,
             Event.DONE: PostTxDecisionMakingRound,
             Event.NO_MAJORITY: PostTxDecisionMakingRound,
         },
@@ -355,6 +361,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedPostMechResponseRound,
         FinishedPostActivityUpdateRound,
         FinishedPostCheckpointRound,
+        FinishedPostDAARound,
     }
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
@@ -381,4 +388,5 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedPostMechResponseRound: set(),
         FinishedPostActivityUpdateRound: set(),
         FinishedPostCheckpointRound: set(),
+        FinishedPostDAARound: set(),
     }
