@@ -462,8 +462,64 @@ class DAAPreparationBehaviour(StakingBaseBehaviour):
     def get_daa_hash(self) -> Generator[None, None, Optional[str]]:
         """Prepare the DAA update tx"""
         self.context.logger.info(
-            "Preparing checkpoint calls"
+            "Preparing DAA update"
         )
+
+        users = self.context.ceramic_db.data["users"]
+        staked_multisigs = [user["service_multisig"] for user in users if user["service_multisig"]]
+
+        # TODO: filter multisigs that have enough points
+        self.context.logger.info(f"Safes marked as DAAs: {staked_multisigs}")
+
+        multi_send_txs = []
+        for staked_multisig in staked_multisigs:
+
+            # Send an empty native transfer
+            multi_send_txs.append(
+                {
+                    "operation": MultiSendOperation.CALL,
+                    "to": staked_multisig,
+                    "value": ZERO_VALUE,
+                    "data": b"",
+                }
+            )
+
+        # Multisend call
+        contract_api_msg = yield from self.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
+            contract_address=self.params.multisend_address,
+            contract_id=str(MultiSendContract.contract_id),
+            contract_callable="get_tx_data",
+            multi_send_txs=multi_send_txs,
+            chain_id=BASE_CHAIN_ID,
+        )
+
+        # Check for errors
+        if (
+            contract_api_msg.performative
+            != ContractApiMessage.Performative.RAW_TRANSACTION
+        ):
+            self.context.logger.error(
+                f"Could not get Multisend tx hash. "
+                f"Expected: {ContractApiMessage.Performative.RAW_TRANSACTION.value}, "
+                f"Actual: {contract_api_msg.performative.value}"
+            )
+            return None
+
+        # Extract the multisend data and strip the 0x
+        multisend_data = cast(str, contract_api_msg.raw_transaction.body["data"])[2:]
+        self.context.logger.info(f"Multisend data is {multisend_data}")
+
+        # Prepare the safe transaction
+        safe_tx_hash = yield from self._build_safe_tx_hash(
+            to_address=self.params.multisend_address,
+            value=ZERO_VALUE,  # the safe is not moving any native value into the multisend
+            data=bytes.fromhex(multisend_data),
+            operation=SafeOperation.DELEGATE_CALL.value
+        )
+
+        return safe_tx_hash
+
 
 class StakingRoundBehaviour(AbstractRoundBehaviour):
     """StakingRoundBehaviour"""
