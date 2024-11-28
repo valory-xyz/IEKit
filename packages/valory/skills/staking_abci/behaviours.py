@@ -46,10 +46,10 @@ from packages.valory.skills.staking_abci.rounds import (
     ActivityUpdatePreparationRound,
     CheckpointPreparationPayload,
     CheckpointPreparationRound,
+    DAAPreparationPayload,
+    DAAPreparationRound,
     StakingAbciApp,
     SynchronizedData,
-    DAAPreparationPayload,
-    DAAPreparationRound
 )
 from packages.valory.skills.transaction_settlement_abci.payload_tools import (
     hash_payload_to_hex,

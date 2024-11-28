@@ -59,7 +59,7 @@ from packages.valory.skills.decision_making_abci.tasks.score_preparations import
 from packages.valory.skills.decision_making_abci.tasks.staking import (
     StakingActivityPreparation,
     StakingCheckpointPreparation,
-    StakingDAAPreparation
+    StakingDAAPreparation,
 )
 from packages.valory.skills.decision_making_abci.tasks.tweet_validation_preparation import (
     TweetValidationPreparation,

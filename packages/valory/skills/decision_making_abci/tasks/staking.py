@@ -335,10 +335,7 @@ class StakingActivityPreparation(StakingPreparation):
                 k: v["points"] for k, v in this_epoch_not_counted_tweets.items()
             }
 
-            (
-                updates,
-                selected_tweets
-            ) = group_tweets(
+            (updates, selected_tweets) = group_tweets(
                 not_counted_tweet_id_to_points, points_pending_from_previous_run
             )
 

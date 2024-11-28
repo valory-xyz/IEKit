@@ -38,7 +38,7 @@ from packages.valory.skills.staking_abci.payloads import (
     ActivityScorePayload,
     ActivityUpdatePreparationPayload,
     CheckpointPreparationPayload,
-    DAAPreparationPayload
+    DAAPreparationPayload,
 )
 
 
