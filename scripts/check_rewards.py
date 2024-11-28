@@ -167,14 +167,14 @@ def get_user_info(user_data: Dict, contract_info: Dict, contributors_contract: C
     staking_contract_name = get_contract_by_address(staking_contract_address)
 
     accrued_rewards = staking_token_contract.functions.calculateStakingReward(service_id).call()
-    this_epoch_rewards = staking_token_contract.functions.calculateStakingLastReward(service_id).call()
+    # this_epoch_rewards = staking_token_contract.functions.calculateStakingLastReward(service_id).call()   # needs fixing
     this_epoch = contract_info[staking_contract_name]["epoch"]
 
     this_epoch_tweets = [t for t in user_data["tweets"].values() if t["epoch"] == this_epoch]
     this_epoch_points = sum(t["points"] for t in this_epoch_tweets)
 
     required_points = POINTS_PER_UPDATE * contract_info[staking_contract_name]['required_updates']
-    color = YELLOW if this_epoch_points >= required_points and this_epoch_rewards == 0 else GREEN
+    color = GREEN if this_epoch_points >= required_points else YELLOW
 
     user_info = {
         "staked": True,
@@ -184,7 +184,7 @@ def get_user_info(user_data: Dict, contract_info: Dict, contributors_contract: C
         "required_points": f"{required_points:4d}",
         "this_epoch_points": f"{this_epoch_points:4d}",
         "next_epoch_start": contract_info[staking_contract_name]["next_epoch_start"],
-        "this_epoch_rewards": f"{this_epoch_rewards / 1e18:6.2f}",
+        # "this_epoch_rewards": f"{this_epoch_rewards / 1e18:6.2f}",
         "accrued_rewards": f"{accrued_rewards / 1e18:6.2f}",
         "color": color
     }
@@ -210,7 +210,7 @@ def print_table():
     )
 
     table = Table(title=f"Contribute staking status [{datetime.now().strftime('%H:%M:%S %Y-%m-%d')}]")
-    columns = ["User ID", "X handle", "Service Safe", "Contract", "Epoch", "Tweets", "Points (this epoch)", "Rewards (this epoch)", "Rewards (accrued)"]
+    columns = ["User ID", "X handle", "Service Safe", "Contract", "Epoch", "Tweets (this epoch)", "Points (this epoch)", "Rewards (accrued)"]
 
     for column in columns:
         table.add_column(column)
@@ -230,7 +230,7 @@ def print_table():
                 user_info["epoch"] + f" [{user_info['next_epoch_start']}]",
                 user_info["this_epoch_tweets"],
                 user_info["this_epoch_points"] + " / " + user_info["required_points"],
-                user_info["this_epoch_rewards"],
+                # user_info["this_epoch_rewards"],
                 user_info["accrued_rewards"],
             ]
             style = user_info["color"]
@@ -244,7 +244,7 @@ def print_table():
                 UNSTAKED,
                 UNSTAKED,
                 UNSTAKED,
-                UNSTAKED,
+                # UNSTAKED,
                 UNSTAKED,
             ]
             style = user_info["color"]
