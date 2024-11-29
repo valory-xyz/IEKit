@@ -34,9 +34,9 @@ skills:
 - valory/termination_abci:0.1.0:bafybeiea67epwwgngp7b3wavs6hpkaxv6etyaps6g6325bchfnf354mibq
 - valory/transaction_settlement_abci:0.1.0:bafybeifmgmwdkx4esemxjacjwzqkqymkuklb5nehkwqkx7v335fllgswcq
 - valory/decision_making_abci:0.1.0:bafybeie52kvwrsh4dyt45amlffclkdttclig33dyc4crb425zf2bcot36u
-- valory/llm_abci:0.1.0:bafybeife2ymfi54jtoarjrwm3nszc4scnxfrkmfeo33rjvufyr66auicse
+- valory/llm_abci:0.1.0:bafybeihpfesi2sjqdcb2j2mqybhz7av7jlvf27ozk32wbwmklkdugycxyq
 - valory/twitter_write_abci:0.1.0:bafybeig4dc4cereyshk535pfpparvxiuaimdu4lsm3hnl5li7pxafho6lu
-- valory/olas_week_abci:0.1.0:bafybeibxaejlnyo5ngrw3mrcr74ca762w7hupfn4ow44fmmvuxefrv664m
+- valory/olas_week_abci:0.1.0:bafybeibhapjfpv5fjrihicxxukfuwdvbdzostmj6ef74rbgzlpkhosn7ku
 - valory/mech_interact_abci:0.1.0:bafybeib4vn6m2yumwoclh5aatcdt5yxcjc5owxmxy5o7t3nfzormgwkr64
 - valory/staking_abci:0.1.0:bafybeie3wypei4kt35trwpa26ocn3zvxb6a45ch2wzbsaev3fxg6lj7yqm
 behaviours:
