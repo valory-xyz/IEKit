@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
-  behaviours.py: bafybeiesysmcdfe4pjol55br33kmhetjgngompsl6ludcvzxw2zpnxcb3u
+  behaviours.py: bafybeigwtxrg5yz3cth32azgngvofrsvduaownukivld44sea2eqvu5q2i
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
   fsm_specification.yaml: bafybeihckbzmtewjwlbdvghzuadspopa25gsvtkgud5v6ymob6bnt4pium
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
@@ -21,7 +21,7 @@ fingerprint:
   tasks/score_preparations.py: bafybeie7cfot24zcyod5becz6t5lasvva77httfkw57qmvgjk35d3qluxa
   tasks/signature_validation.py: bafybeihbwrv72hnh3ytko2i5oszqgdky2j6h2wse45wvuhf2j32lo2tsjy
   tasks/staking.py: bafybeihg54pf7ekzzped6tulzfv74vkeyfijlgzsgmlr7ndyq642qtixtu
-  tasks/task_preparations.py: bafybeihfm3ms665fvz2qwmhmcwgl2ws5mt62pykomowoxpm6a46jlqvsmu
+  tasks/task_preparations.py: bafybeic6cmkwpqb6m7zfelfmljqavtpedqerb5yry5au6fuc6d5orpvoay
   tasks/tweet_validation_preparation.py: bafybeif3wbfskiyuij7unx72euklms7owrzwzgdu462xatvypalm6xrgca
   tasks/twitter_preparation.py: bafybeicn7stcvmd6oex55dwptwxpikpssbcwnj2d3xkercikg5nlzqh4k4
   tasks/week_in_olas_preparations.py: bafybeidmx64rnkhfcqnsx7qwmcwz6s5okxbqwi4ztnfrrsfaxgsb6vdb3i
@@ -58,7 +58,7 @@ protocols:
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeigjddhk7epta7xpnfvv426xedff5abh4xlkwi6cqgp4vkutgkvydm
 - valory/ceramic_read_abci:0.1.0:bafybeibph35jhtvn6kgytj6mqdz4lpjkvtfqd75qorrt4onv6i2trxfttu
-- valory/staking_abci:0.1.0:bafybeiekwqnuxz2s6w3wea6keolrsgsl5wi3qb5jhhskzprhsn6jdp56bm
+- valory/staking_abci:0.1.0:bafybeie3wypei4kt35trwpa26ocn3zvxb6a45ch2wzbsaev3fxg6lj7yqm
 behaviours:
   main:
     args: {}
