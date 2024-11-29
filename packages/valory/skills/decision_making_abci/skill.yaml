@@ -9,11 +9,11 @@ fingerprint:
   __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
   behaviours.py: bafybeiesysmcdfe4pjol55br33kmhetjgngompsl6ludcvzxw2zpnxcb3u
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
-  fsm_specification.yaml: bafybeidw4kakgv56qrlowz4efgtkh6jzopcdnkktjwuyiruaapgxbgw4me
+  fsm_specification.yaml: bafybeihckbzmtewjwlbdvghzuadspopa25gsvtkgud5v6ymob6bnt4pium
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
   models.py: bafybeiatvo5f3kt5euaeddnrhnkjoznarjnnscwn2vgr3hq3qdd5xtwcau
   payloads.py: bafybeic6jrms2xs2odykwwngr5yyqm6cus7cyihdbxux26glpq3573q3ay
-  rounds.py: bafybeifmszfyazqkijjds7xxz2q4brleclqdiyckbifzuomylrg6kplfh4
+  rounds.py: bafybeigzdnn6u6hxjxkdnn4ei77svbml6lwvowzyoh3ttagevpx5ursaba
   tasks/campaign_validation_preparation.py: bafybeiafgc7lzgtl6qwo3qsdpskipm4qeby6c5nmltm4x4yp3zcwn5a6z4
   tasks/finished_pipeline_preparation.py: bafybeid652b53p7mtsbj3ksko3g2eezvg4nut2vukwvnfhxyfi4zkx3dym
   tasks/llm_preparation.py: bafybeigivqniwvqzmhpqytrn5gz3gb5caa6nlvctkbycbk4cmtut6hvuvi
@@ -58,7 +58,7 @@ protocols:
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeigjddhk7epta7xpnfvv426xedff5abh4xlkwi6cqgp4vkutgkvydm
 - valory/ceramic_read_abci:0.1.0:bafybeibph35jhtvn6kgytj6mqdz4lpjkvtfqd75qorrt4onv6i2trxfttu
-- valory/staking_abci:0.1.0:bafybeihy52mvbq7ulgxtvh3tad7xkh3te7hmwu27nkznrfyj6v74u3tkmu
+- valory/staking_abci:0.1.0:bafybeiekwqnuxz2s6w3wea6keolrsgsl5wi3qb5jhhskzprhsn6jdp56bm
 behaviours:
   main:
     args: {}

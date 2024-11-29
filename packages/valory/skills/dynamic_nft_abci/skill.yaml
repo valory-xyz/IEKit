@@ -31,7 +31,7 @@ protocols:
 - valory/http:1.0.0:bafybeifugzl63kfdmwrxwphrnrhj7bn6iruxieme3a4ntzejf6kmtuwmae
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeigjddhk7epta7xpnfvv426xedff5abh4xlkwi6cqgp4vkutgkvydm
-- valory/decision_making_abci:0.1.0:bafybeicd3y473exi5fy4p6ktgr7tz2huxiqxyruiygq64caakrxhzo7fdq
+- valory/decision_making_abci:0.1.0:bafybeiaxhjcfdjgts574mgfnppwrzfihldmy7tfuznidrxkk5b5v2fb6ba
 behaviours:
   main:
     args: {}

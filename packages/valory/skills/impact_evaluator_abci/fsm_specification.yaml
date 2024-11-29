@@ -33,6 +33,7 @@ alphabet_in:
 - POST_MECH
 - POST_TX_ACTIVITY_UPDATE
 - POST_TX_CHECKPOINT
+- POST_TX_DAA
 - POST_TX_MECH
 - PRE_MECH
 - PROCESS_UPDATES
@@ -53,6 +54,7 @@ alphabet_in:
 - SKIP_REQUEST
 - STAKING_ACTIVITY
 - STAKING_CHECKPOINT
+- STAKING_DAA_UPDATE
 - SUSPICIOUS_ACTIVITY
 - TWEET_EVALUATION_ROUND_TIMEOUT
 - TWEET_VALIDATION
@@ -74,6 +76,7 @@ states:
 - CheckTransactionHistoryRound
 - CheckpointPreparationRound
 - CollectSignatureRound
+- DAAPreparationRound
 - DBUpdateRound
 - DecisionMakingRound
 - FinalizationRound
@@ -142,6 +145,9 @@ transition_func:
     (CollectSignatureRound, DONE): FinalizationRound
     (CollectSignatureRound, NO_MAJORITY): ResetRound
     (CollectSignatureRound, ROUND_TIMEOUT): CollectSignatureRound
+    (DAAPreparationRound, DONE): RandomnessTransactionSubmissionRound
+    (DAAPreparationRound, NO_MAJORITY): DAAPreparationRound
+    (DAAPreparationRound, ROUND_TIMEOUT): DAAPreparationRound
     (DBUpdateRound, DONE): TwitterDecisionMakingRound
     (DBUpdateRound, NO_MAJORITY): DBUpdateRound
     (DBUpdateRound, ROUND_TIMEOUT): DBUpdateRound
@@ -161,6 +167,7 @@ transition_func:
     (DecisionMakingRound, SCORE): GenericScoringRound
     (DecisionMakingRound, STAKING_ACTIVITY): ActivityScoreRound
     (DecisionMakingRound, STAKING_CHECKPOINT): CheckpointPreparationRound
+    (DecisionMakingRound, STAKING_DAA_UPDATE): DAAPreparationRound
     (DecisionMakingRound, TWEET_VALIDATION): DecisionMakingRound
     (DecisionMakingRound, UPDATE_CENTAURS): RandomnessRound
     (DecisionMakingRound, WEEK_IN_OLAS_CREATE): OlasWeekDecisionMakingRound
@@ -224,6 +231,7 @@ transition_func:
     (PostTxDecisionMakingRound, NO_MAJORITY): PostTxDecisionMakingRound
     (PostTxDecisionMakingRound, POST_TX_ACTIVITY_UPDATE): ActivityScoreRound
     (PostTxDecisionMakingRound, POST_TX_CHECKPOINT): DecisionMakingRound
+    (PostTxDecisionMakingRound, POST_TX_DAA): DecisionMakingRound
     (PostTxDecisionMakingRound, POST_TX_MECH): MechResponseRound
     (PreMechRequestRound, DONE): MechRequestRound
     (PreMechRequestRound, NO_MAJORITY): PreMechRequestRound
