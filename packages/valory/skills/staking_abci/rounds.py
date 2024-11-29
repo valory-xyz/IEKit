@@ -198,6 +198,7 @@ class DAAPreparationRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.chain_id),
         get_name(SynchronizedData.safe_contract_address),
     )
+    required_class_attributes = ()
 
     # We reference all the events here to prevent the check-abciapp-specs tool from complaining
     # since this round receives the event via payload
