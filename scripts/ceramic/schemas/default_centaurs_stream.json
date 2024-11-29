@@ -81,7 +81,7 @@
                     "enabled": true,
                     "daily": true,
                     "last_run": null,
-                    "run_hour_utc": 12
+                    "run_hour_utc": 0
                 }
             },
             "memberWhitelist": []

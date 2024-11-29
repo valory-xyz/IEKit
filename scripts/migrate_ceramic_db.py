@@ -169,7 +169,7 @@ def main():
         "enabled": True,
         "daily": True,
         "last_run": None,
-        "run_hour_utc": 12
+        "run_hour_utc": 0
     }
 
     # Validate the new data

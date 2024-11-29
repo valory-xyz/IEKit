@@ -62,6 +62,7 @@ ZERO_VALUE = 0
 EMPTY_CALL_DATA = b"0x"
 SAFE_GAS = 0
 BASE_CHAIN_ID = "base"
+SECONDS_IN_DAY = 86400
 
 
 class StakingBaseBehaviour(BaseBehaviour, ABC):
@@ -465,14 +466,32 @@ class DAAPreparationBehaviour(StakingBaseBehaviour):
             "Preparing DAA update"
         )
 
-        users = self.context.ceramic_db.data["users"]
-        staked_multisigs = [user["service_multisig"] for user in users if user["service_multisig"]]
+        active_multisigs: List[str] = []
 
-        # TODO: filter multisigs that have enough points
-        self.context.logger.info(f"Safes marked as DAAs: {staked_multisigs}")
+        # Get the staked and active service multisigs
+        # If the user has not tweeted in the last 24 hours, they're not a DAA
+        for user in self.context.ceramic_db.data["users"].values():
+
+            if not user["service_multisig"]:
+                continue
+
+            if not user["tweets"]:
+                continue
+
+            # Check the latest tweet time
+            tweet_ts = list(user["tweets"].values())[-1]["timestamp"]
+            tweet_time = datetime.fromtimestamp(tweet_ts, tz=timezone.utc)
+            now_utc = self._get_utc_time()
+
+            if (now_utc - tweet_time).total_seconds() > SECONDS_IN_DAY:
+                continue
+
+            active_multisigs.append(user["service_multisig"])
+
+        self.context.logger.info(f"Safes marked as DAAs: {active_multisigs}")
 
         multi_send_txs = []
-        for staked_multisig in staked_multisigs:
+        for staked_multisig in active_multisigs:
 
             # Send an empty native transfer
             multi_send_txs.append(
