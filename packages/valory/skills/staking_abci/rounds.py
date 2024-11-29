@@ -246,7 +246,8 @@ class StakingAbciApp(AbciApp[Event]):
         },
         FinishedActivityUpdatePreparationRound: {},
         FinishedActivityRound: {},
-        FinishedCheckpointPreparationRound: {}
+        FinishedCheckpointPreparationRound: {},
+        FinishedDAAPreparationRound: {},
     }
     final_states: Set[AppState] = {FinishedCheckpointPreparationRound, FinishedActivityUpdatePreparationRound, FinishedActivityRound, FinishedDAAPreparationRound}
     event_to_timeout: EventToTimeout = {}
@@ -254,6 +255,7 @@ class StakingAbciApp(AbciApp[Event]):
     db_pre_conditions: Dict[AppState, Set[str]] = {
         CheckpointPreparationRound: set(),
     	ActivityScoreRound: set(),
+        DAAPreparationRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedCheckpointPreparationRound: {"most_voted_tx_hash"},

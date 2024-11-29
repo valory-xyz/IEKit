@@ -343,6 +343,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedPostMechResponseRound: {},
         FinishedPostActivityUpdateRound: {},
         FinishedPostCheckpointRound: {},
+        FinishedPostDAARound: {},
     }
     final_states: Set[AppState] = {
         FinishedDecisionMakingReadCentaursRound,
