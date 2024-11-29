@@ -8,17 +8,21 @@ final_states:
 - FinishedActivityRound
 - FinishedActivityUpdatePreparationRound
 - FinishedCheckpointPreparationRound
+- FinishedDAAPreparationRound
 label: StakingAbciApp
 start_states:
 - ActivityScoreRound
 - CheckpointPreparationRound
+- DAAPreparationRound
 states:
 - ActivityScoreRound
 - ActivityUpdatePreparationRound
 - CheckpointPreparationRound
+- DAAPreparationRound
 - FinishedActivityRound
 - FinishedActivityUpdatePreparationRound
 - FinishedCheckpointPreparationRound
+- FinishedDAAPreparationRound
 transition_func:
     (ActivityScoreRound, DONE): FinishedActivityRound
     (ActivityScoreRound, NO_MAJORITY): ActivityScoreRound
@@ -30,3 +34,6 @@ transition_func:
     (CheckpointPreparationRound, DONE): FinishedCheckpointPreparationRound
     (CheckpointPreparationRound, NO_MAJORITY): CheckpointPreparationRound
     (CheckpointPreparationRound, ROUND_TIMEOUT): CheckpointPreparationRound
+    (DAAPreparationRound, DONE): FinishedDAAPreparationRound
+    (DAAPreparationRound, NO_MAJORITY): DAAPreparationRound
+    (DAAPreparationRound, ROUND_TIMEOUT): DAAPreparationRound

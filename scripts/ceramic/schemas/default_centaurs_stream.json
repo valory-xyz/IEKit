@@ -76,6 +76,12 @@
                 "staking_checkpoint": {
                     "enabled": true,
                     "last_run": null
+                },
+                "staking_daa": {
+                    "enabled": true,
+                    "daily": true,
+                    "last_run": null,
+                    "run_hour_utc": 0
                 }
             },
             "memberWhitelist": []

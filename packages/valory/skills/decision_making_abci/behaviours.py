@@ -59,6 +59,7 @@ from packages.valory.skills.decision_making_abci.tasks.score_preparations import
 from packages.valory.skills.decision_making_abci.tasks.staking import (
     StakingActivityPreparation,
     StakingCheckpointPreparation,
+    StakingDAAPreparation,
 )
 from packages.valory.skills.decision_making_abci.tasks.tweet_validation_preparation import (
     TweetValidationPreparation,
@@ -134,6 +135,10 @@ previous_event_to_task_preparation_cls = {
     },
     Event.STAKING_CHECKPOINT.value: {
         "prev": StakingCheckpointPreparation,
+        "next": StakingDAAPreparation,
+    },
+    Event.STAKING_DAA_UPDATE.value: {
+        "prev": StakingDAAPreparation,
         "next": UpdateCentaursPreparation,
     },
     Event.UPDATE_CENTAURS.value: {
@@ -343,6 +348,9 @@ class PostTxDecisionMakingBehaviour(DecisionMakingBaseBehaviour):
 
         if tx_submitter == "checkpoint_preparation_behaviour":
             return Event.POST_TX_CHECKPOINT.value
+
+        if tx_submitter == "d_a_a_preparation_behaviour":
+            return Event.POST_TX_DAA.value
 
         # This is a mech request
         return Event.POST_TX_MECH.value

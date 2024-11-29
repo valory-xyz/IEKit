@@ -68,6 +68,8 @@ class Event(Enum):
     POST_TX_MECH = "post_tx_mech"
     POST_TX_ACTIVITY_UPDATE = "post_tx_activity_update"
     POST_TX_CHECKPOINT = "post_tx_checkpoint"
+    STAKING_DAA_UPDATE = "staking_daa_update"
+    POST_TX_DAA = "post_tx_daa"
 
 
 class SynchronizedData(BaseSynchronizedData):
@@ -169,7 +171,7 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
             # Event.SCHEDULED_TWEET, Event.LLM, Event.DAILY_ORBIS, Event.DAILY_TWEET, Event.NEXT_CENTAUR
             # Event.SCORE, Event.READ_CONTRIBUTE_DB, Event.READ_MANUAL_POINTS, Event.WRITE_CONTRIBUTE_DB
             # Event.WEEK_IN_OLAS_CREATE, Event.TWEET_VALIDATION, Event.FORCE_DB_UPDATE, Event.CAMPAIGN_VALIDATION
-            # Event.STAKING_ACTIVITY, Event.STAKING_CHECKPOINT
+            # Event.STAKING_ACTIVITY, Event.STAKING_CHECKPOINT, Event.STAKING_DAA_UPDATE
 
             payload = json.loads(self.most_voted_payload)
             event = Event(payload["event"])
@@ -211,7 +213,7 @@ class PostTxDecisionMakingRound(CollectSameUntilThresholdRound):
             # We reference all the events here to prevent the check-abciapp-specs tool from complaining
             # since this round receives the event via payload
             # Event.DONE, Event.NO_MAJORITY
-            # Event.POST_TX_MECH, Event.POST_TX_ACTIVITY_UPDATE, Event.POST_TX_CHECKPOINT
+            # Event.POST_TX_MECH, Event.POST_TX_ACTIVITY_UPDATE, Event.POST_TX_CHECKPOINT, Event.POST_TX_DAA
 
             event = Event(self.most_voted_payload)
             return self.synchronized_data, event
@@ -275,6 +277,10 @@ class FinishedDecisionMakingCheckpointRound(DegenerateRound):
     """FinishedDecisionMakingCheckpointRound"""
 
 
+class FinishedDecisionMakingDAARound(DegenerateRound):
+    """FinishedDecisionMakingDAARound"""
+
+
 class FinishedPostMechResponseRound(DegenerateRound):
     """FinishedPostMechResponseRound"""
 
@@ -285,6 +291,10 @@ class FinishedPostActivityUpdateRound(DegenerateRound):
 
 class FinishedPostCheckpointRound(DegenerateRound):
     """FinishedPostCheckpointRound"""
+
+
+class FinishedPostDAARound(DegenerateRound):
+    """FinishedPostDAARound"""
 
 
 class DecisionMakingAbciApp(AbciApp[Event]):
@@ -314,11 +324,13 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.CAMPAIGN_VALIDATION: DecisionMakingRound,
             Event.STAKING_ACTIVITY: FinishedDecisionMakingActivityRound,
             Event.STAKING_CHECKPOINT: FinishedDecisionMakingCheckpointRound,
+            Event.STAKING_DAA_UPDATE: FinishedDecisionMakingDAARound,
         },
         PostTxDecisionMakingRound: {
             Event.POST_TX_MECH: FinishedPostMechResponseRound,
             Event.POST_TX_ACTIVITY_UPDATE: FinishedPostActivityUpdateRound,
             Event.POST_TX_CHECKPOINT: FinishedPostCheckpointRound,
+            Event.POST_TX_DAA: FinishedPostDAARound,
             Event.DONE: PostTxDecisionMakingRound,
             Event.NO_MAJORITY: PostTxDecisionMakingRound,
         },
@@ -338,6 +350,8 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedPostMechResponseRound: {},
         FinishedPostActivityUpdateRound: {},
         FinishedPostCheckpointRound: {},
+        FinishedPostDAARound: {},
+        FinishedDecisionMakingDAARound: {},
     }
     final_states: Set[AppState] = {
         FinishedDecisionMakingReadCentaursRound,
@@ -356,6 +370,8 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedPostMechResponseRound,
         FinishedPostActivityUpdateRound,
         FinishedPostCheckpointRound,
+        FinishedPostDAARound,
+        FinishedDecisionMakingDAARound,
     }
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
@@ -382,4 +398,6 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedPostMechResponseRound: set(),
         FinishedPostActivityUpdateRound: set(),
         FinishedPostCheckpointRound: set(),
+        FinishedPostDAARound: set(),
+        FinishedDecisionMakingDAARound: set(),
     }

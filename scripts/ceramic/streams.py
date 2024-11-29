@@ -42,9 +42,6 @@ CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw147nzli6czhklr48yfj4qfkl1b431e2zpdybg
 # CONTRIBUTE_PROD_CENTAURS_STREAM_ID = "kjzl6cwe1jw146h4892zlwow1hsefmbanwjc2aew4x0su5t4nqj0udtbpbtpb4h"  # Nov 1st 2024
 CONTRIBUTE_PROD_CENTAURS_STREAM_ID = "kjzl6cwe1jw14bibbud875n501nvjnk5ny2au1ouxvkcg62dk7q26zkai586smr"    # Nov 8th 2024
 
-# Testing
-# CONTRIBUTE_PROD_CENTAURS_STREAM_ID = "kjzl6cwe1jw149bcac7iiyr1dwc30fh5wqgj5nst9aokik9v1ik16hwm6q8p9db"  # Nov 7th 2024
-
 
 # Manual scores DB
 # -----------------------------------------------------------------------------------------------------------------------
@@ -60,6 +57,7 @@ CONTRIBUTE_DB_SCHEMA_COMMIT = "k3y52l7qbv1fry2qvj6qujxbyjz9eqwk7m682d5xujdg0d3dm
 
 # CONTRIBUTE_CENTAURS_SCHEMA_COMMIT = "k3y52l7qbv1fry9bsoowbfvmjegm6ao5llv5p4dlppzt7ghyqsy87jk0b9m489qf4"  # Until Oct 24th 2024
 # CONTRIBUTE_CENTAURS_SCHEMA_COMMIT = "k3y52l7qbv1frybx3mnuqvs6lp4d53wdygae7lfnyc55ih5cob70ceu0bfwhk1e68"  # Oct 24th 2024
-CONTRIBUTE_CENTAURS_SCHEMA_COMMIT = "k3y52l7qbv1frxkjy7gks27qieu3n6q41h8pgvfevr8kwxkly0hdxzqssbsh2cd1c"  # Nov 8th 2024
+# CONTRIBUTE_CENTAURS_SCHEMA_COMMIT = "k3y52l7qbv1frxkjy7gks27qieu3n6q41h8pgvfevr8kwxkly0hdxzqssbsh2cd1c"  # Nov 8th 2024
+CONTRIBUTE_CENTAURS_SCHEMA_COMMIT = "k3y52l7qbv1frxmcodzmem9bbzu5vjtx7c3rm1oikrdsib834esge1nbw6rit77y8"    # Nov 29th 2024
 
 CONTRIBUTE_GENERIC_SCHEMA_COMMIT = "k3y52l7qbv1fryi4j4lctbrusprz7vrip3l4ywga8e4rgpezqeplvq82s7p07teyo"

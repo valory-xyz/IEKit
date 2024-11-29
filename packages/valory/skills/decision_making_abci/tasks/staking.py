@@ -105,6 +105,8 @@ class StakingPreparation(TaskPreparation):
     ) -> Generator[None, None, Optional[datetime]]:
         """Get the epoch end"""
 
+        self.logger.info(f"Getting epoch end for {staking_contract_address}")
+
         contract_api_msg = yield from self.behaviour.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
             contract_address=staking_contract_address,
@@ -120,6 +122,7 @@ class StakingPreparation(TaskPreparation):
 
         epoch_end_ts = contract_api_msg.state.body["epoch_end"]
         epoch_end = datetime.fromtimestamp(epoch_end_ts, tz=timezone.utc)
+        self.logger.info(f"Epoch end is {epoch_end}")
         return epoch_end
 
     def is_epoch_ending(self, staking_contract_address) -> Generator[None, None, bool]:
@@ -332,12 +335,13 @@ class StakingActivityPreparation(StakingPreparation):
                 k: v["points"] for k, v in this_epoch_not_counted_tweets.items()
             }
 
-            (
-                multisig_to_updates[service_multisig],
-                user_to_counted_tweets[user_id],
-            ) = group_tweets(
+            (updates, selected_tweets) = group_tweets(
                 not_counted_tweet_id_to_points, points_pending_from_previous_run
             )
+
+            if updates:
+                multisig_to_updates[service_multisig] = updates
+                user_to_counted_tweets[user_id] = selected_tweets
 
         self.context.logger.info(f"Calculated activity updates: {multisig_to_updates}")
         self.context.logger.info(
@@ -370,3 +374,35 @@ class StakingCheckpointPreparation(StakingPreparation):
 
         self.context.logger.info("Not time to call the checkpoint yet.")
         return False
+
+
+class StakingDAAPreparation(TaskPreparation):
+    """StakingDAAPreparation"""
+
+    task_name = "staking_daa"
+    task_event = Event.STAKING_DAA_UPDATE.value
+
+    def _pre_task(self):
+        """Preparations before running the task"""
+        yield
+        updates = {}
+        return updates, self.task_event
+
+    def _post_task(self):
+        """Preparations after running the task"""
+        centaurs_data = self.synchronized_data.centaurs_data
+        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
+
+        # Update the last run time
+        current_centaur["configuration"]["plugins"][self.task_name][
+            "last_run"
+        ] = self.now_utc.strftime("%Y-%m-%d %H:%M:%S %Z")
+
+        updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
+        yield
+        return updates, None
+
+    def check_extra_conditions(self):
+        """Check user staking threshold"""
+        yield
+        return True

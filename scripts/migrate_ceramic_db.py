@@ -119,17 +119,11 @@ def main():
 
     print("Updating the users db format...")
 
-    # Remove the module data
-    del user_db["module_data"]["staking_activity"]
-
-    for user_data in user_db["users"].values():
-        for tweet in user_data["tweets"].values():
-            # Initialize the counted_for_activity
-            tweet["counted_for_activity"] = False
+    # Nothing to do
 
     # Validate the new data
     print("Validating the updated users db...")
-    with open(Path("ceramic", "schemas", "db_stream_schema.json"), "r", encoding="utf-8") as data_file:
+    with open(Path("scripts", "ceramic", "schemas", "db_stream_schema.json"), "r", encoding="utf-8") as data_file:
         stream_schema = json.load(data_file)
         jsonschema.validate(instance=user_db, schema=stream_schema)
 
@@ -164,11 +158,17 @@ def main():
 
 
     print("Updating the db format...")
-    # Nothing to do
+
+    centaurs_db[0]["configuration"]["plugins"]["staking_daa"] = {
+        "enabled": True,
+        "daily": True,
+        "last_run": None,
+        "run_hour_utc": 0
+    }
 
     # Validate the new data
     print("Validating the updated centaurs db...")
-    with open(Path("ceramic", "schemas", "centaurs_stream_schema.json"), "r", encoding="utf-8") as data_file:
+    with open(Path("scripts", "ceramic", "schemas", "centaurs_stream_schema.json"), "r", encoding="utf-8") as data_file:
         stream_schema = json.load(data_file)
         jsonschema.validate(instance=centaurs_db, schema=stream_schema)
 
