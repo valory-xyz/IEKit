@@ -93,7 +93,7 @@ class TaskPreparation:
     def log_config(self):
         """Log configuration"""
         self.logger.info(
-            f"Config: enabled={self.enabled}  daily={self.daily}  weekly={self.weekly}  last_run={self.last_run}  run_hour_utc={self.run_hour_utc}"
+            f"Config: enabled={self.enabled}  daily={self.daily}  weekly={self.weekly}  last_run={self.last_run}  run_hour_utc={self.run_hour_utc}  now_utc={self.now_utc}"
         )
 
     def check_conditions(self):

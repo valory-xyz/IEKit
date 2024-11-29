@@ -465,6 +465,7 @@ class DAAPreparationBehaviour(StakingBaseBehaviour):
         self.context.logger.info(
             "Preparing DAA update"
         )
+        now_utc = self._get_utc_time()
 
         active_multisigs: List[str] = []
 
@@ -481,7 +482,6 @@ class DAAPreparationBehaviour(StakingBaseBehaviour):
             # Check the latest tweet time
             tweet_ts = list(user["tweets"].values())[-1]["timestamp"]
             tweet_time = datetime.fromtimestamp(tweet_ts, tz=timezone.utc)
-            now_utc = self._get_utc_time()
 
             if (now_utc - tweet_time).total_seconds() > SECONDS_IN_DAY:
                 continue
