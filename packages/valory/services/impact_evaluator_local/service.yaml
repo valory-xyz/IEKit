@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeiftyzawtlmqd4hzxnee5vxoyxwbotztxcofl4gyadroyoeqkmkjrm
+agent: valory/impact_evaluator:0.1.0:bafybeidwu3eh3lyvrisdiq4xcp43xh4pcqo4kbvbyyj3hpdkdfwcm4muw4
 number_of_agents: 1
 deployment:
   agent:
@@ -126,6 +126,8 @@ models:
       termination_from_block: ${TERMINATION_FROM_BLOCK:int:0}
       mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
       mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
+      agent_registry_address: ${AGENT_REGISTRY_ADDRESS:str:0x0000000000000000000000000000000000000000}
+      use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
       use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:false}
       mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x0000000000000000000000000000000000000000","priority_mech_address":"0x0000000000000000000000000000000000000000","priority_mech_staking_instance_address":"0x0000000000000000000000000000000000000000","priority_mech_service_id":0,"requester_staking_instance_address":"0x0000000000000000000000000000000000000000","response_timeout":300}}
       checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}

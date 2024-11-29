@@ -14,7 +14,7 @@ fingerprint:
   handlers.py: bafybeibofqqb5dvfugwjzuwmm5ktcumwzdak43uyfvythrdrfhk7wcacne
   models.py: bafybeidfipifkwti4lut4uzlyfy5rflxgszresbe2qprfn4enokte4x5v4
   payloads.py: bafybeidpewmdpyumwuufkymibgeviivymrieh7sjkctdwizahn45nbuniq
-  rounds.py: bafybeif4wznvdp3jxeuzv4spscvmx6cjrih4trrcosju6x2mehcyimbeoa
+  rounds.py: bafybeievmjmyo7b6h6jcj44kazd4iydx2j227viw4iycuszk4rx73rwjty
   tests/__init__.py: bafybeigh6rf2j2zt66rq7buojs7zsgxguv2pmav2p4lfi3xx5ayseexp2y
   tests/test_behaviours.py: bafybeiejh5bbrt5ln66lrlckdtdmlbqxibif6bw723asf2kcjeknjnrvye
   tests/test_dialogues.py: bafybeihcg2g7e53foxtikjidybhck6nvh7246ic3sgjlc6nr7gnmmsalna
@@ -24,12 +24,12 @@ fingerprint:
   tests/test_rounds.py: bafybeihmp5cnruopzf2qfxubhlhnrjsauavo2zx5ubdutmubhnnoedpxim
 fingerprint_ignore_patterns: []
 connections:
-- valory/twitter:0.1.0:bafybeiffqsvt3i37sd5qdsmpzf5i4hm37uosbobyogg5oyosovjs66buni
+- valory/twitter:0.1.0:bafybeiankzrpgovfe34wbxxwzmrg6lbdpe2uegcu4ujtswuopr3b7fsqdq
 contracts: []
 protocols:
 - valory/twitter:0.1.0:bafybeig7dugazhljpb4qtu4zfnoimttvivopiq574rogjz3qggf5eysnk4
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeibiw4oqwqvo4jccwz5fb73iardzychgvcl66tceiildohoju2ikti
+- valory/abstract_round_abci:0.1.0:bafybeigjddhk7epta7xpnfvv426xedff5abh4xlkwi6cqgp4vkutgkvydm
 behaviours:
   main:
     args: {}

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -63,6 +63,12 @@ from packages.valory.skills.abstract_round_abci.dialogues import (
 )
 from packages.valory.skills.llm_abci.dialogues import LlmDialogue as BaseLlmDialogue
 from packages.valory.skills.llm_abci.dialogues import LlmDialogues as BaseLlmDialogues
+from packages.valory.skills.mech_interact_abci.dialogues import (
+    AcnDialogue as BaseAcnDialogue,
+)
+from packages.valory.skills.mech_interact_abci.dialogues import (
+    AcnDialogues as BaseAcnDialogues,
+)
 from packages.valory.skills.twitter_write_abci.dialogues import (
     TwitterDialogue as BaseTwitterDialogue,
 )
@@ -105,3 +111,6 @@ LlmDialogues = BaseLlmDialogues
 
 TwitterDialogue = BaseTwitterDialogue
 TwitterDialogues = BaseTwitterDialogues
+
+AcnDialogue = BaseAcnDialogue
+AcnDialogues = BaseAcnDialogues

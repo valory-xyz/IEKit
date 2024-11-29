@@ -158,6 +158,7 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
 
     payload_class = DecisionMakingPayload
     synchronized_data_class = SynchronizedData
+    required_class_attributes = ()
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
@@ -202,6 +203,7 @@ class PostTxDecisionMakingRound(CollectSameUntilThresholdRound):
 
     payload_class = PostTxDecisionPayload
     synchronized_data_class = SynchronizedData
+    required_class_attributes = ()
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""

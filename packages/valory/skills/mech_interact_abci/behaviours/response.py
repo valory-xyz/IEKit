@@ -36,6 +36,7 @@ from packages.valory.skills.mech_interact_abci.behaviours.request import V1_HEX_
 from packages.valory.skills.mech_interact_abci.models import MechResponseSpecs
 from packages.valory.skills.mech_interact_abci.payloads import MechResponsePayload
 from packages.valory.skills.mech_interact_abci.states.base import (
+    MECH_RESPONSE,
     MechInteractionResponse,
     MechRequest,
 )
@@ -59,9 +60,21 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self._mech_responses: List[
             MechInteractionResponse
         ] = self.synchronized_data.mech_responses
-        self._current_mech_response: MechInteractionResponse = MechInteractionResponse(
+        self.current_mech_response: MechInteractionResponse = MechInteractionResponse(
             error="The mech's response has not been set!"
         )
+        self._is_valid_acn_sender: bool = False
+
+    @property
+    def current_mech_response(self) -> MechInteractionResponse:
+        """Get the current mech response."""
+        # accessing the agent shared state, NOT the behaviour's shared state
+        return self.context.shared_state[MECH_RESPONSE]
+
+    @current_mech_response.setter
+    def current_mech_response(self, response: MechInteractionResponse) -> None:
+        """Set the current mech response."""
+        self.context.shared_state[MECH_RESPONSE] = response
 
     @property
     def from_block(self) -> int:
@@ -87,6 +100,16 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
     def response_hex(self) -> str:
         """Get the hash of the response data."""
         return self._response_hex
+
+    @property
+    def is_valid_acn_sender(self) -> bool:
+        """Is valid ACN sender"""
+        return self._is_valid_acn_sender
+
+    @is_valid_acn_sender.setter
+    def is_valid_acn_sender(self, is_valid_acn_sender: bool) -> None:
+        """Set is valid ACN sender"""
+        self._is_valid_acn_sender = is_valid_acn_sender
 
     @response_hex.setter
     def response_hex(self, response_hash: bytes) -> None:
@@ -158,7 +181,22 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
     def _get_response_hash(self) -> WaitableConditionType:
         """Get the hash of the response data."""
-        request_id = self._current_mech_response.requestId
+        if (
+            self.params.use_acn_for_delivers
+            and self.current_mech_response.response_data is not None
+        ):
+            result = yield from self.agent_registry_contract_interact(
+                contract_callable="authenticate_sender",
+                data_key="is_valid",
+                placeholder=get_name(MechResponseBehaviour.is_valid_acn_sender),
+                sender_address=self.current_mech_response.sender_address,
+                mech_address=self.params.mech_contract_address,
+            )
+            if result and self.is_valid_acn_sender:
+                self.response_hex = self.current_mech_response.response_data
+                return True
+
+        request_id = self.current_mech_response.requestId
         self.context.logger.info(
             f"Filtering the mech's events from block {self.from_block} "
             f"for a response to our request with id {request_id!r}."
@@ -204,16 +242,16 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         res = self._handle_response(res)
 
         if self.mech_response_api.is_retries_exceeded():
-            self._current_mech_response.retries_exceeded()
+            self.current_mech_response.retries_exceeded()
             return True
 
         if res is None:
             return False
 
         try:
-            self._current_mech_response.result = res
+            self.current_mech_response.result = res
         except (ValueError, TypeError):
-            self._current_mech_response.incorrect_format(res)
+            self.current_mech_response.incorrect_format(res)
 
         return True
 
@@ -224,7 +262,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 pending_response.data == request.data.hex()
             ):  # TODO: why is request.data bytes now?
                 pending_response.requestId = request.requestId
-                self._current_mech_response = pending_response
+                self.current_mech_response = pending_response
                 break
 
     def _process_responses(
@@ -244,11 +282,11 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 yield from self.wait_for_condition_with_sleep(step)
 
             self.context.logger.info(
-                f"Response has been received:\n{self._current_mech_response}"
+                f"Response has been received:\n{self.current_mech_response}"
             )
-            if self._current_mech_response.result is None:
+            if self.current_mech_response.result is None:
                 self.context.logger.error(
-                    f"There was an error in the mech's response: {self._current_mech_response.error}"
+                    f"There was an error in the mech's response: {self.current_mech_response.error}"
                 )
 
     def async_act(self) -> Generator:

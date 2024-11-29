@@ -104,6 +104,7 @@ class FarcasterWriteRound(OnlyKeeperSendsRound):
 
     payload_class = FarcasterWritePayload
     synchronized_data_class = SynchronizedData
+    required_class_attributes = ()
 
     def end_block(
         self,

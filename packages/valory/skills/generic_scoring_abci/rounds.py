@@ -67,6 +67,7 @@ class GenericScoringRound(CollectSameUntilThresholdRound):
 
     payload_class = GenericScoringPayload
     synchronized_data_class = SynchronizedData
+    required_class_attributes = ()
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""

@@ -45,3 +45,7 @@ FarcasterTestSkillAbciApp = chain(
     ),
     abci_app_transition_mapping,
 )
+
+# patch to avoid breaking changes introduced on open-autonomy v0.18.3
+for state in FarcasterTestSkillAbciApp.get_all_rounds():
+    state.required_class_attributes = ()
