@@ -277,6 +277,10 @@ class FinishedDecisionMakingCheckpointRound(DegenerateRound):
     """FinishedDecisionMakingCheckpointRound"""
 
 
+class FinishedDecisionMakingDAARound(DegenerateRound):
+    """FinishedDecisionMakingDAARound"""
+
+
 class FinishedPostMechResponseRound(DegenerateRound):
     """FinishedPostMechResponseRound"""
 
@@ -320,6 +324,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.CAMPAIGN_VALIDATION: DecisionMakingRound,
             Event.STAKING_ACTIVITY: FinishedDecisionMakingActivityRound,
             Event.STAKING_CHECKPOINT: FinishedDecisionMakingCheckpointRound,
+            Event.STAKING_DAA_UPDATE: FinishedDecisionMakingDAARound,
         },
         PostTxDecisionMakingRound: {
             Event.POST_TX_MECH: FinishedPostMechResponseRound,
@@ -346,6 +351,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedPostActivityUpdateRound: {},
         FinishedPostCheckpointRound: {},
         FinishedPostDAARound: {},
+        FinishedDecisionMakingDAARound: {},
     }
     final_states: Set[AppState] = {
         FinishedDecisionMakingReadCentaursRound,
@@ -365,6 +371,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedPostActivityUpdateRound,
         FinishedPostCheckpointRound,
         FinishedPostDAARound,
+        FinishedDecisionMakingDAARound,
     }
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
@@ -392,4 +399,5 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedPostActivityUpdateRound: set(),
         FinishedPostCheckpointRound: set(),
         FinishedPostDAARound: set(),
+        FinishedDecisionMakingDAARound: set(),
     }

@@ -72,6 +72,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     DecisionMakingAbci.FinishedDecisionMakingCheckpointRound: StakingAbci.CheckpointPreparationRound,
     DecisionMakingAbci.FinishedPostMechResponseRound: MechResponseStates.MechResponseRound,
     DecisionMakingAbci.FinishedPostActivityUpdateRound: StakingAbci.ActivityScoreRound,
+    DecisionMakingAbci.FinishedDecisionMakingDAARound: StakingAbci.DAAPreparationRound,
     DecisionMakingAbci.FinishedPostCheckpointRound: DecisionMakingAbci.DecisionMakingRound,
     DecisionMakingAbci.FinishedPostDAARound: DecisionMakingAbci.DecisionMakingRound,
     StakingAbci.FinishedActivityRound: DecisionMakingAbci.DecisionMakingRound,

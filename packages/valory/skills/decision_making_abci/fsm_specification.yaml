@@ -9,6 +9,7 @@ alphabet_in:
 - NO_MAJORITY
 - POST_TX_ACTIVITY_UPDATE
 - POST_TX_CHECKPOINT
+- POST_TX_DAA
 - POST_TX_MECH
 - READ_CENTAURS
 - READ_CONTRIBUTE_DB
@@ -18,6 +19,7 @@ alphabet_in:
 - SCORE
 - STAKING_ACTIVITY
 - STAKING_CHECKPOINT
+- STAKING_DAA_UPDATE
 - TWEET_VALIDATION
 - UPDATE_CENTAURS
 - WEEK_IN_OLAS_CREATE
@@ -39,6 +41,7 @@ final_states:
 - FinishedDecisionMakingWriteTwitterRound
 - FinishedPostActivityUpdateRound
 - FinishedPostCheckpointRound
+- FinishedPostDAARound
 - FinishedPostMechResponseRound
 label: DecisionMakingAbciApp
 start_states:
@@ -48,6 +51,7 @@ states:
 - DecisionMakingRound
 - FinishedDecisionMakingActivityRound
 - FinishedDecisionMakingCheckpointRound
+- FinishedDecisionMakingDAARound
 - FinishedDecisionMakingDoneRound
 - FinishedDecisionMakingLLMRound
 - FinishedDecisionMakingReadCentaursRound
@@ -61,6 +65,7 @@ states:
 - FinishedDecisionMakingWriteTwitterRound
 - FinishedPostActivityUpdateRound
 - FinishedPostCheckpointRound
+- FinishedPostDAARound
 - FinishedPostMechResponseRound
 - PostTxDecisionMakingRound
 transition_func:
@@ -80,6 +85,7 @@ transition_func:
     (DecisionMakingRound, SCORE): FinishedDecisionMakingScoreRound
     (DecisionMakingRound, STAKING_ACTIVITY): FinishedDecisionMakingActivityRound
     (DecisionMakingRound, STAKING_CHECKPOINT): FinishedDecisionMakingCheckpointRound
+    (DecisionMakingRound, STAKING_DAA_UPDATE): FinishedDecisionMakingDAARound
     (DecisionMakingRound, TWEET_VALIDATION): DecisionMakingRound
     (DecisionMakingRound, UPDATE_CENTAURS): FinishedDecisionMakingUpdateCentaurRound
     (DecisionMakingRound, WEEK_IN_OLAS_CREATE): FinishedDecisionMakingWeekInOlasRound
@@ -88,4 +94,5 @@ transition_func:
     (PostTxDecisionMakingRound, NO_MAJORITY): PostTxDecisionMakingRound
     (PostTxDecisionMakingRound, POST_TX_ACTIVITY_UPDATE): FinishedPostActivityUpdateRound
     (PostTxDecisionMakingRound, POST_TX_CHECKPOINT): FinishedPostCheckpointRound
+    (PostTxDecisionMakingRound, POST_TX_DAA): FinishedPostDAARound
     (PostTxDecisionMakingRound, POST_TX_MECH): FinishedPostMechResponseRound
