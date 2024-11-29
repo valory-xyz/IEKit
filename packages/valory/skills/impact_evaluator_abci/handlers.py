@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2024 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -41,6 +41,9 @@ from packages.valory.skills.dynamic_nft_abci.handlers import (
     HttpHandler as BaseHttpHandler,
 )
 from packages.valory.skills.llm_abci.handlers import LlmHandler as BaseLlmHandler
+from packages.valory.skills.mech_interact_abci.handlers import (
+    AcnHandler as BaseAcnHandler,
+)
 from packages.valory.skills.twitter_write_abci.handlers import (
     TwitterHandler as BaseTwitterHandler,
 )
@@ -55,3 +58,4 @@ TendermintHandler = BaseTendermintHandler
 IpfsHandler = BaseIpfsHandler
 TwitterHandler = BaseTwitterHandler
 LlmHandler = BaseLlmHandler
+AcnHandler = BaseAcnHandler

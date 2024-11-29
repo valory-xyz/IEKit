@@ -233,6 +233,7 @@ transition_func:
     (RandomnessRound, NO_MAJORITY): RandomnessRound
     (RandomnessRound, ROUND_TIMEOUT): RandomnessRound
     (RandomnessTransactionSubmissionRound, DONE): SelectKeeperTransactionSubmissionARound
+    (RandomnessTransactionSubmissionRound, NONE): RandomnessTransactionSubmissionRound
     (RandomnessTransactionSubmissionRound, NO_MAJORITY): RandomnessTransactionSubmissionRound
     (RandomnessTransactionSubmissionRound, ROUND_TIMEOUT): RandomnessTransactionSubmissionRound
     (RandomnessTwitterRound, DONE): SelectKeeperTwitterRound

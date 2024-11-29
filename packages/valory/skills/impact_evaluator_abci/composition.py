@@ -119,3 +119,7 @@ ImpactEvaluatorSkillAbciApp = chain(
     ),
     abci_app_transition_mapping,
 ).add_background_app(termination_config)
+
+# patch to avoid breaking changes introduced on open-autonomy v0.18.3
+for state in ImpactEvaluatorSkillAbciApp.get_all_rounds():
+    state.required_class_attributes = ()

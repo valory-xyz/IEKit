@@ -103,6 +103,7 @@ class ActivityScoreRound(CollectSameUntilThresholdRound):
 
     payload_class = ActivityScorePayload
     synchronized_data_class = SynchronizedData
+    required_class_attributes = ()
 
     selection_key = (
         get_name(SynchronizedData.pending_write),
@@ -155,6 +156,7 @@ class ActivityUpdatePreparationRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.chain_id),
         get_name(SynchronizedData.safe_contract_address),
     )
+    required_class_attributes = ()
 
     # We reference all the events here to prevent the check-abciapp-specs tool from complaining
     # since this round receives the event via payload
@@ -175,6 +177,7 @@ class CheckpointPreparationRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.chain_id),
         get_name(SynchronizedData.safe_contract_address),
     )
+    required_class_attributes = ()
 
     # We reference all the events here to prevent the check-abciapp-specs tool from complaining
     # since this round receives the event via payload

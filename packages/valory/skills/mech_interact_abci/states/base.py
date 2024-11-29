@@ -64,6 +64,9 @@ class MechRequest:
     requestId: int = 0
 
 
+MECH_RESPONSE = "mech_response"
+
+
 @dataclass
 class MechInteractionResponse(MechRequest):
     """A structure for the response of a mech interaction task."""
@@ -71,6 +74,8 @@ class MechInteractionResponse(MechRequest):
     nonce: str = ""
     result: Optional[str] = None
     error: str = "Unknown"
+    response_data: Optional[bytes] = None
+    sender_address: Optional[str] = None
 
     def retries_exceeded(self) -> None:
         """Set an incorrect format response."""
@@ -146,3 +151,4 @@ class MechInteractionRound(CollectSameUntilThresholdRound):
     synchronized_data_class = SynchronizedData
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
+    required_class_attributes = ()
