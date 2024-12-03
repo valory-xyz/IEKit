@@ -39,13 +39,14 @@ dotenv.load_dotenv(override=True)
 
 
 EPOCH = "latest"
-BASE_LEDGER_RPC = os.getenv("BASE_LEDGER_RPC")
+BASE_LEDGER_RPC = os.getenv("BASE_LEDGER_RPC_ALCHEMY")
 GREEN = "bold green"
 RED = "bold red"
 YELLOW = "bold yellow"
 POINTS_PER_UPDATE = 200
 web3 = Web3(Web3.HTTPProvider(BASE_LEDGER_RPC))
-UNSTAKED = "unstaked"
+UNSTAKED = "UNSTAKED"
+EVICTED = "EVICTED"
 
 
 STAKING_CONTRACTS = {
@@ -166,6 +167,8 @@ def get_user_info(user_data: Dict, contract_info: Dict, contributors_contract: C
     )
     staking_contract_name = get_contract_by_address(staking_contract_address)
 
+    is_evicted = staking_token_contract.functions.getStakingState(service_id).call() == 2
+
     accrued_rewards = staking_token_contract.functions.calculateStakingReward(service_id).call()
     # this_epoch_rewards = staking_token_contract.functions.calculateStakingLastReward(service_id).call()   # needs fixing
     this_epoch = contract_info[staking_contract_name]["epoch"]
@@ -175,9 +178,12 @@ def get_user_info(user_data: Dict, contract_info: Dict, contributors_contract: C
 
     required_points = POINTS_PER_UPDATE * contract_info[staking_contract_name]['required_updates']
     color = GREEN if this_epoch_points >= required_points else YELLOW
+    if is_evicted:
+        color = RED
 
     user_info = {
         "staked": True,
+        "evicted": is_evicted,
         "staking_contract_name": staking_contract_name,
         "epoch": str(this_epoch),
         "this_epoch_tweets": str(len(this_epoch_tweets)),
@@ -227,7 +233,7 @@ def print_table():
                 "@" + user_data["twitter_handle"],
                 shorten_address(user_data["service_multisig"]),
                 user_info["staking_contract_name"],
-                user_info["epoch"] + f" [{user_info['next_epoch_start']}]",
+                user_info["epoch"] + f" [{user_info['next_epoch_start']}]" if not user_info["evicted"] else EVICTED,
                 user_info["this_epoch_tweets"],
                 user_info["this_epoch_points"] + " / " + user_info["required_points"],
                 # user_info["this_epoch_rewards"],
