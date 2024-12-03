@@ -132,6 +132,11 @@ def get_contract_info() -> Dict:
 
     contract_info = STAKING_CONTRACTS
 
+    table = Table(title="Contribute staking contracts")
+    columns = ["Name", "Adress", "Epoch", "Epoch end", "Used slots"]
+
+    for column in columns:
+        table.add_column(column)
 
     for contract_name, contract_data in STAKING_CONTRACTS.items():
         staking_token_contract = load_contract(
@@ -148,7 +153,20 @@ def get_contract_info() -> Dict:
         contract_info[contract_name]["used_slots"] = len(ids)
         contract_info[contract_name]["free_slots"] = contract_data["slots"] - len(ids)
 
+        row = [
+            contract_name,
+            contract_data["address"],
+            str(epoch),
+            next_epoch_start.strftime("%Y-%m-%d %H:%M:%S"),
+            f"{len(ids):3d} / {contract_data['slots']:3d}"
+        ]
+        table.add_row(*row, style=GREEN)
+
+    console = Console()
+    console.print(table, justify="center")
+
     return contract_info
+
 
 def get_user_info(user_data: Dict, contract_info: Dict, contributors_contract: Contract) -> Dict:  # pylint: disable=too-many-locals
     """Get user info"""
