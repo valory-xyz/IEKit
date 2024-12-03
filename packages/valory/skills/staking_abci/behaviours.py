@@ -208,7 +208,10 @@ class StakingBaseBehaviour(BaseBehaviour, ABC):
         epoch_end = yield from self.get_epoch_end(staking_contract_address)
 
         if not epoch_end:
+            self.context.logger.error(f"Could not get the epoch end for contract {staking_contract_address}")
             return False
+
+        self.context.logger.info(f"Epoch end for contract {staking_contract_address} is {epoch_end.strftime('%Y-%m-%d %H:%M:%S')}")
 
         # If the epoch end is in the past, the epoch has ended and
         # no one has called the checkpoint
@@ -356,14 +359,10 @@ class CheckpointPreparationBehaviour(StakingBaseBehaviour):
 
         for staking_contract_address in self.params.staking_contract_addresses:
 
-            # Check if there is some service staked on this contract
-            # services_staked = yield from self.get_staked_services(staking_contract_address)
-            # if not services_staked:
-            #     continue
-
             # Check if this checkpoint needs to be called
             is_checkpoint_callable = yield from self.is_checkpoint_callable(staking_contract_address)
             if not is_checkpoint_callable:
+                self.context.logger.info(f"Checkpoint is not callable for contract {staking_contract_address}")
                 continue
 
             # Use the contract api to interact with the staking contract
@@ -398,6 +397,10 @@ class CheckpointPreparationBehaviour(StakingBaseBehaviour):
                     "data": data_bytes,
                 }
             )
+            self.context.logger.info(f"Added checkpoint call for contract {staking_contract_address}")
+
+        if not multi_send_txs:
+            return None
 
         # Multisend call
         contract_api_msg = yield from self.get_contract_api_response(
