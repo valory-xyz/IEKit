@@ -200,6 +200,31 @@ class StakingPreparation(TaskPreparation):
             return None
         return staking_contract_address
 
+    def get_staked_services(
+        self, staking_contract_address: str
+    ) -> Generator[None, None, Optional[List]]:
+        """Get the services staked on a contract"""
+        contract_api_msg = yield from self.behaviour.get_contract_api_response(
+            performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
+            contract_address=staking_contract_address,
+            contract_id=str(Staking.contract_id),
+            contract_callable="get_service_ids",
+            chain_id=BASE_CHAIN_ID,
+        )
+        if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
+            self.context.logger.error(
+                f"Error getting the service ids: [{contract_api_msg.performative}]"
+            )
+            return None
+
+        service_ids = cast(str, contract_api_msg.state.body["service_ids"])
+
+        self.context.logger.info(
+            f"Got {len(service_ids)} staked services for contract {staking_contract_address}"
+        )
+
+        return service_ids
+
 
 class StakingActivityPreparation(StakingPreparation):
     """StakingActivityPreparation"""
@@ -363,6 +388,13 @@ class StakingCheckpointPreparation(StakingPreparation):
         yield
 
         for staking_contract_address in self.params.staking_contract_addresses:
+            # Check if there is some service staked on this contract
+            services_staked = yield from self.get_staked_services(
+                staking_contract_address
+            )
+            if not services_staked:
+                continue
+
             is_checkpoint_callable = yield from self.is_checkpoint_callable(
                 staking_contract_address
             )

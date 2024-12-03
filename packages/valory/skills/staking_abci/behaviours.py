@@ -359,6 +359,11 @@ class CheckpointPreparationBehaviour(StakingBaseBehaviour):
 
         for staking_contract_address in self.params.staking_contract_addresses:
 
+            # Check if there is some service staked on this contract
+            services_staked = yield from self.get_staked_services(staking_contract_address)
+            if not services_staked:
+                continue
+
             # Check if this checkpoint needs to be called
             is_checkpoint_callable = yield from self.is_checkpoint_callable(staking_contract_address)
             if not is_checkpoint_callable:
