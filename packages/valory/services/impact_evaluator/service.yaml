@@ -146,7 +146,7 @@ extra:
         use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
     randomness_api:
       args:
-        url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
+        url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
 1:
   models:
     benchmark_tool:
@@ -245,7 +245,7 @@ extra:
         use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
     randomness_api:
       args:
-        url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
+        url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
 2:
   models:
     benchmark_tool:
@@ -344,7 +344,7 @@ extra:
         staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
     randomness_api:
       args:
-        url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
+        url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
 3:
   models:
     benchmark_tool:
@@ -447,7 +447,7 @@ extra:
         staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
     randomness_api:
       args:
-        url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
+        url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
 ---
 public_id: valory/ledger:0.19.0
 type: connection
