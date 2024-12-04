@@ -31,8 +31,8 @@
         "skill/valory/staking_abci/0.1.0": "bafybeiffqyu4plhkkezhz6oabgx6nb6v2ozhs53iruw7p4ucclbgvo5u24",
         "agent/valory/impact_evaluator/0.1.0": "bafybeicsncua573sgxisxkxf3f6xflt2plyxeejh4lbstr6ybywuj6ekqi",
         "agent/valory/farcaster_test/0.1.0": "bafybeig6yilme5s7fvru2b44dtr5xxqz3gf7p56swr7c5hip775l5wally",
-        "service/valory/impact_evaluator/0.1.0": "bafybeigexmn4jl2s43urlusyajcplmvf3sqcm3ty63ukzgloyfuigzude4",
-        "service/valory/impact_evaluator_local/0.1.0": "bafybeiczd3xkxlfzrpwhu5sqsj5z5d4i2ijlk5xmzf2466de2drn7snvhi"
+        "service/valory/impact_evaluator/0.1.0": "bafybeidja2nujonwekejosenrayprktnxxubwgjnthi7d7vi4u6eqi5tva",
+        "service/valory/impact_evaluator_local/0.1.0": "bafybeidarrmtapqiakoo2rfekq7ifnszt3o2nx66l6ce7efgm3q3clpl7a"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi",
