@@ -140,7 +140,7 @@ models:
       staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
   randomness_api:
     args:
-      url: ${DRAND_ENDPOINT:str:https://drand.cloudflare.com/public/latest}
+      url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
 ---
 public_id: valory/ledger:0.19.0
 type: connection
