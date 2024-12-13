@@ -143,7 +143,7 @@ class SharedState(BaseSharedState):
             DecisionMakingEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
-            OlasWeekEvent.ROUND_TIMEOUT
+            OlasWeekEvent.ROUND_TIMEOUT * MULTIPLIER
         ] = self.context.params.round_timeout_seconds
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             MechInteractEvent.ROUND_TIMEOUT
