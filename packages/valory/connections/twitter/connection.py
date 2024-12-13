@@ -20,6 +20,7 @@
 """Scaffold connection and channel."""
 import json
 import os
+import time
 from pathlib import Path
 from typing import Any, Callable, List, Optional, cast
 
@@ -283,6 +284,7 @@ class TwitterConnection(BaseSyncConnection):
                         response = twitter_cli.create_tweet(**tweet_kwargs)
                         first_tweet_id = response.data["id"]
                     else:
+                        time.sleep(5)  # wait 5 seconds before re-posting
                         tweet_kwargs["in_reply_to_tweet_id"] = previous_tweet_id
                         self.logger.info(f"Tweepy kwargs: {tweet_kwargs}")
                         response = twitter_cli.create_tweet(**tweet_kwargs)

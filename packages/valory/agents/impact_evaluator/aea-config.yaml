@@ -21,7 +21,7 @@ connections:
 - valory/ledger:0.19.0:bafybeigntoericenpzvwejqfuc3kqzo2pscs76qoygg5dbj6f4zxusru5e
 - valory/p2p_libp2p_client:0.1.0:bafybeid3xg5k2ol5adflqloy75ibgljmol6xsvzvezebsg7oudxeeolz7e
 - valory/openai:0.1.0:bafybeiaryip2lbiluf7vjsdq6r5qiqdesmhqevrzekfrxpugfypqja6gae
-- valory/twitter:0.1.0:bafybeiankzrpgovfe34wbxxwzmrg6lbdpe2uegcu4ujtswuopr3b7fsqdq
+- valory/twitter:0.1.0:bafybeiadms4zn5yl3ybjeevz6qlvb46k7bfnzteudcvqv5tyc5dvzjtkru
 contracts:
 - valory/dynamic_contribution:0.1.0:bafybeidttwr3ybnipkh5bt6gtuza36g2qvj2eevluzhala55sotgd4vxtu
 - valory/gnosis_safe:0.1.0:bafybeihtqcpqthb37msgqabpzcc2xc3l3yzkp5pl2sodeghqyzzzyuevgi
@@ -46,7 +46,7 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeif2naoydlrqkdpnig34uejedwgurjwyvmbpcz53tif7pyukfdophq
 - valory/abstract_round_abci:0.1.0:bafybeigjddhk7epta7xpnfvv426xedff5abh4xlkwi6cqgp4vkutgkvydm
-- valory/impact_evaluator_abci:0.1.0:bafybeiarfz5dvfksl5gzeepe5o23sqngcfvck4u5xmqnb3rpgljomlozvy
+- valory/impact_evaluator_abci:0.1.0:bafybeie24g5jonosupl5eiwboim2hwtoyhst35anwmfa6vjsxhems7m65e
 - valory/generic_scoring_abci:0.1.0:bafybeiho6p6ahlrbbavssqe6mgigj6lbpkifc2gspzfe2b6ayib3le4oxm
 - valory/twitter_scoring_abci:0.1.0:bafybeibpevvo25gngej3mtd3ilkoevieq74d5ag5mevgycgtzd7r3ceemu
 - valory/ceramic_read_abci:0.1.0:bafybeibph35jhtvn6kgytj6mqdz4lpjkvtfqd75qorrt4onv6i2trxfttu
@@ -56,7 +56,7 @@ skills:
 - valory/reset_pause_abci:0.1.0:bafybeiezfedmmseox3ce5aucxsiszdmvskrwwbtpb2a3vw3sbmc5jt7nri
 - valory/termination_abci:0.1.0:bafybeiea67epwwgngp7b3wavs6hpkaxv6etyaps6g6325bchfnf354mibq
 - valory/transaction_settlement_abci:0.1.0:bafybeifmgmwdkx4esemxjacjwzqkqymkuklb5nehkwqkx7v335fllgswcq
-- valory/twitter_write_abci:0.1.0:bafybeig4dc4cereyshk535pfpparvxiuaimdu4lsm3hnl5li7pxafho6lu
+- valory/twitter_write_abci:0.1.0:bafybeihytynpd7d55pzzs7jugn3ivad3u656iiqm3hev2ryvflleotrcue
 - valory/decision_making_abci:0.1.0:bafybeibovigvsxoq2huixbpeb7z5mxfvkwzf2zltveibj55eqbaepy2a74
 - valory/llm_abci:0.1.0:bafybeihpfesi2sjqdcb2j2mqybhz7av7jlvf27ozk32wbwmklkdugycxyq
 - valory/olas_week_abci:0.1.0:bafybeibjfxhu3j7ww2lxcekwtw7uiq7iptmhkzgjhk2342mbamrmvol7ma
