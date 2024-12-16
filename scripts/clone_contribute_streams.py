@@ -34,7 +34,7 @@ from ceramic.streams import (
 )
 
 
-MAX_USERS_PER_COMMIT = 250
+MAX_USERS_PER_COMMIT = 150
 MAX_TWEETS_PER_COMMIT = 100
 
 dotenv.load_dotenv(override=True)
