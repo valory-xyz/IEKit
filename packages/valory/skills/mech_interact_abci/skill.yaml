@@ -34,19 +34,19 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/gnosis_safe:0.1.0:bafybeihtqcpqthb37msgqabpzcc2xc3l3yzkp5pl2sodeghqyzzzyuevgi
-- valory/mech:0.1.0:bafybeielwbnikog4eqmu6bo537kzp2e7qpmkzt7l5zuuugp2w4r47dbvwu
+- valory/gnosis_safe:0.1.0:bafybeiaw4yr7ubqlp63iz5wxqep3a5fokqs3kqva7sp2nsqg355zzucqgm
+- valory/mech:0.1.0:bafybeibw72cvdpc4yb3ibnsl3kpjgzqpeeuvncjhi6x2e6c6eryqlhjr4y
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
-- valory/erc20:0.1.0:bafybeientdgpccdi7prtu4x53m5g3yugh5tuh5hnroylfz3wwzyjniqure
-- valory/mech_marketplace:0.1.0:bafybeicfuigpr65k4l2r5dbazzwh43yc6pfuy5mrkjkagmhmcp6ioktfay
+- valory/erc20:0.1.0:bafybeihls7n3wfwruv2snkutv635w5n7zq22mioyty4rziutpsgze4toxe
+- valory/mech_marketplace:0.1.0:bafybeifsq7velt7qeftuft6gsdl7sn5axjli7gcyelymwlsmtlydizp23y
 - valory/agent_registry:0.1.0:bafybeibboljpn2zevzxnpgflxj6ykxk4bpxegtzjts25ajliaoadz35mca
 protocols:
 - valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
 - valory/ledger_api:1.0.0:bafybeihdk6psr4guxmbcrc26jr2cbgzpd5aljkqvpwo64bvaz7tdti2oni
 - valory/acn_data_share:0.1.0:bafybeidbvo3jdbt54pqk3foqfso4uim2vaea5abg6jzktomdeklh6sm2rq
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeigjddhk7epta7xpnfvv426xedff5abh4xlkwi6cqgp4vkutgkvydm
-- valory/transaction_settlement_abci:0.1.0:bafybeifmgmwdkx4esemxjacjwzqkqymkuklb5nehkwqkx7v335fllgswcq
+- valory/abstract_round_abci:0.1.0:bafybeibiw4oqwqvo4jccwz5fb73iardzychgvcl66tceiildohoju2ikti
+- valory/transaction_settlement_abci:0.1.0:bafybeigh2vkt74jrad5gtsczrgqcuhcqe7jkgjy7jdw56yamlzwwnaymjy
 behaviours:
   main:
     args: {}
