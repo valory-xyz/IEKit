@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2024 Valory AG
+#   Copyright 2021-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -29,8 +29,9 @@
 # CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw1477wwkgd6ydzdh5qo7nr4poscb8nz0dru1j1wcujgbdxei3it7a"  # Aug 12th 2024
 # CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw14aqbvmww6is7tiu4w6lr36csbmpx84wehtd1hegucp58udzkgcc"  # Nov 1st 2024
 # CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw14a5qlhy9x2j4jq4jfittfgd1opl1ir2hg4zvk6fteimsclxvvg8"  # Nov 8th 2024
-# CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw147nzli6czhklr48yfj4qfkl1b431e2zpdybgpq0hnre5xia9qvn"    # Nov 20th 2024
-CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw14b17u6xxky8u83vfg41uormyw86yzeokdye2x9nar21pce8eou7"    # Dec 16th 2024
+# CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw147nzli6czhklr48yfj4qfkl1b431e2zpdybgpq0hnre5xia9qvn"  # Nov 20th 2024
+# CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw14b17u6xxky8u83vfg41uormyw86yzeokdye2x9nar21pce8eou7"  # Dec 16th 2024
+CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw146hft9w4phn07lb9y9sa5rrm8lvk1yl3e9zs7tvqgwx5mh7q6at"    # Jan 13th 2025
 
 
 # Centaurs DB
