@@ -469,16 +469,9 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             if not self._mech_requests:
-                payload = MechRequestPayload(
-                    self.context.agent_address,
-                    self.matching_round.auto_round_id(),
-                    None,
-                    None,
-                    self.params.mech_chain_id,
-                    self.synchronized_data.safe_contract_address,
-                    None,
-                    None,
-                )
+                n_params = len(MechRequestPayload.__annotations__)
+                empty_payload_params = (None,) * n_params
+                payload = MechRequestPayload(agent_address, *empty_payload_params)
             else:
                 self.context.logger.info(
                     f"Preparing mech requests: {self._mech_requests}"
