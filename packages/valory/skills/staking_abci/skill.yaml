@@ -13,18 +13,18 @@ fingerprint:
   handlers.py: bafybeiaufft2fwbbjbbc77md6xkq7prnzzi2nkkm2fipapgx54myabmb7y
   models.py: bafybeify7lbvfd3j7inw3g6nr4yjdm2acnug6oavlxfmesj34kqpirtmiq
   payloads.py: bafybeicwwo5rtm24ww6chetzqyg23tlgctrqww3c73tfsd2mxaehemiyyy
-  rounds.py: bafybeighcl5gekirysrmnnqveai7b3zfkmukhlaspi7egmnx5vlfhn7ccy
+  rounds.py: bafybeicgnquu6p7gqokwgld3zygor7sq62e6jmn5imag2hptafcfsk7k5q
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/gnosis_safe:0.1.0:bafybeihtqcpqthb37msgqabpzcc2xc3l3yzkp5pl2sodeghqyzzzyuevgi
-- valory/staking:0.1.0:bafybeicu3qserl7c4bll4ni4l3letibyn3kjsxwe2b3qbywwy2sjovtglu
+- valory/gnosis_safe:0.1.0:bafybeialsnaekbdtn3h6phjs5xxx44es56jffs5jnlkkcgc62k62vxpkxm
+- valory/staking:0.1.0:bafybeihvsg6k3qjypefc54d4bcnlzc574b636hizztytunihvdipmusreq
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 protocols:
-- valory/contract_api:1.0.0:bafybeidgu7o5llh26xp3u3ebq3yluull5lupiyeu6iooi2xyymdrgnzq5i
+- valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeigjddhk7epta7xpnfvv426xedff5abh4xlkwi6cqgp4vkutgkvydm
-- valory/transaction_settlement_abci:0.1.0:bafybeifmgmwdkx4esemxjacjwzqkqymkuklb5nehkwqkx7v335fllgswcq
+- valory/abstract_round_abci:0.1.0:bafybeig4wczuh3l6wbxb47rgsmodlfupichj66gfcwkvy65q5pbm3utykm
+- valory/transaction_settlement_abci:0.1.0:bafybeicjqlnqgmccwb5vjga2lnb2doxqfkvqg36fixil5q4dbymaiggdua
 behaviours:
   main:
     args: {}
