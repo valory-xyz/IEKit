@@ -82,7 +82,7 @@ class TokenTrackRound(CollectSameUntilThresholdRound):
 
     payload_class = TokenTrackPayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     ERROR_PAYLOAD = {"error": True}
 
