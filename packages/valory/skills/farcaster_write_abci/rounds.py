@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 Valory AG
+#   Copyright 2024-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -86,6 +86,7 @@ class RandomnessFarcasterRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.most_voted_randomness),
         get_name(SynchronizedData.most_voted_randomness),
     )
+    extended_requirements = ()
 
 
 class SelectKeeperFarcasterRound(CollectSameUntilThresholdRound):
@@ -97,6 +98,7 @@ class SelectKeeperFarcasterRound(CollectSameUntilThresholdRound):
     no_majority_event = Event.NO_MAJORITY
     collection_key = get_name(SynchronizedData.participant_to_selection)
     selection_key = get_name(SynchronizedData.most_voted_keeper_address)
+    extended_requirements = ()
 
 
 class FarcasterWriteRound(OnlyKeeperSendsRound):
