@@ -15,7 +15,7 @@ fingerprint:
   handlers.py: bafybeib3aiosxhbyudcxtybdrvsmn6bvnl4ao3fwf2uc7lkidpnhvnucam
   models.py: bafybeibknj5hftb7y4djrurgo64uueffrphj4ladd64qjzbhtir2wagkia
   payloads.py: bafybeig63ibt5qa5sa4nw37gly3lvf4wwtps7vgr2zbvpp5zz6hzm66edq
-  rounds.py: bafybeia3qs27zqxxbz5dq5cajha3jss24dvzsm4uo2y3bmtoyyixaqhtoi
+  rounds.py: bafybeigiozy3ggixzb27ljpqqb7ovpqrrhk54lnkmq5y542dhfs6wchs74
   tests/__init__.py: bafybeigknrv5xw52pmcscrsxhtpibey5jbr26dss7o5eofery6ktd6w42e
   tests/test_behaviours.py: bafybeighuno7ajmmchlhb2qwgzjewhjhzee7ain2qxqxvcc2eoox2hxw2m
   tests/test_dialogues.py: bafybeibvhslg6mwhvmeffhoho5olnmr56ohvx63onv63aryhaidizk3jou
@@ -29,7 +29,7 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeig4wczuh3l6wbxb47rgsmodlfupichj66gfcwkvy65q5pbm3utykm
-- valory/ceramic_read_abci:0.1.0:bafybeibdzvtdnqnxjlq2aoxzqosmaasqxfw6lb2qsbkf6vidiqjkery5my
+- valory/ceramic_read_abci:0.1.0:bafybeibfla4iv75fexu4w5ac2shkro23hzmbvfkuwe65hs7lowhgfsojgi
 behaviours:
   main:
     args: {}
