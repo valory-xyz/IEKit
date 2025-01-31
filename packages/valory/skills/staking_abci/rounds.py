@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 Valory AG
+#   Copyright 2024-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -103,7 +103,7 @@ class ActivityScoreRound(CollectSameUntilThresholdRound):
 
     payload_class = ActivityScorePayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     selection_key = (
         get_name(SynchronizedData.pending_write),
@@ -156,7 +156,7 @@ class ActivityUpdatePreparationRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.chain_id),
         get_name(SynchronizedData.safe_contract_address),
     )
-    required_class_attributes = ()
+    extended_requirements = ()
 
     # We reference all the events here to prevent the check-abciapp-specs tool from complaining
     # since this round receives the event via payload
@@ -177,7 +177,7 @@ class CheckpointPreparationRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.chain_id),
         get_name(SynchronizedData.safe_contract_address),
     )
-    required_class_attributes = ()
+    extended_requirements = ()
 
     # We reference all the events here to prevent the check-abciapp-specs tool from complaining
     # since this round receives the event via payload
@@ -198,7 +198,7 @@ class DAAPreparationRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.chain_id),
         get_name(SynchronizedData.safe_contract_address),
     )
-    required_class_attributes = ()
+    extended_requirements = ()
 
     # We reference all the events here to prevent the check-abciapp-specs tool from complaining
     # since this round receives the event via payload

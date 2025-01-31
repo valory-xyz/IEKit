@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -137,7 +137,7 @@ class OlasWeekDecisionMakingRound(CollectSameUntilThresholdRound):
 
     payload_class = OlasWeekDecisionMakingPayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
@@ -158,7 +158,7 @@ class OlasWeekOpenAICallCheckRound(CollectSameUntilThresholdRound):
 
     payload_class = OpenAICallCheckPayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     CALLS_REMAINING = "CALLS_REMAINING"
 
@@ -205,7 +205,7 @@ class OlasWeekTweetCollectionRound(CollectSameUntilThresholdRound):
 
     payload_class = OlasWeekTweetCollectionPayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     @property
     def consensus_threshold(self):
@@ -329,7 +329,7 @@ class OlasWeekEvaluationRound(OnlyKeeperSendsRound):
 
     payload_class = OlasWeekEvaluationPayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
         """Process the end of the block."""
@@ -370,7 +370,7 @@ class OlasWeekRandomnessRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.most_voted_randomness),
         get_name(SynchronizedData.most_voted_randomness),
     )
-    required_class_attributes = ()
+    extended_requirements = ()
 
 
 class OlasWeekSelectKeepersRound(CollectSameUntilThresholdRound):
@@ -378,7 +378,7 @@ class OlasWeekSelectKeepersRound(CollectSameUntilThresholdRound):
 
     payload_class = OlasWeekSelectKeepersPayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""

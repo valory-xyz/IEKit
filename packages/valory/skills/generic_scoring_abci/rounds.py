@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ class GenericScoringRound(CollectSameUntilThresholdRound):
 
     payload_class = GenericScoringPayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""

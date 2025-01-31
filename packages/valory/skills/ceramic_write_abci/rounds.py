@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -112,7 +112,7 @@ class RandomnessRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.most_voted_randomness_round),
         get_name(SynchronizedData.most_voted_randomness),
     )
-    required_class_attributes = ()
+    extended_requirements = ()
 
 
 class SelectKeeperRound(CollectSameUntilThresholdRound):
@@ -124,7 +124,7 @@ class SelectKeeperRound(CollectSameUntilThresholdRound):
     no_majority_event = Event.NO_MAJORITY
     collection_key = get_name(SynchronizedData.participant_to_selection)
     selection_key = get_name(SynchronizedData.most_voted_keeper_address)
-    required_class_attributes = ()
+    extended_requirements = ()
 
 
 class StreamWriteRound(OnlyKeeperSendsRound):
@@ -134,7 +134,7 @@ class StreamWriteRound(OnlyKeeperSendsRound):
 
     payload_class = StreamWritePayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     def end_block(
         self,
@@ -185,7 +185,7 @@ class VerificationRound(CollectSameUntilThresholdRound):
 
     payload_class = VerificationPayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     ERROR_PAYLOAD = "error"
     SUCCCESS_PAYLOAD = "success"

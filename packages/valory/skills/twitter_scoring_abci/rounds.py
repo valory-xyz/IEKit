@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -197,7 +197,7 @@ class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
 
     payload_class = TwitterDecisionMakingPayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
@@ -219,7 +219,7 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
 
     payload_class = TwitterMentionsCollectionPayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     @property
     def consensus_threshold(self):
@@ -358,7 +358,7 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
 
     payload_class = TwitterHashtagsCollectionPayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     @property
     def consensus_threshold(self):
@@ -496,7 +496,7 @@ class PreMechRequestRound(CollectSameUntilThresholdRound):
 
     payload_class = PreMechRequestPayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
         """Process the end of the block."""
@@ -562,7 +562,7 @@ class PostMechRequestRound(CollectSameUntilThresholdRound):
 
     payload_class = PostMechRequestPayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Enum]]:
         """Process the end of the block."""
@@ -610,7 +610,7 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
 
     payload_class = DBUpdatePayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
@@ -656,7 +656,7 @@ class TwitterRandomnessRound(CollectSameUntilThresholdRound):
         get_name(SynchronizedData.most_voted_randomness),
         get_name(SynchronizedData.most_voted_randomness),
     )
-    required_class_attributes = ()
+    extended_requirements = ()
 
 
 class TwitterSelectKeepersRound(CollectSameUntilThresholdRound):
@@ -664,7 +664,7 @@ class TwitterSelectKeepersRound(CollectSameUntilThresholdRound):
 
     payload_class = TwitterSelectKeepersPayload
     synchronized_data_class = SynchronizedData
-    required_class_attributes = ()
+    extended_requirements = ()
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
