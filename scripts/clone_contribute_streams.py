@@ -112,7 +112,6 @@ def main():
         "schema": CONTRIBUTE_CENTAURS_SCHEMA_COMMIT
     }
 
-
     # Get the prod data
     user_db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_DB_STREAM_ID)
 
@@ -124,7 +123,6 @@ def main():
         extra_metadata=extra_metadata_db,
     )
     print(f"Contribute DB stream id: {stream_id}")
-
 
     # Get the prod data
     centaurs_db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_CENTAURS_STREAM_ID)
