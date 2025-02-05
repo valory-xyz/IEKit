@@ -50,6 +50,9 @@ class Params(BaseParams):
         self.contributors_contract_address_old = kwargs.get(
             "contributors_contract_address_old"
         )
+        self.contributors_contract_address_new = kwargs.get(
+            "contributors_contract_address_new"
+        )
         self.safe_contract_address_base = self._ensure(
             "safe_contract_address_base", kwargs, str
         )

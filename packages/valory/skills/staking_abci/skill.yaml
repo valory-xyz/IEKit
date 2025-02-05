@@ -135,6 +135,7 @@ models:
       - '0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb'
       - '0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8'
       contributors_contract_address_old: '0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94'
+      contributors_contract_address_new: '0x343F2B005cF6D70bA610CD9F1F1927049414B582'
       safe_contract_address_base: '0x0000000000000000000000000000000000000000'
       multisend_address: '0x0000000000000000000000000000000000000000'
       staking_rewards_required_points: 200
