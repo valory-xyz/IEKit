@@ -215,7 +215,7 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
 
         contract_api_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
-            contract_address=self.params.contributors_contract_address,
+            contract_address=self.params.contributors_contract_address_old,
             contract_id=str(Staking.contract_id),
             contract_callable="get_account_to_service_map",
             wallet_address=wallet_address,

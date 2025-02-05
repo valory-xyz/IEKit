@@ -290,7 +290,7 @@ models:
       checkpoint_threshold_minutes: ${int:600}
       staking_activity_threshold: ${int:5}
       staking_contract_addresses: ${list:["0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F","0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb","0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8"]}
-      contributors_contract_address: ${str:0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94}
+      contributors_contract_address_old: ${str:0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94}
       epoch_end_threshold_minutes: ${int:60}
       safe_contract_address_base: ${str:0x3316b59A6c4C3ee2920EecE0B02A6d40AAa6b9c9}
       safe_contract_address_gnosis: ${str:0x6B47A6a481dD717526Feaad358fF873f7760B074}

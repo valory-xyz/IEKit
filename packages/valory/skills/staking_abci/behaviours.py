@@ -293,7 +293,7 @@ class ActivityUpdatePreparationBehaviour(StakingBaseBehaviour):
         # Use the contract api to interact with the activity tracker contract
         response_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
-            contract_address=self.params.contributors_contract_address,
+            contract_address=self.params.contributors_contract_address_old,
             contract_id=str(Staking.contract_id),
             contract_callable="build_activity_update_tx",
             updates=self.synchronized_data.staking_multisig_to_updates,
@@ -318,7 +318,7 @@ class ActivityUpdatePreparationBehaviour(StakingBaseBehaviour):
 
         # Prepare the safe transaction
         safe_tx_hash = yield from self._build_safe_tx_hash(
-            to_address=self.params.contributors_contract_address,
+            to_address=self.params.contributors_contract_address_old,
             data=data_bytes
         )
 
