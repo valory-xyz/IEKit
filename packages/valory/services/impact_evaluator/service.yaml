@@ -112,7 +112,7 @@ extra:
         use_termination: ${USE_TERMINATION:bool:true}
         validate_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
-        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:1000}
+        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:1500}
         openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
         openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
         service_endpoint_base: ${SERVICE_ENDPOINT_BASE:str:https://dummy_service.autonolas.tech/}
@@ -212,7 +212,7 @@ extra:
         use_termination: ${USE_TERMINATION:bool:true}
         validate_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
-        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:1000}
+        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:1500}
         openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
         openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
         service_endpoint_base: ${SERVICE_ENDPOINT_BASE:str:https://dummy_service.autonolas.tech/}
@@ -312,7 +312,7 @@ extra:
         use_termination: ${USE_TERMINATION:bool:true}
         validate_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
-        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:1000}
+        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:1500}
         openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
         openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
         service_endpoint_base: ${SERVICE_ENDPOINT_BASE:str:https://dummy_service.autonolas.tech/}
@@ -416,7 +416,7 @@ extra:
         finalize_timeout: 60.0
         history_check_timeout: 1205
         centaur_id_to_secrets: ${CENTAUR_ID_TO_SECRETS:str:{}}
-        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:1000}
+        max_points_per_period: ${MAX_POINTS_PER_PERIOD:int:1500}
         openai_call_window_size: ${OPENAI_CALL_WINDOW_SIZE:float:3600.0}
         openai_calls_allowed_in_window: ${OPENAI_CALLS_ALLOWED_IN_WINDOW:int:100}
         service_endpoint_base: ${SERVICE_ENDPOINT_BASE:str:https://dummy_service.autonolas.tech/}
