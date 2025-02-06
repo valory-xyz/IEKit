@@ -318,7 +318,7 @@ class ActivityUpdatePreparationBehaviour(StakingBaseBehaviour):
 
         # Prepare the safe transaction
         safe_tx_hash = yield from self._build_safe_tx_hash(
-            to_address=contributors_contract_address,
+            to_address=self.params.contributors_contract_address,
             data=data_bytes
         )
 
