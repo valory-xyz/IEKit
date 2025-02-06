@@ -290,12 +290,10 @@ class ActivityUpdatePreparationBehaviour(StakingBaseBehaviour):
             f"Preparing activity update call: {self.synchronized_data.staking_multisig_to_updates}"
         )
 
-        contributors_contract_address = self.params.contributors_contract_address_old
-
         # Use the contract api to interact with the activity tracker contract
         response_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
-            contract_address=contributors_contract_address,
+            contract_address=self.params.contributors_contract_address,
             contract_id=str(Staking.contract_id),
             contract_callable="build_activity_update_tx",
             updates=self.synchronized_data.staking_multisig_to_updates,
