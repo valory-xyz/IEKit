@@ -56,6 +56,12 @@
                 "service_id": {
                     "type": ["string", "null"]
                 },
+                "service_multisig_old": {
+                    "type": "string"
+                },
+                "service_id_old": {
+                    "type": "string"
+                },
                 "tweets": {
                     "type": "object",
                     "patternProperties": {
