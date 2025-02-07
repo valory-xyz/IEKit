@@ -58,7 +58,7 @@ STAKING_CONTRACTS = {
     "Alpha 2 (100 OLAS)": {
         "address": "0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb",
         "slots": 100,
-        "required_updates": 1
+        "required_updates": 3
     },
     "Alpha 3 (500 OLAS)": {
         "address": "0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8",
