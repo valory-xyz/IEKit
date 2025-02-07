@@ -68,7 +68,7 @@ STAKING_CONTRACTS = {
 }
 STAKING_ABI_FILE = Path("packages", "valory", "contracts", "staking", "build", "staking.json")
 CONTRIBUTORS_ABI_FILE = Path("scripts", "contributors.json")
-CONTRIBUTORS_PROXY_CONTRACT_ADDRESS = "0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94"
+CONTRIBUTORS_PROXY_CONTRACT_ADDRESS = "0x343F2B005cF6D70bA610CD9F1F1927049414B582"
 
 
 def read_users_from_ceramic() -> Dict:
