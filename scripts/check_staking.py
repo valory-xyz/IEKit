@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2024 Valory AG
+#   Copyright 2021-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ STAKING_CONTRACTS = {
     "Alpha 2 (100 OLAS)": {
         "address": "0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb",
         "slots": 100,
-        "required_updates": 1
+        "required_updates": 3
     },
     "Alpha 3 (500 OLAS)": {
         "address": "0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8",
@@ -68,7 +68,7 @@ STAKING_CONTRACTS = {
 }
 STAKING_ABI_FILE = Path("packages", "valory", "contracts", "staking", "build", "staking.json")
 CONTRIBUTORS_ABI_FILE = Path("scripts", "contributors.json")
-CONTRIBUTORS_PROXY_CONTRACT_ADDRESS = "0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94"
+CONTRIBUTORS_PROXY_CONTRACT_ADDRESS = "0x343F2B005cF6D70bA610CD9F1F1927049414B582"
 
 
 def read_users_from_ceramic() -> Dict:

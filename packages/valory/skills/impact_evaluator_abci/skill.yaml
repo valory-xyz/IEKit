@@ -25,20 +25,20 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiba3zhx5drsf7ailfboeuvwykocmkffs2j426u4q7d4erig67lyhm
 - valory/ceramic_read_abci:0.1.0:bafybeiav4vpzizk4m4ik55rasyahydwn5r6z6vnhcqxjjb4h6gzzwsmt4q
-- valory/generic_scoring_abci:0.1.0:bafybeib5sjhs4vie4f3af3nm7hbljv6rpufr743ywsngzfbrfgxtwy7ulq
-- valory/twitter_scoring_abci:0.1.0:bafybeih7djdqxzrrn34iiavlb5hlnatzfnwoxst5ykzyurfwvtu5cdr3zu
+- valory/generic_scoring_abci:0.1.0:bafybeidp3qajcdso5u3lafmjurdzzasvtc3trchkxkoai2or6afxetuk2i
+- valory/twitter_scoring_abci:0.1.0:bafybeiggpilq7nq6dcyrbpga72cc7mxzhldilwp4ogz7uqcyi3uoy6os3a
 - valory/ceramic_write_abci:0.1.0:bafybeib6p3rklvxs3pwobdkprj7wnp3gio2bw2ks6pmmplcz3wkvd4pz7e
-- valory/dynamic_nft_abci:0.1.0:bafybeidfkptxkullcx6vrvv46icpbli7tgqiserhtw6rj7pyoidqeb5li4
+- valory/dynamic_nft_abci:0.1.0:bafybeieyv4lztmvwuymzfsyylogyfj3xjkxr5axmedvulvlsa63borql7i
 - valory/registration_abci:0.1.0:bafybeigp2g6uhhgjlkqyhjlk4abfjuecmulnwlki6acbpfu45thslqujlu
 - valory/reset_pause_abci:0.1.0:bafybeidhqvc4cl6alvkql5kadiv7snudl7o2ctfqbmhrihtejm3zhkmbby
 - valory/termination_abci:0.1.0:bafybeig4stz7s6phndruvrgqptbc62ue2filttj4wbnempkur5ybso5edu
 - valory/transaction_settlement_abci:0.1.0:bafybeicvfbyp4lfqcohmvw6ozlvsbp2eugl2wxqxsdpp36ro7bk3waxjky
-- valory/decision_making_abci:0.1.0:bafybeih7u335m4dfxhvciszz3a5lqcvydzy3wthejmrbyyqvat3oukgttu
+- valory/decision_making_abci:0.1.0:bafybeib5vnlmphaslkcpcmfmknkudg7wtrejmlxubeook4x5noznwbjbae
 - valory/llm_abci:0.1.0:bafybeihhwdrkcffycpv3ymr7otvyydjles7fj5imrcbjz25lcpx2ualimu
 - valory/twitter_write_abci:0.1.0:bafybeig7umkllcnvzrd7pxhvjedpr7hldm5hfww5vyrtd6nxaf4te6mu2u
-- valory/olas_week_abci:0.1.0:bafybeiev6bbyairmbdy5tztgryqlrxfv7xnrl4teqvkxdbs3tz4xuydvnq
+- valory/olas_week_abci:0.1.0:bafybeihpfhdfpbtpfdbmdauawp46f6sbfcn2mxdlaybpokrgobnui7ssnm
 - valory/mech_interact_abci:0.1.0:bafybeiclgsetw4inupuaynou332ckp65s6bxdgmfpsxps4i3nldw3lbsnu
-- valory/staking_abci:0.1.0:bafybeiceq7fyqw3i5vkwtrmqqvyh6qtznqgq4gxljoy45cow5tsnocjqju
+- valory/staking_abci:0.1.0:bafybeifp2xo2qkihtvfukh7tyfyzzrkw7qvpej7wzftrhj6amebu65nzt4
 behaviours:
   main:
     args: {}
@@ -182,7 +182,7 @@ models:
       twitter_tweets_args: tweet.fields=author_id,created_at,conversation_id,public_metrics&user.fields=name&expansions=author_id&max_results=50&start_time={start_time}
       openai_call_window_size: 3600.0
       openai_calls_allowed_in_window: 100
-      max_points_per_period: 1000
+      max_points_per_period: 1500
       tx_timeout: 10.0
       whitelist_api_key: null
       whitelist_endpoint: http://localhost
@@ -222,7 +222,7 @@ models:
       - '0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F'
       - '0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb'
       - '0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8'
-      contributors_contract_address: '0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94'
+      contributors_contract_address: '0x343F2B005cF6D70bA610CD9F1F1927049414B582'
       epoch_end_threshold_minutes: 60
       safe_contract_address_base: '0x0000000000000000000000000000000000000000'
       safe_contract_address_gnosis: '0x0000000000000000000000000000000000000000'

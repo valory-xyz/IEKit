@@ -7,11 +7,11 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeie3oujhxxdr5s2lvc6cosbysezqycagw5mbwvxjw24k3dzcbtgg5m
-  behaviours.py: bafybeih35xwfoigo5c5demf53bxkcbptfks5qzti7rkuokwec4nirljbli
+  behaviours.py: bafybeiff2bywtuwphtxkjl6zsuhnhb6ss6kmpxyyuo3mp7y74xnjlggi2q
   dialogues.py: bafybeifmmpyiwetlcgykczsq4dgwvm7tipdupf2rwcndg5cmtm7jfoxwxm
   fsm_specification.yaml: bafybeicjj2blynjtxejcjkr3fmb5mlvfxu4zpymqwurdciqvj5biz37ruu
   handlers.py: bafybeiaufft2fwbbjbbc77md6xkq7prnzzi2nkkm2fipapgx54myabmb7y
-  models.py: bafybeify7lbvfd3j7inw3g6nr4yjdm2acnug6oavlxfmesj34kqpirtmiq
+  models.py: bafybeicczxttdpcdm7nmm5ywacpqffk37dyamsmnp2gaptn7k6eany4lmq
   payloads.py: bafybeicwwo5rtm24ww6chetzqyg23tlgctrqww3c73tfsd2mxaehemiyyy
   rounds.py: bafybeia2nafhbntu4uxb3kqyjzldrp43w57ktc7xlx7snbestwryauleyy
 fingerprint_ignore_patterns: []
@@ -134,7 +134,7 @@ models:
       - '0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F'
       - '0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb'
       - '0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8'
-      contributors_contract_address: '0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94'
+      contributors_contract_address: '0x343F2B005cF6D70bA610CD9F1F1927049414B582'
       safe_contract_address_base: '0x0000000000000000000000000000000000000000'
       multisend_address: '0x0000000000000000000000000000000000000000'
       staking_rewards_required_points: 200
