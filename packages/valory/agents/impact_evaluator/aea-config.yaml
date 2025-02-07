@@ -146,7 +146,6 @@ config:
           fallback_estimate:
             maxFeePerGas: ${int:20000000000}
             maxPriorityFeePerGas: ${int:3000000000}
-            baseFee: null
           priority_fee_increase_boundary: ${int:200}
     gnosis:
       address: ${str:http://localhost:8545}
