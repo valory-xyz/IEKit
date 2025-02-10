@@ -50,18 +50,18 @@ EVICTED = "EVICTED"
 
 
 STAKING_CONTRACTS = {
-    "Alpha 1 (100 OLAS)": {
-        "address": "0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F",
+    "Beta 1 (100 OLAS)": {
+        "address": "0xe2e68ddafbdc0ae48e39cdd1e778298e9d865cf4",
         "slots": 100,
         "required_updates": 1
     },
-    "Alpha 2 (100 OLAS)": {
-        "address": "0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb",
+    "Beta 2 (300 OLAS)": {
+        "address": "0x6ce93e724606c365fc882d4d6dfb4a0a35fe2387",
         "slots": 100,
         "required_updates": 3
     },
-    "Alpha 3 (500 OLAS)": {
-        "address": "0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8",
+    "Beta 3 (500 OLAS)": {
+        "address": "0x28877ffc6583170a4c9ed0121fc3195d06fd3a26",
         "slots": 100,
         "required_updates": 5
     },
@@ -91,6 +91,7 @@ def get_user_by_field(users, field_name, field_value) -> Optional[Dict]:
         if user_data.get(field_name, None) == field_value:
             return user_id
     return None
+
 
 def get_contract_by_address(staking_contract_address) -> Optional[Dict]:
     """Get contract by address"""

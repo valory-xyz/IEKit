@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2024 Valory AG
+#   Copyright 2021-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ def main():
     # Load the contracts
     olas_contract = load_contract("Olas", "0x54330d28ca3357F294334BDC454a032e7f353416")
     contribute_manager_contract = load_contract("ContributeManager", "0xaea9ef993d8a1A164397642648DF43F053d43D85")
-    staking_contract_address = "0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F"
+    staking_contract_address = "0xe2e68ddafbdc0ae48e39cdd1e778298e9d865cf4"
 
     # Approve OLAS
     transaction = olas_contract.functions.approve(

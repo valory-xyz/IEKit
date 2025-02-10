@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeid2j4omfrtmrwlbafaarc6cn57u7qgo42ahipnsd57jui6t5kxcem
+agent: valory/impact_evaluator:0.1.0:bafybeib74hopztpntaoephb43evvit6f7fw2oben2boho2qc3sjg5d6fey
 number_of_agents: 1
 deployment:
   agent:
@@ -132,7 +132,7 @@ models:
       mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x0000000000000000000000000000000000000000","priority_mech_address":"0x0000000000000000000000000000000000000000","priority_mech_staking_instance_address":"0x0000000000000000000000000000000000000000","priority_mech_service_id":0,"requester_staking_instance_address":"0x0000000000000000000000000000000000000000","response_timeout":300}}
       checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
       staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
-      staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0x95146Adf659f455f300D7521B3b62A3b6c4aBA1F","0x2C8a5aC7B431ce04a037747519BA475884BCe2Fb","0x708E511d5fcB3bd5a5d42F42aA9a69EC5B0Ee2E8"]}
+      staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0xe2e68ddafbdc0ae48e39cdd1e778298e9d865cf4","0x6ce93e724606c365fc882d4d6dfb4a0a35fe2387","0x28877ffc6583170a4c9ed0121fc3195d06fd3a26"]}
       contributors_contract_address_old: ${CONTRIBUTORS_CONTRACT_ADDRESS_OLD:str:0x4be7A91e67be963806FeFA9C1FD6C53DfC358d94}
       contributors_contract_address_new: ${CONTRIBUTORS_CONTRACT_ADDRESS_NEW:str:0x343F2B005cF6D70bA610CD9F1F1927049414B582}
       epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:20}
