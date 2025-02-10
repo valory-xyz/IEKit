@@ -163,7 +163,7 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
         status = yield from self.contract_interact(
             performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
             contract_address=self.params.mech_marketplace_config.mech_marketplace_address,
-            contract_public_id=AgentRegistryContract.contract_id,
+            contract_public_id=MechMarketplace.contract_id,
             contract_callable=contract_callable,
             data_key=data_key,
             placeholder=placeholder,
@@ -182,7 +182,7 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
         status = yield from self.contract_interact(
             performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
             contract_address=self.params.agent_registry_address,
-            contract_public_id=MechMarketplace.contract_id,
+            contract_public_id=AgentRegistryContract.contract_id,
             contract_callable=contract_callable,
             data_key=data_key,
             placeholder=placeholder,
