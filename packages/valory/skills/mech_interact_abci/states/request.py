@@ -32,6 +32,7 @@ class MechRequestRound(MechInteractionRound):
     """A round for performing requests to a Mech."""
 
     payload_class = MechRequestPayload
+
     selection_key = (
         get_name(SynchronizedData.tx_submitter),
         get_name(SynchronizedData.most_voted_tx_hash),

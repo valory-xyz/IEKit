@@ -468,11 +468,17 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         """Do the action."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            agent_address = self.context.agent_address
             if not self._mech_requests:
-                n_params = len(MechRequestPayload.__annotations__)
-                empty_payload_params = (None,) * n_params
-                payload = MechRequestPayload(agent_address, *empty_payload_params)
+                payload = MechRequestPayload(
+                    self.context.agent_address,
+                    self.matching_round.auto_round_id(),
+                    None,
+                    None,
+                    self.params.mech_chain_id,
+                    self.synchronized_data.safe_contract_address,
+                    None,
+                    None,
+                )
             else:
                 self.context.logger.info(
                     f"Preparing mech requests: {self._mech_requests}"
@@ -483,11 +489,10 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     for data in (self._mech_requests, self._pending_responses)
                 )
                 self.context.logger.info(
-                    f"Preparing mech request:\ntx_hex: {self.tx_hex}\nprice: {self.price}\n"
-                    f"serialized_data: {serialized_data}"
+                    f"Preparing mech request:\ntx_hex: {self.tx_hex}\nprice: {self.price}\nserialized_data: {serialized_data}\n"
                 )
                 payload = MechRequestPayload(
-                    agent_address,
+                    self.context.agent_address,
                     self.matching_round.auto_round_id(),
                     self.tx_hex,
                     self.price,

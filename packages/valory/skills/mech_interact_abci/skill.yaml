@@ -9,8 +9,8 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeidf3nlv5fpvfy4libtscayhirdw64shgmhfmvjiftjmjkmhu7auxq
   behaviours/__init__.py: bafybeie3zsi6p3yanz5mqwpkdrcgywaqvkit3hdintsb4awnvalgxpxa4i
-  behaviours/base.py: bafybeibrl2rniag7qf6fpn5rgbv5bagnyyps7tm6kb3yjz3ilz56lzfz74
-  behaviours/request.py: bafybeiev7bp6mtzdhn66cj4rqj65gfrpc4ebkdy77pjbdt4k4pb3qahizm
+  behaviours/base.py: bafybeicdcyujafl765anhijisytsyjhdiyacvaeempjyhclvrrogbkjzgq
+  behaviours/request.py: bafybeig57mey7h7uyifiavugjwqw4esdvgiaxcj6uzw6kb7qr3vialxgr4
   behaviours/response.py: bafybeicmcsl5ubv6qcsunfk2e3dn4i5nk2xaioioigzamvybmijftftxu4
   behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
   dialogues.py: bafybeicgtxsrzld6uyi2n455temnz6mj55irmxqxw55jxo4b6ud4rt7nsm
@@ -22,7 +22,7 @@ fingerprint:
   states/__init__.py: bafybeie34wx5znr2hxwh3gs2fchmbeuzjcfnraymdvtzjaxaq5zsiw233q
   states/base.py: bafybeidclvpox4adidod36l2gorv4qtnsunmpzgnvqnm3xvqbqdreqjojy
   states/final_states.py: bafybeihjntrbc666blxj4viz74y4p2hfc5e4vijs3bqng2k4vqbwkud7sq
-  states/request.py: bafybeif3ydxbum5svwkpkk4fjjko4om3evma4csemryycucd3tbmx5kpdi
+  states/request.py: bafybeibo7mxxbqao75zqjale5gjqa3nmt6fgdiwbthdczvd2ybdg4pdts4
   states/response.py: bafybeibaxnp2oxwjptoq7qzm6o7ww2qrdj2vnxzg2qt523vz2ftqzx5hyi
   tests/__init__.py: bafybeifojfnffwlsv6aiku25nwyjwm7h4m45yci3fgmaawpeoyoogzonum
   tests/test_behaviours.py: bafybeidj7git7zaego7k75eejtxlr3usj6wnnqisu7urqwvalpwh5w7nyq
