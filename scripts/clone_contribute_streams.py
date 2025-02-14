@@ -115,18 +115,6 @@ def main():
     # Get the prod data
     user_db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_DB_STREAM_ID)
 
-    # Update multisigs and service_ids
-    for user_data in user_db["users"].values():
-
-        if user_data["service_multisig"]:
-            user_data["service_multisig_old"] = user_data["service_multisig"]
-            user_data["service_multisig"] = None
-
-        if user_data["service_id"]:
-            user_data["service_id_old"] = user_data["service_id"]
-            user_data["service_id"] = None
-
-
     # Clone into a new stream
     stream_id = user_db_batch_write(
         did=ceramic_did_str,
