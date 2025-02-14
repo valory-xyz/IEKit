@@ -51,17 +51,17 @@ EVICTED = "EVICTED"
 
 STAKING_CONTRACTS = {
     "Beta 1 (100 OLAS)": {
-        "address": "0xe2e68ddafbdc0ae48e39cdd1e778298e9d865cf4",
+        "address": "0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4",
         "slots": 100,
         "required_updates": 1
     },
     "Beta 2 (300 OLAS)": {
-        "address": "0x6ce93e724606c365fc882d4d6dfb4a0a35fe2387",
+        "address": "0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387",
         "slots": 100,
         "required_updates": 3
     },
     "Beta 3 (500 OLAS)": {
-        "address": "0x28877ffc6583170a4c9ed0121fc3195d06fd3a26",
+        "address": "0x28877FFc6583170a4C9eD0121fc3195d06fd3A26",
         "slots": 100,
         "required_updates": 5
     },

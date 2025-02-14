@@ -314,9 +314,9 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
             param_overrides={
                 "twitter_max_pages": 10,
                 "staking_contract_addresses": [
-                    "0xe2e68ddafbdc0ae48e39cdd1e778298e9d865cf4",
-                    "0x6ce93e724606c365fc882d4d6dfb4a0a35fe2387",
-                    "0x28877ffc6583170a4c9ed0121fc3195d06fd3a26",
+                    "0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4",
+                    "0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387",
+                    "0x28877FFc6583170a4C9eD0121fc3195d06fd3A26",
                 ],
             }
         )

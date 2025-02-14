@@ -60,7 +60,7 @@ def main():
     # Load the contracts
     olas_contract = load_contract("Olas", "0x54330d28ca3357F294334BDC454a032e7f353416")
     contribute_manager_contract = load_contract("ContributeManager", "0xaea9ef993d8a1A164397642648DF43F053d43D85")
-    staking_contract_address = "0xe2e68ddafbdc0ae48e39cdd1e778298e9d865cf4"
+    staking_contract_address = "0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4"
 
     # Approve OLAS
     transaction = olas_contract.functions.approve(
