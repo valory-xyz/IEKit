@@ -257,6 +257,8 @@ class StakingActivityPreparation(StakingPreparation):
             epoch = yield from self.get_staking_epoch(staking_contract_address)
             staking_contract_to_epoch[staking_contract_address] = epoch
 
+        self.context.logger.info(f"staking_contract_to_epoch = {staking_contract_to_epoch}")
+
         # Get the updates.
         # Store them as a property since we will use them in _pre_task() to return the updates
         (
