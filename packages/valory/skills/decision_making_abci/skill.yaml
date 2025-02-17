@@ -11,7 +11,7 @@ fingerprint:
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
   fsm_specification.yaml: bafybeihckbzmtewjwlbdvghzuadspopa25gsvtkgud5v6ymob6bnt4pium
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
-  models.py: bafybeiatvo5f3kt5euaeddnrhnkjoznarjnnscwn2vgr3hq3qdd5xtwcau
+  models.py: bafybeihjb6d7teichpc725xtja53atvi7wwsos7rl5ltisj7orec2jy7ge
   payloads.py: bafybeic6jrms2xs2odykwwngr5yyqm6cus7cyihdbxux26glpq3573q3ay
   rounds.py: bafybeialjritfpbp4ksnjkmlxstajzggvgxdsgu3vkxeueiy5f6yg65nqq
   tasks/campaign_validation_preparation.py: bafybeiafgc7lzgtl6qwo3qsdpskipm4qeby6c5nmltm4x4yp3zcwn5a6z4
@@ -23,7 +23,7 @@ fingerprint:
   tasks/staking.py: bafybeied5y4f7ns64wer2vubjes3br6xxwkrjvn4mwj3cmzo6qaixxu2vy
   tasks/task_preparations.py: bafybeihfm3ms665fvz2qwmhmcwgl2ws5mt62pykomowoxpm6a46jlqvsmu
   tasks/tweet_validation_preparation.py: bafybeif3wbfskiyuij7unx72euklms7owrzwzgdu462xatvypalm6xrgca
-  tasks/twitter_preparation.py: bafybeicn7stcvmd6oex55dwptwxpikpssbcwnj2d3xkercikg5nlzqh4k4
+  tasks/twitter_preparation.py: bafybeicqi2xw4tzsq2bi555z3sd3vi73p6ctswrtennko4nevklehn3pha
   tasks/week_in_olas_preparations.py: bafybeidmx64rnkhfcqnsx7qwmcwz6s5okxbqwi4ztnfrrsfaxgsb6vdb3i
   tasks/write_stream_preparation.py: bafybeiatdcckbobkaawnuphcgvjx2kgcuil7dtbunfpje7pfjd26gd2es4
   test_tools/__init__.py: bafybeiagwxhcqhvnfhf7yejawmjkle6c7eb4o4hjoy363dahmnyq22xmua
@@ -181,6 +181,7 @@ models:
       checkpoint_threshold_minutes: 60
       staking_activity_threshold: 5
       epoch_end_threshold_minutes: 60
+      disable_wio_posting: false
     class_name: Params
   requests:
     args: {}

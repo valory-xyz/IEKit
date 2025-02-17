@@ -243,13 +243,13 @@ def print_table():
     for user_id, user_data in staked_users.items():
 
         user_info = get_user_info(user_data, contract_info, contributors_contract)
+        handle = str(user_data.get("twitter_handle", None))
 
         # Double check stakiing status using info from the chain
         if user_info["staked"]:
-
             row = [
                 user_id,
-                "@" + user_data["twitter_handle"],
+                "@" + handle,
                 shorten_address(user_data["service_multisig"]),
                 user_info["staking_contract_name"],
                 user_info["epoch"] + f" [{user_info['next_epoch_start']}]" if not user_info["evicted"] else EVICTED,
@@ -263,7 +263,7 @@ def print_table():
         else:
             row = [
                 user_id,
-                "@" + user_data["twitter_handle"],
+                "@" + handle,
                 shorten_address(user_data["service_multisig"]),
                 UNSTAKED,
                 UNSTAKED,
