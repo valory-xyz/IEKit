@@ -296,6 +296,7 @@ models:
       agent_registry_address: ${str:0x0000000000000000000000000000000000000000}
       use_acn_for_delivers: ${bool:false}
       staking_rewards_required_points: ${int:200}
+      disable_wio_posting: ${bool:false}
   randomness_api:
     args:
       api_id: cloudflare

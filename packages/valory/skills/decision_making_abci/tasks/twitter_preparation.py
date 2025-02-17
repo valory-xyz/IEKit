@@ -316,6 +316,11 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
                 self.logger.info("The tweet has no voters")
                 continue
 
+            # Ignore WiO tweets if WiO posting is disabled
+            if self.params.disable_wio_posting and tweet["proposer"]["address"] == "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A":  # service safe address (ethereum)
+                self.logger.info("Week in Olas posting is disabled")
+                continue
+
             # Mark execution for success or failure
             is_tweet_executable = yield from self.check_tweet_consensus(tweet)
             self.logger.info("The tweet will be marked for execution")

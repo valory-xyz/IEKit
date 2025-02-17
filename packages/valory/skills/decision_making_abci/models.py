@@ -93,6 +93,9 @@ class Params(BaseParams):
             "epoch_end_threshold_minutes", kwargs, int
         )
         self.staking_contract_addresses = kwargs.get("staking_contract_addresses", [])
+        self.disable_wio_posting = self._ensure(
+            "disable_wio_posting", kwargs, bool
+        )
         super().__init__(*args, **kwargs)
 
 
