@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -93,9 +93,7 @@ class Params(BaseParams):
             "epoch_end_threshold_minutes", kwargs, int
         )
         self.staking_contract_addresses = kwargs.get("staking_contract_addresses", [])
-        self.disable_wio_posting = self._ensure(
-            "disable_wio_posting", kwargs, bool
-        )
+        self.disable_wio_posting = self._ensure("disable_wio_posting", kwargs, bool)
         super().__init__(*args, **kwargs)
 
 
