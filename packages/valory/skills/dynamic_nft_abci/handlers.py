@@ -335,7 +335,7 @@ class HttpHandler(BaseHttpHandler):
         if round_sequence._abci_app:
             current_round = round_sequence._abci_app.current_round.round_id
             rounds = [
-                r.round_id for r in round_sequence._abci_app._previous_rounds[-25:]
+                r.round_id for r in round_sequence._abci_app._previous_rounds[-50:]
             ]
             rounds.append(current_round)
 

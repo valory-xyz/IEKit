@@ -26,6 +26,7 @@ import os
 
 import dotenv
 from ceramic.ceramic import Ceramic
+from ceramic.streams import CONTRIBUTE_PROD_DB_STREAM_ID, CONTRIBUTE_PROD_CENTAURS_STREAM_ID
 
 
 dotenv.load_dotenv(override=True)
