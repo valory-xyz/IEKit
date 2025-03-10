@@ -36,7 +36,8 @@
 # CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw14bdkz45jyguv0iii50v4av34rvbe5gdyoelvrgcjp8szrg1myhb"  # Feb 5th 2025
 # CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw147hzu1c0hwzb0v7gcqn9ykcqzn0r72dn8gkvlp7c1hcjw3p50fs"  # Feb 7th 2025
 # CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw148aoo6gsals6kkat9bjvaxgqrr2qnz877t0ex9s3ziywyjsgvx7"  # Feb 14th 2025
-CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw145elsbebnsta2ne86e1mhh3097zd4px1u3cps8ufqnbqdw4efvi"    # Feb 21th 2025
+# CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw145elsbebnsta2ne86e1mhh3097zd4px1u3cps8ufqnbqdw4efvi"  # Feb 21th 2025
+CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw145x2ve4rkorbnxljolgywy6od1wlhcnszxc8mmvy84ejrp8kydk"    # Mar 10th 2025
 
 
 # Centaurs DB
@@ -48,7 +49,8 @@ CONTRIBUTE_PROD_DB_STREAM_ID = "kjzl6cwe1jw145elsbebnsta2ne86e1mhh3097zd4px1u3cp
 # CONTRIBUTE_PROD_CENTAURS_STREAM_ID = "kjzl6cwe1jw14an8qki1135vk7hl0gd0rb48edo8p6jiotkyrufsu4y39fothk4"  # Nov 29th 2024
 # CONTRIBUTE_PROD_CENTAURS_STREAM_ID = "kjzl6cwe1jw149i5zvrv9tomssl7ebjn13y611p7bhe5ji2p0fxiw47ofgtigad"  # Feb 3rd 2025 - failed clone
 # CONTRIBUTE_PROD_CENTAURS_STREAM_ID = "kjzl6cwe1jw149ua1d6y823lqo7i56zqwzmcm73168s7w3jc05rspd3tznbjthq"  # Feb 5rd 2025
-CONTRIBUTE_PROD_CENTAURS_STREAM_ID = "kjzl6cwe1jw148hxa40sdhkyy2mell0m5q8gyq9s2epy8vtfgifkhuzrq3k2sr2"    # Feb 21th 2025
+# CONTRIBUTE_PROD_CENTAURS_STREAM_ID = "kjzl6cwe1jw148hxa40sdhkyy2mell0m5q8gyq9s2epy8vtfgifkhuzrq3k2sr2"  # Feb 21th 2025
+CONTRIBUTE_PROD_CENTAURS_STREAM_ID = "kjzl6cwe1jw148gq10c9vx9h0j1yyv1jjnf8rtx8zb7yffzta4wj78pkk5rihr7"    # Mar 10th 2025
 
 
 # Manual scores DB
