@@ -11,7 +11,7 @@ fingerprint:
   behaviours/__init__.py: bafybeie3zsi6p3yanz5mqwpkdrcgywaqvkit3hdintsb4awnvalgxpxa4i
   behaviours/base.py: bafybeicdcyujafl765anhijisytsyjhdiyacvaeempjyhclvrrogbkjzgq
   behaviours/request.py: bafybeig57mey7h7uyifiavugjwqw4esdvgiaxcj6uzw6kb7qr3vialxgr4
-  behaviours/response.py: bafybeidq5kl45gawmnvt752oqrkryqkbmapmjee6wjsqc4djise7qb3gd4
+  behaviours/response.py: bafybeia2nobm2s5zop55oooce2yyoxcq22b3w7k5mnawt7kbq526lsrbli
   behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
   dialogues.py: bafybeicgtxsrzld6uyi2n455temnz6mj55irmxqxw55jxo4b6ud4rt7nsm
   fsm_specification.yaml: bafybeiapzwz6zcneelc2b2wrcb7cae7x6vbthmf6a57cm4mv6hucp67lz4
