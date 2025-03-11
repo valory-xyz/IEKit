@@ -57,9 +57,9 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self._from_block: int = 0
         self._requests: List[MechRequest] = []
         self._response_hex: str = ""
-        self._mech_responses: List[
-            MechInteractionResponse
-        ] = self.synchronized_data.mech_responses
+        self._mech_responses: List[MechInteractionResponse] = (
+            self.synchronized_data.mech_responses
+        )
         self.current_mech_response: MechInteractionResponse = MechInteractionResponse(
             error="The mech's response has not been set!"
         )
@@ -230,8 +230,34 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             self.mech_response_api.increment_retries()
             return None
 
-        self.context.logger.info(f"Retrieved the mech's response: {res}.")
+        self.context.logger.info(
+            f"Retrieved mech's response (length: {len(res)} bytes)"
+        )
         self.mech_response_api.reset_retries()
+
+        # Check if response is likely an image (contains base64 artifacts)
+        try:
+            result_json = json.loads(res)
+            if isinstance(result_json, dict) and "artifacts" in result_json:
+                # For large responses with artifacts, create a summary to avoid consensus payload size issues
+                artifact_count = len(result_json["artifacts"])
+                total_size = sum(
+                    len(artifact.get("base64", ""))
+                    for artifact in result_json["artifacts"]
+                )
+
+                # Create a summary that doesn't include the full base64 data
+                summary = {
+                    "summary": f"Response contains {artifact_count} image artifacts, total size {total_size} bytes",
+                    "ipfs_link": self.mech_response_api.url,  # Keep the link for future reference
+                }
+
+                # Return summary instead of full response
+                return json.dumps(summary)
+        except (json.JSONDecodeError, TypeError, KeyError):
+            # If not parseable as JSON with artifacts, return as is
+            pass
+
         return res
 
     def _get_response(self) -> WaitableConditionType:
