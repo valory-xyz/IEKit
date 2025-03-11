@@ -51,6 +51,9 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
     matching_round = MechResponseRound
 
+    ARTIFACTS_KEY = "artifacts"
+    BASE64_KEY = "base64"
+
     def __init__(self, **kwargs: Any) -> None:
         """Initialize Behaviour."""
         super().__init__(**kwargs)
@@ -235,30 +238,41 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         )
         self.mech_response_api.reset_retries()
 
-        # Check if response is likely an image (contains base64 artifacts)
+        processed_response = self._process_response_with_artifacts(res)
+        return processed_response
+
+    def _process_response_with_artifacts(self, res: str) -> str:
+        """Process response that may contain base64 artifacts.
+
+        :param res: the raw response string
+        :return: processed response or original if no special handling needed
+        """
         try:
             result_json = json.loads(res)
-            if isinstance(result_json, dict) and "artifacts" in result_json:
-                # For large responses with artifacts, create a summary to avoid consensus payload size issues
-                artifact_count = len(result_json["artifacts"])
-                total_size = sum(
-                    len(artifact.get("base64", ""))
-                    for artifact in result_json["artifacts"]
-                )
+        except (json.JSONDecodeError, TypeError):
+            return res
 
-                # Create a summary that doesn't include the full base64 data
-                summary = {
-                    "summary": f"Response contains {artifact_count} image artifacts, total size {total_size} bytes",
-                    "ipfs_link": self.mech_response_api.url,  # Keep the link for future reference
-                }
+        if not isinstance(result_json, dict):
+            return res
 
-                # Return summary instead of full response
-                return json.dumps(summary)
-        except (json.JSONDecodeError, TypeError, KeyError):
-            # If not parseable as JSON with artifacts, return as is
-            pass
+        artifacts = result_json.get(self.ARTIFACTS_KEY, None)
+        if not artifacts:
+            return res
 
-        return res
+        # For large responses with artifacts, create a summary to avoid consensus payload size issues
+        artifact_count = len(artifacts)
+        total_size = sum(
+            len(artifact.get(self.BASE64_KEY, "")) for artifact in artifacts
+        )
+
+        # Create a summary that doesn't include the full base64 data
+        summary = {
+            "summary": f"Response contains {artifact_count} image artifacts, total size {total_size} bytes",
+            "ipfs_link": self.mech_response_api.url,  # Keep the link for future reference
+        }
+
+        # Return summary instead of full response
+        return json.dumps(summary)
 
     def _get_response(self) -> WaitableConditionType:
         """Get the response data from IPFS."""
