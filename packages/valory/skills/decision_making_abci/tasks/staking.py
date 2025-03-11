@@ -22,6 +22,8 @@
 from datetime import datetime, timezone
 from typing import Dict, Generator, List, Optional, Tuple, cast
 
+from web3 import Web3
+
 from packages.valory.contracts.staking.contract import Staking
 from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.decision_making_abci.rounds import Event
@@ -198,7 +200,7 @@ class StakingPreparation(TaskPreparation):
 
         if staking_contract_address == "0x0000000000000000000000000000000000000000":
             return None
-        return staking_contract_address
+        return Web3.to_checksum_address(staking_contract_address)
 
     def get_staked_services(
         self, staking_contract_address: str
@@ -256,6 +258,10 @@ class StakingActivityPreparation(StakingPreparation):
         for staking_contract_address in self.params.staking_contract_addresses:
             epoch = yield from self.get_staking_epoch(staking_contract_address)
             staking_contract_to_epoch[staking_contract_address] = epoch
+
+        self.context.logger.info(
+            f"staking_contract_to_epoch = {staking_contract_to_epoch}"
+        )
 
         # Get the updates.
         # Store them as a property since we will use them in _pre_task() to return the updates

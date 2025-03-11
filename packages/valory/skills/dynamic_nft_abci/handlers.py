@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -335,7 +335,7 @@ class HttpHandler(BaseHttpHandler):
         if round_sequence._abci_app:
             current_round = round_sequence._abci_app.current_round.round_id
             rounds = [
-                r.round_id for r in round_sequence._abci_app._previous_rounds[-25:]
+                r.round_id for r in round_sequence._abci_app._previous_rounds[-50:]
             ]
             rounds.append(current_round)
 

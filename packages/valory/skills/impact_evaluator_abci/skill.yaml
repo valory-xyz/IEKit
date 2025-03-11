@@ -23,22 +23,22 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiba3zhx5drsf7ailfboeuvwykocmkffs2j426u4q7d4erig67lyhm
-- valory/ceramic_read_abci:0.1.0:bafybeiav4vpzizk4m4ik55rasyahydwn5r6z6vnhcqxjjb4h6gzzwsmt4q
-- valory/generic_scoring_abci:0.1.0:bafybeie4gbp7cicaw2zogp6q7yeimzv6bkfqft3wcusdhkam4523dltyhq
-- valory/twitter_scoring_abci:0.1.0:bafybeiexwgaefrkjwzd64mp6x5d6jsbfg4rvbmgx54nlqgp2a7lfvcop24
-- valory/ceramic_write_abci:0.1.0:bafybeib6p3rklvxs3pwobdkprj7wnp3gio2bw2ks6pmmplcz3wkvd4pz7e
-- valory/dynamic_nft_abci:0.1.0:bafybeiazddjnjowzhaybm2czfixxbjge4bifeeplrw3xkl57to6im6rgmq
-- valory/registration_abci:0.1.0:bafybeigp2g6uhhgjlkqyhjlk4abfjuecmulnwlki6acbpfu45thslqujlu
-- valory/reset_pause_abci:0.1.0:bafybeidhqvc4cl6alvkql5kadiv7snudl7o2ctfqbmhrihtejm3zhkmbby
-- valory/termination_abci:0.1.0:bafybeig4stz7s6phndruvrgqptbc62ue2filttj4wbnempkur5ybso5edu
-- valory/transaction_settlement_abci:0.1.0:bafybeicvfbyp4lfqcohmvw6ozlvsbp2eugl2wxqxsdpp36ro7bk3waxjky
-- valory/decision_making_abci:0.1.0:bafybeibcrauqsiksggwn2q2tky2rnd3sw4x64ov5vmt537hv3sacwn4elm
-- valory/llm_abci:0.1.0:bafybeihhwdrkcffycpv3ymr7otvyydjles7fj5imrcbjz25lcpx2ualimu
-- valory/twitter_write_abci:0.1.0:bafybeig7umkllcnvzrd7pxhvjedpr7hldm5hfww5vyrtd6nxaf4te6mu2u
-- valory/olas_week_abci:0.1.0:bafybeihrrozraw3dy2ieh5u4xyhce525visiwwpjm3yhba5qzuhya5cpbq
-- valory/mech_interact_abci:0.1.0:bafybeianm7zyik46dbnelnyktvx2j4qwcdxjbtncbyxo2tamp4qymb6jry
-- valory/staking_abci:0.1.0:bafybeiakep6bigsf5ciomspvb4huka3zyzw4jk6skd5tn7lsmzgiivoigq
+- valory/abstract_round_abci:0.1.0:bafybeia27qmw6w5ds5fcrpj2475brnz742aampe3sgochloijs2l7jovai
+- valory/ceramic_read_abci:0.1.0:bafybeiau4cpsipekpo32mzo75uoomh7iag7toqcckah4oizhp3nsqmevka
+- valory/generic_scoring_abci:0.1.0:bafybeihw6lgtfjgp7nhulmitw43qgcytkcrxv3ifuzbwglkk7mhna75m6q
+- valory/twitter_scoring_abci:0.1.0:bafybeif2y6du2xl6vm2dp3za6byfjjgpsycr5qrj7n2ontqon2uqenkula
+- valory/ceramic_write_abci:0.1.0:bafybeicpdlbzyw2acnou22vyidn25e5x5djwrk2cuiaoyi5yun6hc777ui
+- valory/dynamic_nft_abci:0.1.0:bafybeiga7xelbxrpdcbcwx573wiigbfuhvwtheen6hzm6hzp2w2vhyix5y
+- valory/registration_abci:0.1.0:bafybeifaa6ejpihwxxxswqd5qfy63rixml43d3ljnezilflvdtclspjj6y
+- valory/reset_pause_abci:0.1.0:bafybeigebq46oqz2mx2iajupr6p5pgm6z5pvfye5w6zypsseuqtvta7b4a
+- valory/termination_abci:0.1.0:bafybeieurwmfernodqyczj5ertsgfbjtjnrlgvte7sli4sajnbopty7inu
+- valory/transaction_settlement_abci:0.1.0:bafybeifkftgkyzrxwxjdyqixpp7vk6aqmufikalmwx3kydtlg74tonu47u
+- valory/decision_making_abci:0.1.0:bafybeiauwwpudqeibgf3dfbju6pjeehsonw53miswbhcc42237wzygdm4a
+- valory/llm_abci:0.1.0:bafybeiblb34xrsdrairj7j3d34pbu2nt3mxrcalisqllxgopytxvae2qau
+- valory/twitter_write_abci:0.1.0:bafybeibz5cmgf4f55eq5yt2j5xtzszqtsnxnezwnv6hmao7asjafbna6pq
+- valory/olas_week_abci:0.1.0:bafybeibka5lqql5hbkvz2frhhrflcvwvtnvwd5hxgaio26ew5v5nxdrsxu
+- valory/mech_interact_abci:0.1.0:bafybeif2tpz2zet6p4z4vi3b254oxzyyzoe5tehj3me3znzt7h7otkpd54
+- valory/staking_abci:0.1.0:bafybeibiwf2ej67omidyak5fszu4nhfash5jveg7jrstzkshcdn4xnoyyu
 behaviours:
   main:
     args: {}
@@ -219,14 +219,15 @@ models:
       agent_registry_address: '0x0000000000000000000000000000000000000000'
       use_acn_for_delivers: false
       staking_contract_addresses:
-      - '0xe2e68ddafbdc0ae48e39cdd1e778298e9d865cf4'
-      - '0x6ce93e724606c365fc882d4d6dfb4a0a35fe2387'
-      - '0x28877ffc6583170a4c9ed0121fc3195d06fd3a26'
+      - '0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4'
+      - '0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387'
+      - '0x28877FFc6583170a4C9eD0121fc3195d06fd3A26'
       contributors_contract_address: '0x343F2B005cF6D70bA610CD9F1F1927049414B582'
       epoch_end_threshold_minutes: 60
       safe_contract_address_base: '0x0000000000000000000000000000000000000000'
       safe_contract_address_gnosis: '0x0000000000000000000000000000000000000000'
       staking_rewards_required_points: 200
+      disable_wio_posting: false
     class_name: Params
   randomness_api:
     args:
@@ -271,5 +272,5 @@ models:
     class_name: CeramicDB
 dependencies:
   open-aea-cli-ipfs:
-    version: ==1.63.0
+    version: ==1.64.0
 is_abstract: false

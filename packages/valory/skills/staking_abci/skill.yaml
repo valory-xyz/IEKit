@@ -17,14 +17,14 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/gnosis_safe:0.1.0:bafybeidw3uxuxyp3lso5mh43nhauzvra4jabnuk34bkqd6mrv4ojz37nui
-- valory/staking:0.1.0:bafybeicfhwzvbumaqif2dj3ddxpndwarcvbon4g25m2jyotrq4chb5n2je
+- valory/gnosis_safe:0.1.0:bafybeidao75ykdhkm7brclsslx3iinmgnvdiot5npanfbmatcaqrcvlsk4
+- valory/staking:0.1.0:bafybeid6ckulvudb3u2xza4q5dxuw2v35nzuo5hxt6rxzirxosrgp3ycnq
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 protocols:
 - valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiba3zhx5drsf7ailfboeuvwykocmkffs2j426u4q7d4erig67lyhm
-- valory/transaction_settlement_abci:0.1.0:bafybeicvfbyp4lfqcohmvw6ozlvsbp2eugl2wxqxsdpp36ro7bk3waxjky
+- valory/abstract_round_abci:0.1.0:bafybeia27qmw6w5ds5fcrpj2475brnz742aampe3sgochloijs2l7jovai
+- valory/transaction_settlement_abci:0.1.0:bafybeifkftgkyzrxwxjdyqixpp7vk6aqmufikalmwx3kydtlg74tonu47u
 behaviours:
   main:
     args: {}
@@ -131,9 +131,9 @@ models:
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
       staking_contract_addresses:
-      - '0xe2e68ddafbdc0ae48e39cdd1e778298e9d865cf4'
-      - '0x6ce93e724606c365fc882d4d6dfb4a0a35fe2387'
-      - '0x28877ffc6583170a4c9ed0121fc3195d06fd3a26'
+      - '0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4'
+      - '0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387'
+      - '0x28877FFc6583170a4C9eD0121fc3195d06fd3A26'
       contributors_contract_address: '0x343F2B005cF6D70bA610CD9F1F1927049414B582'
       safe_contract_address_base: '0x0000000000000000000000000000000000000000'
       multisend_address: '0x0000000000000000000000000000000000000000'

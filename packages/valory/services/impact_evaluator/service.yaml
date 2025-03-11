@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeiausnrki5cllz3tnhsjbpfvnak3lkmzedwryw56uhhqvzmxdjl3w4
+agent: valory/impact_evaluator:0.1.0:bafybeibpdgw3u67uriehybtilauatudknxci7o3xldx7i2hietxmkp32ei
 number_of_agents: 4
 deployment:
   agent:
@@ -136,7 +136,7 @@ extra:
         mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x0000000000000000000000000000000000000000","priority_mech_address":"0x0000000000000000000000000000000000000000","priority_mech_staking_instance_address":"0x0000000000000000000000000000000000000000","priority_mech_service_id":0,"requester_staking_instance_address":"0x0000000000000000000000000000000000000000","response_timeout":300}}
         checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
-        staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0xe2e68ddafbdc0ae48e39cdd1e778298e9d865cf4","0x6ce93e724606c365fc882d4d6dfb4a0a35fe2387","0x28877ffc6583170a4c9ed0121fc3195d06fd3a26"]}
+        staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4","0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387","0x28877FFc6583170a4C9eD0121fc3195d06fd3A26"]}
         contributors_contract_address: ${CONTRIBUTORS_CONTRACT_ADDRESS:str:0x343F2B005cF6D70bA610CD9F1F1927049414B582}
         epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:60}
         safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x3316b59A6c4C3ee2920EecE0B02A6d40AAa6b9c9}
@@ -144,6 +144,7 @@ extra:
         staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
         agent_registry_address: ${AGENT_REGISTRY_ADDRESS:str:0x0000000000000000000000000000000000000000}
         use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
+        disable_wio_posting: ${DISABLE_WIO_POSTING:bool:true}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
@@ -235,7 +236,7 @@ extra:
         mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x0000000000000000000000000000000000000000","priority_mech_address":"0x0000000000000000000000000000000000000000","priority_mech_staking_instance_address":"0x0000000000000000000000000000000000000000","priority_mech_service_id":0,"requester_staking_instance_address":"0x0000000000000000000000000000000000000000","response_timeout":300}}
         checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
-        staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0xe2e68ddafbdc0ae48e39cdd1e778298e9d865cf4","0x6ce93e724606c365fc882d4d6dfb4a0a35fe2387","0x28877ffc6583170a4c9ed0121fc3195d06fd3a26"]}
+        staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4","0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387","0x28877FFc6583170a4C9eD0121fc3195d06fd3A26"]}
         contributors_contract_address: ${CONTRIBUTORS_CONTRACT_ADDRESS:str:0x343F2B005cF6D70bA610CD9F1F1927049414B582}
         epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:60}
         safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x3316b59A6c4C3ee2920EecE0B02A6d40AAa6b9c9}
@@ -243,6 +244,7 @@ extra:
         staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
         agent_registry_address: ${AGENT_REGISTRY_ADDRESS:str:0x0000000000000000000000000000000000000000}
         use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
+        disable_wio_posting: ${DISABLE_WIO_POSTING:bool:true}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
@@ -334,7 +336,7 @@ extra:
         mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x0000000000000000000000000000000000000000","priority_mech_address":"0x0000000000000000000000000000000000000000","priority_mech_staking_instance_address":"0x0000000000000000000000000000000000000000","priority_mech_service_id":0,"requester_staking_instance_address":"0x0000000000000000000000000000000000000000","response_timeout":300}}
         checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
-        staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0xe2e68ddafbdc0ae48e39cdd1e778298e9d865cf4","0x6ce93e724606c365fc882d4d6dfb4a0a35fe2387","0x28877ffc6583170a4c9ed0121fc3195d06fd3a26"]}
+        staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4","0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387","0x28877FFc6583170a4C9eD0121fc3195d06fd3A26"]}
         contributors_contract_address: ${CONTRIBUTORS_CONTRACT_ADDRESS:str:0x343F2B005cF6D70bA610CD9F1F1927049414B582}
         epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:60}
         safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x3316b59A6c4C3ee2920EecE0B02A6d40AAa6b9c9}
@@ -342,6 +344,7 @@ extra:
         agent_registry_address: ${AGENT_REGISTRY_ADDRESS:str:0x0000000000000000000000000000000000000000}
         use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
         staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
+        disable_wio_posting: ${DISABLE_WIO_POSTING:bool:true}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
@@ -439,12 +442,13 @@ extra:
         mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x0000000000000000000000000000000000000000","priority_mech_address":"0x0000000000000000000000000000000000000000","priority_mech_staking_instance_address":"0x0000000000000000000000000000000000000000","priority_mech_service_id":0,"requester_staking_instance_address":"0x0000000000000000000000000000000000000000","response_timeout":300}}
         checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
-        staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0xe2e68ddafbdc0ae48e39cdd1e778298e9d865cf4","0x6ce93e724606c365fc882d4d6dfb4a0a35fe2387","0x28877ffc6583170a4c9ed0121fc3195d06fd3a26"]}
+        staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4","0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387","0x28877FFc6583170a4C9eD0121fc3195d06fd3A26"]}
         contributors_contract_address: ${CONTRIBUTORS_CONTRACT_ADDRESS:str:0x343F2B005cF6D70bA610CD9F1F1927049414B582}
         epoch_end_threshold_minutes: ${EPOCH_END_THRESHOLD_MINUTES:int:60}
         safe_contract_address_base: ${SAFE_CONTRACT_ADDRESS_BASE:str:0x3316b59A6c4C3ee2920EecE0B02A6d40AAa6b9c9}
         safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
         staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
+        disable_wio_posting: ${DISABLE_WIO_POSTING:bool:true}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -314,6 +314,15 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
             # Ignore tweet with no voters
             if not tweet["voters"]:
                 self.logger.info("The tweet has no voters")
+                continue
+
+            # Ignore WiO tweets if WiO posting is disabled
+            if (
+                self.params.disable_wio_posting
+                and tweet["proposer"]["address"]
+                == "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A"
+            ):  # service safe address (ethereum)
+                self.logger.info("Week in Olas posting is disabled")
                 continue
 
             # Mark execution for success or failure
