@@ -238,7 +238,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             res[: self.MAX_LOG_CHARS] + "..." if len(res) > self.MAX_LOG_CHARS else res
         )
         self.context.logger.info(
-            f"Retrieved mech's response (first 500 characters) : {truncated_res}"
+            f"Retrieved mech's response (first {MAX_LOG_CHARS} characters) : {truncated_res}"
         )
         self.mech_response_api.reset_retries()
 
