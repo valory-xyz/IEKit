@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -50,6 +50,10 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
     """A behaviour in which the agents receive the Mech's responses."""
 
     matching_round = MechResponseRound
+
+    ARTIFACTS_KEY = "artifacts"
+    BASE64_KEY = "base64"
+    MAX_LOG_CHARS = 500
 
     def __init__(self, **kwargs: Any) -> None:
         """Initialize Behaviour."""
@@ -230,9 +234,48 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             self.mech_response_api.increment_retries()
             return None
 
-        self.context.logger.info(f"Retrieved the mech's response: {res}.")
+        truncated_res = (
+            res[: self.MAX_LOG_CHARS] + "..." if len(res) > self.MAX_LOG_CHARS else res
+        )
+        self.context.logger.info(
+            f"Retrieved mech's response (first {self.MAX_LOG_CHARS} characters) : {truncated_res}"
+        )
         self.mech_response_api.reset_retries()
+
         return res
+
+    def _process_response_with_artifacts(self, res: str) -> str:
+        """Process response that may contain base64 artifacts.
+
+        :param res: the raw response string
+        :return: processed response or original if no special handling needed
+        """
+        try:
+            result_json = json.loads(res)
+        except (json.JSONDecodeError, TypeError):
+            return res
+
+        if not isinstance(result_json, dict):
+            return res
+
+        artifacts = result_json.get(self.ARTIFACTS_KEY, None)
+        if not artifacts:
+            return res
+
+        # For large responses with artifacts, create a summary to avoid consensus payload size issues
+        artifact_count = len(artifacts)
+        total_size = sum(
+            len(artifact.get(self.BASE64_KEY, "")) for artifact in artifacts
+        )
+
+        # Create a summary that doesn't include the full base64 data
+        summary = {
+            "summary": f"Response contains {artifact_count} image artifacts, total size {total_size} bytes",
+            "ipfs_link": self.mech_response_api.url,  # Keep the link for future reference
+        }
+
+        # Return summary instead of full response
+        return json.dumps(summary)
 
     def _get_response(self) -> WaitableConditionType:
         """Get the response data from IPFS."""
@@ -240,6 +283,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         res_raw = yield from self.get_http_response(**specs)
         res = self.mech_response_api.process_response(res_raw)
         res = self._handle_response(res)
+        res = self._process_response_with_artifacts(res)
 
         if self.mech_response_api.is_retries_exceeded():
             self.current_mech_response.retries_exceeded()
