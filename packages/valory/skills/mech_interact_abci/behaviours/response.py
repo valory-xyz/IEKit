@@ -53,6 +53,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
     ARTIFACTS_KEY = "artifacts"
     BASE64_KEY = "base64"
+    MAX_LOG_CHARS = 500
 
     def __init__(self, **kwargs: Any) -> None:
         """Initialize Behaviour."""
@@ -233,13 +234,15 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             self.mech_response_api.increment_retries()
             return None
 
+        truncated_res = (
+            res[: self.MAX_LOG_CHARS] + "..." if len(res) > self.MAX_LOG_CHARS else res
+        )
         self.context.logger.info(
-            f"Retrieved mech's response (length: {len(res)} bytes)"
+            f"Retrieved mech's response (first 500 characters) : {truncated_res}"
         )
         self.mech_response_api.reset_retries()
 
-        processed_response = self._process_response_with_artifacts(res)
-        return processed_response
+        return res
 
     def _process_response_with_artifacts(self, res: str) -> str:
         """Process response that may contain base64 artifacts.
@@ -280,6 +283,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         res_raw = yield from self.get_http_response(**specs)
         res = self.mech_response_api.process_response(res_raw)
         res = self._handle_response(res)
+        res = self._process_response_with_artifacts(res)
 
         if self.mech_response_api.is_retries_exceeded():
             self.current_mech_response.retries_exceeded()
