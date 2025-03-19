@@ -50,15 +50,15 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/veolas_delegation:0.1.0:bafybeihvpjb4jwmyekmbb53fs6ivlnwi2qodae6gvzsbonyb56a4x2lhzu
-- valory/compatibility_fallback_handler:0.1.0:bafybeif32264sa2clxpv2rprcxjkvas6ux7rtrvh73ah37tf4oezrz552a
-- valory/staking:0.1.0:bafybeid6ckulvudb3u2xza4q5dxuw2v35nzuo5hxt6rxzirxosrgp3ycnq
+- valory/veolas_delegation:0.1.0:bafybeifcgvimvu66w273ednm7w765bxjto34aqapfoqkagctgyvfycgeei
+- valory/compatibility_fallback_handler:0.1.0:bafybeig2xx62ysvarzpavzevhw5565st3p5cut6noscuzbvzmyibanet6u
+- valory/staking:0.1.0:bafybeihqox2s4v6m3eirukxs4ducepr4zvvwazinb2cxmw7ycpig4ppoeu
 protocols:
 - valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeia27qmw6w5ds5fcrpj2475brnz742aampe3sgochloijs2l7jovai
-- valory/ceramic_read_abci:0.1.0:bafybeiau4cpsipekpo32mzo75uoomh7iag7toqcckah4oizhp3nsqmevka
-- valory/staking_abci:0.1.0:bafybeibiwf2ej67omidyak5fszu4nhfash5jveg7jrstzkshcdn4xnoyyu
+- valory/abstract_round_abci:0.1.0:bafybeihjuapb3ixamvjjl2evizvp7p7cj2utldqutugwrdd5p3zgz5xaxe
+- valory/ceramic_read_abci:0.1.0:bafybeichgf4enxlzxpwmlpitcrs727suiq7jlp3ajxluplvjuelqnkrvwa
+- valory/staking_abci:0.1.0:bafybeifdqdb3m2kkflowf2rcygq7kb4antzuaixsfhzor6w6w7b3uuhlpu
 behaviours:
   main:
     args: {}
