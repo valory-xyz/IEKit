@@ -68,9 +68,21 @@ jobs:
         name: Build Images
         with:
             image: valory/open-autonomy-user:latest
-            options: -v ${{ github.workspace }}:/work
+            options: >-
+              -v ${{ github.workspace }}:/work
+              -v /var/run/docker.sock:/var/run/docker.sock
             shell: bash
             run: |
+              echo "Installing docker"
+              apt-get update && \
+              apt-get -qy full-upgrade && \
+              apt-get install -qy curl binfmt-support && \
+              curl -sSL https://get.docker.com/ | sh
+              docker run --privileged --rm tonistiigi/binfmt --install all
+
+              echo "Login to Docker Hub"
+              echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+
               echo "Building Docker Images"
               cd /work
               source env.sh || exit 1
@@ -78,20 +90,12 @@ jobs:
               autonomy init --reset --author $AUTHOR --ipfs --remote
               autonomy fetch $AUTHOR/$SERVICE --service --local || exit 1
               cd $SERVICE || exit 1
-              autonomy build-image || exit 1
-              autonomy build-image --version $VERSION || exit 1
 
+              echo "Building and pushing $DOCKER_USER/$SERVICE:$DEFAULT_IMAGE_TAG"
+              autonomy build-image --platform linux/amd64,linux/arm64 --push || exit 1
 
-      - name: Docker login
-        run: |
-            echo  $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
-      - name: Docker Push
-        run: |
-          source env.sh
-          echo "Pushing $DOCKER_USER/$SERVICE:$VERSION"
-          echo "Pushing $DOCKER_USER/$SERVICE:$DEFAULT_IMAGE_TAG"
-          docker push $DOCKER_USER/oar-$SERVICE:$VERSION
-          docker push $DOCKER_USER/oar-$SERVICE:$DEFAULT_IMAGE_TAG
+              echo "Building and pushing $DOCKER_USER/$SERVICE:$VERSION"
+              autonomy build-image --platform linux/amd64,linux/arm64 --push --version $VERSION || exit 1
 
   deploy-service-on-propel:
     name: Deploy service on propel
@@ -149,4 +153,3 @@ jobs:
           echo '${{ toJSON(vars) }}' | jq -r 'to_entries|map("export \(.key)=\(.value|tojson)")|.[]' >> github.vars
           source github.vars
           $CMD service deploy --name  '${{ vars.SERVICE_NAME }}'  --service-dir $SERVICE_PATH --service-ipfs-hash $IPFS_HASH  --ingress-enabled true --keys '${{ vars.SERVICE_KEYS }}' --timeout 320
-
