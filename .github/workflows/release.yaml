@@ -42,14 +42,6 @@ jobs:
         DOCKER_CLI_EXPERIMENTAL: enabled
     steps:
       - uses: actions/checkout@v4
-      - uses: docker/setup-docker-action@v4
-        with:
-          daemon-config: |
-            {
-              "features": {
-                "containerd-snapshotter": true
-              }
-            }
       - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
       - name: Set up tag and vars
@@ -75,38 +67,37 @@ jobs:
               echo DEFAULT_IMAGE_TAG=$(cat packages/packages.json | grep agent/valory/impact_evaluator | awk -F: '{print $2}' | tr -d '", ') >> env.sh
               cat env.sh
 
-      - uses: addnab/docker-run-action@v3
-        name: Build Images
+      - uses: actions/setup-python@v5
         with:
-            image: valory/open-autonomy-user:latest
-            options: >-
-              -v ${{ github.workspace }}:/work
-              -v /var/run/docker.sock:/var/run/docker.sock
-            shell: bash
-            run: |
+          python-version: '3.10'
+
+      - run: |
               echo "Installing docker"
+              docker buildx create --name multiarch-builder --driver docker-container --bootstrap --use
+              docker buildx inspect multiarch-builder
               apt-get update && \
               apt-get -qy full-upgrade && \
-              apt-get install -qy curl binfmt-support && \
-              curl -sSL https://get.docker.com/ | sh
+              apt-get install -qy curl binfmt-support pip && \
               docker run --privileged --rm tonistiigi/binfmt --install all
+
+              pip install --upgrade pip
+              pip install pipenv
+              pipenv install --dev --skip-lock
 
               echo "Login to Docker Hub"
               echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
 
               echo "Building Docker Images"
-              cd /work
               source env.sh || exit 1
               echo "Building images for $AUTHOR for service $SERVICE"
-              autonomy init --reset --author $AUTHOR --ipfs --remote
-              autonomy fetch $AUTHOR/$SERVICE --service --local || exit 1
-              cd $SERVICE || exit 1
+              pipenv run autonomy init --reset --author $AUTHOR --ipfs --remote
+              pipenv run autonomy fetch $AUTHOR/$SERVICE --service --local || exit 1
 
               echo "Building and pushing $DOCKER_USER/$SERVICE:$DEFAULT_IMAGE_TAG"
-              autonomy build-image --platform linux/amd64,linux/arm64 --push || exit 1
+              pipenv run autonomy build-image --service-dir $SERVICE --builder multiarch-builder --platform linux/amd64,linux/arm64 --push || exit 1
 
               echo "Building and pushing $DOCKER_USER/$SERVICE:$VERSION"
-              autonomy build-image --platform linux/amd64,linux/arm64 --push --version $VERSION || exit 1
+              pipenv run autonomy build-image --service-dir $SERVICE --builder multiarch-builder --platform linux/amd64,linux/arm64 --push --version $VERSION || exit 1
 
   deploy-service-on-propel:
     name: Deploy service on propel
