@@ -29,7 +29,7 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiezhbsm2ctlw7frt53jxpdq6d5cq2xaruzsedg66nqmi4prrglame
-- valory/ceramic_read_abci:0.1.0:bafybeig6w7b3egnaixhukjg7mdqvkrpsywok6awl25tigfwtp3lqf64hda
+- valory/ceramic_read_abci:0.1.0:bafybeifwjghvuyfyjhy76c4ad7sqihgnrwkguxtmkfopqo35bm5qr2ke3q
 behaviours:
   main:
     args: {}
@@ -170,7 +170,7 @@ dependencies:
   dag-cbor:
     version: ==0.2.2
   cryptography:
-    version: ==39.0.0
+    version: ==44.0.2
   jsonpatch:
     version: ==1.32
   multiformats:

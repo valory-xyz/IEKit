@@ -160,7 +160,7 @@ dependencies:
   dag-cbor:
     version: ==0.2.2
   cryptography:
-    version: ==39.0.0
+    version: ==44.0.2
   jsonpatch:
     version: ==1.32
   multiformats:
