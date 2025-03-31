@@ -46,9 +46,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeigyae3cvcfts547w56w6oqoq4z5nq4ypmftoftf4jgtlbndzu45lu
 - valory/abstract_round_abci:0.1.0:bafybeifclzgoyulkyyigcwrqzmydyrj6c5d26xu7jk6cjbsed3pkls4pba
-- valory/impact_evaluator_abci:0.1.0:bafybeigcv2usieknqoxekybsvnqjq2m2syqj6rigamsjdszckctetd6raa
+- valory/impact_evaluator_abci:0.1.0:bafybeigdyfoz7kdrb5vy7kup7bbfkrbiuv6k4tp33lihklswsyysy5tswa
 - valory/generic_scoring_abci:0.1.0:bafybeignl5sh7sb3ry2s5s3khwjat2qrpxrzmku5lvnllegpzyjy6rqx6e
-- valory/twitter_scoring_abci:0.1.0:bafybeifmu4gxwcborlbbmvpqnsadz62sdjydzei6zuvgxmvynrpuys4zvi
+- valory/twitter_scoring_abci:0.1.0:bafybeicgco73xxsnghdi3nnd67k2ha7gq2i6oj4l7jv7coayfag3d4su54
 - valory/ceramic_read_abci:0.1.0:bafybeiafztq7eeauz2mmc23wb2rfr5g6gwej4fsont7eleq54k624uedn4
 - valory/ceramic_write_abci:0.1.0:bafybeibbvtvdfamkksfyunotzjdjmhx24javcjwvlddr7gr5yoeyc45imq
 - valory/dynamic_nft_abci:0.1.0:bafybeidjtl2jicmxhh763etlw6f6orflposfdhyqwbjvd72idj27dhia3a
