@@ -18,11 +18,12 @@
 #
 # ------------------------------------------------------------------------------
 
+"""Hello world"""
 
 import json
 import os
 
-from ceramic.ceramic import Ceramic
+from ceramic.ceramic import Ceramic  # pylint: disable=import-error
 
 
 DUMMY_DID = {
