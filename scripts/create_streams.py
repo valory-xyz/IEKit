@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2024 Valory AG
+#   Copyright 2021-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 # pylint: disable=import-error
 
 import json
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
@@ -51,7 +52,7 @@ def create_streams(streams):
 
     # We are using the Clay testnet for this. Use your own node for long term
     # storage, as testnet is periodically reset
-    ceramic = Ceramic(Ceramic.DEFAULT_URL_BASE)
+    ceramic = Ceramic(os.getenv("CERAMIC_API_BASE"))
 
     for stream in streams:
 
