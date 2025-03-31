@@ -223,7 +223,7 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
         )
         if contract_api_msg.performative != ContractApiMessage.Performative.STATE:
             self.context.logger.error(
-                f"Error getting the epoch: [{contract_api_msg.performative}]"
+                f"Error getting the staking contract: [{contract_api_msg.performative}]"
             )
             return None
 
@@ -1173,15 +1173,15 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
             current_period_points += new_points
 
-            # Get the user staking contract and epoch (if the user is staked)
-            epoch = None
+            # Get the user staking contract and the contract epoch (if the user is staked)
+            contract_epoch = None
             if user:
                 service_multisig = user.get("service_multisig", None)
                 if service_multisig and user.get("wallet_address", None):
                     staking_contract_address = yield from self.get_staking_contract(
                         user["wallet_address"]
                     )
-                    epoch = (
+                    contract_epoch = (
                         staking_contract_to_epoch[staking_contract_address]
                         if staking_contract_address
                         else None
@@ -1195,7 +1195,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 user_tweets[tweet_id] = {
                     "points": new_points,
                     "campaign": campaign,
-                    "epoch": epoch,
+                    "epoch": contract_epoch,
                     "timestamp": int(
                         datetime.fromisoformat(
                             tweet["created_at"].replace("Z", "+00:00")
