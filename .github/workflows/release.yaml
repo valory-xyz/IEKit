@@ -66,32 +66,23 @@ jobs:
               echo DEFAULT_IMAGE_TAG=$(cat packages/packages.json | grep agent/valory/impact_evaluator | awk -F: '{print $2}' | tr -d '", ') >> env.sh
               cat env.sh
 
-      - uses: actions/setup-python@v5
+      - uses: addnab/docker-run-action@v3
+        name: Build Images
         with:
-          python-version: '3.10'
-
-      - run: |
-              echo "Installing docker"
-              docker buildx create --name multiarch-builder --driver docker-container --bootstrap --use
-              docker buildx inspect multiarch-builder
-              apt-get update && \
-              apt-get -qy full-upgrade && \
-              apt-get install -qy curl binfmt-support pip && \
-              docker run --privileged --rm tonistiigi/binfmt --install all
-              pip install --upgrade pip
-              pip install pipenv
-              pipenv install --dev --skip-lock
-              echo "Login to Docker Hub"
-              echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
-              echo "Building Docker Images"
+            image: valory/open-autonomy-user:latest
+            options: -v ${{ github.workspace }}:/work
+            shell: bash
+            run: |
+              echo "Building and Pushing Docker Images"
+              cd /work
               source env.sh || exit 1
               echo "Building images for $AUTHOR for service $SERVICE"
-              pipenv run autonomy init --reset --author $AUTHOR --ipfs --remote
-              pipenv run autonomy fetch $AUTHOR/$SERVICE --service --local || exit 1
-              echo "Building and pushing $DOCKER_USER/$SERVICE:$DEFAULT_IMAGE_TAG"
-              pipenv run autonomy build-image --service-dir $SERVICE --builder multiarch-builder --platform linux/amd64,linux/arm64,linux/arm/v7 --pre-install-command "apt update && apt upgrade -y && apt install -y libffi-dev libssl-dev" --push || exit 1
-              echo "Building and pushing $DOCKER_USER/$SERVICE:$VERSION"
-              pipenv run autonomy build-image --service-dir $SERVICE --builder multiarch-builder --platform linux/amd64,linux/arm64,linux/arm/v7 --pre-install-command "apt update && apt upgrade -y && apt install -y libffi-dev libssl-dev" --version $VERSION --push || exit 1
+              autonomy init --reset --author $AUTHOR --ipfs --remote
+              autonomy fetch $AUTHOR/$SERVICE --service --local || exit 1
+              cd $SERVICE || exit 1
+              docker buildx create --name multiarch-builder --driver docker-container --bootstrap --use
+              autonomy build-image --builder multiarch-builder --platform linux/amd64,linux/arm64 --pre-install-command "apt update && apt upgrade -y && apt install -y libffi-dev libssl-dev" --push || exit 1
+              autonomy build-image --builder multiarch-builder --platform linux/amd64,linux/arm64 --pre-install-command "apt update && apt upgrade -y && apt install -y libffi-dev libssl-dev" --version $VERSION --push || exit 1
 
   deploy-service-on-propel:
     name: Deploy service on propel
