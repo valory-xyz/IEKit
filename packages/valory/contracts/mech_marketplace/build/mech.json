@@ -7,37 +7,80 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_stakingFactory",
+          "name": "_serviceRegistry",
           "type": "address"
         },
         {
           "internalType": "address",
-          "name": "_karmaProxy",
+          "name": "_karma",
           "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_minResponseTimeout",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_maxResponseTimeout",
-          "type": "uint256"
         }
       ],
       "stateMutability": "nonpayable",
       "type": "constructor"
     },
     {
+      "inputs": [],
+      "name": "AlreadyInitialized",
+      "type": "error"
+    },
+    {
       "inputs": [
         {
-          "internalType": "uint256",
+          "internalType": "bytes32",
           "name": "requestId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "AlreadyRequested",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes",
+          "name": "signature",
+          "type": "bytes"
+        },
+        {
+          "internalType": "uint256",
+          "name": "provided",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "expected",
           "type": "uint256"
         }
       ],
-      "name": "AlreadyDelivered",
+      "name": "IncorrectSignatureLength",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "current",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "required",
+          "type": "uint256"
+        }
+      ],
+      "name": "InsufficientBalance",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "NoDepositAllowed",
       "type": "error"
     },
     {
@@ -94,22 +137,6 @@
       "type": "error"
     },
     {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "expected",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "current",
-          "type": "uint256"
-        }
-      ],
-      "name": "PriorityMechResponseTimeout",
-      "type": "error"
-    },
-    {
       "inputs": [],
       "name": "ReentrancyGuard",
       "type": "error"
@@ -118,16 +145,47 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "stakingInstance",
+          "name": "requester",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "msgHash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes",
+          "name": "signature",
+          "type": "bytes"
+        }
+      ],
+      "name": "SignatureNotValidated",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "to",
           "type": "address"
         },
         {
           "internalType": "uint256",
-          "name": "serviceId",
+          "name": "amount",
           "type": "uint256"
         }
       ],
-      "name": "ServiceNotStaked",
+      "name": "TransferFailed",
       "type": "error"
     },
     {
@@ -139,6 +197,49 @@
         }
       ],
       "name": "UnauthorizedAccount",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "numValues1",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "numValues2",
+          "type": "uint256"
+        }
+      ],
+      "name": "WrongArrayLength",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "paymentType",
+          "type": "bytes32"
+        }
+      ],
+      "name": "WrongPaymentType",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "state",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "serviceId",
+          "type": "uint256"
+        }
+      ],
+      "name": "WrongServiceState",
       "type": "error"
     },
     {
@@ -157,11 +258,166 @@
         {
           "indexed": true,
           "internalType": "address",
-          "name": "factory",
+          "name": "mech",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "serviceId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "mechFactory",
           "type": "address"
         }
       ],
-      "name": "FactoryUpdated",
+      "name": "CreateMech",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "mech",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "mechServiceMultisig",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "requestId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "deliveryRate",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        }
+      ],
+      "name": "Deliver",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "implementation",
+          "type": "address"
+        }
+      ],
+      "name": "ImplementationUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "deliveryMech",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address[]",
+          "name": "requesters",
+          "type": "address[]"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "numDeliveries",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32[]",
+          "name": "requestIds",
+          "type": "bytes32[]"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool[]",
+          "name": "deliveredRequests",
+          "type": "bool[]"
+        }
+      ],
+      "name": "MarketplaceDelivery",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "deliveryMech",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "requester",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "numDeliveries",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32[]",
+          "name": "requestIds",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "MarketplaceDeliveryWithSignatures",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "fee",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "minResponseTimeout",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "maxResponseTimeout",
+          "type": "uint256"
+        }
+      ],
+      "name": "MarketplaceParamsUpdated",
       "type": "event"
     },
     {
@@ -176,98 +432,23 @@
         {
           "indexed": true,
           "internalType": "address",
-          "name": "actualMech",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
           "name": "requester",
           "type": "address"
         },
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "requestId",
+          "name": "numRequests",
           "type": "uint256"
         },
         {
           "indexed": false,
-          "internalType": "bytes",
-          "name": "data",
-          "type": "bytes"
-        }
-      ],
-      "name": "MarketplaceDeliver",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "requester",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "requestedMech",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "requestId",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "bytes",
-          "name": "data",
-          "type": "bytes"
+          "internalType": "bytes32[]",
+          "name": "requestIds",
+          "type": "bytes32[]"
         }
       ],
       "name": "MarketplaceRequest",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "mech",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "bool",
-          "name": "status",
-          "type": "bool"
-        }
-      ],
-      "name": "MechRegistrationStatusChanged",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "minResponseTimeout",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "maxResponseTimeout",
-          "type": "uint256"
-        }
-      ],
-      "name": "MinMaxResponseTimeoutUpdated",
       "type": "event"
     },
     {
@@ -284,8 +465,72 @@
       "type": "event"
     },
     {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address[]",
+          "name": "mechFactories",
+          "type": "address[]"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool[]",
+          "name": "statuses",
+          "type": "bool[]"
+        }
+      ],
+      "name": "SetMechFactoryStatuses",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "bytes32[]",
+          "name": "paymentTypes",
+          "type": "bytes32[]"
+        },
+        {
+          "indexed": false,
+          "internalType": "address[]",
+          "name": "balanceTrackers",
+          "type": "address[]"
+        }
+      ],
+      "name": "SetPaymentTypeBalanceTrackers",
+      "type": "event"
+    },
+    {
       "inputs": [],
       "name": "DOMAIN_SEPARATOR_TYPE_HASH",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "MAX_FEE_FACTOR",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "MECH_MARKETPLACE_PROXY",
       "outputs": [
         {
           "internalType": "bytes32",
@@ -326,29 +571,121 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "mech",
+          "name": "newImplementation",
           "type": "address"
-        },
+        }
+      ],
+      "name": "changeImplementation",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
         {
-          "internalType": "address",
-          "name": "mechStakingInstance",
-          "type": "address"
+          "internalType": "uint256",
+          "name": "newFee",
+          "type": "uint256"
         },
         {
           "internalType": "uint256",
-          "name": "mechServiceId",
+          "name": "newMinResponseTimeout",
           "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "newMaxResponseTimeout",
+          "type": "uint256"
+        }
+      ],
+      "name": "changeMarketplaceParams",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "changeOwner",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "mech",
+          "type": "address"
         }
       ],
       "name": "checkMech",
       "outputs": [
         {
           "internalType": "address",
-          "name": "",
+          "name": "multisig",
           "type": "address"
         }
       ],
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "serviceId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "mechFactory",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "payload",
+          "type": "bytes"
+        }
+      ],
+      "name": "create",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "mech",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32[]",
+          "name": "requestIds",
+          "type": "bytes32[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "deliveryRates",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "deliverMarketplace",
+      "outputs": [
+        {
+          "internalType": "bool[]",
+          "name": "deliveredRequests",
+          "type": "bool[]"
+        }
+      ],
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -359,63 +696,39 @@
           "type": "address"
         },
         {
-          "internalType": "address",
-          "name": "requesterStakingInstance",
-          "type": "address"
+          "components": [
+            {
+              "internalType": "bytes",
+              "name": "requestData",
+              "type": "bytes"
+            },
+            {
+              "internalType": "bytes",
+              "name": "signature",
+              "type": "bytes"
+            },
+            {
+              "internalType": "bytes",
+              "name": "deliveryData",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct DeliverWithSignature[]",
+          "name": "deliverWithSignatures",
+          "type": "tuple[]"
         },
         {
-          "internalType": "uint256",
-          "name": "requesterServiceId",
-          "type": "uint256"
-        }
-      ],
-      "name": "checkRequester",
-      "outputs": [],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "stakingInstance",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "serviceId",
-          "type": "uint256"
-        }
-      ],
-      "name": "checkStakingInstance",
-      "outputs": [],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "requestId",
-          "type": "uint256"
+          "internalType": "uint256[]",
+          "name": "deliveryRates",
+          "type": "uint256[]"
         },
         {
           "internalType": "bytes",
-          "name": "requestData",
+          "name": "paymentData",
           "type": "bytes"
-        },
-        {
-          "internalType": "address",
-          "name": "deliveryMechStakingInstance",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "deliveryMechServiceId",
-          "type": "uint256"
         }
       ],
-      "name": "deliverMarketplace",
+      "name": "deliverMarketplaceWithSignatures",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -434,14 +747,8 @@
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "account",
-          "type": "address"
-        }
-      ],
-      "name": "getDeliveriesCount",
+      "inputs": [],
+      "name": "fee",
       "outputs": [
         {
           "internalType": "uint256",
@@ -468,74 +775,29 @@
     {
       "inputs": [
         {
-          "internalType": "uint256",
-          "name": "requestId",
-          "type": "uint256"
-        }
-      ],
-      "name": "getMechDeliveryInfo",
-      "outputs": [
-        {
-          "components": [
-            {
-              "internalType": "address",
-              "name": "priorityMech",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "deliveryMech",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "requester",
-              "type": "address"
-            },
-            {
-              "internalType": "uint32",
-              "name": "responseTimeout",
-              "type": "uint32"
-            }
-          ],
-          "internalType": "struct MechDelivery",
-          "name": "",
-          "type": "tuple"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
           "internalType": "address",
-          "name": "mechService",
+          "name": "mech",
           "type": "address"
-        }
-      ],
-      "name": "getMechServiceDeliveriesCount",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
+        },
         {
           "internalType": "address",
-          "name": "account",
+          "name": "requester",
           "type": "address"
         },
         {
           "internalType": "bytes",
           "name": "data",
           "type": "bytes"
+        },
+        {
+          "internalType": "uint256",
+          "name": "deliveryRate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "paymentType",
+          "type": "bytes32"
         },
         {
           "internalType": "uint256",
@@ -546,9 +808,9 @@
       "name": "getRequestId",
       "outputs": [
         {
-          "internalType": "uint256",
+          "internalType": "bytes32",
           "name": "requestId",
-          "type": "uint256"
+          "type": "bytes32"
         }
       ],
       "stateMutability": "view",
@@ -557,9 +819,9 @@
     {
       "inputs": [
         {
-          "internalType": "uint256",
+          "internalType": "bytes32",
           "name": "requestId",
-          "type": "uint256"
+          "type": "bytes32"
         }
       ],
       "name": "getRequestStatus",
@@ -576,25 +838,48 @@
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "account",
-          "type": "address"
-        }
-      ],
-      "name": "getRequestsCount",
-      "outputs": [
+          "internalType": "uint256",
+          "name": "_fee",
+          "type": "uint256"
+        },
         {
           "internalType": "uint256",
-          "name": "",
+          "name": "_minResponseTimeout",
           "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_maxResponseTimeout",
+          "type": "uint256"
+        }
+      ],
+      "name": "initialize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "karma",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
         }
       ],
       "stateMutability": "view",
       "type": "function"
     },
     {
-      "inputs": [],
-      "name": "karmaProxy",
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "mapAgentMechFactories",
       "outputs": [
         {
           "internalType": "address",
@@ -619,6 +904,44 @@
           "internalType": "uint256",
           "name": "",
           "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "mapMechDeliveryCounts",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "mapMechFactories",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
         }
       ],
       "stateMutability": "view",
@@ -665,6 +988,25 @@
     {
       "inputs": [
         {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "mapPaymentTypeBalanceTrackers",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "address",
           "name": "",
           "type": "address"
@@ -684,12 +1026,12 @@
     {
       "inputs": [
         {
-          "internalType": "uint256",
+          "internalType": "bytes32",
           "name": "",
-          "type": "uint256"
+          "type": "bytes32"
         }
       ],
-      "name": "mapRequestIdDeliveries",
+      "name": "mapRequestIdInfos",
       "outputs": [
         {
           "internalType": "address",
@@ -707,9 +1049,19 @@
           "type": "address"
         },
         {
-          "internalType": "uint32",
+          "internalType": "uint256",
           "name": "responseTimeout",
-          "type": "uint32"
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "deliveryRate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "paymentType",
+          "type": "bytes32"
         }
       ],
       "stateMutability": "view",
@@ -731,6 +1083,19 @@
     {
       "inputs": [],
       "name": "minResponseTimeout",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "numMechs",
       "outputs": [
         {
           "internalType": "uint256",
@@ -768,57 +1133,8 @@
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "bytes",
-          "name": "data",
-          "type": "bytes"
-        },
-        {
-          "internalType": "address",
-          "name": "priorityMech",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "priorityMechStakingInstance",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "priorityMechServiceId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "requesterStakingInstance",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "requesterServiceId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "responseTimeout",
-          "type": "uint256"
-        }
-      ],
-      "name": "request",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "requestId",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
       "inputs": [],
-      "name": "stakingFactory",
+      "name": "owner",
       "outputs": [
         {
           "internalType": "address",
@@ -827,6 +1143,143 @@
         }
       ],
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes",
+          "name": "requestData",
+          "type": "bytes"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxDeliveryRate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "paymentType",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "priorityMech",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "responseTimeout",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "paymentData",
+          "type": "bytes"
+        }
+      ],
+      "name": "request",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "requestId",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes[]",
+          "name": "requestDatas",
+          "type": "bytes[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxDeliveryRate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "paymentType",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "priorityMech",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "responseTimeout",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "paymentData",
+          "type": "bytes"
+        }
+      ],
+      "name": "requestBatch",
+      "outputs": [
+        {
+          "internalType": "bytes32[]",
+          "name": "requestIds",
+          "type": "bytes32[]"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "serviceRegistry",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "mechFactories",
+          "type": "address[]"
+        },
+        {
+          "internalType": "bool[]",
+          "name": "statuses",
+          "type": "bool[]"
+        }
+      ],
+      "name": "setMechFactoryStatuses",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32[]",
+          "name": "paymentTypes",
+          "type": "bytes32[]"
+        },
+        {
+          "internalType": "address[]",
+          "name": "balanceTrackers",
+          "type": "address[]"
+        }
+      ],
+      "name": "setPaymentTypeBalanceTrackers",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     }
   ],

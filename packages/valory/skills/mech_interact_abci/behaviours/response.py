@@ -61,12 +61,13 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self._from_block: int = 0
         self._requests: List[MechRequest] = []
         self._response_hex: str = ""
-        self._mech_responses: List[
-            MechInteractionResponse
-        ] = self.synchronized_data.mech_responses
+        self._mech_responses: List[MechInteractionResponse] = (
+            self.synchronized_data.mech_responses
+        )
         self.current_mech_response: MechInteractionResponse = MechInteractionResponse(
             error="The mech's response has not been set!"
         )
+        self.context.logger.info(f"Current mech response: {self.current_mech_response}")
         self._is_valid_acn_sender: bool = False
 
     @property
@@ -181,7 +182,10 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             expected_logs=len(self._mech_responses),
             chain_id=self.params.mech_chain_id,
         )
+        self.context.logger.info(f"Request event processed AXAT123: {result}")
         return result
+
+    # Todo : write another version of this fn for MM which uses ids not id
 
     def _get_response_hash(self) -> WaitableConditionType:
         """Get the hash of the response data."""
@@ -200,22 +204,85 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 self.response_hex = self.current_mech_response.response_data
                 return True
 
-        request_id = self.current_mech_response.requestId
+        # Get the request ID in bytes32 format
+        request_id_bytes: Optional[bytes] = None
+        request_id_for_specs: Optional[int] = None  # Keep int version for specs
+
+        if self.params.use_mech_marketplace:
+            request_ids = self.current_mech_response.requestIds
+            self.context.logger.info(
+                f"Using Mech Marketplace. Request ids (hex): {request_ids}"
+            )
+            if request_ids and len(request_ids) > 0:
+                hex_request_id = request_ids[0]
+                if not isinstance(hex_request_id, str) or not hex_request_id.startswith(
+                    "0x"
+                ):
+                    self.context.logger.error(
+                        f"Invalid hex request ID format: {hex_request_id}"
+                    )
+                    return False
+                try:
+                    # Convert hex string to bytes32 (remove '0x' prefix first)
+                    raw_bytes = bytes.fromhex(hex_request_id[2:])
+                    # Ensure it's exactly 32 bytes by padding with zeros if needed
+                    request_id_bytes = raw_bytes.rjust(32, b"\x00")
+                    # Also keep int version for specs
+                    request_id_for_specs = int(hex_request_id, 16)
+                    self.context.logger.info(
+                        f"Converted marketplace request ID from hex {hex_request_id} to bytes32: 0x{request_id_bytes.hex()}"
+                    )
+                except (ValueError, TypeError) as e:
+                    self.context.logger.error(
+                        f"Could not convert request ID {hex_request_id} to bytes32: {e}"
+                    )
+                    return False
+            else:
+                self.context.logger.warning(
+                    "Mech Marketplace is enabled, but no request IDs found."
+                )
+                return False
+        else:
+            # Convert integer requestId to bytes32 for direct mech interaction
+            request_id = self.current_mech_response.requestId
+            request_id_for_specs = request_id
+            try:
+                # Convert int to 32-byte hex string (padded with zeros), then to bytes
+                hex_str = format(request_id, "064x")  # 32 bytes = 64 hex chars
+                request_id_bytes = bytes.fromhex(hex_str)
+                self.context.logger.info(
+                    f"Converted direct mech request ID from int {request_id} to bytes32: 0x{request_id_bytes.hex()}"
+                )
+            except (ValueError, TypeError) as e:
+                self.context.logger.error(
+                    f"Could not convert request ID {request_id} to bytes32: {e}"
+                )
+                return False
+
+        if request_id_bytes is None or request_id_for_specs is None:
+            self.context.logger.error(
+                "Could not determine the request ID bytes32 to use for fetching the response."
+            )
+            return False
+
         self.context.logger.info(
-            f"Filtering the mech's events from block {self.from_block} "
-            f"for a response to our request with id {request_id!r}."
+            f"Filtering the Mech's Deliver events from block {self.from_block} "
+            f"for a response to request with id 0x{request_id_bytes.hex()}"
         )
-        result = yield from self.mech_contract_interact(
+
+        # Call get_response with bytes32 request ID
+        result = yield from self._mech_contract_interact(
             contract_callable="get_response",
             data_key="data",
             placeholder=get_name(MechResponseBehaviour.response_hex),
-            request_id=request_id,
+            request_id=request_id_bytes,
             from_block=self.from_block,
             chain_id=self.params.mech_chain_id,
         )
 
         if result:
-            self.set_mech_response_specs(request_id)
+            # Use integer version for specs
+            self.set_mech_response_specs(request_id_for_specs)
 
         return result
 
@@ -301,13 +368,13 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
     def _set_current_response(self, request: MechRequest) -> None:
         """Set the current Mech response."""
+        self.context.logger.info(f"response: {request}")
         for pending_response in self._mech_responses:
-            if (
-                pending_response.data == request.data.hex()
-            ):  # TODO: why is request.data bytes now?
-                pending_response.requestId = request.requestId
-                self.current_mech_response = pending_response
-                break
+            self.context.logger.info(f"Pending response: {pending_response}")
+            pending_response.requestIds = request.requestIds
+            self.current_mech_response = pending_response
+            self.context.logger.info(f"Current mech responses: {self._mech_responses}")
+            break
 
     def _process_responses(
         self,
@@ -321,6 +388,8 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
         for request in self.requests:
             self._set_current_response(request)
+
+            # TODO : add a conditional check if this is mm request via use_mech_marketplace param
 
             for step in (self._get_response_hash, self._get_response):
                 yield from self.wait_for_condition_with_sleep(step)

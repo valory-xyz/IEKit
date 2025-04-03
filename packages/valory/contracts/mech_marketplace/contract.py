@@ -20,7 +20,7 @@
 """This module contains the class to connect to a Mech Marketplace contract."""
 
 import concurrent.futures
-from typing import Any, Callable, Dict, List, cast
+from typing import Any, Callable, Dict, List, cast, Optional
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId
@@ -33,7 +33,6 @@ from web3.types import BlockData, BlockIdentifier, EventData, TxReceipt
 
 PUBLIC_ID = PublicId.from_str("valory/mech_marketplace:0.1.0")
 FIVE_MINUTES = 300.0
-
 
 
 class MechMarketplace(Contract):
@@ -67,6 +66,15 @@ class MechMarketplace(Contract):
 
             return data, None
 
+    # args from mech client
+    #  method_args = {
+    #     "maxDeliveryRate": method_args_data.delivery_rate,
+    #     "paymentType": "0x" + cast(str, method_args_data.payment_type),
+    #     "priorityMech": to_checksum_address(method_args_data.priority_mech_address),
+    #     "responseTimeout": method_args_data.response_timeout,
+    #     "paymentData": method_args_data.payment_data,
+    # }
+
     @classmethod
     def get_request_data(
         cls,
@@ -74,38 +82,39 @@ class MechMarketplace(Contract):
         contract_address: str,
         request_data: bytes,
         priority_mech: str,
-        priority_mech_staking_instance: str,
-        priority_mech_service_id: int,
-        requester_staking_instance: str,
-        requester_service_id: int,
+        max_delivery_rate: int,
+        payment_type: str,  # Expected to be a '0x...' hex string for bytes32
+        payment_data: bytes,
         response_timeout: int,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> Dict[str, bytes]:
         """Gets the encoded arguments for a request tx, which should only be called via the multisig.
 
         :param ledger_api: the ledger API object
         :param contract_address: the contract's address
-        :param request_data: the request data
-        :param priority_mech: the priority mech address
-        :param priority_mech_staking_instance: the priority mech staking instance address
-        :param priority_mech_service_id: the priority mech service id
-        :param requester_staking_instance: the requester staking instance address
-        :param requester_service_id: the requester service id
-        :param response_timeout: the response timeout
+        :param request_data: the request data (bytes)
+        :param priority_mech: the priority mech address (str)
+        :param max_delivery_rate: the maximum delivery rate (uint256)
+        :param payment_type: the payment type identifier (bytes32, passed as '0x...' hex str)
+        :param payment_data: the payment data (bytes)
+        :param response_timeout: the response timeout (uint256)
         """
-        contract_address = ledger_api.api.to_checksum_address(contract_address)
-        contract_instance = cls.get_instance(ledger_api, contract_address)
+        checksummed_contract_address = ledger_api.api.to_checksum_address(
+            contract_address
+        )
+        contract_instance = cls.get_instance(ledger_api, checksummed_contract_address)
+        # Checksum the priority mech address before passing it to the contract method
+        checksummed_priority_mech = ledger_api.api.to_checksum_address(priority_mech)
         encoded_data = contract_instance.encodeABI(
             fn_name="request",
             args=(
-                request_data,
-                priority_mech,
-                priority_mech_staking_instance,
-                priority_mech_service_id,
-                requester_staking_instance,
-                requester_service_id,
-                response_timeout,
-            )
+                request_data,  # bytes
+                max_delivery_rate,  # uint256
+                payment_type,  # bytes32 (web3.py handles '0x...' hex string)
+                checksummed_priority_mech,  # address
+                response_timeout,  # uint256
+                payment_data,  # bytes
+            ),
         )
         return {"data": bytes.fromhex(encoded_data[2:])}
 
@@ -118,7 +127,7 @@ class MechMarketplace(Contract):
         expected_logs: int,
         event_name: str,
         *args: Any,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> JSONLike:
         """Process the logs of the given event."""
         ledger_api = cast(EthereumApi, ledger_api)
@@ -137,8 +146,32 @@ class MechMarketplace(Contract):
             if event_args is None or any(
                 expected_key not in event_args for expected_key in args
             ):
-                return {"error": f"The emitted event's ({event_name}) logs for tx {tx_hash} do not match the expected format: {log}"}
-            results.append({arg_name: event_args[arg_name] for arg_name in args})
+                return {
+                    "error": f"The emitted event's ({event_name}) logs for tx {tx_hash} do not match the expected format: {log} , event args: {event_args}"
+                }
+
+            # Create a result dict with processed values
+            result = {}
+            for arg_name in args:
+                value = event_args[arg_name]
+
+                # If value is a list, process each item
+                if isinstance(value, list):
+                    processed_list = []
+                    for item in value:
+                        if isinstance(item, bytes):
+                            # Convert bytes to hex string
+                            processed_list.append("0x" + item.hex())
+                        else:
+                            processed_list.append(item)
+                    result[arg_name] = processed_list
+                # If value is bytes, convert to hex string
+                elif isinstance(value, bytes):
+                    result[arg_name] = "0x" + value.hex()
+                else:
+                    result[arg_name] = value
+
+            results.append(result)
 
         return dict(results=results)
 
@@ -149,7 +182,7 @@ class MechMarketplace(Contract):
         contract_address: str,
         tx_hash: HexStr,
         expected_logs: int = 1,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> JSONLike:
         """
         Process the request receipt to get the requestId and the given data from the `Request` event's logs.
@@ -164,9 +197,16 @@ class MechMarketplace(Contract):
         contract_address = ledger_api.api.to_checksum_address(contract_address)
         contract_instance = cls.get_instance(ledger_api, contract_address)
         res = cls._process_event(
-            ledger_api, contract_instance, tx_hash, expected_logs, "MarketplaceRequest", "requestId", "data"
+            ledger_api,
+            contract_instance,
+            tx_hash,
+            expected_logs,
+            "MarketplaceRequest",
+            "requestIds",
+            "numRequests",
         )
 
+        print(f"Request event result: {res} Axat")
         return res
 
     @classmethod
@@ -176,7 +216,7 @@ class MechMarketplace(Contract):
         contract_address: str,
         tx_hash: HexStr,
         expected_logs: int = 1,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> JSONLike:
         """
         Process the request receipt to get the requestId and the delivered data if the `MarketplaceDeliver` event has been emitted.
@@ -190,7 +230,13 @@ class MechMarketplace(Contract):
         contract_address = ledger_api.api.to_checksum_address(contract_address)
         contract_instance = cls.get_instance(ledger_api, contract_address)
         res = cls._process_event(
-            ledger_api, contract_instance, tx_hash, expected_logs, "MarketplaceDeliver", "requestId", "data"
+            ledger_api,
+            contract_instance,
+            tx_hash,
+            expected_logs,
+            "MarketplaceDelivery",
+            "requestId",
+            "data",
         )
 
         return res
@@ -201,13 +247,80 @@ class MechMarketplace(Contract):
         ledger_api: EthereumApi,
         contract_address: str,
         tx_hash: HexStr,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> JSONLike:
         """Get the number of the block in which the tx of the given hash was settled."""
         contract_address = ledger_api.api.to_checksum_address(contract_address)
         receipt: TxReceipt = ledger_api.api.eth.get_transaction_receipt(tx_hash)
         block: BlockData = ledger_api.api.eth.get_block(receipt["blockNumber"])
         return dict(number=block["number"])
+
+    @classmethod
+    def get_response_mm(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+        request_id: bytes,  # Expect bytes for marketplace matching
+        from_block: BlockIdentifier = "earliest",
+        to_block: BlockIdentifier = "latest",
+        timeout: float = FIVE_MINUTES,
+        **kwargs: Any,
+    ) -> JSONLike:
+        """Filter the `MarketplaceDelivery` events using bytes request ID and get the data.
+
+        This is specifically for the Mech Marketplace where the event uses bytes32[] requestIds.
+        """
+        contract_address = ledger_api.api.to_checksum_address(contract_address)
+        ledger_api = cast(EthereumApi, ledger_api)
+
+        def get_responses_mm_internal() -> Any:
+            """Get the responses from the contract using bytes ID."""
+            contract_instance = cls.get_instance(ledger_api, contract_address)
+            # Ensure the event name matches your contract's ABI, e.g., MarketplaceDelivery
+            deliver_filter = contract_instance.events.MarketplaceDelivery.build_filter()
+            deliver_filter.fromBlock = from_block
+            deliver_filter.toBlock = to_block
+            # Fetch all delivery events in the range
+            all_delivered_events = list(
+                deliver_filter.deploy(ledger_api.api).get_all_entries()
+            )
+
+            matching_event: Optional[EventData] = None
+            # Manually filter for the event containing our request_id
+            for event in all_delivered_events:
+                event_args = event.get("args", {})
+                if request_id in event_args.get("requestIds", []):
+                    if matching_event is not None:
+                        # Should not happen for a single request ID, but log if it does
+                        hex_request_id = "0x" + request_id.hex()
+                        cls.context.logger.warning(
+                            f"Multiple MarketplaceDelivery events found for request ID {hex_request_id} in the same block range. Using the first one found."
+                        )
+                        # Stick with the first match found
+                        break
+                    matching_event = event
+                    # Optional: break here if we only expect one match ever
+                    # break
+
+            hex_request_id_log = "0x" + request_id.hex()
+            if matching_event is None:
+                info = f"The mech ({contract_address}) has not delivered a response yet for request with id {hex_request_id_log}. No matching MarketplaceDelivery event found in blocks {from_block}-{to_block}."
+                return {"info": info}
+
+            # We found exactly one matching event
+            deliver_args = matching_event.get("args", None)
+            if deliver_args is None or "data" not in deliver_args:
+                error = f"The mech's response (event: {matching_event}) does not match the expected format (missing 'data' arg)."
+                return error
+
+            return dict(data=deliver_args["data"])
+
+        # Use the internal function name for clarity in timeout execution
+        data, err = cls.execute_with_timeout(get_responses_mm_internal, timeout=timeout)
+        if err is not None:
+            return {"error": err}
+
+        return data
 
     @classmethod
     def get_response(
@@ -218,7 +331,7 @@ class MechMarketplace(Contract):
         from_block: BlockIdentifier = "earliest",
         to_block: BlockIdentifier = "latest",
         timeout: float = FIVE_MINUTES,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> JSONLike:
         """Filter the `MarketplaceDeliver` events emitted by the contract and get the data of the given `request_id`."""
         contract_address = ledger_api.api.to_checksum_address(contract_address)
