@@ -66,14 +66,7 @@ class MechMarketplace(Contract):
 
             return data, None
 
-    # args from mech client
-    #  method_args = {
-    #     "maxDeliveryRate": method_args_data.delivery_rate,
-    #     "paymentType": "0x" + cast(str, method_args_data.payment_type),
-    #     "priorityMech": to_checksum_address(method_args_data.priority_mech_address),
-    #     "responseTimeout": method_args_data.response_timeout,
-    #     "paymentData": method_args_data.payment_data,
-    # }
+
 
     @classmethod
     def get_request_data(
@@ -108,12 +101,12 @@ class MechMarketplace(Contract):
         encoded_data = contract_instance.encodeABI(
             fn_name="request",
             args=(
-                request_data,  # bytes
-                max_delivery_rate,  # uint256
-                payment_type,  # bytes32 (web3.py handles '0x...' hex string)
-                checksummed_priority_mech,  # address
-                response_timeout,  # uint256
-                payment_data,  # bytes
+                request_data,  
+                max_delivery_rate,  
+                payment_type,  
+                checksummed_priority_mech,  
+                response_timeout,  
+                payment_data,  
             ),
         )
         return {"data": bytes.fromhex(encoded_data[2:])}
@@ -206,7 +199,7 @@ class MechMarketplace(Contract):
             "numRequests",
         )
 
-        print(f"Request event result: {res} Axat")
+        print(f"Request event result: {res}")
         return res
 
     @classmethod
@@ -254,120 +247,3 @@ class MechMarketplace(Contract):
         receipt: TxReceipt = ledger_api.api.eth.get_transaction_receipt(tx_hash)
         block: BlockData = ledger_api.api.eth.get_block(receipt["blockNumber"])
         return dict(number=block["number"])
-
-    @classmethod
-    def get_response_mm(
-        cls,
-        ledger_api: LedgerApi,
-        contract_address: str,
-        request_id: bytes,  # Expect bytes for marketplace matching
-        from_block: BlockIdentifier = "earliest",
-        to_block: BlockIdentifier = "latest",
-        timeout: float = FIVE_MINUTES,
-        **kwargs: Any,
-    ) -> JSONLike:
-        """Filter the `MarketplaceDelivery` events using bytes request ID and get the data.
-
-        This is specifically for the Mech Marketplace where the event uses bytes32[] requestIds.
-        """
-        contract_address = ledger_api.api.to_checksum_address(contract_address)
-        ledger_api = cast(EthereumApi, ledger_api)
-
-        def get_responses_mm_internal() -> Any:
-            """Get the responses from the contract using bytes ID."""
-            contract_instance = cls.get_instance(ledger_api, contract_address)
-            # Ensure the event name matches your contract's ABI, e.g., MarketplaceDelivery
-            deliver_filter = contract_instance.events.MarketplaceDelivery.build_filter()
-            deliver_filter.fromBlock = from_block
-            deliver_filter.toBlock = to_block
-            # Fetch all delivery events in the range
-            all_delivered_events = list(
-                deliver_filter.deploy(ledger_api.api).get_all_entries()
-            )
-
-            matching_event: Optional[EventData] = None
-            # Manually filter for the event containing our request_id
-            for event in all_delivered_events:
-                event_args = event.get("args", {})
-                if request_id in event_args.get("requestIds", []):
-                    if matching_event is not None:
-                        # Should not happen for a single request ID, but log if it does
-                        hex_request_id = "0x" + request_id.hex()
-                        cls.context.logger.warning(
-                            f"Multiple MarketplaceDelivery events found for request ID {hex_request_id} in the same block range. Using the first one found."
-                        )
-                        # Stick with the first match found
-                        break
-                    matching_event = event
-                    # Optional: break here if we only expect one match ever
-                    # break
-
-            hex_request_id_log = "0x" + request_id.hex()
-            if matching_event is None:
-                info = f"The mech ({contract_address}) has not delivered a response yet for request with id {hex_request_id_log}. No matching MarketplaceDelivery event found in blocks {from_block}-{to_block}."
-                return {"info": info}
-
-            # We found exactly one matching event
-            deliver_args = matching_event.get("args", None)
-            if deliver_args is None or "data" not in deliver_args:
-                error = f"The mech's response (event: {matching_event}) does not match the expected format (missing 'data' arg)."
-                return error
-
-            return dict(data=deliver_args["data"])
-
-        # Use the internal function name for clarity in timeout execution
-        data, err = cls.execute_with_timeout(get_responses_mm_internal, timeout=timeout)
-        if err is not None:
-            return {"error": err}
-
-        return data
-
-    @classmethod
-    def get_response(
-        cls,
-        ledger_api: LedgerApi,
-        contract_address: str,
-        request_id: int,
-        from_block: BlockIdentifier = "earliest",
-        to_block: BlockIdentifier = "latest",
-        timeout: float = FIVE_MINUTES,
-        **kwargs: Any,
-    ) -> JSONLike:
-        """Filter the `MarketplaceDeliver` events emitted by the contract and get the data of the given `request_id`."""
-        contract_address = ledger_api.api.to_checksum_address(contract_address)
-        ledger_api = cast(EthereumApi, ledger_api)
-
-        def get_responses() -> Any:
-            """Get the responses from the contract."""
-            contract_instance = cls.get_instance(ledger_api, contract_address)
-            deliver_filter = contract_instance.events.MarketplaceDeliver.build_filter()
-            deliver_filter.fromBlock = from_block
-            deliver_filter.toBlock = to_block
-            deliver_filter.args.requestId.match_single(request_id)
-            delivered = list(deliver_filter.deploy(ledger_api.api).get_all_entries())
-            n_delivered = len(delivered)
-
-            if n_delivered == 0:
-                info = f"The mech ({contract_address}) has not delivered a response yet for request with id {request_id}."
-                return {"info": info}
-
-            if n_delivered != 1:
-                error = (
-                    f"A single response was expected by the mech ({contract_address}) for request with id {request_id}. "
-                    f"Received {n_delivered} responses: {delivered}."
-                )
-                return error
-
-            delivered_event = delivered.pop()
-            deliver_args = delivered_event.get("args", None)
-            if deliver_args is None or "data" not in deliver_args:
-                error = f"The mech's response does not match the expected format: {delivered_event}"
-                return error
-
-            return dict(data=deliver_args["data"])
-
-        data, err = cls.execute_with_timeout(get_responses, timeout=timeout)
-        if err is not None:
-            return {"error": err}
-
-        return data

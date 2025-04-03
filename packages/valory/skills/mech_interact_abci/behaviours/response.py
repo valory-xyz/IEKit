@@ -182,7 +182,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             expected_logs=len(self._mech_responses),
             chain_id=self.params.mech_chain_id,
         )
-        self.context.logger.info(f"Request event processed AXAT123: {result}")
+        self.context.logger.info(f"Request event processed: {result}")
         return result
 
     # Todo : write another version of this fn for MM which uses ids not id
@@ -223,11 +223,11 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                     )
                     return False
                 try:
-                    # Convert hex string to bytes32 (remove '0x' prefix first)
+                    # Convert hex str to by32 after removing the 0x prefix
                     raw_bytes = bytes.fromhex(hex_request_id[2:])
-                    # Ensure it's exactly 32 bytes by padding with zeros if needed
+                    # Ensuring it's exactly 32 bytes by padding with zeros if needed
                     request_id_bytes = raw_bytes.rjust(32, b"\x00")
-                    # Also keep int version for specs
+                    # keeping int version for specs
                     request_id_for_specs = int(hex_request_id, 16)
                     self.context.logger.info(
                         f"Converted marketplace request ID from hex {hex_request_id} to bytes32: 0x{request_id_bytes.hex()}"
@@ -243,7 +243,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 )
                 return False
         else:
-            # Convert integer requestId to bytes32 for direct mech interaction
+            # Convet integer requestId to bytes32 forr direct mech interaction
             request_id = self.current_mech_response.requestId
             request_id_for_specs = request_id
             try:
