@@ -20,7 +20,7 @@
 """This module contains the class to connect to a Mech Marketplace contract."""
 
 import concurrent.futures
-from typing import Any, Callable, Dict, List, cast, Optional
+from typing import Any, Callable, Dict, List, Optional, cast
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId

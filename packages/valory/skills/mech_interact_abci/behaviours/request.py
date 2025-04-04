@@ -392,7 +392,6 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         self._pending_responses.append(pending_response)
         return True
 
-
     def _get_payment_type(self) -> Generator[None, None, str]:
         """Get payment type from the mech contract."""
         status = yield from self._mech_contract_interact(
