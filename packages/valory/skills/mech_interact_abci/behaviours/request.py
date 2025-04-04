@@ -404,7 +404,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             self.context.logger.error("Failed to get payment type from contract")
             return "0x"
 
-        payment_type = getattr(self, "mech_payment_type")
+        payment_type = getattr(self, "mech_payment_type")  # noqa: B009
         self.context.logger.info(f"Payment type from contract: {payment_type}")
         return payment_type
 
@@ -422,7 +422,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             )
             return 100
 
-        max_rate = getattr(self, "mech_max_delivery_rate")
+        max_rate = getattr(self, "mech_max_delivery_rate")  # noqa: B009
         self.context.logger.info(f"Max delivery rate from contract: {max_rate}")
         return max_rate
 
@@ -449,7 +449,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             )
         except (ValueError, TypeError) as e:
             self.context.logger.error(
-                f"Failed to decode request_data '{self._v1_hex_truncated}': {e}"
+                f"Failed to decode request_data {self._v1_hex_truncated!r}: {e}"
             )
             return False
 
