@@ -62,9 +62,9 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self._from_block: int = 0
         self._requests: List[MechRequest] = []
         self._response_hex: str = ""
-        self._mech_responses: List[
-            MechInteractionResponse
-        ] = self.synchronized_data.mech_responses
+        self._mech_responses: List[MechInteractionResponse] = (
+            self.synchronized_data.mech_responses
+        )
         self.current_mech_response: MechInteractionResponse = MechInteractionResponse(
             error="The mech's response has not been set!"
         )
@@ -183,8 +183,61 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             expected_logs=len(self._mech_responses),
             chain_id=self.params.mech_chain_id,
         )
-        self.context.logger.info(f"Request event processed: {result}")
         return result
+
+    def _get_marketplace_request_ids(self) -> tuple[Optional[bytes], Optional[int]]:
+        """Get the request IDs for the marketplace flow."""
+        request_ids = self.current_mech_response.requestIds
+        self.context.logger.info(
+            f"Using Mech Marketplace. Request ids (hex): {request_ids}"
+        )
+        if not request_ids or len(request_ids) == 0:
+            self.context.logger.warning(
+                "Mech Marketplace is enabled, but no request IDs found."
+            )
+            return None, None
+
+        hex_request_id = request_ids[0]
+        if not isinstance(hex_request_id, str) or not hex_request_id.startswith("0x"):
+            self.context.logger.error(
+                f"Invalid hex request ID format: {hex_request_id}"
+            )
+            return None, None
+
+        try:
+            # Convert hex str to by32 after removing the 0x prefix
+            raw_bytes = bytes.fromhex(hex_request_id[2:])
+            # Ensuring it's exactly 32 bytes by padding with zeros if needed
+            request_id_bytes = raw_bytes.rjust(32, b"\x00")
+            # keeping int version for specs
+            request_id_for_specs = int(hex_request_id, 16)
+            self.context.logger.info(
+                f"Converted marketplace request ID from hex {hex_request_id} to bytes32: 0x{request_id_bytes.hex()}"
+            )
+            return request_id_bytes, request_id_for_specs
+        except (ValueError, TypeError) as e:
+            self.context.logger.error(
+                f"Could not convert request ID {hex_request_id} to bytes32: {e}"
+            )
+            return None, None
+
+    def _get_legacy_request_ids(self) -> tuple[Optional[bytes], Optional[int]]:
+        """Get the request IDs for the legacy (direct) mech flow."""
+        request_id = self.current_mech_response.requestId
+        request_id_for_specs = request_id
+        try:
+            # Convert int to 32-byte hex string (padded with zeros), then to bytes
+            hex_str = format(request_id, "064x")  # 32 bytes = 64 hex chars
+            request_id_bytes = bytes.fromhex(hex_str)
+            self.context.logger.info(
+                f"Converted direct mech request ID from int {request_id} to bytes32: 0x{request_id_bytes.hex()}"
+            )
+            return request_id_bytes, request_id_for_specs
+        except (ValueError, TypeError) as e:
+            self.context.logger.error(
+                f"Could not convert request ID {request_id} to bytes32: {e}"
+            )
+            return None, None
 
     def _get_response_hash(self) -> WaitableConditionType:
         """Get the hash of the response data."""
@@ -203,64 +256,16 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 self.response_hex = self.current_mech_response.response_data
                 return True
 
-        # Get the request ID in bytes32 format
-        request_id_bytes: Optional[bytes] = None
-        request_id_for_specs: Optional[int] = None  # Keep int version for specs
-
+        # Determine request IDs based on the flow
         if self.params.use_mech_marketplace:
-            request_ids = self.current_mech_response.requestIds
-            self.context.logger.info(
-                f"Using Mech Marketplace. Request ids (hex): {request_ids}"
-            )
-            if request_ids and len(request_ids) > 0:
-                hex_request_id = request_ids[0]
-                if not isinstance(hex_request_id, str) or not hex_request_id.startswith(
-                    "0x"
-                ):
-                    self.context.logger.error(
-                        f"Invalid hex request ID format: {hex_request_id}"
-                    )
-                    return False
-                try:
-                    # Convert hex str to by32 after removing the 0x prefix
-                    raw_bytes = bytes.fromhex(hex_request_id[2:])
-                    # Ensuring it's exactly 32 bytes by padding with zeros if needed
-                    request_id_bytes = raw_bytes.rjust(32, b"\x00")
-                    # keeping int version for specs
-                    request_id_for_specs = int(hex_request_id, 16)
-                    self.context.logger.info(
-                        f"Converted marketplace request ID from hex {hex_request_id} to bytes32: 0x{request_id_bytes.hex()}"
-                    )
-                except (ValueError, TypeError) as e:
-                    self.context.logger.error(
-                        f"Could not convert request ID {hex_request_id} to bytes32: {e}"
-                    )
-                    return False
-            else:
-                self.context.logger.warning(
-                    "Mech Marketplace is enabled, but no request IDs found."
-                )
-                return False
+            request_id_bytes, request_id_for_specs = self._get_marketplace_request_ids()
         else:
-            # Convet integer requestId to bytes32 forr direct mech interaction
-            request_id = self.current_mech_response.requestId
-            request_id_for_specs = request_id
-            try:
-                # Convert int to 32-byte hex string (padded with zeros), then to bytes
-                hex_str = format(request_id, "064x")  # 32 bytes = 64 hex chars
-                request_id_bytes = bytes.fromhex(hex_str)
-                self.context.logger.info(
-                    f"Converted direct mech request ID from int {request_id} to bytes32: 0x{request_id_bytes.hex()}"
-                )
-            except (ValueError, TypeError) as e:
-                self.context.logger.error(
-                    f"Could not convert request ID {request_id} to bytes32: {e}"
-                )
-                return False
+            request_id_bytes, request_id_for_specs = self._get_legacy_request_ids()
 
+        # Check if request IDs were successfully determined
         if request_id_bytes is None or request_id_for_specs is None:
             self.context.logger.error(
-                "Could not determine the request ID bytes32 to use for fetching the response."
+                "Could not determine the request ID to use for fetching the response."
             )
             return False
 
