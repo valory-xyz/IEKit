@@ -403,7 +403,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         )
         if not status:
             self.context.logger.error("Failed to get payment type from contract")
-            return "0x"
+            return None
 
         payment_type = getattr(self, "mech_payment_type")  # noqa: B009
         self.context.logger.info(f"Payment type from contract: {payment_type}")
@@ -421,7 +421,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             self.context.logger.warning(
                 "Failed to get max delivery rate from contract, using default value of 100"
             )
-            return 100
+            return None
 
         max_rate = getattr(self, "mech_max_delivery_rate")  # noqa: B009
         self.context.logger.info(f"Max delivery rate from contract: {max_rate}")
@@ -434,13 +434,23 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         self.context.logger.info("Getting payment type")
         # Get payment type from contract and use hardcoded payment data
         payment_type = yield from self._get_payment_type()
+        if payment_type is None:
+            self.context.logger.warning(
+                "Failed to get payment type from contract, cannot build request data"
+            )
+            return False
         payment_data = "0x"  # Empty bytes for payment data
 
         self.context.logger.info("Getting max delivery rate")
         # Get max delivery rate from contract
         max_delivery_rate = yield from self._get_max_delivery_rate()
+        if max_delivery_rate is None:
+            self.context.logger.warning(
+                "Failed to get max delivery rate from contract , cannot build request data"
+            )
+            return False
 
-        # request_data needs to be bytes. Assuming _v1_hex_truncated is a '0x...' hex string.
+        # request_data needs to be bytes.
         try:
             # Remove "0x" prefix if present and convert hex string to bytes
             request_data_bytes = bytes.fromhex(
@@ -474,13 +484,13 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                 "get_request_data",
                 "data",
                 get_name(MechRequestBehaviour.request_data),
-                request_data=request_data_bytes,  # Pass as bytes
-                priority_mech=self.mech_marketplace_config.priority_mech_address,  # str (checksummed inside get_request_data)
-                payment_data=payment_data,  # Pass as bytes
-                payment_type=payment_type,  # Pass as hex string
-                response_timeout=self.mech_marketplace_config.response_timeout,  # int (uint256)
+                request_data=request_data_bytes, 
+                priority_mech=self.mech_marketplace_config.priority_mech_address, 
+                payment_data=payment_data,
+                payment_type=payment_type,
+                response_timeout=self.mech_marketplace_config.response_timeout, 
                 chain_id=self.params.mech_chain_id,
-                max_delivery_rate=max_delivery_rate,  # int (uint256)
+                max_delivery_rate=max_delivery_rate,  
             )
         else:
             status = yield from self._mech_contract_interact(
