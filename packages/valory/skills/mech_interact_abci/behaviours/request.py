@@ -36,7 +36,6 @@ from packages.valory.contracts.gnosis_safe.contract import (
     GnosisSafeContract,
     SafeOperation,
 )
-from packages.valory.contracts.mech_mm.contract import MechMM
 from packages.valory.contracts.multisend.contract import MultiSendContract
 from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.protocols.ledger_api.message import LedgerApiMessage
@@ -430,7 +429,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                 "Failed to get max delivery rate from contract. This might be acceptable depending on the contract."
             )
             # Explicitly set attribute to None and return False, indicating the step didn't succeed in getting the rate.
-            setattr(self, "mech_max_delivery_rate", None)
+            setattr(self, "mech_max_delivery_rate", None)  # noqa: B010
             return False
 
         # Verify the attribute was set
@@ -456,7 +455,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             )
             return False
         # Successfully fetched, access the stored attribute
-        payment_type = getattr(self, "mech_payment_type")
+        payment_type = getattr(self, "mech_payment_type")  # noqa: B009
         payment_data = EMPTY_PAYMENT_DATA_HEX  # Use constant
 
         self.context.logger.info("Getting max delivery rate")
@@ -470,7 +469,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             max_delivery_rate = None  # Ensure it's None if fetch failed
         else:
             # Successfully fetched, access the stored attribute
-            max_delivery_rate = getattr(self, "mech_max_delivery_rate")
+            max_delivery_rate = getattr(self, "mech_max_delivery_rate")  # noqa: B009
 
         # Check if max_delivery_rate is None *if* it's strictly required by the contract call
         # Assuming get_request_data requires it for now:
