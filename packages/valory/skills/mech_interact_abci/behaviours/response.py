@@ -220,7 +220,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             )
             return None, None
 
-    def _get_legacy_request_ids(self) -> tuple[Optional[bytes], Optional[int]]:
+    def _get_legacy_request_ids(self) -> Tuple[Optional[bytes], Optional[int]]:
         """Get the request IDs for the legacy (direct) mech flow."""
         request_id = self.current_mech_response.requestId
         request_id_for_specs = request_id
