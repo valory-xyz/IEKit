@@ -192,23 +192,6 @@ class MechMM(Contract):
         return data
 
     @classmethod
-    def get_pending_requests(
-        cls,
-        ledger_api: EthereumApi,
-        contract_address: str,
-        sender_address: str,
-        **kwargs: Any,
-    ) -> JSONLike:
-        """Get the pending requests."""
-        contract_address = ledger_api.api.to_checksum_address(contract_address)
-        sender_address = ledger_api.api.to_checksum_address(sender_address)
-        contract_instance = cls.get_instance(ledger_api, contract_address)
-        pending_requests = contract_instance.functions.mapUndeliveredRequestsCounts(
-            sender_address
-        ).call()
-        return {"pending_requests": pending_requests}
-
-    @classmethod
     def get_payment_type(
         cls, ledger_api: EthereumApi, contract_address: str, **kwargs: Any
     ) -> JSONLike:
