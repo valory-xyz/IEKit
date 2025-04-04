@@ -185,8 +185,6 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self.context.logger.info(f"Request event processed: {result}")
         return result
 
-    # Todo : write another version of this fn for MM which uses ids not id
-
     def _get_response_hash(self) -> WaitableConditionType:
         """Get the hash of the response data."""
         if (
