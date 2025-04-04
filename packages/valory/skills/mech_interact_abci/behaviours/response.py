@@ -25,6 +25,7 @@ from typing import Any, Callable, Dict, Generator, List, Optional
 from web3.constants import ADDRESS_ZERO
 
 from packages.valory.contracts.mech.contract import Mech
+from packages.valory.contracts.mech_mm.contract import MechMM
 from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.abstract_round_abci.base import get_name
 from packages.valory.skills.mech_interact_abci.behaviours.base import (
@@ -61,9 +62,9 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self._from_block: int = 0
         self._requests: List[MechRequest] = []
         self._response_hex: str = ""
-        self._mech_responses: List[
-            MechInteractionResponse
-        ] = self.synchronized_data.mech_responses
+        self._mech_responses: List[MechInteractionResponse] = (
+            self.synchronized_data.mech_responses
+        )
         self.current_mech_response: MechInteractionResponse = MechInteractionResponse(
             error="The mech's response has not been set!"
         )
@@ -265,21 +266,43 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
         self.context.logger.info(
             f"Filtering the Mech's Deliver events from block {self.from_block} "
-            f"for a response to request with id 0x{request_id_bytes.hex()}"
+            f"for a response to request with id (bytes32) 0x{request_id_bytes.hex()} or (int) {request_id_for_specs}"
         )
 
-        # Call get_response with bytes32 request ID
-        result = yield from self._mech_contract_interact(
-            contract_callable="get_response",
-            data_key="data",
-            placeholder=get_name(MechResponseBehaviour.response_hex),
-            request_id=request_id_bytes,
-            from_block=self.from_block,
-            chain_id=self.params.mech_chain_id,
-        )
+        # Conditionally call get_response based on whether the marketplace (and thus mech_mm) is used
+        if self.params.use_mech_marketplace:
+            # Use mech_mm ABI (MechMM.contract_id) and bytes32 request ID
+            self.context.logger.info(
+                f"Using Mech Marketplace flow: Calling get_response with bytes32 request ID 0x{request_id_bytes.hex()} using MechMM ABI."
+            )
+            result = yield from self.contract_interact(
+                performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,
+                contract_address=self.params.mech_contract_address,  # Target the mech_mm contract address
+                contract_public_id=MechMM.contract_id,  # Use MechMM ABI
+                contract_callable="get_response",
+                data_key="data",
+                placeholder=get_name(MechResponseBehaviour.response_hex),
+                request_id=request_id_bytes,  # Use bytes32 request ID
+                from_block=self.from_block,
+                chain_id=self.params.mech_chain_id,
+            )
+        else:
+            # Use legacy mech ABI (self.params.mech_contract_id) and int request ID
+            self.context.logger.info(
+                f"Using legacy Mech flow: Calling get_response with int request ID {request_id_for_specs} using legacy Mech ABI."
+            )
+            # Note: We rely on _mech_contract_interact using the correct legacy mech ABI via self.params.mech_contract_id
+            result = yield from self._mech_contract_interact(
+                contract_callable="get_response",
+                data_key="data",
+                placeholder=get_name(MechResponseBehaviour.response_hex),
+                request_id=request_id_for_specs,  # Use integer request ID for legacy mech
+                from_block=self.from_block,
+                chain_id=self.params.mech_chain_id,
+            )
 
         if result:
-            # Use integer version for specs
+            # Use integer version for specs regardless of which flow was used
             self.set_mech_response_specs(request_id_for_specs)
 
         return result

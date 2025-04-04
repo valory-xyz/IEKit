@@ -32,6 +32,7 @@ from aea.helpers.cid import to_v1
 from hexbytes import HexBytes
 
 from packages.valory.contracts.erc20.contract import ERC20
+from packages.valory.contracts.mech_mm.contract import MechMM
 from packages.valory.contracts.gnosis_safe.contract import (
     GnosisSafeContract,
     SafeOperation,
@@ -394,7 +395,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
     def _get_payment_type(self) -> Generator[None, None, str]:
         """Get payment type from the mech contract."""
-        status = yield from self._mech_contract_interact(
+        status = yield from self._mech_mm_contract_interact(
             "get_payment_type",  # contract method to call
             "payment_type",  # key in response
             "mech_payment_type",  # attribute to store result
@@ -410,7 +411,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
     def _get_max_delivery_rate(self) -> Generator[None, None, int]:
         """Get max delivery rate from the mech contract."""
-        status = yield from self._mech_contract_interact(
+        status = yield from self._mech_mm_contract_interact(
             "get_max_delivery_rate",
             "max_delivery_rate",
             "mech_max_delivery_rate",  # attribute to store result
