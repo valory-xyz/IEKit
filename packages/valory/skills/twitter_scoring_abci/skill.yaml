@@ -33,7 +33,7 @@ protocols:
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeifclzgoyulkyyigcwrqzmydyrj6c5d26xu7jk6cjbsed3pkls4pba
 - valory/decision_making_abci:0.1.0:bafybeifh4wnlwqhuni32kmscug6nykogioddkzxdq3j2tjsmayjfq4uc6a
-- valory/mech_interact_abci:0.1.0:bafybeighx37v6c6ivwqbpat2dkntrgkrdq2j3gamc5eqqqzlur4fsw4ntu
+- valory/mech_interact_abci:0.1.0:bafybeidtaszsz4luf2fb5pvnf2mjlcf7j5aygn2pgf7lk2hyjg2smdsonq
 behaviours:
   main:
     args: {}
