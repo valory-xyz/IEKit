@@ -66,8 +66,6 @@ class MechMarketplace(Contract):
 
             return data, None
 
-
-
     @classmethod
     def get_request_data(
         cls,
@@ -101,12 +99,12 @@ class MechMarketplace(Contract):
         encoded_data = contract_instance.encodeABI(
             fn_name="request",
             args=(
-                request_data,  
-                max_delivery_rate,  
-                payment_type,  
-                checksummed_priority_mech,  
-                response_timeout,  
-                payment_data,  
+                request_data,
+                max_delivery_rate,
+                payment_type,
+                checksummed_priority_mech,
+                response_timeout,
+                payment_data,
             ),
         )
         return {"data": bytes.fromhex(encoded_data[2:])}
@@ -247,3 +245,22 @@ class MechMarketplace(Contract):
         receipt: TxReceipt = ledger_api.api.eth.get_transaction_receipt(tx_hash)
         block: BlockData = ledger_api.api.eth.get_block(receipt["blockNumber"])
         return dict(number=block["number"])
+
+    @classmethod
+    def get_request_count(
+        cls,
+        ledger_api: EthereumApi,
+        contract_address: str,
+        address: str,
+        **kwargs: Any,
+    ) -> JSONLike:
+        """Get the number of requests made by a specific address using mapRequestCounts."""
+        contract_address = ledger_api.api.to_checksum_address(contract_address)
+        instance = cls.get_instance(ledger_api, contract_address)
+
+        # The mapRequestCounts function expects the address as the first positional argument.
+        checksummed_address = ledger_api.api.to_checksum_address(address)
+        count = instance.functions.mapRequestCounts(checksummed_address).call()
+
+        # Ensure the count is returned as an integer within the dict
+        return dict(requests_count=int(count))
