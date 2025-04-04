@@ -1,1 +1,1 @@
-# Agent Mech contract for Marketplace
+# Agent Mech contract

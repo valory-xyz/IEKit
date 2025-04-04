@@ -40,32 +40,6 @@ class MechMarketplace(Contract):
 
     contract_id = PUBLIC_ID
 
-    @staticmethod
-    def execute_with_timeout(func: Callable, timeout: float) -> Any:
-        """Execute a function with a timeout."""
-
-        # Create a ProcessPoolExecutor with a maximum of 1 worker (process)
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-            # Submit the function to the executor
-            future = executor.submit(
-                func,
-            )
-
-            try:
-                # Wait for the result with a 5-minute timeout
-                data = future.result(timeout=timeout)
-            except TimeoutError:
-                # Handle the case where the execution times out
-                err = f"The RPC didn't respond in {timeout}."
-                return None, err
-
-            # Check if an error occurred
-            if isinstance(data, str):
-                # Handle the case where the execution failed
-                return None, data
-
-            return data, None
-
     @classmethod
     def get_request_data(
         cls,

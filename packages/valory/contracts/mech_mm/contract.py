@@ -27,6 +27,7 @@ from aea.configurations.base import PublicId
 from aea.contracts.base import Contract
 from aea.crypto.base import LedgerApi
 from aea_ledger_ethereum import EthereumApi
+from aea_ledger_ethereum.ethereum import rpc_call_with_timeout
 from eth_typing import HexStr
 from web3.types import BlockData, BlockIdentifier, EventData, TxReceipt
 
@@ -39,32 +40,6 @@ class MechMM(Contract):
     """The Mech contract for marketplace."""
 
     contract_id = PUBLIC_ID
-
-    @staticmethod
-    def execute_with_timeout(func: Callable, timeout: float) -> Any:
-        """Execute a function with a timeout."""
-
-        # Create a ProcessPoolExecutor with a maximum of 1 worker (process)
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-            # Submit the function to the executor
-            future = executor.submit(
-                func,
-            )
-
-            try:
-                # Wait for the result with a 5-minute timeout
-                data = future.result(timeout=timeout)
-            except TimeoutError:
-                # Handle the case where the execution times out
-                err = f"The RPC didn't respond in {timeout}."
-                return None, err
-
-            # Check if an error occurred
-            if isinstance(data, str):
-                # Handle the case where the execution failed
-                return None, data
-
-            return data, None
 
     @classmethod
     def get_request_data(
@@ -185,12 +160,11 @@ class MechMM(Contract):
 
             return dict(data=deliver_args["data"])
 
-        data, err = cls.execute_with_timeout(get_responses, timeout=timeout)
+        data, err = rpc_call_with_timeout(get_responses, timeout=int(timeout))
         if err is not None:
             return {"error": err}
 
         return data
-
 
     @classmethod
     def get_payment_type(
