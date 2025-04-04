@@ -62,9 +62,9 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self._from_block: int = 0
         self._requests: List[MechRequest] = []
         self._response_hex: str = ""
-        self._mech_responses: List[MechInteractionResponse] = (
-            self.synchronized_data.mech_responses
-        )
+        self._mech_responses: List[
+            MechInteractionResponse
+        ] = self.synchronized_data.mech_responses
         self.current_mech_response: MechInteractionResponse = MechInteractionResponse(
             error="The mech's response has not been set!"
         )

@@ -32,7 +32,6 @@ from aea.helpers.cid import to_v1
 from hexbytes import HexBytes
 
 from packages.valory.contracts.erc20.contract import ERC20
-from packages.valory.contracts.mech_mm.contract import MechMM
 from packages.valory.contracts.gnosis_safe.contract import (
     GnosisSafeContract,
     SafeOperation,
@@ -404,6 +403,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         )
         if not status:
             self.context.logger.error("Failed to get payment type from contract")
+            return None
             return None
 
         payment_type = getattr(self, "mech_payment_type")  # noqa: B009
