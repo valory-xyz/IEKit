@@ -7,9 +7,9 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeibl4uw7rs6mwh7zuvdnqmj2o2xyr7nx5qk3w7torwx3jg6farn6ca
-  __init__.py: bafybeicx5pxh3cxnml2biuuoebvafvu5tvy6mgkzyjzuubuoeebb5yzjsm
+  __init__.py: bafybeifawfjsdfhhaxebj4aphxccebxgmuarzgk6atnicqak747tgqi77m
   build/mech.json: bafybeigfnspnth45gkxuibzuua3b3xax2cnbhoataf6kdjyz4inugxqc7y
-  contract.py: bafybeicbbdf2z2jtqaaqj2oc4o7hpkrtbodf5jjv72666s6w6y7ul3jgtu
+  contract.py: bafybeibrtxjfwcisadtai4nbdxcgm3y4oqbqtvtx7njbc3nw3eozix5aqi
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: MechMM
