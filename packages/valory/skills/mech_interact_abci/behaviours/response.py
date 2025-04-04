@@ -20,11 +20,12 @@
 """This module contains the response state of the mech interaction abci app."""
 
 import json
-from typing import Any, Callable, Dict, Generator, List, Optional
+from typing import Any, Callable, Dict, Generator, List, Optional, Tuple
 
 from web3.constants import ADDRESS_ZERO
 
 from packages.valory.contracts.mech.contract import Mech
+from packages.valory.contracts.mech_mm.contract import MechMM
 from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.abstract_round_abci.base import get_name
 from packages.valory.skills.mech_interact_abci.behaviours.base import (
@@ -183,6 +184,60 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         )
         return result
 
+    def _get_marketplace_request_ids(self) -> Tuple[Optional[bytes], Optional[int]]:
+        """Get the request IDs for the marketplace flow."""
+        request_ids = self.current_mech_response.requestIds
+        self.context.logger.info(
+            f"Using Mech Marketplace. Request ids (hex): {request_ids}"
+        )
+        if not request_ids or len(request_ids) == 0:
+            self.context.logger.warning(
+                "Mech Marketplace is enabled, but no request IDs found."
+            )
+            return None, None
+
+        hex_request_id = request_ids[0]
+        if not isinstance(hex_request_id, str) or not hex_request_id.startswith("0x"):
+            self.context.logger.error(
+                f"Invalid hex request ID format: {hex_request_id}"
+            )
+            return None, None
+
+        try:
+            # Convert hex str to by32 after removing the 0x prefix
+            raw_bytes = bytes.fromhex(hex_request_id[2:])
+            # Ensuring it's exactly 32 bytes by padding with zeros if needed
+            request_id_bytes = raw_bytes.rjust(32, b"\x00")
+            # keeping int version for specs
+            request_id_for_specs = int(hex_request_id, 16)
+            self.context.logger.info(
+                f"Converted marketplace request ID from hex {hex_request_id} to bytes32: 0x{request_id_bytes.hex()}"
+            )
+            return request_id_bytes, request_id_for_specs
+        except (ValueError, TypeError) as e:
+            self.context.logger.error(
+                f"Could not convert request ID {hex_request_id} to bytes32: {e}"
+            )
+            return None, None
+
+    def _get_legacy_request_ids(self) -> Tuple[Optional[bytes], Optional[int]]:
+        """Get the request IDs for the legacy (direct) mech flow."""
+        request_id = self.current_mech_response.requestId
+        request_id_for_specs = request_id
+        try:
+            # Convert int to 32-byte hex string (padded with zeros), then to bytes
+            hex_str = format(request_id, "064x")  # 32 bytes = 64 hex chars
+            request_id_bytes = bytes.fromhex(hex_str)
+            self.context.logger.info(
+                f"Converted direct mech request ID from int {request_id} to bytes32: 0x{request_id_bytes.hex()}"
+            )
+            return request_id_bytes, request_id_for_specs
+        except (ValueError, TypeError) as e:
+            self.context.logger.error(
+                f"Could not convert request ID {request_id} to bytes32: {e}"
+            )
+            return None, None
+
     def _get_response_hash(self) -> WaitableConditionType:
         """Get the hash of the response data."""
         if (
@@ -200,22 +255,59 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 self.response_hex = self.current_mech_response.response_data
                 return True
 
-        request_id = self.current_mech_response.requestId
+        # Determine request IDs based on the flow
+        if self.params.use_mech_marketplace:
+            request_id_bytes, request_id_for_specs = self._get_marketplace_request_ids()
+        else:
+            request_id_bytes, request_id_for_specs = self._get_legacy_request_ids()
+
+        # Check if request IDs were successfully determined
+        if request_id_bytes is None or request_id_for_specs is None:
+            self.context.logger.error(
+                "Could not determine the request ID to use for fetching the response."
+            )
+            return False
+
         self.context.logger.info(
-            f"Filtering the mech's events from block {self.from_block} "
-            f"for a response to our request with id {request_id!r}."
-        )
-        result = yield from self.mech_contract_interact(
-            contract_callable="get_response",
-            data_key="data",
-            placeholder=get_name(MechResponseBehaviour.response_hex),
-            request_id=request_id,
-            from_block=self.from_block,
-            chain_id=self.params.mech_chain_id,
+            f"Filtering the Mech's Deliver events from block {self.from_block} "
+            f"for a response to request with id (bytes32) 0x{request_id_bytes.hex()} or (int) {request_id_for_specs}"
         )
 
+        # Conditionally call get_response based on whether the marketplace (and thus mech_mm) is used
+        if self.params.use_mech_marketplace:
+            # Use mech_mm ABI (MechMM.contract_id) and bytes32 request ID
+            self.context.logger.info(
+                f"Using Mech Marketplace flow: Calling get_response with bytes32 request ID 0x{request_id_bytes.hex()} using MechMM ABI."
+            )
+            result = yield from self.contract_interact(
+                performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,
+                contract_address=self.params.mech_contract_address,  # Target the mech_mm contract address
+                contract_public_id=MechMM.contract_id,  # Use MechMM ABI
+                contract_callable="get_response",
+                data_key="data",
+                placeholder=get_name(MechResponseBehaviour.response_hex),
+                request_id=request_id_bytes,  # Use bytes32 request ID
+                from_block=self.from_block,
+                chain_id=self.params.mech_chain_id,
+            )
+        else:
+            # Use legacy mech ABI (self.params.mech_contract_id) and int request ID
+            self.context.logger.info(
+                f"Using legacy Mech flow: Calling get_response with int request ID {request_id_for_specs} using legacy Mech ABI."
+            )
+            # Note: We rely on _mech_contract_interact using the correct legacy mech ABI via self.params.mech_contract_id
+            result = yield from self._mech_contract_interact(
+                contract_callable="get_response",
+                data_key="data",
+                placeholder=get_name(MechResponseBehaviour.response_hex),
+                request_id=request_id_for_specs,  # Use integer request ID for legacy mech
+                from_block=self.from_block,
+                chain_id=self.params.mech_chain_id,
+            )
+
         if result:
-            self.set_mech_response_specs(request_id)
+            # Use integer version for specs regardless of which flow was used
+            self.set_mech_response_specs(request_id_for_specs)
 
         return result
 
@@ -301,13 +393,13 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
     def _set_current_response(self, request: MechRequest) -> None:
         """Set the current Mech response."""
+        self.context.logger.info(f"response: {request}")
         for pending_response in self._mech_responses:
-            if (
-                pending_response.data == request.data.hex()
-            ):  # TODO: why is request.data bytes now?
-                pending_response.requestId = request.requestId
-                self.current_mech_response = pending_response
-                break
+            self.context.logger.info(f"Pending response: {pending_response}")
+            pending_response.requestIds = request.requestIds
+            self.current_mech_response = pending_response
+            self.context.logger.info(f"Current mech responses: {self._mech_responses}")
+            break
 
     def _process_responses(
         self,

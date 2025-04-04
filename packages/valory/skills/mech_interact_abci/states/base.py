@@ -20,7 +20,7 @@
 """This module contains the base functionality for the rounds of the mech interact abci app."""
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, List, Mapping, Optional, cast
 
@@ -62,6 +62,8 @@ class MechRequest:
 
     data: str = ""
     requestId: int = 0
+    requestIds: List[int] = field(default_factory=list)
+    numRequests: int = 0
 
 
 MECH_RESPONSE = "mech_response"
