@@ -35,114 +35,6 @@ PUBLIC_ID = PublicId.from_str("valory/mech_mm:0.1.0")
 FIVE_MINUTES = 300.0
 
 
-partial_abis = [
-    [
-        {
-            "anonymous": False,
-            "inputs": [
-                {
-                    "indexed": False,
-                    "internalType": "uint256",
-                    "name": "requestId",
-                    "type": "uint256",
-                },
-                {
-                    "indexed": False,
-                    "internalType": "bytes",
-                    "name": "data",
-                    "type": "bytes",
-                },
-            ],
-            "name": "Deliver",
-            "type": "event",
-        },
-        {
-            "anonymous": False,
-            "inputs": [
-                {
-                    "indexed": True,
-                    "internalType": "address",
-                    "name": "sender",
-                    "type": "address",
-                },
-                {
-                    "indexed": False,
-                    "internalType": "uint256",
-                    "name": "requestId",
-                    "type": "uint256",
-                },
-                {
-                    "indexed": False,
-                    "internalType": "bytes",
-                    "name": "data",
-                    "type": "bytes",
-                },
-            ],
-            "name": "Request",
-            "type": "event",
-        },
-    ],
-    [
-        {
-            "anonymous": False,
-            "inputs": [
-                {
-                    "indexed": True,
-                    "internalType": "address",
-                    "name": "sender",
-                    "type": "address",
-                },
-                {
-                    "indexed": False,
-                    "internalType": "uint256",
-                    "name": "requestId",
-                    "type": "uint256",
-                },
-                {
-                    "indexed": False,
-                    "internalType": "uint256",
-                    "name": "requestIdWithNonce",
-                    "type": "uint256",
-                },
-                {
-                    "indexed": False,
-                    "internalType": "bytes",
-                    "name": "data",
-                    "type": "bytes",
-                },
-            ],
-            "name": "Request",
-            "type": "event",
-        },
-        {
-            "anonymous": False,
-            "inputs": [
-                {
-                    "indexed": True,
-                    "internalType": "address",
-                    "name": "sender",
-                    "type": "address",
-                },
-                {
-                    "indexed": False,
-                    "internalType": "uint256",
-                    "name": "requestId",
-                    "type": "uint256",
-                },
-                {
-                    "indexed": False,
-                    "internalType": "bytes",
-                    "name": "data",
-                    "type": "bytes",
-                },
-            ],
-            "name": "Deliver",
-            "type": "event",
-        },
-    ],
-]
-
-
 class MechMM(Contract):
     """The Mech contract for marketplace."""
 
@@ -173,16 +65,6 @@ class MechMM(Contract):
                 return None, data
 
             return data, None
-
-    @classmethod
-    def get_price(
-        cls, ledger_api: EthereumApi, contract_address: str, **kwargs: Any
-    ) -> JSONLike:
-        """Get the price of a request."""
-        contract_address = ledger_api.api.to_checksum_address(contract_address)
-        contract_instance = cls.get_instance(ledger_api, contract_address)
-        price = ledger_api.contract_method_call(contract_instance, "price")
-        return dict(price=price)
 
     @classmethod
     def get_request_data(
@@ -237,79 +119,6 @@ class MechMM(Contract):
             results.append({arg_name: event_args[arg_name] for arg_name in args})
 
         return dict(results=results)
-
-    @classmethod
-    def process_request_event(
-        cls,
-        ledger_api: LedgerApi,
-        contract_address: str,
-        tx_hash: HexStr,
-        expected_logs: int = 1,
-        **kwargs: Any,
-    ) -> JSONLike:
-        """
-        Process the request receipt to get the requestId and the given data from the `Request` event's logs.
-
-        :param ledger_api: the ledger apis.
-        :param contract_address: the contract address.
-        :param tx_hash: the hash of a request tx to be processed.
-        :param expected_logs: the number of logs expected.
-        :return: a dictionary with a key named `results`
-        which contains a list of dictionaries (as many as the expected logs) containing the request id and the data.
-        """
-        contract_address = ledger_api.api.to_checksum_address(contract_address)
-        res = {}
-        for abi in partial_abis:
-            contract_instance = ledger_api.api.eth.contract(contract_address, abi=abi)
-            res = cls._process_event(
-                ledger_api,
-                contract_instance,
-                tx_hash,
-                expected_logs,
-                "Request",
-                "requestId",
-                "data",
-            )
-            if "error" not in res:
-                return res
-
-        return res
-
-    @classmethod
-    def process_deliver_event(
-        cls,
-        ledger_api: LedgerApi,
-        contract_address: str,
-        tx_hash: HexStr,
-        expected_logs: int = 1,
-        **kwargs: Any,
-    ) -> JSONLike:
-        """
-        Process the request receipt to get the requestId and the delivered data if the `Deliver` event has been emitted.
-
-        :param ledger_api: the ledger apis.
-        :param contract_address: the contract address.
-        :param tx_hash: the hash of a request tx to be processed.
-        :param expected_logs: the number of logs expected.
-        :return: a dictionary with the request id and the data.
-        """
-        contract_address = ledger_api.api.to_checksum_address(contract_address)
-        res = {}
-        for abi in partial_abis:
-            contract_instance = ledger_api.api.eth.contract(contract_address, abi=abi)
-            res = cls._process_event(
-                ledger_api,
-                contract_instance,
-                tx_hash,
-                expected_logs,
-                "Deliver",
-                "requestId",
-                "data",
-            )
-            if "error" not in res:
-                return res
-
-        return res
 
     @classmethod
     def get_block_number(
@@ -381,27 +190,6 @@ class MechMM(Contract):
             return {"error": err}
 
         return data
-
-    @classmethod
-    def get_mech_id(
-        cls, ledger_api: EthereumApi, contract_address: str, **kwargs: Any
-    ) -> JSONLike:
-        """Get the price of a request."""
-        contract_address = ledger_api.api.to_checksum_address(contract_address)
-        contract_instance = cls.get_instance(ledger_api, contract_address)
-        mech_id = ledger_api.contract_method_call(contract_instance, "tokenId")
-        return dict(id=mech_id)
-
-    @classmethod
-    def get_requests_count(
-        cls, ledger_api: EthereumApi, contract_address: str, address: str, **kwargs: Any
-    ) -> JSONLike:
-        """Get the requests count."""
-        contract_address = ledger_api.api.to_checksum_address(contract_address)
-        address = ledger_api.api.to_checksum_address(address)
-        contract_instance = cls.get_instance(ledger_api, contract_address)
-        requests_count = contract_instance.functions.getRequestsCount(address).call()
-        return {"requests_count": requests_count}
 
     @classmethod
     def get_pending_requests(
