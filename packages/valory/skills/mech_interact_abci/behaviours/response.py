@@ -68,7 +68,6 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self.current_mech_response: MechInteractionResponse = MechInteractionResponse(
             error="The mech's response has not been set!"
         )
-        self.context.logger.info(f"Current mech response: {self.current_mech_response}")
         self._is_valid_acn_sender: bool = False
 
     @property
@@ -414,8 +413,6 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
         for request in self.requests:
             self._set_current_response(request)
-
-            # TODO : add a conditional check if this is mm request via use_mech_marketplace param
 
             for step in (self._get_response_hash, self._get_response):
                 yield from self.wait_for_condition_with_sleep(step)
