@@ -109,6 +109,11 @@ class MechMarketplace(Contract):
         )
         return {"data": bytes.fromhex(encoded_data[2:])}
 
+    @staticmethod
+    def _format_arg_value(value: Any) -> Any:
+        """Format contract event argument values (bytes to hex)."""
+        return f"0x{value.hex()}" if isinstance(value, bytes) else value
+
     @classmethod
     def _process_event(
         cls,
@@ -138,29 +143,19 @@ class MechMarketplace(Contract):
                 expected_key not in event_args for expected_key in args
             ):
                 return {
-                    "error": f"The emitted event's ({event_name}) logs for tx {tx_hash} do not match the expected format: {log} , event args: {event_args}"
+                    "error": f"The emitted event's ({event_name}) logs for tx {tx_hash} do not match the expected format: {log}"
                 }
 
-            # Create a result dict with processed values
+            # Create a result dict with processed values using the helper
             result = {}
             for arg_name in args:
                 value = event_args[arg_name]
-
-                # If value is a list, process each item
                 if isinstance(value, list):
-                    processed_list = []
-                    for item in value:
-                        if isinstance(item, bytes):
-                            # Convert bytes to hex string
-                            processed_list.append("0x" + item.hex())
-                        else:
-                            processed_list.append(item)
-                    result[arg_name] = processed_list
-                # If value is bytes, convert to hex string
-                elif isinstance(value, bytes):
-                    result[arg_name] = "0x" + value.hex()
+                    # Process list items using the helper
+                    result[arg_name] = [cls._format_arg_value(item) for item in value]
                 else:
-                    result[arg_name] = value
+                    # Process single value using the helper
+                    result[arg_name] = cls._format_arg_value(value)
 
             results.append(result)
 
