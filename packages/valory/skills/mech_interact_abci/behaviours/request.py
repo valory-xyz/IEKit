@@ -63,6 +63,7 @@ from packages.valory.skills.transaction_settlement_abci.rounds import TX_HASH_LE
 METADATA_FILENAME = "metadata.json"
 V1_HEX_PREFIX = "f01"
 Ox = "0x"
+EMPTY_PAYMENT_DATA_HEX = "0x"
 
 # setting the safe gas to 0 means that all available gas will be used
 # which is what we want in most cases
@@ -439,7 +440,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                 "Failed to get payment type from contract, cannot build request data"
             )
             return False
-        payment_data = "0x"  # Empty bytes for payment data
+        payment_data = EMPTY_PAYMENT_DATA_HEX  # Empty bytes for payment data
 
         self.context.logger.info("Getting max delivery rate")
         # Get max delivery rate from contract
@@ -466,31 +467,17 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
 
         """Get the request tx data encoded."""
         if self.params.use_mech_marketplace:
-            self.context.logger.info(
-                f"Using mech marketplace with config: {self.mech_marketplace_config}"
-            )
-            self.context.logger.info(f"Request data bytes: {request_data_bytes}")
-            self.context.logger.info(
-                f"Priority mech address: {self.mech_marketplace_config.priority_mech_address}"
-            )
-            self.context.logger.info(f"Payment data: {payment_data}")
-            self.context.logger.info(f"Payment type: {payment_type}")
-            self.context.logger.info(
-                f"Response timeout: {self.mech_marketplace_config.response_timeout}"
-            )
-            self.context.logger.info(f"Chain ID: {self.params.mech_chain_id}")
-            self.context.logger.info(f"Max delivery rate: {max_delivery_rate}")
             status = yield from self._mech_marketplace_contract_interact(
                 "get_request_data",
                 "data",
                 get_name(MechRequestBehaviour.request_data),
-                request_data=request_data_bytes, 
-                priority_mech=self.mech_marketplace_config.priority_mech_address, 
+                request_data=request_data_bytes,
+                priority_mech=self.mech_marketplace_config.priority_mech_address,
                 payment_data=payment_data,
                 payment_type=payment_type,
-                response_timeout=self.mech_marketplace_config.response_timeout, 
+                response_timeout=self.mech_marketplace_config.response_timeout,
                 chain_id=self.params.mech_chain_id,
-                max_delivery_rate=max_delivery_rate,  
+                max_delivery_rate=max_delivery_rate,
             )
         else:
             status = yield from self._mech_contract_interact(
