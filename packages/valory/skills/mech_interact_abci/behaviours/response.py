@@ -20,7 +20,7 @@
 """This module contains the response state of the mech interaction abci app."""
 
 import json
-from typing import Any, Callable, Dict, Generator, List, Optional
+from typing import Any, Callable, Dict, Generator, List, Optional, Tuple
 
 from web3.constants import ADDRESS_ZERO
 
@@ -184,7 +184,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         )
         return result
 
-    def _get_marketplace_request_ids(self) -> tuple[Optional[bytes], Optional[int]]:
+    def _get_marketplace_request_ids(self) -> Tuple[Optional[bytes], Optional[int]]:
         """Get the request IDs for the marketplace flow."""
         request_ids = self.current_mech_response.requestIds
         self.context.logger.info(
