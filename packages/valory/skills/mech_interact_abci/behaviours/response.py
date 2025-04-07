@@ -402,10 +402,10 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
             if not self.params.use_mech_marketplace:
                 # Legacy flow: Match based on data string comparison.
-
-                if pending_response.data == request.data:
+                # This assumes request.data is bytes and pending_response.data is the hex string representation.
+                if pending_response.data == request.data.hex():
                     self.context.logger.info(
-                        f"Matched LEGACY pending response (Nonce: {pending_response.nonce}) to parsed event request (ID: {request.requestId}) based on data field."
+                        f"Matched LEGACY pending response (Nonce: {pending_response.nonce}) to parsed event request (ID: {request.requestId}) based on data field matching .hex()."
                     )
                     pending_response.requestId = request.requestId
                     self.current_mech_response = pending_response
