@@ -16,7 +16,7 @@ fingerprint:
   dialogues.py: bafybeicgtxsrzld6uyi2n455temnz6mj55irmxqxw55jxo4b6ud4rt7nsm
   fsm_specification.yaml: bafybeiapzwz6zcneelc2b2wrcb7cae7x6vbthmf6a57cm4mv6hucp67lz4
   handlers.py: bafybeieogcp4buhjommra3fkvyh3vwg3wzuepiwbn6qzr2b7zs27ghjxy4
-  models.py: bafybeic7d7klfdczo2nww5kg2eyintz4dq3pap5ve4v5htelhp5ovqxn4i
+  models.py: bafybeiatz5yiwypkmysccepsvfjngcalv7h65q62nsz5557nggg5ac25hi
   payloads.py: bafybeie3s5irdmcggst5kmbm6duyhr4nm2qc67fkwznhrdskri4qzmkmla
   rounds.py: bafybeif7taciv6pqupb7xuewurqssziplbjeobbv4d7ea3vbngz3kpjnee
   states/__init__.py: bafybeie34wx5znr2hxwh3gs2fchmbeuzjcfnraymdvtzjaxaq5zsiw233q
@@ -173,9 +173,6 @@ models:
       mech_marketplace_config:
         mech_marketplace_address: '0x0000000000000000000000000000000000000000'
         priority_mech_address: '0x0000000000000000000000000000000000000000'
-        priority_mech_staking_instance_address: '0x0000000000000000000000000000000000000000'
-        priority_mech_service_id: 0
-        requester_staking_instance_address: '0x0000000000000000000000000000000000000000'
         response_timeout: 300
     class_name: Params
   mech_response:
