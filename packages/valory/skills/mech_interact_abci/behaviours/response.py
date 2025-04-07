@@ -405,7 +405,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 # This assumes request.data is bytes and pending_response.data is the hex string representation.
                 if pending_response.data == request.data.hex():
                     self.context.logger.info(
-                        f"Matched LEGACY pending response (Nonce: {pending_response.nonce}) to parsed event request (ID: {request.requestId}) based on data field matching .hex()."
+                        f"Matched LEGACY pending response (Nonce: {pending_response.nonce}) to parsed event request (ID: {hex(int(request.requestId))}) based on data field matching .hex(). Data: {request.data.hex()}"
                     )
                     pending_response.requestId = request.requestId
                     self.current_mech_response = pending_response
