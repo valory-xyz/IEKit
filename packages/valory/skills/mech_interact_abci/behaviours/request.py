@@ -447,38 +447,6 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         """Build the request data."""
         self.context.logger.info("Building request data")
 
-        self.context.logger.info("Getting payment type")
-        # Get payment type from contract
-        if not (yield from self._get_payment_type()):
-            self.context.logger.error(
-                "Failed step: Could not get payment type. Cannot build request data."
-            )
-            return False
-        # Successfully fetched, access the stored attribute
-        payment_type = getattr(self, "mech_payment_type")  # noqa: B009
-        payment_data = EMPTY_PAYMENT_DATA_HEX  # Use constant
-
-        self.context.logger.info("Getting max delivery rate")
-        # Get max delivery rate from contract
-        if not (yield from self._get_max_delivery_rate()):
-            # This step failed, but maybe it's not critical? Decide based on contract needs.
-            # For now, we log a warning and proceed. If the rate *is* required later, the call will fail.
-            self.context.logger.warning(
-                "Failed step: Could not get max delivery rate. Proceeding without it, which might cause issues."
-            )
-            max_delivery_rate = None  # Ensure it's None if fetch failed
-        else:
-            # Successfully fetched, access the stored attribute
-            max_delivery_rate = getattr(self, "mech_max_delivery_rate")  # noqa: B009
-
-        # Check if max_delivery_rate is None *if* it's strictly required by the contract call
-        # Assuming get_request_data requires it for now:
-        if self.params.use_mech_marketplace and max_delivery_rate is None:
-            self.context.logger.error(
-                "Max delivery rate is required for marketplace request but was not fetched. Cannot build request data."
-            )
-            return False
-
         # request_data needs to be bytes.
         try:
             request_data_bytes = bytes.fromhex(
@@ -493,7 +461,42 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             return False
 
         """Get the request tx data encoded."""
+        status = False
         if self.params.use_mech_marketplace:
+            self.context.logger.info("Using Mech Marketplace flow.")
+            self.context.logger.info("Getting payment type")
+            # Get payment type from contract
+            if not (yield from self._get_payment_type()):
+                self.context.logger.error(
+                    "Failed step: Could not get payment type. Cannot build request data."
+                )
+                return False
+            # Successfully fetched, access the stored attribute
+            payment_type = getattr(self, "mech_payment_type")  # noqa: B009
+            payment_data = EMPTY_PAYMENT_DATA_HEX  # Use constant
+
+            self.context.logger.info("Getting max delivery rate")
+            # Get max delivery rate from contract
+            if not (yield from self._get_max_delivery_rate()):
+                # This step failed, but maybe it's not critical? Decide based on contract needs.
+                # For now, we log a warning and proceed. If the rate *is* required later, the call will fail.
+                self.context.logger.warning(
+                    "Failed step: Could not get max delivery rate. Proceeding without it, which might cause issues."
+                )
+                max_delivery_rate = None  # Ensure it's None if fetch failed
+            else:
+                # Successfully fetched, access the stored attribute
+                max_delivery_rate = getattr(
+                    self, "mech_max_delivery_rate"
+                )  # noqa: B009
+
+            # Check if max_delivery_rate is None *if* it's strictly required by the contract call
+            if max_delivery_rate is None:
+                self.context.logger.error(
+                    "Max delivery rate is required for marketplace request but was not fetched. Cannot build request data."
+                )
+                return False
+
             # Convert payment_data hex string to bytes for the contract call
             try:
                 payment_data_bytes = (
@@ -518,14 +521,20 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                 response_timeout=self.mech_marketplace_config.response_timeout,
                 chain_id=self.params.mech_chain_id,
                 max_delivery_rate=max_delivery_rate,  # Use stored attribute (or None if fetch failed and wasn't critical)
+                # Add missing arguments from params
+                priority_mech_staking_instance=self.params.priority_mech_staking_instance,
+                priority_mech_service_id=self.params.priority_mech_service_id,
+                requester_staking_instance=self.params.requester_staking_instance,
+                requester_service_id=self.params.requester_service_id,
             )
         else:
+            self.context.logger.info("Using legacy Mech flow.")
             # Legacy mech logic
             status = yield from self._mech_contract_interact(
                 "get_request_data",
                 "data",
                 get_name(MechRequestBehaviour.request_data),
-                request_data=self._v1_hex_truncated,
+                request_data=self._v1_hex_truncated,  # Note: Legacy mech expects hex string
                 chain_id=self.params.mech_chain_id,
             )
 

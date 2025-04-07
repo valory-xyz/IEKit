@@ -62,9 +62,9 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self._from_block: int = 0
         self._requests: List[MechRequest] = []
         self._response_hex: str = ""
-        self._mech_responses: List[
-            MechInteractionResponse
-        ] = self.synchronized_data.mech_responses
+        self._mech_responses: List[MechInteractionResponse] = (
+            self.synchronized_data.mech_responses
+        )
         self.current_mech_response: MechInteractionResponse = MechInteractionResponse(
             error="The mech's response has not been set!"
         )
@@ -392,14 +392,68 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         return True
 
     def _set_current_response(self, request: MechRequest) -> None:
-        """Set the current Mech response."""
-        self.context.logger.info(f"response: {request}")
+        """Set the current Mech response by matching parsed event data to pending state."""
+        self.context.logger.info(f"Attempting to match parsed event request: {request}")
+        matched = False
         for pending_response in self._mech_responses:
-            self.context.logger.info(f"Pending response: {pending_response}")
-            pending_response.requestIds = request.requestIds
-            self.current_mech_response = pending_response
-            self.context.logger.info(f"Current mech responses: {self._mech_responses}")
-            break
+            self.context.logger.info(
+                f"Comparing with pending response: {pending_response}"
+            )
+
+            # Attempt to match based on the request data.
+            # WARNING: This assumes the `data` field parsed from the Request event (`request.data`)
+            # is identical to the `data` field stored when the request was initiated (`pending_response.data`).
+            # If the event includes extra info in `data` (e.g., nonce, other IDs), this match might fail.
+            # A more robust solution would involve ensuring a unique identifier (like nonce)
+            # is emitted in the event and parsed into the MechRequest object.
+            # Reverting to compare pending_response.data (str) with request.data.hex() (bytes -> str)
+            # This assumes pending_response.data is stored as a hex string.
+            if pending_response.data == request.data.hex():
+                self.context.logger.info(
+                    f"Matched pending response (Nonce: {pending_response.nonce}) to parsed event request based on data field matching .hex()."
+                )
+
+                # Update the appropriate ID field based on the configured flow
+                if self.params.use_mech_marketplace:
+                    # Marketplace flow: Update the list of request IDs
+                    # This requires the parsed `request` object to have `requestIds` populated correctly.
+                    if hasattr(request, "requestIds"):
+                        # Ensure requestIds are stored as strings if needed by MechInteractionResponse schema
+                        pending_response.requestIds = [
+                            str(req_id) for req_id in request.requestIds
+                        ]
+                        self.context.logger.info(
+                            f"Updated pending_response.requestIds: {pending_response.requestIds}"
+                        )
+                    else:
+                        self.context.logger.warning(
+                            f"Marketplace flow is active, but parsed request object lacks 'requestIds' attribute: {request}"
+                        )
+                else:
+                    # Legacy flow: Update the single integer request ID
+                    pending_response.requestId = request.requestId
+                    self.context.logger.info(
+                        f"Updated pending_response.requestId: {pending_response.requestId}"
+                    )
+
+                # Set the matched and updated response as the current one for subsequent steps
+                self.current_mech_response = pending_response
+                self.context.logger.info(
+                    f"Updated current mech response state: {self.current_mech_response}"
+                )
+                matched = True
+                break  # Found the match, stop searching
+
+        if not matched:
+            # This case indicates a potential problem: the Request event data couldn't be matched
+            # to any known pending request based on the `data` field.
+            self.context.logger.error(
+                f"Could not find a matching pending response for parsed request event: {request}. "
+                f"This might be due to differences in the 'data' field or state tracking issues. "
+                f"Response processing for this request might fail."
+            )
+            # Decide how to handle: skip? error? For now, `self.current_mech_response`
+            # might remain pointing to the previous one or an initial state.
 
     def _process_responses(
         self,
