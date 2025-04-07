@@ -522,10 +522,9 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                 chain_id=self.params.mech_chain_id,
                 max_delivery_rate=max_delivery_rate,  # Use stored attribute (or None if fetch failed and wasn't critical)
                 # Add missing arguments from params
-                priority_mech_staking_instance=self.params.priority_mech_staking_instance,
-                priority_mech_service_id=self.params.priority_mech_service_id,
-                requester_staking_instance=self.params.requester_staking_instance,
-                requester_service_id=self.params.requester_service_id,
+                priority_mech_staking_instance=self.params.mech_marketplace_config.priority_mech_staking_instance_address,
+                priority_mech_service_id=self.params.mech_marketplace_config.priority_mech_service_id,
+                requester_staking_instance=self.params.mech_marketplace_config.requester_staking_instance_address,
             )
         else:
             self.context.logger.info("Using legacy Mech flow.")

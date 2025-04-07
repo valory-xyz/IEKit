@@ -62,9 +62,9 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self._from_block: int = 0
         self._requests: List[MechRequest] = []
         self._response_hex: str = ""
-        self._mech_responses: List[
-            MechInteractionResponse
-        ] = self.synchronized_data.mech_responses
+        self._mech_responses: List[MechInteractionResponse] = (
+            self.synchronized_data.mech_responses
+        )
         self.current_mech_response: MechInteractionResponse = MechInteractionResponse(
             error="The mech's response has not been set!"
         )
@@ -400,49 +400,41 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 f"Comparing with pending response: {pending_response}"
             )
 
-            # Attempt to match based on the request data.
-            # WARNING: This assumes the `data` field parsed from the Request event (`request.data`)
-            # is identical to the `data` field stored when the request was initiated (`pending_response.data`).
-            # If the event includes extra info in `data` (e.g., nonce, other IDs), this match might fail.
-            # A more robust solution would involve ensuring a unique identifier (like nonce)
-            # is emitted in the event and parsed into the MechRequest object.
-            # Reverting to compare pending_response.data (str) with request.data.hex() (bytes -> str)
-            # This assumes pending_response.data is stored as a hex string.
-            if pending_response.data == request.data.hex():
-                self.context.logger.info(
-                    f"Matched pending response (Nonce: {pending_response.nonce}) to parsed event request based on data field matching .hex()."
-                )
+            if not self.params.use_mech_marketplace:
+                # Legacy flow: Match based on data string comparison.
 
-                # Update the appropriate ID field based on the configured flow
-                if self.params.use_mech_marketplace:
-                    # Marketplace flow: Update the list of request IDs
-                    # This requires the parsed `request` object to have `requestIds` populated correctly.
-                    if hasattr(request, "requestIds"):
-                        # Ensure requestIds are stored as strings if needed by MechInteractionResponse schema
+                if pending_response.data == request.data:
+                    self.context.logger.info(
+                        f"Matched LEGACY pending response (Nonce: {pending_response.nonce}) to parsed event request (ID: {request.requestId}) based on data field."
+                    )
+                    pending_response.requestId = request.requestId
+                    self.current_mech_response = pending_response
+                    matched = True
+                    break
+            elif self.params.use_mech_marketplace:
+                # Marketplace flow: Cannot match on data as it's not reliably parsed/emitted.
+                # This will break if multiple requests are handled in the same response round.
+                self.context.logger.warning(
+                    "Marketplace flow: Using TEMPORARY matching logic. Assuming first pending response corresponds to the first parsed event."
+                    " This is unsafe for multiple concurrent requests."
+                )
+                if hasattr(request, "requestIds") and request.requestIds:
+                    # Assuming the first pending_response is the one we want to update
+                    if pending_response is self._mech_responses[0]:
                         pending_response.requestIds = [
                             str(req_id) for req_id in request.requestIds
                         ]
                         self.context.logger.info(
-                            f"Updated pending_response.requestIds: {pending_response.requestIds}"
+                            f"Updated (first) pending_response.requestIds: {pending_response.requestIds}"
                         )
-                    else:
-                        self.context.logger.warning(
-                            f"Marketplace flow is active, but parsed request object lacks 'requestIds' attribute: {request}"
-                        )
+                        self.current_mech_response = pending_response
+                        matched = True
+                        # Note: This break assumes we only care about the first match in marketplace mode for now.
+                        break
                 else:
-                    # Legacy flow: Update the single integer request ID
-                    pending_response.requestId = request.requestId
-                    self.context.logger.info(
-                        f"Updated pending_response.requestId: {pending_response.requestId}"
+                    self.context.logger.warning(
+                        f"Marketplace flow active, but parsed request lacks 'requestIds' attribute or list is empty: {request}"
                     )
-
-                # Set the matched and updated response as the current one for subsequent steps
-                self.current_mech_response = pending_response
-                self.context.logger.info(
-                    f"Updated current mech response state: {self.current_mech_response}"
-                )
-                matched = True
-                break  # Found the match, stop searching
 
         if not matched:
             # This case indicates a potential problem: the Request event data couldn't be matched
@@ -452,8 +444,6 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 f"This might be due to differences in the 'data' field or state tracking issues. "
                 f"Response processing for this request might fail."
             )
-            # Decide how to handle: skip? error? For now, `self.current_mech_response`
-            # might remain pointing to the previous one or an initial state.
 
     def _process_responses(
         self,
