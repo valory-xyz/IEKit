@@ -520,11 +520,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                 payment_type=payment_type,  # Use stored attribute
                 response_timeout=self.mech_marketplace_config.response_timeout,
                 chain_id=self.params.mech_chain_id,
-                max_delivery_rate=max_delivery_rate,  # Use stored attribute (or None if fetch failed and wasn't critical)
-                # Add missing arguments from params
-                priority_mech_staking_instance=self.params.mech_marketplace_config.priority_mech_staking_instance_address,
-                priority_mech_service_id=self.params.mech_marketplace_config.priority_mech_service_id,
-                requester_staking_instance=self.params.mech_marketplace_config.requester_staking_instance_address,
+                max_delivery_rate=max_delivery_rate,
             )
         else:
             self.context.logger.info("Using legacy Mech flow.")
