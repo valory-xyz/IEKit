@@ -486,10 +486,9 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                 max_delivery_rate = None  # Ensure it's None if fetch failed
             else:
                 # Successfully fetched, access the stored attribute
-                max_delivery_rate = getattr(
+                max_delivery_rate = getattr(  # noqa: B009
                     self, "mech_max_delivery_rate"
-                )  # noqa: B009
-
+                )
             # Check if max_delivery_rate is None *if* it's strictly required by the contract call
             if max_delivery_rate is None:
                 self.context.logger.error(
