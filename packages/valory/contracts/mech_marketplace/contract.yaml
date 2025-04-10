@@ -8,8 +8,8 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   README.md: bafybeihygfmkbo4cegrqnz5ws6bbjaifubvk7r2uyvuanxpqy24l634tba
   __init__.py: bafybeie6625ddrcph7pcxef4fbfcuhyd6yuzdyyqcoqpc5xdjb4rttw7my
-  build/mech.json: bafybeif2doizav5rs5hig6bruaoz2bedlyesyh23s735llblh64vazespi
-  contract.py: bafybeiawzcqvkx7tip7tck2czf47d5rnolebmet3fbmv5p4hzpv3fmarwq
+  build/mech.json: bafybeidprjeyuu45svcbfjrft6xj6u43lwkpjkmeojsva3g7mgld4jw5ma
+  contract.py: bafybeih7l7hyejvmr7l65lvadqfywbfv2ej7xghuqe7zj36liba3u7xtz4
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: MechMarketplace

@@ -30,6 +30,7 @@ from aea.configurations.data_types import PublicId
 from packages.valory.contracts.agent_registry.contract import AgentRegistryContract
 from packages.valory.contracts.mech.contract import Mech
 from packages.valory.contracts.mech_marketplace.contract import MechMarketplace
+from packages.valory.contracts.mech_mm.contract import MechMM
 from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 from packages.valory.skills.abstract_round_abci.behaviour_utils import (
@@ -145,6 +146,21 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
             performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
             contract_address=self.params.mech_contract_address,
             contract_public_id=Mech.contract_id,
+            contract_callable=contract_callable,
+            data_key=data_key,
+            placeholder=placeholder,
+            **kwargs,
+        )
+        return status
+
+    def _mech_mm_contract_interact(
+        self, contract_callable: str, data_key: str, placeholder: str, **kwargs: Any
+    ) -> WaitableConditionType:
+        """Interact with the mech mm contract."""
+        status = yield from self.contract_interact(
+            performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
+            contract_address=self.params.mech_marketplace_config.priority_mech_address,
+            contract_public_id=MechMM.contract_id,
             contract_callable=contract_callable,
             data_key=data_key,
             placeholder=placeholder,

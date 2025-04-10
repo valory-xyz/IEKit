@@ -9,18 +9,18 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeidf3nlv5fpvfy4libtscayhirdw64shgmhfmvjiftjmjkmhu7auxq
   behaviours/__init__.py: bafybeie3zsi6p3yanz5mqwpkdrcgywaqvkit3hdintsb4awnvalgxpxa4i
-  behaviours/base.py: bafybeicdcyujafl765anhijisytsyjhdiyacvaeempjyhclvrrogbkjzgq
-  behaviours/request.py: bafybeig57mey7h7uyifiavugjwqw4esdvgiaxcj6uzw6kb7qr3vialxgr4
-  behaviours/response.py: bafybeidwmufiyr3hwox5ioeqk2vboi4ofaggpmnxxhprntzkxg4mb5uvlu
+  behaviours/base.py: bafybeic2qrixxkqabdn42k3fjh5nrjqgzhzvzv4njdu2ge7x6mz2jiiaey
+  behaviours/request.py: bafybeiflgj5fdk5curuzkpvounl6vfihi3x5psfudt5ewc4qciwm3fzaxq
+  behaviours/response.py: bafybeidpefbhminwe6tuwr2igxrs6kkfhq4ys6jgrux7qcks6qcdk2qaci
   behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
   dialogues.py: bafybeicgtxsrzld6uyi2n455temnz6mj55irmxqxw55jxo4b6ud4rt7nsm
   fsm_specification.yaml: bafybeiapzwz6zcneelc2b2wrcb7cae7x6vbthmf6a57cm4mv6hucp67lz4
   handlers.py: bafybeieogcp4buhjommra3fkvyh3vwg3wzuepiwbn6qzr2b7zs27ghjxy4
-  models.py: bafybeic7d7klfdczo2nww5kg2eyintz4dq3pap5ve4v5htelhp5ovqxn4i
+  models.py: bafybeicahxfu64sanwbqbebeyimxipx6vsezcw236knnnaizhv6ttcx25e
   payloads.py: bafybeie3s5irdmcggst5kmbm6duyhr4nm2qc67fkwznhrdskri4qzmkmla
   rounds.py: bafybeif7taciv6pqupb7xuewurqssziplbjeobbv4d7ea3vbngz3kpjnee
   states/__init__.py: bafybeie34wx5znr2hxwh3gs2fchmbeuzjcfnraymdvtzjaxaq5zsiw233q
-  states/base.py: bafybeidclvpox4adidod36l2gorv4qtnsunmpzgnvqnm3xvqbqdreqjojy
+  states/base.py: bafybeieya4xmiefvwsd5qb2cwo5d237ztlgjvw4yc6x6zzyvhd2bws2vpi
   states/final_states.py: bafybeihjntrbc666blxj4viz74y4p2hfc5e4vijs3bqng2k4vqbwkud7sq
   states/request.py: bafybeibo7mxxbqao75zqjale5gjqa3nmt6fgdiwbthdczvd2ybdg4pdts4
   states/response.py: bafybeibaxnp2oxwjptoq7qzm6o7ww2qrdj2vnxzg2qt523vz2ftqzx5hyi
@@ -35,10 +35,11 @@ fingerprint_ignore_patterns: []
 connections: []
 contracts:
 - valory/gnosis_safe:0.1.0:bafybeidhegkiibxroyvzvsyuh5t3qpq3egj24u2yg2xryf2kir4f36on3u
-- valory/mech:0.1.0:bafybeiffl527ti4rbmizirribicc3elvbxq63e3xg2as26izg67o4nxsay
+- valory/mech:0.1.0:bafybeigwbv5nicn4t6wwkxcf2myg2b7mnm7ik5dwhd6nbifrff23a4ft7m
+- valory/mech_mm:0.1.0:bafybeiad32w5rysrrw5coldzklbx7zcwj4pjsbb26mqzgcxvlvoslmanqe
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/erc20:0.1.0:bafybeibtkjl3z7syunxtzylwju2dj5uk6m7jxk26jgxfpifqyr4e76b3sm
-- valory/mech_marketplace:0.1.0:bafybeidewt2kdfla7yezwa2h6gwecp76is4dh4oszhz2pvalrls55una6a
+- valory/mech_marketplace:0.1.0:bafybeiajuyxzp7l3lzxk23jle2bjdxapghc5om6iidcnwg6szfkqpxhb6y
 - valory/agent_registry:0.1.0:bafybeiehqygljgewzrk2he5bktbupzayke5iesgqzd2rkhzqldyy7mbtpa
 protocols:
 - valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
@@ -172,9 +173,6 @@ models:
       mech_marketplace_config:
         mech_marketplace_address: '0x0000000000000000000000000000000000000000'
         priority_mech_address: '0x0000000000000000000000000000000000000000'
-        priority_mech_staking_instance_address: '0x0000000000000000000000000000000000000000'
-        priority_mech_service_id: 0
-        requester_staking_instance_address: '0x0000000000000000000000000000000000000000'
         response_timeout: 300
     class_name: Params
   mech_response:
