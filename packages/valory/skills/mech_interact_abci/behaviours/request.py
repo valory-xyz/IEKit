@@ -439,9 +439,9 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
     def _get_max_delivery_rate(self) -> WaitableConditionType:
         """Get max delivery rate from the mech contract. Returns True on success, False otherwise."""
         status = yield from self._mech_mm_contract_interact(
-            contract_method="get_max_delivery_rate",
-            response_key="max_delivery_rate",
-            attribute_name="_mech_max_delivery_rate",  # Store in private attribute
+            contract_callable="get_max_delivery_rate",
+            data_key="max_delivery_rate",
+            placeholder="_mech_max_delivery_rate",  # Store in private attribute
             chain_id=self.params.mech_chain_id,
         )
         if not status:
