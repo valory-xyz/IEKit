@@ -417,9 +417,9 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
     def _get_payment_type(self) -> WaitableConditionType:
         """Get payment type from the mech contract. Returns True on success, False otherwise."""
         status = yield from self._mech_mm_contract_interact(
-            contract_method="get_payment_type",
-            response_key="payment_type",
-            attribute_name="_mech_payment_type",  # Store in private attribute
+            contract_callable="get_payment_type",
+            data_key="payment_type",
+            placeholder="_mech_payment_type",  # Store in private attribute
             chain_id=self.params.mech_chain_id,
         )
         if not status:
