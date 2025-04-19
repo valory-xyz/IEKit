@@ -95,19 +95,10 @@ class MechMM(Contract):
 
         return dict(results=results)
 
-    @classmethod
-    def get_block_number(
-        cls,
-        ledger_api: EthereumApi,
-        contract_address: str,
-        tx_hash: HexStr,
-        **kwargs: Any,
-    ) -> JSONLike:
-        """Get the number of the block in which the tx of the given hash was settled."""
-        contract_address = ledger_api.api.to_checksum_address(contract_address)
-        receipt: TxReceipt = ledger_api.api.eth.get_transaction_receipt(tx_hash)
-        block: BlockData = ledger_api.api.eth.get_block(receipt["blockNumber"])
-        return dict(number=block["number"])
+    @staticmethod
+    def _bytes_to_prefixed_hex(value: bytes) -> str:
+        """Convert bytes to a hex string prefixed with '0x'."""
+        return "0x" + value.hex()
 
     @classmethod
     def get_response(
@@ -140,12 +131,12 @@ class MechMM(Contract):
 
             if n_delivered == 0:
                 # Convert bytes to hex for logging
-                hex_request_id = "0x" + request_id.hex()
+                hex_request_id = cls._bytes_to_prefixed_hex(request_id)
                 info = f"The mech ({contract_address}) has not delivered a response yet for request with id {hex_request_id}."
                 return {"info": info}
 
             if n_delivered != 1:
-                hex_request_id = "0x" + request_id.hex()
+                hex_request_id = cls._bytes_to_prefixed_hex(request_id)
                 error = (
                     f"A single response was expected by the mech ({contract_address}) for request with id {hex_request_id}. "
                     f"Received {n_delivered} responses: {delivered}."
@@ -181,7 +172,7 @@ class MechMM(Contract):
         # Call the paymentType() function
         payment_type = ledger_api.contract_method_call(contract_instance, "paymentType")
         # Convert bytes32 to hex string with '0x' prefix
-        payment_type_hex = "0x" + payment_type.hex()
+        payment_type_hex = cls._bytes_to_prefixed_hex(payment_type)
         return dict(payment_type=payment_type_hex)
 
     @classmethod

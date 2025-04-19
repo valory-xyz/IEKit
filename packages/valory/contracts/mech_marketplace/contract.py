@@ -84,7 +84,7 @@ class MechMarketplace(Contract):
         return {"data": bytes.fromhex(encoded_data[2:])}
 
     @staticmethod
-    def _format_arg_value(value: Any) -> Any:
+    def _format_event_log_bytes_argument_to_hex(value: Any) -> Any:
         """Format contract event argument values (bytes to hex)."""
         return f"0x{value.hex()}" if isinstance(value, bytes) else value
 
@@ -126,10 +126,13 @@ class MechMarketplace(Contract):
                 value = event_args[arg_name]
                 if isinstance(value, list):
                     # Process list items using the helper
-                    result[arg_name] = [cls._format_arg_value(item) for item in value]
+                    result[arg_name] = [
+                        cls._format_event_log_bytes_argument_to_hex(item)
+                        for item in value
+                    ]
                 else:
                     # Process single value using the helper
-                    result[arg_name] = cls._format_arg_value(value)
+                    result[arg_name] = cls._format_event_log_bytes_argument_to_hex(value)
 
             results.append(result)
 
@@ -166,7 +169,6 @@ class MechMarketplace(Contract):
             "numRequests",
         )
 
-        print(f"Request event result: {res}")
         return res
 
     @classmethod
