@@ -159,7 +159,7 @@ all-linters:
 	tox -e check-hash
 	tox -e black-check
 	tox -e isort-check
-	# tox -e flake8
+	tox -e flake8
 	tox -e darglint
 	tox -e pylint
 	tox -e mypy
