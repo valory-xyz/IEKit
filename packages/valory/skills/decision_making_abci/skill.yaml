@@ -58,7 +58,7 @@ protocols:
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeifclzgoyulkyyigcwrqzmydyrj6c5d26xu7jk6cjbsed3pkls4pba
 - valory/ceramic_read_abci:0.1.0:bafybeiafztq7eeauz2mmc23wb2rfr5g6gwej4fsont7eleq54k624uedn4
-- valory/staking_abci:0.1.0:bafybeiagjyuygtblcy3jzvhb3j2j547u6epuyiwapooptgydysjakxqzhe
+- valory/staking_abci:0.1.0:bafybeihiwtnt4akbq2r4a35uvxdotcniusk2amcgoxik3o3ebiezyvegvq
 behaviours:
   main:
     args: {}
