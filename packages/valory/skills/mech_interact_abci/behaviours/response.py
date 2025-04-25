@@ -419,8 +419,6 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self.context.logger.info(f"Attempting to match parsed event request: {request}")
 
         for i, pending_response in enumerate(self._mech_responses):
-            self.context.logger.debug()  # Use debug for loop-internal comparison logging
-
             is_match = self._check_match(pending_response, request, i == 0)
 
             if is_match:

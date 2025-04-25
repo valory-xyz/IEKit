@@ -10,8 +10,8 @@ fingerprint:
   __init__.py: bafybeidf3nlv5fpvfy4libtscayhirdw64shgmhfmvjiftjmjkmhu7auxq
   behaviours/__init__.py: bafybeie3zsi6p3yanz5mqwpkdrcgywaqvkit3hdintsb4awnvalgxpxa4i
   behaviours/base.py: bafybeic2qrixxkqabdn42k3fjh5nrjqgzhzvzv4njdu2ge7x6mz2jiiaey
-  behaviours/request.py: bafybeidmbvglrmianl4ubtzj2lfqk376s7pmp4l2r7qa5evmlqhqaarqgy
-  behaviours/response.py: bafybeianks23bj3lsyxkuyxkvhhkuscn55jsdagzkyaxhyp5lse33hvtau
+  behaviours/request.py: bafybeihoujdhqd7a4hklmbtbfu62qpcw6yskhhxnknweh6dadnhy3qgpci
+  behaviours/response.py: bafybeibuzfpqgd7pgwtgtzpph53sub3bz5neqn4coxjjgv5p2yb3flvcqy
   behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
   dialogues.py: bafybeicgtxsrzld6uyi2n455temnz6mj55irmxqxw55jxo4b6ud4rt7nsm
   fsm_specification.yaml: bafybeiapzwz6zcneelc2b2wrcb7cae7x6vbthmf6a57cm4mv6hucp67lz4

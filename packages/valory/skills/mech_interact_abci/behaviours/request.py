@@ -62,7 +62,7 @@ from packages.valory.skills.transaction_settlement_abci.rounds import TX_HASH_LE
 METADATA_FILENAME = "metadata.json"
 V1_HEX_PREFIX = "f01"
 Ox = "0x"
-EMPTY_PAYMENT_DATA_HEX = "0x"
+EMPTY_PAYMENT_DATA_HEX = Ox
 
 # setting the safe gas to 0 means that all available gas will be used
 # which is what we want in most cases
@@ -469,7 +469,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         """Decode a hex string to bytes, handling potential errors."""
         try:
             return bytes.fromhex(
-                hex_string[2:] if hex_string.startswith("0x") else hex_string
+                hex_string[2:] if hex_string.startswith(Ox) else hex_string
             )
         except (ValueError, TypeError) as e:
             self.context.logger.error(
