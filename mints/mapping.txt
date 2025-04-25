@@ -14,6 +14,8 @@ token_id-"component_id"
 ---
 token_id-"agent_id"
 6-"agent/valory/impact_evaluator/0.1.0"
+41-"agent/valory/contribute/0.1.0"
 ---
 token_id-"service_id" (Gnosis Chain)
 6-"service/valory/impact_evaluator/0.1.0"
+X-"service/valory/contribute/0.1.0"
