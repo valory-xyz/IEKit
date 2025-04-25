@@ -76,7 +76,7 @@ class SynchronizedData(BaseSynchronizedData):
     """
     Class to represent the synchronized data.
 
-    This data is replicatedby the tendermint application.
+    This data is replicated by the tendermint application.
     """
 
     @property
