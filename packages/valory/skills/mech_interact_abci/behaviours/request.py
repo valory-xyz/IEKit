@@ -158,7 +158,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
     def mech_payment_type(self) -> Optional[str]:
         """Gets the fetched mech payment type."""
         if self._mech_payment_type is None:
-            self.context.logger.debug(
+            self.context.logger.error(
                 "Accessing mech_payment_type before it has been fetched."
             )
         return self._mech_payment_type
@@ -167,7 +167,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
     def mech_max_delivery_rate(self) -> Optional[int]:
         """Gets the fetched max delivery rate."""
         if self._mech_max_delivery_rate is None:
-            self.context.logger.debug(
+            self.context.logger.error(
                 "Accessing mech_max_delivery_rate before it has been fetched."
             )
         return self._mech_max_delivery_rate
@@ -465,72 +465,75 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         )
         return True
 
-    def _build_marketplace_request_data(self) -> WaitableConditionType:
-        """Build the request data for the Mech Marketplace flow."""
-        self.context.logger.info("Building request data for Mech Marketplace flow.")
-
-        # Decode the truncated v1 hex data to bytes
+    def _decode_hex_to_bytes(self, hex_string: str, data_name: str) -> Optional[bytes]:
+        """Decode a hex string to bytes, handling potential errors."""
         try:
-            request_data_bytes = bytes.fromhex(
-                self._v1_hex_truncated[2:]
-                if self._v1_hex_truncated.startswith("0x")
-                else self._v1_hex_truncated
+            return bytes.fromhex(
+                hex_string[2:] if hex_string.startswith("0x") else hex_string
             )
         except (ValueError, TypeError) as e:
             self.context.logger.error(
-                f"Failed to decode request_data {self._v1_hex_truncated!r}: {e}"
+                f"Failed to decode {data_name} {hex_string!r}: {e}"
             )
-            return False
+            return None
 
-        # Get payment type from contract
+    def _fetch_and_validate_payment_type(self) -> WaitableConditionType:
+        """Fetch and validate the payment type from the contract."""
         self.context.logger.info("Getting payment type")
         if not (yield from self._get_payment_type()):
-            self.context.logger.error(
-                "Failed step: Could not get payment type. Cannot build request data."
-            )
+            self.context.logger.error("Failed step: Could not get payment type.")
             return False
-        # Access via property
-        payment_type = self.mech_payment_type
-        if payment_type is None:  # Check if fetching actually succeeded
+        if self.mech_payment_type is None:
             self.context.logger.error(
                 "Payment type was not successfully fetched or is unexpectedly None."
             )
             return False
+        return True
 
-        payment_data = EMPTY_PAYMENT_DATA_HEX  # Use constant
-
-        # Get max delivery rate from contract
+    def _fetch_and_validate_max_delivery_rate(self) -> WaitableConditionType:
+        """Fetch and validate the max delivery rate from the contract."""
         self.context.logger.info("Getting max delivery rate")
         if not (yield from self._get_max_delivery_rate()):
-            # Proceeding without max_delivery_rate might be acceptable for some contracts.
             self.context.logger.warning(
                 "Failed step: Could not get max delivery rate. Proceeding without it, which might cause issues."
             )
-            max_delivery_rate = None
-        else:
-            # Access via property
-            max_delivery_rate = self.mech_max_delivery_rate
-
-        # Check if max_delivery_rate is required but missing. This check might be overly strict
-        # if the contract interaction itself can handle a None value when appropriate.
-        # Consider removing if the contract call is robust to None.
-        if max_delivery_rate is None:
+            # The original logic considered missing max_delivery_rate an error for marketplace.
             self.context.logger.error(
                 "Max delivery rate is required for marketplace request but was not fetched. Cannot build request data."
             )
             return False
 
-        # Convert payment_data hex string to bytes for the contract call
-        try:
-            payment_data_bytes = (
-                bytes.fromhex(payment_data[2:])
-                if payment_data.startswith("0x")
-                else bytes.fromhex(payment_data)
-            )
-        except (ValueError, TypeError) as e:
+        # Although _get_max_delivery_rate handles logging if the attribute isn't set,
+        # we double-check here to be explicit about the requirement for this flow.
+        if self.mech_max_delivery_rate is None:
             self.context.logger.error(
-                f"Failed to decode payment_data {payment_data!r}: {e}"
+                "Max delivery rate is required for marketplace request but is None. Cannot build request data."
             )
+            return False
+        return True
+
+    def _build_marketplace_request_data(self) -> WaitableConditionType:
+        """Build the request data for the Mech Marketplace flow using helper methods."""
+        self.context.logger.info("Building request data for Mech Marketplace flow.")
+
+        request_data_bytes = self._decode_hex_to_bytes(
+            self._v1_hex_truncated, "request_data"
+        )
+        if request_data_bytes is None:
+            return False
+
+        if not (yield from self._fetch_and_validate_payment_type()):
+            return False
+        payment_type = self.mech_payment_type  # Already validated not None
+
+        if not (yield from self._fetch_and_validate_max_delivery_rate()):
+            return False
+        max_delivery_rate = self.mech_max_delivery_rate  # Already validated not None
+
+        payment_data_bytes = self._decode_hex_to_bytes(
+            EMPTY_PAYMENT_DATA_HEX, "payment_data"
+        )
+        if payment_data_bytes is None:
             return False
 
         # Call the contract to get the encoded request data
@@ -540,8 +543,8 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             get_name(MechRequestBehaviour.request_data),
             request_data=request_data_bytes,
             priority_mech=self.mech_marketplace_config.priority_mech_address,
-            payment_data=payment_data_bytes,  # Pass bytes
-            payment_type=payment_type,  # Use stored attribute
+            payment_data=payment_data_bytes,
+            payment_type=payment_type,
             response_timeout=self.mech_marketplace_config.response_timeout,
             chain_id=self.params.mech_chain_id,
             max_delivery_rate=max_delivery_rate,

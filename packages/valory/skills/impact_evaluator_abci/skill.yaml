@@ -25,20 +25,20 @@ protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeifclzgoyulkyyigcwrqzmydyrj6c5d26xu7jk6cjbsed3pkls4pba
 - valory/ceramic_read_abci:0.1.0:bafybeiafztq7eeauz2mmc23wb2rfr5g6gwej4fsont7eleq54k624uedn4
-- valory/generic_scoring_abci:0.1.0:bafybeignl5sh7sb3ry2s5s3khwjat2qrpxrzmku5lvnllegpzyjy6rqx6e
-- valory/twitter_scoring_abci:0.1.0:bafybeifqrna4joivgtjtycmjm7fv6oz35cg3sjaqwa2njyubh43jcfwziu
+- valory/generic_scoring_abci:0.1.0:bafybeie6pgrhl2u3zkpvitjcvvwbuszct53dj7shjbzogzct3e75vmzpzq
+- valory/twitter_scoring_abci:0.1.0:bafybeih5bmlaeq7mhvkvkhvouxducsfjnfpdfgic575q6f6se4egynrxea
 - valory/ceramic_write_abci:0.1.0:bafybeibbvtvdfamkksfyunotzjdjmhx24javcjwvlddr7gr5yoeyc45imq
-- valory/dynamic_nft_abci:0.1.0:bafybeidjtl2jicmxhh763etlw6f6orflposfdhyqwbjvd72idj27dhia3a
+- valory/dynamic_nft_abci:0.1.0:bafybeihpgxjbehkjhrnw6dlx3siflfdef4bjyffojvznn33pqtfpxyezyy
 - valory/registration_abci:0.1.0:bafybeigt7bmrfhet7fyafqojl2i5uhzvpaz5wfv6kuk5ojwhhnhmg3qihu
 - valory/reset_pause_abci:0.1.0:bafybeicskv7u3mtfhi7nnoyw3bppwjof63izs4jgqdddtxicoea26t2n7i
 - valory/termination_abci:0.1.0:bafybeianygjbwmt4xrq77pfl3yzcokbjfzxmuru6j2k7a3boqc2qfb7shi
 - valory/transaction_settlement_abci:0.1.0:bafybeid4alawv3oz4gdyom5uevrgzfsahbwabi37r7gomsetwqiq66g6cm
-- valory/decision_making_abci:0.1.0:bafybeifh4wnlwqhuni32kmscug6nykogioddkzxdq3j2tjsmayjfq4uc6a
+- valory/decision_making_abci:0.1.0:bafybeiabu2p7jro2wisk2xijfuyhdal4axh45axukmmeo7ily4puxojidq
 - valory/llm_abci:0.1.0:bafybeibxctedcrb2hb6xxglpbcmbfjlyqq3m7gawwe5fs7vacxjux6z63i
 - valory/twitter_write_abci:0.1.0:bafybeieywzotyhslqvegpsjqkod34skmhllpvulis37dmfyrafguh73eg4
-- valory/olas_week_abci:0.1.0:bafybeifjeol2baxacdt5gyoooij6wrc32fuvwc27zea6h7alumo5gprem4
-- valory/mech_interact_abci:0.1.0:bafybeifxcnyy442g4vofvw3iij3rxyiitcdtbvi3innblxxr4knbe46klq
-- valory/staking_abci:0.1.0:bafybeigvn4lxzkv3f6xh65eiuliuc7lqvtoiskdreuyh2g7zq7rpla7nta
+- valory/olas_week_abci:0.1.0:bafybeigqfjaswq7bj74i2bhmbat543qviv4mfoaz3eqoo4mbwqghfaysam
+- valory/mech_interact_abci:0.1.0:bafybeifupurze3ncp43htfp7iw6rvk5cw44kzrrcv3uyuruqwnye3p2ace
+- valory/staking_abci:0.1.0:bafybeiagjyuygtblcy3jzvhb3j2j547u6epuyiwapooptgydysjakxqzhe
 behaviours:
   main:
     args: {}

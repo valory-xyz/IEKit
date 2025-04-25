@@ -96,7 +96,7 @@ class MechMM(Contract):
         return dict(results=results)
 
     @staticmethod
-    def _bytes_to_prefixed_hex(value: bytes) -> str:
+    def _to_prefixed_hex(value: bytes) -> str:
         """Convert bytes to a hex string prefixed with '0x'."""
         return "0x" + value.hex()
 
@@ -131,12 +131,12 @@ class MechMM(Contract):
 
             if n_delivered == 0:
                 # Convert bytes to hex for logging
-                hex_request_id = cls._bytes_to_prefixed_hex(request_id)
+                hex_request_id = cls._to_prefixed_hex(request_id)
                 info = f"The mech ({contract_address}) has not delivered a response yet for request with id {hex_request_id}."
                 return {"info": info}
 
             if n_delivered != 1:
-                hex_request_id = cls._bytes_to_prefixed_hex(request_id)
+                hex_request_id = cls._to_prefixed_hex(request_id)
                 error = (
                     f"A single response was expected by the mech ({contract_address}) for request with id {hex_request_id}. "
                     f"Received {n_delivered} responses: {delivered}."
@@ -172,7 +172,7 @@ class MechMM(Contract):
         # Call the paymentType() function
         payment_type = ledger_api.contract_method_call(contract_instance, "paymentType")
         # Convert bytes32 to hex string with '0x' prefix
-        payment_type_hex = cls._bytes_to_prefixed_hex(payment_type)
+        payment_type_hex = cls._to_prefixed_hex(payment_type)
         return dict(payment_type=payment_type_hex)
 
     @classmethod

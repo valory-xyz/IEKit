@@ -47,6 +47,9 @@ from packages.valory.skills.mech_interact_abci.states.response import MechRespon
 IPFS_HASH_PREFIX = f"{V1_HEX_PREFIX}701220"
 HEX_PREFIX_LENGTH = 2
 BYTES32_LENGTH = 32
+BYTES32_PADDING_BYTE = b"\x00"
+BYTES32_HEX_FORMAT_SPEC = "064x"
+HEX_BASE = 16
 
 
 class MechResponseBehaviour(MechInteractBaseBehaviour):
@@ -216,9 +219,9 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             # Convert hex str to by32 after removing the 0x prefix
             raw_bytes = bytes.fromhex(hex_request_id[HEX_PREFIX_LENGTH:])
             # Ensuring it's exactly 32 bytes by padding with zeros if needed
-            request_id_bytes = raw_bytes.rjust(BYTES32_LENGTH, b"\x00")
+            request_id_bytes = raw_bytes.rjust(BYTES32_LENGTH, BYTES32_PADDING_BYTE)
             # keeping int version for specs
-            request_id_for_specs = int(hex_request_id, 16)
+            request_id_for_specs = int(hex_request_id, HEX_BASE)
 
         except (ValueError, TypeError) as e:
             self.context.logger.error(
@@ -236,7 +239,9 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         request_id_for_specs = request_id
         try:
             # Convert int to 32-byte hex string (padded with zeros), then to bytes
-            hex_str = format(request_id, "064x")  # 32 bytes = 64 hex chars
+            hex_str = format(
+                request_id, BYTES32_HEX_FORMAT_SPEC
+            )  # 32 bytes = 64 hex chars
             request_id_bytes = bytes.fromhex(hex_str)
         except (ValueError, TypeError) as e:
             self.context.logger.error(
@@ -412,44 +417,29 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
     def _set_current_response(self, request: MechRequest) -> None:
         """Set the current Mech response by matching parsed event data to a pending response."""
         self.context.logger.info(f"Attempting to match parsed event request: {request}")
-        matched = False
 
         for i, pending_response in enumerate(self._mech_responses):
-            self.context.logger.debug(  # Use debug for loop-internal comparison logging
-                f"Comparing with pending response #{i}: {pending_response}"
-            )
+            self.context.logger.debug()  # Use debug for loop-internal comparison logging
 
-            is_match = False
-            if self.params.use_mech_marketplace:
-                # Marketplace flow: TEMPORARY logic - attempts to match only the first pending response.
-                is_match = self._is_marketplace_match(pending_response, request, i == 0)
-            else:
-                # Legacy flow: Match based on data field comparison.
-                is_match = self._is_legacy_match(pending_response, request)
+            is_match = self._check_match(pending_response, request, i == 0)
 
             if is_match:
                 self.current_mech_response = pending_response
-                matched = True
-                self.context.logger.info(
-                    f"Successfully matched request to pending response #{i}."
-                )
-                break  # Exit loop once a match is found
+                return  # Return immediately after finding a match
 
-        if not matched:
-            # This case indicates a potential problem: the Request event data couldn't be matched
-            # to any known pending request based on the matching logic.
-            flow_type = (
-                "Marketplace (Temporary Logic)"
-                if self.params.use_mech_marketplace
-                else "Legacy"
-            )
-            self.context.logger.error(
-                f"Could not find a matching pending response for parsed request event: {request}. "
-                f"Flow: {flow_type}. "
-                f"This might be due to differences in the 'data' field (legacy), state tracking issues, "
-                f"or limitations of the temporary marketplace matching. "
-                f"Response processing for this request might fail."
-            )
+        # If the loop completes without returning, no match was found.
+        flow_type = (
+            "Marketplace (Temporary Logic)"
+            if self.params.use_mech_marketplace
+            else "Legacy"
+        )
+        self.context.logger.error(
+            f"Could not find a matching pending response for parsed request event: {request}. "
+            f"Flow: {flow_type}. "
+            f"This might be due to differences in the 'data' field (legacy), state tracking issues, "
+            f"or limitations of the temporary marketplace matching. "
+            f"Response processing for this request might fail."
+        )
 
     def _is_legacy_match(
         self, pending_response: MechInteractionResponse, request: MechRequest
@@ -499,6 +489,22 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             f"Updated (first) pending_response.requestIds: {pending_response.requestIds} (TEMPORARY MATCH)"
         )
         return True
+
+    def _check_match(
+        self,
+        pending_response: MechInteractionResponse,
+        request: MechRequest,
+        is_first_pending: bool,
+    ) -> bool:
+        """Check if a pending response matches the request based on the flow."""
+        if self.params.use_mech_marketplace:
+            # Marketplace flow: TEMPORARY logic - attempts to match only the first pending response.
+            return self._is_marketplace_match(
+                pending_response, request, is_first_pending
+            )
+
+        # Legacy flow: Match based on data field comparison.
+        return self._is_legacy_match(pending_response, request)
 
     def _process_responses(
         self,
