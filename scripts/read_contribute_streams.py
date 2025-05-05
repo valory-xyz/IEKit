@@ -42,16 +42,19 @@ def main():
     db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_DB_STREAM_ID)
     with open("contribute_db.json", "w", encoding="utf-8") as of:
         json.dump(db, of, indent=4)
+        print("Contribute DB written to contribute_db.json")
 
     # Centaurs db
     centaurs, _, _ = ceramic.get_data(CONTRIBUTE_PROD_CENTAURS_STREAM_ID)
     with open("contribute_centaurs.json", "w", encoding="utf-8") as of:
         json.dump(centaurs, of, indent=4)
+        print("Centaurs DB written to contribute_centaurs.json")
 
     # Manual point db
     points, _, _ = ceramic.get_data(CONTRIBUTE_PROD_MANUAL_STREAM_ID)
     with open("contribute_generic_points.json", "w", encoding="utf-8") as of:
         json.dump(points, of, indent=4)
+        print("Manual DB written to contribute_generic_points.json")
 
 
 if __name__ == "__main__":
