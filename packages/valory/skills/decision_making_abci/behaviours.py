@@ -303,7 +303,10 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
 
     def _get_utc_time(self):
         """Check if it is process time"""
-        now_utc = self.local_state.round_sequence.last_round_transition_timestamp
+        now_utc = (
+            self.local_state.round_sequence._last_round_transition_timestamp
+            or datetime.now(timezone.utc)
+        )
 
         # Tendermint timestamps are expected to be UTC, but for some reason
         # we are getting local time. We replace the hour and timezone.
