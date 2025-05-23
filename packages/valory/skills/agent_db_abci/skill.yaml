@@ -1,0 +1,156 @@
+name: agent_db_abci
+author: valory
+version: 0.1.0
+type: skill
+description: A skill that serves as a base skill for others to interact with AgentDB.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeigmk5a3fgwudb2kysbh7ar3sdlunfxxrj76udkj555z5zz6onurdi
+  agent_db_client.py: bafybeif2tf6ba6ec73f7kqzficlkk6r3pwlb2uzl2qxkksa3a3ysl33voa
+  agent_db_models.py: bafybeieujj532ijrpcqgzgdb5rtvkrzdyv6j6uoz7r7v45kc5t4tgzl7au
+  agents_fun_db.py: bafybeifvilceat6y3hfw57x4ifds662jmdyn6gvdcr6gojul4wngn6zrre
+  behaviours.py: bafybeidf42rpakglcibu4ahdql4bqrpcm7ghffq5gndyqrukz5l3k6a6le
+  dialogues.py: bafybeihsfzez4dsemudres2je4ksjcngbw5q72ltyucqtv5ytkpverqpry
+  fsm_specification.yaml: bafybeigiboab2knxjw7jj7k7bne6osbnhs7rreo3mgtq5nfkrtpw47thze
+  handlers.py: bafybeiboaxdq7goafpoedrulb3s46usgqpi646oq5vsevtb2c434eiamxa
+  models.py: bafybeihdebjnndq6bw4mtoaooqrent2jbb4pwpsgbf66xfhvhcl64kvv6m
+  payloads.py: bafybeifjq6sljt33cbdfleab4czsoe66ntlcvqjnxcdhp4rtn6sdiipjy4
+  rounds.py: bafybeif4v3ka77zommvf7md7wwxz7ebdvbruhelwz2sviakhbmbtisqr7m
+  twitter_models.py: bafybeig44bk3x4pdus32djvqa3prj5exo5v2ykqhvzwnex2xcnp2fjygfi
+fingerprint_ignore_patterns: []
+connections: []
+contracts: []
+protocols: []
+skills:
+- valory/abstract_round_abci:0.1.0:bafybeifclzgoyulkyyigcwrqzmydyrj6c5d26xu7jk6cjbsed3pkls4pba
+behaviours:
+  main:
+    args: {}
+    class_name: AgentDBRoundBehaviour
+handlers:
+  abci:
+    args: {}
+    class_name: ABCIHandler
+  contract_api:
+    args: {}
+    class_name: ContractApiHandler
+  http:
+    args: {}
+    class_name: HttpHandler
+  ipfs:
+    args: {}
+    class_name: IpfsHandler
+  ledger_api:
+    args: {}
+    class_name: LedgerApiHandler
+  signing:
+    args: {}
+    class_name: SigningHandler
+  tendermint:
+    args: {}
+    class_name: TendermintHandler
+models:
+  abci_dialogues:
+    args: {}
+    class_name: AbciDialogues
+  benchmark_tool:
+    args:
+      log_dir: /logs
+    class_name: BenchmarkTool
+  contract_api_dialogues:
+    args: {}
+    class_name: ContractApiDialogues
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
+  ipfs_dialogues:
+    args: {}
+    class_name: IpfsDialogues
+  ledger_api_dialogues:
+    args: {}
+    class_name: LedgerApiDialogues
+  params:
+    args:
+      multisend_address: '0x0000000000000000000000000000000000000000'
+      termination_sleep: 900
+      cleanup_history_depth: 1
+      cleanup_history_depth_current: null
+      drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
+      finalize_timeout: 60.0
+      genesis_config:
+        chain_id: chain-c4daS1
+        consensus_params:
+          block:
+            max_bytes: '22020096'
+            max_gas: '-1'
+            time_iota_ms: '1000'
+          evidence:
+            max_age_duration: '172800000000000'
+            max_age_num_blocks: '100000'
+            max_bytes: '1048576'
+          validator:
+            pub_key_types:
+            - ed25519
+          version: {}
+        genesis_time: '2022-05-20T16:00:21.735122717Z'
+        voting_power: '10'
+      history_check_timeout: 1205
+      ipfs_domain_name: null
+      keeper_allowed_retries: 3
+      keeper_timeout: 30.0
+      max_attempts: 10
+      max_healthcheck: 120
+      reset_pause_duration: 10
+      on_chain_service_id: null
+      request_retry_delay: 1.0
+      request_timeout: 10.0
+      reset_tendermint_after: 2
+      retry_attempts: 400
+      retry_timeout: 3
+      round_timeout_seconds: 30.0
+      service_id: dummy_service
+      service_registry_address: null
+      setup:
+        all_participants: []
+        safe_contract_address: '0x0000000000000000000000000000000000000000'
+        consensus_threshold: null
+      share_tm_config_on_startup: false
+      sleep_time: 1
+      tendermint_check_sleep_delay: 3
+      tendermint_com_url: http://localhost:8080
+      tendermint_max_retries: 5
+      tendermint_p2p_url: localhost:26656
+      tendermint_url: http://localhost:26657
+      tx_timeout: 10.0
+      validate_timeout: 1205
+      use_termination: false
+      use_slashing: false
+      slash_cooldown_hours: 3
+      slash_threshold_amount: 10000000000000000
+      light_slash_unit_amount: 5000000000000000
+      serious_slash_unit_amount: 8000000000000000
+    class_name: Params
+  requests:
+    args: {}
+    class_name: Requests
+  signing_dialogues:
+    args: {}
+    class_name: SigningDialogues
+  state:
+    args: {}
+    class_name: SharedState
+  tendermint_dialogues:
+    args: {}
+    class_name: TendermintDialogues
+  agent_db_client:
+    args:
+      base_url: https://afmdb.autonolas.tech
+    class_name: AgentDBClient
+  agents_fun_db:
+    args: {}
+    class_name: AgentsFunDatabase
+dependencies:
+  pydantic:
+    version: '>=2.11.4'
+is_abstract: true

@@ -1,0 +1,17 @@
+alphabet_in:
+- DONE
+- NO_MAJORITY
+- ROUND_TIMEOUT
+default_start_state: AgentDBRound
+final_states:
+- FinishedReadingRound
+label: AgentDBAbciApp
+start_states:
+- AgentDBRound
+states:
+- AgentDBRound
+- FinishedReadingRound
+transition_func:
+    (AgentDBRound, DONE): FinishedReadingRound
+    (AgentDBRound, NO_MAJORITY): AgentDBRound
+    (AgentDBRound, ROUND_TIMEOUT): AgentDBRound
