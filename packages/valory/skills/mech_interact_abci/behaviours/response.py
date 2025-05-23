@@ -20,11 +20,12 @@
 """This module contains the response state of the mech interaction abci app."""
 
 import json
-from typing import Any, Callable, Dict, Generator, List, Optional
+from typing import Any, Callable, Dict, Generator, List, Optional, Tuple
 
 from web3.constants import ADDRESS_ZERO
 
 from packages.valory.contracts.mech.contract import Mech
+from packages.valory.contracts.mech_mm.contract import MechMM
 from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.abstract_round_abci.base import get_name
 from packages.valory.skills.mech_interact_abci.behaviours.base import (
@@ -44,6 +45,11 @@ from packages.valory.skills.mech_interact_abci.states.response import MechRespon
 
 
 IPFS_HASH_PREFIX = f"{V1_HEX_PREFIX}701220"
+HEX_PREFIX_LENGTH = 2
+BYTES32_LENGTH = 32
+BYTES32_PADDING_BYTE = b"\x00"
+BYTES32_HEX_FORMAT_SPEC = "064x"
+HEX_BASE = 16
 
 
 class MechResponseBehaviour(MechInteractBaseBehaviour):
@@ -183,6 +189,107 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         )
         return result
 
+    @property
+    def request_id_getter(self) -> Callable[[], Tuple[Optional[bytes], Optional[int]]]:
+        """Get the appropriate request ID retrieval method based on the configuration."""
+        if self.params.use_mech_marketplace:
+            return self._get_marketplace_request_ids
+        return self._get_legacy_request_ids
+
+    def _get_marketplace_request_ids(self) -> Tuple[Optional[bytes], Optional[int]]:
+        """Get the request IDs for the marketplace flow."""
+        request_ids = self.current_mech_response.requestIds
+        self.context.logger.info(
+            f"Using Mech Marketplace. Request ids (hex): {request_ids}"
+        )
+        if not request_ids or len(request_ids) == 0:
+            self.context.logger.warning(
+                "Mech Marketplace is enabled, but no request IDs found."
+            )
+            return None, None
+
+        hex_request_id = request_ids[0]
+        if not isinstance(hex_request_id, str) or not hex_request_id.startswith("0x"):
+            self.context.logger.error(
+                f"Invalid hex request ID format: {hex_request_id}"
+            )
+            return None, None
+
+        try:
+            # Convert hex str to by32 after removing the 0x prefix
+            raw_bytes = bytes.fromhex(hex_request_id[HEX_PREFIX_LENGTH:])
+            # Ensuring it's exactly 32 bytes by padding with zeros if needed
+            request_id_bytes = raw_bytes.rjust(BYTES32_LENGTH, BYTES32_PADDING_BYTE)
+            # keeping int version for specs
+            request_id_for_specs = int(hex_request_id, HEX_BASE)
+
+        except (ValueError, TypeError) as e:
+            self.context.logger.error(
+                f"Could not convert request ID {hex_request_id} to bytes32: {e}"
+            )
+            return None, None
+        self.context.logger.info(
+            f"Converted marketplace request ID from hex {hex_request_id} to bytes32: 0x{request_id_bytes.hex()}"
+        )
+        return request_id_bytes, request_id_for_specs
+
+    def _get_legacy_request_ids(self) -> Tuple[Optional[bytes], Optional[int]]:
+        """Get the request IDs for the legacy (direct) mech flow."""
+        request_id = self.current_mech_response.requestId
+        request_id_for_specs = request_id
+        try:
+            # Convert int to 32-byte hex string (padded with zeros), then to bytes
+            hex_str = format(
+                request_id, BYTES32_HEX_FORMAT_SPEC
+            )  # 32 bytes = 64 hex chars
+            request_id_bytes = bytes.fromhex(hex_str)
+        except (ValueError, TypeError) as e:
+            self.context.logger.error(
+                f"Could not convert request ID {request_id} to bytes32: {e}"
+            )
+            return None, None
+        self.context.logger.info(
+            f"Converted direct mech request ID from int {request_id} to bytes32: 0x{request_id_bytes.hex()}"
+        )
+        return request_id_bytes, request_id_for_specs
+
+    def _prepare_get_response_call(
+        self,
+        request_id_bytes: Optional[bytes],
+        request_id_for_specs: Optional[int],
+    ) -> Generator:
+        """Prepare the generator for the get_response contract call."""
+        if self.params.use_mech_marketplace:
+            # Use mech_mm ABI (MechMM.contract_id) and bytes32 request ID
+            self.context.logger.info(
+                f"Using Mech Marketplace flow: Preparing get_response call with bytes32 request ID 0x{request_id_bytes.hex()} using MechMM ABI."
+            )
+            return self.contract_interact(
+                performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,
+                contract_address=self.params.mech_contract_address,  # Target the mech_mm contract address
+                contract_public_id=MechMM.contract_id,  # Use MechMM ABI
+                contract_callable="get_response",
+                data_key="data",
+                placeholder=get_name(MechResponseBehaviour.response_hex),
+                request_id=request_id_bytes,  # Use bytes32 request ID
+                from_block=self.from_block,
+                chain_id=self.params.mech_chain_id,
+            )
+
+        # Use legacy mech ABI (self.params.mech_contract_id) and int request ID
+        self.context.logger.info(
+            f"Using legacy Mech flow: Preparing get_response call with int request ID {request_id_for_specs} using legacy Mech ABI."
+        )
+        # Note: We rely on _mech_contract_interact using the correct legacy mech ABI via self.params.mech_contract_id
+        return self._mech_contract_interact(
+            contract_callable="get_response",
+            data_key="data",
+            placeholder=get_name(MechResponseBehaviour.response_hex),
+            request_id=request_id_for_specs,  # Use integer request ID for legacy mech
+            from_block=self.from_block,
+            chain_id=self.params.mech_chain_id,
+        )
+
     def _get_response_hash(self) -> WaitableConditionType:
         """Get the hash of the response data."""
         if (
@@ -200,22 +307,30 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 self.response_hex = self.current_mech_response.response_data
                 return True
 
-        request_id = self.current_mech_response.requestId
+        # Determine request IDs based on the flow using the property
+        request_id_bytes, request_id_for_specs = self.request_id_getter()
+
+        # Check if request IDs were successfully determined
+        if request_id_bytes is None or request_id_for_specs is None:
+            self.context.logger.error(
+                "Could not determine the request ID to use for fetching the response."
+            )
+            return False
+
         self.context.logger.info(
-            f"Filtering the mech's events from block {self.from_block} "
-            f"for a response to our request with id {request_id!r}."
-        )
-        result = yield from self.mech_contract_interact(
-            contract_callable="get_response",
-            data_key="data",
-            placeholder=get_name(MechResponseBehaviour.response_hex),
-            request_id=request_id,
-            from_block=self.from_block,
-            chain_id=self.params.mech_chain_id,
+            f"Filtering the Mech's Deliver events from block {self.from_block} "
+            f"for a response to request with id (bytes32) 0x{request_id_bytes.hex()} or (int) {request_id_for_specs}"
         )
 
+        # Conditionally call get_response based on whether the marketplace (and thus mech_mm) is used
+        response_generator = self._prepare_get_response_call(
+            request_id_bytes, request_id_for_specs
+        )
+        result = yield from response_generator
+
         if result:
-            self.set_mech_response_specs(request_id)
+            # Use integer version for specs regardless of which flow was used
+            self.set_mech_response_specs(request_id_for_specs)
 
         return result
 
@@ -300,14 +415,94 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         return True
 
     def _set_current_response(self, request: MechRequest) -> None:
-        """Set the current Mech response."""
-        for pending_response in self._mech_responses:
-            if (
-                pending_response.data == request.data.hex()
-            ):  # TODO: why is request.data bytes now?
-                pending_response.requestId = request.requestId
+        """Set the current Mech response by matching parsed event data to a pending response."""
+        self.context.logger.info(f"Attempting to match parsed event request: {request}")
+
+        for i, pending_response in enumerate(self._mech_responses):
+            is_match = self._check_match(pending_response, request, i == 0)
+
+            if is_match:
                 self.current_mech_response = pending_response
-                break
+                return  # Return immediately after finding a match
+
+        # If the loop completes without returning, no match was found.
+        flow_type = (
+            "Marketplace (Temporary Logic)"
+            if self.params.use_mech_marketplace
+            else "Legacy"
+        )
+        self.context.logger.error(
+            f"Could not find a matching pending response for parsed request event: {request}. "
+            f"Flow: {flow_type}. "
+            f"This might be due to differences in the 'data' field (legacy), state tracking issues, "
+            f"or limitations of the temporary marketplace matching. "
+            f"Response processing for this request might fail."
+        )
+
+    def _is_legacy_match(
+        self, pending_response: MechInteractionResponse, request: MechRequest
+    ) -> bool:
+        """Check if a legacy pending response matches the request based on data."""
+        match = pending_response.data == request.data.hex()
+        if match:
+            # Log detailed match info only if it matches
+            self.context.logger.info(
+                f"Matched LEGACY pending response (Nonce: {pending_response.nonce}) "
+                f"to parsed event request (ID: {hex(int(request.requestId))}) "
+                f"based on data field matching. Data Hex: {request.data.hex()}"
+            )
+            pending_response.requestId = (
+                request.requestId
+            )  # Update the pending response directly
+        return match
+
+    def _is_marketplace_match(
+        self,
+        pending_response: MechInteractionResponse,
+        request: MechRequest,
+        is_first_pending: bool,
+    ) -> bool:
+        """Check if a marketplace pending response matches the request (TEMPORARY LOGIC)."""
+        # NOTE: Replace this temporary logic with robust matching for multiple concurrent marketplace requests. if in future we need to support multiple concurrent requests.
+        # This currently assumes the first pending response corresponds to the first event.
+        if not is_first_pending:
+            # Current temporary logic only attempts to match the first pending response.
+            return False
+
+        if not hasattr(request, "requestIds") or not request.requestIds:
+            self.context.logger.warning(
+                f"Marketplace flow active for first pending response, but parsed request lacks 'requestIds' or list is empty: {request}"
+            )
+            return False
+
+        # Log the warning only when attempting the temporary match on the first item
+        self.context.logger.warning(
+            "Marketplace flow: Using TEMPORARY matching logic. Assuming the first pending response "
+            "corresponds to the received event request. This is unsafe for multiple concurrent requests."
+        )
+
+        # If it's the first pending response and the request has IDs, assume it's a match (temporary)
+        pending_response.requestIds = [str(req_id) for req_id in request.requestIds]
+        self.context.logger.info(
+            f"Updated (first) pending_response.requestIds: {pending_response.requestIds} (TEMPORARY MATCH)"
+        )
+        return True
+
+    def _check_match(
+        self,
+        pending_response: MechInteractionResponse,
+        request: MechRequest,
+        is_first_pending: bool,
+    ) -> bool:
+        """Check if a pending response matches the request based on the flow."""
+        if self.params.use_mech_marketplace:
+            # Marketplace flow: TEMPORARY logic - attempts to match only the first pending response.
+            return self._is_marketplace_match(
+                pending_response, request, is_first_pending
+            )
+
+        # Legacy flow: Match based on data field comparison.
+        return self._is_legacy_match(pending_response, request)
 
     def _process_responses(
         self,

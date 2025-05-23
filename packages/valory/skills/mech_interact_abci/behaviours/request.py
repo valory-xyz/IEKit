@@ -62,6 +62,7 @@ from packages.valory.skills.transaction_settlement_abci.rounds import TX_HASH_LE
 METADATA_FILENAME = "metadata.json"
 V1_HEX_PREFIX = "f01"
 Ox = "0x"
+EMPTY_PAYMENT_DATA_HEX = Ox
 
 # setting the safe gas to 0 means that all available gas will be used
 # which is what we want in most cases
@@ -82,6 +83,9 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         self._price: int = 0
         self._mech_requests: List[MechMetadata] = []
         self._pending_responses: List[MechInteractionResponse] = []
+        # Initialize private attributes for properties
+        self._mech_payment_type: Optional[str] = None
+        self._mech_max_delivery_rate: Optional[int] = None
 
     @property
     def metadata_filepath(self) -> str:
@@ -149,6 +153,24 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             self.multisend_data,
             SafeOperation.DELEGATE_CALL.value,
         )
+
+    @property
+    def mech_payment_type(self) -> Optional[str]:
+        """Gets the fetched mech payment type."""
+        if self._mech_payment_type is None:
+            self.context.logger.error(
+                "Accessing mech_payment_type before it has been fetched."
+            )
+        return self._mech_payment_type
+
+    @property
+    def mech_max_delivery_rate(self) -> Optional[int]:
+        """Gets the fetched max delivery rate."""
+        if self._mech_max_delivery_rate is None:
+            self.context.logger.error(
+                "Accessing mech_max_delivery_rate before it has been fetched."
+            )
+        return self._mech_max_delivery_rate
 
     @staticmethod
     def wei_to_unit(wei: int) -> float:
@@ -392,30 +414,165 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         self._pending_responses.append(pending_response)
         return True
 
+    def _get_payment_type(self) -> WaitableConditionType:
+        """Get payment type from the mech contract. Returns True on success, False otherwise."""
+        status = yield from self._mech_mm_contract_interact(
+            contract_callable="get_payment_type",
+            data_key="payment_type",
+            placeholder="_mech_payment_type",  # Store in private attribute
+            chain_id=self.params.mech_chain_id,
+        )
+        if not status:
+            self.context.logger.error("Failed to get payment type from contract")
+            return False
+
+        # Verify the attribute was set (optional, property handles None)
+        if self.mech_payment_type is None:
+            self.context.logger.error(
+                "Payment type attribute not set correctly after contract call."
+            )
+            return False
+
+        self.context.logger.info(f"Payment type fetched: {self.mech_payment_type}")
+        return True
+
+    def _get_max_delivery_rate(self) -> WaitableConditionType:
+        """Get max delivery rate from the mech contract. Returns True on success, False otherwise."""
+        status = yield from self._mech_mm_contract_interact(
+            contract_callable="get_max_delivery_rate",
+            data_key="max_delivery_rate",
+            placeholder="_mech_max_delivery_rate",  # Store in private attribute
+            chain_id=self.params.mech_chain_id,
+        )
+        if not status:
+            # This might be acceptable depending on the contract.
+            self.context.logger.warning(
+                "Failed step: Could not get max delivery rate. Proceeding without it."
+            )
+            # No need to explicitly set attribute to None, property will return None
+            return True  # Return True as the step itself didn't fail catastrophically, just didn't get the value
+
+        # Verify the attribute was set (optional, property handles None)
+        if self.mech_max_delivery_rate is None:
+            self.context.logger.error(
+                "Max delivery rate attribute not set correctly after contract call."
+            )
+            # Even if status was True, if the value is None unexpectedly, treat as failure
+            return False
+
+        self.context.logger.info(
+            f"Max delivery rate fetched: {self.mech_max_delivery_rate}"
+        )
+        return True
+
+    def _decode_hex_to_bytes(self, hex_string: str, data_name: str) -> Optional[bytes]:
+        """Decode a hex string to bytes, handling potential errors."""
+        try:
+            return bytes.fromhex(
+                hex_string[2:] if hex_string.startswith(Ox) else hex_string
+            )
+        except (ValueError, TypeError) as e:
+            self.context.logger.error(
+                f"Failed to decode {data_name} {hex_string!r}: {e}"
+            )
+            return None
+
+    def _fetch_and_validate_payment_type(self) -> WaitableConditionType:
+        """Fetch and validate the payment type from the contract."""
+        self.context.logger.info("Getting payment type")
+        if not (yield from self._get_payment_type()):
+            self.context.logger.error("Failed step: Could not get payment type.")
+            return False
+        if self.mech_payment_type is None:
+            self.context.logger.error(
+                "Payment type was not successfully fetched or is unexpectedly None."
+            )
+            return False
+        return True
+
+    def _fetch_and_validate_max_delivery_rate(self) -> WaitableConditionType:
+        """Fetch and validate the max delivery rate from the contract."""
+        self.context.logger.info("Getting max delivery rate")
+        if not (yield from self._get_max_delivery_rate()):
+            self.context.logger.warning(
+                "Failed step: Could not get max delivery rate. Proceeding without it, which might cause issues."
+            )
+            # The original logic considered missing max_delivery_rate an error for marketplace.
+            self.context.logger.error(
+                "Max delivery rate is required for marketplace request but was not fetched. Cannot build request data."
+            )
+            return False
+
+        # Although _get_max_delivery_rate handles logging if the attribute isn't set,
+        # we double-check here to be explicit about the requirement for this flow.
+        if self.mech_max_delivery_rate is None:
+            self.context.logger.error(
+                "Max delivery rate is required for marketplace request but is None. Cannot build request data."
+            )
+            return False
+        return True
+
+    def _build_marketplace_request_data(self) -> WaitableConditionType:
+        """Build the request data for the Mech Marketplace flow using helper methods."""
+        self.context.logger.info("Building request data for Mech Marketplace flow.")
+
+        request_data_bytes = self._decode_hex_to_bytes(
+            self._v1_hex_truncated, "request_data"
+        )
+        if request_data_bytes is None:
+            return False
+
+        if not (yield from self._fetch_and_validate_payment_type()):
+            return False
+        payment_type = self.mech_payment_type  # Already validated not None
+
+        if not (yield from self._fetch_and_validate_max_delivery_rate()):
+            return False
+        max_delivery_rate = self.mech_max_delivery_rate  # Already validated not None
+
+        payment_data_bytes = self._decode_hex_to_bytes(
+            EMPTY_PAYMENT_DATA_HEX, "payment_data"
+        )
+        if payment_data_bytes is None:
+            return False
+
+        # Call the contract to get the encoded request data
+        status = yield from self._mech_marketplace_contract_interact(
+            "get_request_data",
+            "data",
+            get_name(MechRequestBehaviour.request_data),
+            request_data=request_data_bytes,
+            priority_mech=self.mech_marketplace_config.priority_mech_address,
+            payment_data=payment_data_bytes,
+            payment_type=payment_type,
+            response_timeout=self.mech_marketplace_config.response_timeout,
+            chain_id=self.params.mech_chain_id,
+            max_delivery_rate=max_delivery_rate,
+        )
+        return status
+
+    def _build_legacy_request_data(self) -> WaitableConditionType:
+        """Build the request data for the legacy Mech flow."""
+        self.context.logger.info("Building request data for legacy Mech flow.")
+        # Legacy mech logic
+        status = yield from self._mech_contract_interact(
+            "get_request_data",
+            "data",
+            get_name(MechRequestBehaviour.request_data),
+            request_data=self._v1_hex_truncated,  # Note: Legacy mech expects hex string
+            chain_id=self.params.mech_chain_id,
+        )
+        return status
+
     def _build_request_data(self) -> WaitableConditionType:
-        """Get the request tx data encoded."""
+        """Build the request data by dispatching to the appropriate method."""
+        self.context.logger.info("Building request data")
+
+        status = False
         if self.params.use_mech_marketplace:
-            status = yield from self._mech_marketplace_contract_interact(
-                "get_request_data",
-                "data",
-                get_name(MechRequestBehaviour.request_data),
-                request_data=self._v1_hex_truncated,
-                priority_mech=self.mech_marketplace_config.priority_mech_address,
-                priority_mech_staking_instance=self.mech_marketplace_config.priority_mech_staking_instance_address,
-                priority_mech_service_id=self.mech_marketplace_config.priority_mech_service_id,
-                requester_staking_instance=self.mech_marketplace_config.requester_staking_instance_address,
-                requester_service_id=self.params.on_chain_service_id,
-                response_timeout=self.mech_marketplace_config.response_timeout,
-                chain_id=self.params.mech_chain_id,
-            )
+            status = yield from self._build_marketplace_request_data()
         else:
-            status = yield from self._mech_contract_interact(
-                "get_request_data",
-                "data",
-                get_name(MechRequestBehaviour.request_data),
-                request_data=self._v1_hex_truncated,
-                chain_id=self.params.mech_chain_id,
-            )
+            status = yield from self._build_legacy_request_data()
 
         if status:
             to = (
@@ -429,6 +586,11 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                 value=self.price,
             )
             self.multisend_batches.append(batch)
+            self.context.logger.info(
+                f"Successfully built request data and added batch for address {to}."
+            )
+        else:
+            self.context.logger.error("Failed to build request data.")
 
         return status
 

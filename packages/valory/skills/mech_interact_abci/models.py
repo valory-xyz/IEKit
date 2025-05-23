@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -57,9 +57,6 @@ class MechMarketplaceConfig:
 
     mech_marketplace_address: str
     priority_mech_address: str
-    priority_mech_staking_instance_address: str
-    priority_mech_service_id: int
-    requester_staking_instance_address: str
     response_timeout: int
 
     @classmethod
@@ -68,13 +65,6 @@ class MechMarketplaceConfig:
         return cls(
             mech_marketplace_address=data["mech_marketplace_address"],
             priority_mech_address=data["priority_mech_address"],
-            priority_mech_staking_instance_address=data[
-                "priority_mech_staking_instance_address"
-            ],
-            priority_mech_service_id=data["priority_mech_service_id"],
-            requester_staking_instance_address=data[
-                "requester_staking_instance_address"
-            ],
             response_timeout=data["response_timeout"],
         )
 
