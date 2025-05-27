@@ -512,9 +512,9 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             return False
         return True
 
-    def _build_marketplace_request_data(self) -> WaitableConditionType:
-        """Build the request data for the Mech Marketplace flow using helper methods."""
-        self.context.logger.info("Building request data for Mech Marketplace flow.")
+    def _build_marketplace_v2_request_data(self) -> WaitableConditionType:
+        """Build the request data for the Mech Marketplace v2 flow using helper methods."""
+        self.context.logger.info("Building request data for Mech Marketplace v2 flow.")
 
         request_data_bytes = self._decode_hex_to_bytes(
             self._v1_hex_truncated, "request_data"
@@ -551,6 +551,39 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         )
         return status
 
+    def _build_marketplace_v1_request_data(self) -> WaitableConditionType:
+        """Build request data for marketplace v1 (legacy marketplace without payment_type)."""
+        self.context.logger.info("Building request data for legacy marketplace flow.")
+        
+        # For legacy marketplace, we might still use the marketplace contract
+        # but without the new parameters like payment_type and max_delivery_rate
+        request_data_bytes = self._decode_hex_to_bytes(
+            self._v1_hex_truncated, "request_data"
+        )
+        if request_data_bytes is None:
+            return False
+
+        payment_data_bytes = self._decode_hex_to_bytes(
+            EMPTY_PAYMENT_DATA_HEX, "payment_data"
+        )
+        if payment_data_bytes is None:
+            return False
+
+        # Use marketplace contract but with legacy parameters
+        # This assumes the old marketplace contract has a simpler request method
+        status = yield from self._mech_marketplace_contract_interact(
+            "get_request_data",
+            "data",
+            get_name(MechRequestBehaviour.request_data),
+            request_data=request_data_bytes,
+            priority_mech=self.mech_marketplace_config.priority_mech_address,
+            payment_data=payment_data_bytes,
+            response_timeout=self.mech_marketplace_config.response_timeout,
+            chain_id=self.params.mech_chain_id,
+            # Note: No payment_type and max_delivery_rate for legacy
+        )
+        return status
+
     def _build_legacy_request_data(self) -> WaitableConditionType:
         """Build the request data for the legacy Mech flow."""
         self.context.logger.info("Building request data for legacy Mech flow.")
@@ -564,22 +597,37 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         )
         return status
 
+    def _get_target_contract_address(self) -> str:
+        """Get the target contract address based on the flow being used."""
+        if self.params.use_mech_marketplace and self.should_use_marketplace_v2():
+            return self.mech_marketplace_config.mech_marketplace_address
+        elif self.params.use_mech_marketplace:
+            # Legacy marketplace - might still use marketplace contract but with different flow
+            return self.mech_marketplace_config.mech_marketplace_address
+        else:
+            return self.params.mech_contract_address
+
     def _build_request_data(self) -> WaitableConditionType:
         """Build the request data by dispatching to the appropriate method."""
         self.context.logger.info("Building request data")
-
-        status = False
+        
+        # Perform compatibility check if marketplace is enabled
         if self.params.use_mech_marketplace:
-            status = yield from self._build_marketplace_request_data()
+            yield from self.wait_for_condition_with_sleep(self._detect_marketplace_compatibility)
+            
+            # Use detected compatibility instead of static flag
+            if self.should_use_marketplace_v2():
+                self.context.logger.info("Using detected marketplace v2 flow")
+                status = yield from self._build_marketplace_v2_request_data()
+            else:
+                self.context.logger.info("Using detected marketplace v1 (legacy) flow")
+                status = yield from self._build_marketplace_v1_request_data()
         else:
+            self.context.logger.info("Using direct mech flow (marketplace disabled)")
             status = yield from self._build_legacy_request_data()
 
         if status:
-            to = (
-                self.mech_marketplace_config.mech_marketplace_address
-                if self.params.use_mech_marketplace
-                else self.params.mech_contract_address
-            )
+            to = self._get_target_contract_address()
             batch = MultisendBatch(
                 to=to,
                 data=HexBytes(self.request_data),
@@ -618,10 +666,10 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
     def _prepare_safe_tx(self) -> Generator:
         """Prepare a multisend safe tx for sending requests to a mech and return the hex for the tx settlement skill."""
         n_iters = min(self.params.multisend_batch_size, len(self._mech_requests))
-        steps = (self._get_price,)
-        steps += (self._ensure_available_balance,)
-        steps += (self._send_metadata_to_ipfs, self._build_request_data) * n_iters
-        steps += (self._build_multisend_data, self._build_multisend_safe_tx_hash)
+        steps = [self._get_price]
+        steps.append(self._ensure_available_balance)
+        steps.extend((self._send_metadata_to_ipfs, self._build_request_data) * n_iters)
+        steps.extend([self._build_multisend_data, self._build_multisend_safe_tx_hash])
 
         for step in steps:
             yield from self.wait_for_condition_with_sleep(step)
@@ -638,6 +686,8 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     None,
                     self.params.mech_chain_id,
                     self.synchronized_data.safe_contract_address,
+                    None,
+                    None,
                     None,
                     None,
                 )
@@ -661,5 +711,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     self.params.mech_chain_id,
                     self.synchronized_data.safe_contract_address,
                     *serialized_data,
+                    self.get_updated_compatibility_cache(),
+                    self.get_updated_compatibility_cache_access(),
                 )
         yield from self.finish_behaviour(payload)
