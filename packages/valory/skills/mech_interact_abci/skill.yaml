@@ -2,8 +2,11 @@ name: mech_interact_abci
 author: valory
 version: 0.1.0
 type: skill
-description: The mech interact skill can be used to send requests to a mech and receive
-  the responses.
+description: |
+  The mech interact skill provides comprehensive interaction capabilities with 
+  mech contracts, supporting both legacy direct mech interactions and marketplace-based 
+  transactions. It includes dynamic compatibility detection, intelligent caching, 
+  and automatic fallback mechanisms for robust cross-version contract support.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
@@ -154,26 +157,50 @@ models:
       tendermint_url: http://localhost:26657
       tx_timeout: 10.0
       validate_timeout: 1205
-      multisend_batch_size: 50
-      mech_contract_address: '0x77af31De935740567Cf4fF1986D04B2c964A786a'
-      mech_request_price: null
-      mech_chain_id: gnosis
-      mech_wrapped_native_token_address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'
-      ipfs_address: https://gateway.autonolas.tech/ipfs/
+      # Transaction batching configuration
+      multisend_batch_size: 50  # Number of transactions to batch together
+      
+      # Mech contract configuration
+      mech_contract_address: '0x77af31De935740567Cf4fF1986D04B2c964A786a'  # Main mech contract address
+      mech_request_price: null  # Fixed price in wei (null = auto-detect from contract)
+      mech_chain_id: gnosis  # Target blockchain network
+      mech_wrapped_native_token_address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'  # Wrapped token for payments
+      
+      # External service configuration
+      ipfs_address: https://gateway.autonolas.tech/ipfs/  # IPFS gateway for metadata storage
+      agent_registry_address: '0x0000000000000000000000000000000000000000'  # Agent registry for ACN validation
+      
+      # Operational configuration
+      mech_interaction_sleep_time: 10  # Sleep time between mech interaction retries (seconds)
+      use_acn_for_delivers: false  # Use Agent Communication Network for response delivery
+      
+      # Termination and slashing configuration
       use_termination: false
       use_slashing: false
       slash_cooldown_hours: 3
-      agent_registry_address: '0x0000000000000000000000000000000000000000'
-      use_acn_for_delivers: false
       slash_threshold_amount: 10000000000000000
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
-      mech_interaction_sleep_time: 10
-      use_mech_marketplace: false
+      
+      # Marketplace configuration
+      use_mech_marketplace: false  # Enable marketplace-based mech interactions
+      # Marketplace-specific configuration
       mech_marketplace_config:
-        mech_marketplace_address: '0x0000000000000000000000000000000000000000'
-        priority_mech_address: '0x0000000000000000000000000000000000000000'
-        response_timeout: 300
+        mech_marketplace_address: '0x0000000000000000000000000000000000000000'  # Marketplace contract address
+        priority_mech_address: '0x0000000000000000000000000000000000000000'      # Primary mech for marketplace requests
+        response_timeout: 300                                                     # Response timeout in seconds
+      
+      # Compatibility detection and caching configuration
+      compatibility_config:
+        force_cache_refresh: false              # Force cache refresh on every compatibility check
+        max_cache_entries: 50                   # Maximum number of cached compatibility results
+        cache_ttl_seconds: 86400               # Cache time-to-live (24 hours)
+        enable_compatibility_detection: true    # Enable runtime compatibility detection
+        fallback_to_legacy: true               # Fallback to legacy mode if detection fails
+      
+      # Legacy compatibility parameters (deprecated - use compatibility_config instead)
+      force_compatibility_refresh: false
+      max_compatibility_cache_entries: 50
     class_name: Params
   mech_response:
     args:
