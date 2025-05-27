@@ -22,7 +22,7 @@
 import json
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, List, Mapping, Optional, cast
+from typing import Any, Dict, List, Mapping, Optional, Union, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     BaseTxPayload,
@@ -144,6 +144,22 @@ class SynchronizedData(TxSynchronizedData):
     def tx_submitter(self) -> str:
         """Get the round that submitted a tx to transaction_settlement_abci."""
         return str(self.db.get_strict("tx_submitter"))
+
+    @property
+    def marketplace_compatibility_cache(self) -> Mapping[str, Union[bool, Dict[str, Any]]]:
+        """Get the marketplace compatibility cache."""
+        cache_data = self.db.get("marketplace_compatibility_cache", "{}")
+        if isinstance(cache_data, str):
+            cache_data = json.loads(cache_data)
+        return cast(Mapping[str, Union[bool, Dict[str, Any]]], cache_data)
+
+    @property
+    def marketplace_compatibility_cache_access(self) -> Mapping[str, float]:
+        """Get the marketplace compatibility cache access times."""
+        access_data = self.db.get("marketplace_compatibility_cache_access", "{}")
+        if isinstance(access_data, str):
+            access_data = json.loads(access_data)
+        return cast(Mapping[str, float], access_data)
 
 
 class MechInteractionRound(CollectSameUntilThresholdRound):
