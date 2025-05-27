@@ -36,6 +36,8 @@ class MechRequestPayload(BaseTxPayload):
     safe_contract_address: Optional[str]
     mech_requests: Optional[str]
     mech_responses: Optional[str]
+    marketplace_compatibility_cache: Optional[str]
+    marketplace_compatibility_cache_access: Optional[str]
 
 
 @dataclass(frozen=True)
