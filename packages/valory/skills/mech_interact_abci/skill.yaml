@@ -2,30 +2,29 @@ name: mech_interact_abci
 author: valory
 version: 0.1.0
 type: skill
-description: |
-  The mech interact skill provides comprehensive interaction capabilities with 
-  mech contracts, supporting both legacy direct mech interactions and marketplace-based 
-  transactions. It includes dynamic compatibility detection, intelligent caching, 
-  and automatic fallback mechanisms for robust cross-version contract support.
+description: "The mech interact skill provides comprehensive interaction capabilities\
+  \ with \nmech contracts, supporting both legacy direct mech interactions and marketplace-based\
+  \ \ntransactions. It includes dynamic compatibility detection, intelligent caching,\
+  \ \nand automatic fallback mechanisms for robust cross-version contract support.\n"
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeidf3nlv5fpvfy4libtscayhirdw64shgmhfmvjiftjmjkmhu7auxq
   behaviours/__init__.py: bafybeie3zsi6p3yanz5mqwpkdrcgywaqvkit3hdintsb4awnvalgxpxa4i
-  behaviours/base.py: bafybeic2qrixxkqabdn42k3fjh5nrjqgzhzvzv4njdu2ge7x6mz2jiiaey
-  behaviours/request.py: bafybeihoujdhqd7a4hklmbtbfu62qpcw6yskhhxnknweh6dadnhy3qgpci
-  behaviours/response.py: bafybeibuzfpqgd7pgwtgtzpph53sub3bz5neqn4coxjjgv5p2yb3flvcqy
+  behaviours/base.py: bafybeicrmim7zmlhhxppcqlxfi7ndbbufq2xfaohywuenhhfng67hbluqq
+  behaviours/request.py: bafybeifoys4s6yv373bsfplamyl5mi47ziuo76rqjimsfgn6t3f3dmu6se
+  behaviours/response.py: bafybeiapu6ud55apfpypdk3xyo3gi2ov6524pdyplbbs3rxwnnwxe6quau
   behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
   dialogues.py: bafybeicgtxsrzld6uyi2n455temnz6mj55irmxqxw55jxo4b6ud4rt7nsm
   fsm_specification.yaml: bafybeiapzwz6zcneelc2b2wrcb7cae7x6vbthmf6a57cm4mv6hucp67lz4
   handlers.py: bafybeieogcp4buhjommra3fkvyh3vwg3wzuepiwbn6qzr2b7zs27ghjxy4
-  models.py: bafybeicahxfu64sanwbqbebeyimxipx6vsezcw236knnnaizhv6ttcx25e
-  payloads.py: bafybeie3s5irdmcggst5kmbm6duyhr4nm2qc67fkwznhrdskri4qzmkmla
+  models.py: bafybeihw42uclb6em2xo773itggiev7jsx6vkymz4bgna3izus2lgzyaxm
+  payloads.py: bafybeibouj46bnmgztcc5rdejt32xgt6xdy7rp7axg2jbgoh2zutm7fvvu
   rounds.py: bafybeif7taciv6pqupb7xuewurqssziplbjeobbv4d7ea3vbngz3kpjnee
   states/__init__.py: bafybeie34wx5znr2hxwh3gs2fchmbeuzjcfnraymdvtzjaxaq5zsiw233q
-  states/base.py: bafybeieya4xmiefvwsd5qb2cwo5d237ztlgjvw4yc6x6zzyvhd2bws2vpi
+  states/base.py: bafybeihpi7rjvag4beyu54e6vnwywqujblui2ldtz4llzb5amhkz47flfy
   states/final_states.py: bafybeihjntrbc666blxj4viz74y4p2hfc5e4vijs3bqng2k4vqbwkud7sq
-  states/request.py: bafybeibo7mxxbqao75zqjale5gjqa3nmt6fgdiwbthdczvd2ybdg4pdts4
+  states/request.py: bafybeibmjiui6uyub7p4atmlqd7wevfwccokqdvjfzdidcc2kmjthcqu6e
   states/response.py: bafybeibaxnp2oxwjptoq7qzm6o7ww2qrdj2vnxzg2qt523vz2ftqzx5hyi
   tests/__init__.py: bafybeifojfnffwlsv6aiku25nwyjwm7h4m45yci3fgmaawpeoyoogzonum
   tests/test_behaviours.py: bafybeidj7git7zaego7k75eejtxlr3usj6wnnqisu7urqwvalpwh5w7nyq
@@ -41,9 +40,9 @@ contracts:
 - valory/mech:0.1.0:bafybeigwbv5nicn4t6wwkxcf2myg2b7mnm7ik5dwhd6nbifrff23a4ft7m
 - valory/mech_mm:0.1.0:bafybeigncdnpzurtiyg5j3tk63qa4la6enu7hmwkahdvt7jwcq5om34n7m
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
-- valory/erc20:0.1.0:bafybeibtkjl3z7syunxtzylwju2dj5uk6m7jxk26jgxfpifqyr4e76b3sm
+- valory/erc20:0.1.0:bafybeifh3t3ch7thznpjxag4vsc2c75xptnj4fcufv2nv57uoki255cakq
 - valory/mech_marketplace:0.1.0:bafybeiccn4ohizw2wrjt7goidiakfik26ugm735lnm3fna3khko7qgkawm
-- valory/agent_registry:0.1.0:bafybeiehqygljgewzrk2he5bktbupzayke5iesgqzd2rkhzqldyy7mbtpa
+- valory/agent_registry:0.1.0:bafybeifpoeyztnytctpudxlulumh6ybvhgbhhprgwen2yc4ykgblsoa2eu
 protocols:
 - valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
 - valory/ledger_api:1.0.0:bafybeihmqzcbj6t7vxz2aehd5726ofnzsfjs5cwlf42ro4tn6i34cbfrc4
@@ -157,48 +156,32 @@ models:
       tendermint_url: http://localhost:26657
       tx_timeout: 10.0
       validate_timeout: 1205
-      # Transaction batching configuration
-      multisend_batch_size: 50  # Number of transactions to batch together
-      
-      # Mech contract configuration
-      mech_contract_address: '0x77af31De935740567Cf4fF1986D04B2c964A786a'  # Main mech contract address
-      mech_request_price: null  # Fixed price in wei (null = auto-detect from contract)
-      mech_chain_id: gnosis  # Target blockchain network
-      mech_wrapped_native_token_address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'  # Wrapped token for payments
-      
-      # External service configuration
-      ipfs_address: https://gateway.autonolas.tech/ipfs/  # IPFS gateway for metadata storage
-      agent_registry_address: '0x0000000000000000000000000000000000000000'  # Agent registry for ACN validation
-      
-      # Operational configuration
-      mech_interaction_sleep_time: 10  # Sleep time between mech interaction retries (seconds)
-      use_acn_for_delivers: false  # Use Agent Communication Network for response delivery
-      
-      # Termination and slashing configuration
+      multisend_batch_size: 50
+      mech_contract_address: '0x77af31De935740567Cf4fF1986D04B2c964A786a'
+      mech_request_price: null
+      mech_chain_id: gnosis
+      mech_wrapped_native_token_address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'
+      ipfs_address: https://gateway.autonolas.tech/ipfs/
+      agent_registry_address: '0x0000000000000000000000000000000000000000'
+      mech_interaction_sleep_time: 10
+      use_acn_for_delivers: false
       use_termination: false
       use_slashing: false
       slash_cooldown_hours: 3
       slash_threshold_amount: 10000000000000000
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
-      
-      # Marketplace configuration
-      use_mech_marketplace: false  # Enable marketplace-based mech interactions
-      # Marketplace-specific configuration
+      use_mech_marketplace: false
       mech_marketplace_config:
-        mech_marketplace_address: '0x0000000000000000000000000000000000000000'  # Marketplace contract address
-        priority_mech_address: '0x0000000000000000000000000000000000000000'      # Primary mech for marketplace requests
-        response_timeout: 300                                                     # Response timeout in seconds
-      
-      # Compatibility detection and caching configuration
+        mech_marketplace_address: '0x0000000000000000000000000000000000000000'
+        priority_mech_address: '0x0000000000000000000000000000000000000000'
+        response_timeout: 300
       compatibility_config:
-        force_cache_refresh: false              # Force cache refresh on every compatibility check
-        max_cache_entries: 50                   # Maximum number of cached compatibility results
-        cache_ttl_seconds: 86400               # Cache time-to-live (24 hours)
-        enable_compatibility_detection: true    # Enable runtime compatibility detection
-        fallback_to_legacy: true               # Fallback to legacy mode if detection fails
-      
-      # Legacy compatibility parameters (deprecated - use compatibility_config instead)
+        force_cache_refresh: false
+        max_cache_entries: 50
+        cache_ttl_seconds: 86400
+        enable_compatibility_detection: true
+        fallback_to_legacy: true
       force_compatibility_refresh: false
       max_compatibility_cache_entries: 50
     class_name: Params
