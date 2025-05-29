@@ -26,8 +26,8 @@ from typing import Any, Dict, List, Mapping, Optional, Type, Union, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     BaseTxPayload,
-    CollectionRound,
     CollectSameUntilThresholdRound,
+    CollectionRound,
 )
 from packages.valory.skills.mech_interact_abci.payloads import (
     MechRequestPayload,

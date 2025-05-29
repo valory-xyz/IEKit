@@ -98,7 +98,9 @@ class MechInteractAbciApp(AbciApp[Event]):
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: frozenset[str] = frozenset({get_name(SynchronizedData.mech_responses)})
+    cross_period_persisted_keys: frozenset[str] = frozenset(
+        {get_name(SynchronizedData.mech_responses)}
+    )
     db_pre_conditions: Dict[AppState, Set[str]] = {
         # using `set(get_name(SynchronizedData.mech_requests))`
         # makes the checks complain that "db pre and post conditions intersect"

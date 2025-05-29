@@ -258,8 +258,6 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
 
         self.set_done()
 
-
-
     def _get_cache_key(self) -> str:
         """Generate cache key for the current marketplace configuration."""
         priority_mech = self.params.mech_marketplace_config.priority_mech_address
@@ -281,38 +279,43 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
                 "Compatibility detection is disabled in configuration. "
                 f"Using fallback mode: {'legacy' if self.params.compatibility_config.fallback_to_legacy else 'v2'}"
             )
-            self._is_marketplace_v2_compatible = not self.params.compatibility_config.fallback_to_legacy
+            self._is_marketplace_v2_compatible = (
+                not self.params.compatibility_config.fallback_to_legacy
+            )
             self._compatibility_check_performed = True
             return True
 
         cache_key = self._get_cache_key()
         compatibility_cache = self.synchronized_data.marketplace_compatibility_cache
-        
+
         # Check synchronized data cache first (unless forced refresh)
         if cache_key in compatibility_cache and not self.force_cache_refresh:
             # Handle both old format (bool) and new format (dict with metadata)
             cache_value = compatibility_cache[cache_key]
             is_cache_valid = True
-            
+
             if isinstance(cache_value, bool):
                 self._is_marketplace_v2_compatible = cache_value
             elif isinstance(cache_value, dict):
                 # Check TTL for new format entries
                 import time
+
                 current_time = time.time()
-                cache_timestamp = cache_value.get('timestamp', 0)
+                cache_timestamp = cache_value.get("timestamp", 0)
                 cache_age = current_time - cache_timestamp
-                
+
                 if cache_age > self.params.compatibility_config.cache_ttl_seconds:
                     self.context.logger.info(
                         f"Cache entry for {cache_key} has expired (age: {cache_age:.0f}s, TTL: {self.params.compatibility_config.cache_ttl_seconds}s)"
                     )
                     is_cache_valid = False
                 else:
-                    self._is_marketplace_v2_compatible = cache_value.get('compatible', False)
+                    self._is_marketplace_v2_compatible = cache_value.get(
+                        "compatible", False
+                    )
             else:
                 is_cache_valid = False
-            
+
             if is_cache_valid:
                 self._compatibility_check_performed = True
                 # Update access time for LRU
@@ -323,18 +326,20 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
                     "(from synchronized data)"
                 )
                 return True
-            
-        self.context.logger.info("Detecting marketplace contract compatibility (not in cache)...")
-        
+
+        self.context.logger.info(
+            "Detecting marketplace contract compatibility (not in cache)..."
+        )
+
         # Try calling get_payment_type on the priority mech address
         try:
             status = yield from self._mech_mm_contract_interact(
                 contract_callable="get_payment_type",
-                data_key="payment_type", 
+                data_key="payment_type",
                 placeholder="_temp_payment_type_check",
                 chain_id=self.params.mech_chain_id,
             )
-            
+
             if status:
                 self.context.logger.info(
                     f"Contract at {self.params.mech_marketplace_config.priority_mech_address} "
@@ -347,18 +352,20 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
                     "does not support v2 marketplace features (get_payment_type failed)"
                 )
                 self._is_marketplace_v2_compatible = False
-                
+
         except Exception as e:
             self.context.logger.warning(
                 f"Feature detection failed for contract "
                 f"{self.params.mech_marketplace_config.priority_mech_address}: {e}. "
                 f"Using fallback mode: {'legacy' if self.params.compatibility_config.fallback_to_legacy else 'v2'}"
             )
-            self._is_marketplace_v2_compatible = not self.params.compatibility_config.fallback_to_legacy
-        
+            self._is_marketplace_v2_compatible = (
+                not self.params.compatibility_config.fallback_to_legacy
+            )
+
         # Update the cache in synchronized data through payload if needed
         self._update_compatibility_cache(cache_key, self._is_marketplace_v2_compatible)
-        
+
         self._compatibility_check_performed = True
         return True
 
@@ -367,43 +374,55 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
         try:
             # Get current cache and access times
             current_cache = dict(self.synchronized_data.marketplace_compatibility_cache)
-            current_access = dict(self.synchronized_data.marketplace_compatibility_cache_access)
-            
+            current_access = dict(
+                self.synchronized_data.marketplace_compatibility_cache_access
+            )
+
             # Check if update is needed
             cache_value = current_cache.get(cache_key)
             needs_update = False
-            
+
             if isinstance(cache_value, bool):
                 needs_update = cache_value != compatible
             elif isinstance(cache_value, dict):
-                needs_update = cache_value.get('compatible', False) != compatible
+                needs_update = cache_value.get("compatible", False) != compatible
             else:
                 needs_update = True  # New entry
-            
+
             if needs_update:
                 # Clean cache if it's getting too large
-                if len(current_cache) >= self.max_cache_entries and cache_key not in current_cache:
-                    current_cache, current_access = self._evict_lru_entries(current_cache, current_access)
-                
+                if (
+                    len(current_cache) >= self.max_cache_entries
+                    and cache_key not in current_cache
+                ):
+                    current_cache, current_access = self._evict_lru_entries(
+                        current_cache, current_access
+                    )
+
                 # Update cache with metadata
                 import time
+
                 current_time = time.time()
                 existing_entry = current_cache.get(cache_key, {})
-                access_count = existing_entry.get('access_count', 0) if isinstance(existing_entry, dict) else 0
+                access_count = (
+                    existing_entry.get("access_count", 0)
+                    if isinstance(existing_entry, dict)
+                    else 0
+                )
                 current_cache[cache_key] = {
-                    'compatible': compatible,
-                    'timestamp': current_time,
-                    'access_count': access_count + 1
+                    "compatible": compatible,
+                    "timestamp": current_time,
+                    "access_count": access_count + 1,
                 }
                 current_access[cache_key] = current_time
-                
+
                 self.context.logger.info(
                     f"Updated compatibility cache: {cache_key} = v{'2' if compatible else '1'} marketplace "
                     f"(cache size: {len(current_cache)}/{self.max_cache_entries}, TTL: {self.params.compatibility_config.cache_ttl_seconds}s)"
                 )
             else:
                 self.context.logger.debug(f"Cache value unchanged for {cache_key}")
-                
+
         except Exception as e:
             self.context.logger.warning(f"Failed to update compatibility cache: {e}")
 
@@ -416,40 +435,41 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
         """Remove least recently used entries and expired entries to make room for new ones."""
         try:
             import time
+
             current_time = time.time()
             ttl_seconds = self.params.compatibility_config.cache_ttl_seconds
-            
+
             # First, remove expired entries
             expired_keys = []
             for key, cache_value in cache.items():
                 if isinstance(cache_value, dict):
-                    cache_timestamp = cache_value.get('timestamp', 0)
+                    cache_timestamp = cache_value.get("timestamp", 0)
                     if current_time - cache_timestamp > ttl_seconds:
                         expired_keys.append(key)
-            
+
             # Remove expired entries
             for key in expired_keys:
                 if key in cache:
                     del cache[key]
                 if key in access_times:
                     del access_times[key]
-            
+
             if expired_keys:
                 self.context.logger.info(
                     f"Evicted {len(expired_keys)} expired cache entries. "
                     f"Cache size after cleanup: {len(cache)}/{self.max_cache_entries}"
                 )
-            
+
             # Calculate how many more entries to remove (remove 20% when limit reached)
             target_size = int(self.max_cache_entries * 0.8)
             entries_to_remove = len(cache) - target_size
-            
+
             if entries_to_remove <= 0:
                 return cache, access_times
-            
+
             # Sort by access time (oldest first)
             sorted_by_access = sorted(access_times.items(), key=lambda x: x[1])
-            
+
             # Remove oldest entries
             removed_count = 0
             for key, _ in sorted_by_access:
@@ -459,14 +479,14 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
                     del cache[key]
                     del access_times[key]
                     removed_count += 1
-            
+
             self.context.logger.info(
                 f"Evicted {removed_count} LRU cache entries. "
                 f"Final cache size: {len(cache)}/{self.max_cache_entries}"
             )
-            
+
             return cache, access_times
-            
+
         except Exception as e:
             self.context.logger.warning(f"Failed to evict cache entries: {e}")
             return cache, access_times
@@ -475,26 +495,41 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
         """Get the updated compatibility cache as JSON string for synchronized data."""
         try:
             current_cache = dict(self.synchronized_data.marketplace_compatibility_cache)
-            current_access = dict(self.synchronized_data.marketplace_compatibility_cache_access)
+            current_access = dict(
+                self.synchronized_data.marketplace_compatibility_cache_access
+            )
             cache_key = self._get_cache_key()
-            
-            if self._compatibility_check_performed and self._is_marketplace_v2_compatible is not None:
+
+            if (
+                self._compatibility_check_performed
+                and self._is_marketplace_v2_compatible is not None
+            ):
                 # Clean cache if needed before adding new entry
-                if len(current_cache) >= self.max_cache_entries and cache_key not in current_cache:
-                    current_cache, current_access = self._evict_lru_entries(current_cache, current_access)
-                
+                if (
+                    len(current_cache) >= self.max_cache_entries
+                    and cache_key not in current_cache
+                ):
+                    current_cache, current_access = self._evict_lru_entries(
+                        current_cache, current_access
+                    )
+
                 # Update with metadata
                 import time
+
                 current_time = time.time()
                 existing_entry = current_cache.get(cache_key, {})
-                access_count = existing_entry.get('access_count', 0) if isinstance(existing_entry, dict) else 0
+                access_count = (
+                    existing_entry.get("access_count", 0)
+                    if isinstance(existing_entry, dict)
+                    else 0
+                )
                 current_cache[cache_key] = {
-                    'compatible': self._is_marketplace_v2_compatible,
-                    'timestamp': current_time,
-                    'access_count': access_count + 1
+                    "compatible": self._is_marketplace_v2_compatible,
+                    "timestamp": current_time,
+                    "access_count": access_count + 1,
                 }
                 current_access[cache_key] = current_time
-                
+
             return json.dumps(current_cache)
         except Exception as e:
             self.context.logger.warning(f"Failed to serialize compatibility cache: {e}")
@@ -503,13 +538,16 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
     def get_updated_compatibility_cache_access(self) -> str:
         """Get the updated cache access times as JSON string for synchronized data."""
         try:
-            current_access = dict(self.synchronized_data.marketplace_compatibility_cache_access)
+            current_access = dict(
+                self.synchronized_data.marketplace_compatibility_cache_access
+            )
             cache_key = self._get_cache_key()
-            
+
             if self._compatibility_check_performed:
                 import time
+
                 current_access[cache_key] = time.time()
-                
+
             return json.dumps(current_access)
         except Exception as e:
             self.context.logger.warning(f"Failed to serialize cache access times: {e}")
@@ -519,7 +557,9 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
     def is_marketplace_v2_compatible(self) -> bool:
         """Returns True if the marketplace supports v2 features."""
         if not self._compatibility_check_performed:
-            raise ValueError("Compatibility check must be performed before accessing this property")
+            raise ValueError(
+                "Compatibility check must be performed before accessing this property"
+            )
         return self._is_marketplace_v2_compatible or False
 
     def should_use_marketplace_v2(self) -> bool:
@@ -529,15 +569,15 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
         """
         if not self.params.use_mech_marketplace:
             return False  # Configuration explicitly disables marketplace
-            
+
         if not self._compatibility_check_performed:
             raise ValueError("Compatibility check must be performed first")
-            
+
         # Respect the configuration's compatibility detection setting
         if not self.params.compatibility_config.enable_compatibility_detection:
             # Use the configured fallback behavior
             return not self.params.compatibility_config.fallback_to_legacy
-            
+
         return self._is_marketplace_v2_compatible or False
 
 

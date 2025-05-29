@@ -193,7 +193,9 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                 if isinstance(balance_result, (int, str)):
                     balance = int(balance_result)
                 else:
-                    self.context.logger.error(f"Invalid balance result type: {type(balance_result)}")
+                    self.context.logger.error(
+                        f"Invalid balance result type: {type(balance_result)}"
+                    )
                     balance = None
             else:
                 balance = None
@@ -258,7 +260,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                 f"Invalid token value: {token}. Expected integer."
             )
             return None
-            
+
         self.context.logger.info(
             f"Account {account} has {self.wei_to_unit(token_int)} wrapped native tokens."
         )
@@ -313,7 +315,9 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             else:
                 hex_data = HexBytes(str(withdraw_data))
         except (ValueError, TypeError) as e:
-            self.context.logger.error(f"Could not convert withdraw_data to HexBytes: {e}")
+            self.context.logger.error(
+                f"Could not convert withdraw_data to HexBytes: {e}"
+            )
             return False
 
         batch = MultisendBatch(
@@ -407,7 +411,11 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             return False
 
         tx_hash = response_msg.state.body.get("tx_hash", None)
-        if tx_hash is None or not isinstance(tx_hash, str) or len(tx_hash) != TX_HASH_LENGTH:
+        if (
+            tx_hash is None
+            or not isinstance(tx_hash, str)
+            or len(tx_hash) != TX_HASH_LENGTH
+        ):
             self.context.logger.error(
                 "Something went wrong while trying to get the buy transaction's hash. "
                 f"Invalid hash {tx_hash!r} was returned."
@@ -587,7 +595,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
     def _build_marketplace_v1_request_data(self) -> WaitableConditionType:
         """Build request data for marketplace v1 (legacy marketplace without payment_type)."""
         self.context.logger.info("Building request data for legacy marketplace flow.")
-        
+
         # For legacy marketplace, we might still use the marketplace contract
         # but without the new parameters like payment_type and max_delivery_rate
         request_data_bytes = self._decode_hex_to_bytes(
@@ -606,7 +614,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         # Provide default values for payment_type and max_delivery_rate
         default_payment_type = "0x" + "0" * 64  # Empty bytes32
         default_max_delivery_rate = 0  # Default to 0 for legacy compatibility
-        
+
         status = yield from self._mech_marketplace_contract_interact(
             "get_request_data",
             "data",
@@ -647,11 +655,13 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
     def _build_request_data(self) -> WaitableConditionType:
         """Build the request data by dispatching to the appropriate method."""
         self.context.logger.info("Building request data")
-        
+
         # Perform compatibility check if marketplace is enabled
         if self.params.use_mech_marketplace:
-            yield from self.wait_for_condition_with_sleep(self._detect_marketplace_compatibility)
-            
+            yield from self.wait_for_condition_with_sleep(
+                self._detect_marketplace_compatibility
+            )
+
             # Use detected compatibility instead of static flag
             if self.should_use_marketplace_v2():
                 self.context.logger.info("Using detected marketplace v2 flow")
@@ -733,9 +743,13 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     f"Preparing mech requests: {self._mech_requests}"
                 )
                 yield from self._prepare_safe_tx()
-                serialized_requests = json.dumps(self._mech_requests, cls=DataclassEncoder)
-                serialized_responses = json.dumps(self._pending_responses, cls=DataclassEncoder)
-                
+                serialized_requests = json.dumps(
+                    self._mech_requests, cls=DataclassEncoder
+                )
+                serialized_responses = json.dumps(
+                    self._pending_responses, cls=DataclassEncoder
+                )
+
                 self.context.logger.info(
                     f"Preparing mech request:\ntx_hex: {self.tx_hex}\nprice: {self.price}\nserialized_requests: {serialized_requests}\nserialized_responses: {serialized_responses}\n"
                 )

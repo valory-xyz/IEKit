@@ -110,8 +110,12 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             mech_request = MechRequest(
                 data=request.get("data", ""),
                 requestId=int(request.get("requestId", 0)),
-                requestIds=[int(x) for x in request.get("requestIds", "").split(",") if x.strip()],
-                numRequests=int(request.get("numRequests", 0))
+                requestIds=[
+                    int(x)
+                    for x in request.get("requestIds", "").split(",")
+                    if x.strip()
+                ],
+                numRequests=int(request.get("numRequests", 0)),
             )
             self._requests.append(mech_request)
 
@@ -271,7 +275,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         request_id_for_specs: Optional[int],
     ) -> WaitableConditionType:
         """Prepare the generator for the get_response contract call with compatibility detection."""
-        
+
         if self.params.use_mech_marketplace and self.should_use_marketplace_v2():
             # Use new marketplace v2 flow with MechMM
             self.context.logger.info(
@@ -292,7 +296,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             )
             return self._mech_contract_interact(
                 contract_callable="get_response",
-                data_key="data", 
+                data_key="data",
                 placeholder=get_name(MechResponseBehaviour.response_hex),
                 request_id=request_id_for_specs,
                 from_block=self.from_block,
@@ -351,11 +355,13 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
     def _get_response_data(self) -> WaitableConditionType:
         """Get the response data from contract with compatibility detection."""
-        
+
         # Perform compatibility check if not already done
         if self.params.use_mech_marketplace and not self._compatibility_check_performed:
-            yield from self.wait_for_condition_with_sleep(self._detect_marketplace_compatibility)
-        
+            yield from self.wait_for_condition_with_sleep(
+                self._detect_marketplace_compatibility
+            )
+
         if (
             self.params.use_acn_for_delivers
             and self.current_mech_response.response_data is not None
