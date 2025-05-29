@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -20,26 +19,31 @@
 
 """This module contains definitions for Twitter models."""
 
-from pydantic import BaseModel, Field, field_validator
-from datetime import datetime
-from typing import List, Dict, Optional
-from datetime import datetime, date
 import re
+from datetime import date, datetime
+from typing import Dict, List, Optional
 from uuid import UUID
+from pydantic_core import core_schema
+from pydantic import BaseModel, field_validator
 
 
-class EthereumAddress(BaseModel):
+class EthereumAddress(str):
     """EthereumAddress"""
 
-    address: str = Field(..., pattern=r"^[a-zA-Z0-9_-]{3,16}$")
-
-    @field_validator("address")
     @classmethod
-    def validate_address(cls, address):
-        """Validate Ethereum address."""
-        if not re.match(r"^(0x)?[0-9a-fA-F]{40}$", address):
-            raise ValueError("Ethereum address is not valid")
-        return address
+    def __get_pydantic_core_schema__(cls, _source, _handler):
+        """Get the Pydantic core schema for EthereumAddress."""
+        return core_schema.with_info_after_validator_function(
+            cls.validate,
+            core_schema.str_schema(),
+        )
+
+    @classmethod
+    def validate(cls, value: str, _info) -> str:
+        """Validate that the value is a valid Ethereum address."""
+        if not re.fullmatch(r"0x[0-9a-fA-F]{40}", value):
+            raise ValueError(f"Invalid Ethereum address: {value}")
+        return value
 
 
 class Proposer(BaseModel):
@@ -55,14 +59,14 @@ class Voter(BaseModel):
 
     address: EthereumAddress
     signature: str
-    votingPower: int
+    votingPower: float
 
 
-class ExecutionAttempt:
+class ExecutionAttempt(BaseModel):
     """ExecutionAttempt"""
 
     id: UUID
-    verified: bool
+    verified: Optional[bool]
     dateCreated: float
 
 
@@ -70,10 +74,11 @@ class UserTweet(BaseModel):
     """UserTweet"""
 
     tweet_id: str
-    epoch: int
-    points: int
-    campaign: str
-    timestamp: datetime
+    twitter_user_id: str
+    epoch: Optional[int] = None
+    points: Optional[int] = None
+    campaign: Optional[str] = None
+    timestamp: Optional[datetime] = None
     counted_for_activity: bool = False
 
 
@@ -82,7 +87,7 @@ class ServiceTweet(BaseModel):
 
     text: List[str]
     posted: bool = False
-    voters: List[EthereumAddress] = []
+    voters: List[Voter] = []
     proposer: Proposer
     action_id: str
     request_id: UUID
@@ -95,7 +100,7 @@ class ContributeUser(BaseModel):
 
     id: int
     points: int = 0
-    tweets: List[UserTweet] = []
+    tweets: Dict[str, UserTweet] = {}
     token_id: Optional[str] = None
     discord_id: Optional[str] = None
     service_id: Optional[str] = None
@@ -120,12 +125,12 @@ class TwitterCampaign(BaseModel):
     """TwitterCampaign"""
 
     id: str
-    end_ts: str
+    end_ts: int
     status: str
     voters: List[Voter] = []
     hashtag: str
     proposer: Proposer
-    start_ts: float
+    start_ts: int
 
 
 class TwitterScoringData(BaseModel):
@@ -147,39 +152,47 @@ class DynamicNFTData(BaseModel):
 class ScheduledTweetConfig(BaseModel):
     """ScheduledTweetConfig"""
 
-    tweets = Dict[str, ServiceTweet]
+    tweets: List[ServiceTweet]
 
 
 class TwitterCampaignsConfig(BaseModel):
     """TwitterCampaignsConfig"""
 
-    campaigns: Dict[str, TwitterCampaign]
+    campaigns: List[TwitterCampaign]
 
 
-class PluginConfig(BaseModel):
-    """PluginConfig"""
+class ModuleConfig(BaseModel):
+    """ModuleConfig"""
 
-    daily: bool
-    enabled: bool
-    last_run: datetime
-    run_hour_utc: int
+    daily: bool = False
+    enabled: bool = False
+    last_run: Optional[datetime] = None
+    run_hour_utc: int = 0
 
-
-class PluginsConfig(BaseModel):
-    """PluginsConfig"""
-
-    daily_orbis: PluginConfig
-    daily_tweet: PluginConfig
-    staking_daa: PluginConfig
-    week_in_olas: PluginConfig
-    scheduled_tweet: PluginConfig
-    staking_activity: PluginConfig
-    twitter_campaigns: PluginConfig
-    staking_checkpoint: PluginConfig
+    @field_validator("last_run", mode="before")
+    @classmethod
+    def parse_utc_datetime(cls, v):
+        """Parse the last_run datetime string to a datetime object."""
+        if isinstance(v, str) and v.endswith(" UTC"):
+            v = v[:-4]  # Remove the trailing ' UTC'
+        return v
 
 
-class PluginsData(BaseModel):
-    """PluginsData"""
+class ModuleConfigs(BaseModel):
+    """ModuleConfigs"""
+
+    daily_orbis: ModuleConfig
+    daily_tweet: ModuleConfig
+    staking_daa: ModuleConfig
+    week_in_olas: ModuleConfig
+    scheduled_tweet: ModuleConfig
+    staking_activity: ModuleConfig
+    twitter_campaigns: ModuleConfig
+    staking_checkpoint: ModuleConfig
+
+
+class ModuleData(BaseModel):
+    """ModuleData"""
 
     daily_orbis: Optional[dict]
     daily_tweet: Optional[dict]
@@ -193,6 +206,6 @@ class ContributeDatabase(BaseModel):
     """ContributeDatabase"""
 
     users: Dict[str, ContributeUser]
-    plugins_data: PluginsData
-    configuration: PluginsConfig
-
+    # tweets: Dict[str, UserTweet]
+    module_data: ModuleData
+    module_configs: ModuleConfigs

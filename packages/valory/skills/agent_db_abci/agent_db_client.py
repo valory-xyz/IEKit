@@ -20,11 +20,18 @@
 
 """This module contains classes to interact with AgentDB."""
 
-from packages.valory.skills.agent_db_abci.agent_db_models import AgentType, AgentInstance, AttributeDefinition, AttributeInstance
-from datetime import datetime, timezone
 import json
-from typing import Any, List, Optional, Callable
+from datetime import datetime, timezone
+from typing import Any, Callable, List, Optional
+
 from aea.skills.base import Model
+
+from packages.valory.skills.agent_db_abci.agent_db_models import (
+    AgentInstance,
+    AgentType,
+    AttributeDefinition,
+    AttributeInstance,
+)
 
 
 # Docs at:

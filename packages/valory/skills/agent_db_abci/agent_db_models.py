@@ -20,9 +20,10 @@
 
 """This module contains definitions for AgentDB models."""
 
-from pydantic import BaseModel
 from datetime import datetime
 from typing import Any, List
+
+from pydantic import BaseModel
 
 
 class AgentType(BaseModel):

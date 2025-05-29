@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
@@ -20,18 +19,22 @@
 
 """This module contains classes to interact with Agents.Fun agent data on AgentDB."""
 
-from typing import Any, Dict, List
 from datetime import datetime, timedelta, timezone
-from packages.valory.skills.agent_db_abci.agent_db_client import AgentDBClient, AgentInstance
+from typing import Any, Dict, List
 
+from aea.skills.base import Model
+
+from packages.valory.skills.agent_db_abci.agent_db_client import (
+    AgentDBClient,
+    AgentInstance,
+)
 from packages.valory.skills.agent_db_abci.twitter_models import (
     TwitterAction,
-    TwitterPost,
-    TwitterRewtweet,
     TwitterFollow,
     TwitterLike,
+    TwitterPost,
+    TwitterRewtweet,
 )
-from aea.skills.base import Model
 
 
 MEMEOOORR = "memeooorr"
@@ -132,7 +135,9 @@ class AgentsFunAgent:
             raise ValueError(f"Unknown Twitter action: {interaction.action}")
 
         # Create attribute instance
-        attr_def = yield from self.client.get_attribute_definition_by_name("twitter_interactions")
+        attr_def = yield from self.client.get_attribute_definition_by_name(
+            "twitter_interactions"
+        )
         if not attr_def:
             raise ValueError("Attribute definition not found")
 
@@ -168,7 +173,9 @@ class AgentsFunDatabase(Model):
     def load(self):
         """Load data"""
         if self.agent_type is None:
-            self.agent_type = yield from self.client.get_agent_type_by_type_name(MEMEOOORR)
+            self.agent_type = yield from self.client.get_agent_type_by_type_name(
+                MEMEOOORR
+            )
 
         agent_instances = yield from self.client.get_agent_instances_by_type_id(
             self.agent_type.type_id

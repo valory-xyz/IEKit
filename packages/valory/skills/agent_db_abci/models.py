@@ -27,9 +27,13 @@ from packages.valory.skills.abstract_round_abci.models import Requests as BaseRe
 from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
+from packages.valory.skills.agent_db_abci.agent_db_client import (
+    AgentDBClient as BaseAgentDBClient,
+)
+from packages.valory.skills.agent_db_abci.agents_fun_db import (
+    AgentsFunDatabase as BaseAgentsFunDatabase,
+)
 from packages.valory.skills.agent_db_abci.rounds import AgentDBAbciApp
-from packages.valory.skills.agent_db_abci.agent_db_client import AgentDBClient as BaseAgentDBClient
-from packages.valory.skills.agent_db_abci.agents_fun_db import AgentsFunDatabase as BaseAgentsFunDatabase
 
 
 class SharedState(BaseSharedState):
