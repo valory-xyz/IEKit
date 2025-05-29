@@ -21,3 +21,5 @@ dependencies:
   web3:
     version: <7,>=6.0.0
   eth_typing: {}
+  eth-utils:
+    version: ==2.2.0
