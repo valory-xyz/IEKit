@@ -101,22 +101,9 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         return self._requests
 
     @requests.setter
-    def requests(self, requests: List[Dict[str, str]]) -> None:
+    def requests(self, requests: List[Dict]) -> None:
         """Set the requests."""
-        self._requests = []
-        for request in requests:
-            # Convert string values to appropriate types for MechRequest
-            mech_request = MechRequest(
-                data=request.get("data", ""),
-                requestId=int(request.get("requestId", 0)),
-                requestIds=[
-                    int(x)
-                    for x in request.get("requestIds", "").split(",")
-                    if x.strip()
-                ],
-                numRequests=int(request.get("numRequests", 0)),
-            )
-            self._requests.append(mech_request)
+        self._requests = [MechRequest(**request) for request in requests]
 
     @property
     def response_hex(self) -> str:
@@ -197,6 +184,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
     def _process_request_event(self) -> WaitableConditionType:
         """Process the request event."""
+
         result = yield from self.mech_contract_interact(
             contract_callable="process_request_event",
             data_key="results",
@@ -210,7 +198,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
     @property
     def request_id_getter(self) -> Callable[[], Tuple[Optional[bytes], Optional[int]]]:
         """Get the appropriate request ID retrieval method based on the configuration."""
-        if self.params.use_mech_marketplace:
+        if self.params.use_mech_marketplace and self.should_use_marketplace_v2():
             return self._get_marketplace_request_ids
         return self._get_legacy_request_ids
 
@@ -298,7 +286,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 f"Using Mech Marketplace Legacy flow: Preparing get_response call with int request ID {request_id_for_specs} using Mech Marketplace ABI."
             )
             # Note: We rely on _mech_contract_interact using the correct Mech Marketplace ABI via self.params.mech_contract_id
-            return self._mech_contract_interact(
+            return self._mech_marketplace_legacy_contract_interact(
                 contract_callable="get_response",
                 data_key="data",
                 placeholder=get_name(MechResponseBehaviour.response_hex),
@@ -545,6 +533,12 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self,
     ) -> Generator:
         """Get the response."""
+
+        if self.params.use_mech_marketplace:
+            yield from self.wait_for_condition_with_sleep(
+                self._detect_marketplace_compatibility
+            )
+
         for step in (
             self._get_block_number,
             self._process_request_event,

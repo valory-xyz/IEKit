@@ -12,8 +12,8 @@ fingerprint:
   __init__.py: bafybeidf3nlv5fpvfy4libtscayhirdw64shgmhfmvjiftjmjkmhu7auxq
   behaviours/__init__.py: bafybeie3zsi6p3yanz5mqwpkdrcgywaqvkit3hdintsb4awnvalgxpxa4i
   behaviours/base.py: bafybeicrrtzku4sb373zwsn2wj4hvfdda37ng6xjgvomqdil66cyd62hzu
-  behaviours/request.py: bafybeicyfcwhktcz64n7dxrnrw4fnemjuhy3fgf5yymolkgkoj23ibkzyq
-  behaviours/response.py: bafybeiexle3pjqzeyvuql2iwp7e5xyadwueksp5yyg3nvzjvekwr4kk7qq
+  behaviours/request.py: bafybeicvsdnk7mxgqxxswi6c5wvcm62x5h3cabwti44llrxky5c7fhdira
+  behaviours/response.py: bafybeig4qbyfmtlxkco4rny62wtprupuhu4imd65bz3dnghm6e5alwbrri
   behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
   dialogues.py: bafybeicgtxsrzld6uyi2n455temnz6mj55irmxqxw55jxo4b6ud4rt7nsm
   fsm_specification.yaml: bafybeiapzwz6zcneelc2b2wrcb7cae7x6vbthmf6a57cm4mv6hucp67lz4

@@ -595,7 +595,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         """Build request data for marketplace v1 (legacy marketplace without payment_type)."""
         self.context.logger.info("Building request data for legacy marketplace flow.")
 
-        status = yield from self._mech_marketplace_contract_interact(
+        status = yield from self._mech_marketplace_legacy_contract_interact(
             "get_request_data",
             "data",
             get_name(MechRequestBehaviour.request_data),
