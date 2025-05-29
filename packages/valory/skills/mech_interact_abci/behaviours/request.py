@@ -58,7 +58,6 @@ from packages.valory.skills.transaction_settlement_abci.payload_tools import (
 )
 from packages.valory.skills.transaction_settlement_abci.rounds import TX_HASH_LENGTH
 
-
 METADATA_FILENAME = "metadata.json"
 V1_HEX_PREFIX = "f01"
 Ox = "0x"
@@ -596,36 +595,18 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         """Build request data for marketplace v1 (legacy marketplace without payment_type)."""
         self.context.logger.info("Building request data for legacy marketplace flow.")
 
-        # For legacy marketplace, we might still use the marketplace contract
-        # but without the new parameters like payment_type and max_delivery_rate
-        request_data_bytes = self._decode_hex_to_bytes(
-            self._v1_hex_truncated, "request_data"
-        )
-        if request_data_bytes is None:
-            return False
-
-        payment_data_bytes = self._decode_hex_to_bytes(
-            EMPTY_PAYMENT_DATA_HEX, "payment_data"
-        )
-        if payment_data_bytes is None:
-            return False
-
-        # Use marketplace contract but with default values for v1 compatibility
-        # Provide default values for payment_type and max_delivery_rate
-        default_payment_type = "0x" + "0" * 64  # Empty bytes32
-        default_max_delivery_rate = 0  # Default to 0 for legacy compatibility
-
         status = yield from self._mech_marketplace_contract_interact(
             "get_request_data",
             "data",
             get_name(MechRequestBehaviour.request_data),
-            request_data=request_data_bytes,
-            priority_mech=self.mech_marketplace_config.priority_mech_address,
-            payment_data=payment_data_bytes,
-            response_timeout=self.mech_marketplace_config.response_timeout,
+            request_data=self._v1_hex_truncated,
+            priority_mech=self.mech_marketplace_legacy_config.priority_mech_address,
+            priority_mech_staking_instance=self.mech_marketplace_legacy_config.priority_mech_staking_instance_address,
+            priority_mech_service_id=self.mech_marketplace_legacy_config.priority_mech_service_id,
+            requester_staking_instance=self.mech_marketplace_legacy_config.requester_staking_instance_address,
+            requester_service_id=self.params.on_chain_service_id,
+            response_timeout=self.mech_marketplace_legacy_config.response_timeout,
             chain_id=self.params.mech_chain_id,
-            payment_type=default_payment_type,
-            max_delivery_rate=default_max_delivery_rate,
         )
         return status
 
@@ -648,7 +629,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             return self.mech_marketplace_config.mech_marketplace_address
         elif self.params.use_mech_marketplace:
             # Legacy marketplace - might still use marketplace contract but with different flow
-            return self.mech_marketplace_config.mech_marketplace_address
+            return self.mech_marketplace_legacy_config.mech_marketplace_address
         else:
             return self.params.mech_contract_address
 

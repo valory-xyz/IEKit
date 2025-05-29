@@ -30,6 +30,7 @@ contracts:
 - valory/service_registry:0.1.0:bafybeihabtvuft3nc2gcy2b3fwyqpmgilx5piialp6mrnxikpv7l7pbtla
 - valory/veolas_delegation:0.1.0:bafybeifcgvimvu66w273ednm7w765bxjto34aqapfoqkagctgyvfycgeei
 - valory/mech_marketplace:0.1.0:bafybeiccn4ohizw2wrjt7goidiakfik26ugm735lnm3fna3khko7qgkawm
+- valory/mech_marketplace_legacy:0.1.0:bafybeichr3zxrxnd7d2wzbmhnfjdboz2adwhx6454wndgf2celkuzitb4i
 - valory/staking:0.1.0:bafybeihqox2s4v6m3eirukxs4ducepr4zvvwazinb2cxmw7ycpig4ppoeu
 - valory/agent_registry:0.1.0:bafybeifpoeyztnytctpudxlulumh6ybvhgbhhprgwen2yc4ykgblsoa2eu
 protocols:
@@ -46,9 +47,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeifihiht6ovuzn7z3geel4y5zauosw6beqsjjbnm6znhlqb46ojtra
 - valory/abstract_round_abci:0.1.0:bafybeifdsu34iupe426ycvecuc3exptialvqeml4y5k43v2ojsoxwnccla
-- valory/impact_evaluator_abci:0.1.0:bafybeieg3y35e56wqhnitinifh5jwkvde6aq3s5ne36yivunu65o3h6dli
+- valory/impact_evaluator_abci:0.1.0:bafybeifcgmtozouot25zcdjr4aehd6hzpxh2ltuqq5m73yqqv74q6bndyy
 - valory/generic_scoring_abci:0.1.0:bafybeidkzullpw6hunss52v2zclxqm5csuj6uvoye72ac4c4yykuov3tbm
-- valory/twitter_scoring_abci:0.1.0:bafybeies5jwzkbxrbtg6mioqtbk3xegv7roqlka3dewuytnnw2nsuqx7pa
+- valory/twitter_scoring_abci:0.1.0:bafybeihrb6zzsxfcvtboxuqkuwdzsuhhm4vqq2gtwabianqr7n4fwtwssa
 - valory/ceramic_read_abci:0.1.0:bafybeigo3actdnwsytpil24o27qauniyitn3umodrcxisgdnshvpwrzd2m
 - valory/ceramic_write_abci:0.1.0:bafybeif6shygtlyd5qwewxmj74q6suhrqybqw6x5hcwloozjbpua4htruq
 - valory/dynamic_nft_abci:0.1.0:bafybeibkkj3vkcvnwn7kilmubotntvewa45aznt73tpekclx5iu35jhfbu
@@ -60,7 +61,7 @@ skills:
 - valory/decision_making_abci:0.1.0:bafybeihqz6pxwzy7chilw7wtmrfiwfqkhh3i472l6sniku7a5qb6pys5ki
 - valory/llm_abci:0.1.0:bafybeiadcczyqs343ohmklx4tdfsmd2jvjxyuvocw77a4thvgv2akdevsi
 - valory/olas_week_abci:0.1.0:bafybeieapkmdg55hyhpphukhmby5wmbbujdghec2sq652xm7zlgofpm33u
-- valory/mech_interact_abci:0.1.0:bafybeifjlueinlt2wf2ylaiszchecof4h35lsnyhqwfcojnqkdkrdi55oa
+- valory/mech_interact_abci:0.1.0:bafybeifuzs7cuysn7nmtby365gsx2zwg43nd3s6vpwdznogfnv3ji2e7da
 - valory/staking_abci:0.1.0:bafybeifn7dl3fzz7kbyydrnu77bjuofp7fhfoticy5ru6rj2gawedquz5m
 default_ledger: ethereum
 required_ledgers:

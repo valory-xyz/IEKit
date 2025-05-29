@@ -36,7 +36,6 @@ from packages.valory.skills.abstract_round_abci.models import (
 )
 from packages.valory.skills.mech_interact_abci.rounds import MechInteractAbciApp
 
-
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
 
@@ -76,6 +75,34 @@ class MechMarketplaceConfig:
             raise ValueError("priority_mech_address cannot be empty")
         if self.response_timeout <= 0:
             raise ValueError("response_timeout must be positive")
+
+
+@dataclass(frozen=True)
+class MechMarketplaceLegacyConfig:
+    """The configuration for the Mech marketplace."""
+
+    mech_marketplace_address: str
+    priority_mech_address: str
+    priority_mech_staking_instance_address: str
+    priority_mech_service_id: int
+    requester_staking_instance_address: str
+    response_timeout: int
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "MechMarketplaceLegacyConfig":
+        """Create an instance from a dictionary."""
+        return cls(
+            mech_marketplace_address=data["mech_marketplace_address"],
+            priority_mech_address=data["priority_mech_address"],
+            priority_mech_staking_instance_address=data[
+                "priority_mech_staking_instance_address"
+            ],
+            priority_mech_service_id=data["priority_mech_service_id"],
+            requester_staking_instance_address=data[
+                "requester_staking_instance_address"
+            ],
+            response_timeout=data["response_timeout"],
+        )
 
 
 @dataclass(frozen=True)

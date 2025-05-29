@@ -39,11 +39,11 @@ from packages.valory.skills.abstract_round_abci.behaviour_utils import (
 )
 from packages.valory.skills.mech_interact_abci.models import (
     MechMarketplaceConfig,
+    MechMarketplaceLegacyConfig,
     MechParams,
     MultisendBatch,
 )
 from packages.valory.skills.mech_interact_abci.states.base import SynchronizedData
-
 
 WaitableConditionType = Generator[None, None, bool]
 
@@ -74,6 +74,13 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
     def mech_marketplace_config(self) -> MechMarketplaceConfig:
         """Return the mech marketplace config."""
         return cast(MechMarketplaceConfig, self.context.params.mech_marketplace_config)
+
+    @property
+    def mech_marketplace_legacy_config(self) -> MechMarketplaceLegacyConfig:
+        """Return the mech marketplace config."""
+        return cast(
+            MechMarketplaceLegacyConfig, self.context.params.mech_marketplace_config
+        )
 
     @property
     def force_cache_refresh(self) -> bool:
