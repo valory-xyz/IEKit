@@ -22,12 +22,12 @@
 import json
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Mapping, Optional, Union, cast
+from typing import Any, Dict, List, Mapping, Optional, Type, Union, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     BaseTxPayload,
-    CollectSameUntilThresholdRound,
     CollectionRound,
+    CollectSameUntilThresholdRound,
 )
 from packages.valory.skills.mech_interact_abci.payloads import (
     MechRequestPayload,
@@ -131,9 +131,9 @@ class SynchronizedData(TxSynchronizedData):
         return cast(Mapping[str, MechResponsePayload], deserialized)
 
     @property
-    def final_tx_hash(self) -> Optional[str]:
+    def final_tx_hash(self) -> str:
         """Get the verified tx hash."""
-        return cast(str, self.db.get("final_tx_hash", None))
+        return cast(str, self.db.get("final_tx_hash"))
 
     @property
     def chain_id(self) -> Optional[str]:
@@ -146,7 +146,9 @@ class SynchronizedData(TxSynchronizedData):
         return str(self.db.get_strict("tx_submitter"))
 
     @property
-    def marketplace_compatibility_cache(self) -> Mapping[str, Union[bool, Dict[str, Any]]]:
+    def marketplace_compatibility_cache(
+        self,
+    ) -> Mapping[str, Union[bool, Dict[str, Any]]]:
         """Get the marketplace compatibility cache."""
         cache_data = self.db.get("marketplace_compatibility_cache", "{}")
         if isinstance(cache_data, str):
@@ -165,7 +167,7 @@ class SynchronizedData(TxSynchronizedData):
 class MechInteractionRound(CollectSameUntilThresholdRound):
     """A base round for the mech interactions."""
 
-    payload_class = BaseTxPayload
+    payload_class: Type[BaseTxPayload] = BaseTxPayload
     synchronized_data_class = SynchronizedData
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
