@@ -265,11 +265,7 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
         return f"{priority_mech.lower()}:{marketplace.lower()}"
 
     def _detect_marketplace_compatibility(self) -> WaitableConditionType:
-        """
-        Detect if the marketplace/mech contract supports v2 features.
-        Returns True if compatible with new marketplace, False for legacy.
-        Uses synchronized data cache to avoid repeated contract calls across agent runs.
-        """
+        """Detect if the marketplace/mech contract supports v2 features."""
         if self._compatibility_check_performed:
             return True  # Use in-memory cached result
 
@@ -563,10 +559,7 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
         return self._is_marketplace_v2_compatible or False
 
     def should_use_marketplace_v2(self) -> bool:
-        """
-        Determine if marketplace v2 flow should be used.
-        Combines configuration flag with runtime detection.
-        """
+        """Determine if marketplace v2 flow should be used."""
         if not self.params.use_mech_marketplace:
             return False  # Configuration explicitly disables marketplace
 
