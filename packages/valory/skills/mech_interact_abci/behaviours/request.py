@@ -188,7 +188,15 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         )
 
         try:
-            balance = int(ledger_api_response.state.body["get_balance_result"])
+            balance_result = ledger_api_response.state.body.get("get_balance_result")
+            if balance_result is not None:
+                if isinstance(balance_result, (int, str)):
+                    balance = int(balance_result)
+                else:
+                    self.context.logger.error(f"Invalid balance result type: {type(balance_result)}")
+                    balance = None
+            else:
+                balance = None
         except (AEAEnforceError, KeyError, ValueError, TypeError):
             balance = None
 
@@ -237,10 +245,24 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             )
             return None
 
+        try:
+            if isinstance(token, (int, str)):
+                token_int = int(token)
+            else:
+                self.context.logger.error(
+                    f"Invalid token value type: {type(token)}. Expected int or str."
+                )
+                return None
+        except (ValueError, TypeError):
+            self.context.logger.error(
+                f"Invalid token value: {token}. Expected integer."
+            )
+            return None
+            
         self.context.logger.info(
-            f"Account {account} has {self.wei_to_unit(token)} wrapped native tokens."
+            f"Account {account} has {self.wei_to_unit(token_int)} wrapped native tokens."
         )
-        return token
+        return token_int
 
     def update_safe_balances(self) -> WaitableConditionType:
         """Check the safe's balance."""
@@ -283,9 +305,20 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             self.context.logger.info(f"Could not build withdraw tx: {response_msg}")
             return False
 
+        try:
+            if isinstance(withdraw_data, str):
+                hex_data = HexBytes(withdraw_data)
+            elif isinstance(withdraw_data, (bytes, bytearray)):
+                hex_data = HexBytes(withdraw_data)
+            else:
+                hex_data = HexBytes(str(withdraw_data))
+        except (ValueError, TypeError) as e:
+            self.context.logger.error(f"Could not convert withdraw_data to HexBytes: {e}")
+            return False
+
         batch = MultisendBatch(
             to=self.params.mech_wrapped_native_token_address,
-            data=HexBytes(withdraw_data),
+            data=hex_data,
         )
         self.multisend_batches.append(batch)
         self.context.logger.info(f"Built transaction to unwrap {amount} tokens.")
@@ -374,14 +407,14 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             return False
 
         tx_hash = response_msg.state.body.get("tx_hash", None)
-        if tx_hash is None or len(tx_hash) != TX_HASH_LENGTH:
+        if tx_hash is None or not isinstance(tx_hash, str) or len(tx_hash) != TX_HASH_LENGTH:
             self.context.logger.error(
                 "Something went wrong while trying to get the buy transaction's hash. "
                 f"Invalid hash {tx_hash!r} was returned."
             )
             return False
 
-        self.safe_tx_hash = tx_hash
+        self.safe_tx_hash = str(tx_hash)
         return True
 
     def setup(self) -> None:
@@ -569,8 +602,11 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         if payment_data_bytes is None:
             return False
 
-        # Use marketplace contract but with legacy parameters
-        # This assumes the old marketplace contract has a simpler request method
+        # Use marketplace contract but with default values for v1 compatibility
+        # Provide default values for payment_type and max_delivery_rate
+        default_payment_type = "0x" + "0" * 64  # Empty bytes32
+        default_max_delivery_rate = 0  # Default to 0 for legacy compatibility
+        
         status = yield from self._mech_marketplace_contract_interact(
             "get_request_data",
             "data",
@@ -580,7 +616,8 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             payment_data=payment_data_bytes,
             response_timeout=self.mech_marketplace_config.response_timeout,
             chain_id=self.params.mech_chain_id,
-            # Note: No payment_type and max_delivery_rate for legacy
+            payment_type=default_payment_type,
+            max_delivery_rate=default_max_delivery_rate,
         )
         return status
 
@@ -696,12 +733,11 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     f"Preparing mech requests: {self._mech_requests}"
                 )
                 yield from self._prepare_safe_tx()
-                serialized_data = (
-                    json.dumps(data, cls=DataclassEncoder)
-                    for data in (self._mech_requests, self._pending_responses)
-                )
+                serialized_requests = json.dumps(self._mech_requests, cls=DataclassEncoder)
+                serialized_responses = json.dumps(self._pending_responses, cls=DataclassEncoder)
+                
                 self.context.logger.info(
-                    f"Preparing mech request:\ntx_hex: {self.tx_hex}\nprice: {self.price}\nserialized_data: {serialized_data}\n"
+                    f"Preparing mech request:\ntx_hex: {self.tx_hex}\nprice: {self.price}\nserialized_requests: {serialized_requests}\nserialized_responses: {serialized_responses}\n"
                 )
                 payload = MechRequestPayload(
                     self.context.agent_address,
@@ -710,7 +746,8 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     self.price,
                     self.params.mech_chain_id,
                     self.synchronized_data.safe_contract_address,
-                    *serialized_data,
+                    serialized_requests,
+                    serialized_responses,
                     self.get_updated_compatibility_cache(),
                     self.get_updated_compatibility_cache_access(),
                 )
