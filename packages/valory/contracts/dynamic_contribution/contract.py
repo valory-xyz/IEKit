@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -26,7 +26,24 @@ from aea.configurations.base import PublicId
 from aea.contracts.base import Contract
 from aea.crypto.base import LedgerApi
 from aea_ledger_ethereum import EthereumApi
-from web3.types import BlockIdentifier
+from eth_utils import event_abi_to_log_topic
+from hexbytes import HexBytes
+from web3._utils.events import get_event_data
+from web3.types import BlockIdentifier, FilterParams
+
+
+# Avoid parsing too many blocks at a time. This might take too long and the connection could time out.
+# The value covers the free QN version: https://www.quicknode.com/docs/ethereum/eth_getLogs
+MAX_BLOCKS = 5
+TOPIC_BYTES = 32
+TOPIC_CHARS = TOPIC_BYTES * 2
+Ox = "0x"
+Ox_CHARS = len(Ox)
+
+
+def pad_address_for_topic(address: str) -> HexBytes:
+    """Left-pad an Ethereum address to 32 bytes for use in a topic."""
+    return HexBytes(Ox + address[Ox_CHARS:].zfill(TOPIC_CHARS))
 
 
 class DynamicContributionContract(Contract):
@@ -106,24 +123,29 @@ class DynamicContributionContract(Contract):
         """
         ledger_api = cast(EthereumApi, ledger_api)
         factory_contract = cls.get_instance(ledger_api, contract_address)
+        event_abi = factory_contract.events.Transfer().abi
+        event_topic = event_abi_to_log_topic(event_abi)
 
-        # Avoid parsing too many blocks at a time. This might take too long and
-        # the connection could time out.
-        MAX_BLOCKS = 300000
         to_block = (
             ledger_api.api.eth.get_block_number() - 1 if to_block == "latest" else to_block
         )
         ranges = list(range(from_block, to_block, MAX_BLOCKS)) + [to_block]
+        from_address = pad_address_for_topic(from_address)
 
         entries = []
         for i in range(len(ranges) - 1):
             from_block = ranges[i]
             to_block = ranges[i + 1]
-            entries += factory_contract.events.Transfer.create_filter(
-                fromBlock=from_block,  # exclusive
-                toBlock=to_block,  # inclusive
-                argument_filters={"from": from_address},
-            ).get_all_entries()  # limited to 10k entries for now: https://github.com/valory-xyz/contribution-service/issues/13
+            filter_params: FilterParams = {
+                "fromBlock": from_block,
+                "toBlock": to_block,
+                "address": factory_contract.address,
+                "topics": [event_topic, from_address],
+            }
+
+            w3 = ledger_api.api.eth
+            logs = w3.get_logs(filter_params)
+            entries = [get_event_data(w3.codec, event_abi, log) for log in logs]
 
         token_id_to_member = {
             str(entry["args"]["id"]): entry["args"]["to"] for entry in entries
