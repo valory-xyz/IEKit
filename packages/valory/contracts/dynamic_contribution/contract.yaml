@@ -8,7 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeidk77j5zmvjhf42ie7grv33hzjedgc6vdiwn22uzhlwuo6xh6hmsi
   build/DynamicContribution.json: bafybeicq5ee4hba3h6tsluzvdrtyvzllpqsseqys66e24bfrpjlegnxome
-  contract.py: bafybeihe45m6zeuymlanetr6purk4bx6vcxh5efjvn3rteovhexkksdpqy
+  contract.py: bafybeihjmzvnatebdf2upizuko2i7syopco5io67twomlwdb7wmh4tsasu
 fingerprint_ignore_patterns: []
 class_name: DynamicContributionContract
 contract_interface_paths:
