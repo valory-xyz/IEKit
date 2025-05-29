@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """This module contains the handlers for the skill of MechInteractAbciApp."""
+
 from typing import cast
 
 from aea.protocols.base import Message
@@ -49,7 +50,6 @@ from packages.valory.skills.mech_interact_abci.states.base import (
     MECH_RESPONSE,
     MechInteractionResponse,
 )
-
 
 ABCIHandler = BaseABCIRoundHandler
 HttpHandler = BaseHttpHandler
@@ -101,5 +101,5 @@ class AcnHandler(Handler):
             )
             return
 
-        self.current_mech_response.response_data = message.content
+        self.current_mech_response.response_data = bytes(message.content, "utf-8")
         self.current_mech_response.sender_address = message.sender
