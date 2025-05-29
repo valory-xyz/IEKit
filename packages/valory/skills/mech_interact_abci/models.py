@@ -56,14 +56,37 @@ class MechMarketplaceConfig:
 
     mech_marketplace_address: str
     priority_mech_address: str
+    priority_mech_staking_instance_address: Optional[str]
+    priority_mech_service_id: Optional[int]
+    requester_staking_instance_address: Optional[str]
     response_timeout: int
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "MechMarketplaceConfig":
         """Create an instance from a dictionary."""
+        if not data["priority_mech_staking_instance_address"]:
+            data["priority_mech_staking_instance_address"] = (
+                "0x0000000000000000000000000000000000000000"
+            )
+
+        if not data["requester_staking_instance_address"]:
+            data["requester_staking_instance_address"] = (
+                "0x0000000000000000000000000000000000000000"
+            )
+
+        if not data["priority_mech_service_id"]:
+            data["priority_mech_service_id"] = 975
+
         return cls(
             mech_marketplace_address=data["mech_marketplace_address"],
             priority_mech_address=data["priority_mech_address"],
+            priority_mech_staking_instance_address=data[
+                "priority_mech_staking_instance_address"
+            ],
+            priority_mech_service_id=data.get("priority_mech_service_id"),
+            requester_staking_instance_address=data[
+                "requester_staking_instance_address"
+            ],
             response_timeout=data["response_timeout"],
         )
 
@@ -75,34 +98,6 @@ class MechMarketplaceConfig:
             raise ValueError("priority_mech_address cannot be empty")
         if self.response_timeout <= 0:
             raise ValueError("response_timeout must be positive")
-
-
-@dataclass(frozen=True)
-class MechMarketplaceLegacyConfig:
-    """The configuration for the Mech marketplace."""
-
-    mech_marketplace_address: str
-    priority_mech_address: str
-    priority_mech_staking_instance_address: str
-    priority_mech_service_id: int
-    requester_staking_instance_address: str
-    response_timeout: int
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "MechMarketplaceLegacyConfig":
-        """Create an instance from a dictionary."""
-        return cls(
-            mech_marketplace_address=data["mech_marketplace_address"],
-            priority_mech_address=data["priority_mech_address"],
-            priority_mech_staking_instance_address=data[
-                "priority_mech_staking_instance_address"
-            ],
-            priority_mech_service_id=data["priority_mech_service_id"],
-            requester_staking_instance_address=data[
-                "requester_staking_instance_address"
-            ],
-            response_timeout=data["response_timeout"],
-        )
 
 
 @dataclass(frozen=True)

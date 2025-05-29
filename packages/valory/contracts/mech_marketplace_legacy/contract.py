@@ -30,11 +30,11 @@ from aea_ledger_ethereum import EthereumApi
 from eth_typing import HexStr
 from web3.types import BlockData, BlockIdentifier, EventData, TxReceipt
 
-PUBLIC_ID = PublicId.from_str("valory/mech_marketplace:0.1.0")
+PUBLIC_ID = PublicId.from_str("valory/mech_marketplace_legacy:0.1.0")
 FIVE_MINUTES = 300.0
 
 
-class MechMarketplace(Contract):
+class MechMarketplaceLegacy(Contract):
     """The Mech Marketplace contract."""
 
     contract_id = PUBLIC_ID

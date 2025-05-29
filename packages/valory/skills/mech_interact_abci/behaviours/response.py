@@ -43,7 +43,6 @@ from packages.valory.skills.mech_interact_abci.states.base import (
 )
 from packages.valory.skills.mech_interact_abci.states.response import MechResponseRound
 
-
 IPFS_HASH_PREFIX = f"{V1_HEX_PREFIX}701220"
 HEX_PREFIX_LENGTH = 2
 BYTES32_LENGTH = 32
@@ -67,9 +66,9 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self._from_block: int = 0
         self._requests: List[MechRequest] = []
         self._response_hex: str = ""
-        self._mech_responses: List[
-            MechInteractionResponse
-        ] = self.synchronized_data.mech_responses
+        self._mech_responses: List[MechInteractionResponse] = (
+            self.synchronized_data.mech_responses
+        )
         self.current_mech_response: MechInteractionResponse = MechInteractionResponse(
             error="The mech's response has not been set!"
         )
@@ -189,7 +188,10 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
     def mech_contract_interact(self) -> Callable[..., WaitableConditionType]:
         """Interact with the mech contract."""
         if self.params.use_mech_marketplace:
-            return self._mech_marketplace_contract_interact
+            if self.should_use_marketplace_v2():
+                return self._mech_marketplace_contract_interact
+            else:
+                return self._mech_marketplace_legacy_contract_interact
 
         return self._mech_contract_interact
 
@@ -269,60 +271,13 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         )
         return request_id_bytes, request_id_for_specs
 
-    def _prepare_compatible_get_response_call(
-        self,
-        request_id_bytes: Optional[bytes],
-        request_id_for_specs: Optional[int],
-    ) -> WaitableConditionType:
-        """Prepare the generator for the get_response contract call with compatibility detection."""
-
-        if self.params.use_mech_marketplace and self.should_use_marketplace_v2():
-            # Use new marketplace v2 flow with MechMM
-            self.context.logger.info(
-                f"Using Marketplace v2 flow: Preparing get_response call with bytes32 request ID 0x{request_id_bytes.hex() if request_id_bytes else 'None'} using MechMM ABI."
-            )
-            return self._mech_mm_contract_interact(
-                contract_callable="get_response",
-                data_key="data",
-                placeholder=get_name(MechResponseBehaviour.response_hex),
-                request_id=request_id_bytes,
-                from_block=self.from_block,
-                chain_id=self.params.mech_chain_id,
-            )
-        elif self.params.use_mech_marketplace:
-            # Use marketplace v1 flow - marketplace contract for requests but mech contract for responses
-            self.context.logger.info(
-                f"Using Marketplace v1 flow: Preparing get_response call with int request ID {request_id_for_specs} using Mech ABI."
-            )
-            return self._mech_contract_interact(
-                contract_callable="get_response",
-                data_key="data",
-                placeholder=get_name(MechResponseBehaviour.response_hex),
-                request_id=request_id_for_specs,
-                from_block=self.from_block,
-                chain_id=self.params.mech_chain_id,
-            )
-        else:
-            # Use direct mech flow
-            self.context.logger.info(
-                f"Using direct Mech flow: Preparing get_response call with int request ID {request_id_for_specs} using legacy Mech ABI."
-            )
-            return self._mech_contract_interact(
-                contract_callable="get_response",
-                data_key="data",
-                placeholder=get_name(MechResponseBehaviour.response_hex),
-                request_id=request_id_for_specs,
-                from_block=self.from_block,
-                chain_id=self.params.mech_chain_id,
-            )
-
     def _prepare_get_response_call(
         self,
         request_id_bytes: Optional[bytes],
         request_id_for_specs: Optional[int],
     ) -> WaitableConditionType:
         """Prepare the generator for the get_response contract call."""
-        if self.params.use_mech_marketplace:
+        if self.params.use_mech_marketplace and self.should_use_marketplace_v2():
             # Use mech_mm ABI (MechMM.contract_id) and bytes32 request ID
             self.context.logger.info(
                 f"Using Mech Marketplace flow: Preparing get_response call with bytes32 request ID 0x{request_id_bytes.hex() if request_id_bytes else 'None'} using MechMM ABI."
@@ -335,6 +290,19 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 data_key="data",
                 placeholder=get_name(MechResponseBehaviour.response_hex),
                 request_id=request_id_bytes,  # Use bytes32 request ID
+                from_block=self.from_block,
+                chain_id=self.params.mech_chain_id,
+            )
+        elif self.params.use_mech_marketplace:
+            self.context.logger.info(
+                f"Using Mech Marketplace Legacy flow: Preparing get_response call with int request ID {request_id_for_specs} using Mech Marketplace ABI."
+            )
+            # Note: We rely on _mech_contract_interact using the correct Mech Marketplace ABI via self.params.mech_contract_id
+            return self._mech_contract_interact(
+                contract_callable="get_response",
+                data_key="data",
+                placeholder=get_name(MechResponseBehaviour.response_hex),
+                request_id=request_id_for_specs,  # Use integer request ID for Legacy Mech Marketplace
                 from_block=self.from_block,
                 chain_id=self.params.mech_chain_id,
             )
@@ -393,7 +361,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         )
 
         # Use compatibility-aware response retrieval
-        response_generator = self._prepare_compatible_get_response_call(
+        response_generator = self._prepare_get_response_call(
             request_id_bytes, request_id_for_specs
         )
         result = yield from response_generator
@@ -512,7 +480,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self, pending_response: MechInteractionResponse, request: MechRequest
     ) -> bool:
         """Check if a legacy pending response matches the request based on data."""
-        match = pending_response.data == request.data
+        match = pending_response.data == request.data.hex()
         if match:
             # Log detailed match info only if it matches
             self.context.logger.info(
@@ -564,7 +532,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         is_first_pending: bool,
     ) -> bool:
         """Check if a pending response matches the request based on the flow."""
-        if self.params.use_mech_marketplace:
+        if self.params.use_mech_marketplace and self.should_use_marketplace_v2():
             # Marketplace flow: TEMPORARY logic - attempts to match only the first pending response.
             return self._is_marketplace_match(
                 pending_response, request, is_first_pending

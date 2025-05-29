@@ -600,12 +600,12 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             "data",
             get_name(MechRequestBehaviour.request_data),
             request_data=self._v1_hex_truncated,
-            priority_mech=self.mech_marketplace_legacy_config.priority_mech_address,
-            priority_mech_staking_instance=self.mech_marketplace_legacy_config.priority_mech_staking_instance_address,
-            priority_mech_service_id=self.mech_marketplace_legacy_config.priority_mech_service_id,
-            requester_staking_instance=self.mech_marketplace_legacy_config.requester_staking_instance_address,
+            priority_mech=self.mech_marketplace_config.priority_mech_address,
+            priority_mech_staking_instance=self.mech_marketplace_config.priority_mech_staking_instance_address,
+            priority_mech_service_id=self.mech_marketplace_config.priority_mech_service_id,
+            requester_staking_instance=self.mech_marketplace_config.requester_staking_instance_address,
             requester_service_id=self.params.on_chain_service_id,
-            response_timeout=self.mech_marketplace_legacy_config.response_timeout,
+            response_timeout=self.mech_marketplace_config.response_timeout,
             chain_id=self.params.mech_chain_id,
         )
         return status
@@ -629,7 +629,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             return self.mech_marketplace_config.mech_marketplace_address
         elif self.params.use_mech_marketplace:
             # Legacy marketplace - might still use marketplace contract but with different flow
-            return self.mech_marketplace_legacy_config.mech_marketplace_address
+            return self.mech_marketplace_config.mech_marketplace_address
         else:
             return self.params.mech_contract_address
 
