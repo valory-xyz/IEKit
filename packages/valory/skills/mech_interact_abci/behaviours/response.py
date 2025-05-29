@@ -104,12 +104,33 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
     @requests.setter
     def requests(self, requests: List[Dict[str, str]]) -> None:
         """Set the requests."""
-        self._requests = [MechRequest(**request) for request in requests]
+        self._requests = []
+        for request in requests:
+            # Convert string values to appropriate types for MechRequest
+            mech_request = MechRequest(
+                data=request.get("data", ""),
+                requestId=int(request.get("requestId", 0)),
+                requestIds=[int(x) for x in request.get("requestIds", "").split(",") if x.strip()],
+                numRequests=int(request.get("numRequests", 0))
+            )
+            self._requests.append(mech_request)
 
     @property
     def response_hex(self) -> str:
         """Get the hash of the response data."""
         return self._response_hex
+
+    @response_hex.setter
+    def response_hex(self, response_hash: bytes) -> None:
+        """Set the hash of the response data."""
+        if isinstance(response_hash, bytes):
+            self._response_hex = response_hash.hex()
+        elif isinstance(response_hash, str):
+            self._response_hex = response_hash
+        else:
+            msg = f"Response hash {response_hash!r} is not valid hex bytes or string!"
+            self.context.logger.error(msg)
+            self._response_hex = ""
 
     @property
     def is_valid_acn_sender(self) -> bool:
@@ -120,15 +141,6 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
     def is_valid_acn_sender(self, is_valid_acn_sender: bool) -> None:
         """Set is valid ACN sender"""
         self._is_valid_acn_sender = is_valid_acn_sender
-
-    @response_hex.setter
-    def response_hex(self, response_hash: bytes) -> None:
-        """Set the hash of the response data."""
-        try:
-            self._response_hex = response_hash.hex()
-        except AttributeError:
-            msg = f"Response hash {response_hash!r} is not valid hex bytes!"
-            self.context.logger.error(msg)
 
     @property
     def mech_response_api(self) -> MechResponseSpecs:
@@ -257,13 +269,13 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self,
         request_id_bytes: Optional[bytes],
         request_id_for_specs: Optional[int],
-    ) -> Generator:
+    ) -> WaitableConditionType:
         """Prepare the generator for the get_response contract call with compatibility detection."""
         
         if self.params.use_mech_marketplace and self.should_use_marketplace_v2():
             # Use new marketplace v2 flow with MechMM
             self.context.logger.info(
-                f"Using Marketplace v2 flow: Preparing get_response call with bytes32 request ID 0x{request_id_bytes.hex()} using MechMM ABI."
+                f"Using Marketplace v2 flow: Preparing get_response call with bytes32 request ID 0x{request_id_bytes.hex() if request_id_bytes else 'None'} using MechMM ABI."
             )
             return self._mech_mm_contract_interact(
                 contract_callable="get_response",
@@ -274,11 +286,11 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 chain_id=self.params.mech_chain_id,
             )
         elif self.params.use_mech_marketplace:
-            # Use legacy marketplace flow
+            # Use marketplace v1 flow - marketplace contract for requests but mech contract for responses
             self.context.logger.info(
-                f"Using legacy Marketplace flow: Preparing get_response call with int request ID {request_id_for_specs} using legacy Marketplace ABI."
+                f"Using Marketplace v1 flow: Preparing get_response call with int request ID {request_id_for_specs} using Mech ABI."
             )
-            return self._mech_marketplace_contract_interact(
+            return self._mech_contract_interact(
                 contract_callable="get_response",
                 data_key="data", 
                 placeholder=get_name(MechResponseBehaviour.response_hex),
@@ -304,12 +316,12 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self,
         request_id_bytes: Optional[bytes],
         request_id_for_specs: Optional[int],
-    ) -> Generator:
+    ) -> WaitableConditionType:
         """Prepare the generator for the get_response contract call."""
         if self.params.use_mech_marketplace:
             # Use mech_mm ABI (MechMM.contract_id) and bytes32 request ID
             self.context.logger.info(
-                f"Using Mech Marketplace flow: Preparing get_response call with bytes32 request ID 0x{request_id_bytes.hex()} using MechMM ABI."
+                f"Using Mech Marketplace flow: Preparing get_response call with bytes32 request ID 0x{request_id_bytes.hex() if request_id_bytes else 'None'} using MechMM ABI."
             )
             return self.contract_interact(
                 performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,
@@ -356,7 +368,8 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 mech_address=self.params.mech_contract_address,
             )
             if result and self.is_valid_acn_sender:
-                self.response_hex = self.current_mech_response.response_data
+                if self.current_mech_response.response_data:
+                    self._response_hex = self.current_mech_response.response_data.hex()
                 return True
 
         # Determine request IDs based on the flow using the property
@@ -370,7 +383,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
         self.context.logger.info(
             f"Filtering the Mech's Deliver events from block {self.from_block} "
-            f"for a response to request with id (bytes32) 0x{request_id_bytes.hex()} or (int) {request_id_for_specs}"
+            f"for a response to request with id (bytes32) 0x{request_id_bytes.hex() if request_id_bytes else 'None'} or (int) {request_id_for_specs}"
         )
 
         # Use compatibility-aware response retrieval
@@ -493,13 +506,13 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self, pending_response: MechInteractionResponse, request: MechRequest
     ) -> bool:
         """Check if a legacy pending response matches the request based on data."""
-        match = pending_response.data == request.data.hex()
+        match = pending_response.data == request.data
         if match:
             # Log detailed match info only if it matches
             self.context.logger.info(
                 f"Matched LEGACY pending response (Nonce: {pending_response.nonce}) "
                 f"to parsed event request (ID: {hex(int(request.requestId))}) "
-                f"based on data field matching. Data Hex: {request.data.hex()}"
+                f"based on data field matching. Data: {request.data}"
             )
             pending_response.requestId = (
                 request.requestId
@@ -532,7 +545,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         )
 
         # If it's the first pending response and the request has IDs, assume it's a match (temporary)
-        pending_response.requestIds = [str(req_id) for req_id in request.requestIds]
+        pending_response.requestIds = list(request.requestIds)
         self.context.logger.info(
             f"Updated (first) pending_response.requestIds: {pending_response.requestIds} (TEMPORARY MATCH)"
         )
