@@ -51,6 +51,7 @@ from packages.valory.skills.mech_interact_abci.states.base import (
     MechInteractionResponse,
 )
 
+
 ABCIHandler = BaseABCIRoundHandler
 HttpHandler = BaseHttpHandler
 SigningHandler = BaseSigningHandler
