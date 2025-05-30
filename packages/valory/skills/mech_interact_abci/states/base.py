@@ -22,12 +22,12 @@
 import json
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Mapping, Optional, Type, Union, cast
+from typing import Any, List, Mapping, Optional, Type, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     BaseTxPayload,
-    CollectSameUntilThresholdRound,
     CollectionRound,
+    CollectSameUntilThresholdRound,
 )
 from packages.valory.skills.mech_interact_abci.payloads import (
     MechRequestPayload,
@@ -146,22 +146,12 @@ class SynchronizedData(TxSynchronizedData):
         return str(self.db.get_strict("tx_submitter"))
 
     @property
-    def marketplace_compatibility_cache(
-        self,
-    ) -> Mapping[str, Union[bool, Dict[str, Any]]]:
-        """Get the marketplace compatibility cache."""
+    def marketplace_compatibility_cache(self) -> Mapping[str, str]:
+        """Get the marketplace compatibility cache. Format: {mech_address: "v1"|"v2"}"""
         cache_data = self.db.get("marketplace_compatibility_cache", "{}")
         if isinstance(cache_data, str):
             cache_data = json.loads(cache_data)
-        return cast(Mapping[str, Union[bool, Dict[str, Any]]], cache_data)
-
-    @property
-    def marketplace_compatibility_cache_access(self) -> Mapping[str, float]:
-        """Get the marketplace compatibility cache access times."""
-        access_data = self.db.get("marketplace_compatibility_cache_access", "{}")
-        if isinstance(access_data, str):
-            access_data = json.loads(access_data)
-        return cast(Mapping[str, float], access_data)
+        return cast(Mapping[str, str], cache_data)
 
 
 class MechInteractionRound(CollectSameUntilThresholdRound):

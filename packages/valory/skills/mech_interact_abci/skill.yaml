@@ -11,20 +11,20 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeidf3nlv5fpvfy4libtscayhirdw64shgmhfmvjiftjmjkmhu7auxq
   behaviours/__init__.py: bafybeie3zsi6p3yanz5mqwpkdrcgywaqvkit3hdintsb4awnvalgxpxa4i
-  behaviours/base.py: bafybeicrrtzku4sb373zwsn2wj4hvfdda37ng6xjgvomqdil66cyd62hzu
-  behaviours/request.py: bafybeicvsdnk7mxgqxxswi6c5wvcm62x5h3cabwti44llrxky5c7fhdira
-  behaviours/response.py: bafybeig4qbyfmtlxkco4rny62wtprupuhu4imd65bz3dnghm6e5alwbrri
+  behaviours/base.py: bafybeib6kjpcecrxfmrfzlhzw73llaz3udu5rrxdiv5tlxwamtrogn7nnq
+  behaviours/request.py: bafybeifjoxympom7llhqv3cchxncwyqtm7337to7asxftnpctmnrdz2oky
+  behaviours/response.py: bafybeie564rpvodr4d2abcbdoioq7bgocokwokpdegnmz2ldox36zry2tq
   behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
   dialogues.py: bafybeicgtxsrzld6uyi2n455temnz6mj55irmxqxw55jxo4b6ud4rt7nsm
   fsm_specification.yaml: bafybeiapzwz6zcneelc2b2wrcb7cae7x6vbthmf6a57cm4mv6hucp67lz4
   handlers.py: bafybeieho4uyy6qqx3uzgzy4rpb7qvqb4jl2yk5tfwacce3zapec7pflie
-  models.py: bafybeignarjdkf6mx4zz53nkafv6bt7qhpicyyjibalsmqemt6hbntn4cy
-  payloads.py: bafybeidq2zdyenuzoiqddb6b5akr5lswby2dl6o65z5lp56yl2xyt5fiai
+  models.py: bafybeihmdp6ounzjx2ur65e5hveqdxhnzr56vzt2pmkntdzpvuac6p3b2i
+  payloads.py: bafybeifgwgbw4iy5mqt7mx7z44mu7jtvdrxsxxgrztizvwd7inwrsldo2y
   rounds.py: bafybeiadnukced2x3qk64jdf7dx3yh6knfvslc6hegusgfwfbdm5pby6mm
   states/__init__.py: bafybeie34wx5znr2hxwh3gs2fchmbeuzjcfnraymdvtzjaxaq5zsiw233q
-  states/base.py: bafybeicakxmheboazrudibknldz7hj7zfbatf3vam3aiom7lgeruf2uy2q
+  states/base.py: bafybeidmts36lfdj2i7ps3i6qk6bo6t5rmcvlfoymzyxjktgzgf4xjedsy
   states/final_states.py: bafybeihjntrbc666blxj4viz74y4p2hfc5e4vijs3bqng2k4vqbwkud7sq
-  states/request.py: bafybeibmjiui6uyub7p4atmlqd7wevfwccokqdvjfzdidcc2kmjthcqu6e
+  states/request.py: bafybeiabuia52gvyivtw5tif35vff45ggbrdiseu5t6lci7fposbpg62lu
   states/response.py: bafybeibaxnp2oxwjptoq7qzm6o7ww2qrdj2vnxzg2qt523vz2ftqzx5hyi
   tests/__init__.py: bafybeifojfnffwlsv6aiku25nwyjwm7h4m45yci3fgmaawpeoyoogzonum
   tests/test_behaviours.py: bafybeidj7git7zaego7k75eejtxlr3usj6wnnqisu7urqwvalpwh5w7nyq
@@ -33,6 +33,7 @@ fingerprint:
   tests/test_models.py: bafybeid3cvcttdxlklwvr6tqmiurb2qywvmgr5bnsn62pb5gl5p552eagy
   tests/test_payloads.py: bafybeiakqhgochfu4ra4hp65hi7jvxtjd7fdub5wqmhlccrc4va26hb7da
   tests/test_rounds.py: bafybeiauu5adaoxu7yvtrfa6uwdw4sxr5gn2pj7qjh6vowd556iji6vtca
+  utils.py: bafybeifcoppebe2dgk2ysmj3gq5dnozhrpzbsdhsujlfyzsnhyij7bx4ve
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
@@ -177,14 +178,6 @@ models:
         mech_marketplace_address: '0x0000000000000000000000000000000000000000'
         priority_mech_address: '0x0000000000000000000000000000000000000000'
         response_timeout: 300
-      compatibility_config:
-        force_cache_refresh: false
-        max_cache_entries: 50
-        cache_ttl_seconds: 86400
-        enable_compatibility_detection: true
-        fallback_to_legacy: true
-      force_compatibility_refresh: false
-      max_compatibility_cache_entries: 50
     class_name: Params
   mech_response:
     args:

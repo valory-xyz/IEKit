@@ -21,7 +21,6 @@
 
 import json
 from abc import ABC
-from dataclasses import asdict, is_dataclass
 from datetime import datetime, timedelta
 from typing import Any, Callable, Generator, List, Optional, cast
 
@@ -46,6 +45,7 @@ from packages.valory.skills.mech_interact_abci.models import (
     MultisendBatch,
 )
 from packages.valory.skills.mech_interact_abci.states.base import SynchronizedData
+
 
 WaitableConditionType = Generator[None, None, bool]
 
@@ -76,16 +76,6 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
     def mech_marketplace_config(self) -> MechMarketplaceConfig:
         """Return the mech marketplace config."""
         return cast(MechMarketplaceConfig, self.context.params.mech_marketplace_config)
-
-    @property
-    def force_cache_refresh(self) -> bool:
-        """Return whether to force cache refresh."""
-        return self.params.compatibility_config.force_cache_refresh
-
-    @property
-    def max_cache_entries(self) -> int:
-        """Return maximum number of cache entries."""
-        return self.params.compatibility_config.max_cache_entries
 
     def default_error(
         self, contract_id: str, contract_callable: str, response_msg: ContractApiMessage
@@ -279,76 +269,56 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
 
         self.set_done()
 
-    def _get_cache_key(self) -> str:
-        """Generate cache key for the current marketplace configuration."""
-        priority_mech = self.params.mech_marketplace_config.priority_mech_address
-        marketplace = self.params.mech_marketplace_config.mech_marketplace_address
-        return f"{priority_mech.lower()}:{marketplace.lower()}"
+    def _get_mech_address(self) -> str:
+        """Get the current mech address."""
+        return self.params.mech_marketplace_config.priority_mech_address.lower()
 
     def _detect_marketplace_compatibility(self) -> WaitableConditionType:
-        """Detect if the marketplace/mech contract supports v2 features."""
+        """
+        Detect if the marketplace/mech contract supports v2 features.
+        Simple cache: {mech_address: "v1" | "v2"}
+        """
         if self._compatibility_check_performed:
             return True  # Use in-memory cached result
 
-        # Check if compatibility detection is enabled
-        if not self.params.compatibility_config.enable_compatibility_detection:
-            self.context.logger.info(
-                "Compatibility detection is disabled in configuration. "
-                f"Using fallback mode: {'legacy' if self.params.compatibility_config.fallback_to_legacy else 'v2'}"
-            )
-            self._is_marketplace_v2_compatible = (
-                not self.params.compatibility_config.fallback_to_legacy
-            )
-            self._compatibility_check_performed = True
-            return True
-
-        cache_key = self._get_cache_key()
+        mech_address = self._get_mech_address()
         compatibility_cache = self.synchronized_data.marketplace_compatibility_cache
 
-        # Check synchronized data cache first (unless forced refresh)
-        if cache_key in compatibility_cache and not self.force_cache_refresh:
-            # Handle both old format (bool) and new format (dict with metadata)
-            cache_value = compatibility_cache[cache_key]
-            is_cache_valid = True
-
-            if isinstance(cache_value, bool):
-                self._is_marketplace_v2_compatible = cache_value
-            elif isinstance(cache_value, dict):
-                # Check TTL for new format entries
-                import time
-
-                current_time = time.time()
-                cache_timestamp = cache_value.get("timestamp", 0)
-                cache_age = current_time - cache_timestamp
-
-                if cache_age > self.params.compatibility_config.cache_ttl_seconds:
-                    self.context.logger.info(
-                        f"Cache entry for {cache_key} has expired (age: {cache_age:.0f}s, TTL: {self.params.compatibility_config.cache_ttl_seconds}s)"
-                    )
-                    is_cache_valid = False
-                else:
-                    self._is_marketplace_v2_compatible = cache_value.get(
-                        "compatible", False
-                    )
+        # Check if we already know this mech address
+        if mech_address in compatibility_cache:
+            cached_value = compatibility_cache[mech_address]
+            
+            # Handle different cache formats during transition
+            if isinstance(cached_value, str):
+                # New string format: "v1" or "v2"
+                self._is_marketplace_v2_compatible = cached_value == "v2"
+                cached_version = cached_value
+            elif isinstance(cached_value, bool):
+                # Old boolean format: True = v2, False = v1
+                self._is_marketplace_v2_compatible = cached_value
+                cached_version = "v2" if cached_value else "v1"
+            elif isinstance(cached_value, dict):
+                # Old dict format: get 'compatible' field
+                compatible = cached_value.get('compatible', False)
+                self._is_marketplace_v2_compatible = compatible
+                cached_version = "v2" if compatible else "v1"
             else:
-                is_cache_valid = False
-
-            if is_cache_valid:
+                # Unknown format, fall through to detection
+                self.context.logger.warning(f"Unknown cache format for {mech_address}: {type(cached_value)}")
+                cached_version = None
+            
+            if cached_version:
                 self._compatibility_check_performed = True
-                # Update access time for LRU
-                self._update_cache_access_time(cache_key)
                 self.context.logger.info(
-                    f"Using cached compatibility result for {cache_key}: "
-                    f"v{'2' if self._is_marketplace_v2_compatible else '1'} marketplace "
-                    "(from synchronized data)"
+                    f"Using cached compatibility for {mech_address}: {cached_version}"
                 )
                 return True
 
         self.context.logger.info(
-            "Detecting marketplace contract compatibility (not in cache)..."
+            f"Detecting marketplace compatibility for new mech: {mech_address}"
         )
 
-        # Try calling get_payment_type on the priority mech address
+        # Try calling get_payment_type on the mech address
         try:
             status = yield from self._mech_mm_contract_interact(
                 contract_callable="get_payment_type",
@@ -358,216 +328,56 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
             )
 
             if status:
-                self.context.logger.info(
-                    f"Contract at {self.params.mech_marketplace_config.priority_mech_address} "
-                    "supports v2 marketplace features (get_payment_type detected)"
-                )
+                self.context.logger.info(f"Mech {mech_address} supports v2 features")
                 self._is_marketplace_v2_compatible = True
             else:
-                self.context.logger.info(
-                    f"Contract at {self.params.mech_marketplace_config.priority_mech_address} "
-                    "does not support v2 marketplace features (get_payment_type failed)"
-                )
+                self.context.logger.info(f"Mech {mech_address} uses v1 features")
                 self._is_marketplace_v2_compatible = False
 
         except Exception as e:
             self.context.logger.warning(
-                f"Feature detection failed for contract "
-                f"{self.params.mech_marketplace_config.priority_mech_address}: {e}. "
-                f"Using fallback mode: {'legacy' if self.params.compatibility_config.fallback_to_legacy else 'v2'}"
+                f"Feature detection failed for mech {mech_address}: {e}. "
+                "Defaulting to v1 (legacy mode)"
             )
-            self._is_marketplace_v2_compatible = (
-                not self.params.compatibility_config.fallback_to_legacy
-            )
-
-        # Update the cache in synchronized data through payload if needed
-        self._update_compatibility_cache(cache_key, self._is_marketplace_v2_compatible)
+            self._is_marketplace_v2_compatible = False
 
         self._compatibility_check_performed = True
         return True
 
-    def _update_compatibility_cache(self, cache_key: str, compatible: bool) -> None:
-        """Update the compatibility cache in synchronized data with size management."""
-        try:
-            # Get current cache and access times
-            current_cache = dict(self.synchronized_data.marketplace_compatibility_cache)
-            current_access = dict(
-                self.synchronized_data.marketplace_compatibility_cache_access
-            )
 
-            # Check if update is needed
-            cache_value = current_cache.get(cache_key)
-            needs_update = False
-
-            if isinstance(cache_value, bool):
-                needs_update = cache_value != compatible
-            elif isinstance(cache_value, dict):
-                needs_update = cache_value.get("compatible", False) != compatible
-            else:
-                needs_update = True  # New entry
-
-            if needs_update:
-                # Clean cache if it's getting too large
-                if (
-                    len(current_cache) >= self.max_cache_entries
-                    and cache_key not in current_cache
-                ):
-                    current_cache, current_access = self._evict_lru_entries(
-                        current_cache, current_access
-                    )
-
-                # Update cache with metadata
-                import time
-
-                current_time = time.time()
-                existing_entry = current_cache.get(cache_key, {})
-                access_count = (
-                    existing_entry.get("access_count", 0)
-                    if isinstance(existing_entry, dict)
-                    else 0
-                )
-                current_cache[cache_key] = {
-                    "compatible": compatible,
-                    "timestamp": current_time,
-                    "access_count": access_count + 1,
-                }
-                current_access[cache_key] = current_time
-
-                self.context.logger.info(
-                    f"Updated compatibility cache: {cache_key} = v{'2' if compatible else '1'} marketplace "
-                    f"(cache size: {len(current_cache)}/{self.max_cache_entries}, TTL: {self.params.compatibility_config.cache_ttl_seconds}s)"
-                )
-            else:
-                self.context.logger.debug(f"Cache value unchanged for {cache_key}")
-
-        except Exception as e:
-            self.context.logger.warning(f"Failed to update compatibility cache: {e}")
-
-    def _update_cache_access_time(self, cache_key: str) -> None:
-        """Update access time for LRU tracking."""
-        # This will be handled in get_updated_compatibility_cache for consensus updates
-        pass
-
-    def _evict_lru_entries(self, cache: dict, access_times: dict) -> tuple:
-        """Remove least recently used entries and expired entries to make room for new ones."""
-        try:
-            import time
-
-            current_time = time.time()
-            ttl_seconds = self.params.compatibility_config.cache_ttl_seconds
-
-            # First, remove expired entries
-            expired_keys = []
-            for key, cache_value in cache.items():
-                if isinstance(cache_value, dict):
-                    cache_timestamp = cache_value.get("timestamp", 0)
-                    if current_time - cache_timestamp > ttl_seconds:
-                        expired_keys.append(key)
-
-            # Remove expired entries
-            for key in expired_keys:
-                if key in cache:
-                    del cache[key]
-                if key in access_times:
-                    del access_times[key]
-
-            if expired_keys:
-                self.context.logger.info(
-                    f"Evicted {len(expired_keys)} expired cache entries. "
-                    f"Cache size after cleanup: {len(cache)}/{self.max_cache_entries}"
-                )
-
-            # Calculate how many more entries to remove (remove 20% when limit reached)
-            target_size = int(self.max_cache_entries * 0.8)
-            entries_to_remove = len(cache) - target_size
-
-            if entries_to_remove <= 0:
-                return cache, access_times
-
-            # Sort by access time (oldest first)
-            sorted_by_access = sorted(access_times.items(), key=lambda x: x[1])
-
-            # Remove oldest entries
-            removed_count = 0
-            for key, _ in sorted_by_access:
-                if removed_count >= entries_to_remove:
-                    break
-                if key in cache:
-                    del cache[key]
-                    del access_times[key]
-                    removed_count += 1
-
-            self.context.logger.info(
-                f"Evicted {removed_count} LRU cache entries. "
-                f"Final cache size: {len(cache)}/{self.max_cache_entries}"
-            )
-
-            return cache, access_times
-
-        except Exception as e:
-            self.context.logger.warning(f"Failed to evict cache entries: {e}")
-            return cache, access_times
 
     def get_updated_compatibility_cache(self) -> str:
         """Get the updated compatibility cache as JSON string for synchronized data."""
         try:
-            current_cache = dict(self.synchronized_data.marketplace_compatibility_cache)
-            current_access = dict(
-                self.synchronized_data.marketplace_compatibility_cache_access
-            )
-            cache_key = self._get_cache_key()
-
+            # Get current cache and convert old formats to new string format
+            current_cache = {}
+            raw_cache = self.synchronized_data.marketplace_compatibility_cache
+            
+            # Convert old cache formats to new string format
+            for key, value in raw_cache.items():
+                if isinstance(value, bool):
+                    # Old boolean format: True = v2, False = v1
+                    current_cache[key] = "v2" if value else "v1"
+                elif isinstance(value, dict):
+                    # Old dict format: get 'compatible' field
+                    compatible = value.get('compatible', False)
+                    current_cache[key] = "v2" if compatible else "v1"
+                elif isinstance(value, str):
+                    # New string format: keep as is
+                    current_cache[key] = value
+            
             if (
                 self._compatibility_check_performed
                 and self._is_marketplace_v2_compatible is not None
             ):
-                # Clean cache if needed before adding new entry
-                if (
-                    len(current_cache) >= self.max_cache_entries
-                    and cache_key not in current_cache
-                ):
-                    current_cache, current_access = self._evict_lru_entries(
-                        current_cache, current_access
-                    )
-
-                # Update with metadata
-                import time
-
-                current_time = time.time()
-                existing_entry = current_cache.get(cache_key, {})
-                access_count = (
-                    existing_entry.get("access_count", 0)
-                    if isinstance(existing_entry, dict)
-                    else 0
-                )
-                current_cache[cache_key] = {
-                    "compatible": self._is_marketplace_v2_compatible,
-                    "timestamp": current_time,
-                    "access_count": access_count + 1,
-                }
-                current_access[cache_key] = current_time
+                mech_address = self._get_mech_address()
+                version = "v2" if self._is_marketplace_v2_compatible else "v1"
+                current_cache[mech_address] = version
+                self.context.logger.info(f"Updated cache: {mech_address} = {version}")
 
             return json.dumps(current_cache)
         except Exception as e:
             self.context.logger.warning(f"Failed to serialize compatibility cache: {e}")
-            return "{}"
-
-    def get_updated_compatibility_cache_access(self) -> str:
-        """Get the updated cache access times as JSON string for synchronized data."""
-        try:
-            current_access = dict(
-                self.synchronized_data.marketplace_compatibility_cache_access
-            )
-            cache_key = self._get_cache_key()
-
-            if self._compatibility_check_performed:
-                import time
-
-                current_access[cache_key] = time.time()
-
-            return json.dumps(current_access)
-        except Exception as e:
-            self.context.logger.warning(f"Failed to serialize cache access times: {e}")
             return "{}"
 
     @property
@@ -580,26 +390,14 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
         return self._is_marketplace_v2_compatible or False
 
     def should_use_marketplace_v2(self) -> bool:
-        """Determine if marketplace v2 flow should be used."""
+        """
+        Determine if marketplace v2 flow should be used.
+        """
         if not self.params.use_mech_marketplace:
             return False  # Configuration explicitly disables marketplace
 
         if not self._compatibility_check_performed:
             raise ValueError("Compatibility check must be performed first")
 
-        # Respect the configuration's compatibility detection setting
-        if not self.params.compatibility_config.enable_compatibility_detection:
-            # Use the configured fallback behavior
-            return not self.params.compatibility_config.fallback_to_legacy
-
         return self._is_marketplace_v2_compatible or False
 
-
-class DataclassEncoder(json.JSONEncoder):
-    """A custom JSON encoder for dataclasses."""
-
-    def default(self, o: Any) -> Any:
-        """The default JSON encoder."""
-        if is_dataclass(o) and not isinstance(o, type):
-            return asdict(o)
-        return super().default(o)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023-2025 Valory AG
@@ -26,15 +25,15 @@ from aea.exceptions import enforce
 from hexbytes import HexBytes
 
 from packages.valory.contracts.multisend.contract import MultiSendOperation
-from packages.valory.skills.abstract_round_abci.models import ApiSpecs, BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
+    ApiSpecs,
+    BaseParams,
     BenchmarkTool as BaseBenchmarkTool,
-)
-from packages.valory.skills.abstract_round_abci.models import Requests as BaseRequests
-from packages.valory.skills.abstract_round_abci.models import (
+    Requests as BaseRequests,
     SharedState as BaseSharedState,
 )
 from packages.valory.skills.mech_interact_abci.rounds import MechInteractAbciApp
+
 
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
@@ -100,86 +99,6 @@ class MechMarketplaceConfig:
             raise ValueError("response_timeout must be positive")
 
 
-@dataclass(frozen=True)
-class CompatibilityConfig:
-    """Configuration for marketplace compatibility detection and caching.
-
-    This configuration controls how the agent detects and caches marketplace
-    contract compatibility information to minimize contract interactions while
-    ensuring correct behavior across different contract versions.
-
-    Attributes:
-        force_cache_refresh: If True, forces cache refresh on every check
-        max_cache_entries: Maximum number of cache entries to maintain
-        cache_ttl_seconds: Time-to-live for cache entries in seconds
-        enable_compatibility_detection: If False, disables runtime detection
-        fallback_to_legacy: If True, falls back to legacy mode on detection failure
-    """
-
-    force_cache_refresh: bool = False
-    max_cache_entries: int = 50
-    cache_ttl_seconds: int = 86400  # 24 hours
-    enable_compatibility_detection: bool = True
-    fallback_to_legacy: bool = True
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "CompatibilityConfig":
-        """Create an instance from a dictionary.
-
-        Args:
-            data: Dictionary containing configuration values
-
-        Returns:
-            CompatibilityConfig instance with values from the dictionary
-        """
-        return cls(
-            force_cache_refresh=data.get("force_cache_refresh", False),
-            max_cache_entries=data.get("max_cache_entries", 50),
-            cache_ttl_seconds=data.get("cache_ttl_seconds", 86400),
-            enable_compatibility_detection=data.get(
-                "enable_compatibility_detection", True
-            ),
-            fallback_to_legacy=data.get("fallback_to_legacy", True),
-        )
-
-    def __post_init__(self) -> None:
-        """Validate configuration after initialization."""
-        if self.max_cache_entries <= 0:
-            raise ValueError("max_cache_entries must be positive")
-        if self.cache_ttl_seconds <= 0:
-            raise ValueError("cache_ttl_seconds must be positive")
-
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert configuration to dictionary.
-
-        Returns:
-            Dictionary representation of the configuration
-        """
-        return {
-            "force_cache_refresh": self.force_cache_refresh,
-            "max_cache_entries": self.max_cache_entries,
-            "cache_ttl_seconds": self.cache_ttl_seconds,
-            "enable_compatibility_detection": self.enable_compatibility_detection,
-            "fallback_to_legacy": self.fallback_to_legacy,
-        }
-
-    def is_cache_enabled(self) -> bool:
-        """Check if caching is effectively enabled.
-
-        Returns:
-            True if caching is enabled and not forced to refresh
-        """
-        return not self.force_cache_refresh and self.max_cache_entries > 0
-
-    def should_detect_compatibility(self) -> bool:
-        """Check if compatibility detection should be performed.
-
-        Returns:
-            True if compatibility detection is enabled
-        """
-        return self.enable_compatibility_detection
-
-
 class MechParams(BaseParams):
     """The mech interact abci skill's parameters.
 
@@ -199,7 +118,7 @@ class MechParams(BaseParams):
         Raises:
             ValueError: If required parameters are missing or invalid
         """
-        multisend_address = kwargs.get("multisend_address", None)
+        multisend_address = kwargs.get("multisend_address")
         enforce(multisend_address is not None, "Multisend address not specified!")
         self.multisend_address: str = multisend_address
         self.multisend_batch_size: int = self._ensure(
@@ -208,11 +127,11 @@ class MechParams(BaseParams):
         self.mech_contract_address: str = self._ensure(
             "mech_contract_address", kwargs, str
         )
-        self.mech_request_price: Optional[int] = kwargs.get("mech_request_price", None)
+        self.mech_request_price: Optional[int] = kwargs.get("mech_request_price")
         self._ipfs_address: str = self._ensure("ipfs_address", kwargs, str)
         self.mech_chain_id: Optional[str] = kwargs.get("mech_chain_id", "gnosis")
         self.mech_wrapped_native_token_address: Optional[str] = kwargs.get(
-            "mech_wrapped_native_token_address", None
+            "mech_wrapped_native_token_address"
         )
         self.mech_interaction_sleep_time: int = self._ensure(
             "mech_interaction_sleep_time", kwargs, int
@@ -221,30 +140,12 @@ class MechParams(BaseParams):
         self.mech_marketplace_config: MechMarketplaceConfig = (
             MechMarketplaceConfig.from_dict(kwargs["mech_marketplace_config"])
         )
-        self.agent_registry_address = kwargs.get("agent_registry_address", None)
+        self.agent_registry_address = kwargs.get("agent_registry_address")
         enforce(
             self.agent_registry_address is not None,
             "Agent registry address not specified!",
         )
         self.use_acn_for_delivers = self._ensure("use_acn_for_delivers", kwargs, bool)
-
-        # Compatibility detection configuration
-        compatibility_config_data = kwargs.get("compatibility_config", {})
-        if isinstance(compatibility_config_data, dict):
-            self.compatibility_config = CompatibilityConfig.from_dict(
-                compatibility_config_data
-            )
-        else:
-            self.compatibility_config = CompatibilityConfig()
-
-        # Legacy parameter support for backward compatibility
-        self.force_compatibility_refresh = kwargs.get(
-            "force_compatibility_refresh", self.compatibility_config.force_cache_refresh
-        )
-        self.max_compatibility_cache_entries = kwargs.get(
-            "max_compatibility_cache_entries",
-            self.compatibility_config.max_cache_entries,
-        )
 
         enforce(
             not self.use_mech_marketplace
@@ -277,12 +178,6 @@ class MechParams(BaseParams):
                         "priority_mech_address is required when use_mech_marketplace is True"
                     )
 
-            # Validate cache configuration
-            if self.compatibility_config.max_cache_entries > 1000:
-                raise ValueError(
-                    "max_cache_entries should not exceed 1000 for performance reasons"
-                )
-
             # Validate sleep time
             if self.mech_interaction_sleep_time <= 0:
                 raise ValueError("mech_interaction_sleep_time must be positive")
@@ -293,19 +188,6 @@ class MechParams(BaseParams):
 
         except Exception as e:
             raise ValueError(f"Configuration validation failed: {e}") from e
-
-    def get_cache_config_summary(self) -> Dict[str, Any]:
-        """Get a summary of cache configuration.
-
-        Returns:
-            Dictionary containing cache configuration summary
-        """
-        return {
-            "cache_enabled": self.compatibility_config.is_cache_enabled(),
-            "max_entries": self.compatibility_config.max_cache_entries,
-            "ttl_hours": self.compatibility_config.cache_ttl_seconds / 3600,
-            "force_refresh": self.compatibility_config.force_cache_refresh,
-        }
 
     def get_marketplace_config_summary(self) -> Dict[str, Any]:
         """Get a summary of marketplace configuration.
@@ -318,7 +200,7 @@ class MechParams(BaseParams):
             "marketplace_address": self.mech_marketplace_config.mech_marketplace_address,
             "priority_mech": self.mech_marketplace_config.priority_mech_address,
             "response_timeout": self.mech_marketplace_config.response_timeout,
-            "compatibility_detection": self.compatibility_config.should_detect_compatibility(),
+            "compatibility_detection": True,
         }
 
     def export_config(self) -> Dict[str, Any]:
@@ -337,7 +219,6 @@ class MechParams(BaseParams):
             "mech_interaction_sleep_time": self.mech_interaction_sleep_time,
             "use_mech_marketplace": self.use_mech_marketplace,
             "mech_marketplace_config": self.mech_marketplace_config.__dict__,
-            "compatibility_config": self.compatibility_config.to_dict(),
             "agent_registry_address": self.agent_registry_address,
             "use_acn_for_delivers": self.use_acn_for_delivers,
             "ipfs_address": self._ipfs_address,

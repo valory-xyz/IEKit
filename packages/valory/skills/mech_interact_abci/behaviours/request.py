@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023-2025 Valory AG
@@ -42,7 +41,6 @@ from packages.valory.protocols.ledger_api.message import LedgerApiMessage
 from packages.valory.skills.abstract_round_abci.base import get_name
 from packages.valory.skills.abstract_round_abci.io_.store import SupportedFiletype
 from packages.valory.skills.mech_interact_abci.behaviours.base import (
-    DataclassEncoder,
     MechInteractBaseBehaviour,
     WaitableConditionType,
 )
@@ -53,10 +51,12 @@ from packages.valory.skills.mech_interact_abci.states.base import (
     MechMetadata,
 )
 from packages.valory.skills.mech_interact_abci.states.request import MechRequestRound
+from packages.valory.skills.mech_interact_abci.utils import DataclassEncoder
 from packages.valory.skills.transaction_settlement_abci.payload_tools import (
     hash_payload_to_hex,
 )
 from packages.valory.skills.transaction_settlement_abci.rounds import TX_HASH_LENGTH
+
 
 METADATA_FILENAME = "metadata.json"
 V1_HEX_PREFIX = "f01"
@@ -307,9 +307,9 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             return False
 
         try:
-            if isinstance(withdraw_data, str):
-                hex_data = HexBytes(withdraw_data)
-            elif isinstance(withdraw_data, (bytes, bytearray)):
+            if isinstance(withdraw_data, str) or isinstance(
+                withdraw_data, (bytes, bytearray)
+            ):
                 hex_data = HexBytes(withdraw_data)
             else:
                 hex_data = HexBytes(str(withdraw_data))
@@ -441,7 +441,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             return False
 
         v1_file_hash = to_v1(metadata_hash)
-        cid_bytes = cast(bytes, multibase.decode(v1_file_hash))
+        cid_bytes = cast("bytes", multibase.decode(v1_file_hash))
         multihash_bytes = multicodec.remove_prefix(cid_bytes)
         v1_file_hash_hex = V1_HEX_PREFIX + multihash_bytes.hex()
         ipfs_link = self.params.ipfs_address + v1_file_hash_hex
@@ -627,11 +627,10 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         """Get the target contract address based on the flow being used."""
         if self.params.use_mech_marketplace and self.should_use_marketplace_v2():
             return self.mech_marketplace_config.mech_marketplace_address
-        elif self.params.use_mech_marketplace:
+        if self.params.use_mech_marketplace:
             # Legacy marketplace - might still use marketplace contract but with different flow
             return self.mech_marketplace_config.mech_marketplace_address
-        else:
-            return self.params.mech_contract_address
+        return self.params.mech_contract_address
 
     def _build_request_data(self) -> WaitableConditionType:
         """Build the request data by dispatching to the appropriate method."""
@@ -717,7 +716,6 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     None,
                     None,
                     None,
-                    None,
                 )
             else:
                 self.context.logger.info(
@@ -744,6 +742,5 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     serialized_requests,
                     serialized_responses,
                     self.get_updated_compatibility_cache(),
-                    self.get_updated_compatibility_cache_access(),
                 )
         yield from self.finish_behaviour(payload)

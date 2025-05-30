@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023-2025 Valory AG
@@ -29,7 +28,6 @@ from packages.valory.contracts.mech_mm.contract import MechMM
 from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.abstract_round_abci.base import get_name
 from packages.valory.skills.mech_interact_abci.behaviours.base import (
-    DataclassEncoder,
     MechInteractBaseBehaviour,
     WaitableConditionType,
 )
@@ -42,6 +40,8 @@ from packages.valory.skills.mech_interact_abci.states.base import (
     MechRequest,
 )
 from packages.valory.skills.mech_interact_abci.states.response import MechResponseRound
+from packages.valory.skills.mech_interact_abci.utils import DataclassEncoder
+
 
 IPFS_HASH_PREFIX = f"{V1_HEX_PREFIX}701220"
 HEX_PREFIX_LENGTH = 2
@@ -66,9 +66,6 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         self._from_block: int = 0
         self._requests: List[MechRequest] = []
         self._response_hex: str = ""
-        self._mech_responses: List[MechInteractionResponse] = (
-            self.synchronized_data.mech_responses
-        )
         self.current_mech_response: MechInteractionResponse = MechInteractionResponse(
             error="The mech's response has not been set!"
         )
@@ -140,11 +137,10 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
     @property
     def serialized_responses(self) -> str:
         """Get the Mech's responses serialized."""
-        return json.dumps(self._mech_responses, cls=DataclassEncoder)
+        return json.dumps(self.synchronized_data.mech_responses, cls=DataclassEncoder)
 
     def setup(self) -> None:
         """Set up the `MechResponse` behaviour."""
-        self._mech_responses = self.synchronized_data.mech_responses
 
     def set_mech_response_specs(self, request_id: int) -> None:
         """Set the mech's response specs."""
@@ -177,8 +173,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         if self.params.use_mech_marketplace:
             if self.should_use_marketplace_v2():
                 return self._mech_marketplace_contract_interact
-            else:
-                return self._mech_marketplace_legacy_contract_interact
+            return self._mech_marketplace_legacy_contract_interact
 
         return self._mech_contract_interact
 
@@ -190,7 +185,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             data_key="results",
             placeholder=get_name(MechResponseBehaviour.requests),
             tx_hash=self.synchronized_data.final_tx_hash,
-            expected_logs=len(self._mech_responses),
+            expected_logs=len(self.synchronized_data.mech_responses),
             chain_id=self.params.mech_chain_id,
         )
         return result
@@ -281,7 +276,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 from_block=self.from_block,
                 chain_id=self.params.mech_chain_id,
             )
-        elif self.params.use_mech_marketplace:
+        if self.params.use_mech_marketplace:
             self.context.logger.info(
                 f"Using Mech Marketplace Legacy flow: Preparing get_response call with int request ID {request_id_for_specs} using Mech Marketplace ABI."
             )
@@ -443,7 +438,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         """Set the current Mech response by matching parsed event data to a pending response."""
         self.context.logger.info(f"Attempting to match parsed event request: {request}")
 
-        for i, pending_response in enumerate(self._mech_responses):
+        for i, pending_response in enumerate(self.synchronized_data.mech_responses):
             is_match = self._check_match(pending_response, request, i == 0)
 
             if is_match:
