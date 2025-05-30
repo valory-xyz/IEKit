@@ -42,7 +42,6 @@ from packages.valory.protocols.ledger_api.message import LedgerApiMessage
 from packages.valory.skills.abstract_round_abci.base import get_name
 from packages.valory.skills.abstract_round_abci.io_.store import SupportedFiletype
 from packages.valory.skills.mech_interact_abci.behaviours.base import (
-    DataclassEncoder,
     MechInteractBaseBehaviour,
     WaitableConditionType,
 )
@@ -53,6 +52,7 @@ from packages.valory.skills.mech_interact_abci.states.base import (
     MechMetadata,
 )
 from packages.valory.skills.mech_interact_abci.states.request import MechRequestRound
+from packages.valory.skills.mech_interact_abci.utils import DataclassEncoder
 from packages.valory.skills.transaction_settlement_abci.payload_tools import (
     hash_payload_to_hex,
 )
@@ -188,7 +188,17 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         )
 
         try:
-            balance = int(ledger_api_response.state.body["get_balance_result"])
+            balance_result = ledger_api_response.state.body.get("get_balance_result")
+            if balance_result is not None:
+                if isinstance(balance_result, (int, str)):
+                    balance = int(balance_result)
+                else:
+                    self.context.logger.error(
+                        f"Invalid balance result type: {type(balance_result)}"
+                    )
+                    balance = None
+            else:
+                balance = None
         except (AEAEnforceError, KeyError, ValueError, TypeError):
             balance = None
 
@@ -237,10 +247,24 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             )
             return None
 
+        try:
+            if isinstance(token, (int, str)):
+                token_int = int(token)
+            else:
+                self.context.logger.error(
+                    f"Invalid token value type: {type(token)}. Expected int or str."
+                )
+                return None
+        except (ValueError, TypeError):
+            self.context.logger.error(
+                f"Invalid token value: {token}. Expected integer."
+            )
+            return None
+
         self.context.logger.info(
-            f"Account {account} has {self.wei_to_unit(token)} wrapped native tokens."
+            f"Account {account} has {self.wei_to_unit(token_int)} wrapped native tokens."
         )
-        return token
+        return token_int
 
     def update_safe_balances(self) -> WaitableConditionType:
         """Check the safe's balance."""
@@ -283,9 +307,22 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             self.context.logger.info(f"Could not build withdraw tx: {response_msg}")
             return False
 
+        try:
+            if isinstance(withdraw_data, str) or isinstance(
+                withdraw_data, (bytes, bytearray)
+            ):
+                hex_data = HexBytes(withdraw_data)
+            else:
+                hex_data = HexBytes(str(withdraw_data))
+        except (ValueError, TypeError) as e:
+            self.context.logger.error(
+                f"Could not convert withdraw_data to HexBytes: {e}"
+            )
+            return False
+
         batch = MultisendBatch(
             to=self.params.mech_wrapped_native_token_address,
-            data=HexBytes(withdraw_data),
+            data=hex_data,
         )
         self.multisend_batches.append(batch)
         self.context.logger.info(f"Built transaction to unwrap {amount} tokens.")
@@ -374,14 +411,18 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             return False
 
         tx_hash = response_msg.state.body.get("tx_hash", None)
-        if tx_hash is None or len(tx_hash) != TX_HASH_LENGTH:
+        if (
+            tx_hash is None
+            or not isinstance(tx_hash, str)
+            or len(tx_hash) != TX_HASH_LENGTH
+        ):
             self.context.logger.error(
                 "Something went wrong while trying to get the buy transaction's hash. "
                 f"Invalid hash {tx_hash!r} was returned."
             )
             return False
 
-        self.safe_tx_hash = tx_hash
+        self.safe_tx_hash = str(tx_hash)
         return True
 
     def setup(self) -> None:
@@ -401,7 +442,7 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             return False
 
         v1_file_hash = to_v1(metadata_hash)
-        cid_bytes = cast(bytes, multibase.decode(v1_file_hash))
+        cid_bytes = cast("bytes", multibase.decode(v1_file_hash))
         multihash_bytes = multicodec.remove_prefix(cid_bytes)
         v1_file_hash_hex = V1_HEX_PREFIX + multihash_bytes.hex()
         ipfs_link = self.params.ipfs_address + v1_file_hash_hex
@@ -512,9 +553,9 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
             return False
         return True
 
-    def _build_marketplace_request_data(self) -> WaitableConditionType:
-        """Build the request data for the Mech Marketplace flow using helper methods."""
-        self.context.logger.info("Building request data for Mech Marketplace flow.")
+    def _build_marketplace_v2_request_data(self) -> WaitableConditionType:
+        """Build the request data for the Mech Marketplace v2 flow using helper methods."""
+        self.context.logger.info("Building request data for Mech Marketplace v2 flow.")
 
         request_data_bytes = self._decode_hex_to_bytes(
             self._v1_hex_truncated, "request_data"
@@ -551,6 +592,25 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         )
         return status
 
+    def _build_marketplace_v1_request_data(self) -> WaitableConditionType:
+        """Build request data for marketplace v1 (legacy marketplace without payment_type)."""
+        self.context.logger.info("Building request data for legacy marketplace flow.")
+
+        status = yield from self._mech_marketplace_legacy_contract_interact(
+            "get_request_data",
+            "data",
+            get_name(MechRequestBehaviour.request_data),
+            request_data=self._v1_hex_truncated,
+            priority_mech=self.mech_marketplace_config.priority_mech_address,
+            priority_mech_staking_instance=self.mech_marketplace_config.priority_mech_staking_instance_address,
+            priority_mech_service_id=self.mech_marketplace_config.priority_mech_service_id,
+            requester_staking_instance=self.mech_marketplace_config.requester_staking_instance_address,
+            requester_service_id=self.params.on_chain_service_id,
+            response_timeout=self.mech_marketplace_config.response_timeout,
+            chain_id=self.params.mech_chain_id,
+        )
+        return status
+
     def _build_legacy_request_data(self) -> WaitableConditionType:
         """Build the request data for the legacy Mech flow."""
         self.context.logger.info("Building request data for legacy Mech flow.")
@@ -564,22 +624,38 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
         )
         return status
 
+    def _get_target_contract_address(self) -> str:
+        """Get the target contract address based on the flow being used."""
+        if self.params.use_mech_marketplace and self.should_use_marketplace_v2():
+            return self.mech_marketplace_config.mech_marketplace_address
+        if self.params.use_mech_marketplace:
+            # Legacy marketplace - might still use marketplace contract but with different flow
+            return self.mech_marketplace_config.mech_marketplace_address
+        return self.params.mech_contract_address
+
     def _build_request_data(self) -> WaitableConditionType:
         """Build the request data by dispatching to the appropriate method."""
         self.context.logger.info("Building request data")
 
-        status = False
+        # Perform compatibility check if marketplace is enabled
         if self.params.use_mech_marketplace:
-            status = yield from self._build_marketplace_request_data()
+            yield from self.wait_for_condition_with_sleep(
+                self._detect_marketplace_compatibility
+            )
+
+            # Use detected compatibility instead of static flag
+            if self.should_use_marketplace_v2():
+                self.context.logger.info("Using detected marketplace v2 flow")
+                status = yield from self._build_marketplace_v2_request_data()
+            else:
+                self.context.logger.info("Using detected marketplace v1 (legacy) flow")
+                status = yield from self._build_marketplace_v1_request_data()
         else:
+            self.context.logger.info("Using direct mech flow (marketplace disabled)")
             status = yield from self._build_legacy_request_data()
 
         if status:
-            to = (
-                self.mech_marketplace_config.mech_marketplace_address
-                if self.params.use_mech_marketplace
-                else self.params.mech_contract_address
-            )
+            to = self._get_target_contract_address()
             batch = MultisendBatch(
                 to=to,
                 data=HexBytes(self.request_data),
@@ -618,10 +694,10 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
     def _prepare_safe_tx(self) -> Generator:
         """Prepare a multisend safe tx for sending requests to a mech and return the hex for the tx settlement skill."""
         n_iters = min(self.params.multisend_batch_size, len(self._mech_requests))
-        steps = (self._get_price,)
-        steps += (self._ensure_available_balance,)
-        steps += (self._send_metadata_to_ipfs, self._build_request_data) * n_iters
-        steps += (self._build_multisend_data, self._build_multisend_safe_tx_hash)
+        steps = [self._get_price]
+        steps.append(self._ensure_available_balance)
+        steps.extend((self._send_metadata_to_ipfs, self._build_request_data) * n_iters)
+        steps.extend([self._build_multisend_data, self._build_multisend_safe_tx_hash])
 
         for step in steps:
             yield from self.wait_for_condition_with_sleep(step)
@@ -640,18 +716,22 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     self.synchronized_data.safe_contract_address,
                     None,
                     None,
+                    None,
                 )
             else:
                 self.context.logger.info(
                     f"Preparing mech requests: {self._mech_requests}"
                 )
                 yield from self._prepare_safe_tx()
-                serialized_data = (
-                    json.dumps(data, cls=DataclassEncoder)
-                    for data in (self._mech_requests, self._pending_responses)
+                serialized_requests = json.dumps(
+                    self._mech_requests, cls=DataclassEncoder
                 )
+                serialized_responses = json.dumps(
+                    self._pending_responses, cls=DataclassEncoder
+                )
+
                 self.context.logger.info(
-                    f"Preparing mech request:\ntx_hex: {self.tx_hex}\nprice: {self.price}\nserialized_data: {serialized_data}\n"
+                    f"Preparing mech request:\ntx_hex: {self.tx_hex}\nprice: {self.price}\nserialized_requests: {serialized_requests}\nserialized_responses: {serialized_responses}\n"
                 )
                 payload = MechRequestPayload(
                     self.context.agent_address,
@@ -660,6 +740,8 @@ class MechRequestBehaviour(MechInteractBaseBehaviour):
                     self.price,
                     self.params.mech_chain_id,
                     self.synchronized_data.safe_contract_address,
-                    *serialized_data,
+                    serialized_requests,
+                    serialized_responses,
+                    self.get_updated_compatibility_cache(),
                 )
         yield from self.finish_behaviour(payload)

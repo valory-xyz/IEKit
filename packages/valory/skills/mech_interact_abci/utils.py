@@ -17,30 +17,18 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the MechInteractAbciApp."""
+"""This module contains utility functions and classes for the mech interact abci skill."""
 
-from dataclasses import dataclass
-from typing import Optional
-
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
-
-
-@dataclass(frozen=True)
-class MechRequestPayload(BaseTxPayload):
-    """Represent a transaction payload for the MechRequestRound."""
-
-    tx_submitter: Optional[str]
-    tx_hash: Optional[str]
-    price: Optional[int]
-    chain_id: Optional[str]
-    safe_contract_address: Optional[str]
-    mech_requests: Optional[str]
-    mech_responses: Optional[str]
-    marketplace_compatibility_cache: Optional[str]  # ToDO
+import json
+from dataclasses import asdict, is_dataclass
+from typing import Any
 
 
-@dataclass(frozen=True)
-class MechResponsePayload(BaseTxPayload):
-    """Represent a transaction payload for the MechResponseRound."""
+class DataclassEncoder(json.JSONEncoder):
+    """A custom JSON encoder for dataclasses."""
 
-    mech_responses: str
+    def default(self, o: Any) -> Any:
+        """The default JSON encoder."""
+        if is_dataclass(o) and not isinstance(o, type):
+            return asdict(o)
+        return super().default(o)

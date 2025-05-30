@@ -57,24 +57,70 @@ class MechMarketplaceConfig:
 
     mech_marketplace_address: str
     priority_mech_address: str
+    priority_mech_staking_instance_address: Optional[str]
+    priority_mech_service_id: Optional[int]
+    requester_staking_instance_address: Optional[str]
     response_timeout: int
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "MechMarketplaceConfig":
         """Create an instance from a dictionary."""
+        if not data["priority_mech_staking_instance_address"]:
+            data[
+                "priority_mech_staking_instance_address"
+            ] = "0x0000000000000000000000000000000000000000"
+
+        if not data["requester_staking_instance_address"]:
+            data[
+                "requester_staking_instance_address"
+            ] = "0x0000000000000000000000000000000000000000"
+
+        if not data["priority_mech_service_id"]:
+            data["priority_mech_service_id"] = 975
+
         return cls(
             mech_marketplace_address=data["mech_marketplace_address"],
             priority_mech_address=data["priority_mech_address"],
+            priority_mech_staking_instance_address=data[
+                "priority_mech_staking_instance_address"
+            ],
+            priority_mech_service_id=data.get("priority_mech_service_id"),
+            requester_staking_instance_address=data[
+                "requester_staking_instance_address"
+            ],
             response_timeout=data["response_timeout"],
         )
 
+    def __post_init__(self) -> None:
+        """Validate configuration after initialization."""
+        if not self.mech_marketplace_address:
+            raise ValueError("mech_marketplace_address cannot be empty")
+        if not self.priority_mech_address:
+            raise ValueError("priority_mech_address cannot be empty")
+        if self.response_timeout <= 0:
+            raise ValueError("response_timeout must be positive")
+
 
 class MechParams(BaseParams):
-    """The mech interact abci skill's parameters."""
+    """The mech interact abci skill's parameters.
+
+    This class manages all configuration parameters for the mech interaction
+    system, including marketplace settings, compatibility detection, caching,
+    and transaction parameters. It provides validation and utility methods
+    for robust configuration management.
+    """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Set up the mech-interaction parameters."""
-        multisend_address = kwargs.get("multisend_address", None)
+        """Set up the mech-interaction parameters.
+
+        Args:
+            *args: Positional arguments passed to BaseParams
+            **kwargs: Keyword arguments containing configuration values
+
+        Raises:
+            ValueError: If required parameters are missing or invalid
+        """
+        multisend_address = kwargs.get("multisend_address")
         enforce(multisend_address is not None, "Multisend address not specified!")
         self.multisend_address: str = multisend_address
         self.multisend_batch_size: int = self._ensure(
@@ -83,11 +129,11 @@ class MechParams(BaseParams):
         self.mech_contract_address: str = self._ensure(
             "mech_contract_address", kwargs, str
         )
-        self.mech_request_price: Optional[int] = kwargs.get("mech_request_price", None)
+        self.mech_request_price: Optional[int] = kwargs.get("mech_request_price")
         self._ipfs_address: str = self._ensure("ipfs_address", kwargs, str)
         self.mech_chain_id: Optional[str] = kwargs.get("mech_chain_id", "gnosis")
         self.mech_wrapped_native_token_address: Optional[str] = kwargs.get(
-            "mech_wrapped_native_token_address", None
+            "mech_wrapped_native_token_address"
         )
         self.mech_interaction_sleep_time: int = self._ensure(
             "mech_interaction_sleep_time", kwargs, int
@@ -96,12 +142,13 @@ class MechParams(BaseParams):
         self.mech_marketplace_config: MechMarketplaceConfig = (
             MechMarketplaceConfig.from_dict(kwargs["mech_marketplace_config"])
         )
-        self.agent_registry_address = kwargs.get("agent_registry_address", None)
+        self.agent_registry_address = kwargs.get("agent_registry_address")
         enforce(
             self.agent_registry_address is not None,
             "Agent registry address not specified!",
         )
         self.use_acn_for_delivers = self._ensure("use_acn_for_delivers", kwargs, bool)
+
         enforce(
             not self.use_mech_marketplace
             or self.mech_contract_address
@@ -109,6 +156,8 @@ class MechParams(BaseParams):
             "The mech contract address must be the same as the priority mech address when using the marketplace.",
         )
         super().__init__(*args, **kwargs)
+        # Validate configuration after initialization
+        self.validate_configuration()
 
     @property
     def ipfs_address(self) -> str:
@@ -117,15 +166,108 @@ class MechParams(BaseParams):
             return self._ipfs_address
         return f"{self._ipfs_address}/"
 
+    def validate_configuration(self) -> None:
+        """Validate the entire configuration for consistency."""
+        try:
+            # Validate marketplace configuration consistency
+            if self.use_mech_marketplace:
+                if not self.mech_marketplace_config.mech_marketplace_address:
+                    raise ValueError(
+                        "mech_marketplace_address is required when use_mech_marketplace is True"
+                    )
+                if not self.mech_marketplace_config.priority_mech_address:
+                    raise ValueError(
+                        "priority_mech_address is required when use_mech_marketplace is True"
+                    )
+
+            # Validate sleep time
+            if self.mech_interaction_sleep_time <= 0:
+                raise ValueError("mech_interaction_sleep_time must be positive")
+
+            # Validate batch size
+            if self.multisend_batch_size <= 0:
+                raise ValueError("multisend_batch_size must be positive")
+
+        except Exception as e:
+            raise ValueError(f"Configuration validation failed: {e}") from e
+
+    def get_marketplace_config_summary(self) -> Dict[str, Any]:
+        """Get a summary of marketplace configuration.
+
+        Returns:
+            Dictionary containing marketplace configuration summary
+        """
+        return {
+            "marketplace_enabled": self.use_mech_marketplace,
+            "marketplace_address": self.mech_marketplace_config.mech_marketplace_address,
+            "priority_mech": self.mech_marketplace_config.priority_mech_address,
+            "response_timeout": self.mech_marketplace_config.response_timeout,
+            "compatibility_detection": True,
+        }
+
+    def export_config(self) -> Dict[str, Any]:
+        """Export the complete configuration as a dictionary.
+
+        Returns:
+            Dictionary containing all configuration parameters
+        """
+        return {
+            "multisend_address": self.multisend_address,
+            "multisend_batch_size": self.multisend_batch_size,
+            "mech_contract_address": self.mech_contract_address,
+            "mech_request_price": self.mech_request_price,
+            "mech_chain_id": self.mech_chain_id,
+            "mech_wrapped_native_token_address": self.mech_wrapped_native_token_address,
+            "mech_interaction_sleep_time": self.mech_interaction_sleep_time,
+            "use_mech_marketplace": self.use_mech_marketplace,
+            "mech_marketplace_config": self.mech_marketplace_config.__dict__,
+            "agent_registry_address": self.agent_registry_address,
+            "use_acn_for_delivers": self.use_acn_for_delivers,
+            "ipfs_address": self._ipfs_address,
+        }
+
 
 Params = MechParams
 
 
 @dataclass
 class MultisendBatch:
-    """A structure representing a single transaction of a multisend."""
+    """A structure representing a single transaction of a multisend.
+
+    This dataclass encapsulates the parameters needed for a single transaction
+    within a multisend batch, providing a clean interface for transaction
+    construction and validation.
+
+    Attributes:
+        to: Target contract address for the transaction
+        data: Transaction data as HexBytes
+        value: Wei value to send with the transaction (default: 0)
+        operation: Type of operation (CALL or DELEGATECALL)
+    """
 
     to: str
     data: HexBytes
     value: int = 0
     operation: MultiSendOperation = MultiSendOperation.CALL
+
+    def __post_init__(self) -> None:
+        """Validate the multisend batch after initialization."""
+        if not self.to or not isinstance(self.to, str):
+            raise ValueError("Target address 'to' must be a non-empty string")
+        if self.value < 0:
+            raise ValueError("Value must be non-negative")
+        if not isinstance(self.data, HexBytes):
+            raise ValueError("Data must be HexBytes instance")
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert the batch to a dictionary representation.
+
+        Returns:
+            Dictionary containing batch parameters
+        """
+        return {
+            "to": self.to,
+            "data": self.data.hex(),
+            "value": self.value,
+            "operation": self.operation.value,
+        }

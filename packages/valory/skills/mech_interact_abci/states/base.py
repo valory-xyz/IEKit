@@ -22,7 +22,7 @@
 import json
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, List, Mapping, Optional, cast
+from typing import Any, List, Mapping, Optional, Type, cast
 
 from packages.valory.skills.abstract_round_abci.base import (
     BaseTxPayload,
@@ -145,11 +145,19 @@ class SynchronizedData(TxSynchronizedData):
         """Get the round that submitted a tx to transaction_settlement_abci."""
         return str(self.db.get_strict("tx_submitter"))
 
+    @property
+    def marketplace_compatibility_cache(self) -> Mapping[str, str]:
+        """Get the marketplace compatibility cache. Format: {mech_address: "v1"|"v2"}"""
+        cache_data = self.db.get("marketplace_compatibility_cache", "{}")
+        if isinstance(cache_data, str):
+            cache_data = json.loads(cache_data)
+        return cast(Mapping[str, str], cache_data)
+
 
 class MechInteractionRound(CollectSameUntilThresholdRound):
     """A base round for the mech interactions."""
 
-    payload_class = BaseTxPayload
+    payload_class: Type[BaseTxPayload] = BaseTxPayload
     synchronized_data_class = SynchronizedData
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
