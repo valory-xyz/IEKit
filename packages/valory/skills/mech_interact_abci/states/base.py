@@ -131,9 +131,9 @@ class SynchronizedData(TxSynchronizedData):
         return cast(Mapping[str, MechResponsePayload], deserialized)
 
     @property
-    def final_tx_hash(self) -> str:
+    def final_tx_hash(self) -> Optional[str]:
         """Get the verified tx hash."""
-        return cast(str, self.db.get("final_tx_hash"))
+        return cast(str, self.db.get("final_tx_hash", None))
 
     @property
     def chain_id(self) -> Optional[str]:
