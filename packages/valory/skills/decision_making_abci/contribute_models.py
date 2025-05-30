@@ -19,12 +19,21 @@
 
 """This module contains definitions for Twitter models."""
 
+import json
 import re
 from datetime import date, datetime
 from typing import Dict, List, Optional
 from uuid import UUID
-from pydantic_core import core_schema
+
 from pydantic import BaseModel, field_validator
+from pydantic_core import core_schema
+
+from packages.valory.skills.agent_db_abci.agent_db_models import (
+    AgentInstance,
+    AgentType,
+    AttributeDefinition,
+    AttributeInstance,
+)
 
 
 class EthereumAddress(str):
@@ -80,6 +89,7 @@ class UserTweet(BaseModel):
     campaign: Optional[str] = None
     timestamp: Optional[datetime] = None
     counted_for_activity: bool = False
+    attribute_instance_id: Optional[int] = None
 
 
 class ServiceTweet(BaseModel):
@@ -110,6 +120,13 @@ class ContributeUser(BaseModel):
     wallet_address: Optional[EthereumAddress] = None
     service_multisig: Optional[EthereumAddress] = None
     current_period_points: int = 0
+    attribute_instance_id: Optional[int] = None
+
+    def model_dump(self):
+        """Dump the user data to a JSON-compatible dictionary."""
+        data = super().model_dump()
+        data["tweets"] = list(data["tweets"].keys())  # We just store the tweet ids
+        return data
 
 
 class Action(BaseModel):
@@ -168,6 +185,7 @@ class ModuleConfig(BaseModel):
     enabled: bool = False
     last_run: Optional[datetime] = None
     run_hour_utc: int = 0
+    attribute_instance_id: Optional[int] = None
 
     @field_validator("last_run", mode="before")
     @classmethod
@@ -200,12 +218,13 @@ class ModuleData(BaseModel):
     twitter_campaigns: TwitterCampaignsConfig
     dynamic_nft: DynamicNFTData
     twitter: TwitterScoringData
+    attribute_instance_id: Optional[int] = None
 
 
-class ContributeDatabase(BaseModel):
-    """ContributeDatabase"""
+class ContributeData(BaseModel):
+    """ContributeData"""
 
-    users: Dict[str, ContributeUser]
-    # tweets: Dict[str, UserTweet]
-    module_data: ModuleData
-    module_configs: ModuleConfigs
+    users: Dict[str, ContributeUser] = {}
+    tweets: Dict[str, UserTweet] = {}
+    module_data: Optional[ModuleData] = None
+    module_configs: Optional[ModuleConfigs] = None

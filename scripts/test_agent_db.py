@@ -24,6 +24,8 @@
 
 import os
 import sys
+
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import json
 from datetime import datetime, timedelta, timezone
@@ -34,9 +36,6 @@ import requests
 from eth_account import Account
 from eth_account.messages import encode_defunct
 from pydantic import BaseModel
-from rich.align import Align
-from rich.console import Console
-from rich.table import Table
 
 from packages.valory.skills.agent_db_abci.agent_db_models import (
     AgentInstance,
@@ -45,23 +44,11 @@ from packages.valory.skills.agent_db_abci.agent_db_models import (
     AttributeInstance,
 )
 from packages.valory.skills.decision_making_abci.contribute_models import (
-    Action,
-    ContributeDatabase,
+    ContributeData,
     ContributeUser,
-    DynamicNFTData,
-    EthereumAddress,
-    ExecutionAttempt,
-    ModuleConfig,
     ModuleConfig,
     ModuleData,
-    Proposer,
-    ScheduledTweetConfig,
-    ServiceTweet,
-    TwitterCampaign,
-    TwitterCampaignsConfig,
-    TwitterScoringData,
     UserTweet,
-    Voter,
 )
 
 
@@ -118,6 +105,7 @@ class AgentDBClient:
                 payload["auth"] = self._sign_request(endpoint)
             else:
                 payload = payload | self._sign_request(endpoint)
+
         response = requests.request(
             method, url, headers=headers, json=payload, params=params
         )
@@ -266,12 +254,22 @@ class AgentDBClient:
         result = self._request("POST", endpoint, {"agent_attr": payload}, auth=True)
         return AttributeInstance.model_validate(result) if result else None
 
-    def get_attribute_instance(
+    def get_first_attribute_instance_by_attribute_definition(
         self, agent_instance: AgentInstance, attr_def: AttributeDefinition
     ) -> Optional[AttributeInstance]:
         """Get attribute instance by agent ID and attribute definition ID"""
         endpoint = (
             f"/api/agents/{agent_instance.agent_id}/attributes/{attr_def.attr_def_id}/"
+        )
+        result = self._request("GET", endpoint)
+        return AttributeInstance.model_validate(result) if result else None
+
+    def get_attribute_instance_by_attribute_id(
+        self, attribute_id: int
+    ) -> Optional[AttributeInstance]:
+        """Get attribute instance by attribute ID"""
+        endpoint = (
+            f"/api/agent-attributes/{attribute_id}"
         )
         result = self._request("GET", endpoint)
         return AttributeInstance.model_validate(result) if result else None
@@ -311,7 +309,27 @@ class AgentDBClient:
         payload = {
             "agent_id": agent_instance.agent_id,
         }
-        return self._request("GET", endpoint, {"agent_attr": payload}, auth=True)
+        raw_attributes = []
+        skip = 0
+        while True:
+            params = {
+                "skip": skip,
+                "limit": 100,
+            }
+            print(f"Reading agent attributes from {skip} to {skip + 100}... ", end="")
+            result = self._request(method="GET", endpoint=endpoint, payload={"agent_attr": payload}, params=params, auth=True)
+
+            if result is None:
+                print("Error fetching agent attributes")
+                continue
+
+            print(f"got {len(result)} attributes")
+
+            raw_attributes += result
+            skip = len(raw_attributes)
+
+            if len(result) < 100:
+                return raw_attributes
 
     def parse_attribute_instance(self, attribute_instance: AttributeInstance):
         """Parse attribute instance"""
@@ -335,6 +353,7 @@ class AgentDBClient:
             attr_value = bool(attr_value)
 
         parsed_attribute_instance = {
+            "attr_id": attribute_instance.attribute_id,
             "attr_name": attribute_definition.attr_name,
             "attr_value": attr_value,
         }
@@ -350,408 +369,243 @@ class AgentDBClient:
         return parsed_attributes
 
 
-class TweetInterface:
-    """TweetInterface"""
+class JsonAttribute:
+    """JsonAttribute"""
+
+    attribute_name: str = None
 
     def __init__(self, client: AgentDBClient):
         """Constructor"""
         self.client = client
+        self.attr_def = self.client.get_attribute_definition_by_name(self.attribute_name)
+
+    def create_definition(self):
+        """Create the attribute definition"""
+        if not self.attr_def:
+            self.attr_def = self.client.create_attribute_definition(
+                agent_type=self.client.agent_type,
+                attr_name=self.attribute_name,
+                data_type="json",
+                default_value="{}",
+            )
+            print(f"Created attribute definition: {self.attribute_name}")
+
+    def create_instance(
+        self, tweet: UserTweet
+    ) -> Optional[AttributeInstance]:
+        """Create an attribute instance"""
+        attr_def = self.client.get_attribute_definition_by_name(self.attribute_name)
+        if not attr_def:
+            raise ValueError(f"{self.attribute_name} attribute definition not found")
+
+        # Create or update the tweet attribute instance
+        attr_instance = self.client.create_attribute_instance(
+            agent_instance=self.client.agent,
+            attribute_def=attr_def,
+            value=tweet.model_dump(),
+            value_type="json",
+        )
+        return attr_instance
+
+    def update_instance(
+        self, attr_instance: AttributeInstance, model: BaseModel
+    ) -> Optional[AttributeInstance]:
+        """Update an attribute instance"""
+        attr_def = self.client.get_attribute_definition_by_name(self.attribute_name)
+        if not attr_def:
+            raise ValueError(f"{self.attribute_name} attribute definition not found")
+
+        # Update the attribute instance
+        updated_instance = self.client.update_attribute_instance(
+            agent_instance=self.client.agent_instance,
+            attribute_def=attr_def,
+            attribute_instance=attr_instance,
+            value=model.model_dump(),
+            value_type="json",
+        )
+        return updated_instance
+
+
+class Tweet(JsonAttribute):
+    """Tweet"""
+    attribute_name = "tweet"
+
+
+class User(JsonAttribute):
+    """User"""
+    attribute_name = "user"
+
+
+class PluginConfig(JsonAttribute):
+    """PluginConfig"""
+    attribute_name = "plugin_config"
+
+
+class PluginData(JsonAttribute):
+    """PluginData"""
+    attribute_name = "plugin_data"
+
+
+class ContributeDatabase:
+    """ContributeDatabase"""
+
+    attr_name_to_class = {
+        "tweet": Tweet,
+        "user": User,
+        "plugin_config": PluginConfig,
+        "plugin_data": PluginData,
+    }
+
+    def __init__(self, client: AgentDBClient):
+        """Constructor"""
+        self.client = client
+        self.agent_type = client.get_agent_type_by_type_name(CONTRIBUTE)
+        self.tweet_interface = Tweet(client)
+        self.user_interface = User(client)
+        self.plugin_config_interface = PluginConfig(client)
+        self.plugin_data_interface = PluginData(client)
+        self.data = ContributeData()
 
     def register(self):
-        """Create the Tweet attribute definition"""
-
-
-
-
-# class User:
-#     """User"""
-
-#     def __init__(self, client: AgentDBClient, user_instance: AgentInstance):
-#         """Constructor"""
-#         self.client = client
-#         self.user_instance = ContributeUser
-#         self.loaded = False
-
-
-#     def load(self):
-#         """Load agent data"""
-
-
-#     def add_interaction(self, interaction: TwitterAction):
-#         """Add interaction to agent"""
-
-
-#     def __str__(self) -> str:
-#         if not self.loaded:
-#             self.load()
-
-#         title = f"@{self.twitter_username}"
-#         table = Table(title=title, show_lines=True)
-#         table.add_column("Type", style="cyan", no_wrap=True, justify="center")
-#         table.add_column("Timestamp", style="magenta", justify="center")
-#         table.add_column("Details", style="yellow", justify="center")
-
-#         interactions = self.likes + self.retweets + self.posts + self.follows
-#         interactions.sort(key=lambda x: x.timestamp)
-
-#         for interaction in interactions:
-#             table.add_row(
-#                 interaction.action,
-#                 interaction.timestamp.strftime("%Y-%m-%d %H:%M"),
-#                 interaction.model_dump_json(exclude={"action", "timestamp"}),
-#             )
-
-#         console = Console()
-#         with console.capture() as capture:
-#             console.print(Align.center(table))
-
-#         return capture.get()
-
-
-# class ContributeDatabase:
-#     """ContributeDatabase"""
-
-#     def __init__(self, client: AgentDBClient):
-#         """Constructor"""
-#         self.client = client
-#         self.agent_type = client.get_agent_type_by_type_name(MEMEOOORR)
-#         self.agents = []
-
-#     def load(self):
-#         """Load data"""
-#         agent_instances = self.client.get_agent_instances_by_type_id(
-#             self.agent_type.type_id
-#         )
-#         for agent_instance in agent_instances:
-#             self.agents.append(AgentsFunAgent(self.client, agent_instance))
-#             self.agents[-1].load()
-
-#     def get_tweet_likes_number(self, tweet_id) -> int:
-#         """Get all tweet likes"""
-#         tweet_likes = 0
-#         for agent in self.agents:
-#             if not agent.loaded:
-#                 agent.load()
-#             for like in agent.likes:
-#                 if like.tweet_id == tweet_id:
-#                     tweet_likes += 1
-#                     break
-#         return tweet_likes
-
-#     def get_tweet_retweets_number(self, tweet_id) -> int:
-#         """Get all tweet retweets"""
-#         tweet_retweets = 0
-#         for agent in self.agents:
-#             if not agent.loaded:
-#                 agent.load()
-#             for retweet in agent.retweets:
-#                 if retweet.tweet_id == tweet_id:
-#                     tweet_retweets += 1
-#                     break
-#         return tweet_retweets
-
-#     def get_tweet_replies(self, tweet_id) -> List[TwitterPost]:
-#         """Get all tweet replies"""
-#         tweet_replies = []
-#         for agent in self.agents:
-#             if not agent.loaded:
-#                 agent.load()
-#             for post in agent.posts:
-#                 if post.reply_to_tweet_id == tweet_id:
-#                     tweet_replies.append(post)
-#                     break
-#         return tweet_replies
-
-#     def get_tweet_feedback(self, tweet_id) -> Dict[str, Any]:
-#         """Get all tweet feedback"""
-#         tweet_feedback = {
-#             "likes": self.get_tweet_likes_number(tweet_id),
-#             "retweets": self.get_tweet_retweets_number(tweet_id),
-#             "replies": self.get_tweet_replies(tweet_id),
-#         }
-#         return tweet_feedback
-
-#     def get_active_agents(self) -> List[AgentsFunAgent]:
-#         """Get all active agents"""
-#         active_agents = []
-#         for agent in self.agents:
-#             if not agent.loaded:
-#                 agent.load()
-
-#             # An agent is active if it has posted in the last 7 days
-#             if not agent.posts:
-#                 continue
-
-#             if agent.posts[-1].timestamp < datetime.now(timezone.utc) - timedelta(
-#                 days=7
-#             ):
-#                 continue
-
-#             active_agents.append(agent)
-#         return active_agents
-
-#     def __str__(self) -> str:
-#         table = Table(title="Agents.fun agent_db", show_lines=True)
-#         table.add_column("Agent ID", style="green", justify="center")
-#         table.add_column("Twitter name", style="cyan", no_wrap=True, justify="center")
-#         table.add_column("Twitter id", style="magenta", justify="center")
-#         table.add_column("Agent address", style="yellow", justify="center")
-
-#         for agent in self.agents:
-#             if not agent.loaded:
-#                 agent.load()
-#             table.add_row(
-#                 str(agent.agent_instance.agent_id),
-#                 agent.twitter_username,
-#                 agent.twitter_user_id,
-#                 str(agent.agent_instance.eth_address),
-#             )
-
-#         console = Console()
-#         with console.capture() as capture:
-#             console.print(Align.center(table))
-
-#         return capture.get()
-
-
-# def basic_example(client: AgentDBClient):
-#     """Example usage of the AgentDBClient class."""
-
-#     # Read or create agent type
-#     memeooorr_type = client.get_agent_type_by_type_name(MEMEOOORR)
-#     print(f"memeooorr_type = {memeooorr_type}")
-
-#     if not memeooorr_type:
-#         agent_type = client.create_agent_type(
-#             type_name=MEMEOOORR, description="Description of memeooorr"
-#         )
-
-#     # Read or create agent instance
-#     memeooorr_instance = client.get_agent_instance_by_address(client.eth_address)
-#     print(f"agent_instance = {memeooorr_instance}")
-
-#     if not memeooorr_instance:
-#         agent_instance = client.create_agent_instance(
-#             agent_name="Terminator",
-#             agent_type=memeooorr_type,
-#             eth_address=client.eth_address,
-#         )
-#         print(f"memeooorr_instance = {memeooorr_instance}")
-
-#     # Read or create atttribute definition
-#     twitter_username_attr_def = client.get_attribute_definition_by_name(
-#         "twitter_username"
-#     )
-#     print(f"twitter_username_attr_def = {twitter_username_attr_def}")
-
-#     if not twitter_username_attr_def:
-#         twitter_username_attr_def = client.create_attribute_definition(
-#             agent_type=memeooorr_type,
-#             attr_name="twitter_username",
-#             data_type="string",
-#             default_value="",
-#             is_required=True,
-#         )
-#         print(f"twitter_username_attr_def = {twitter_username_attr_def}")
-
-#     # Get agent type attributes
-#     memeooorr_attrs = client.get_attribute_definitions_by_agent_type(memeooorr_type)
-#     print(f"memeooorr_attrs = {memeooorr_attrs}")
-
-#     # Ensure Attribute Instance exists
-#     twitter_username_attr_instance = client.get_attribute_instance(
-#         memeooorr_instance, twitter_username_attr_def
-#     )
-#     print(f"twitter_username_attr_instance = {twitter_username_attr_instance}")
-
-#     # Create or update attribute instance
-#     if not twitter_username_attr_instance:
-#         twitter_username_instance = client.create_attribute_instance(
-#             agent_instance=memeooorr_instance,
-#             attribute_def=twitter_username_attr_def,
-#             value="user123",
-#         )
-#         print(f"twitter_username_instance = {twitter_username_instance}")
-#     else:
-#         client.update_attribute_instance(
-#             agent_instance=memeooorr_instance,
-#             attribute_def=twitter_username_attr_def,
-#             attribute_instance=twitter_username_attr_instance,
-#             value="new_terminator",
-#         )
-#         print(f"Updated twitter_username_instance = {twitter_username_attr_instance}")
-
-#     # Get all attributes of an agent
-#     all_attributes = client.get_all_agent_instance_attributes_parsed(memeooorr_instance)
-#     print(f"all_attributes = {all_attributes}")
-
-
-# def init_memeooorr_db(client: AgentDBClient):
-#     """Initialize the memeooorr database"""
-
-#     # Read or create agent type
-#     memeooorr_type = client.get_agent_type_by_type_name(MEMEOOORR)
-
-#     if not memeooorr_type:
-#         print(f"Creating agent type {MEMEOOORR}")
-#         memeooorr_type = client.create_agent_type(
-#             type_name=MEMEOOORR, description="Description of memeooorr"
-#         )
-#     print(f"memeooorr_type = {memeooorr_type}")
-
-#     # Read or create agent instance (needed to sign)
-#     memeooorr_instance = client.get_agent_instance_by_address(client.eth_address)
-
-#     if not memeooorr_instance:
-#         print(f"Creating agent instance {client.eth_address}")
-#         memeooorr_instance = client.create_agent_instance(
-#             agent_name="Terminator",
-#             agent_type=memeooorr_type,
-#             eth_address=client.eth_address,
-#         )
-#     print(f"memeooorr_instance = {memeooorr_instance}")
-
-#     # Read or create attribute definitions
-#     memeooorr_attrs = client.get_attribute_definitions_by_agent_type(memeooorr_type)
-
-#     if not memeooorr_attrs:
-#         print("Creating agent type attributes")
-#         twitter_username_attr_def = client.create_attribute_definition(
-#             agent_type=memeooorr_type,
-#             attr_name="twitter_username",
-#             data_type="string",
-#             default_value="",
-#             is_required=True,
-#         )
-#         twitter_user_id_attr_def = client.create_attribute_definition(
-#             agent_type=memeooorr_type,
-#             attr_name="twitter_user_id",
-#             data_type="string",
-#             default_value="",
-#             is_required=True,
-#         )
-#         twitter_interactions_attr_def = client.create_attribute_definition(
-#             agent_type=memeooorr_type,
-#             attr_name="twitter_interactions",
-#             data_type="json",
-#             default_value="{}",
-#             is_required=False,
-#         )
-#         memeooorr_attrs = client.get_attribute_definitions_by_agent_type(memeooorr_type)
-#     else:
-#         (
-#             twitter_username_attr_def,
-#             twitter_user_id_attr_def,
-#             twitter_interactions_attr_def,
-#         ) = memeooorr_attrs
-
-#     print(f"memeooorr_attrs = {memeooorr_attrs}")
-
-#     # Create attribute instances
-#     twitter_username_attr_instance = client.get_attribute_instance(
-#         memeooorr_instance, twitter_username_attr_def
-#     )
-#     if not twitter_username_attr_instance:
-#         print("Creating twitter_username attribute instance")
-#         twitter_username_attr_instance = client.create_attribute_instance(
-#             agent_instance=memeooorr_instance,
-#             attribute_def=twitter_username_attr_def,
-#             value="0xTerminator",
-#         )
-#     print(f"twitter_username_attr_instance = {twitter_username_attr_instance}")
-
-#     twitter_user_id_attr_instance = client.get_attribute_instance(
-#         memeooorr_instance, twitter_user_id_attr_def
-#     )
-#     if not twitter_user_id_attr_instance:
-#         print("Creating twitter_user_id attribute instance")
-#         twitter_user_id_attr_instance = client.create_attribute_instance(
-#             agent_instance=memeooorr_instance,
-#             attribute_def=twitter_user_id_attr_def,
-#             value="1234567890",
-#         )
-#     print(f"twitter_user_id_attr_instance = {twitter_user_id_attr_instance}")
-
-#     # Load the database
-#     agents_fun_db = AgentsFunDatabase(client=client)
-#     agents_fun_db.load()
-
-#     # Add a post
-#     post = TwitterPost(
-#         timestamp=datetime.now(timezone.utc),
-#         tweet_id="1234567890",
-#         text="Hello, world!",
-#     )
-#     agents_fun_db.agents[0].add_interaction(post)
-
-#     # Add a retweet
-#     retweet = TwitterRewtweet(
-#         timestamp=datetime.now(timezone.utc),
-#         tweet_id="0987654321",
-#     )
-#     agents_fun_db.agents[0].add_interaction(retweet)
-
-#     # Add a like
-#     like = TwitterLike(
-#         timestamp=datetime.now(timezone.utc),
-#         tweet_id="1234567890",
-#     )
-#     agents_fun_db.agents[0].add_interaction(like)
-
-#     # Add a follow
-#     follow = TwitterFollow(
-#         timestamp=datetime.now(timezone.utc),
-#         username="another_user",
-#     )
-#     agents_fun_db.agents[0].add_interaction(follow)
-
-
-# def reset_agents_fun_db(client: AgentDBClient):
-#     """Reset the database"""
-
-#     agents_fun_db = AgentsFunDatabase(client=client)
-#     agents_fun_db.load()
-
-#     for agent in agents_fun_db.agents:
-#         # Delete attributes instances
-#         memeooorr_attrs = client.get_all_agent_instance_attributes_parsed(
-#             agent.agent_instance
-#         )
-#         for attr in memeooorr_attrs:
-#             print(f"Deleting agent attribute {attr.attr_def_id}")
-#             client.delete_attribute_instance(attr)
-
-#         # Delete agent instance
-#         print(f"Deleting agent instance {agent.agent_instance.agent_id}")
-#         client.delete_agent_instance(agent.agent_instance)
-
-#     # Delete attribute definitions
-#     memeooorr_attr_defs = client.get_attribute_definitions_by_agent_type(
-#         agents_fun_db.agent_type
-#     )
-#     for attr_def in memeooorr_attr_defs:
-#         print(f"Deleting attribute definition {attr_def.attr_def_id}")
-#         client.delete_attribute_definition(attr_def)
-
-#     # Delete agent type
-#     print(f"Deleting agent type {agents_fun_db.agent_type.type_id}")
-#     client.delete_agent_type(agents_fun_db.agent_type)
-
-
-# def memeooorr_example(client: AgentDBClient):
-#     """Example usage of the AgentDBClient class."""
-#     agents_fun_db = AgentsFunDatabase(client=client)
-#     agents_fun_db.load()
-
-#     print(agents_fun_db)
-#     for agent in agents_fun_db.agents:
-#         if agent.likes or agent.retweets or agent.posts or agent.follows:
-#             print(agent)
+        """Register agent and all definitions"""
+        contribute_type = self.client.get_agent_type_by_type_name(CONTRIBUTE)
+
+        # Create Contribute agent
+        if not contribute_type:
+            contribute_type = self.client.create_agent_type(
+                type_name="contribute",
+                description="A service that tracks contributions to the Olas ecosystem.",
+            )
+            print(f"Created agent type: {contribute_type.type_name}")
+
+        self.agent_type = contribute_type
+
+        # Create Contribute instance
+        contribute_instance = self.client.get_agent_instance_by_address(self.client.eth_address)
+        if not contribute_instance:
+            contribute_instance = self.client.create_agent_instance(
+                agent_name="Contribute",
+                agent_type=contribute_type,
+                eth_address=self.client.eth_address,
+            )
+            print(f"Created agent instance: {contribute_instance.agent_name}")
+
+        self.client.agent = contribute_instance
+
+        # Register attribute definitions
+        self.tweet_interface.create_definition()
+        self.user_interface.create_definition()
+        self.plugin_config_interface.create_definition()
+        self.plugin_data_interface.create_definition()
+
+    def get_user_by_attribute(self, key, value) -> Optional[ContributeUser]:
+        """Get a user by one of its attributes"""
+        for user_id, user in self.data.users.items():
+            if getattr(user, key, None) == value:
+                return user
+        return None
+
+    def create_tweet(self, tweet: UserTweet) -> Optional[AttributeInstance]:
+        """Create a tweet attribute instance"""
+
+        print(f"Creating tweet: {tweet.tweet_id} for user {tweet.twitter_user_id}")
+
+        # Create the new tweet
+        tweet_instance = self.tweet_interface.create_instance(tweet)
+        self.data.tweets[tweet.tweet_id] = tweet
+
+        # Get or create the user
+        user = self.get_user_by_attribute("twitter_id", tweet.twitter_user_id)
+
+        if not user:
+            raise ValueError(
+                f"User with twitter_id {tweet.twitter_user_id} not found in the database."
+            )
+
+        # Update the user
+        user.tweets[tweet.tweet_id] = tweet
+        user_instance = self.client.get_attribute_instance_by_attribute_id(user.attribute_instance_id)
+        self.user_interface.update_instance(user_instance, user)
+        return tweet_instance
+
+    def update_tweet(self, attr_instance: AttributeInstance, tweet: UserTweet) -> Optional[AttributeInstance]:
+        """Update a tweet attribute instance"""
+        return self.tweet_interface.update_instance(attr_instance, tweet)
+
+    def create_user(self, user: ContributeUser) -> Optional[AttributeInstance]:
+        """Create a user attribute instance"""
+        print(f"Creating user: {user.id} with twitter_id {user.twitter_id}")
+        user_instance = self.user_interface.create_instance(user)
+        if user_instance:
+            self.data.users[user.id] = user
+        return user_instance
+
+    def update_user(self, attr_instance: AttributeInstance, user: ContributeUser) -> Optional[AttributeInstance]:
+        """Update a user attribute instance"""
+        return self.user_interface.update_instance(attr_instance, user)
+
+    def create_plugin_config(self, config: ModuleConfig) -> Optional[AttributeInstance]:
+        """Create a plugin config attribute instance"""
+        plugin_config_instance = self.plugin_config_interface.create_instance(config)
+        # if plugin_config_instance:
+        #     self.data.users[user.id] = user
+        return plugin_config_instance
+
+    def update_plugin_config(self, attr_instance: AttributeInstance, config: ModuleConfig) -> Optional[AttributeInstance]:
+        """Update a plugin config attribute instance"""
+        return self.plugin_config_interface.update_instance(attr_instance, config)
+
+    def create_plugin_data(self, data: ModuleData) -> Optional[AttributeInstance]:
+        """Create a plugin data attribute instance"""
+        plugin_data_instance = self.plugin_data_interface.create_instance(data)
+        # if plugin_data_instance:
+        #     self.data.pl[user.id] = user
+        return plugin_data_instance
+
+    def update_plugin_data(self, attr_instance: AttributeInstance, data: ModuleData) -> Optional[AttributeInstance]:
+        """Update a plugin data attribute instance"""
+        return self.plugin_data_interface.update_instance(attr_instance, data)
+
+    def load_from_remote_db(self):
+        """Load data from the remote database."""
+
+        attributes = self.client.get_all_agent_instance_attributes_parsed(self.client.agent)
+
+        for attribute in attributes:
+            attr_name = attribute["attr_name"]
+            attr_data = attribute["attr_value"] | {"attribute_instance_id": attribute["attr_id"]}
+            print(f"Loading attribute: {attr_name} with id: {attribute['attr_id']}")
+
+            if attr_name == "tweet":
+                tweet = UserTweet(**attr_data)
+                self.data.tweets[tweet.tweet_id] = tweet
+                continue
+
+            if attr_name == "user":
+                attr_data["tweets"] = {}
+                user = ContributeUser(**attr_data)
+                self.data.users[user.id] = user
+                continue
+
+            # if attr_name == "module_config":
+            #     module_config = ModuleConfig(**attr_data)
+            #     self.data.module_configs[config.plugin_name] = config
+            #     continue
+
+            # if attr_name == "module_data":
+            #     module_data = ModuleData(**attr_data)
+            #     self.data.module_data[data.plugin_name] = data
+            #     continue
+
+            # raise ValueError(
+            #     f"Unknown attribute name: {attr_name}"
+            # )
 
 
 def load_ceramic_data():
     """Load the contribute database from JSON files."""
     # Load the user and centaurs databases from JSON files
+    tweets = {}
     with open("contribute_db.json", "r", encoding="utf-8") as file:
         user_db = json.load(file)
 
@@ -760,6 +614,7 @@ def load_ceramic_data():
             for tweet_id, tweet in user["tweets"].items():
                 tweet["tweet_id"] = tweet_id
                 tweet["twitter_user_id"] = user["twitter_id"]
+                tweets[tweet_id] = tweet
 
     with open("contribute_centaurs.json", "r", encoding="utf-8") as file:
         centaurs_db = json.load(file)
@@ -775,6 +630,7 @@ def load_ceramic_data():
     # Combine the data
     combined_db = {
         "users": user_db["users"],
+        "tweets": tweets,
         "module_data": user_db["module_data"] | centaurs_db[0]["plugins_data"],
         "module_configs": centaurs_db[0]["configuration"]["plugins"],
     }
@@ -783,8 +639,6 @@ def load_ceramic_data():
 
 if __name__ == "__main__":
 
-    contribute_db = ContributeDatabase(**load_ceramic_data())
-
     # Initialize the client
     db_client = AgentDBClient(
         base_url=os.getenv("AGENT_DB_BASE_URL"),
@@ -792,113 +646,27 @@ if __name__ == "__main__":
         private_key=os.getenv("AGENT_PRIVATE_KEY"),
     )
 
-    contribute_type = db_client.get_agent_type_by_type_name(CONTRIBUTE)
+    contribute_db = ContributeDatabase(db_client)
+    # contribute_db.register()
+    contribute_db.load_from_remote_db()
 
-    # Create Contribute agent
-    if not contribute_type:
-        contribute_type = db_client.create_agent_type(
-            type_name="contribute",
-            description="A service that tracks contributions to the Olas ecosystem.",
-        )
-    print(contribute_type)
+    # Load the contribute data from JSON files
+    contribute_data = ContributeData(**load_ceramic_data())
 
-    # Create Contribute instance
-    contribute_instance = db_client.get_agent_instance_by_address(db_client.eth_address)
-    if not contribute_instance:
-        contribute_instance = db_client.create_agent_instance(
-            agent_name="Contribute",
-            agent_type=contribute_type,
-            eth_address=db_client.eth_address,
-        )
-    print(contribute_instance)
-
-    # Create attribute definitions
-
-    # Tweets
-    tweet_attr_def = db_client.get_attribute_definition_by_name("tweet")
-    if not tweet_attr_def:
-        tweet_attr_def = db_client.create_attribute_definition(
-            agent_type=contribute_type,
-            attr_name="tweet",
-            data_type="json",
-            default_value="{}",
-        )
-    print(tweet_attr_def)
-
-    # User
-    user_attr_def = db_client.get_attribute_definition_by_name("user")
-    if not user_attr_def:
-        user_attr_def = db_client.create_attribute_definition(
-            agent_type=contribute_type,
-            attr_name="user",
-            data_type="json",
-            default_value="{}",
-        )
-    print(user_attr_def)
-
-    # ModuleConfig
-    module_config_attr_def = db_client.get_attribute_definition_by_name("module_config")
-    if not module_config_attr_def:
-        module_config_attr_def = db_client.create_attribute_definition(
-            agent_type=contribute_type,
-            attr_name="module_config",
-            data_type="json",
-            default_value="{}",
-        )
-    print(module_config_attr_def)
-
-    # ModuleData
-    module_data_attr_def = db_client.get_attribute_definition_by_name("module_data")
-    if not module_data_attr_def:
-        module_data_attr_def = db_client.create_attribute_definition(
-            agent_type=contribute_type,
-            attr_name="module_data",
-            data_type="json",
-            default_value="{}",
-        )
-    print(module_data_attr_def)
-
-    # Dummy
-    dummy_data_attr_def = db_client.get_attribute_definition_by_name("dummy")
-    if not dummy_data_attr_def:
-        dummy_data_attr_def = db_client.create_attribute_definition(
-            agent_type=contribute_type,
-            attr_name="dummy",
-            data_type="json",
-            default_value="{}",
-        )
-    print(dummy_data_attr_def)
-
-    # Create attribute instances
-    # dummy_instance_1 = db_client.create_attribute_instance(
-    #     agent_instance=contribute_instance,
-    #     attribute_def=dummy_data_attr_def,
-    #     value={"a": 1},
-    #     value_type="json",
-    # )
-    # print(dummy_instance_1)
-
-    # dummy_instance_2 = db_client.create_attribute_instance(
-    #     agent_instance=contribute_instance,
-    #     attribute_def=dummy_data_attr_def,
-    #     value={"a": 1},
-    #     value_type="json",
-    # )
-    # print(dummy_instance_2)
-
-    isntance = db_client.get_attribute_instance(
-        agent_instance=contribute_instance,
-        attr_def=dummy_data_attr_def,
-    )
-    print(isntance)
-
-    # print(db_client.get_all_agent_instance_attributes_raw(contribute_instance))
-
-    # Tweets
-    # for tweet in contribute_db.users
+    # Create all the attribute definitions
 
     # Users
+    for user_id, user in contribute_data.users.items():
+        user_attribute = contribute_db.create_user(user)
+        user.attribute_instance_id = user_attribute.attribute_id if user_attribute else None
+
+    # Tweets
+    for tweet_id, tweet in contribute_data.tweets.items():
+        tweet_attribute = contribute_db.create_tweet(tweet)
+        tweet.attribute_instance_id = tweet_attribute.attribute_id if tweet_attribute else None
+
 
     # ModuleConfig
 
     # ModuleData
+
