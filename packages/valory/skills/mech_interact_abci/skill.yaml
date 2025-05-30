@@ -11,18 +11,18 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeidf3nlv5fpvfy4libtscayhirdw64shgmhfmvjiftjmjkmhu7auxq
   behaviours/__init__.py: bafybeie3zsi6p3yanz5mqwpkdrcgywaqvkit3hdintsb4awnvalgxpxa4i
-  behaviours/base.py: bafybeib6kjpcecrxfmrfzlhzw73llaz3udu5rrxdiv5tlxwamtrogn7nnq
-  behaviours/request.py: bafybeifjoxympom7llhqv3cchxncwyqtm7337to7asxftnpctmnrdz2oky
-  behaviours/response.py: bafybeie564rpvodr4d2abcbdoioq7bgocokwokpdegnmz2ldox36zry2tq
+  behaviours/base.py: bafybeickqon2rzffuyctqja7b4cf4nlq4cfjukiqov4zjsd2f2vyjctov4
+  behaviours/request.py: bafybeigpazon5tdompbdfovrvcy2kbtijziuhdaprsseea2feu4ecgb66u
+  behaviours/response.py: bafybeifwtwj6m2qpqbwc7xc5vfxai2gr44bijl2jkau3qsecuezrcps6eu
   behaviours/round_behaviour.py: bafybeib33inrpyzzlx7k7i3okkslsx4p46dgdaww2m5k7rno57o5nndage
   dialogues.py: bafybeicgtxsrzld6uyi2n455temnz6mj55irmxqxw55jxo4b6ud4rt7nsm
   fsm_specification.yaml: bafybeiapzwz6zcneelc2b2wrcb7cae7x6vbthmf6a57cm4mv6hucp67lz4
   handlers.py: bafybeieho4uyy6qqx3uzgzy4rpb7qvqb4jl2yk5tfwacce3zapec7pflie
-  models.py: bafybeihmdp6ounzjx2ur65e5hveqdxhnzr56vzt2pmkntdzpvuac6p3b2i
+  models.py: bafybeihvlhvokvoj75jvvdip5mx7c2fnav5tbb6q6bhx7z7i6tc3ud3d5e
   payloads.py: bafybeifgwgbw4iy5mqt7mx7z44mu7jtvdrxsxxgrztizvwd7inwrsldo2y
   rounds.py: bafybeiadnukced2x3qk64jdf7dx3yh6knfvslc6hegusgfwfbdm5pby6mm
   states/__init__.py: bafybeie34wx5znr2hxwh3gs2fchmbeuzjcfnraymdvtzjaxaq5zsiw233q
-  states/base.py: bafybeidmts36lfdj2i7ps3i6qk6bo6t5rmcvlfoymzyxjktgzgf4xjedsy
+  states/base.py: bafybeiglxubub4oiuy6jeflyj5q7uk3e55n7npvis5735sje44xkmh7l64
   states/final_states.py: bafybeihjntrbc666blxj4viz74y4p2hfc5e4vijs3bqng2k4vqbwkud7sq
   states/request.py: bafybeiabuia52gvyivtw5tif35vff45ggbrdiseu5t6lci7fposbpg62lu
   states/response.py: bafybeibaxnp2oxwjptoq7qzm6o7ww2qrdj2vnxzg2qt523vz2ftqzx5hyi
@@ -33,7 +33,7 @@ fingerprint:
   tests/test_models.py: bafybeid3cvcttdxlklwvr6tqmiurb2qywvmgr5bnsn62pb5gl5p552eagy
   tests/test_payloads.py: bafybeiakqhgochfu4ra4hp65hi7jvxtjd7fdub5wqmhlccrc4va26hb7da
   tests/test_rounds.py: bafybeiauu5adaoxu7yvtrfa6uwdw4sxr5gn2pj7qjh6vowd556iji6vtca
-  utils.py: bafybeifcoppebe2dgk2ysmj3gq5dnozhrpzbsdhsujlfyzsnhyij7bx4ve
+  utils.py: bafybeiel3fg6ev7acoya2ky6iuy3hskw7v65gbpls7vlqt7eiwxcg7dlqq
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
@@ -43,7 +43,7 @@ contracts:
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/erc20:0.1.0:bafybeifh3t3ch7thznpjxag4vsc2c75xptnj4fcufv2nv57uoki255cakq
 - valory/mech_marketplace:0.1.0:bafybeiccn4ohizw2wrjt7goidiakfik26ugm735lnm3fna3khko7qgkawm
-- valory/mech_marketplace_legacy:0.1.0:bafybeic4nbnbte5sqngpkk65j265t4jlpgkk5acedemcdtyipifsdjimju
+- valory/mech_marketplace_legacy:0.1.0:bafybeidpcanet4abp6bwi3b46ybusdiblkbe26j75i7xhtvo3wihs5sz4q
 - valory/agent_registry:0.1.0:bafybeifpoeyztnytctpudxlulumh6ybvhgbhhprgwen2yc4ykgblsoa2eu
 protocols:
 - valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4

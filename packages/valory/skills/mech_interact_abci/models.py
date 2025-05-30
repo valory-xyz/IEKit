@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
 #   Copyright 2023-2025 Valory AG
@@ -25,11 +26,12 @@ from aea.exceptions import enforce
 from hexbytes import HexBytes
 
 from packages.valory.contracts.multisend.contract import MultiSendOperation
+from packages.valory.skills.abstract_round_abci.models import ApiSpecs, BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
-    ApiSpecs,
-    BaseParams,
     BenchmarkTool as BaseBenchmarkTool,
-    Requests as BaseRequests,
+)
+from packages.valory.skills.abstract_round_abci.models import Requests as BaseRequests
+from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
 from packages.valory.skills.mech_interact_abci.rounds import MechInteractAbciApp
@@ -64,14 +66,14 @@ class MechMarketplaceConfig:
     def from_dict(cls, data: Dict[str, Any]) -> "MechMarketplaceConfig":
         """Create an instance from a dictionary."""
         if not data["priority_mech_staking_instance_address"]:
-            data["priority_mech_staking_instance_address"] = (
-                "0x0000000000000000000000000000000000000000"
-            )
+            data[
+                "priority_mech_staking_instance_address"
+            ] = "0x0000000000000000000000000000000000000000"
 
         if not data["requester_staking_instance_address"]:
-            data["requester_staking_instance_address"] = (
-                "0x0000000000000000000000000000000000000000"
-            )
+            data[
+                "requester_staking_instance_address"
+            ] = "0x0000000000000000000000000000000000000000"
 
         if not data["priority_mech_service_id"]:
             data["priority_mech_service_id"] = 975

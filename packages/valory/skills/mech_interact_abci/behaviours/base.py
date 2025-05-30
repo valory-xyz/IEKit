@@ -274,10 +274,8 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
         return self.params.mech_marketplace_config.priority_mech_address.lower()
 
     def _detect_marketplace_compatibility(self) -> WaitableConditionType:
-        """
-        Detect if the marketplace/mech contract supports v2 features.
-        Simple cache: {mech_address: "v1" | "v2"}
-        """
+        """Detect if the marketplace/mech contract supports v2 features."""
+
         if self._compatibility_check_performed:
             return True  # Use in-memory cached result
 
@@ -287,7 +285,7 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
         # Check if we already know this mech address
         if mech_address in compatibility_cache:
             cached_value = compatibility_cache[mech_address]
-            
+
             # Handle different cache formats during transition
             if isinstance(cached_value, str):
                 # New string format: "v1" or "v2"
@@ -299,14 +297,16 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
                 cached_version = "v2" if cached_value else "v1"
             elif isinstance(cached_value, dict):
                 # Old dict format: get 'compatible' field
-                compatible = cached_value.get('compatible', False)
+                compatible = cached_value.get("compatible", False)
                 self._is_marketplace_v2_compatible = compatible
                 cached_version = "v2" if compatible else "v1"
             else:
                 # Unknown format, fall through to detection
-                self.context.logger.warning(f"Unknown cache format for {mech_address}: {type(cached_value)}")
+                self.context.logger.warning(
+                    f"Unknown cache format for {mech_address}: {type(cached_value)}"
+                )
                 cached_version = None
-            
+
             if cached_version:
                 self._compatibility_check_performed = True
                 self.context.logger.info(
@@ -344,15 +344,14 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
         self._compatibility_check_performed = True
         return True
 
-
-
     def get_updated_compatibility_cache(self) -> str:
         """Get the updated compatibility cache as JSON string for synchronized data."""
+
         try:
             # Get current cache and convert old formats to new string format
             current_cache = {}
             raw_cache = self.synchronized_data.marketplace_compatibility_cache
-            
+
             # Convert old cache formats to new string format
             for key, value in raw_cache.items():
                 if isinstance(value, bool):
@@ -360,12 +359,12 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
                     current_cache[key] = "v2" if value else "v1"
                 elif isinstance(value, dict):
                     # Old dict format: get 'compatible' field
-                    compatible = value.get('compatible', False)
+                    compatible = value.get("compatible", False)
                     current_cache[key] = "v2" if compatible else "v1"
                 elif isinstance(value, str):
                     # New string format: keep as is
                     current_cache[key] = value
-            
+
             if (
                 self._compatibility_check_performed
                 and self._is_marketplace_v2_compatible is not None
@@ -383,6 +382,7 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
     @property
     def is_marketplace_v2_compatible(self) -> bool:
         """Returns True if the marketplace supports v2 features."""
+
         if not self._compatibility_check_performed:
             raise ValueError(
                 "Compatibility check must be performed before accessing this property"
@@ -390,9 +390,8 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
         return self._is_marketplace_v2_compatible or False
 
     def should_use_marketplace_v2(self) -> bool:
-        """
-        Determine if marketplace v2 flow should be used.
-        """
+        """Determine if marketplace v2 flow should be used."""
+
         if not self.params.use_mech_marketplace:
             return False  # Configuration explicitly disables marketplace
 
@@ -400,4 +399,3 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
             raise ValueError("Compatibility check must be performed first")
 
         return self._is_marketplace_v2_compatible or False
-

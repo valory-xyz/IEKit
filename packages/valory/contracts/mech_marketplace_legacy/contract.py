@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2024 Valory AG
+#   Copyright 2024-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ from aea.crypto.base import LedgerApi
 from aea_ledger_ethereum import EthereumApi
 from eth_typing import HexStr
 from web3.types import BlockData, BlockIdentifier, EventData, TxReceipt
+
 
 PUBLIC_ID = PublicId.from_str("valory/mech_marketplace_legacy:0.1.0")
 FIVE_MINUTES = 300.0
