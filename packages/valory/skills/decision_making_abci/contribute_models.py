@@ -122,9 +122,9 @@ class ContributeUser(BaseModel):
     current_period_points: int = 0
     attribute_instance_id: Optional[int] = None
 
-    def model_dump(self):
+    def model_dump(self, mode):
         """Dump the user data to a JSON-compatible dictionary."""
-        data = super().model_dump()
+        data = super().model_dump(mode=mode)
         data["tweets"] = list(data["tweets"].keys())  # We just store the tweet ids
         return data
 
@@ -185,7 +185,6 @@ class ModuleConfig(BaseModel):
     enabled: bool = False
     last_run: Optional[datetime] = None
     run_hour_utc: int = 0
-    attribute_instance_id: Optional[int] = None
 
     @field_validator("last_run", mode="before")
     @classmethod
@@ -207,6 +206,7 @@ class ModuleConfigs(BaseModel):
     staking_activity: ModuleConfig
     twitter_campaigns: ModuleConfig
     staking_checkpoint: ModuleConfig
+    attribute_instance_id: Optional[int] = None
 
 
 class ModuleData(BaseModel):
@@ -228,3 +228,13 @@ class ContributeData(BaseModel):
     tweets: Dict[str, UserTweet] = {}
     module_data: Optional[ModuleData] = None
     module_configs: Optional[ModuleConfigs] = None
+    attribute_instance_id: Optional[int] = None
+
+    def sort(self):
+        """Sort users and tweets."""
+        self.users = dict(
+            sorted(self.users.items(), key=lambda item: int(item[0]), reverse=False)
+        )
+        self.tweets = dict(
+            sorted(self.tweets.items(), key=lambda item: int(item[0]), reverse=False)
+        )

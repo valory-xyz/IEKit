@@ -46,7 +46,7 @@ from packages.valory.skills.agent_db_abci.agent_db_models import (
 from packages.valory.skills.decision_making_abci.contribute_models import (
     ContributeData,
     ContributeUser,
-    ModuleConfig,
+    ModuleConfigs,
     ModuleData,
     UserTweet,
 )
@@ -369,8 +369,8 @@ class AgentDBClient:
         return parsed_attributes
 
 
-class JsonAttribute:
-    """JsonAttribute"""
+class JsonAttributeInterface:
+    """JsonAttributeInterface"""
 
     attribute_name: str = None
 
@@ -391,7 +391,7 @@ class JsonAttribute:
             print(f"Created attribute definition: {self.attribute_name}")
 
     def create_instance(
-        self, tweet: UserTweet
+        self, model: BaseModel
     ) -> Optional[AttributeInstance]:
         """Create an attribute instance"""
         attr_def = self.client.get_attribute_definition_by_name(self.attribute_name)
@@ -402,7 +402,7 @@ class JsonAttribute:
         attr_instance = self.client.create_attribute_instance(
             agent_instance=self.client.agent,
             attribute_def=attr_def,
-            value=tweet.model_dump(),
+            value=model.model_dump(mode="json"),
             value_type="json",
         )
         return attr_instance
@@ -417,53 +417,47 @@ class JsonAttribute:
 
         # Update the attribute instance
         updated_instance = self.client.update_attribute_instance(
-            agent_instance=self.client.agent_instance,
+            agent_instance=self.client.agent,
             attribute_def=attr_def,
             attribute_instance=attr_instance,
-            value=model.model_dump(),
+            value=model.model_dump(mode="json"),
             value_type="json",
         )
         return updated_instance
 
 
-class Tweet(JsonAttribute):
-    """Tweet"""
+class TweetAttributeInterface(JsonAttributeInterface):
+    """TweetAttribute"""
     attribute_name = "tweet"
 
 
-class User(JsonAttribute):
-    """User"""
+class UserAttributeInterface(JsonAttributeInterface):
+    """UserAttribute"""
     attribute_name = "user"
 
 
-class PluginConfig(JsonAttribute):
-    """PluginConfig"""
-    attribute_name = "plugin_config"
+class ModuleConfigsAttributeInterface(JsonAttributeInterface):
+    """ModuleConfigsAttribute"""
+    attribute_name = "module_configs"
 
 
-class PluginData(JsonAttribute):
-    """PluginData"""
-    attribute_name = "plugin_data"
+class ModuleDataAttributeInterface(JsonAttributeInterface):
+    """ModuleDataAttribute"""
+    attribute_name = "module_data"
 
 
 class ContributeDatabase:
     """ContributeDatabase"""
 
-    attr_name_to_class = {
-        "tweet": Tweet,
-        "user": User,
-        "plugin_config": PluginConfig,
-        "plugin_data": PluginData,
-    }
-
     def __init__(self, client: AgentDBClient):
         """Constructor"""
         self.client = client
-        self.agent_type = client.get_agent_type_by_type_name(CONTRIBUTE)
-        self.tweet_interface = Tweet(client)
-        self.user_interface = User(client)
-        self.plugin_config_interface = PluginConfig(client)
-        self.plugin_data_interface = PluginData(client)
+        self.agent = client.agent
+        self.agent_type = client.agent_type
+        self.tweet_interface = TweetAttributeInterface(client)
+        self.user_interface = UserAttributeInterface(client)
+        self.module_configs_interface = ModuleConfigsAttributeInterface(client)
+        self.module_data_interface = ModuleDataAttributeInterface(client)
         self.data = ContributeData()
 
     def register(self):
@@ -479,6 +473,7 @@ class ContributeDatabase:
             print(f"Created agent type: {contribute_type.type_name}")
 
         self.agent_type = contribute_type
+        self.client.agent_type = contribute_type
 
         # Create Contribute instance
         contribute_instance = self.client.get_agent_instance_by_address(self.client.eth_address)
@@ -490,13 +485,14 @@ class ContributeDatabase:
             )
             print(f"Created agent instance: {contribute_instance.agent_name}")
 
+        self.agent = contribute_instance
         self.client.agent = contribute_instance
 
         # Register attribute definitions
         self.tweet_interface.create_definition()
         self.user_interface.create_definition()
-        self.plugin_config_interface.create_definition()
-        self.plugin_data_interface.create_definition()
+        self.module_configs_interface.create_definition()
+        self.module_data_interface.create_definition()
 
     def get_user_by_attribute(self, key, value) -> Optional[ContributeUser]:
         """Get a user by one of its attributes"""
@@ -512,9 +508,9 @@ class ContributeDatabase:
 
         # Create the new tweet
         tweet_instance = self.tweet_interface.create_instance(tweet)
+        tweet.attribute_instance_id = tweet_instance.attribute_id if tweet_instance else None
         self.data.tweets[tweet.tweet_id] = tweet
 
-        # Get or create the user
         user = self.get_user_by_attribute("twitter_id", tweet.twitter_user_id)
 
         if not user:
@@ -544,27 +540,31 @@ class ContributeDatabase:
         """Update a user attribute instance"""
         return self.user_interface.update_instance(attr_instance, user)
 
-    def create_plugin_config(self, config: ModuleConfig) -> Optional[AttributeInstance]:
+    def create_module_configs(self, config: ModuleConfigs) -> Optional[AttributeInstance]:
         """Create a plugin config attribute instance"""
-        plugin_config_instance = self.plugin_config_interface.create_instance(config)
-        # if plugin_config_instance:
-        #     self.data.users[user.id] = user
-        return plugin_config_instance
+        print("Creating module configs")
+        module_configs_instance = self.module_configs_interface.create_instance(config)
+        if module_configs_instance:
+            self.data.module_configs = config
+            self.data.module_configs.attribute_instance_id = module_configs_instance.attribute_id
+        return module_configs_instance
 
-    def update_plugin_config(self, attr_instance: AttributeInstance, config: ModuleConfig) -> Optional[AttributeInstance]:
+    def update_module_configs(self, attr_instance: AttributeInstance, configs: ModuleConfigs) -> Optional[AttributeInstance]:
         """Update a plugin config attribute instance"""
-        return self.plugin_config_interface.update_instance(attr_instance, config)
+        return self.module_configs_interface.update_instance(attr_instance, configs)
 
-    def create_plugin_data(self, data: ModuleData) -> Optional[AttributeInstance]:
+    def create_module_data(self, data: ModuleData) -> Optional[AttributeInstance]:
         """Create a plugin data attribute instance"""
-        plugin_data_instance = self.plugin_data_interface.create_instance(data)
-        # if plugin_data_instance:
-        #     self.data.pl[user.id] = user
-        return plugin_data_instance
+        print("Creating module data")
+        module_data_instance = self.module_data_interface.create_instance(data)
+        if module_data_instance:
+            self.data.module_data = data
+            self.data.module_data.attribute_instance_id = module_data_instance.attribute_id
+        return module_data_instance
 
-    def update_plugin_data(self, attr_instance: AttributeInstance, data: ModuleData) -> Optional[AttributeInstance]:
+    def update_module_data(self, attr_instance: AttributeInstance, data: ModuleData) -> Optional[AttributeInstance]:
         """Update a plugin data attribute instance"""
-        return self.plugin_data_interface.update_instance(attr_instance, data)
+        return self.module_data_interface.update_instance(attr_instance, data)
 
     def load_from_remote_db(self):
         """Load data from the remote database."""
@@ -587,19 +587,24 @@ class ContributeDatabase:
                 self.data.users[user.id] = user
                 continue
 
-            # if attr_name == "module_config":
-            #     module_config = ModuleConfig(**attr_data)
-            #     self.data.module_configs[config.plugin_name] = config
-            #     continue
+            if attr_name == "module_configs":
+                module_configs = ModuleConfigs(**attr_data)
+                self.data.module_configs = module_configs
+                continue
 
-            # if attr_name == "module_data":
-            #     module_data = ModuleData(**attr_data)
-            #     self.data.module_data[data.plugin_name] = data
-            #     continue
+            if attr_name == "module_data":
+                module_data = ModuleData(**attr_data)
+                self.data.module_data = module_data
+                continue
 
-            # raise ValueError(
-            #     f"Unknown attribute name: {attr_name}"
-            # )
+            raise ValueError(
+                f"Unknown attribute name: {attr_name}"
+            )
+
+        self.data.sort()
+
+        for tweet_id, tweet in self.data.tweets.items():
+            self.data.users[tweet.twitter_user_id].tweets[tweet_id] = tweet
 
 
 def load_ceramic_data():
@@ -627,6 +632,8 @@ def load_ceramic_data():
             if not tweet["proposer"]["address"]:
                 tweet["proposer"]["address"] = ZERO_ADDRESS
 
+    print(f"Loaded {len(user_db['users'])} users and {len(tweets)} tweets from contribute_db.json")
+
     # Combine the data
     combined_db = {
         "users": user_db["users"],
@@ -637,23 +644,14 @@ def load_ceramic_data():
     return combined_db
 
 
-if __name__ == "__main__":
-
-    # Initialize the client
-    db_client = AgentDBClient(
-        base_url=os.getenv("AGENT_DB_BASE_URL"),
-        eth_address=os.getenv("AGENT_ADDRESS"),
-        private_key=os.getenv("AGENT_PRIVATE_KEY"),
-    )
-
+def init_database_from_ceramic(db_client):
+    """Initialize the contribute database from Ceramic data."""
     contribute_db = ContributeDatabase(db_client)
-    # contribute_db.register()
-    contribute_db.load_from_remote_db()
+    contribute_db.register()
 
     # Load the contribute data from JSON files
     contribute_data = ContributeData(**load_ceramic_data())
-
-    # Create all the attribute definitions
+    contribute_data.sort()
 
     # Users
     for user_id, user in contribute_data.users.items():
@@ -665,8 +663,25 @@ if __name__ == "__main__":
         tweet_attribute = contribute_db.create_tweet(tweet)
         tweet.attribute_instance_id = tweet_attribute.attribute_id if tweet_attribute else None
 
-
-    # ModuleConfig
+    # ModuleConfigs
+    module_configs_attribute = contribute_db.create_module_configs(contribute_data.module_configs)
+    contribute_data.module_configs.attribute_instance_id = module_configs_attribute.attribute_id
 
     # ModuleData
+    module_data_attribute = contribute_db.create_module_data(contribute_data.module_data)
+    contribute_data.module_data.attribute_instance_id = module_data_attribute.attribute_id
 
+
+if __name__ == "__main__":
+
+    # Initialize the client
+    db_client = AgentDBClient(
+        base_url=os.getenv("AGENT_DB_BASE_URL"),
+        eth_address=os.getenv("AGENT_ADDRESS"),
+        private_key=os.getenv("AGENT_PRIVATE_KEY"),
+    )
+
+    # init_database_from_ceramic(db_client)
+
+    contribute_db = ContributeDatabase(db_client)
+    contribute_db.load_from_remote_db()
