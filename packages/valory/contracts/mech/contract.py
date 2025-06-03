@@ -344,8 +344,8 @@ class Mech(Contract):
 
         def get_responses() -> Any:
             """Get the responses from the contract."""
-            res = {}
-            for abi in partial_abis:
+            last_result = {}
+            for abi_index, abi in enumerate(partial_abis):
                 try:
                     contract_instance = ledger_api.api.eth.contract(address=contract_address, abi=abi)
                 
@@ -357,7 +357,7 @@ class Mech(Contract):
                             break
                 
                     if deliver_event_abi is None:
-                        res = {"error": f"No Deliver event found in ABI"}
+                        last_result = {"error": f"No Deliver event found in ABI {abi_index}"}
                         continue
                 
                     event_topic = HexStr("0x" + event_abi_to_log_topic(deliver_event_abi).hex())
@@ -380,25 +380,29 @@ class Mech(Contract):
                     n_delivered = len(delivered)
 
                     if n_delivered == 0:
-                        res = {"info": f"The mech ({contract_address}) has not delivered a response yet for request with id {request_id}."}
+                        last_result = {"info": f"The mech ({contract_address}) has not delivered a response yet for request with id {request_id}."}
+                        # Continue trying other ABIs
+                        continue
                     elif n_delivered != 1:
-                        res = {"error": f"A single response was expected by the mech ({contract_address}) for request with id {request_id}. Received {n_delivered} responses: {delivered}."}
+                        last_result = {"error": f"A single response was expected by the mech ({contract_address}) for request with id {request_id}. Received {n_delivered} responses: {delivered}."}
+                        # Continue trying other ABIs in case this ABI has issues
+                        continue
                     else:
                         delivered_event = delivered.pop()
                         deliver_args = delivered_event.get("args", None)
                         if deliver_args is None or "data" not in deliver_args:
-                            res = {"error": f"The mech's response does not match the expected format: {delivered_event}"}
+                            last_result = {"error": f"The mech's response does not match the expected format: {delivered_event}"}
+                            # Continue trying other ABIs
+                            continue
                         else:
-                            res = dict(data=deliver_args["data"])
-                
-                    if "error" not in res:
-                        return res
+                            # SUCCESS! Return immediately
+                            return dict(data=deliver_args["data"])
                     
                 except Exception as e:
-                    res = {"error": f"Failed to process with ABI: {str(e)}"}
+                    last_result = {"error": f"Failed to process with ABI {abi_index}: {str(e)}"}
                     continue
         
-            return res
+            return last_result
 
         data, err = cls.execute_with_timeout(get_responses, timeout=timeout)
         if err is not None:
