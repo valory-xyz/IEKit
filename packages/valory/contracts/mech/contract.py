@@ -262,7 +262,7 @@ class Mech(Contract):
         contract_address = ledger_api.api.to_checksum_address(contract_address)
         res = {}
         for abi in partial_abis:
-            contract_instance = ledger_api.api.eth.contract(contract_address, abi=abi)
+            contract_instance = ledger_api.api.eth.contract(address=contract_address, abi=abi)
             res = cls._process_event(
                 ledger_api,
                 contract_instance,
@@ -298,7 +298,7 @@ class Mech(Contract):
         contract_address = ledger_api.api.to_checksum_address(contract_address)
         res = {}
         for abi in partial_abis:
-            contract_instance = ledger_api.api.eth.contract(contract_address, abi=abi)
+            contract_instance = ledger_api.api.eth.contract(address=contract_address, abi=abi)
             res = cls._process_event(
                 ledger_api,
                 contract_instance,
@@ -344,41 +344,61 @@ class Mech(Contract):
 
         def get_responses() -> Any:
             """Get the responses from the contract."""
-            contract_instance = cls.get_instance(ledger_api, contract_address)
-            event_abi = contract_instance.events.Deliver().abi
-            event_topic = HexStr("0x" + event_abi_to_log_topic(event_abi).hex())
+            res = {}
+            for abi in partial_abis:
+                try:
+                    contract_instance = ledger_api.api.eth.contract(address=contract_address, abi=abi)
+                
+                    # Find the Deliver event in this ABI
+                    deliver_event_abi = None
+                    for event_spec in abi:
+                        if event_spec.get("name") == "Deliver" and event_spec.get("type") == "event":
+                            deliver_event_abi = event_spec
+                            break
+                
+                    if deliver_event_abi is None:
+                        res = {"error": f"No Deliver event found in ABI"}
+                        continue
+                
+                    event_topic = HexStr("0x" + event_abi_to_log_topic(deliver_event_abi).hex())
 
-            filter_params: FilterParams = {
-                "fromBlock": from_block,
-                "toBlock": to_block,
-                "address": contract_instance.address,
-                "topics": [event_topic],
-            }
+                    filter_params: FilterParams = {
+                        "fromBlock": from_block,
+                        "toBlock": to_block,
+                        "address": contract_instance.address,
+                        "topics": [event_topic],
+                    }
 
-            w3 = ledger_api.api.eth
-            logs = w3.get_logs(filter_params)
-            delivered = []
-            for log in logs:
-                decoded_log = get_event_data(w3.codec, event_abi, log)
-                log_request_id = decoded_log.get("args", {}).get("requestId", None)
-                if request_id == log_request_id:
-                    delivered.append(decoded_log)
-            n_delivered = len(delivered)
+                    w3 = ledger_api.api.eth
+                    logs = w3.get_logs(filter_params)
+                    delivered = []
+                    for log in logs:
+                        decoded_log = get_event_data(w3.codec, deliver_event_abi, log)
+                        log_request_id = decoded_log.get("args", {}).get("requestId", None)
+                        if request_id == log_request_id:
+                            delivered.append(decoded_log)
+                    n_delivered = len(delivered)
 
-            if n_delivered == 0:
-                res = {"info": f"The mech ({contract_address}) has not delivered a response yet for request with id {request_id}."}
-            elif n_delivered != 1:
-                res = {"error": f"A single response was expected by the mech ({contract_address}) for request with id {request_id}. Received {n_delivered} responses: {delivered}."}
-            else:
-                delivered_event = delivered.pop()
-                deliver_args = delivered_event.get("args", None)
-                if deliver_args is None or "data" not in deliver_args:
-                    res = {"error": f"The mech's response does not match the expected format: {delivered_event}"}
-                else:
-                    res = dict(data=deliver_args["data"])
-            
-            if "error" not in res:
-                return res
+                    if n_delivered == 0:
+                        res = {"info": f"The mech ({contract_address}) has not delivered a response yet for request with id {request_id}."}
+                    elif n_delivered != 1:
+                        res = {"error": f"A single response was expected by the mech ({contract_address}) for request with id {request_id}. Received {n_delivered} responses: {delivered}."}
+                    else:
+                        delivered_event = delivered.pop()
+                        deliver_args = delivered_event.get("args", None)
+                        if deliver_args is None or "data" not in deliver_args:
+                            res = {"error": f"The mech's response does not match the expected format: {delivered_event}"}
+                        else:
+                            res = dict(data=deliver_args["data"])
+                
+                    if "error" not in res:
+                        return res
+                    
+                except Exception as e:
+                    res = {"error": f"Failed to process with ABI: {str(e)}"}
+                    continue
+        
+            return res
 
         data, err = cls.execute_with_timeout(get_responses, timeout=timeout)
         if err is not None:
