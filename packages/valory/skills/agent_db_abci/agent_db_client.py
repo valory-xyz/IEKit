@@ -254,12 +254,22 @@ class AgentDBClient(Model):
         result = yield from self._request("POST", endpoint, {"agent_attr": payload}, auth=True)
         return AttributeInstance.model_validate(result) if result else None
 
-    def get_attribute_instance(
+    def get_first_attribute_instance_by_attribute_definition(
         self, agent_instance: AgentInstance, attr_def: AttributeDefinition
     ) -> Optional[AttributeInstance]:
         """Get attribute instance by agent ID and attribute definition ID"""
         endpoint = (
             f"/api/agents/{agent_instance.agent_id}/attributes/{attr_def.attr_def_id}/"
+        )
+        result = yield from self._request("GET", endpoint)
+        return AttributeInstance.model_validate(result) if result else None
+
+    def get_attribute_instance_by_attribute_id(
+        self, attribute_id: int
+    ) -> Optional[AttributeInstance]:
+        """Get attribute instance by attribute ID"""
+        endpoint = (
+            f"/api/agent-attributes/{attribute_id}"
         )
         result = yield from self._request("GET", endpoint)
         return AttributeInstance.model_validate(result) if result else None
@@ -299,8 +309,27 @@ class AgentDBClient(Model):
         payload = {
             "agent_id": agent_instance.agent_id,
         }
-        result = yield from self._request("GET", endpoint, {"agent_attr": payload}, auth=True)
-        return result
+        raw_attributes = []
+        skip = 0
+        while True:
+            params = {
+                "skip": skip,
+                "limit": 100,
+            }
+            print(f"Reading agent attributes from {skip} to {skip + 100}... ", end="")
+            result = yield from self._request(method="GET", endpoint=endpoint, payload={"agent_attr": payload}, params=params, auth=True)
+
+            if result is None:
+                print("Error fetching agent attributes")
+                continue
+
+            print(f"got {len(result)} attributes")
+
+            raw_attributes += result
+            skip = len(raw_attributes)
+
+            if len(result) < 100:
+                return raw_attributes
 
     def parse_attribute_instance(self, attribute_instance: AttributeInstance):
         """Parse attribute instance"""
@@ -324,6 +353,7 @@ class AgentDBClient(Model):
             attr_value = bool(attr_value)
 
         parsed_attribute_instance = {
+            "attr_id": attribute_instance.attribute_id,
             "attr_name": attribute_definition.attr_name,
             "attr_value": attr_value,
         }
