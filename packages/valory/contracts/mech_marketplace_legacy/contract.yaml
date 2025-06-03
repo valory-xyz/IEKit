@@ -9,7 +9,7 @@ fingerprint:
   README.md: bafybeic3ldpphjsteilzj36ittzrj2jm55qwp2fn7qubbf4q4wpdpzm6y4
   __init__.py: bafybeih566schek7lxlxjkfb2medntav3kfnnqfhog35iolgljfxsobaxu
   build/mech.json: bafybeifhlumph2hdxmn7bohkqnivdggwaz26kwr7mvd5v4pjunyl6siqpi
-  contract.py: bafybeiab7hfonsxw2usaymxztl5mspkciirc4iddpkawehbflcm6km7kfa
+  contract.py: bafybeif55jtodzp6e7wi6j7mkiwtthl577chdtlpdpmeypetmbiu5t2d5a
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: MechMarketplaceLegacy
