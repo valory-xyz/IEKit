@@ -20,7 +20,7 @@
 """This module contains the class to connect to a Mech contract."""
 
 import concurrent.futures
-from typing import Any, Callable, Dict, List, Optional, cast
+from typing import Any, Callable, Dict, List, Optional, Tuple, cast
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId
@@ -221,6 +221,204 @@ class MechABIDiscoveryEngine:
         }
 
 
+class MechCapabilityCache:
+    """AEA-native persistent caching via SynchronizedData."""
+    
+    CACHE_TTL = 24 * 3600  # 24 hours
+    CACHE_VERSION = "v1.0"
+    
+    @classmethod
+    def get_capabilities(
+        cls,
+        synchronized_data: Any,
+        ledger_api: LedgerApi,
+        contract_address: str,
+        force_refresh: bool = False
+    ) -> JSONLike:
+        """Get capabilities with persistent caching."""
+        
+        cache_key = cls._generate_cache_key(contract_address, ledger_api.api.eth.chain_id)
+        
+        # Try cache first (unless forced refresh)
+        if not force_refresh and synchronized_data:
+            cached_data = cls._get_from_cache(synchronized_data, cache_key)
+            if cached_data and cls._is_cache_valid(cached_data):
+                return cached_data["capabilities"]
+        
+        # Discover capabilities
+        capabilities = MechABIDiscoveryEngine.discover_contract_capabilities(
+            ledger_api, contract_address
+        )
+        
+        # Cache successful discoveries
+        if capabilities.get("status") == "success" and synchronized_data:
+            cls._store_in_cache(synchronized_data, cache_key, capabilities)
+        
+        return capabilities
+    
+    @classmethod
+    def _generate_cache_key(cls, contract_address: str, chain_id: int) -> str:
+        """Generate deterministic cache key."""
+        return f"mech_capabilities_{contract_address.lower()}_{chain_id}"
+    
+    @classmethod
+    def _get_from_cache(cls, synchronized_data: Any, cache_key: str) -> Optional[Dict[str, Any]]:
+        """Get data from SynchronizedData cache."""
+        try:
+            if hasattr(synchronized_data, 'db') and hasattr(synchronized_data.db, 'get'):
+                cached_str = synchronized_data.db.get(cache_key)
+                if cached_str:
+                    import json
+                    return json.loads(cached_str)
+        except (TypeError, ValueError, AttributeError):
+            pass
+        return None
+    
+    @classmethod
+    def _store_in_cache(cls, synchronized_data: Any, cache_key: str, capabilities: Dict[str, Any]) -> None:
+        """Store data in SynchronizedData cache."""
+        try:
+            if hasattr(synchronized_data, 'db') and hasattr(synchronized_data.db, 'update'):
+                import json
+                import time
+                cache_data = {
+                    "capabilities": capabilities,
+                    "timestamp": time.time(),
+                    "cache_version": cls.CACHE_VERSION
+                }
+                synchronized_data.db.update({cache_key: json.dumps(cache_data)})
+        except (TypeError, AttributeError):
+            pass
+    
+    @classmethod 
+    def _is_cache_valid(cls, cached_data: dict) -> bool:
+        """Validate cache entry integrity and TTL."""
+        try:
+            # Check version compatibility
+            if cached_data.get("cache_version") != cls.CACHE_VERSION:
+                return False
+                
+            # Check TTL
+            import time
+            age = time.time() - cached_data.get("timestamp", 0)
+            if age > cls.CACHE_TTL:
+                return False
+                
+            # Validate data structure
+            required_keys = ["capabilities", "timestamp", "cache_version"]
+            return all(key in cached_data for key in required_keys)
+        except (TypeError, KeyError):
+            return False
+
+
+class AEAMechResponseIntegration:
+    """AEA-native integration with SynchronizedData and message-based errors."""
+    
+    @classmethod
+    def get_response_aea_compatible(
+        cls,
+        ledger_api: LedgerApi,
+        contract_address: str,
+        request_id: int,
+        synchronized_data: Any = None,
+        from_block: BlockIdentifier = "earliest",
+        to_block: BlockIdentifier = "latest",
+        timeout: float = FIVE_MINUTES,
+        **kwargs: Any
+    ) -> JSONLike:
+        """
+        AEA-compatible response fetching with persistent caching.
+        
+        Returns structured messages, never raises exceptions.
+        """
+        
+        def get_responses_with_aea_integration() -> JSONLike:
+            # Step 1: Get capabilities (cached if available)
+            if synchronized_data:
+                capabilities = MechCapabilityCache.get_capabilities(
+                    synchronized_data, ledger_api, contract_address
+                )
+            else:
+                # Fallback without cache
+                capabilities = MechABIDiscoveryEngine.discover_contract_capabilities(
+                    ledger_api, contract_address
+                )
+            
+            # Step 2: Handle discovery errors
+            if capabilities.get("status") == "error":
+                return {
+                    "status": "error",
+                    "error": f"ABI discovery failed: {capabilities.get('error', 'Unknown discovery error')}",
+                    "error_type": "abi_discovery_failed",
+                    "contract_address": contract_address
+                }
+            
+            # Step 3: Use existing enhanced logic for response fetching
+            contract_address_checksummed = ledger_api.api.to_checksum_address(contract_address)
+            ledger_api_casted = cast(EthereumApi, ledger_api)
+            
+            # Use discovered event ABI for filtering
+            event_abi = capabilities["event_abi"]
+            event_topic = event_abi_to_log_topic(event_abi)
+
+            filter_params: FilterParams = {
+                "fromBlock": from_block,
+                "toBlock": to_block,
+                "address": contract_address_checksummed,
+                "topics": [event_topic],
+            }
+
+            w3 = ledger_api_casted.api.eth
+            logs = w3.get_logs(filter_params)
+            
+            # Process logs with enhanced error handling
+            delivered = []
+            for log in logs:
+                try:
+                    decoded_log = get_event_data(w3.codec, event_abi, log)
+                    log_request_id = decoded_log.get("args", {}).get("requestId", None)
+                    if request_id == log_request_id:
+                        delivered.append(decoded_log)
+                except Exception:
+                    # Log decoding error but continue processing other logs
+                    continue
+            
+            return Mech._process_delivered_events(delivered, request_id, contract_address_checksummed, capabilities)
+        
+        # Execute with timeout (AEA pattern)
+        data, err = cls.execute_with_timeout(get_responses_with_aea_integration, timeout=timeout)
+        
+        if err is not None:
+            # Format timeout error message to match expected format
+            if "timed out" in err:
+                timeout_msg = f"The RPC didn't respond in {timeout}."
+            else:
+                timeout_msg = err
+            return {
+                "status": "error",
+                "error": timeout_msg,
+                "error_type": "timeout",
+                "timeout_seconds": timeout
+            }
+        
+        return data
+    
+    @classmethod
+    def execute_with_timeout(cls, func: Callable, timeout: float) -> Tuple[Any, Optional[str]]:
+        """Execute function with timeout - AEA compatible."""
+        import concurrent.futures
+        
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+            future = executor.submit(func)
+            try:
+                data = future.result(timeout=timeout)
+                return data, None
+            except concurrent.futures.TimeoutError:
+                return None, f"Operation timed out after {timeout} seconds"
+            except Exception as e:
+                return None, f"Operation failed: {str(e)}"
+
+
 class Mech(Contract):
     """The Mech contract."""
 
@@ -397,6 +595,7 @@ class Mech(Contract):
         ledger_api: LedgerApi,
         contract_address: str,
         request_id: int,
+        synchronized_data: Any = None,
         from_block: BlockIdentifier = "earliest",
         to_block: BlockIdentifier = "latest",
         timeout: float = FIVE_MINUTES,
@@ -415,10 +614,16 @@ class Mech(Contract):
         def get_responses_enhanced() -> Any:
             """Get responses using enhanced ABI discovery."""
             
-            # Step 1: Discover contract capabilities
-            capabilities = MechABIDiscoveryEngine.discover_contract_capabilities(
-                ledger_api, contract_address
-            )
+            # Step 1: Get capabilities (cached if available)
+            if synchronized_data:
+                capabilities = MechCapabilityCache.get_capabilities(
+                    synchronized_data, ledger_api, contract_address
+                )
+            else:
+                # Fallback without cache
+                capabilities = MechABIDiscoveryEngine.discover_contract_capabilities(
+                    ledger_api, contract_address
+                )
             
             # Handle discovery errors
             if capabilities.get("status") == "error":
@@ -511,14 +716,26 @@ class Mech(Contract):
             except AttributeError:
                 return {"error": "No compatible Deliver event found in contract ABI"}
 
-        # Choose implementation based on feature flag
-        get_responses_func = get_responses_enhanced if use_enhanced_discovery else get_responses_legacy
-        
-        data, err = cls.execute_with_timeout(get_responses_func, timeout=timeout)
-        if err is not None:
-            return {"error": err}
-
-        return data
+        # Choose implementation based on feature flag and SynchronizedData availability
+        if use_enhanced_discovery and synchronized_data:
+            # Use new optimized path with caching
+            return AEAMechResponseIntegration.get_response_aea_compatible(
+                ledger_api, contract_address, request_id, synchronized_data,
+                from_block, to_block, timeout, **kwargs
+            )
+        elif use_enhanced_discovery:
+            # Use optimization without persistent cache
+            return AEAMechResponseIntegration.get_response_aea_compatible(
+                ledger_api, contract_address, request_id, None,
+                from_block, to_block, timeout, **kwargs
+            )
+        else:
+            # Use legacy implementation
+            get_responses_func = get_responses_legacy
+            data, err = cls.execute_with_timeout(get_responses_func, timeout=timeout)
+            if err is not None:
+                return {"error": err}
+            return data
 
     @classmethod
     def _process_delivered_events(

@@ -276,6 +276,8 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 request_id=request_id_bytes,  # Use bytes32 request ID
                 from_block=self.from_block,
                 chain_id=self.params.mech_chain_id,
+                synchronized_data=self.synchronized_data,
+                use_enhanced_discovery=True,
             )
         if self.params.use_mech_marketplace:
             self.context.logger.info(
@@ -289,6 +291,8 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 request_id=request_id_for_specs,  # Use integer request ID for Legacy Mech Marketplace
                 from_block=self.from_block,
                 chain_id=self.params.mech_chain_id,
+                synchronized_data=self.synchronized_data,
+                use_enhanced_discovery=True,
             )
 
         # Use legacy mech ABI (self.params.mech_contract_id) and int request ID
@@ -303,6 +307,8 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             request_id=request_id_for_specs,  # Use integer request ID for legacy mech
             from_block=self.from_block,
             chain_id=self.params.mech_chain_id,
+            synchronized_data=self.synchronized_data,
+            use_enhanced_discovery=True,
         )
 
     def _get_response_data(self) -> WaitableConditionType:
@@ -352,6 +358,20 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
         if result:
             self.set_mech_response_specs(request_id_for_specs)
+            
+            # Log discovery info if available
+            if hasattr(self, 'response_hex') and self.response_hex:
+                try:
+                    import json
+                    response_data = json.loads(self.response_hex)
+                    if isinstance(response_data, dict) and "discovery_info" in response_data:
+                        discovery_info = response_data["discovery_info"]
+                        self.context.logger.info(
+                            f"Mech response retrieved using {discovery_info.get('discovery_method', 'unknown')} "
+                            f"with ABI version {discovery_info.get('abi_version', 'unknown')}"
+                        )
+                except (json.JSONDecodeError, AttributeError):
+                    pass
 
         return result
 

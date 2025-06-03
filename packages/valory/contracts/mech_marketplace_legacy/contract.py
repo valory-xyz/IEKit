@@ -242,7 +242,7 @@ class MechMarketplaceLegacy(Contract):
         def get_responses() -> Any:
             """Get the responses from the contract."""
             contract_instance = cls.get_instance(ledger_api, contract_address)
-            event_abi = contract_instance.events.Deliver().abi
+            event_abi = contract_instance.events.MarketplaceDeliver().abi
             event_topic = event_abi_to_log_topic(event_abi)
 
             filter_params: FilterParams = {
