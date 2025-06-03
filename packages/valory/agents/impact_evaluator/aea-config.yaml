@@ -47,9 +47,9 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeibfsmbjasqnb3lgmwj7dlxvlfbngdyqc7a4n5q2g7phvmv4ktehq4
 - valory/abstract_round_abci:0.1.0:bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy
-- valory/impact_evaluator_abci:0.1.0:bafybeidfn4naotw6iixyest2i3b5hkws6hkaiibipdzqqoenibljgmuoum
+- valory/impact_evaluator_abci:0.1.0:bafybeicyfzdzaxkylhs6nvus5gvccfzfqsawhjmowfozucwnjcltcxtqn4
 - valory/generic_scoring_abci:0.1.0:bafybeigqu3dmea7brq3l525sxq2irx3ie4ii7hrc2eisrjr2fsnpc24vp4
-- valory/twitter_scoring_abci:0.1.0:bafybeidl7xjkrvaanp3ddekaxqbifnx4rpo73tqvzjdzt6nvouq3e5h3hy
+- valory/twitter_scoring_abci:0.1.0:bafybeibfwuudq75knh76pwlyy4f6bzzgmdxslkowv7a4mzhwup76mawfka
 - valory/ceramic_read_abci:0.1.0:bafybeigyt6jf5a4ucbdn44tspklpbeenxr57g2czlepqm227j5c6k7glw4
 - valory/ceramic_write_abci:0.1.0:bafybeiets4e6zgh5q2uatze5us7gny2377eukqslfvw2l3gxvgbxqpw5qq
 - valory/dynamic_nft_abci:0.1.0:bafybeigcvfpjzbue3ubtcwstjej5wv27t7nhyj7bfjkxzhuzp4lznfknky
@@ -61,7 +61,7 @@ skills:
 - valory/decision_making_abci:0.1.0:bafybeieo6egzxpvgdpahefzbghpyhuy5ikwu4aqicfxxuxmsbnlwy67y7i
 - valory/llm_abci:0.1.0:bafybeiegzlpp7lk4m5w23fn4kwadlof4z34g4uqqydki4hxkvap3wwtiui
 - valory/olas_week_abci:0.1.0:bafybeiek6bduhnbddmo4lwhjnismejzruwxtvbfylk2gd4olw3tfonozoy
-- valory/mech_interact_abci:0.1.0:bafybeifaypltnsssry242co5fvwex6wka2cw24ovrdujakegpdwe32mtw4
+- valory/mech_interact_abci:0.1.0:bafybeib6fk4ftxyvxsmop5hm5otc4nszw6i36sup2oyu2vbdfom7zgatwe
 - valory/staking_abci:0.1.0:bafybeiderd34zw5jq2xxat6aewaq7blgeemwutjnmloyzfdux5ppmn4uou
 default_ledger: ethereum
 required_ledgers:
