@@ -604,7 +604,8 @@ class ContributeDatabase:
         self.data.sort()
 
         for tweet_id, tweet in self.data.tweets.items():
-            self.data.users[tweet.twitter_user_id].tweets[tweet_id] = tweet
+            user = self.get_user_by_attribute("twitter_id", tweet.twitter_user_id)
+            user.tweets[tweet_id] = tweet
 
 
 def load_ceramic_data():
