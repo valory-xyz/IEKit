@@ -20,7 +20,7 @@
 """This module contains the class to connect to a Mech contract."""
 
 import concurrent.futures
-from typing import Any, Callable, Dict, List, cast
+from typing import Any, Callable, Dict, List, Tuple, Optional, cast
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId
@@ -262,7 +262,9 @@ class Mech(Contract):
         contract_address = ledger_api.api.to_checksum_address(contract_address)
         res = {}
         for abi in partial_abis:
-            contract_instance = ledger_api.api.eth.contract(address=contract_address, abi=abi)
+            contract_instance = ledger_api.api.eth.contract(
+                address=contract_address, abi=abi
+            )
             res = cls._process_event(
                 ledger_api,
                 contract_instance,
@@ -298,7 +300,9 @@ class Mech(Contract):
         contract_address = ledger_api.api.to_checksum_address(contract_address)
         res = {}
         for abi in partial_abis:
-            contract_instance = ledger_api.api.eth.contract(address=contract_address, abi=abi)
+            contract_instance = ledger_api.api.eth.contract(
+                address=contract_address, abi=abi
+            )
             res = cls._process_event(
                 ledger_api,
                 contract_instance,
@@ -328,6 +332,89 @@ class Mech(Contract):
         return dict(number=block["number"])
 
     @classmethod
+    def _process_abi_for_response(
+        cls,
+        abi_index: int,
+        abi: Any,
+        ledger_api: EthereumApi,
+        contract_address: str,
+        request_id: int,
+        from_block: BlockIdentifier,
+        to_block: BlockIdentifier,
+    ) -> Tuple[Dict[str, Any], bool]:
+        """
+        Process a single ABI to find a response for the given request ID.
+
+        Args:
+            abi_index: The index of the ABI being processed
+            abi: The ABI to process
+            ledger_api: The ledger API
+            contract_address: The contract address
+            request_id: The request ID to search for
+            from_block: The block to start searching from
+            to_block: The block to end searching at
+
+        Returns:
+            A tuple containing:
+            - The result (data on success, error/info message on failure)
+            - A boolean indicating if this is a successful final result
+        """
+        contract_instance = ledger_api.api.eth.contract(
+            address=contract_address, abi=abi
+        )
+
+        # Find the Deliver event in this ABI
+        deliver_event_abi = None
+        for event_spec in abi:
+            if (
+                event_spec.get("name") == "Deliver"
+                and event_spec.get("type") == "event"
+            ):
+                deliver_event_abi = event_spec
+                break
+
+        if deliver_event_abi is None:
+            return {"error": f"No Deliver event found in ABI {abi_index}"}, False
+
+        event_topic = event_abi_to_log_topic(deliver_event_abi)
+
+        filter_params: FilterParams = {
+            "fromBlock": from_block,
+            "toBlock": to_block,
+            "address": contract_instance.address,
+            "topics": [event_topic],
+        }
+
+        w3 = ledger_api.api.eth
+        logs = w3.get_logs(filter_params)
+        delivered = []
+        for log in logs:
+            decoded_log = get_event_data(w3.codec, deliver_event_abi, log)
+            log_request_id = decoded_log.get("args", {}).get("requestId", None)
+            if request_id == log_request_id:
+                delivered.append(decoded_log)
+        n_delivered = len(delivered)
+
+        if n_delivered == 0:
+            return {
+                "info": f"The mech ({contract_address}) has not delivered a response yet for request with id {request_id}."
+            }, False
+        elif n_delivered != 1:
+            return {
+                "error": f"A single response was expected by the mech ({contract_address}) for request with id {request_id}. Received {n_delivered} responses: {delivered}."
+            }, False
+        else:
+            delivered_event = delivered.pop()
+            deliver_args = delivered_event.get("args", None)
+            if deliver_args is None or "data" not in deliver_args:
+                return {
+                    "error": f"The mech's response does not match the expected format: {delivered_event}"
+                }, False
+            else:
+                # SUCCESS! Return immediately
+                return dict(data=deliver_args["data"]), True
+
+    @classmethod
     def get_response(
         cls,
         ledger_api: LedgerApi,
@@ -346,62 +433,21 @@ class Mech(Contract):
             """Get the responses from the contract."""
             last_result = {}
             for abi_index, abi in enumerate(partial_abis):
-                try:
-                    contract_instance = ledger_api.api.eth.contract(address=contract_address, abi=abi)
-                
-                    # Find the Deliver event in this ABI
-                    deliver_event_abi = None
-                    for event_spec in abi:
-                        if event_spec.get("name") == "Deliver" and event_spec.get("type") == "event":
-                            deliver_event_abi = event_spec
-                            break
-                
-                    if deliver_event_abi is None:
-                        last_result = {"error": f"No Deliver event found in ABI {abi_index}"}
-                        continue
-                
-                    event_topic = HexStr("0x" + event_abi_to_log_topic(deliver_event_abi).hex())
+                result, is_final = cls._process_abi_for_response(
+                    abi_index,
+                    abi,
+                    ledger_api,
+                    contract_address,
+                    request_id,
+                    from_block,
+                    to_block,
+                )
 
-                    filter_params: FilterParams = {
-                        "fromBlock": from_block,
-                        "toBlock": to_block,
-                        "address": contract_instance.address,
-                        "topics": [event_topic],
-                    }
+                if is_final:
+                    return result
 
-                    w3 = ledger_api.api.eth
-                    logs = w3.get_logs(filter_params)
-                    delivered = []
-                    for log in logs:
-                        decoded_log = get_event_data(w3.codec, deliver_event_abi, log)
-                        log_request_id = decoded_log.get("args", {}).get("requestId", None)
-                        if request_id == log_request_id:
-                            delivered.append(decoded_log)
-                    n_delivered = len(delivered)
+                last_result = result
 
-                    if n_delivered == 0:
-                        last_result = {"info": f"The mech ({contract_address}) has not delivered a response yet for request with id {request_id}."}
-                        # Continue trying other ABIs
-                        continue
-                    elif n_delivered != 1:
-                        last_result = {"error": f"A single response was expected by the mech ({contract_address}) for request with id {request_id}. Received {n_delivered} responses: {delivered}."}
-                        # Continue trying other ABIs in case this ABI has issues
-                        continue
-                    else:
-                        delivered_event = delivered.pop()
-                        deliver_args = delivered_event.get("args", None)
-                        if deliver_args is None or "data" not in deliver_args:
-                            last_result = {"error": f"The mech's response does not match the expected format: {delivered_event}"}
-                            # Continue trying other ABIs
-                            continue
-                        else:
-                            # SUCCESS! Return immediately
-                            return dict(data=deliver_args["data"])
-                    
-                except Exception as e:
-                    last_result = {"error": f"Failed to process with ABI {abi_index}: {str(e)}"}
-                    continue
-        
             return last_result
 
         data, err = cls.execute_with_timeout(get_responses, timeout=timeout)
