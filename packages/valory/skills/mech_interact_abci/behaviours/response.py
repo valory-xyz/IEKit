@@ -289,6 +289,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 contract_callable="get_response",
                 data_key="data",
                 placeholder=get_name(MechResponseBehaviour.response_hex),
+                requester=self.synchronized_data.safe_contract_address,
                 request_id=request_id_for_specs,  # Use integer request ID for Legacy Mech Marketplace
                 from_block=self.from_block,
                 chain_id=self.params.mech_chain_id,

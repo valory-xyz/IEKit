@@ -29,12 +29,22 @@ from aea.crypto.base import LedgerApi
 from aea_ledger_ethereum import EthereumApi
 from eth_typing import HexStr
 from eth_utils import event_abi_to_log_topic
+from hexbytes import HexBytes
 from web3._utils.events import get_event_data
 from web3.types import BlockData, BlockIdentifier, EventData, FilterParams, TxReceipt
 
 
 PUBLIC_ID = PublicId.from_str("valory/mech_marketplace_legacy:0.1.0")
 FIVE_MINUTES = 300.0
+TOPIC_BYTES = 32
+TOPIC_CHARS = TOPIC_BYTES * 2
+Ox = "0x"
+Ox_CHARS = len(Ox)
+
+
+def pad_address_for_topic(address: str) -> HexBytes:
+    """Left-pad an Ethereum address to 32 bytes for use in a topic."""
+    return HexBytes(Ox + address[Ox_CHARS:].zfill(TOPIC_CHARS))
 
 
 class MechMarketplaceLegacy(Contract):
@@ -229,6 +239,7 @@ class MechMarketplaceLegacy(Contract):
         cls,
         ledger_api: LedgerApi,
         contract_address: str,
+        requester: str,
         request_id: int,
         from_block: BlockIdentifier = "earliest",
         to_block: BlockIdentifier = "latest",
@@ -249,7 +260,7 @@ class MechMarketplaceLegacy(Contract):
                 "fromBlock": from_block,
                 "toBlock": to_block,
                 "address": contract_instance.address,
-                "topics": [event_topic],
+                "topics": [event_topic, None, None, pad_address_for_topic(requester)],
             }
 
             w3 = ledger_api.api.eth
