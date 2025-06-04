@@ -30,5 +30,11 @@ class DataclassEncoder(json.JSONEncoder):
     def default(self, o: Any) -> Any:
         """The default JSON encoder."""
         if is_dataclass(o) and not isinstance(o, type):
-            return asdict(o)
+            result = asdict(o)
+            # Ensure important fields are preserved even if they have default values
+            if hasattr(o, 'requestId') and o.requestId != 0:
+                result['requestId'] = o.requestId
+            if hasattr(o, 'result') and o.result is not None:
+                result['result'] = o.result
+            return result
         return super().default(o)
