@@ -255,9 +255,12 @@ class MechMarketplaceLegacy(Contract):
             w3 = ledger_api.api.eth
             logs = w3.get_logs(filter_params)
             delivered = [
-                get_event_data(w3.codec, event_abi, log)
+                event_data
                 for log in logs
-                if request_id == log.get("args", {}).get("requestId", None)
+                if request_id
+                == (event_data := get_event_data(w3.codec, event_abi, log))
+                .get("args", {})
+                .get("requestId", None)
             ]
             n_delivered = len(delivered)
 

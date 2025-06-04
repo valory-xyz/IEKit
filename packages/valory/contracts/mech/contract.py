@@ -387,12 +387,14 @@ class Mech(Contract):
 
         w3 = ledger_api.api.eth
         logs = w3.get_logs(filter_params)
-        delivered = []
-        for log in logs:
-            decoded_log = get_event_data(w3.codec, deliver_event_abi, log)
-            log_request_id = decoded_log.get("args", {}).get("requestId", None)
-            if request_id == log_request_id:
-                delivered.append(decoded_log)
+        delivered = [
+            event_data
+            for log in logs
+            if request_id
+            == (event_data := get_event_data(w3.codec, deliver_event_abi, log))
+            .get("args", {})
+            .get("requestId", None)
+        ]
         n_delivered = len(delivered)
 
         if n_delivered == 0:
