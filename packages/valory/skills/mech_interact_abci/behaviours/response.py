@@ -142,9 +142,9 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
 
     def setup(self) -> None:
         """Set up the `MechResponse` behaviour."""
-        self._mech_responses: List[MechInteractionResponse] = (
-            self.synchronized_data.mech_responses
-        )
+        self._mech_responses: List[
+            MechInteractionResponse
+        ] = self.synchronized_data.mech_responses
 
     def set_mech_response_specs(self, request_id: int) -> None:
         """Set the mech's response specs."""
