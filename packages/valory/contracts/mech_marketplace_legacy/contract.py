@@ -29,12 +29,22 @@ from aea.crypto.base import LedgerApi
 from aea_ledger_ethereum import EthereumApi
 from eth_typing import HexStr
 from eth_utils import event_abi_to_log_topic
+from hexbytes import HexBytes
 from web3._utils.events import get_event_data
 from web3.types import BlockData, BlockIdentifier, EventData, FilterParams, TxReceipt
 
 
 PUBLIC_ID = PublicId.from_str("valory/mech_marketplace_legacy:0.1.0")
 FIVE_MINUTES = 300.0
+TOPIC_BYTES = 32
+TOPIC_CHARS = TOPIC_BYTES * 2
+Ox = "0x"
+Ox_CHARS = len(Ox)
+
+
+def pad_address_for_topic(address: str) -> HexBytes:
+    """Left-pad an Ethereum address to 32 bytes for use in a topic."""
+    return HexBytes(Ox + address[Ox_CHARS:].zfill(TOPIC_CHARS))
 
 
 class MechMarketplaceLegacy(Contract):
@@ -229,6 +239,7 @@ class MechMarketplaceLegacy(Contract):
         cls,
         ledger_api: LedgerApi,
         contract_address: str,
+        requester: str,
         request_id: int,
         from_block: BlockIdentifier = "earliest",
         to_block: BlockIdentifier = "latest",
@@ -242,22 +253,25 @@ class MechMarketplaceLegacy(Contract):
         def get_responses() -> Any:
             """Get the responses from the contract."""
             contract_instance = cls.get_instance(ledger_api, contract_address)
-            event_abi = contract_instance.events.Deliver().abi
+            event_abi = contract_instance.events.MarketplaceDeliver().abi
             event_topic = event_abi_to_log_topic(event_abi)
 
             filter_params: FilterParams = {
                 "fromBlock": from_block,
                 "toBlock": to_block,
                 "address": contract_instance.address,
-                "topics": [event_topic],
+                "topics": [event_topic, None, None, pad_address_for_topic(requester)],
             }
 
             w3 = ledger_api.api.eth
             logs = w3.get_logs(filter_params)
             delivered = [
-                get_event_data(w3.codec, event_abi, log)
+                event_data
                 for log in logs
-                if request_id == log.get("args", {}).get("requestId", None)
+                if request_id
+                == (event_data := get_event_data(w3.codec, event_abi, log))
+                .get("args", {})
+                .get("requestId", None)
             ]
             n_delivered = len(delivered)
 

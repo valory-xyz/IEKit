@@ -138,10 +138,13 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
     @property
     def serialized_responses(self) -> str:
         """Get the Mech's responses serialized."""
-        return json.dumps(self.synchronized_data.mech_responses, cls=DataclassEncoder)
+        return json.dumps(self._mech_responses, cls=DataclassEncoder)
 
     def setup(self) -> None:
         """Set up the `MechResponse` behaviour."""
+        self._mech_responses: List[
+            MechInteractionResponse
+        ] = self.synchronized_data.mech_responses
 
     def set_mech_response_specs(self, request_id: int) -> None:
         """Set the mech's response specs."""
@@ -186,7 +189,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
             data_key="results",
             placeholder=get_name(MechResponseBehaviour.requests),
             tx_hash=self.synchronized_data.final_tx_hash,
-            expected_logs=len(self.synchronized_data.mech_responses),
+            expected_logs=len(self._mech_responses),
             chain_id=self.params.mech_chain_id,
         )
         return result
@@ -286,6 +289,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
                 contract_callable="get_response",
                 data_key="data",
                 placeholder=get_name(MechResponseBehaviour.response_hex),
+                requester=self.synchronized_data.safe_contract_address,
                 request_id=request_id_for_specs,  # Use integer request ID for Legacy Mech Marketplace
                 from_block=self.from_block,
                 chain_id=self.params.mech_chain_id,
@@ -439,7 +443,7 @@ class MechResponseBehaviour(MechInteractBaseBehaviour):
         """Set the current Mech response by matching parsed event data to a pending response."""
         self.context.logger.info(f"Attempting to match parsed event request: {request}")
 
-        for i, pending_response in enumerate(self.synchronized_data.mech_responses):
+        for i, pending_response in enumerate(self._mech_responses):
             is_match = self._check_match(pending_response, request, i == 0)
 
             if is_match:
