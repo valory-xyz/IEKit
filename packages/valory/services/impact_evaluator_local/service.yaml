@@ -56,15 +56,6 @@ models:
     args:
       setup: *id001
       genesis_config: *id002
-      centaurs_stream_id: ${CENTAURS_STREAM_ID:str:dummy_centaurs_stream_id}
-      manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
-      ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:ceramic_db_stream_id}
-      ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
-      ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
-      ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
-      ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
-      ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-      ceramic_did_str: ${CERAMIC_DID_STR:str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -140,6 +131,7 @@ models:
       safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
       staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
       disable_wio_posting: ${DISABLE_WIO_POSTING:bool:false}
+      contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
   randomness_api:
     args:
       url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}

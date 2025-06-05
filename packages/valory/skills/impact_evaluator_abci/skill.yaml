@@ -24,10 +24,9 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeifclzgoyulkyyigcwrqzmydyrj6c5d26xu7jk6cjbsed3pkls4pba
-- valory/ceramic_read_abci:0.1.0:bafybeiafztq7eeauz2mmc23wb2rfr5g6gwej4fsont7eleq54k624uedn4
+- valory/contribute_db_abci:0.1.0:bafybeiafztq7eeauz2mmc23wb2rfr5g6gwej4fsont7eleq54k624uedn4
 - valory/generic_scoring_abci:0.1.0:bafybeiao2rckgnxgdffsjoyozaczrmeyojpgllh57j3yitbu3mkpkuh6pm
 - valory/twitter_scoring_abci:0.1.0:bafybeib335rm32bw5cizwyj3jt2wa2stsyw3nrpmcjl75lmcpuhr7emdf4
-- valory/ceramic_write_abci:0.1.0:bafybeibbvtvdfamkksfyunotzjdjmhx24javcjwvlddr7gr5yoeyc45imq
 - valory/dynamic_nft_abci:0.1.0:bafybeiarq6dkwbg4kazk3dpg3nxmt5o5wafkii3askqbv36klbnkejx77a
 - valory/registration_abci:0.1.0:bafybeigt7bmrfhet7fyafqojl2i5uhzvpaz5wfv6kuk5ojwhhnhmg3qihu
 - valory/reset_pause_abci:0.1.0:bafybeicskv7u3mtfhi7nnoyw3bppwjof63izs4jgqdddtxicoea26t2n7i
@@ -102,17 +101,6 @@ models:
     class_name: AcnDialogues
   params:
     args:
-      centaurs_stream_id: dummy_centaurs_stream_id
-      manual_points_stream_id: manual_points_stream_id
-      ceramic_db_stream_id: ceramic_db_stream_id
-      ceramic_api_base: https://ceramic-clay.3boxlabs.com/
-      ceramic_api_create_endpoint: api/v0/streams
-      ceramic_api_commit_endpoint: api/v0/commits
-      ceramic_api_read_endpoint: api/v0/commits/{stream_id}
-      ceramic_did_seed: '0101010101010101010101010101010101010101010101010101010101010101'
-      ceramic_did_str: z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX
-      default_read_target_property: default_read_target_property
-      default_write_target_property: default_write_target_property
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -228,6 +216,7 @@ models:
       safe_contract_address_gnosis: '0x0000000000000000000000000000000000000000'
       staking_rewards_required_points: 200
       disable_wio_posting: false
+      contribute_db_pkey: null
     class_name: Params
   randomness_api:
     args:
@@ -267,9 +256,9 @@ models:
   twitter_dialogues:
     args: {}
     class_name: TwitterDialogues
-  ceramic_db:
+  contribute_db:
     args: {}
-    class_name: CeramicDB
+    class_name: ContributeDatabase
 dependencies:
   open-aea-cli-ipfs:
     version: ==1.65.0

@@ -49,8 +49,7 @@ skills:
 - valory/impact_evaluator_abci:0.1.0:bafybeideyly3dqltdnjslfgmu3qvaxhojh33xquwgfhbcdkyuhd3t5xysi
 - valory/generic_scoring_abci:0.1.0:bafybeiao2rckgnxgdffsjoyozaczrmeyojpgllh57j3yitbu3mkpkuh6pm
 - valory/twitter_scoring_abci:0.1.0:bafybeib335rm32bw5cizwyj3jt2wa2stsyw3nrpmcjl75lmcpuhr7emdf4
-- valory/ceramic_read_abci:0.1.0:bafybeiafztq7eeauz2mmc23wb2rfr5g6gwej4fsont7eleq54k624uedn4
-- valory/ceramic_write_abci:0.1.0:bafybeibbvtvdfamkksfyunotzjdjmhx24javcjwvlddr7gr5yoeyc45imq
+- valory/contribute_db_abci:0.1.0:bafybeiafztq7eeauz2mmc23wb2rfr5g6gwej4fsont7eleq54k624uedn4
 - valory/dynamic_nft_abci:0.1.0:bafybeiarq6dkwbg4kazk3dpg3nxmt5o5wafkii3askqbv36klbnkejx77a
 - valory/registration_abci:0.1.0:bafybeigt7bmrfhet7fyafqojl2i5uhzvpaz5wfv6kuk5ojwhhnhmg3qihu
 - valory/reset_pause_abci:0.1.0:bafybeicskv7u3mtfhi7nnoyw3bppwjof63izs4jgqdddtxicoea26t2n7i
@@ -183,17 +182,6 @@ models:
       log_dir: ${str:/logs}
   params:
     args:
-      centaurs_stream_id: ${str:kjzl6cwe1jw146h5momfk1vwzjq9vtg2ic4c1h5893usybetw3x338gu0ui2iih}
-      manual_points_stream_id: ${str:manual_points_stream_id}
-      ceramic_db_stream_id: ${str:ceramic_db_stream_id}
-      ceramic_api_base: ${str:https://ceramic-clay.3boxlabs.com/}
-      ceramic_api_create_endpoint: ${str:api/v0/streams}
-      ceramic_api_commit_endpoint: ${str:api/v0/commits}
-      ceramic_api_read_endpoint: ${str:api/v0/commits/{stream_id}}
-      ceramic_did_seed: ${str:0101010101010101010101010101010101010101010101010101010101010101}
-      ceramic_did_str: ${str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
-      default_read_target_property: ${str:default_read_target_property}
-      default_write_target_property: ${str:default_write_target_property}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -297,6 +285,7 @@ models:
       use_acn_for_delivers: ${bool:false}
       staking_rewards_required_points: ${int:200}
       disable_wio_posting: ${bool:false}
+      contribute_db_pkey: ${str:null}
   randomness_api:
     args:
       api_id: cloudflare

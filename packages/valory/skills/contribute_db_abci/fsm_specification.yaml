@@ -1,0 +1,41 @@
+alphabet_in:
+- API_ERROR
+- DID_NOT_SEND
+- DONE
+- DONE_CONTINUE
+- DONE_FINISHED
+- MAX_RETRIES_ERROR
+- NO_MAJORITY
+- ROUND_TIMEOUT
+- VERIFICATION_ERROR
+default_start_state: RandomnessRound
+final_states:
+- FinishedMaxRetriesRound
+- FinishedVerificationRound
+label: ContributeDBAbciApp
+start_states:
+- RandomnessRound
+states:
+- FinishedMaxRetriesRound
+- FinishedVerificationRound
+- RandomnessRound
+- SelectKeeperRound
+- DBWriteRound
+- VerificationRound
+transition_func:
+    (RandomnessRound, DONE): SelectKeeperRound
+    (RandomnessRound, NO_MAJORITY): RandomnessRound
+    (RandomnessRound, ROUND_TIMEOUT): RandomnessRound
+    (SelectKeeperRound, DONE): DBWriteRound
+    (SelectKeeperRound, NO_MAJORITY): RandomnessRound
+    (SelectKeeperRound, ROUND_TIMEOUT): RandomnessRound
+    (DBWriteRound, API_ERROR): RandomnessRound
+    (DBWriteRound, DID_NOT_SEND): RandomnessRound
+    (DBWriteRound, DONE): VerificationRound
+    (DBWriteRound, MAX_RETRIES_ERROR): FinishedMaxRetriesRound
+    (DBWriteRound, ROUND_TIMEOUT): RandomnessRound
+    (VerificationRound, DONE_CONTINUE): DBWriteRound
+    (VerificationRound, DONE_FINISHED): FinishedVerificationRound
+    (VerificationRound, NO_MAJORITY): RandomnessRound
+    (VerificationRound, ROUND_TIMEOUT): RandomnessRound
+    (VerificationRound, VERIFICATION_ERROR): RandomnessRound

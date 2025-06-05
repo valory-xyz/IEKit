@@ -57,15 +57,6 @@ extra:
       args:
         setup: *id001
         genesis_config: *id002
-        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw149xtnm40kvveyhywbkgp798nen6s9ul3dzdwuxh39cxyv480kwn}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81vhee620y3g9sdo7fwwd}
-        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
-        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
-        ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
-        ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
-        ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
-        ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-        ceramic_did_str: ${CERAMIC_DID_STR:str:z6MkoyCcAaqBKvoEi3FumHZ1NtJEwcN73A6sjHjF3RMhBhcc}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -145,6 +136,7 @@ extra:
         agent_registry_address: ${AGENT_REGISTRY_ADDRESS:str:0x0000000000000000000000000000000000000000}
         use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
         disable_wio_posting: ${DISABLE_WIO_POSTING:bool:true}
+        contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
@@ -157,15 +149,6 @@ extra:
       args:
         setup: *id001
         genesis_config: *id002
-        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw149xtnm40kvveyhywbkgp798nen6s9ul3dzdwuxh39cxyv480kwn}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81vhee620y3g9sdo7fwwd}
-        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
-        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
-        ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
-        ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
-        ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
-        ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-        ceramic_did_str: ${CERAMIC_DID_STR:str:z6MkoyCcAaqBKvoEi3FumHZ1NtJEwcN73A6sjHjF3RMhBhcc}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -245,6 +228,7 @@ extra:
         agent_registry_address: ${AGENT_REGISTRY_ADDRESS:str:0x0000000000000000000000000000000000000000}
         use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
         disable_wio_posting: ${DISABLE_WIO_POSTING:bool:true}
+        contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
@@ -257,15 +241,6 @@ extra:
       args:
         setup: *id001
         genesis_config: *id002
-        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw149xtnm40kvveyhywbkgp798nen6s9ul3dzdwuxh39cxyv480kwn}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81vhee620y3g9sdo7fwwd}
-        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
-        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
-        ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
-        ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
-        ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
-        ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-        ceramic_did_str: ${CERAMIC_DID_STR:str:z6MkoyCcAaqBKvoEi3FumHZ1NtJEwcN73A6sjHjF3RMhBhcc}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -345,6 +320,7 @@ extra:
         use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
         staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
         disable_wio_posting: ${DISABLE_WIO_POSTING:bool:true}
+        contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
@@ -357,15 +333,6 @@ extra:
       args:
         setup: *id001
         genesis_config: *id002
-        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw149xtnm40kvveyhywbkgp798nen6s9ul3dzdwuxh39cxyv480kwn}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81vhee620y3g9sdo7fwwd}
-        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
-        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
-        ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
-        ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
-        ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
-        ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-        ceramic_did_str: ${CERAMIC_DID_STR:str:z6MkoyCcAaqBKvoEi3FumHZ1NtJEwcN73A6sjHjF3RMhBhcc}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -449,6 +416,7 @@ extra:
         safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
         staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
         disable_wio_posting: ${DISABLE_WIO_POSTING:bool:true}
+        contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}

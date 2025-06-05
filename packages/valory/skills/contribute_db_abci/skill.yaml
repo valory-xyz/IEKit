@@ -1,21 +1,28 @@
-name: agent_db_abci
+name: contribute_db_abci
 author: valory
 version: 0.1.0
 type: skill
-description: A skill that serves as a base skill for others to interact with AgentDB.
+description: A skill that interacts with AgentDB to store Contribute data.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeigmk5a3fgwudb2kysbh7ar3sdlunfxxrj76udkj555z5zz6onurdi
-  agent_db_client.py: bafybeif2tf6ba6ec73f7kqzficlkk6r3pwlb2uzl2qxkksa3a3ysl33voa
-  behaviours.py: bafybeidf42rpakglcibu4ahdql4bqrpcm7ghffq5gndyqrukz5l3k6a6le
-  dialogues.py: bafybeihsfzez4dsemudres2je4ksjcngbw5q72ltyucqtv5ytkpverqpry
-  fsm_specification.yaml: bafybeigiboab2knxjw7jj7k7bne6osbnhs7rreo3mgtq5nfkrtpw47thze
-  handlers.py: bafybeiboaxdq7goafpoedrulb3s46usgqpi646oq5vsevtb2c434eiamxa
-  models.py: bafybeihdebjnndq6bw4mtoaooqrent2jbb4pwpsgbf66xfhvhcl64kvv6m
-  payloads.py: bafybeifjq6sljt33cbdfleab4czsoe66ntlcvqjnxcdhp4rtn6sdiipjy4
-  rounds.py: bafybeif4v3ka77zommvf7md7wwxz7ebdvbruhelwz2sviakhbmbtisqr7m
-  twitter_models.py: bafybeig44bk3x4pdus32djvqa3prj5exo5v2ykqhvzwnex2xcnp2fjygfi
+  __init__.py: bafybeic3je64koagffola4n4khlbp4jdfhonyl6dwmodwz4r4oglnbwyma
+  behaviours.py: bafybeidbyaegrzh6fxpudujdl3yp7nnlkue6benok4vzbh3422ooyjorxe
+  ceramic/__init__.py: bafybeias4e3s6p5qtx6mmmcwkcd6kvbdnudy7sxai7d2suk75aazzdzdie
+  ceramic/payloads.py: bafybeiazdmvlnl6mdbzyv22xiyxwruxxeoxtbasppc2orlazy5hrzevjuq
+  dialogues.py: bafybeifvrclkqpnl3dw46zwareemio6vgrqm4c5f3wfgv6rp267fcbyf5e
+  fsm_specification.yaml: bafybeigrqblzg5xzgep5gi24z2ie7i3t7mplkim73chvmkpotd3rzk6bem
+  handlers.py: bafybeib3aiosxhbyudcxtybdrvsmn6bvnl4ao3fwf2uc7lkidpnhvnucam
+  models.py: bafybeibknj5hftb7y4djrurgo64uueffrphj4ladd64qjzbhtir2wagkia
+  payloads.py: bafybeig63ibt5qa5sa4nw37gly3lvf4wwtps7vgr2zbvpp5zz6hzm66edq
+  rounds.py: bafybeigiozy3ggixzb27ljpqqb7ovpqrrhk54lnkmq5y542dhfs6wchs74
+  tests/__init__.py: bafybeigknrv5xw52pmcscrsxhtpibey5jbr26dss7o5eofery6ktd6w42e
+  tests/test_behaviours.py: bafybeighuno7ajmmchlhb2qwgzjewhjhzee7ain2qxqxvcc2eoox2hxw2m
+  tests/test_dialogues.py: bafybeibvhslg6mwhvmeffhoho5olnmr56ohvx63onv63aryhaidizk3jou
+  tests/test_handlers.py: bafybeih6yobt7ihsp32n6nliq3ourwfmgpc7lvb672timj7cqx4wg4n5ba
+  tests/test_models.py: bafybeihqwbnrtarzos5tak2ywurtbel6fxodpupyk677aipdemaxlgs7qi
+  tests/test_payloads.py: bafybeicbuestgyhvx6obesc25tcupca3oqracjo2oevl5x3bfrf7sj3eay
+  tests/test_rounds.py: bafybeig5t6zms73c2zndheg4mdqge7wkc4zcohxkbqwng6njqm3as55tam
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
@@ -25,7 +32,7 @@ skills:
 behaviours:
   main:
     args: {}
-    class_name: AgentDBRoundBehaviour
+    class_name: ContributeDBRoundBehaviour
 handlers:
   abci:
     args: {}
@@ -107,7 +114,7 @@ models:
       retry_attempts: 400
       retry_timeout: 3
       round_timeout_seconds: 30.0
-      service_id: dummy_service
+      service_id: contribute_db
       service_registry_address: null
       setup:
         all_participants: []
@@ -128,7 +135,19 @@ models:
       slash_threshold_amount: 10000000000000000
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
+      contribute_db_pkey: null
     class_name: Params
+  randomness_api:
+    args:
+      api_id: cloudflare
+      headers: {}
+      method: GET
+      parameters: {}
+      response_key: null
+      response_type: dict
+      retries: 5
+      url: https://drand.cloudflare.com/public/latest
+    class_name: RandomnessApi
   requests:
     args: {}
     class_name: Requests
@@ -145,7 +164,18 @@ models:
     args:
       base_url: https://afmdb.autonolas.tech
     class_name: AgentDBClient
+  contribute_db:
+    args: {}
+    class_name: ContributeDatabase
 dependencies:
-  pydantic:
-    version: '>=2.11.4'
+  Authlib:
+    version: ==1.2.0
+  dag-cbor:
+    version: ==0.2.2
+  cryptography:
+    version: ==44.0.2
+  jsonpatch:
+    version: ==1.32
+  multiformats:
+    version: ==0.3.1.post4
 is_abstract: true

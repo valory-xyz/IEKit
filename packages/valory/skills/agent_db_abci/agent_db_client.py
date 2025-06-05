@@ -22,9 +22,11 @@
 
 import json
 from datetime import datetime, timezone
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, List, Optional, Union
 
 from aea.skills.base import Model
+from eth_account import Account
+from eth_account.messages import encode_defunct
 
 from packages.valory.skills.agent_db_abci.agent_db_models import (
     AgentInstance,
@@ -50,15 +52,24 @@ class AgentDBClient(Model):
         self.agent_type = None
         self.address: str = None
         self.signing_func: Callable = None
+        self.private_key: Optional[str] = None
         self.http_request_func: Callable = None
         self.logger: Callable = None
 
-    def initialize(self, address: str, http_request_func: Callable, signing_func: Callable, logger: Callable):
+    def initialize(self, address: str, http_request_func: Callable, signing_func_or_pkey: Union[Callable, str], logger: Callable):
         """Inject external functions"""
         self.address = address
         self.http_request_func = http_request_func
-        self.signing_func = signing_func
+        self.signing_func = signing_func_or_pkey if isinstance(signing_func_or_pkey, Callable) else self.sign_using_pkey
+        self.private_key = signing_func_or_pkey if isinstance(signing_func_or_pkey, str) else None
         self.logger = logger
+
+    def sign_using_pkey(self, message_to_sign: str):
+        """Sign using pkey"""
+        signed_message = Account.sign_message(  # pylint: disable=no-value-for-parameter
+            encode_defunct(text=message_to_sign), private_key=self.private_key
+        )
+        return signed_message
 
     def _sign_request(self, endpoint):
         """Generate authentication"""
