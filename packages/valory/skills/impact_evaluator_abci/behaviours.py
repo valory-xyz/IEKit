@@ -25,11 +25,11 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-from packages.valory.skills.ceramic_read_abci.behaviours import (
-    CeramicReadRoundBehaviour,
-)
 from packages.valory.skills.ceramic_write_abci.behaviours import (
     CeramicWriteRoundBehaviour,
+)
+from packages.valory.skills.contribute_db_abci.behaviours import (
+    ContributeDBRoundBehaviour,
 )
 from packages.valory.skills.decision_making_abci.behaviours import (
     DecisionMakingRoundBehaviour,
@@ -76,7 +76,7 @@ class ImpactEvaluatorConsensusBehaviour(AbstractRoundBehaviour):
     abci_app_cls = ImpactEvaluatorSkillAbciApp
     behaviours: Set[Type[BaseBehaviour]] = {
         *AgentRegistrationRoundBehaviour.behaviours,
-        *CeramicReadRoundBehaviour.behaviours,
+        *ContributeDBRoundBehaviour.behaviours,
         *GenericScoringRoundBehaviour.behaviours,
         *TwitterScoringRoundBehaviour.behaviours,
         *DynamicNFTRoundBehaviour.behaviours,

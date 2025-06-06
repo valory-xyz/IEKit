@@ -31,7 +31,7 @@ final_states:
 - FinishedDecisionMakingDAARound
 - FinishedDecisionMakingDoneRound
 - FinishedDecisionMakingLLMRound
-- FinishedDecisionMakingReadCentaursRound
+- FinishedDecisionMakingDBLoadRound
 - FinishedDecisionMakingReadContributeDBRound
 - FinishedDecisionMakingReadManualPointsRound
 - FinishedDecisionMakingScoreRound
@@ -55,7 +55,7 @@ states:
 - FinishedDecisionMakingDAARound
 - FinishedDecisionMakingDoneRound
 - FinishedDecisionMakingLLMRound
-- FinishedDecisionMakingReadCentaursRound
+- FinishedDecisionMakingDBLoadRound
 - FinishedDecisionMakingReadContributeDBRound
 - FinishedDecisionMakingReadManualPointsRound
 - FinishedDecisionMakingScoreRound
@@ -78,7 +78,7 @@ transition_func:
     (DecisionMakingRound, LLM): FinishedDecisionMakingLLMRound
     (DecisionMakingRound, NEXT_CENTAUR): DecisionMakingRound
     (DecisionMakingRound, NO_MAJORITY): DecisionMakingRound
-    (DecisionMakingRound, READ_CENTAURS): FinishedDecisionMakingReadCentaursRound
+    (DecisionMakingRound, READ_CENTAURS): FinishedDecisionMakingDBLoadRound
     (DecisionMakingRound, READ_CONTRIBUTE_DB): FinishedDecisionMakingReadContributeDBRound
     (DecisionMakingRound, READ_MANUAL_POINTS): FinishedDecisionMakingReadManualPointsRound
     (DecisionMakingRound, ROUND_TIMEOUT): DecisionMakingRound

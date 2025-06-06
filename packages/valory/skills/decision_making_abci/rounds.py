@@ -225,8 +225,8 @@ class PostTxDecisionMakingRound(CollectSameUntilThresholdRound):
         return None
 
 
-class FinishedDecisionMakingReadCentaursRound(DegenerateRound):
-    """FinishedDecisionMakingReadCentaursRound"""
+class FinishedDecisionMakingDBLoadRound(DegenerateRound):
+    """FinishedDecisionMakingDBLoadRound"""
 
 
 class FinishedDecisionMakingLLMRound(DegenerateRound):
@@ -304,7 +304,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
     initial_states: Set[AppState] = {DecisionMakingRound, PostTxDecisionMakingRound}
     transition_function: AbciAppTransitionFunction = {
         DecisionMakingRound: {
-            Event.READ_CENTAURS: FinishedDecisionMakingReadCentaursRound,
+            Event.READ_CENTAURS: FinishedDecisionMakingDBLoadRound,
             Event.LLM: FinishedDecisionMakingLLMRound,
             Event.DAILY_TWEET: FinishedDecisionMakingWriteTwitterRound,
             Event.TWEET_VALIDATION: DecisionMakingRound,
@@ -334,7 +334,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.DONE: PostTxDecisionMakingRound,
             Event.NO_MAJORITY: PostTxDecisionMakingRound,
         },
-        FinishedDecisionMakingReadCentaursRound: {},
+        FinishedDecisionMakingDBLoadRound: {},
         FinishedDecisionMakingLLMRound: {},
         FinishedDecisionMakingWriteTwitterRound: {},
         FinishedDecisionMakingWriteOrbisRound: {},
@@ -354,7 +354,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingDAARound: {},
     }
     final_states: Set[AppState] = {
-        FinishedDecisionMakingReadCentaursRound,
+        FinishedDecisionMakingDBLoadRound,
         FinishedDecisionMakingLLMRound,
         FinishedDecisionMakingWriteTwitterRound,
         FinishedDecisionMakingWriteOrbisRound,
@@ -382,7 +382,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         PostTxDecisionMakingRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedDecisionMakingReadCentaursRound: set(),
+        FinishedDecisionMakingDBLoadRound: set(),
         FinishedDecisionMakingLLMRound: {"llm_prompt_templates", "llm_values"},
         FinishedDecisionMakingWriteTwitterRound: {"write_data"},
         FinishedDecisionMakingWriteOrbisRound: {"write_data"},

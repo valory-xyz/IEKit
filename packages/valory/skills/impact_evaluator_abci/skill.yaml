@@ -256,6 +256,10 @@ models:
   twitter_dialogues:
     args: {}
     class_name: TwitterDialogues
+  agent_db_client:
+    args:
+      base_url: https://afmdb.autonolas.tech
+    class_name: AgentDBClient
   contribute_db:
     args: {}
     class_name: ContributeDatabase
