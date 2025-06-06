@@ -22,6 +22,8 @@
 from abc import ABC
 from typing import Any, Generator, Set, Type, cast
 
+from eth_account import Account
+
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
@@ -46,7 +48,7 @@ class ContributeDBBehaviour(BaseBehaviour, ABC):
         super().__init__(**kwargs)
 
         self.context.agent_db_client.initialize(
-            address=self.context.agent_address,
+            address=Account.from_key(self.params.contribute_db_pkey).address,
             http_request_func=self.get_http_response,
             signing_func_or_pkey=self.params.contribute_db_pkey,
             logger=self.context.logger,
@@ -54,6 +56,7 @@ class ContributeDBBehaviour(BaseBehaviour, ABC):
 
         self.context.contribute_db.initialize(
             client=self.context.agent_db_client,
+            agent_address=self.context.agent_address
         )
 
     @property

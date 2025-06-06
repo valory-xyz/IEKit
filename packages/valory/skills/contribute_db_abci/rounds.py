@@ -71,14 +71,9 @@ class DBLoadRound(CollectSameUntilThresholdRound):
             # Get all the agents that have sent, sort them alphabetically and get the first one
             # This will be the db keeper until it is down and therefore does not send any payload
             db_keeper = sorted(list(self.collection.keys()))[0]
+            self.context.contribute_db.writer_addresses = [db_keeper]
 
-            synchronized_data = self.synchronized_data.update(
-                synchronized_data_class=SynchronizedData,
-                **{
-                    get_name(SynchronizedData.db_keeper): db_keeper,
-                }
-            )
-            return synchronized_data, Event.DONE
+            return self.synchronized_data, Event.DONE
 
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants

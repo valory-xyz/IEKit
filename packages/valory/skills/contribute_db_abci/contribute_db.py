@@ -134,6 +134,7 @@ class ContributeDatabase:
     def __init__(self):
         """Constructor"""
         self.client = None
+        self.agent_address = None
         self.logger = None
         self.agent = None
         self.agent_type = None
@@ -142,10 +143,12 @@ class ContributeDatabase:
         self.module_configs_interface = None
         self.module_data_interface = None
         self.data = ContributeData()
+        self.writer_addresses = []  # which addresses should write to the db
 
-    def initialize(self, client: AgentDBClient):
+    def initialize(self, client: AgentDBClient, agent_address: str):
         """Initialize agent"""
         self.client = client
+        self.agent_address = agent_address
         self.logger = self.client.logger
         self.tweet_interface = TweetAttributeInterface(self.client)
         self.user_interface = UserAttributeInterface(self.client)
@@ -154,12 +157,18 @@ class ContributeDatabase:
         self.agent = self.client.agent
         self.agent_type = self.client.agent_type
 
+    def is_writer(self) -> bool:
+        """Should this instance write to the DB?"""
+        if not self.writer_addresses:
+            raise ValueError("Writer addresses is empty. No agent will write to AgentDB!")
+        return self.agent_address in self.writer_addresses
+
     def register(self):
         """Register agent and all definitions"""
         contribute_type = yield from self.client.get_agent_type_by_type_name(CONTRIBUTE)
 
         # Create Contribute agent
-        if not contribute_type:
+        if not contribute_type and self.is_writer():
             contribute_type = yield from self.client.create_agent_type(
                 type_name="contribute",
                 description="A service that tracks contributions to the Olas ecosystem.",
@@ -173,7 +182,7 @@ class ContributeDatabase:
         contribute_instance = yield from self.client.get_agent_instance_by_address(
             self.client.eth_address
         )
-        if not contribute_instance:
+        if not contribute_instance and self.is_writer():
             contribute_instance = yield from self.client.create_agent_instance(
                 agent_name="Contribute",
                 agent_type=contribute_type,
@@ -185,6 +194,9 @@ class ContributeDatabase:
         self.client.agent = contribute_instance
 
         # Register attribute definitions
+        if not self.is_writer():
+            return
+
         self.tweet_interface.create_definition()
         self.user_interface.create_definition()
         self.module_configs_interface.create_definition()
@@ -203,7 +215,10 @@ class ContributeDatabase:
         print(f"Creating tweet: {tweet.tweet_id} for user {tweet.twitter_user_id}")
 
         # Create the new tweet
-        tweet_instance = yield from self.tweet_interface.create_instance(tweet)
+        tweet_instance = None
+        if self.is_writer():
+            tweet_instance = yield from self.tweet_interface.create_instance(tweet)
+
         tweet.attribute_instance_id = (
             tweet_instance.attribute_id if tweet_instance else None
         )
@@ -221,13 +236,17 @@ class ContributeDatabase:
         user_instance = yield from self.client.get_attribute_instance_by_attribute_id(
             user.attribute_instance_id
         )
-        yield from self.user_interface.update_instance(user_instance, user)
+        if self.is_writer():
+            yield from self.user_interface.update_instance(user_instance, user)
         return tweet_instance
 
     def update_tweet(
         self, attr_instance: AttributeInstance, tweet: UserTweet
     ) -> Optional[AttributeInstance]:
         """Update a tweet attribute instance"""
+        if not self.is_writer():
+            return None
+
         attr_instance = yield from self.tweet_interface.update_instance(
             attr_instance, tweet
         )
@@ -236,15 +255,19 @@ class ContributeDatabase:
     def create_user(self, user: ContributeUser) -> Optional[AttributeInstance]:
         """Create a user attribute instance"""
         print(f"Creating user: {user.id} with twitter_id {user.twitter_id}")
-        user_instance = yield from self.user_interface.create_instance(user)
-        if user_instance:
-            self.data.users[user.id] = user
+        user_instance = None
+        if self.is_writer():
+            user_instance = yield from self.user_interface.create_instance(user)
+
+        self.data.users[user.id] = user
         return user_instance
 
     def update_user(
         self, attr_instance: AttributeInstance, user: ContributeUser
     ) -> Optional[AttributeInstance]:
         """Update a user attribute instance"""
+        if not self.is_writer():
+            return None
         return self.user_interface.update_instance(attr_instance, user)
 
     def create_module_configs(
@@ -252,11 +275,13 @@ class ContributeDatabase:
     ) -> Optional[AttributeInstance]:
         """Create a plugin config attribute instance"""
         print("Creating module configs")
-        module_configs_instance = (
-            yield from self.module_configs_interface.create_instance(config)
-        )
+        module_configs_instance = None
+        if self.is_writer():
+            module_configs_instance = (
+                yield from self.module_configs_interface.create_instance(config)
+            )
+        self.data.module_configs = config
         if module_configs_instance:
-            self.data.module_configs = config
             self.data.module_configs.attribute_instance_id = (
                 module_configs_instance.attribute_id
             )
@@ -266,6 +291,8 @@ class ContributeDatabase:
         self, attr_instance: AttributeInstance, configs: ModuleConfigs
     ) -> Optional[AttributeInstance]:
         """Update a plugin config attribute instance"""
+        if not self.is_writer():
+            return None
         attr_instance = yield from self.module_configs_interface.update_instance(
             attr_instance, configs
         )
@@ -274,11 +301,15 @@ class ContributeDatabase:
     def create_module_data(self, data: ModuleData) -> Optional[AttributeInstance]:
         """Create a plugin data attribute instance"""
         print("Creating module data")
-        module_data_instance = yield from self.module_data_interface.create_instance(
-            data
-        )
+        module_data_instance = None
+        if self.is_writer():
+            module_data_instance = yield from self.module_data_interface.create_instance(
+                data
+            )
+
+        self.data.module_data = data
+
         if module_data_instance:
-            self.data.module_data = data
             self.data.module_data.attribute_instance_id = (
                 module_data_instance.attribute_id
             )
@@ -288,6 +319,8 @@ class ContributeDatabase:
         self, attr_instance: AttributeInstance, data: ModuleData
     ) -> Optional[AttributeInstance]:
         """Update a plugin data attribute instance"""
+        if not self.is_writer():
+            return None
         attr_instance = yield from self.module_data_interface.update_instance(
             attr_instance, data
         )
