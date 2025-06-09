@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the CeramicReadAbciApp."""
+"""This module contains the transaction payloads of the AgentDBAbciApp."""
 
 from dataclasses import dataclass
 

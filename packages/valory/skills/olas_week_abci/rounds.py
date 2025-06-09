@@ -77,11 +77,6 @@ class SynchronizedData(BaseSynchronizedData):
     """
 
     @property
-    def pending_write(self) -> bool:
-        """Checks whether there are changes pending to be written to Ceramic."""
-        return cast(bool, self.db.get("pending_write", False))
-
-    @property
     def api_retries(self) -> int:
         """Gets the number of API retries."""
         return cast(int, self.db.get("api_retries", 0))

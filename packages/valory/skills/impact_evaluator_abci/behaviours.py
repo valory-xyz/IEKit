@@ -25,9 +25,6 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-from packages.valory.skills.ceramic_write_abci.behaviours import (
-    CeramicWriteRoundBehaviour,
-)
 from packages.valory.skills.contribute_db_abci.behaviours import (
     ContributeDBRoundBehaviour,
 )
@@ -80,7 +77,6 @@ class ImpactEvaluatorConsensusBehaviour(AbstractRoundBehaviour):
         *GenericScoringRoundBehaviour.behaviours,
         *TwitterScoringRoundBehaviour.behaviours,
         *DynamicNFTRoundBehaviour.behaviours,
-        *CeramicWriteRoundBehaviour.behaviours,
         *DecisionMakingRoundBehaviour.behaviours,
         *LLMRoundBehaviour.behaviours,
         *TwitterWriteRoundBehaviour.behaviours,

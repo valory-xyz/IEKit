@@ -127,11 +127,6 @@ class SynchronizedData(MechInteractionSynchronizedData):
     """
 
     @property
-    def pending_write(self) -> bool:
-        """Checks whether there are changes pending to be written to Ceramic."""
-        return cast(bool, self.db.get("pending_write", False))
-
-    @property
     def api_retries(self) -> int:
         """Gets the number of API retries."""
         return cast(int, self.db.get("api_retries", 0))
@@ -180,17 +175,6 @@ class SynchronizedData(MechInteractionSynchronizedData):
     def are_keepers_set(self) -> bool:
         """Check whether keepers are set."""
         return self.db.get("most_voted_keeper_addresses", None) is not None
-
-    @property
-    def centaurs_data(self) -> list:
-        """Get the centaurs_data."""
-        return cast(list, self.db.get("centaurs_data", []))
-
-    @property
-    def current_centaur_index(self) -> int:
-        """Gets the current_centaur_index."""
-        return cast(int, self.db.get("current_centaur_index", 0))
-
 
 class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
     """TwitterDecisionMakingRound"""

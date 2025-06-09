@@ -85,11 +85,6 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(str, self.db.get("previous_decision_event", None))
 
     @property
-    def centaurs_data(self) -> list:
-        """Get the centaurs_data."""
-        return cast(list, self.db.get("centaurs_data", []))
-
-    @property
     def llm_prompt_templates(self) -> list:
         """Get the llm_prompt_templates."""
         return cast(list, self.db.get_strict("llm_prompt_templates"))
@@ -103,11 +98,6 @@ class SynchronizedData(BaseSynchronizedData):
     def llm_results(self) -> list:
         """Get the llm_results."""
         return cast(list, self.db.get("llm_results", []))
-
-    @property
-    def read_stream_id(self) -> Optional[str]:
-        """Get the read_stream_id."""
-        return cast(str, self.db.get("read_stream_id", None))
 
     @property
     def daily_tweet(self) -> str:
@@ -125,29 +115,9 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(int, self.db.get("re_prompt_attempts", 0))
 
     @property
-    def current_centaur_index(self) -> int:
-        """Gets the current_centaur_index."""
-        return cast(int, self.db.get("current_centaur_index", 0))
-
-    @property
-    def has_centaurs_changes(self) -> bool:
-        """Gets the has_centaurs_changes."""
-        return cast(bool, self.db.get("has_centaurs_changes", False))
-
-    @property
-    def pending_write(self) -> bool:
-        """Checks whether there are changes pending to be written to Ceramic."""
-        return cast(bool, self.db.get("pending_write", False))
-
-    @property
     def summary_tweets(self) -> list:
         """Get the summary_tweets."""
         return cast(list, self.db.get("summary_tweets", []))
-
-    @property
-    def write_results(self) -> list:
-        """Get the write_results."""
-        return cast(list, self.db.get("write_results", []))
 
     @property
     def tx_submitter(self) -> str:
