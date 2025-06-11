@@ -22,7 +22,7 @@
 
 import json
 from datetime import datetime, timezone
-from typing import Any, Callable, List, Optional, Union
+from typing import Any, Callable, List, Optional, Union, Dict
 
 from aea.skills.base import Model
 from eth_account import Account
@@ -48,6 +48,7 @@ class AgentDBClient(Model):
         """Constructor"""
         super().__init__(**kwargs)
         self.base_url: str = base_url.rstrip("/")
+        self._attribute_definition_cache: Dict[int, AttributeDefinition] = {}
         self.agent: AgentInstance = None
         self.agent_type = None
         self.address: str = None
@@ -233,9 +234,16 @@ class AgentDBClient(Model):
         self, attr_id: int
     ) -> Optional[AttributeDefinition]:
         """Get attribute definition by id"""
+        if attr_id in self._attribute_definition_cache:
+            return self._attribute_definition_cache[attr_id]
+
         endpoint = f"/api/attributes/{attr_id}"
         result = yield from self._request("GET", endpoint)
-        return AttributeDefinition.model_validate(result) if result else None
+        if result:
+            definition = AttributeDefinition.model_validate(result)
+            self._attribute_definition_cache[attr_id] = definition
+            return definition
+        return None
 
     def get_attribute_definitions_by_agent_type(self, agent_type: AgentType):
         """Get attributes by agent type"""
@@ -296,12 +304,12 @@ class AgentDBClient(Model):
         self,
         agent_instance: AgentInstance,
         attribute_def: AttributeDefinition,
-        attribute_instance: AttributeInstance,
+        attribute_instance_id: int,
         value: Any,
         value_type="string",
     ) -> Optional[AttributeInstance]:
         """Update attribute instance"""
-        endpoint = f"/api/agent-attributes/{attribute_instance.attribute_id}"
+        endpoint = f"/api/agent-attributes/{attribute_instance_id}"
         payload = {f"{value_type}_value": value}
         payload = {
             "agent_id": agent_instance.agent_id,

@@ -29,7 +29,7 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 class ActivityScorePayload(BaseTxPayload):
     """Represent a transaction payload for the ActivityScoreRound."""
 
-    pending_write: bool
+    finished_update: bool
 
 
 @dataclass(frozen=True)

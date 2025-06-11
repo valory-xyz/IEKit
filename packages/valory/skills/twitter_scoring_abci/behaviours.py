@@ -70,6 +70,9 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     TwitterScoringAbciApp,
     TwitterSelectKeepersRound,
 )
+from packages.valory.skills.decision_making_abci.contribute_models import (
+    ContributeUser, UserTweet
+)
 
 
 ONE_DAY = 86400.0
@@ -138,22 +141,9 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
 
     def _check_twitter_limits(self) -> Tuple:
         """Check if the daily limit has exceeded or not"""
-        try:
-            number_of_tweets_pulled_today = int(
-                self.context.ceramic_db["module_data"]["twitter"][
-                    "number_of_tweets_pulled_today"
-                ]
-            )
-            last_tweet_pull_window_reset = float(
-                self.context.ceramic_db["module_data"]["twitter"][
-                    "last_tweet_pull_window_reset"
-                ]
-            )
-        except KeyError:
-            number_of_tweets_pulled_today = 0
-            last_tweet_pull_window_reset = cast(
-                SharedState, self.context.state
-            ).round_sequence.last_round_transition_timestamp.timestamp()
+        module_data = self.context.contribute_db.data.module_data.twitter
+        number_of_tweets_pulled_today = module_data.number_of_tweets_pulled_today
+        last_tweet_pull_window_reset = module_data.last_tweet_pull_window_reset
 
         current_time = cast(
             SharedState, self.context.state
@@ -478,14 +468,8 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
         api_base = self.params.twitter_api_base
         api_endpoint = self.params.twitter_mentions_endpoint
-        try:
-            latest_mention_tweet_id = int(
-                self.context.ceramic_db["module_data"]["twitter"][
-                    "latest_mention_tweet_id"
-                ]
-            )
-        except KeyError:
-            latest_mention_tweet_id = 0
+        module_data = self.context.contribute_db.data.module_data.twitter
+        latest_mention_tweet_id = module_data.latest_mention_tweet_id
 
         number_of_tweets_remaining_today = (
             self.params.max_tweet_pulls_allowed - number_of_tweets_pulled_today
@@ -742,14 +726,8 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
         api_base = self.params.twitter_api_base
         api_endpoint = self.params.twitter_search_endpoint
-        try:
-            latest_hashtag_tweet_id = int(
-                self.context.ceramic_db["module_data"]["twitter"][
-                    "latest_hashtag_tweet_id"
-                ]
-            )
-        except KeyError:
-            latest_hashtag_tweet_id = 0
+        module_data = self.context.contribute_db.data.module_data.twitter
+        latest_hashtag_tweet_id = module_data.latest_hashtag_tweet_id
 
         number_of_tweets_remaining_today = (
             self.params.max_tweet_pulls_allowed - number_of_tweets_pulled_today
@@ -1107,33 +1085,25 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         """Calculate the new content of the DB"""
 
         tweets = self.synchronized_data.tweets
-
-        # Instantiate the db
-        ceramic_db_copy = self.context.ceramic_db.copy()
+        contribute_db = self.context.contribute_db
+        module_data = contribute_db.data.module_data.twitter
+        users = contribute_db.data.users
 
         # Have we changed scoring period?
         now = cast(
             SharedState, self.context.state
         ).round_sequence.last_round_transition_timestamp.timestamp()
 
-        today = datetime.fromtimestamp(now).strftime("%Y-%m-%d")
-        current_period = ceramic_db_copy.data["module_data"]["twitter"][
-            "current_period"
-        ]
+        today = datetime.fromtimestamp(now)
+        current_period = module_data.current_period
         is_period_changed = today != current_period
         if is_period_changed:
             self.context.logger.info(
                 f"Scoring period has changed from {current_period} to {today}. Resetting user period points..."
             )
-            ceramic_db_copy.reset_period_points()
+            for user in users:
 
         active_hashtags = self.get_active_hashtags()
-
-        # Replace the encoded %23 for #
-        active_hashtags = [i.replace("%23", "#") for i in active_hashtags]
-
-        # Add the mention as a campaign
-        active_hashtags.append("@autonolas")
 
         # Get the staking epoch
         staking_contract_to_epoch = {}
@@ -1158,11 +1128,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             wallet_address = self.get_registration(tweet["text"])
 
             # Check this user's point limit per period
-            user, _ = ceramic_db_copy.get_user_by_field(
-                "twitter_id", tweet["author_id"]
-            )
+            user = contribute_db.get_user_by_attribute("twitter_id", tweet["author_id"]) or ContributeUser()
 
-            current_period_points = user["current_period_points"] if user else 0
+            current_period_points = user.current_period_points if user else 0
 
             if current_period_points + new_points > self.params.max_points_per_period:
                 self.context.logger.info(
@@ -1176,10 +1144,10 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             # Get the user staking contract and the contract epoch (if the user is staked)
             contract_epoch = None
             if user:
-                service_multisig = user.get("service_multisig", None)
-                if service_multisig and user.get("wallet_address", None):
+                service_multisig = user.service_multisig
+                if service_multisig and user.wallet_address:
                     staking_contract_address = yield from self.get_staking_contract(
-                        user["wallet_address"]
+                        user.wallet_address
                     )
                     contract_epoch = (
                         staking_contract_to_epoch[staking_contract_address]
@@ -1188,10 +1156,14 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                     )
 
             # Store the tweet id and awarded points
-            user_tweets = {} if not user else user.get("tweets", {})
+            user_tweets = user.tweets
             if tweet_id not in user_tweets:
                 # Keep in mind that we store the updated points if the user has reached max_points_per_period
                 campaign = get_campaign(tweet["text"], active_hashtags)
+
+                # TODO
+
+
                 user_tweets[tweet_id] = {
                     "points": new_points,
                     "campaign": campaign,
@@ -1220,6 +1192,8 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                     f"Detected a Twitter registration for @{twitter_name}: {wallet_address}. Tweet: {tweet['text']}"
                 )
                 user_data["wallet_address"] = wallet_address
+
+            user = ContributeUser(**user_data)
 
             # For existing users, all existing user data is replaced except points, which are added
             ceramic_db_copy.update_or_create_user("twitter_id", author_id, user_data)

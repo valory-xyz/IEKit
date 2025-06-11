@@ -108,14 +108,12 @@ class TokenTrackRound(CollectSameUntilThresholdRound):
 
             token_id_to_points = payload["token_id_to_points"]
             last_update_time = payload["last_update_time"]
-            pending_write = payload["pending_write"]
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
                     get_name(SynchronizedData.token_id_to_points): token_id_to_points,
                     get_name(SynchronizedData.last_update_time): last_update_time,
-                    get_name(SynchronizedData.pending_write): pending_write,
                     get_name(SynchronizedData.token_event_retries): 0,
                 }
             )

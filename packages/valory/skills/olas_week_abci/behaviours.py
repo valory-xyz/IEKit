@@ -160,22 +160,10 @@ class OlasWeekBaseBehaviour(BaseBehaviour, ABC):
 
     def _check_twitter_limits(self) -> Tuple:
         """Check if the daily limit has exceeded or not"""
-        try:
-            number_of_tweets_pulled_today = int(
-                self.context.ceramic_db["module_data"]["twitter"][
-                    "number_of_tweets_pulled_today"
-                ]
-            )
-            last_tweet_pull_window_reset = float(
-                self.context.ceramic_db["module_data"]["twitter"][
-                    "last_tweet_pull_window_reset"
-                ]
-            )
-        except KeyError:
-            number_of_tweets_pulled_today = 0
-            last_tweet_pull_window_reset = cast(
-                SharedState, self.context.state
-            ).round_sequence.last_round_transition_timestamp.timestamp()
+
+        module_data = self.context.contribute_db.data.twitter
+        number_of_tweets_pulled_today = module_data.number_of_tweets_pulled_today
+        last_tweet_pull_window_reset = module_data.last_tweet_pull_window_reset
 
         current_time = cast(
             SharedState, self.context.state
