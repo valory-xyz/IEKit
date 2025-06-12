@@ -321,9 +321,7 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
             else:
                 updates[
                     get_name(SynchronizedData.latest_mention_tweet_id)
-                ] = self.context.ceramic_db["module_data"]["twitter"][
-                    "latest_mention_tweet_id"
-                ]
+                ] = self.context.contribute_db.data.module_data.twitter.latest_mention_tweet_id
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
@@ -460,9 +458,7 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
             else:
                 updates[
                     get_name(SynchronizedData.latest_hashtag_tweet_id)
-                ] = self.context.ceramic_db["module_data"]["twitter"][
-                    "latest_hashtag_tweet_id"
-                ]
+                ] = self.context.contribute_db.module_data.twitter.latest_hashtag_tweet_id
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **updates,
@@ -604,7 +600,6 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
                 SynchronizedData, self.synchronized_data
             ).performed_twitter_tasks
             performed_twitter_tasks["db_update"] = Event.DONE.value
-            self.context.ceramic_db.apply_diff(payload["ceramic_diff"])
 
             # Clear processed tweets that are no longer needed. Keep only those with no points yet.
             tweets = cast(SynchronizedData, self.synchronized_data).tweets
@@ -613,7 +608,6 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    get_name(SynchronizedData.pending_write): True,
                     get_name(
                         SynchronizedData.performed_twitter_tasks
                     ): performed_twitter_tasks,
@@ -755,7 +749,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         Event.ROUND_TIMEOUT: 30.0,
         Event.TWEET_EVALUATION_ROUND_TIMEOUT: 600.0,
     }
-    cross_period_persisted_keys: FrozenSet[str] = frozenset(["pending_write", "tweets"])
+    cross_period_persisted_keys: FrozenSet[str] = frozenset(["tweets"])
     db_pre_conditions: Dict[AppState, Set[str]] = {
         TwitterDecisionMakingRound: set(),
     }

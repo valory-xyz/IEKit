@@ -32,26 +32,19 @@ from packages.valory.skills.decision_making_abci.tasks.signature_validation impo
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
 )
+from packages.valory.skills.contribute_db_abci.contribute_models import ServiceTweet
+
+# This comes from the time we could have multiple "Centaurs"
+CENTAUR_ID = "2"
 
 
 class TwitterPreparation(TaskPreparation):
     """TwitterPreparation"""
 
     def check_extra_conditions(self):
-        """Validate Twitter credentials for the current centaur"""
+        """Validate Twitter credentials"""
         yield
-        current_centaur = self.synchronized_data.centaurs_data[
-            self.synchronized_data.current_centaur_index
-        ]
-        centaur_id_to_secrets = self.params.centaur_id_to_secrets
-
-        if current_centaur["id"] not in centaur_id_to_secrets:
-            return False
-
-        if "twitter" not in centaur_id_to_secrets[current_centaur["id"]]:
-            return False
-
-        secrets = centaur_id_to_secrets[current_centaur["id"]]["twitter"]
+        secrets = self.params.centaur_id_to_secrets[0]["twitter"]
 
         if sorted(secrets.keys()) != sorted(
             ["consumer_key", "consumer_secret", "access_token", "access_secret"]
@@ -63,9 +56,6 @@ class TwitterPreparation(TaskPreparation):
     def _pre_task(self):
         """Preparations before running the task"""
         yield
-        current_centaur = self.synchronized_data.centaurs_data[
-            self.synchronized_data.current_centaur_index
-        ]
 
         tweet = self.get_tweet()
 
@@ -73,7 +63,7 @@ class TwitterPreparation(TaskPreparation):
             {
                 "text": tweet["text"],
                 "media_hashes": tweet.get("media_hashes", None),
-                "credentials": self.params.centaur_id_to_secrets[current_centaur["id"]][
+                "credentials": self.params.centaur_id_to_secrets[CENTAUR_ID][
                     "twitter"
                 ],
             }
@@ -86,57 +76,13 @@ class TwitterPreparation(TaskPreparation):
 
     def _post_task(self):
         """Preparations after running the task"""
-        centaurs_data = self.synchronized_data.centaurs_data
-        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
-
-        # Update Twitter action
-        tweet_ids = self.synchronized_data.tweet_ids
-        timestamp = self.now_utc.timestamp()
-
-        twitter_action = {
-            "actorAddress": self.params.ceramic_did_str,
-            "outputUrl": f"https://twitter.com/launchcentaurs/status/{tweet_ids[0]}",
-            "description": "posted to Twitter",
-            "timestamp": timestamp,
-        }
-
-        if "actions" in current_centaur:
-            current_centaur["actions"].append(twitter_action)
-        else:
-            current_centaur["actions"] = twitter_action
-
-        updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
+        updates = {}
         yield
         return updates, None
 
     def get_tweet(self):
         """Get the tweet"""
         raise NotImplementedError
-
-
-class DailyTweetPreparation(TwitterPreparation):
-    """DailyTweetPreparation"""
-
-    task_name = "daily_tweet"
-    task_event = Event.DAILY_TWEET.value
-
-    def get_tweet(self):
-        """Get the tweet"""
-        return self.synchronized_data.daily_tweet
-
-    def _post_task(self):
-        """Task postprocessing"""
-        updates, event = yield from super()._post_task()
-
-        # Update the last run time
-        centaurs_data = updates["centaurs_data"]
-        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
-        current_centaur["configuration"]["plugins"]["daily_tweet"][
-            "last_run"
-        ] = self.now_utc.strftime("%Y-%m-%d %H:%M:%S %Z")
-
-        updates["centaurs_data"] = centaurs_data
-        return updates, event
 
 
 class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
@@ -155,18 +101,12 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
     def _pre_task(self):
         """Preparations before running the task"""
         yield
-        centaurs_data = self.synchronized_data.centaurs_data
-        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
 
         updates = {}
         event = None
 
         if self.tweets_need_update:
-            current_centaur["plugins_data"]["scheduled_tweet"][
-                "tweets"
-            ] = self.updated_tweets
-            updates["centaurs_data"] = centaurs_data
-            updates["has_centaurs_changes"] = True
+            self.data.tweets = self.updated_tweets
             event = Event.FORCE_DB_UPDATE.value
 
         if self.pending_tweets:
@@ -177,7 +117,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
                     "text": tweet["text"],
                     "media_hashes": tweet.get("media_hashes", None),
                     "credentials": self.params.centaur_id_to_secrets[
-                        current_centaur["id"]
+                        CENTAUR_ID
                     ]["twitter"],
                 }
             ]
@@ -199,10 +139,8 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
         updates, event = yield from super()._post_task()
 
         # Set the scheduled tweet as posted
-        centaurs_data = updates["centaurs_data"]
-        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
         pending_tweets = yield from self.get_pending_tweets()
-        tweet_ids = self.synchronized_data.tweet_ids
+
         if not pending_tweets:
             self.logger.info("No tweets are pending to be published")
             return updates, event
@@ -211,24 +149,13 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
         posted_tweet_id = pending_tweets[0]["request_id"]
 
-        tweet_id = tweet_ids[0]
-        for j, tweet in enumerate(
-            current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]
-        ):
-            if tweet["request_id"] == posted_tweet_id:
-                current_centaur["plugins_data"]["scheduled_tweet"]["tweets"][j][
-                    "posted"
-                ] = True
-                current_centaur["plugins_data"]["scheduled_tweet"]["tweets"][j][
-                    "action_id"
-                ] = f"https://twitter.com/launchcentaurs/status/{tweet_id}"  # even if the tweet does not belong to this account, Twitter resolves it correctly by id
-                current_centaur["plugins_data"]["scheduled_tweet"]["tweets"][j][
-                    "executionAttempts"
-                ][-1]["verified"] = True
+        for tweet in self.data.tweets:
+            if tweet.request_id == posted_tweet_id:
+                tweet.posted = True
+                tweet.executionAttempts[-1].verified = True
                 break
 
-        updates["centaurs_data"] = centaurs_data
-        updates["has_centaurs_changes"] = True
+        self.context.contribute_db.update_module_data(self.data)
         return updates, event
 
     def get_tweet(self):
@@ -244,30 +171,12 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
             self.logger.info("Not running again because this was a force db update")
             return False
 
-        current_centaur = self.synchronized_data.centaurs_data[
-            self.synchronized_data.current_centaur_index
-        ]
-
         proceed = yield from super().check_extra_conditions()
         if not proceed:
             return False
 
-        if "scheduled_tweet" not in current_centaur["plugins_data"]:
+        if not self.data.tweets:
             return False
-
-        if "tweets" not in current_centaur["plugins_data"]["scheduled_tweet"]:
-            return False
-
-        if not isinstance(
-            current_centaur["plugins_data"]["scheduled_tweet"]["tweets"], list
-        ):
-            return False
-
-        for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
-            if not all(
-                field in tweet for field in ["posted", "request_id", "text", "voters"]
-            ):
-                return False
 
         self.pending_tweets = yield from self.get_pending_tweets()
         if not self.pending_tweets and not self.tweets_need_update:
@@ -280,46 +189,43 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
     def get_pending_tweets(self):
         """Get not yet posted tweets that need to be posted"""
-        current_centaur = self.synchronized_data.centaurs_data[
-            self.synchronized_data.current_centaur_index
-        ]
 
         pending_tweets = []
-        for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
+        for tweet in self.data.tweets:
             self.logger.info(
-                f"Checking tweet: text={tweet['text']} media_hashes={tweet.get('media_hashes', None)}"
+                f"Checking tweet: text={tweet.text}"
             )
 
             # Ignore posted tweets
-            if tweet["posted"]:
+            if tweet.posted:
                 self.logger.info("The tweet has been already posted")
                 continue
 
             # Ignore unverified proposals
-            if not tweet["proposer"]["verified"]:
+            if not tweet.proposer.verified:
                 self.logger.info("The tweet proposer signature is not valid")
                 continue
 
             # Ignore tweets not marked for posting
-            if not tweet["executionAttempts"]:
+            if not tweet.executionAttempts:
                 self.logger.info("The tweet is not marked for execution")
                 continue
 
-            if tweet["executionAttempts"][-1]["verified"] is not None:
+            if tweet.executionAttempts[-1].verified is not None:
                 self.logger.info("The tweet execution attempt has not been verified")
                 continue
 
             # At this point, the tweet is awaiting to be published [verified=None]
 
             # Ignore tweet with no voters
-            if not tweet["voters"]:
+            if not tweet.voters:
                 self.logger.info("The tweet has no voters")
                 continue
 
             # Ignore WiO tweets if WiO posting is disabled
             if (
                 self.params.disable_wio_posting
-                and tweet["proposer"]["address"]
+                and tweet.proposer.address
                 == "0x12b680F1Ffb678598eFC0C57BB2edCAebB762A9A"
             ):  # service safe address (ethereum)
                 self.logger.info("Week in Olas posting is disabled")
@@ -332,45 +238,43 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
             # We only update the executionAttempt now if the verification failed
             # If it succeeded, it will be updated after posting
             if not is_tweet_executable:
-                tweet["executionAttempts"][-1]["verified"] = False
+                tweet.executionAttempts[-1].verified = False
                 self.tweets_need_update = True
                 continue
 
             pending_tweets.append(tweet)
 
-        self.updated_tweets = current_centaur["plugins_data"]["scheduled_tweet"][
-            "tweets"
-        ]
+        self.updated_tweets = self.data.tweets
 
         return pending_tweets
 
-    def check_tweet_consensus(self, tweet: dict):
+    def check_tweet_consensus(self, tweet: ServiceTweet):
         """Check whether users agree on posting"""
         total_voting_power = 0
 
-        for voter in tweet["voters"]:
+        for voter in tweet.voters:
             # Verify signature
             tweet_text = (
-                tweet["text"] if isinstance(tweet["text"], str) else tweet["text"][0]
+                tweet.text if isinstance(tweet.text, str) else tweet.text[0]
             )
             message = f"I am signing a message to verify that I approve the tweet starting with {tweet_text[:10]}"
             is_valid = yield from self.validate_signature(
-                message, voter["address"], voter["signature"]
+                message, voter.address, voter.signature
             )
 
-            self.logger.info(f"Voter: {voter['address']}  Signature valid: {is_valid}")
+            self.logger.info(f"Voter: {voter.address}  Signature valid: {is_valid}")
             if not is_valid:
                 continue
 
             # Get voting power
-            voting_power = yield from self.get_voting_power(voter["address"])
-            self.logger.info(f"Voter: {voter['address']}  Voting power: {voting_power}")
+            voting_power = yield from self.get_voting_power(voter.address)
+            self.logger.info(f"Voter: {voter.address}  Voting power: {voting_power}")
             total_voting_power += cast(int, voting_power)
 
         consensus = total_voting_power >= self.params.tweet_consensus_veolas
 
         self.behaviour.context.logger.info(
-            f"Voting power is {total_voting_power} for tweet {tweet['text']}. Executing? {consensus}"
+            f"Voting power is {total_voting_power} for tweet {tweet.text}. Executing? {consensus}"
         )
 
         return consensus

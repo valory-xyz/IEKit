@@ -27,6 +27,8 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
     TaskPreparation,
 )
 
+CENTAUR_ID = "2"
+
 
 class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
     """TweetValidationPreparation"""
@@ -35,20 +37,9 @@ class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
     task_event = Event.TWEET_VALIDATION.value
 
     def check_extra_conditions(self):
-        """Validate Twitter credentials for the current centaur"""
+        """Validate Twitter credentials"""
         yield
-        current_centaur = self.synchronized_data.centaurs_data[
-            self.synchronized_data.current_centaur_index
-        ]
-        centaur_id_to_secrets = self.params.centaur_id_to_secrets
-
-        if current_centaur["id"] not in centaur_id_to_secrets:
-            return False
-
-        if "twitter" not in centaur_id_to_secrets[current_centaur["id"]]:
-            return False
-
-        secrets = centaur_id_to_secrets[current_centaur["id"]]["twitter"]
+        secrets = self.params.centaur_id_to_secrets[CENTAUR_ID]["twitter"]
 
         if sorted(secrets.keys()) != sorted(
             ["consumer_key", "consumer_secret", "access_token", "access_secret"]
@@ -59,24 +50,22 @@ class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
 
     def _pre_task(self):
         """Preparations before running the task"""
-        centaurs_data = self.synchronized_data.centaurs_data
-        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
         updates = {}
 
-        for tweet in current_centaur["plugins_data"]["scheduled_tweet"]["tweets"]:
+        for tweet in self.data.tweets:
             tweet_text = (
-                tweet["text"] if isinstance(tweet["text"], str) else tweet["text"][0]
+                tweet.text if isinstance(tweet.text, str) else tweet.text[0]
             )
 
             self.logger.info(f"Checking tweet proposal: {tweet_text}")
 
             # Ignore posted tweets
-            if tweet["posted"]:
+            if tweet.posted:
                 self.logger.info("The tweet has been posted already")
                 continue
 
             # Ignore already processed proposals
-            if tweet["proposer"]["verified"] is not None:
+            if tweet.proposer.verified is not None:
                 self.logger.info("The proposal has been already verified")
                 continue
 
@@ -84,13 +73,14 @@ class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
             message = f"I am signing a message to verify that I propose a tweet starting with {tweet_text[:10]}"
             is_valid = yield from self.validate_signature(
                 message,
-                tweet["proposer"]["address"],
-                tweet["proposer"]["signature"],
+                tweet.proposer.address,
+                tweet.proposer.signature,
             )
             self.logger.info(f"Is the proposer signature valid? {is_valid}")
 
-            tweet["proposer"]["verified"] = is_valid
-            updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
+            tweet.proposer.verified = is_valid
+
+            self.context.contribute_db.update_module_data(self.data)
 
         return updates, self.task_event
 

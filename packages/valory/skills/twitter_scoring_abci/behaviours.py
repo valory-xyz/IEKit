@@ -27,7 +27,7 @@ from abc import ABC
 from dataclasses import asdict
 from datetime import datetime
 from typing import Dict, Generator, List, Optional, Set, Tuple, Type, Union, cast
-
+from packages.valory.skills.contribute_db_abci.contribute_models import UserTweet, ContributeUser
 from web3 import Web3
 
 from packages.valory.contracts.staking.contract import Staking
@@ -70,9 +70,7 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     TwitterScoringAbciApp,
     TwitterSelectKeepersRound,
 )
-from packages.valory.skills.decision_making_abci.contribute_models import (
-    ContributeUser, UserTweet
-)
+
 
 
 ONE_DAY = 86400.0
@@ -168,7 +166,7 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
 
     def get_active_hashtags(self) -> List[str]:
         """Get the active campaigns"""
-        centaurs_data = self.synchronized_data.centaurs_data
+        module_configs = self.context.contribute_db.data.module_configs
         current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
         active_hashtags = [
             f"%23{campaign['hashtag'].replace('#', '').strip()}"  # %23 = hashtag
@@ -1069,10 +1067,10 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             sender = self.context.agent_address
-            ceramic_diff = yield from self.get_update_diff()
+            yield from self.update_db()
             payload = DBUpdatePayload(
                 sender=sender,
-                content=json.dumps({"ceramic_diff": ceramic_diff}, sort_keys=True),
+                content="",
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -1081,7 +1079,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         self.set_done()
 
-    def get_update_diff(self) -> Generator[None, None, Dict]:
+    def update_db(self) -> Generator[None, None, None]:
         """Calculate the new content of the DB"""
 
         tweets = self.synchronized_data.tweets
@@ -1094,7 +1092,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             SharedState, self.context.state
         ).round_sequence.last_round_transition_timestamp.timestamp()
 
-        today = datetime.fromtimestamp(now)
+        today = datetime.fromtimestamp(now).date()
         current_period = module_data.current_period
         is_period_changed = today != current_period
         if is_period_changed:
@@ -1102,6 +1100,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 f"Scoring period has changed from {current_period} to {today}. Resetting user period points..."
             )
             for user in users:
+                user.current_period_points = 0
 
         active_hashtags = self.get_active_hashtags()
 
@@ -1116,16 +1115,20 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         )
 
         # Update data
-        for tweet_id, tweet in tweets.items():
+        for tweet_id, tweet_data in tweets.items():
             if "points" not in tweet:
                 continue
 
+            tweet_data["tweet_id"] = tweet_id
+            tweet_data["twitter_user_id"] = tweet_data["author_id"]
+            tweet = UserTweet(**tweet_data)
+
             self.context.logger.info(f"Updating db with tweet: {tweet}")
 
-            author_id = str(tweet["author_id"])
-            twitter_name = tweet["username"]
-            new_points = tweet["points"]
-            wallet_address = self.get_registration(tweet["text"])
+            author_id = tweet.twitter_user_id
+            twitter_name = tweet.username
+            new_points = tweet.points
+            wallet_address = self.get_registration(tweet.text)
 
             # Check this user's point limit per period
             user = contribute_db.get_user_by_attribute("twitter_id", tweet["author_id"]) or ContributeUser()
@@ -1156,34 +1159,27 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                     )
 
             # Store the tweet id and awarded points
-            user_tweets = user.tweets
-            if tweet_id not in user_tweets:
+            if tweet_id not in user.tweets:
                 # Keep in mind that we store the updated points if the user has reached max_points_per_period
                 campaign = get_campaign(tweet["text"], active_hashtags)
 
-                # TODO
+                tweet.points = new_points
+                tweet.campaign = campaign
+                tweet.epoch = contract_epoch
+                tweet.timestamp = datetime.fromisoformat(
+                    tweet["created_at"].replace("Z", "+00:00")
+                ) if "created_at" in tweet else None
 
+                contribute_db.create_tweet(tweet)
 
-                user_tweets[tweet_id] = {
-                    "points": new_points,
-                    "campaign": campaign,
-                    "epoch": contract_epoch,
-                    "timestamp": int(
-                        datetime.fromisoformat(
-                            tweet["created_at"].replace("Z", "+00:00")
-                        ).timestamp()
-                    )
-                    if "created_at" in tweet
-                    else None,
-                    "counted_for_activity": False,
-                }
+            user = contribute_db.get_user_by_attribute("twitter_id", author_id)
 
             # User data to update
             user_data = {
                 "points": int(new_points),
                 "twitter_handle": twitter_name,
                 "current_period_points": int(current_period_points),
-                "tweets": user_tweets,
+                "tweets": user.tweets if user else {tweet_id: tweet}
             }
 
             # If this is a registration
@@ -1193,53 +1189,50 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 )
                 user_data["wallet_address"] = wallet_address
 
-            user = ContributeUser(**user_data)
+            if not user:
+                user_data["id"] = contribute_db.get_next_user_id()
+                user = ContributeUser(**user_data)
+            else:
+                user.points += user_data["points"]
+                user.twitter_handle = user_data["twitter_name"]
+                user.current_period_points = user_data["current_period_points"]
+                user.tweets = user_data["tweets"]
 
             # For existing users, all existing user data is replaced except points, which are added
-            ceramic_db_copy.update_or_create_user("twitter_id", author_id, user_data)
+            contribute_db.create_or_update_user_by_key("twitter_id", author_id, user)
 
-        # If a user has first contributed to one module (i.e. twitter) without registering a wallet,
-        # and later he/she contributes to another module, it could happen that we have two different
-        # entries on the database
-        ceramic_db_copy.merge_by_wallet()
+        module_data = contribute_db.data.module_data
 
         # Update the latest_hashtag_tweet_id
         latest_hashtag_tweet_id = self.synchronized_data.latest_hashtag_tweet_id
         if latest_hashtag_tweet_id:
-            ceramic_db_copy.data["module_data"]["twitter"][
-                "latest_hashtag_tweet_id"
-            ] = str(latest_hashtag_tweet_id)
+            module_data.twitter.latest_hashtag_tweet_id = str(latest_hashtag_tweet_id)
 
         # Update the latest_mention_tweet_id
         latest_mention_tweet_id = self.synchronized_data.latest_mention_tweet_id
         if latest_mention_tweet_id:
-            ceramic_db_copy.data["module_data"]["twitter"][
-                "latest_mention_tweet_id"
-            ] = str(latest_mention_tweet_id)
+            module_data.twitter.latest_mention_tweet_id = str(latest_mention_tweet_id)
 
         # Update the number of tweets made today
         number_of_tweets_pulled_today = (
             self.synchronized_data.number_of_tweets_pulled_today
         )
         if number_of_tweets_pulled_today:
-            ceramic_db_copy.data["module_data"]["twitter"][
-                "number_of_tweets_pulled_today"
-            ] = str(number_of_tweets_pulled_today)
+            module_data.twitter.number_of_tweets_pulled_today = number_of_tweets_pulled_today
 
         last_tweet_pull_window_reset = (
             self.synchronized_data.last_tweet_pull_window_reset
         )
         if last_tweet_pull_window_reset:
-            ceramic_db_copy.data["module_data"]["twitter"][
-                "last_tweet_pull_window_reset"
-            ] = str(last_tweet_pull_window_reset)
+            module_data.twitter.last_tweet_pull_window_reset = str(last_tweet_pull_window_reset)
 
         # Update the current_period
-        ceramic_db_copy.data["module_data"]["twitter"]["current_period"] = today
-        diff = self.context.ceramic_db.diff(ceramic_db_copy)
+        module_data.twitter.current_period = today
 
-        self.context.logger.info(f"Finished updating the db:\n{diff}")
-        return diff
+        contribute_db.update_module_data(module_data)
+
+        self.context.logger.info("Finished updating the db:")
+        return
 
     def get_registration(self, text: str) -> Optional[str]:
         """Check if the tweet is a registration and return the wallet address"""
@@ -1253,9 +1246,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             wallet_address = Web3.to_checksum_address(address_match.group())
 
             address_to_twitter_handles = {
-                user["wallet_address"]: user["twitter_handle"]
-                for user in self.context.ceramic_db["users"].values()
-                if user["wallet_address"]
+                user.wallet_address: user.twitter_handle
+                for user in self.context.contribute_db.data.users.values()
+                if user.wallet_address
             }
 
             # Ignore registration if both address and Twitter handle already exist

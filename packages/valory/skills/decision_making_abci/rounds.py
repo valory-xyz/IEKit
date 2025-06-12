@@ -39,7 +39,6 @@ from packages.valory.skills.decision_making_abci.payloads import (
 
 
 TWEET_LENGTH = 280
-MAX_REPROMPTS = 2
 
 
 class Event(Enum):
@@ -47,14 +46,9 @@ class Event(Enum):
 
     ROUND_TIMEOUT = "round_timeout"
     NO_MAJORITY = "no_majority"
-    READ_CENTAURS = "read_centaurs"
-    LLM = "llm"
-    DAILY_TWEET = "daily_tweet"
-    DAILY_ORBIS = "daily_orbis"
+    READ_CONTRIBUTE_DB = "read_contribute_db"
     SCHEDULED_TWEET = "scheduled_tweet"
     SCORE = "score"
-    UPDATE_CENTAURS = "update_centaurs"
-    NEXT_CENTAUR = "next_centaur"
     DONE = "done"
     READ_CONTRIBUTE_DB = "read_contribute_db"
     READ_MANUAL_POINTS = "read_manual_points"
@@ -137,8 +131,8 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
         if self.threshold_reached:
             # We reference all the events here to prevent the check-abciapp-specs tool from complaining
             # since this round receives the event via payload
-            # Event.NO_MAJORITY, Event.DONE, Event.UPDATE_CENTAURS, Event.READ_CENTAURS,
-            # Event.SCHEDULED_TWEET, Event.LLM, Event.DAILY_ORBIS, Event.DAILY_TWEET, Event.NEXT_CENTAUR
+            # Event.NO_MAJORITY, Event.DONE,
+            # Event.SCHEDULED_TWEET, Event.LLM, Event.DAILY_ORBIS, Event.DAILY_TWEET
             # Event.SCORE, Event.READ_CONTRIBUTE_DB, Event.READ_MANUAL_POINTS, Event.WRITE_CONTRIBUTE_DB
             # Event.WEEK_IN_OLAS_CREATE, Event.TWEET_VALIDATION, Event.FORCE_DB_UPDATE, Event.CAMPAIGN_VALIDATION
             # Event.STAKING_ACTIVITY, Event.STAKING_CHECKPOINT, Event.STAKING_DAA_UPDATE
@@ -153,7 +147,6 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
                         **payload["updates"],
                         "previous_decision_event": event.value,
                         "score_data": dict(),
-                        "centaurs_data": list(),
                     }
                 )
             else:
@@ -274,20 +267,14 @@ class DecisionMakingAbciApp(AbciApp[Event]):
     initial_states: Set[AppState] = {DecisionMakingRound, PostTxDecisionMakingRound}
     transition_function: AbciAppTransitionFunction = {
         DecisionMakingRound: {
-            Event.READ_CENTAURS: FinishedDecisionMakingDBLoadRound,
-            Event.LLM: FinishedDecisionMakingLLMRound,
-            Event.DAILY_TWEET: FinishedDecisionMakingWriteTwitterRound,
+            Event.READ_CONTRIBUTE_DB: FinishedDecisionMakingDBLoadRound,
             Event.TWEET_VALIDATION: DecisionMakingRound,
             Event.SCHEDULED_TWEET: FinishedDecisionMakingWriteTwitterRound,
             Event.FORCE_DB_UPDATE: DecisionMakingRound,
             Event.WEEK_IN_OLAS_CREATE: FinishedDecisionMakingWeekInOlasRound,
             Event.DAILY_ORBIS: FinishedDecisionMakingWriteOrbisRound,
-            Event.UPDATE_CENTAURS: FinishedDecisionMakingUpdateCentaurRound,
             Event.SCORE: FinishedDecisionMakingScoreRound,
-            Event.READ_CONTRIBUTE_DB: FinishedDecisionMakingReadContributeDBRound,
             Event.WRITE_CONTRIBUTE_DB: FinishedDecisionMakingWriteContributeDBRound,
-            Event.READ_MANUAL_POINTS: FinishedDecisionMakingReadManualPointsRound,
-            Event.NEXT_CENTAUR: DecisionMakingRound,
             Event.DONE: FinishedDecisionMakingDoneRound,
             Event.NO_MAJORITY: DecisionMakingRound,
             Event.ROUND_TIMEOUT: DecisionMakingRound,

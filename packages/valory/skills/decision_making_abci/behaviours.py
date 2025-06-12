@@ -71,12 +71,6 @@ from packages.valory.skills.decision_making_abci.tasks.twitter_preparation impor
 from packages.valory.skills.decision_making_abci.tasks.week_in_olas_preparations import (
     WeekInOlasCreatePreparation,
 )
-from packages.valory.skills.decision_making_abci.tasks.write_stream_preparation import (
-    DailyOrbisPreparation,
-    UpdateCentaursPreparation,
-    WriteContributeDBPreparation,
-)
-
 
 # Task FSM
 previous_event_to_task_preparation_cls = {
@@ -85,27 +79,7 @@ previous_event_to_task_preparation_cls = {
         "next": ReadContributeDBPreparation,
     },
     Event.READ_CONTRIBUTE_DB.value: {
-        "prev": ReadContributeDBPreparation,
-        "next": ReadManualPointsPreparation,
-    },
-    Event.READ_MANUAL_POINTS.value: {
-        "prev": ReadManualPointsPreparation,
-        "next": ReadCentaursPreparation,
-    },
-    Event.READ_CENTAURS.value: {
-        "prev": ReadCentaursPreparation,
-        "next": LLMPreparation,
-    },
-    Event.LLM.value: {
-        "prev": LLMPreparation,
-        "next": DailyTweetPreparation,
-    },
-    Event.DAILY_TWEET.value: {
-        "prev": DailyTweetPreparation,
-        "next": DailyOrbisPreparation,
-    },
-    Event.DAILY_ORBIS.value: {
-        "prev": DailyOrbisPreparation,
+        "prev": None,
         "next": WeekInOlasCreatePreparation,
     },
     Event.WEEK_IN_OLAS_CREATE.value: {

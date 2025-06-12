@@ -182,6 +182,7 @@ class ModuleConfig(BaseModel):
     """ModuleConfig"""
 
     daily: bool = False
+    weekly: Optional[int] = None
     enabled: bool = False
     last_run: Optional[datetime] = None
     run_hour_utc: int = 0
@@ -198,8 +199,6 @@ class ModuleConfig(BaseModel):
 class ModuleConfigs(BaseModel):
     """ModuleConfigs"""
 
-    daily_orbis: ModuleConfig
-    daily_tweet: ModuleConfig
     staking_daa: ModuleConfig
     week_in_olas: ModuleConfig
     scheduled_tweet: ModuleConfig
@@ -212,8 +211,6 @@ class ModuleConfigs(BaseModel):
 class ModuleData(BaseModel):
     """ModuleData"""
 
-    daily_orbis: Optional[dict]
-    daily_tweet: Optional[dict]
     scheduled_tweet: ScheduledTweetConfig
     twitter_campaigns: TwitterCampaignsConfig
     dynamic_nft: DynamicNFTData

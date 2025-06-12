@@ -45,13 +45,9 @@ class WeekInOlasCreatePreparation(TaskPreparation):
 
     def _post_task(self):
         """Task postprocessing"""
-        centaurs_data = self.synchronized_data.centaurs_data
-        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
 
         # Update the last run time
-        current_centaur["configuration"]["plugins"]["week_in_olas"][
-            "last_run"
-        ] = self.now_utc.strftime("%Y-%m-%d %H:%M:%S %Z")
+        self.config.last_run = self.now_utc
 
         # Add the new thread to proposed tweets
         thread = {
@@ -71,8 +67,9 @@ class WeekInOlasCreatePreparation(TaskPreparation):
 
         self.logger.info(f"Added WiO to the tweet list:\n{thread}")
 
-        current_centaur["plugins_data"]["scheduled_tweet"]["tweets"].append(thread)
+        self.data.tweets.append(thread)
+        self.context.contribute_db.update_module_data(self.data)
 
-        updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
+        updates = {}
         yield
         return updates, None
