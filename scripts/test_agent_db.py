@@ -43,7 +43,7 @@ from packages.valory.skills.agent_db_abci.agent_db_models import (
     AttributeDefinition,
     AttributeInstance,
 )
-from packages.valory.skills.decision_making_abci.contribute_models import (
+from packages.valory.skills.contribute_db_abci.contribute_models import (
     ContributeData,
     ContributeUser,
     ModuleConfigs,
@@ -504,8 +504,6 @@ class ContributeDatabase:
     def create_tweet(self, tweet: UserTweet) -> Optional[AttributeInstance]:
         """Create a tweet attribute instance"""
 
-        print(f"Creating tweet: {tweet.tweet_id} for user {tweet.twitter_user_id}")
-
         # Create the new tweet
         tweet_instance = self.tweet_interface.create_instance(tweet)
         tweet.attribute_instance_id = tweet_instance.attribute_id if tweet_instance else None
@@ -660,7 +658,8 @@ def init_database_from_ceramic(db_client):
         user.attribute_instance_id = user_attribute.attribute_id if user_attribute else None
 
     # Tweets
-    for tweet_id, tweet in contribute_data.tweets.items():
+    for i, tweet in enumerate(contribute_data.tweets.values()):
+        print(f"Creating tweet {i + 1}: {tweet.tweet_id} for user {tweet.twitter_user_id}")
         tweet_attribute = contribute_db.create_tweet(tweet)
         tweet.attribute_instance_id = tweet_attribute.attribute_id if tweet_attribute else None
 
@@ -682,7 +681,7 @@ if __name__ == "__main__":
         private_key=os.getenv("AGENT_PRIVATE_KEY"),
     )
 
-    # init_database_from_ceramic(db_client)
+    init_database_from_ceramic(db_client)
 
-    contribute_db = ContributeDatabase(db_client)
-    contribute_db.load_from_remote_db()
+    # contribute_db = ContributeDatabase(db_client)
+    # contribute_db.load_from_remote_db()

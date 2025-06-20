@@ -114,11 +114,13 @@ class ContributeUser(BaseModel):
     token_id: Optional[str] = None
     discord_id: Optional[str] = None
     service_id: Optional[str] = None
+    service_id_old: Optional[str] = None
     twitter_id: Optional[str] = None
     twitter_handle: Optional[str] = None
     discord_handle: Optional[str] = None
     wallet_address: Optional[EthereumAddress] = None
     service_multisig: Optional[EthereumAddress] = None
+    service_multisig_old: Optional[EthereumAddress] = None
     current_period_points: int = 0
     attribute_instance_id: Optional[int] = None
 

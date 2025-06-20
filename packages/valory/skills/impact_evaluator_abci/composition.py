@@ -22,7 +22,6 @@
 import packages.valory.skills.contribute_db_abci.rounds as ContributeDBAbci
 import packages.valory.skills.decision_making_abci.rounds as DecisionMakingAbci
 import packages.valory.skills.dynamic_nft_abci.rounds as DynamicNFTAbci
-import packages.valory.skills.generic_scoring_abci.rounds as GenericScoringAbci
 import packages.valory.skills.llm_abci.rounds as LLMAbciApp
 import packages.valory.skills.mech_interact_abci.rounds as MechInteractAbci
 import packages.valory.skills.mech_interact_abci.states.final_states as MechFinalStates
@@ -55,14 +54,13 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     ContributeDBAbci.FinishedLoadingRound: DecisionMakingAbci.DecisionMakingRound,
     DecisionMakingAbci.FinishedDecisionMakingLLMRound: LLMAbciApp.LLMRandomnessRound,
     DecisionMakingAbci.FinishedDecisionMakingWriteTwitterRound: TwitterWriteAbciApp.RandomnessTwitterRound,
-    DecisionMakingAbci.FinishedDecisionMakingScoreRound: GenericScoringAbci.GenericScoringRound,
     DecisionMakingAbci.FinishedDecisionMakingDoneRound: ResetAndPauseAbci.ResetAndPauseRound,
     DecisionMakingAbci.FinishedDecisionMakingWeekInOlasRound: WeekInOlasAbciApp.OlasWeekDecisionMakingRound,
-    GenericScoringAbci.FinishedGenericScoringRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     TwitterScoringAbci.FinishedTwitterCollectionRound: MechRequestStates.MechRequestRound,
     MechFinalStates.FinishedMechRequestRound: TxSettlementAbci.RandomnessTransactionSubmissionRound,
     TxSettlementAbci.FinishedTransactionSubmissionRound: DecisionMakingAbci.PostTxDecisionMakingRound,
     TxSettlementAbci.FailedRound: MechRequestStates.MechRequestRound,
+    DecisionMakingAbci.FinishedDecisionMakingScoreRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     DecisionMakingAbci.FinishedDecisionMakingActivityRound: StakingAbci.ActivityScoreRound,
     DecisionMakingAbci.FinishedDecisionMakingCheckpointRound: StakingAbci.CheckpointPreparationRound,
     DecisionMakingAbci.FinishedPostMechResponseRound: MechResponseStates.MechResponseRound,
@@ -99,7 +97,6 @@ ImpactEvaluatorSkillAbciApp = chain(
         DecisionMakingAbci.DecisionMakingAbciApp,
         LLMAbciApp.LLMAbciApp,
         TwitterWriteAbciApp.TwitterWriteAbciApp,
-        GenericScoringAbci.GenericScoringAbciApp,
         TwitterScoringAbci.TwitterScoringAbciApp,
         DynamicNFTAbci.DynamicNFTAbciApp,
         ContributeDBAbci.ContributeDBAbciApp,

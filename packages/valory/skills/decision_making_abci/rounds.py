@@ -50,12 +50,9 @@ class Event(Enum):
     SCHEDULED_TWEET = "scheduled_tweet"
     SCORE = "score"
     DONE = "done"
-    READ_CONTRIBUTE_DB = "read_contribute_db"
-    READ_MANUAL_POINTS = "read_manual_points"
     WRITE_CONTRIBUTE_DB = "write_contribute_db"
     WEEK_IN_OLAS_CREATE = "week_in_olas_create"
     TWEET_VALIDATION = "tweet_validation"
-    FORCE_DB_UPDATE = "force_db_update"
     CAMPAIGN_VALIDATION = "campaign_validation"
     STAKING_ACTIVITY = "staking_activity"
     STAKING_CHECKPOINT = "staking_checkpoint"
@@ -132,9 +129,9 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
             # We reference all the events here to prevent the check-abciapp-specs tool from complaining
             # since this round receives the event via payload
             # Event.NO_MAJORITY, Event.DONE,
-            # Event.SCHEDULED_TWEET, Event.LLM, Event.DAILY_ORBIS, Event.DAILY_TWEET
+            # Event.SCHEDULED_TWEET,
             # Event.SCORE, Event.READ_CONTRIBUTE_DB, Event.READ_MANUAL_POINTS, Event.WRITE_CONTRIBUTE_DB
-            # Event.WEEK_IN_OLAS_CREATE, Event.TWEET_VALIDATION, Event.FORCE_DB_UPDATE, Event.CAMPAIGN_VALIDATION
+            # Event.WEEK_IN_OLAS_CREATE, Event.TWEET_VALIDATION, Event.CAMPAIGN_VALIDATION
             # Event.STAKING_ACTIVITY, Event.STAKING_CHECKPOINT, Event.STAKING_DAA_UPDATE
 
             payload = json.loads(self.most_voted_payload)
@@ -199,25 +196,12 @@ class FinishedDecisionMakingLLMRound(DegenerateRound):
 class FinishedDecisionMakingWriteTwitterRound(DegenerateRound):
     """FinishedDecisionMakingWriteTwitterRound"""
 
-
-class FinishedDecisionMakingWriteOrbisRound(DegenerateRound):
-    """FinishedDecisionMakingWriteOrbisRound"""
-
-
-class FinishedDecisionMakingUpdateCentaurRound(DegenerateRound):
-    """FinishedDecisionMakingUpdateCentaurRound"""
-
-
 class FinishedDecisionMakingReadContributeDBRound(DegenerateRound):
     """FinishedDecisionMakingReadContributeDBRound"""
 
 
 class FinishedDecisionMakingWriteContributeDBRound(DegenerateRound):
     """FinishedDecisionMakingWriteContributeDBRound"""
-
-
-class FinishedDecisionMakingReadManualPointsRound(DegenerateRound):
-    """FinishedDecisionMakingReadManualPointsRound"""
 
 
 class FinishedDecisionMakingScoreRound(DegenerateRound):
@@ -270,9 +254,7 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.READ_CONTRIBUTE_DB: FinishedDecisionMakingDBLoadRound,
             Event.TWEET_VALIDATION: DecisionMakingRound,
             Event.SCHEDULED_TWEET: FinishedDecisionMakingWriteTwitterRound,
-            Event.FORCE_DB_UPDATE: DecisionMakingRound,
             Event.WEEK_IN_OLAS_CREATE: FinishedDecisionMakingWeekInOlasRound,
-            Event.DAILY_ORBIS: FinishedDecisionMakingWriteOrbisRound,
             Event.SCORE: FinishedDecisionMakingScoreRound,
             Event.WRITE_CONTRIBUTE_DB: FinishedDecisionMakingWriteContributeDBRound,
             Event.DONE: FinishedDecisionMakingDoneRound,
@@ -294,13 +276,10 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingDBLoadRound: {},
         FinishedDecisionMakingLLMRound: {},
         FinishedDecisionMakingWriteTwitterRound: {},
-        FinishedDecisionMakingWriteOrbisRound: {},
         FinishedDecisionMakingScoreRound: {},
-        FinishedDecisionMakingUpdateCentaurRound: {},
         FinishedDecisionMakingDoneRound: {},
         FinishedDecisionMakingReadContributeDBRound: {},
         FinishedDecisionMakingWriteContributeDBRound: {},
-        FinishedDecisionMakingReadManualPointsRound: {},
         FinishedDecisionMakingWeekInOlasRound: {},
         FinishedDecisionMakingActivityRound: {},
         FinishedDecisionMakingCheckpointRound: {},
@@ -314,13 +293,10 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingDBLoadRound,
         FinishedDecisionMakingLLMRound,
         FinishedDecisionMakingWriteTwitterRound,
-        FinishedDecisionMakingWriteOrbisRound,
         FinishedDecisionMakingScoreRound,
-        FinishedDecisionMakingUpdateCentaurRound,
         FinishedDecisionMakingDoneRound,
         FinishedDecisionMakingReadContributeDBRound,
         FinishedDecisionMakingWriteContributeDBRound,
-        FinishedDecisionMakingReadManualPointsRound,
         FinishedDecisionMakingWeekInOlasRound,
         FinishedDecisionMakingActivityRound,
         FinishedDecisionMakingCheckpointRound,
@@ -342,13 +318,10 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingDBLoadRound: set(),
         FinishedDecisionMakingLLMRound: {"llm_prompt_templates", "llm_values"},
         FinishedDecisionMakingWriteTwitterRound: {"write_data"},
-        FinishedDecisionMakingWriteOrbisRound: {"write_data"},
         FinishedDecisionMakingScoreRound: set(),
-        FinishedDecisionMakingUpdateCentaurRound: set(),
         FinishedDecisionMakingDoneRound: set(),
         FinishedDecisionMakingReadContributeDBRound: set(),
         FinishedDecisionMakingWriteContributeDBRound: set(),
-        FinishedDecisionMakingReadManualPointsRound: set(),
         FinishedDecisionMakingWeekInOlasRound: set(),
         FinishedDecisionMakingActivityRound: set(),
         FinishedDecisionMakingCheckpointRound: set(),
