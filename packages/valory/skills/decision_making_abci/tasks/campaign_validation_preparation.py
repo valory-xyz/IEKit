@@ -26,6 +26,7 @@ from packages.valory.contracts.veolas_delegation.contract import (
     VeOLASDelegationContract,
 )
 from packages.valory.protocols.contract_api import ContractApiMessage
+from packages.valory.skills.contribute_db_abci.contribute_models import TwitterCampaign
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.signature_validation import (
     SignatureValidationMixin,
@@ -33,7 +34,6 @@ from packages.valory.skills.decision_making_abci.tasks.signature_validation impo
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
 )
-from packages.valory.skills.contribute_db_abci.contribute_models import TwitterCampaign
 
 
 class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
@@ -52,7 +52,6 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
         yield
 
         for campaign in self.data.twitter_campaigns.campaigns:
-
             self.logger.info(
                 f"Checking campaign proposal {campaign.id} #{campaign.hashtag} [{campaign.status}]"
             )

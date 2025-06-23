@@ -29,11 +29,11 @@ from packages.valory.skills.abstract_round_abci.models import Requests as BaseRe
 from packages.valory.skills.agent_db_abci.agent_db_client import (
     AgentDBClient as BaseAgentDBClient,
 )
-from packages.valory.skills.contribute_db_abci.models import (
-    SharedState as ContributeDBSharedState,
-)
 from packages.valory.skills.contribute_db_abci.contribute_db import (
     ContributeDatabase as BaseContributeDatabase,
+)
+from packages.valory.skills.contribute_db_abci.models import (
+    SharedState as ContributeDBSharedState,
 )
 from packages.valory.skills.contribute_db_abci.rounds import ContributeDBAbciApp
 

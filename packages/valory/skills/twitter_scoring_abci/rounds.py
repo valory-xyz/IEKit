@@ -176,6 +176,7 @@ class SynchronizedData(MechInteractionSynchronizedData):
         """Check whether keepers are set."""
         return self.db.get("most_voted_keeper_addresses", None) is not None
 
+
 class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
     """TwitterDecisionMakingRound"""
 
@@ -321,7 +322,9 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
             else:
                 updates[
                     get_name(SynchronizedData.latest_mention_tweet_id)
-                ] = self.context.contribute_db.data.module_data.twitter.latest_mention_tweet_id
+                ] = (
+                    self.context.contribute_db.data.module_data.twitter.latest_mention_tweet_id
+                )
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
@@ -458,7 +461,9 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
             else:
                 updates[
                     get_name(SynchronizedData.latest_hashtag_tweet_id)
-                ] = self.context.contribute_db.module_data.twitter.latest_hashtag_tweet_id
+                ] = (
+                    self.context.contribute_db.module_data.twitter.latest_hashtag_tweet_id
+                )
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **updates,

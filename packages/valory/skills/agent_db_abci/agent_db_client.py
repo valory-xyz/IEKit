@@ -22,7 +22,7 @@
 
 import json
 from datetime import datetime, timezone
-from typing import Any, Callable, List, Optional, Union, Dict
+from typing import Any, Callable, Dict, List, Optional, Union
 
 from aea.skills.base import Model
 from eth_account import Account

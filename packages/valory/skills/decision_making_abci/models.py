@@ -49,6 +49,7 @@ Rewrite the tweet to fit {n_chars} characters. If in doubt, make it shorter. IMP
 Text: {text}
 """
 
+
 class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
 

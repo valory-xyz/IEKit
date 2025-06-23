@@ -32,9 +32,6 @@ from packages.valory.skills.decision_making_abci.behaviours import (
     DecisionMakingRoundBehaviour,
 )
 from packages.valory.skills.dynamic_nft_abci.behaviours import DynamicNFTRoundBehaviour
-from packages.valory.skills.generic_scoring_abci.behaviours import (
-    GenericScoringRoundBehaviour,
-)
 from packages.valory.skills.impact_evaluator_abci.composition import (
     ImpactEvaluatorSkillAbciApp,
 )
@@ -74,7 +71,6 @@ class ImpactEvaluatorConsensusBehaviour(AbstractRoundBehaviour):
     behaviours: Set[Type[BaseBehaviour]] = {
         *AgentRegistrationRoundBehaviour.behaviours,
         *ContributeDBRoundBehaviour.behaviours,
-        *GenericScoringRoundBehaviour.behaviours,
         *TwitterScoringRoundBehaviour.behaviours,
         *DynamicNFTRoundBehaviour.behaviours,
         *DecisionMakingRoundBehaviour.behaviours,

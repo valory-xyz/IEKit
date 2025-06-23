@@ -196,6 +196,7 @@ class FinishedDecisionMakingLLMRound(DegenerateRound):
 class FinishedDecisionMakingWriteTwitterRound(DegenerateRound):
     """FinishedDecisionMakingWriteTwitterRound"""
 
+
 class FinishedDecisionMakingReadContributeDBRound(DegenerateRound):
     """FinishedDecisionMakingReadContributeDBRound"""
 

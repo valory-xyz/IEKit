@@ -27,6 +27,7 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
     TaskPreparation,
 )
 
+
 CENTAUR_ID = "2"
 
 
@@ -53,9 +54,7 @@ class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
         updates = {}
 
         for tweet in self.data.tweets:
-            tweet_text = (
-                tweet.text if isinstance(tweet.text, str) else tweet.text[0]
-            )
+            tweet_text = tweet.text if isinstance(tweet.text, str) else tweet.text[0]
 
             self.logger.info(f"Checking tweet proposal: {tweet_text}")
 

@@ -45,6 +45,9 @@ from packages.valory.skills.decision_making_abci.tasks.campaign_validation_prepa
 from packages.valory.skills.decision_making_abci.tasks.finished_pipeline_preparation import (
     FinishedPipelinePreparation,
 )
+from packages.valory.skills.decision_making_abci.tasks.read_contribute_db_preparation import (
+    ReadContributeDBPreparation,
+)
 from packages.valory.skills.decision_making_abci.tasks.score_preparations import (
     ScorePreparation,
 )
@@ -62,9 +65,7 @@ from packages.valory.skills.decision_making_abci.tasks.twitter_preparation impor
 from packages.valory.skills.decision_making_abci.tasks.week_in_olas_preparations import (
     WeekInOlasCreatePreparation,
 )
-from packages.valory.skills.decision_making_abci.tasks.read_contribute_db_preparation import (
-    ReadContributeDBPreparation,
-)
+
 
 # Task FSM
 previous_event_to_task_preparation_cls = {

@@ -42,8 +42,12 @@ class TaskPreparation:
         self.context = context
 
         self.logger.info(f"Instantiated task {self.__class__.__name__}")
-        self.data = getattr(self.context.contribute_db.data.module_data, self.task_name, None)
-        self.config = getattr(self.context.contribute_db.data.module_configs, self.task_name)
+        self.data = getattr(
+            self.context.contribute_db.data.module_data, self.task_name, None
+        )
+        self.config = getattr(
+            self.context.contribute_db.data.module_configs, self.task_name
+        )
         self.log_config()
 
     def log_config(self):
@@ -61,14 +65,21 @@ class TaskPreparation:
             return False
 
         # Does the task run every day?
-        if self.config.daily and self.config.last_run and self.config.last_run.day == self.now_utc.day:
+        if (
+            self.config.daily
+            and self.config.last_run
+            and self.config.last_run.day == self.now_utc.day
+        ):
             self.logger.info(
                 f"[{self.__class__.__name__}]: task is a daily task and was already ran today"
             )
             return False
 
         # Does the task run every week?
-        if self.config.weekly is not None and self.config.weekly != self.now_utc.weekday():
+        if (
+            self.config.weekly is not None
+            and self.config.weekly != self.now_utc.weekday()
+        ):
             self.logger.info(
                 f"[{self.__class__.__name__}]: task is a weekly task but today is not the configured run day: {self.now_utc.weekday()} != {self.config.weekly}"
             )

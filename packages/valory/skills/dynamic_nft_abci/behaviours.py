@@ -32,6 +32,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
+from packages.valory.skills.contribute_db_abci.contribute_models import ContributeUser
 from packages.valory.skills.dynamic_nft_abci.models import Params, SharedState
 from packages.valory.skills.dynamic_nft_abci.payloads import TokenTrackPayload
 from packages.valory.skills.dynamic_nft_abci.rounds import (
@@ -39,7 +40,6 @@ from packages.valory.skills.dynamic_nft_abci.rounds import (
     SynchronizedData,
     TokenTrackRound,
 )
-from packages.valory.skills.contribute_db_abci.contribute_models import ContributeUser
 
 
 NULL_ADDRESS = "0x0000000000000000000000000000000000000000"
@@ -101,7 +101,9 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
     ) -> Generator[None, None, Tuple[dict, Optional[int]]]:
         """Get token id to address data."""
 
-        from_block = self.context.contribute_db.module_data.dynamic_nft.last_parsed_block
+        from_block = (
+            self.context.contribute_db.module_data.dynamic_nft.last_parsed_block
+        )
         if from_block is None:
             self.context.logger.warning(
                 f"last_parsed_block is not set. Using default earliest_block_to_monitor={self.params.earliest_block_to_monitor}"
@@ -156,12 +158,11 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
                 user_id = contribute_db.get_next_user_id()
                 user = ContributeUser(id=user_id)
 
-            if (
-                user.token_id is None
-                or int(token_id) < int(user.token_id)
-            ):
+            if user.token_id is None or int(token_id) < int(user.token_id):
                 user.token_id = token_id
-                contribute_db.create_or_update_user_by_key("wallet_address", address, user)
+                contribute_db.create_or_update_user_by_key(
+                    "wallet_address", address, user
+                )
 
         # Rebuild token_to_points
         new_token_id_to_points = {

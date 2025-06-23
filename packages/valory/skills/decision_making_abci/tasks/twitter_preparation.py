@@ -25,6 +25,7 @@ from packages.valory.contracts.veolas_delegation.contract import (
     VeOLASDelegationContract,
 )
 from packages.valory.protocols.contract_api import ContractApiMessage
+from packages.valory.skills.contribute_db_abci.contribute_models import ServiceTweet
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.signature_validation import (
     SignatureValidationMixin,
@@ -32,7 +33,7 @@ from packages.valory.skills.decision_making_abci.tasks.signature_validation impo
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
 )
-from packages.valory.skills.contribute_db_abci.contribute_models import ServiceTweet
+
 
 # This comes from the time we could have multiple "Centaurs"
 CENTAUR_ID = "2"
@@ -63,9 +64,7 @@ class TwitterPreparation(TaskPreparation):
             {
                 "text": tweet["text"],
                 "media_hashes": tweet.get("media_hashes", None),
-                "credentials": self.params.centaur_id_to_secrets[CENTAUR_ID][
-                    "twitter"
-                ],
+                "credentials": self.params.centaur_id_to_secrets[CENTAUR_ID]["twitter"],
             }
         ]
         updates = {
@@ -116,9 +115,9 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
                 {
                     "text": tweet["text"],
                     "media_hashes": tweet.get("media_hashes", None),
-                    "credentials": self.params.centaur_id_to_secrets[
-                        CENTAUR_ID
-                    ]["twitter"],
+                    "credentials": self.params.centaur_id_to_secrets[CENTAUR_ID][
+                        "twitter"
+                    ],
                 }
             ]
 
@@ -192,9 +191,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
         pending_tweets = []
         for tweet in self.data.tweets:
-            self.logger.info(
-                f"Checking tweet: text={tweet.text}"
-            )
+            self.logger.info(f"Checking tweet: text={tweet.text}")
 
             # Ignore posted tweets
             if tweet.posted:
@@ -254,9 +251,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
         for voter in tweet.voters:
             # Verify signature
-            tweet_text = (
-                tweet.text if isinstance(tweet.text, str) else tweet.text[0]
-            )
+            tweet_text = tweet.text if isinstance(tweet.text, str) else tweet.text[0]
             message = f"I am signing a message to verify that I approve the tweet starting with {tweet_text[:10]}"
             is_valid = yield from self.validate_signature(
                 message, voter.address, voter.signature

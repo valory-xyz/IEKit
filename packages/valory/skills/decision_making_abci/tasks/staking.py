@@ -90,7 +90,9 @@ class StakingPreparation(TaskPreparation):
 
     def _post_task(self):
         """Preparations after running the task"""
-        plugin_config = getattr(self.context.contribute_db.data.module_configs, self.task_name)
+        plugin_config = getattr(
+            self.context.contribute_db.data.module_configs, self.task_name
+        )
 
         # Update the last run time
         plugin_config.last_run = self.now_utc
@@ -311,9 +313,7 @@ class StakingActivityPreparation(StakingPreparation):
             service_multisig = user.service_multisig
 
             # Get this user's staking contract epoch
-            staking_contract = yield from self.get_staking_contract(
-                user.wallet_address
-            )
+            staking_contract = yield from self.get_staking_contract(user.wallet_address)
 
             if not staking_contract:
                 continue
@@ -422,7 +422,9 @@ class StakingDAAPreparation(TaskPreparation):
 
     def _post_task(self):
         """Preparations after running the task"""
-        plugin_config = getattr(self.context.contribute_db.data.module_configs, self.task_name)
+        plugin_config = getattr(
+            self.context.contribute_db.data.module_configs, self.task_name
+        )
 
         # Update the last run time
         plugin_config.last_run = self.now_utc

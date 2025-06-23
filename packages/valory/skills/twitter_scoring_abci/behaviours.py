@@ -27,7 +27,7 @@ from abc import ABC
 from dataclasses import asdict
 from datetime import datetime
 from typing import Dict, Generator, List, Optional, Set, Tuple, Type, Union, cast
-from packages.valory.skills.contribute_db_abci.contribute_models import UserTweet, ContributeUser
+
 from web3 import Web3
 
 from packages.valory.contracts.staking.contract import Staking
@@ -38,6 +38,10 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     BaseBehaviour,
 )
 from packages.valory.skills.abstract_round_abci.common import RandomnessBehaviour
+from packages.valory.skills.contribute_db_abci.contribute_models import (
+    ContributeUser,
+    UserTweet,
+)
 from packages.valory.skills.twitter_scoring_abci.models import (
     OpenAICalls,
     Params,
@@ -70,7 +74,6 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     TwitterScoringAbciApp,
     TwitterSelectKeepersRound,
 )
-
 
 
 ONE_DAY = 86400.0
@@ -1131,7 +1134,10 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             wallet_address = self.get_registration(tweet.text)
 
             # Check this user's point limit per period
-            user = contribute_db.get_user_by_attribute("twitter_id", tweet["author_id"]) or ContributeUser()
+            user = (
+                contribute_db.get_user_by_attribute("twitter_id", tweet["author_id"])
+                or ContributeUser()
+            )
 
             current_period_points = user.current_period_points if user else 0
 
@@ -1166,9 +1172,11 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 tweet.points = new_points
                 tweet.campaign = campaign
                 tweet.epoch = contract_epoch
-                tweet.timestamp = datetime.fromisoformat(
-                    tweet["created_at"].replace("Z", "+00:00")
-                ) if "created_at" in tweet else None
+                tweet.timestamp = (
+                    datetime.fromisoformat(tweet["created_at"].replace("Z", "+00:00"))
+                    if "created_at" in tweet
+                    else None
+                )
 
                 contribute_db.create_tweet(tweet)
 
@@ -1179,7 +1187,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 "points": int(new_points),
                 "twitter_handle": twitter_name,
                 "current_period_points": int(current_period_points),
-                "tweets": user.tweets if user else {tweet_id: tweet}
+                "tweets": user.tweets if user else {tweet_id: tweet},
             }
 
             # If this is a registration
@@ -1218,13 +1226,17 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             self.synchronized_data.number_of_tweets_pulled_today
         )
         if number_of_tweets_pulled_today:
-            module_data.twitter.number_of_tweets_pulled_today = number_of_tweets_pulled_today
+            module_data.twitter.number_of_tweets_pulled_today = (
+                number_of_tweets_pulled_today
+            )
 
         last_tweet_pull_window_reset = (
             self.synchronized_data.last_tweet_pull_window_reset
         )
         if last_tweet_pull_window_reset:
-            module_data.twitter.last_tweet_pull_window_reset = str(last_tweet_pull_window_reset)
+            module_data.twitter.last_tweet_pull_window_reset = str(
+                last_tweet_pull_window_reset
+            )
 
         # Update the current_period
         module_data.twitter.current_period = today

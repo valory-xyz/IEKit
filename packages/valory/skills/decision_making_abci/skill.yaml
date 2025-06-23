@@ -7,30 +7,28 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
-  behaviours.py: bafybeibmr3vzaktbl7tq7d6e3i7vrjnmc35xtkg2qx5xgzybn3xwmuczcq
+  behaviours.py: bafybeifqsid5sh54bpqwdvk5leeicrgkq3hs47fxmqegd3hce5t4bhpbzi
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
-  fsm_specification.yaml: bafybeihckbzmtewjwlbdvghzuadspopa25gsvtkgud5v6ymob6bnt4pium
+  fsm_specification.yaml: bafybeidd3g3uw74atuarbqebt6wuzzmxfprowicggqxeif7lpugy6gebhe
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
-  models.py: bafybeihjb6d7teichpc725xtja53atvi7wwsos7rl5ltisj7orec2jy7ge
+  models.py: bafybeib2a2ry75iqtc5lvaukzrulluqju7mi2fsmj2nxi2if6gsvt57tfy
   payloads.py: bafybeic6jrms2xs2odykwwngr5yyqm6cus7cyihdbxux26glpq3573q3ay
-  rounds.py: bafybeialjritfpbp4ksnjkmlxstajzggvgxdsgu3vkxeueiy5f6yg65nqq
-  tasks/campaign_validation_preparation.py: bafybeiafgc7lzgtl6qwo3qsdpskipm4qeby6c5nmltm4x4yp3zcwn5a6z4
-  tasks/finished_pipeline_preparation.py: bafybeid652b53p7mtsbj3ksko3g2eezvg4nut2vukwvnfhxyfi4zkx3dym
-  tasks/llm_preparation.py: bafybeigivqniwvqzmhpqytrn5gz3gb5caa6nlvctkbycbk4cmtut6hvuvi
-  tasks/read_stream_preparation.py: bafybeicmjasiyecopfweobodzbmn3tbluu5q724uzzqkit6urn3lb5q354
+  rounds.py: bafybeiex3b7ia2jbx6mxegsqqrst3yycjq24oseufwepb2litymjzjxeam
+  tasks/campaign_validation_preparation.py: bafybeibkekxenslvmzlapb6biwu4ghhf3ddqeugyyz7csgqjbu56pqaywm
+  tasks/finished_pipeline_preparation.py: bafybeig5dxh2gsm7wi3fdhxo45el4xflzxqstmsvbr6cg6tr5six5wnmqa
+  tasks/read_contribute_db_preparation.py: bafybeibfgxnkewyov7le4g2jwqt723skmpqvmdhzrztcota4jlgj7fmu6q
   tasks/score_preparations.py: bafybeie7cfot24zcyod5becz6t5lasvva77httfkw57qmvgjk35d3qluxa
   tasks/signature_validation.py: bafybeihbwrv72hnh3ytko2i5oszqgdky2j6h2wse45wvuhf2j32lo2tsjy
-  tasks/staking.py: bafybeied5y4f7ns64wer2vubjes3br6xxwkrjvn4mwj3cmzo6qaixxu2vy
-  tasks/task_preparations.py: bafybeihfm3ms665fvz2qwmhmcwgl2ws5mt62pykomowoxpm6a46jlqvsmu
-  tasks/tweet_validation_preparation.py: bafybeif3wbfskiyuij7unx72euklms7owrzwzgdu462xatvypalm6xrgca
-  tasks/twitter_preparation.py: bafybeicqi2xw4tzsq2bi555z3sd3vi73p6ctswrtennko4nevklehn3pha
-  tasks/week_in_olas_preparations.py: bafybeidmx64rnkhfcqnsx7qwmcwz6s5okxbqwi4ztnfrrsfaxgsb6vdb3i
-  tasks/write_stream_preparation.py: bafybeiatdcckbobkaawnuphcgvjx2kgcuil7dtbunfpje7pfjd26gd2es4
+  tasks/staking.py: bafybeicg4cc5bdsbsqg5v6v3grorg5oas7xzuuiemlkcjunou27am7vdsi
+  tasks/task_preparations.py: bafybeifr3a24esjcdkj464jacz42o5hl2lppvzm6p7jf7og3f6upw2vfay
+  tasks/tweet_validation_preparation.py: bafybeifgav3m5u7aubb3c27zenjf2yatdflqjweukp2tqgdsgwgfzksvlm
+  tasks/twitter_preparation.py: bafybeidjfrfcbkhumcuqjqaptqnbknnkqa4kpt6g5qqd74ja52gicslc5q
+  tasks/week_in_olas_preparations.py: bafybeihjovhskt2fsldmj55xsanqcqcnh7eb63k2bjtxyktemzcikp4h2i
   test_tools/__init__.py: bafybeiagwxhcqhvnfhf7yejawmjkle6c7eb4o4hjoy363dahmnyq22xmua
   test_tools/tasks.py: bafybeiecu32iciko26ncglpxkzwlb6ifrvgknmcisthotkqhn7eku25qrm
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
   tests/centaur_configs.py: bafybeigkr2n3l7ibtxtwf5w2t6fygxxt5headnic4lh6wrs6tcbb2ghqgi
-  tests/test_behaviours.py: bafybeigt4ifqyyw23ejypquaqgecjrgmvtrgxustwmzucolgm6kr5gzdnu
+  tests/test_behaviours.py: bafybeif4sq5sswwqf3v3ggkaa2upgt5mblwuuxvswe4hzuinx3zlb7xiim
   tests/test_campaign_validation.py: bafybeihpfaqjevuprse5uesw5ascbzyxylldcnpkjfuey7ytspriq2p5pu
   tests/test_ceramic_db.py: bafybeid44ytwdgnzjyarw3yirg6bz3ago7pdamufphjbh6rxa5d25zkdtq
   tests/test_dialogues.py: bafybeihxzcyy7xvg4lte4bv5hy2h4mozdzwvyaa36feu3oxv67jfvsyuoi
@@ -58,7 +56,7 @@ protocols:
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeifclzgoyulkyyigcwrqzmydyrj6c5d26xu7jk6cjbsed3pkls4pba
 - valory/ceramic_read_abci:0.1.0:bafybeiafztq7eeauz2mmc23wb2rfr5g6gwej4fsont7eleq54k624uedn4
-- valory/staking_abci:0.1.0:bafybeihwgzv35owgm2iirku5i37ilceynftie2hyvngkiiur2lqtgpm3fq
+- valory/staking_abci:0.1.0:bafybeiecu4koj2i2gjba3wardoshidjdl3jpatwruyxhwjsxkqnna26dpu
 behaviours:
   main:
     args: {}

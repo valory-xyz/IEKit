@@ -27,10 +27,10 @@ from packages.valory.skills.abstract_round_abci.models import Requests as BaseRe
 from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
-from packages.valory.skills.contribute_db_abci.rounds import Event as ContributeDBEvent
 from packages.valory.skills.contribute_db_abci.models import (
     Params as ContributeDBAbciParams,
 )
+from packages.valory.skills.contribute_db_abci.rounds import Event as ContributeDBEvent
 from packages.valory.skills.decision_making_abci.models import (
     Params as DecisionMakingAbciParams,
 )
@@ -96,9 +96,9 @@ class SharedState(BaseSharedState):
     def setup(self) -> None:
         """Set up."""
         super().setup()
-        ImpactEvaluatorSkillAbciApp.event_to_timeout[ContributeDBEvent.ROUND_TIMEOUT] = (
-            self.context.params.round_timeout_seconds * MULTIPLIER
-        )
+        ImpactEvaluatorSkillAbciApp.event_to_timeout[
+            ContributeDBEvent.ROUND_TIMEOUT
+        ] = (self.context.params.round_timeout_seconds * MULTIPLIER)
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             TwitterScoringEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds
