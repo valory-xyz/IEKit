@@ -12,7 +12,7 @@ fingerprint:
   fsm_specification.yaml: bafybeicjj2blynjtxejcjkr3fmb5mlvfxu4zpymqwurdciqvj5biz37ruu
   handlers.py: bafybeiaufft2fwbbjbbc77md6xkq7prnzzi2nkkm2fipapgx54myabmb7y
   models.py: bafybeicczxttdpcdm7nmm5ywacpqffk37dyamsmnp2gaptn7k6eany4lmq
-  payloads.py: bafybeidtndiipq2n5ctb7krqtzyas2rjbk4uaaxlmiz3sagyu52tnbxusq
+  payloads.py: bafybeigulz4filagckh65usnkgatmsrkvx7imfxjw4kk5zysbhwa2xccfq
   rounds.py: bafybeicvqouuqqkrrpqqpxki5ofglrubugxvrplo4jhlzoqybwo6m5bc7a
 fingerprint_ignore_patterns: []
 connections: []

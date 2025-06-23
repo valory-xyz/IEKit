@@ -6,16 +6,16 @@ description: A skill that serves as a base skill for others to interact with Age
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeigmk5a3fgwudb2kysbh7ar3sdlunfxxrj76udkj555z5zz6onurdi
-  agent_db_client.py: bafybeif2tf6ba6ec73f7kqzficlkk6r3pwlb2uzl2qxkksa3a3ysl33voa
-  behaviours.py: bafybeidf42rpakglcibu4ahdql4bqrpcm7ghffq5gndyqrukz5l3k6a6le
-  dialogues.py: bafybeihsfzez4dsemudres2je4ksjcngbw5q72ltyucqtv5ytkpverqpry
+  __init__.py: bafybeiaxb63hpickyjxvsrkzcmophtdzd27rqwvznngdrye465to4fufii
+  agent_db_client.py: bafybeidgg4utsw3tirbm6rkgo2jhonnuxpxaxik4yyyj26eyjky5qvwl3e
+  agent_db_models.py: bafybeihmqk4wkvbxb7fychvcjhelza226hn3prugs5l32plzj6joelkghq
+  behaviours.py: bafybeigbbd7tsqkxbyziwtlx5zdtm5znnospzybma44cylt6vk2gjhcdje
+  dialogues.py: bafybeifmodah5c75hcwa4vygcvmk5cvj4kpmfy5qwyov7kvgqn6gipupqi
   fsm_specification.yaml: bafybeigiboab2knxjw7jj7k7bne6osbnhs7rreo3mgtq5nfkrtpw47thze
-  handlers.py: bafybeiboaxdq7goafpoedrulb3s46usgqpi646oq5vsevtb2c434eiamxa
-  models.py: bafybeihdebjnndq6bw4mtoaooqrent2jbb4pwpsgbf66xfhvhcl64kvv6m
-  payloads.py: bafybeifjq6sljt33cbdfleab4czsoe66ntlcvqjnxcdhp4rtn6sdiipjy4
+  handlers.py: bafybeicdplfliyfjuc5zfblbsusibw6sz7brk7jioby36zwt2thv2efrza
+  models.py: bafybeiea6dp6zaftrznwtxiqec4ublfa37g5jpn7ff3sgynxvelpgzgaq4
+  payloads.py: bafybeiaypbpipdwuvzntp7pbdissbapwhxnklm2xtimsee3ahdpf4hlire
   rounds.py: bafybeif4v3ka77zommvf7md7wwxz7ebdvbruhelwz2sviakhbmbtisqr7m
-  twitter_models.py: bafybeig44bk3x4pdus32djvqa3prj5exo5v2ykqhvzwnex2xcnp2fjygfi
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []

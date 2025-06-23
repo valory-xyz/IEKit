@@ -6,23 +6,16 @@ description: A skill that interacts with AgentDB to store Contribute data.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeic3je64koagffola4n4khlbp4jdfhonyl6dwmodwz4r4oglnbwyma
-  behaviours.py: bafybeidbyaegrzh6fxpudujdl3yp7nnlkue6benok4vzbh3422ooyjorxe
-  ceramic/__init__.py: bafybeias4e3s6p5qtx6mmmcwkcd6kvbdnudy7sxai7d2suk75aazzdzdie
-  ceramic/payloads.py: bafybeiazdmvlnl6mdbzyv22xiyxwruxxeoxtbasppc2orlazy5hrzevjuq
-  dialogues.py: bafybeifvrclkqpnl3dw46zwareemio6vgrqm4c5f3wfgv6rp267fcbyf5e
-  fsm_specification.yaml: bafybeigrqblzg5xzgep5gi24z2ie7i3t7mplkim73chvmkpotd3rzk6bem
-  handlers.py: bafybeib3aiosxhbyudcxtybdrvsmn6bvnl4ao3fwf2uc7lkidpnhvnucam
-  models.py: bafybeibknj5hftb7y4djrurgo64uueffrphj4ladd64qjzbhtir2wagkia
-  payloads.py: bafybeig63ibt5qa5sa4nw37gly3lvf4wwtps7vgr2zbvpp5zz6hzm66edq
-  rounds.py: bafybeigiozy3ggixzb27ljpqqb7ovpqrrhk54lnkmq5y542dhfs6wchs74
-  tests/__init__.py: bafybeigknrv5xw52pmcscrsxhtpibey5jbr26dss7o5eofery6ktd6w42e
-  tests/test_behaviours.py: bafybeighuno7ajmmchlhb2qwgzjewhjhzee7ain2qxqxvcc2eoox2hxw2m
-  tests/test_dialogues.py: bafybeibvhslg6mwhvmeffhoho5olnmr56ohvx63onv63aryhaidizk3jou
-  tests/test_handlers.py: bafybeih6yobt7ihsp32n6nliq3ourwfmgpc7lvb672timj7cqx4wg4n5ba
-  tests/test_models.py: bafybeihqwbnrtarzos5tak2ywurtbel6fxodpupyk677aipdemaxlgs7qi
-  tests/test_payloads.py: bafybeicbuestgyhvx6obesc25tcupca3oqracjo2oevl5x3bfrf7sj3eay
-  tests/test_rounds.py: bafybeig5t6zms73c2zndheg4mdqge7wkc4zcohxkbqwng6njqm3as55tam
+  __init__.py: bafybeidtx5yecrqsufu5f4sjm2bcyjafwtioayq4ytk4txzllw3crbklq4
+  behaviours.py: bafybeiedzayo3n5djrn556s735qgi5wmcd26yndlnwrk32qqe7xcviv77i
+  contribute_db.py: bafybeidclzscz6lakanxzahynrwirp7eb6gcpj26wi2p5w4u5cpmju6xoa
+  contribute_models.py: bafybeibep6eadki2m3ib2al3jdwczmzrs4dfb5brydpyrmih3g7i5lluge
+  dialogues.py: bafybeifi7sbyed3cqsnuil4c33r53ehsjj3cn5reljgvvfhfo2lpmktkjm
+  fsm_specification.yaml: bafybeicco2jz3nhfj6gz72b7l2xzwklputr6d6xfm3rappnpkhkoy3q7vu
+  handlers.py: bafybeiaa2ezo5lyyv275uwl6sqcmicyqokanubm6j74tsewuizf5c6s3ri
+  models.py: bafybeietrvbzy6jd5swa3zjqutzbmslj6dhb3ndxqyz2r6kabzeq2cagra
+  payloads.py: bafybeidmrysvteu7xcadg5s36qkp7ap3xd74ul6a3zu5ao3b55xbxwhbhu
+  rounds.py: bafybeie2yewymusegvonnvxd2u2japxv3ggioplnjolpderpxh3cbzjfbi
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
