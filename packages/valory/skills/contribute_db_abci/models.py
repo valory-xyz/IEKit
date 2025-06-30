@@ -32,13 +32,13 @@ from packages.valory.skills.agent_db_abci.agent_db_client import (
 from packages.valory.skills.contribute_db_abci.contribute_db import (
     ContributeDatabase as BaseContributeDatabase,
 )
-from packages.valory.skills.contribute_db_abci.models import (
-    SharedState as ContributeDBSharedState,
+from packages.valory.skills.abstract_round_abci.models import (
+    SharedState as BaseSharedState,
 )
 from packages.valory.skills.contribute_db_abci.rounds import ContributeDBAbciApp
 
 
-class SharedState(ContributeDBSharedState):
+class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
 
     abci_app_cls = ContributeDBAbciApp

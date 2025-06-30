@@ -23,14 +23,14 @@ from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional, Tuple
 
 from aea.skills.base import Model
-from pydantil import BaseModel
+from pydantic import BaseModel
 
 from packages.valory.skills.agent_db_abci.agent_db_client import (
     AgentDBClient,
     AgentInstance,
     AttributeInstance,
 )
-from packages.valory.skills.decision_making_abci.contribute_models import (
+from packages.valory.skills.contribute_db_abci.contribute_models import (
     ContributeData,
     ContributeUser,
     ModuleConfigs,
@@ -133,7 +133,7 @@ class ModuleDataAttributeInterface(JsonAttributeInterface):
     attribute_name = "module_data"
 
 
-class ContributeDatabase:
+class ContributeDatabase(Model):
     """ContributeDatabase"""
 
     def __init__(self):

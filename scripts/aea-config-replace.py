@@ -51,15 +51,6 @@ PATH_TO_VAR = {
     "models/params/args/safe_contract_address_gnosis": "SAFE_CONTRACT_ADDRESS_GNOSIS",
     "models/params/args/transaction_service_url": "TRANSACTION_SERVICE_URL",
 
-    # Ceramic
-    "models/params/args/ceramic_api_base": "CERAMIC_API_BASE",
-    "models/params/args/ceramic_did_str": "CERAMIC_DID_STR",
-    "models/params/args/ceramic_did_seed": "CERAMIC_DID_SEED",
-    "models/params/args/ceramic_db_stream_id": "CERAMIC_DB_STREAM_ID",
-    "models/params/args/centaurs_stream_id": "CENTAURS_STREAM_ID",
-    "models/params/args/manual_points_stream_id": "MANUAL_POINTS_STREAM_ID",
-    "models/params/args/centaur_id_to_secrets": "CENTAUR_ID_TO_SECRETS",
-
     # Twitter
     "config/use_twitter_staging_api": "USE_TWITTER_STAGING_API",
     "config/twitter_staging_api": "TWITTER_STAGING_API",

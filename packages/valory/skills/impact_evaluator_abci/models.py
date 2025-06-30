@@ -65,6 +65,12 @@ from packages.valory.skills.twitter_scoring_abci.models import (
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     Event as TwitterScoringEvent,
 )
+from packages.valory.skills.agent_db_abci.agent_db_client import (
+    AgentDBClient as BaseAgentDBClient,
+)
+from packages.valory.skills.contribute_db_abci.models import (
+    ContributeDatabase as BaseContributeDatabase,
+)
 
 
 ContributeDBParams = ContributeDBAbciParams
@@ -78,6 +84,8 @@ MechInteractParams = MechInteractAbciParams
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
 MechResponseSpecs = BaseMechResponseSpecs
+AgentDBClient = BaseAgentDBClient
+ContributeDatabase = BaseContributeDatabase
 
 
 class RandomnessApi(ApiSpecs):

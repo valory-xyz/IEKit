@@ -8,12 +8,12 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeidtx5yecrqsufu5f4sjm2bcyjafwtioayq4ytk4txzllw3crbklq4
   behaviours.py: bafybeiedzayo3n5djrn556s735qgi5wmcd26yndlnwrk32qqe7xcviv77i
-  contribute_db.py: bafybeidclzscz6lakanxzahynrwirp7eb6gcpj26wi2p5w4u5cpmju6xoa
+  contribute_db.py: bafybeif2szrw6bhhym5qq6c6itq4amih2lhe4htnewtvapxmdlllxilrqe
   contribute_models.py: bafybeibep6eadki2m3ib2al3jdwczmzrs4dfb5brydpyrmih3g7i5lluge
   dialogues.py: bafybeifi7sbyed3cqsnuil4c33r53ehsjj3cn5reljgvvfhfo2lpmktkjm
   fsm_specification.yaml: bafybeicco2jz3nhfj6gz72b7l2xzwklputr6d6xfm3rappnpkhkoy3q7vu
   handlers.py: bafybeiaa2ezo5lyyv275uwl6sqcmicyqokanubm6j74tsewuizf5c6s3ri
-  models.py: bafybeietrvbzy6jd5swa3zjqutzbmslj6dhb3ndxqyz2r6kabzeq2cagra
+  models.py: bafybeihlxwlj6mtqg6x5x2hqqk52mhluhpr7rd5dk57kafpgp3dkw53pze
   payloads.py: bafybeidmrysvteu7xcadg5s36qkp7ap3xd74ul6a3zu5ao3b55xbxwhbhu
   rounds.py: bafybeie2yewymusegvonnvxd2u2japxv3ggioplnjolpderpxh3cbzjfbi
 fingerprint_ignore_patterns: []
@@ -22,6 +22,7 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeifclzgoyulkyyigcwrqzmydyrj6c5d26xu7jk6cjbsed3pkls4pba
+- valory/agent_db_abci:0.1.0:bafybeialscbxarrpylxwkgqp5o3kz6vk24vsdcrmy5spwgzcrh6ulzcctq
 behaviours:
   main:
     args: {}
