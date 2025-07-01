@@ -191,41 +191,6 @@ class MechParams(BaseParams):
         except Exception as e:
             raise ValueError(f"Configuration validation failed: {e}") from e
 
-    def get_marketplace_config_summary(self) -> Dict[str, Any]:
-        """Get a summary of marketplace configuration.
-
-        Returns:
-            Dictionary containing marketplace configuration summary
-        """
-        return {
-            "marketplace_enabled": self.use_mech_marketplace,
-            "marketplace_address": self.mech_marketplace_config.mech_marketplace_address,
-            "priority_mech": self.mech_marketplace_config.priority_mech_address,
-            "response_timeout": self.mech_marketplace_config.response_timeout,
-            "compatibility_detection": True,
-        }
-
-    def export_config(self) -> Dict[str, Any]:
-        """Export the complete configuration as a dictionary.
-
-        Returns:
-            Dictionary containing all configuration parameters
-        """
-        return {
-            "multisend_address": self.multisend_address,
-            "multisend_batch_size": self.multisend_batch_size,
-            "mech_contract_address": self.mech_contract_address,
-            "mech_request_price": self.mech_request_price,
-            "mech_chain_id": self.mech_chain_id,
-            "mech_wrapped_native_token_address": self.mech_wrapped_native_token_address,
-            "mech_interaction_sleep_time": self.mech_interaction_sleep_time,
-            "use_mech_marketplace": self.use_mech_marketplace,
-            "mech_marketplace_config": self.mech_marketplace_config.__dict__,
-            "agent_registry_address": self.agent_registry_address,
-            "use_acn_for_delivers": self.use_acn_for_delivers,
-            "ipfs_address": self._ipfs_address,
-        }
-
 
 Params = MechParams
 
