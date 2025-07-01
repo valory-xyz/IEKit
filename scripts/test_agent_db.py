@@ -20,7 +20,7 @@
 
 """Test the AgentDBClient class."""
 
-# pylint: disable=unused-variable,too-many-arguments,too-many-instance-attributes
+# pylint: disable=unused-variable,too-many-arguments,too-many-instance-attributes,wrong-import-position
 
 import os
 import sys
@@ -28,8 +28,8 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import json
-from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, List, Literal, Optional
+from datetime import datetime, timezone
+from typing import Any, List, Optional
 
 import dotenv
 import requests
@@ -374,9 +374,9 @@ class JsonAttributeInterface:
 
     attribute_name: str = None
 
-    def __init__(self, client: AgentDBClient):
+    def __init__(self, client_: AgentDBClient):
         """Constructor"""
-        self.client = client
+        self.client = client_
         self.attr_def = self.client.get_attribute_definition_by_name(self.attribute_name)
 
     def create_definition(self):
@@ -449,15 +449,15 @@ class ModuleDataAttributeInterface(JsonAttributeInterface):
 class ContributeDatabase:
     """ContributeDatabase"""
 
-    def __init__(self, client: AgentDBClient):
+    def __init__(self, client_: AgentDBClient):
         """Constructor"""
-        self.client = client
-        self.agent = client.agent
-        self.agent_type = client.agent_type
-        self.tweet_interface = TweetAttributeInterface(client)
-        self.user_interface = UserAttributeInterface(client)
-        self.module_configs_interface = ModuleConfigsAttributeInterface(client)
-        self.module_data_interface = ModuleDataAttributeInterface(client)
+        self.client = client_
+        self.agent = self.client.agent
+        self.agent_type = self.client.agent_type
+        self.tweet_interface = TweetAttributeInterface(self.client)
+        self.user_interface = UserAttributeInterface(self.client)
+        self.module_configs_interface = ModuleConfigsAttributeInterface(self.client)
+        self.module_data_interface = ModuleDataAttributeInterface(self.client)
         self.data = ContributeData()
 
     def register(self):
@@ -675,13 +675,13 @@ def init_database_from_ceramic(db_client):
 if __name__ == "__main__":
 
     # Initialize the client
-    db_client = AgentDBClient(
+    client = AgentDBClient(
         base_url=os.getenv("AGENT_DB_BASE_URL"),
         eth_address=os.getenv("AGENT_ADDRESS"),
         private_key=os.getenv("AGENT_PRIVATE_KEY"),
     )
 
-    init_database_from_ceramic(db_client)
+    init_database_from_ceramic(client)
 
-    # contribute_db = ContributeDatabase(db_client)
+    # contribute_db = ContributeDatabase(client)
     # contribute_db.load_from_remote_db()

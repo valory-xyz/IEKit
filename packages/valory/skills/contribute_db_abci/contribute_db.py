@@ -19,15 +19,13 @@
 
 """This module contains classes to interact with Agents.Fun agent data on AgentDB."""
 
-from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional, Tuple
 
 from aea.skills.base import Model
 from pydantic import BaseModel
 
 from packages.valory.skills.agent_db_abci.agent_db_client import (
     AgentDBClient,
-    AgentInstance,
     AttributeInstance,
 )
 from packages.valory.skills.contribute_db_abci.contribute_models import (

@@ -19,7 +19,6 @@
 
 """This module contains definitions for Twitter models."""
 
-import json
 import re
 from datetime import date, datetime
 from typing import Dict, List, Optional
@@ -27,13 +26,6 @@ from uuid import UUID
 
 from pydantic import BaseModel, field_validator
 from pydantic_core import core_schema
-
-from packages.valory.skills.agent_db_abci.agent_db_models import (
-    AgentInstance,
-    AgentType,
-    AttributeDefinition,
-    AttributeInstance,
-)
 
 
 class EthereumAddress(str):

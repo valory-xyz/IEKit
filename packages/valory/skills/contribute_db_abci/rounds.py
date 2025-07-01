@@ -30,7 +30,6 @@ from packages.valory.skills.abstract_round_abci.base import (
     CollectSameUntilThresholdRound,
     DegenerateRound,
     EventToTimeout,
-    get_name,
 )
 from packages.valory.skills.contribute_db_abci.payloads import DBLoadPayload
 

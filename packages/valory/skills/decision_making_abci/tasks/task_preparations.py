@@ -18,8 +18,6 @@
 # ------------------------------------------------------------------------------
 
 """This package contains the logic for task preparations."""
-from datetime import datetime, timezone
-
 
 SECONDS_IN_DAY = 24 * 3600
 

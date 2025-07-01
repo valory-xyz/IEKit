@@ -19,8 +19,6 @@
 
 """This module contains the transaction payloads of the ContributeDBAbciApp."""
 
-from dataclasses import dataclass
-
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 

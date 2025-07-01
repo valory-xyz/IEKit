@@ -169,14 +169,11 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
 
     def get_active_hashtags(self) -> List[str]:
         """Get the active campaigns"""
-        module_configs = self.context.contribute_db.data.module_configs
-        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
+        module_data = self.context.contribute_db.data.module_data
         active_hashtags = [
             f"%23{campaign['hashtag'].replace('#', '').strip()}"  # %23 = hashtag
-            for campaign in current_centaur["plugins_data"]["twitter_campaigns"][
-                "campaigns"
-            ]
-            if campaign["status"] == "live"
+            for campaign in module_data.twitter_campaigns.campaigns
+            if campaign.status == "live"
         ]
         return active_hashtags
 
@@ -1119,7 +1116,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         # Update data
         for tweet_id, tweet_data in tweets.items():
-            if "points" not in tweet:
+            if "points" not in tweet_data:
                 continue
 
             tweet_data["tweet_id"] = tweet_id

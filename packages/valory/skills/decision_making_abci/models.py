@@ -19,13 +19,7 @@
 
 """This module contains the shared state for the abci skill of DecisionMakingAbciApp."""
 
-import itertools
-import json
-from copy import deepcopy
-from typing import Any, Dict, List, Optional, Tuple
-
-import jsonpatch
-from aea.skills.base import Model
+from typing import Any
 
 from packages.valory.skills.abstract_round_abci.models import BaseParams
 from packages.valory.skills.abstract_round_abci.models import (

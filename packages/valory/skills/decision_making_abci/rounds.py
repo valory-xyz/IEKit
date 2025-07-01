@@ -188,6 +188,7 @@ class PostTxDecisionMakingRound(CollectSameUntilThresholdRound):
 class FinishedDecisionMakingDBLoadRound(DegenerateRound):
     """FinishedDecisionMakingDBLoadRound"""
 
+
 class FinishedDecisionMakingWriteTwitterRound(DegenerateRound):
     """FinishedDecisionMakingWriteTwitterRound"""
 
