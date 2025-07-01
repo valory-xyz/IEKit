@@ -1,19 +1,12 @@
 alphabet_in:
 - CAMPAIGN_VALIDATION
-- DAILY_ORBIS
-- DAILY_TWEET
 - DONE
-- FORCE_DB_UPDATE
-- LLM
-- NEXT_CENTAUR
 - NO_MAJORITY
 - POST_TX_ACTIVITY_UPDATE
 - POST_TX_CHECKPOINT
 - POST_TX_DAA
 - POST_TX_MECH
-- READ_CENTAURS
 - READ_CONTRIBUTE_DB
-- READ_MANUAL_POINTS
 - ROUND_TIMEOUT
 - SCHEDULED_TWEET
 - SCORE
@@ -21,7 +14,6 @@ alphabet_in:
 - STAKING_CHECKPOINT
 - STAKING_DAA_UPDATE
 - TWEET_VALIDATION
-- UPDATE_CENTAURS
 - WEEK_IN_OLAS_CREATE
 - WRITE_CONTRIBUTE_DB
 default_start_state: DecisionMakingRound
@@ -29,16 +21,11 @@ final_states:
 - FinishedDecisionMakingActivityRound
 - FinishedDecisionMakingCheckpointRound
 - FinishedDecisionMakingDAARound
-- FinishedDecisionMakingDoneRound
-- FinishedDecisionMakingLLMRound
 - FinishedDecisionMakingDBLoadRound
-- FinishedDecisionMakingReadContributeDBRound
-- FinishedDecisionMakingReadManualPointsRound
+- FinishedDecisionMakingDoneRound
 - FinishedDecisionMakingScoreRound
-- FinishedDecisionMakingUpdateCentaurRound
 - FinishedDecisionMakingWeekInOlasRound
 - FinishedDecisionMakingWriteContributeDBRound
-- FinishedDecisionMakingWriteOrbisRound
 - FinishedDecisionMakingWriteTwitterRound
 - FinishedPostActivityUpdateRound
 - FinishedPostCheckpointRound
@@ -53,16 +40,11 @@ states:
 - FinishedDecisionMakingActivityRound
 - FinishedDecisionMakingCheckpointRound
 - FinishedDecisionMakingDAARound
-- FinishedDecisionMakingDoneRound
-- FinishedDecisionMakingLLMRound
 - FinishedDecisionMakingDBLoadRound
-- FinishedDecisionMakingReadContributeDBRound
-- FinishedDecisionMakingReadManualPointsRound
+- FinishedDecisionMakingDoneRound
 - FinishedDecisionMakingScoreRound
-- FinishedDecisionMakingUpdateCentaurRound
 - FinishedDecisionMakingWeekInOlasRound
 - FinishedDecisionMakingWriteContributeDBRound
-- FinishedDecisionMakingWriteOrbisRound
 - FinishedDecisionMakingWriteTwitterRound
 - FinishedPostActivityUpdateRound
 - FinishedPostCheckpointRound
@@ -71,16 +53,9 @@ states:
 - PostTxDecisionMakingRound
 transition_func:
     (DecisionMakingRound, CAMPAIGN_VALIDATION): DecisionMakingRound
-    (DecisionMakingRound, DAILY_ORBIS): FinishedDecisionMakingWriteOrbisRound
-    (DecisionMakingRound, DAILY_TWEET): FinishedDecisionMakingWriteTwitterRound
     (DecisionMakingRound, DONE): FinishedDecisionMakingDoneRound
-    (DecisionMakingRound, FORCE_DB_UPDATE): DecisionMakingRound
-    (DecisionMakingRound, LLM): FinishedDecisionMakingLLMRound
-    (DecisionMakingRound, NEXT_CENTAUR): DecisionMakingRound
     (DecisionMakingRound, NO_MAJORITY): DecisionMakingRound
-    (DecisionMakingRound, READ_CENTAURS): FinishedDecisionMakingDBLoadRound
-    (DecisionMakingRound, READ_CONTRIBUTE_DB): FinishedDecisionMakingReadContributeDBRound
-    (DecisionMakingRound, READ_MANUAL_POINTS): FinishedDecisionMakingReadManualPointsRound
+    (DecisionMakingRound, READ_CONTRIBUTE_DB): FinishedDecisionMakingDBLoadRound
     (DecisionMakingRound, ROUND_TIMEOUT): DecisionMakingRound
     (DecisionMakingRound, SCHEDULED_TWEET): FinishedDecisionMakingWriteTwitterRound
     (DecisionMakingRound, SCORE): FinishedDecisionMakingScoreRound
@@ -88,7 +63,6 @@ transition_func:
     (DecisionMakingRound, STAKING_CHECKPOINT): FinishedDecisionMakingCheckpointRound
     (DecisionMakingRound, STAKING_DAA_UPDATE): FinishedDecisionMakingDAARound
     (DecisionMakingRound, TWEET_VALIDATION): DecisionMakingRound
-    (DecisionMakingRound, UPDATE_CENTAURS): FinishedDecisionMakingUpdateCentaurRound
     (DecisionMakingRound, WEEK_IN_OLAS_CREATE): FinishedDecisionMakingWeekInOlasRound
     (DecisionMakingRound, WRITE_CONTRIBUTE_DB): FinishedDecisionMakingWriteContributeDBRound
     (PostTxDecisionMakingRound, DONE): PostTxDecisionMakingRound

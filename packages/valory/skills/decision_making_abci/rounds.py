@@ -188,17 +188,8 @@ class PostTxDecisionMakingRound(CollectSameUntilThresholdRound):
 class FinishedDecisionMakingDBLoadRound(DegenerateRound):
     """FinishedDecisionMakingDBLoadRound"""
 
-
-class FinishedDecisionMakingLLMRound(DegenerateRound):
-    """FinishedDecisionMakingLLMRound"""
-
-
 class FinishedDecisionMakingWriteTwitterRound(DegenerateRound):
     """FinishedDecisionMakingWriteTwitterRound"""
-
-
-class FinishedDecisionMakingReadContributeDBRound(DegenerateRound):
-    """FinishedDecisionMakingReadContributeDBRound"""
 
 
 class FinishedDecisionMakingWriteContributeDBRound(DegenerateRound):
@@ -275,11 +266,9 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.NO_MAJORITY: PostTxDecisionMakingRound,
         },
         FinishedDecisionMakingDBLoadRound: {},
-        FinishedDecisionMakingLLMRound: {},
         FinishedDecisionMakingWriteTwitterRound: {},
         FinishedDecisionMakingScoreRound: {},
         FinishedDecisionMakingDoneRound: {},
-        FinishedDecisionMakingReadContributeDBRound: {},
         FinishedDecisionMakingWriteContributeDBRound: {},
         FinishedDecisionMakingWeekInOlasRound: {},
         FinishedDecisionMakingActivityRound: {},
@@ -292,11 +281,9 @@ class DecisionMakingAbciApp(AbciApp[Event]):
     }
     final_states: Set[AppState] = {
         FinishedDecisionMakingDBLoadRound,
-        FinishedDecisionMakingLLMRound,
         FinishedDecisionMakingWriteTwitterRound,
         FinishedDecisionMakingScoreRound,
         FinishedDecisionMakingDoneRound,
-        FinishedDecisionMakingReadContributeDBRound,
         FinishedDecisionMakingWriteContributeDBRound,
         FinishedDecisionMakingWeekInOlasRound,
         FinishedDecisionMakingActivityRound,
@@ -317,11 +304,9 @@ class DecisionMakingAbciApp(AbciApp[Event]):
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
         FinishedDecisionMakingDBLoadRound: set(),
-        FinishedDecisionMakingLLMRound: {"llm_prompt_templates", "llm_values"},
         FinishedDecisionMakingWriteTwitterRound: {"write_data"},
         FinishedDecisionMakingScoreRound: set(),
         FinishedDecisionMakingDoneRound: set(),
-        FinishedDecisionMakingReadContributeDBRound: set(),
         FinishedDecisionMakingWriteContributeDBRound: set(),
         FinishedDecisionMakingWeekInOlasRound: set(),
         FinishedDecisionMakingActivityRound: set(),

@@ -6,26 +6,17 @@ alphabet_in:
 - CHECK_TIMEOUT
 - CONTINUE
 - CONTRACT_ERROR
-- DAILY_ORBIS
-- DAILY_TWEET
 - DB_UPDATE
-- DID_NOT_SEND
 - DONE
 - DONE_API_LIMITS
-- DONE_CONTINUE
-- DONE_FINISHED
 - DONE_MAX_RETRIES
 - DONE_SKIP
 - EVALUATE
 - FINALIZATION_FAILED
 - FINALIZE_TIMEOUT
-- FORCE_DB_UPDATE
 - INCORRECT_SERIALIZATION
 - INSUFFICIENT_FUNDS
-- LLM
-- MAX_RETRIES_ERROR
 - NEGATIVE
-- NEXT_CENTAUR
 - NONE
 - NO_ALLOWANCE
 - NO_MAJORITY
@@ -37,15 +28,12 @@ alphabet_in:
 - POST_TX_MECH
 - PRE_MECH
 - PROCESS_UPDATES
-- READ_CENTAURS
 - READ_CONTRIBUTE_DB
-- READ_MANUAL_POINTS
 - RESET_AND_PAUSE_TIMEOUT
 - RESET_TIMEOUT
 - RETRIEVE_HASHTAGS
 - RETRIEVE_MENTIONS
 - RETRIEVE_TWEETS
-- RETRY
 - ROUND_TIMEOUT
 - SCHEDULED_TWEET
 - SCORE
@@ -58,13 +46,12 @@ alphabet_in:
 - SUSPICIOUS_ACTIVITY
 - TWEET_EVALUATION_ROUND_TIMEOUT
 - TWEET_VALIDATION
-- UPDATE_CENTAURS
 - VALIDATE_TIMEOUT
-- VERIFICATION_ERROR
 - WEEK_IN_OLAS_CREATE
 - WRITE_CONTRIBUTE_DB
 default_start_state: RegistrationStartupRound
-final_states: []
+final_states:
+- FinishedDecisionMakingWriteContributeDBRound
 label: ImpactEvaluatorSkillAbciApp
 start_states:
 - RegistrationRound
@@ -77,13 +64,11 @@ states:
 - CheckpointPreparationRound
 - CollectSignatureRound
 - DAAPreparationRound
+- DBLoadRound
 - DBUpdateRound
 - DecisionMakingRound
 - FinalizationRound
-- GenericScoringRound
-- LLMRandomnessRound
-- LLMRound
-- LLMSelectKeeperRound
+- FinishedDecisionMakingWriteContributeDBRound
 - MechRequestRound
 - MechResponseRound
 - OlasWeekDecisionMakingRound
@@ -95,20 +80,16 @@ states:
 - PostMechRequestRound
 - PostTxDecisionMakingRound
 - PreMechRequestRound
-- RandomnessRound
 - RandomnessTransactionSubmissionRound
 - RandomnessTwitterRound
 - RegistrationRound
 - RegistrationStartupRound
 - ResetAndPauseRound
 - ResetRound
-- SelectKeeperRound
 - SelectKeeperTransactionSubmissionARound
 - SelectKeeperTransactionSubmissionBAfterTimeoutRound
 - SelectKeeperTransactionSubmissionBRound
 - SelectKeeperTwitterRound
-- StreamReadRound
-- StreamWriteRound
 - SynchronizeLateMessagesRound
 - TokenTrackRound
 - TwitterDecisionMakingRound
@@ -118,7 +99,6 @@ states:
 - TwitterSelectKeepersRound
 - TwitterWriteRound
 - ValidateTransactionRound
-- VerificationRound
 transition_func:
     (ActivityScoreRound, DONE): DecisionMakingRound
     (ActivityScoreRound, NO_MAJORITY): ActivityScoreRound
@@ -148,49 +128,31 @@ transition_func:
     (DAAPreparationRound, DONE): RandomnessTransactionSubmissionRound
     (DAAPreparationRound, NO_MAJORITY): DAAPreparationRound
     (DAAPreparationRound, ROUND_TIMEOUT): DAAPreparationRound
+    (DBLoadRound, DONE): DecisionMakingRound
+    (DBLoadRound, NO_MAJORITY): DBLoadRound
+    (DBLoadRound, ROUND_TIMEOUT): DBLoadRound
     (DBUpdateRound, DONE): TwitterDecisionMakingRound
     (DBUpdateRound, NO_MAJORITY): DBUpdateRound
     (DBUpdateRound, ROUND_TIMEOUT): DBUpdateRound
     (DecisionMakingRound, CAMPAIGN_VALIDATION): DecisionMakingRound
-    (DecisionMakingRound, DAILY_ORBIS): RandomnessRound
-    (DecisionMakingRound, DAILY_TWEET): RandomnessTwitterRound
     (DecisionMakingRound, DONE): ResetAndPauseRound
-    (DecisionMakingRound, FORCE_DB_UPDATE): DecisionMakingRound
-    (DecisionMakingRound, LLM): LLMRandomnessRound
-    (DecisionMakingRound, NEXT_CENTAUR): DecisionMakingRound
     (DecisionMakingRound, NO_MAJORITY): DecisionMakingRound
-    (DecisionMakingRound, READ_CENTAURS): StreamReadRound
-    (DecisionMakingRound, READ_CONTRIBUTE_DB): StreamReadRound
-    (DecisionMakingRound, READ_MANUAL_POINTS): StreamReadRound
+    (DecisionMakingRound, READ_CONTRIBUTE_DB): DBLoadRound
     (DecisionMakingRound, ROUND_TIMEOUT): DecisionMakingRound
     (DecisionMakingRound, SCHEDULED_TWEET): RandomnessTwitterRound
-    (DecisionMakingRound, SCORE): GenericScoringRound
+    (DecisionMakingRound, SCORE): TwitterDecisionMakingRound
     (DecisionMakingRound, STAKING_ACTIVITY): ActivityScoreRound
     (DecisionMakingRound, STAKING_CHECKPOINT): CheckpointPreparationRound
     (DecisionMakingRound, STAKING_DAA_UPDATE): DAAPreparationRound
     (DecisionMakingRound, TWEET_VALIDATION): DecisionMakingRound
-    (DecisionMakingRound, UPDATE_CENTAURS): RandomnessRound
     (DecisionMakingRound, WEEK_IN_OLAS_CREATE): OlasWeekDecisionMakingRound
-    (DecisionMakingRound, WRITE_CONTRIBUTE_DB): RandomnessRound
+    (DecisionMakingRound, WRITE_CONTRIBUTE_DB): FinishedDecisionMakingWriteContributeDBRound
     (FinalizationRound, CHECK_HISTORY): CheckTransactionHistoryRound
     (FinalizationRound, CHECK_LATE_ARRIVING_MESSAGE): SynchronizeLateMessagesRound
     (FinalizationRound, DONE): ValidateTransactionRound
     (FinalizationRound, FINALIZATION_FAILED): SelectKeeperTransactionSubmissionBRound
     (FinalizationRound, FINALIZE_TIMEOUT): SelectKeeperTransactionSubmissionBAfterTimeoutRound
     (FinalizationRound, INSUFFICIENT_FUNDS): SelectKeeperTransactionSubmissionBRound
-    (GenericScoringRound, DONE): TwitterDecisionMakingRound
-    (GenericScoringRound, NO_MAJORITY): GenericScoringRound
-    (GenericScoringRound, ROUND_TIMEOUT): GenericScoringRound
-    (LLMRandomnessRound, DONE): LLMSelectKeeperRound
-    (LLMRandomnessRound, NO_MAJORITY): LLMRandomnessRound
-    (LLMRandomnessRound, ROUND_TIMEOUT): LLMRandomnessRound
-    (LLMRound, DID_NOT_SEND): LLMRandomnessRound
-    (LLMRound, DONE_CONTINUE): LLMRound
-    (LLMRound, DONE_FINISHED): DecisionMakingRound
-    (LLMRound, ROUND_TIMEOUT): LLMRandomnessRound
-    (LLMSelectKeeperRound, DONE): LLMRound
-    (LLMSelectKeeperRound, NO_MAJORITY): LLMRandomnessRound
-    (LLMSelectKeeperRound, ROUND_TIMEOUT): LLMRandomnessRound
     (MechRequestRound, DONE): RandomnessTransactionSubmissionRound
     (MechRequestRound, NO_MAJORITY): MechRequestRound
     (MechRequestRound, ROUND_TIMEOUT): MechRequestRound
@@ -237,9 +199,6 @@ transition_func:
     (PreMechRequestRound, NO_MAJORITY): PreMechRequestRound
     (PreMechRequestRound, ROUND_TIMEOUT): PreMechRequestRound
     (PreMechRequestRound, SKIP_EVALUATION): TokenTrackRound
-    (RandomnessRound, DONE): SelectKeeperRound
-    (RandomnessRound, NO_MAJORITY): RandomnessRound
-    (RandomnessRound, ROUND_TIMEOUT): RandomnessRound
     (RandomnessTransactionSubmissionRound, DONE): SelectKeeperTransactionSubmissionARound
     (RandomnessTransactionSubmissionRound, NONE): RandomnessTransactionSubmissionRound
     (RandomnessTransactionSubmissionRound, NO_MAJORITY): RandomnessTransactionSubmissionRound
@@ -256,9 +215,6 @@ transition_func:
     (ResetRound, DONE): RandomnessTransactionSubmissionRound
     (ResetRound, NO_MAJORITY): MechRequestRound
     (ResetRound, RESET_TIMEOUT): MechRequestRound
-    (SelectKeeperRound, DONE): StreamWriteRound
-    (SelectKeeperRound, NO_MAJORITY): RandomnessRound
-    (SelectKeeperRound, ROUND_TIMEOUT): RandomnessRound
     (SelectKeeperTransactionSubmissionARound, DONE): CollectSignatureRound
     (SelectKeeperTransactionSubmissionARound, INCORRECT_SERIALIZATION): MechRequestRound
     (SelectKeeperTransactionSubmissionARound, NO_MAJORITY): ResetRound
@@ -276,16 +232,6 @@ transition_func:
     (SelectKeeperTwitterRound, DONE): TwitterWriteRound
     (SelectKeeperTwitterRound, NO_MAJORITY): RandomnessTwitterRound
     (SelectKeeperTwitterRound, ROUND_TIMEOUT): RandomnessTwitterRound
-    (StreamReadRound, API_ERROR): StreamReadRound
-    (StreamReadRound, DONE): DecisionMakingRound
-    (StreamReadRound, NO_MAJORITY): StreamReadRound
-    (StreamReadRound, RETRY): StreamReadRound
-    (StreamReadRound, ROUND_TIMEOUT): StreamReadRound
-    (StreamWriteRound, API_ERROR): RandomnessRound
-    (StreamWriteRound, DID_NOT_SEND): RandomnessRound
-    (StreamWriteRound, DONE): VerificationRound
-    (StreamWriteRound, MAX_RETRIES_ERROR): RandomnessRound
-    (StreamWriteRound, ROUND_TIMEOUT): RandomnessRound
     (SynchronizeLateMessagesRound, DONE): CheckLateTxHashesRound
     (SynchronizeLateMessagesRound, NONE): SelectKeeperTransactionSubmissionBRound
     (SynchronizeLateMessagesRound, ROUND_TIMEOUT): SynchronizeLateMessagesRound
@@ -330,8 +276,3 @@ transition_func:
     (ValidateTransactionRound, NONE): SelectKeeperTransactionSubmissionBRound
     (ValidateTransactionRound, NO_MAJORITY): ValidateTransactionRound
     (ValidateTransactionRound, VALIDATE_TIMEOUT): CheckTransactionHistoryRound
-    (VerificationRound, DONE_CONTINUE): StreamWriteRound
-    (VerificationRound, DONE_FINISHED): DecisionMakingRound
-    (VerificationRound, NO_MAJORITY): RandomnessRound
-    (VerificationRound, ROUND_TIMEOUT): RandomnessRound
-    (VerificationRound, VERIFICATION_ERROR): RandomnessRound

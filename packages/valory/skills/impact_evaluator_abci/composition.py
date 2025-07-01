@@ -22,7 +22,6 @@
 import packages.valory.skills.contribute_db_abci.rounds as ContributeDBAbci
 import packages.valory.skills.decision_making_abci.rounds as DecisionMakingAbci
 import packages.valory.skills.dynamic_nft_abci.rounds as DynamicNFTAbci
-import packages.valory.skills.llm_abci.rounds as LLMAbciApp
 import packages.valory.skills.mech_interact_abci.rounds as MechInteractAbci
 import packages.valory.skills.mech_interact_abci.states.final_states as MechFinalStates
 import packages.valory.skills.mech_interact_abci.states.request as MechRequestStates
@@ -52,7 +51,6 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     RegistrationAbci.FinishedRegistrationRound: DecisionMakingAbci.DecisionMakingRound,
     DecisionMakingAbci.FinishedDecisionMakingDBLoadRound: ContributeDBAbci.DBLoadRound,
     ContributeDBAbci.FinishedLoadingRound: DecisionMakingAbci.DecisionMakingRound,
-    DecisionMakingAbci.FinishedDecisionMakingLLMRound: LLMAbciApp.LLMRandomnessRound,
     DecisionMakingAbci.FinishedDecisionMakingWriteTwitterRound: TwitterWriteAbciApp.RandomnessTwitterRound,
     DecisionMakingAbci.FinishedDecisionMakingDoneRound: ResetAndPauseAbci.ResetAndPauseRound,
     DecisionMakingAbci.FinishedDecisionMakingWeekInOlasRound: WeekInOlasAbciApp.OlasWeekDecisionMakingRound,
@@ -78,7 +76,6 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     TwitterScoringAbci.FinishedTwitterScoringRound: DynamicNFTAbci.TokenTrackRound,
     WeekInOlasAbciApp.FinishedWeekInOlasRound: DecisionMakingAbci.DecisionMakingRound,
     DynamicNFTAbci.FinishedTokenTrackRound: DecisionMakingAbci.DecisionMakingRound,
-    LLMAbciApp.FinishedLLMRound: DecisionMakingAbci.DecisionMakingRound,
     TwitterWriteAbciApp.FinishedTwitterWriteRound: DecisionMakingAbci.DecisionMakingRound,
     ResetAndPauseAbci.FinishedResetAndPauseRound: DecisionMakingAbci.DecisionMakingRound,
     ResetAndPauseAbci.FinishedResetAndPauseErrorRound: RegistrationAbci.RegistrationRound,
@@ -95,7 +92,6 @@ ImpactEvaluatorSkillAbciApp = chain(
     (
         RegistrationAbci.AgentRegistrationAbciApp,
         DecisionMakingAbci.DecisionMakingAbciApp,
-        LLMAbciApp.LLMAbciApp,
         TwitterWriteAbciApp.TwitterWriteAbciApp,
         TwitterScoringAbci.TwitterScoringAbciApp,
         DynamicNFTAbci.DynamicNFTAbciApp,
