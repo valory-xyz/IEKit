@@ -50,8 +50,6 @@ from packages.valory.skills.dynamic_nft_abci.rounds import Event as DynamicNFTEv
 from packages.valory.skills.impact_evaluator_abci.composition import (
     ImpactEvaluatorSkillAbciApp,
 )
-from packages.valory.skills.llm_abci.models import Params as LLMAbciParams
-from packages.valory.skills.llm_abci.rounds import Event as LLMEvent
 from packages.valory.skills.mech_interact_abci.models import (
     MechResponseSpecs as BaseMechResponseSpecs,
 )
@@ -76,7 +74,6 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
 ContributeDBParams = ContributeDBAbciParams
 DynamicNFTParams = DynamicNFTAbciParams
 TwitterScoringParams = TwitterScoringAbciParams
-LLMParams = LLMAbciParams
 DecisionMakingParams = DecisionMakingAbciParams
 OlasWeekParams = OlasWeekAbciParams
 MechInteractParams = MechInteractAbciParams
@@ -122,9 +119,6 @@ class SharedState(BaseSharedState):
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             ResetPauseEvent.RESET_AND_PAUSE_TIMEOUT
         ] = (self.context.params.reset_pause_duration + MARGIN)
-        ImpactEvaluatorSkillAbciApp.event_to_timeout[LLMEvent.ROUND_TIMEOUT] = (
-            self.context.params.round_timeout_seconds * MULTIPLIER
-        )
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             DecisionMakingEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds

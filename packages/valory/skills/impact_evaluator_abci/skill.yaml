@@ -7,12 +7,12 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
-  behaviours.py: bafybeihwttw5xgoxmfroq5mjza26q2ytniqub3yqkmqqh36lruaqkgeuum
+  behaviours.py: bafybeigcvodybauatvybm47grm4wqpcpghwmdtw6zdoli3gufvk2hmxmuu
   composition.py: bafybeiczymbfvki3sxmeekfgypczale5n74g57fheyu7szcqdznmgcp5ei
-  dialogues.py: bafybeigybns7lilv57day366bo6kri5ehu3nbrfjk6x7a7pz3xq4wc5r6e
+  dialogues.py: bafybeie4xxg3shhlf2zwbzckg55am4dlt376fsk4iyr76uaxahecynp4lm
   fsm_specification.yaml: bafybeibmkvflgwdioknbxrybh46iyvon4h2rjw5kthop6lczxy64267noa
-  handlers.py: bafybeihnfjtuusm65o76lr4q6rdawq6xjc7d7hywmcdabop7vgvuxdry3e
-  models.py: bafybeihh7p2ahvf5rvqvrd3tuapk5uykwhfj22f7cwzazmdgoban6z23zm
+  handlers.py: bafybeic2ftxguie4xmawdilht7lrho5kq7poho6ajjhyltcjvseklmn5iq
+  models.py: bafybeig2yc3kqgikedvjzgajf7c4poudutvzim5oshmv2tl6m4l7nilvze
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
   tests/test_behaviours.py: bafybeifkazsevd6vsfaapulouxepez3rl24y3rxgja5zhmj7s323zdjlmq
   tests/test_dialogues.py: bafybeieaos2byphju6i6xvytppqqcuqqvnpilnflsy73l3wqazzjttbg7m
@@ -33,7 +33,6 @@ skills:
 - valory/termination_abci:0.1.0:bafybeianygjbwmt4xrq77pfl3yzcokbjfzxmuru6j2k7a3boqc2qfb7shi
 - valory/transaction_settlement_abci:0.1.0:bafybeid4alawv3oz4gdyom5uevrgzfsahbwabi37r7gomsetwqiq66g6cm
 - valory/decision_making_abci:0.1.0:bafybeihlip22f265frtid3my5ggwg25eluvqwieotopaxwcgdjklmut2li
-- valory/llm_abci:0.1.0:bafybeibxctedcrb2hb6xxglpbcmbfjlyqq3m7gawwe5fs7vacxjux6z63i
 - valory/twitter_write_abci:0.1.0:bafybeieywzotyhslqvegpsjqkod34skmhllpvulis37dmfyrafguh73eg4
 - valory/olas_week_abci:0.1.0:bafybeib4wvihfftphm5fmennutsqghhmbrvjp4oxdgl6oz5mob7hbrcdie
 - valory/mech_interact_abci:0.1.0:bafybeic73sfduvn75x4jfsvvpqhoxuwae75g2p4ahuuyalluvblltriqii
@@ -58,9 +57,6 @@ handlers:
   ledger_api:
     args: {}
     class_name: LedgerApiHandler
-  llm:
-    args: {}
-    class_name: LlmHandler
   signing:
     args: {}
     class_name: SigningHandler
@@ -93,9 +89,6 @@ models:
   ledger_api_dialogues:
     args: {}
     class_name: LedgerApiDialogues
-  llm_dialogues:
-    args: {}
-    class_name: LlmDialogues
   acn_dialogues:
     args: {}
     class_name: AcnDialogues

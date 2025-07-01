@@ -40,7 +40,6 @@ from packages.valory.skills.abstract_round_abci.handlers import (
 from packages.valory.skills.dynamic_nft_abci.handlers import (
     HttpHandler as BaseHttpHandler,
 )
-from packages.valory.skills.llm_abci.handlers import LlmHandler as BaseLlmHandler
 from packages.valory.skills.mech_interact_abci.handlers import (
     AcnHandler as BaseAcnHandler,
 )
@@ -57,5 +56,4 @@ ContractApiHandler = BaseContractApiHandler
 TendermintHandler = BaseTendermintHandler
 IpfsHandler = BaseIpfsHandler
 TwitterHandler = BaseTwitterHandler
-LlmHandler = BaseLlmHandler
 AcnHandler = BaseAcnHandler

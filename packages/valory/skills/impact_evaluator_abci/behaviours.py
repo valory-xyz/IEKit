@@ -35,7 +35,6 @@ from packages.valory.skills.dynamic_nft_abci.behaviours import DynamicNFTRoundBe
 from packages.valory.skills.impact_evaluator_abci.composition import (
     ImpactEvaluatorSkillAbciApp,
 )
-from packages.valory.skills.llm_abci.behaviours import LLMRoundBehaviour
 from packages.valory.skills.mech_interact_abci.behaviours.round_behaviour import (
     MechInteractRoundBehaviour,
 )
@@ -74,7 +73,6 @@ class ImpactEvaluatorConsensusBehaviour(AbstractRoundBehaviour):
         *TwitterScoringRoundBehaviour.behaviours,
         *DynamicNFTRoundBehaviour.behaviours,
         *DecisionMakingRoundBehaviour.behaviours,
-        *LLMRoundBehaviour.behaviours,
         *TwitterWriteRoundBehaviour.behaviours,
         *ResetPauseABCIConsensusBehaviour.behaviours,
         *TransactionSettlementRoundBehaviour.behaviours,
