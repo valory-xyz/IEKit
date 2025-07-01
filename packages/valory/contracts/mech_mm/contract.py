@@ -19,8 +19,7 @@
 
 """This module contains the class to connect to a Mech contract."""
 
-import concurrent.futures
-from typing import Any, Callable, Dict, List, cast
+from typing import Any, Dict, List, cast
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId
@@ -210,3 +209,21 @@ class MechMM(Contract):
             contract_instance, "maxDeliveryRate"
         )
         return dict(max_delivery_rate=max_delivery_rate)
+
+    @classmethod
+    def get_service_id(
+        cls,
+        ledger_api: EthereumApi,
+        contract_address: str,
+        **kwargs: Any,
+    ) -> JSONLike:
+        """Get the service id of the mech.
+
+        :param ledger_api: the ledger API object
+        :param contract_address: the contract address
+        :return: the service id
+        """
+        contract_address = ledger_api.api.to_checksum_address(contract_address)
+        contract_instance = cls.get_instance(ledger_api, contract_address)
+        service_id = ledger_api.contract_method_call(contract_instance, "serviceId")
+        return dict(service_id=service_id)
