@@ -162,14 +162,10 @@ models:
     args: {}
     class_name: ContributeDatabase
 dependencies:
-  Authlib:
-    version: ==1.2.0
-  dag-cbor:
-    version: ==0.2.2
-  cryptography:
-    version: ==44.0.2
-  jsonpatch:
-    version: ==1.32
-  multiformats:
-    version: ==0.3.1.post4
+  pydantic:
+    version: ==2.9.2
+  eth_account:
+    version: ==0.8.0
+  pydantic_core:
+    version: ==2.23.4
 is_abstract: true
