@@ -68,7 +68,9 @@ class JsonAttributeInterface:
 
     def get_instance(self, attribute_id) -> Optional[AttributeInstance]:
         """Get an attribute instance"""
-        attribute_instance = self.client.get_attribute_instance_by_attribute_id(attribute_id)
+        attribute_instance = self.client.get_attribute_instance_by_attribute_id(
+            attribute_id
+        )
         return attribute_instance
 
     def create_instance(self, model: BaseModel) -> Optional[AttributeInstance]:
@@ -88,9 +90,7 @@ class JsonAttributeInterface:
         )
         return attr_instance
 
-    def update_instance(
-        self, model: BaseModel
-    ) -> Optional[AttributeInstance]:
+    def update_instance(self, model: BaseModel) -> Optional[AttributeInstance]:
         """Update an attribute instance"""
         attr_def = yield from self.client.get_attribute_definition_by_name(
             self.attribute_name
@@ -166,7 +166,9 @@ class ContributeDatabase(Model):
     def is_writer(self) -> bool:
         """Should this instance write to the DB?"""
         if not self.writer_addresses:
-            raise ValueError("Writer addresses is empty. No agent will write to AgentDB!")
+            raise ValueError(
+                "Writer addresses is empty. No agent will write to AgentDB!"
+            )
         return self.agent_address in self.writer_addresses
 
     def register(self):
@@ -246,15 +248,14 @@ class ContributeDatabase(Model):
         return tweet_instance
 
     def update_tweet(
-        self, tweet: UserTweet,
+        self,
+        tweet: UserTweet,
     ) -> Optional[AttributeInstance]:
         """Update a tweet attribute instance"""
         if not self.is_writer():
             return None
 
-        attr_instance = yield from self.tweet_interface.update_instance(
-            tweet
-        )
+        attr_instance = yield from self.tweet_interface.update_instance(tweet)
         return attr_instance
 
     def create_user(self, user: ContributeUser) -> Optional[AttributeInstance]:
@@ -264,7 +265,9 @@ class ContributeDatabase(Model):
         # Avoid user duplication
         is_duplicate, existing_user = self.is_duplicate_user(user)
         if is_duplicate:
-            raise ValueError(f"Trying to create a duplicated user: {user}\nUser already exists: {existing_user}")
+            raise ValueError(
+                f"Trying to create a duplicated user: {user}\nUser already exists: {existing_user}"
+            )
 
         user_instance = None
         if self.is_writer():
@@ -273,12 +276,20 @@ class ContributeDatabase(Model):
         self.data.users[user.id] = user
         return user_instance
 
-    def is_duplicate_user(self, user: ContributeUser) -> Tuple[bool, Optional[ContributeUser]]:
+    def is_duplicate_user(
+        self, user: ContributeUser
+    ) -> Tuple[bool, Optional[ContributeUser]]:
         """Does the user already exist"""
 
         UNIQUE_FIELDS = [
-            "token_id", "discord_id", "discord_handle", "service_id", "twitter_id",
-            "twitter_handle", "wallet_address", "service_multisig"
+            "token_id",
+            "discord_id",
+            "discord_handle",
+            "service_id",
+            "twitter_id",
+            "twitter_handle",
+            "wallet_address",
+            "service_multisig",
         ]
 
         for field_name in UNIQUE_FIELDS:
@@ -288,9 +299,7 @@ class ContributeDatabase(Model):
                 return True, existing_user
         return False, None
 
-    def update_user(
-        self, user: ContributeUser
-    ) -> Optional[AttributeInstance]:
+    def update_user(self, user: ContributeUser) -> Optional[AttributeInstance]:
         """Update a user attribute instance"""
         if not self.is_writer():
             return None
@@ -302,7 +311,9 @@ class ContributeDatabase(Model):
         if not user:
             self.create_user(user)
         else:
-            attribute_instance = yield from self.user_interface.get_instance(user.attribute_instance_id)
+            attribute_instance = yield from self.user_interface.get_instance(
+                user.attribute_instance_id
+            )
             self.update_user(attribute_instance, user)
 
     def create_module_configs(
@@ -338,8 +349,8 @@ class ContributeDatabase(Model):
         print("Creating module data")
         module_data_instance = None
         if self.is_writer():
-            module_data_instance = yield from self.module_data_interface.create_instance(
-                data
+            module_data_instance = (
+                yield from self.module_data_interface.create_instance(data)
             )
 
         self.data.module_data = data
@@ -350,15 +361,11 @@ class ContributeDatabase(Model):
             )
         return module_data_instance
 
-    def update_module_data(
-        self, data: ModuleData
-    ) -> Optional[AttributeInstance]:
+    def update_module_data(self, data: ModuleData) -> Optional[AttributeInstance]:
         """Update a plugin data attribute instance"""
         if not self.is_writer():
             return None
-        attr_instance = yield from self.module_data_interface.update_instance(
-            data
-        )
+        attr_instance = yield from self.module_data_interface.update_instance(data)
         return attr_instance
 
     def load_from_remote_db(self):

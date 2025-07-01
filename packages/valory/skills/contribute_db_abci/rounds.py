@@ -67,7 +67,6 @@ class DBLoadRound(CollectSameUntilThresholdRound):
         """Process the end of the block."""
 
         if self.threshold_reached:
-
             # Get all the agents that have sent, sort them alphabetically and get the first one
             # This will be the db keeper until it is down and therefore does not send any payload
             db_keeper = sorted(list(self.collection.keys()))[0]

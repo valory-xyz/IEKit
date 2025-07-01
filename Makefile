@@ -82,7 +82,8 @@ common-checks-1:
 test:
 	pytest \
 	-rfE packages/valory/skills/ceramic_read_abci \
-	-rfE packages/valory/skills/generic_scoring_abci \
+	-rfE packages/valory/skills/agent_db_abci \
+	-rfE packages/valory/skills/contribute_db_abci \
 	-rfE packages/valory/skills/twitter_scoring_abci \
 	-rfE packages/valory/skills/dynamic_nft_abci \
 	-rfE packages/valory/skills/ceramic_write_abci \
@@ -93,7 +94,8 @@ test:
 	-rfE packages/valory/skills/olas_week_abci \
 	-rfE packages/valory/skills/mech_interact_abci \
 	--cov=packages.valory.skills.ceramic_read_abci \
-	--cov=packages.valory.skills.generic_scoring_abci \
+	--cov=packages.valory.skills.agent_db_abci \
+	--cov=packages.valory.skills.contribute_db_abci \
 	--cov=packages.valory.skills.twitter_scoring_abci \
 	--cov=packages.valory.skills.dynamic_nft_abci \
 	--cov=packages.valory.skills.ceramic_write_abci \
@@ -133,7 +135,8 @@ fix-abci-app-specs:
 	autonomy analyse fsm-specs --update --app-class CeramicReadAbciApp --package packages/valory/skills/ceramic_read_abci/ || (echo "Failed to check ceramic_read_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class CeramicWriteAbciApp --package packages/valory/skills/ceramic_write_abci/ || (echo "Failed to check ceramic_write_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class DecisionMakingAbciApp --package packages/valory/skills/decision_making_abci/ || (echo "Failed to check decision_making_abci abci consistency" && exit 1)
-	autonomy analyse fsm-specs --update --app-class GenericScoringAbciApp --package packages/valory/skills/generic_scoring_abci/ || (echo "Failed to check generic_scoring_abci abci consistency" && exit 1)
+	autonomy analyse fsm-specs --update --app-class AgentDBAbciApp --package packages/valory/skills/agent_db_abci/ || (echo "Failed to check agent_db_abci abci consistency" && exit 1)
+	autonomy analyse fsm-specs --update --app-class ContributeDBAbciApp --package packages/valory/skills/contribute_db_abci/ || (echo "Failed to check contribute_db_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class TwitterScoringAbciApp --package packages/valory/skills/twitter_scoring_abci/ || (echo "Failed to check twitter_scoring_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class DynamicNFTAbciApp --package packages/valory/skills/dynamic_nft_abci/ || (echo "Failed to check dynamic_nft_abci abci consistency" && exit 1)
 	autonomy analyse fsm-specs --update --app-class LLMAbciApp --package packages/valory/skills/llm_abci/ || (echo "Failed to check llm_abci abci consistency" && exit 1)

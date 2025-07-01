@@ -56,7 +56,7 @@ class ContributeDBBehaviour(BaseBehaviour, ABC):
 
         self.context.contribute_db.initialize(
             client=self.context.agent_db_client,
-            agent_address=self.context.agent_address
+            agent_address=self.context.agent_address,
         )
 
     @property
@@ -75,7 +75,6 @@ class DBLoadBehaviour(ContributeDBBehaviour):
         with self.context.benchmark_tool.measure(
             self.behaviour_id,
         ).local():
-
             # Load AgentDB
             yield from self.context.contribute_db.load_from_remote_db()
 
