@@ -18,7 +18,7 @@ fingerprint:
   dialogues.py: bafybeicgtxsrzld6uyi2n455temnz6mj55irmxqxw55jxo4b6ud4rt7nsm
   fsm_specification.yaml: bafybeiapzwz6zcneelc2b2wrcb7cae7x6vbthmf6a57cm4mv6hucp67lz4
   handlers.py: bafybeieho4uyy6qqx3uzgzy4rpb7qvqb4jl2yk5tfwacce3zapec7pflie
-  models.py: bafybeihvlhvokvoj75jvvdip5mx7c2fnav5tbb6q6bhx7z7i6tc3ud3d5e
+  models.py: bafybeihz22d6yrm6lpi3cfwqdaty53paozkqd6db6nld4slkxw6tih7iou
   payloads.py: bafybeiej3iqjalgewojsweuwjpqgeihhquohf7qm6v3vzpxrl5hgespi2q
   rounds.py: bafybeicb3tph46vzhr72derohz2uby6lvfqs4u4fs77wald3ihfpvrdhgy
   states/__init__.py: bafybeie34wx5znr2hxwh3gs2fchmbeuzjcfnraymdvtzjaxaq5zsiw233q
@@ -39,7 +39,7 @@ connections: []
 contracts:
 - valory/gnosis_safe:0.1.0:bafybeibgpgpi7w6xtxg3zr7tye3f6g6tu7fnvy7yxlgunbjqin3ou7e5pi
 - valory/mech:0.1.0:bafybeib32m5zriagivlj7insajfs4jm5o5h53eym32wjjjp6qwv4lzl3pu
-- valory/mech_mm:0.1.0:bafybeifyvfzoyb3bmcgb6zpcoxpcqupiicimegbhro7xvkjqpose34lnve
+- valory/mech_mm:0.1.0:bafybeibbz2hlyvtg6yfojzdnou2xqbpu32a4mjvn2xidfypvwy5oj6gx4u
 - valory/multisend:0.1.0:bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y
 - valory/erc20:0.1.0:bafybeifyjub3v62r53by76u7cli7oqvg5qukb4e6gaa62z34euqfwnrsvi
 - valory/mech_marketplace:0.1.0:bafybeiccn4ohizw2wrjt7goidiakfik26ugm735lnm3fna3khko7qgkawm
