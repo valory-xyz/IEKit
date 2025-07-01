@@ -27,6 +27,12 @@ from packages.valory.skills.abstract_round_abci.models import Requests as BaseRe
 from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
+from packages.valory.skills.agent_db_abci.agent_db_client import (
+    AgentDBClient as BaseAgentDBClient,
+)
+from packages.valory.skills.contribute_db_abci.models import (
+    ContributeDatabase as BaseContributeDatabase,
+)
 from packages.valory.skills.contribute_db_abci.models import (
     Params as ContributeDBAbciParams,
 )
@@ -64,12 +70,6 @@ from packages.valory.skills.twitter_scoring_abci.models import (
 )
 from packages.valory.skills.twitter_scoring_abci.rounds import (
     Event as TwitterScoringEvent,
-)
-from packages.valory.skills.agent_db_abci.agent_db_client import (
-    AgentDBClient as BaseAgentDBClient,
-)
-from packages.valory.skills.contribute_db_abci.models import (
-    ContributeDatabase as BaseContributeDatabase,
 )
 
 

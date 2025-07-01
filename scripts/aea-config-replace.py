@@ -61,6 +61,10 @@ PATH_TO_VAR = {
 
     # Staking
     "models/params/args/staking_activity_threshold": "STAKING_ACTIVITY_THRESHOLD",
+
+    # AgentDB
+    "models/params/args/contribute_db_pkey": "CONTRIBUTE_DB_PKEY",
+    "models/agent_db_client/args/base_url": "AGENT_DB_BASE_URL",
 }
 
 CONFIG_REGEX = r"\${.*?:(.*)}"

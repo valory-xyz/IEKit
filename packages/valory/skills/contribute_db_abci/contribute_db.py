@@ -136,8 +136,9 @@ class ModuleDataAttributeInterface(JsonAttributeInterface):
 class ContributeDatabase(Model):
     """ContributeDatabase"""
 
-    def __init__(self):
+    def __init__(self, **kwargs: Any):
         """Constructor"""
+        super().__init__(**kwargs)
         self.client = None
         self.agent_address = None
         self.logger = None
