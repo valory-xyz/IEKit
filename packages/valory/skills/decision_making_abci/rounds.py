@@ -130,7 +130,7 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
             # since this round receives the event via payload
             # Event.NO_MAJORITY, Event.DONE,
             # Event.SCHEDULED_TWEET,
-            # Event.SCORE, Event.READ_CONTRIBUTE_DB, Event.READ_MANUAL_POINTS, Event.WRITE_CONTRIBUTE_DB
+            # Event.SCORE, Event.READ_CONTRIBUTE_DB, Event.WRITE_CONTRIBUTE_DB
             # Event.WEEK_IN_OLAS_CREATE, Event.TWEET_VALIDATION, Event.CAMPAIGN_VALIDATION
             # Event.STAKING_ACTIVITY, Event.STAKING_CHECKPOINT, Event.STAKING_DAA_UPDATE
 
