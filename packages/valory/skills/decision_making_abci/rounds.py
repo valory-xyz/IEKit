@@ -46,7 +46,6 @@ class Event(Enum):
 
     ROUND_TIMEOUT = "round_timeout"
     NO_MAJORITY = "no_majority"
-    READ_CONTRIBUTE_DB = "read_contribute_db"
     SCHEDULED_TWEET = "scheduled_tweet"
     SCORE = "score"
     DONE = "done"
@@ -130,7 +129,7 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
             # since this round receives the event via payload
             # Event.NO_MAJORITY, Event.DONE,
             # Event.SCHEDULED_TWEET,
-            # Event.SCORE, Event.READ_CONTRIBUTE_DB, Event.WRITE_CONTRIBUTE_DB
+            # Event.SCORE, Event.WRITE_CONTRIBUTE_DB
             # Event.WEEK_IN_OLAS_CREATE, Event.TWEET_VALIDATION, Event.CAMPAIGN_VALIDATION
             # Event.STAKING_ACTIVITY, Event.STAKING_CHECKPOINT, Event.STAKING_DAA_UPDATE
 
@@ -244,7 +243,6 @@ class DecisionMakingAbciApp(AbciApp[Event]):
     initial_states: Set[AppState] = {DecisionMakingRound, PostTxDecisionMakingRound}
     transition_function: AbciAppTransitionFunction = {
         DecisionMakingRound: {
-            Event.READ_CONTRIBUTE_DB: FinishedDecisionMakingDBLoadRound,
             Event.TWEET_VALIDATION: DecisionMakingRound,
             Event.SCHEDULED_TWEET: FinishedDecisionMakingWriteTwitterRound,
             Event.WEEK_IN_OLAS_CREATE: FinishedDecisionMakingWeekInOlasRound,

@@ -48,8 +48,7 @@ from packages.valory.skills.termination_abci.rounds import (
 # Here we define how the transition between the FSMs should happen
 # more information here: https://open-autonomy.docs.autonolas.tech/open-autonomy/key_concepts/fsm_app_introduction/?h=composition#composition-of-fsm-apps
 abci_app_transition_mapping: AbciAppTransitionMapping = {
-    RegistrationAbci.FinishedRegistrationRound: DecisionMakingAbci.DecisionMakingRound,
-    DecisionMakingAbci.FinishedDecisionMakingDBLoadRound: ContributeDBAbci.DBLoadRound,
+    RegistrationAbci.FinishedRegistrationRound: ContributeDBAbci.DBLoadRound,
     ContributeDBAbci.FinishedLoadingRound: DecisionMakingAbci.DecisionMakingRound,
     DecisionMakingAbci.FinishedDecisionMakingWriteTwitterRound: TwitterWriteAbciApp.RandomnessTwitterRound,
     DecisionMakingAbci.FinishedDecisionMakingDoneRound: ResetAndPauseAbci.ResetAndPauseRound,

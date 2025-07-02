@@ -91,6 +91,7 @@ class RandomnessApi(ApiSpecs):
 
 MARGIN = 5
 MULTIPLIER = 5
+MULTIPLIER_DB = 10
 
 
 class SharedState(BaseSharedState):
@@ -103,7 +104,7 @@ class SharedState(BaseSharedState):
         super().setup()
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             ContributeDBEvent.ROUND_TIMEOUT
-        ] = (self.context.params.round_timeout_seconds * MULTIPLIER)
+        ] = (self.context.params.round_timeout_seconds * MULTIPLIER_DB)
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             TwitterScoringEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds

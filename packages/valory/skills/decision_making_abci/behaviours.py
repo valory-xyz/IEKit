@@ -46,9 +46,6 @@ from packages.valory.skills.decision_making_abci.tasks.campaign_validation_prepa
 from packages.valory.skills.decision_making_abci.tasks.finished_pipeline_preparation import (
     FinishedPipelinePreparation,
 )
-from packages.valory.skills.decision_making_abci.tasks.read_contribute_db_preparation import (
-    ReadContributeDBPreparation,
-)
 from packages.valory.skills.decision_making_abci.tasks.score_preparations import (
     ScorePreparation,
 )
@@ -71,10 +68,6 @@ from packages.valory.skills.decision_making_abci.tasks.week_in_olas_preparations
 # Task FSM
 previous_event_to_task_preparation_cls = {
     None: {
-        "prev": None,
-        "next": ReadContributeDBPreparation,
-    },
-    Event.READ_CONTRIBUTE_DB.value: {
         "prev": None,
         "next": WeekInOlasCreatePreparation,
     },
@@ -141,7 +134,6 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
-            yield from self.context.contribute_db.load_from_remote_db()
             updates, event = yield from self.get_updates_and_event()
             payload_content = json.dumps(
                 {"updates": updates, "event": event}, sort_keys=True
@@ -251,7 +243,7 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
                 # it means we are skipping the LLM task (it comes after a NEXT_CENTAUR event). In this case,
                 # we can directly skip to SCHEDULED_TWEET because skipping LLM means skipping DailyTwitter and DailyOrbis.
                 # Therefore, we act as if the previous task was DailyOrbis.
-                previous_decision_event = Event.READ_CONTRIBUTE_DB.value
+                previous_decision_event = Event.WEEK_IN_OLAS_CREATE.value
 
             previous_task_skipped = True
 

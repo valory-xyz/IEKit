@@ -7,16 +7,15 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
-  behaviours.py: bafybeiczpqizqqnmprvxpmrsh3oputskl2yxzb6o2eqfomxfxif6kyp6ki
+  behaviours.py: bafybeidpmvfvnshqp57c6hny2hirvbmxblcj4p43geso4qatlwi76szatu
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
   fsm_specification.yaml: bafybeiba7uqjj5lxjbrl4ufw2ncakgcfcxgwlqp2mfxr37e45zos7se34u
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
   models.py: bafybeicr3ehgjpds5c4esgo2ma5fu3bbwyp4yq7dv2t42qxrtckz6zjdwu
   payloads.py: bafybeic6jrms2xs2odykwwngr5yyqm6cus7cyihdbxux26glpq3573q3ay
-  rounds.py: bafybeigbvnumauzfdkp4n3z3sjltlpanbnhbky67gyxrbgtniks7wfbske
+  rounds.py: bafybeihmd5vnr5juqnt2voptvwzkq5ihdj3iy2dcoifqvvhvrxmdr4mqde
   tasks/campaign_validation_preparation.py: bafybeigfbmwrw5bvqkk3b7tbhk2w7y4vfkoa54t2mpkyfoapg3rgtfo5c4
   tasks/finished_pipeline_preparation.py: bafybeig6ibvp6qvwsflsriiesjlmtbjv2j7q3nh4hy7kzvypvva424cl6i
-  tasks/read_contribute_db_preparation.py: bafybeicw4j24h6anoieo2zvicrqdqx5j76jr3gi3wg2ojr3vjoqijtbxxe
   tasks/score_preparations.py: bafybeie7cfot24zcyod5becz6t5lasvva77httfkw57qmvgjk35d3qluxa
   tasks/signature_validation.py: bafybeihbwrv72hnh3ytko2i5oszqgdky2j6h2wse45wvuhf2j32lo2tsjy
   tasks/staking.py: bafybeiequnuw6toljk34a45dv4xsvagrnhbwxzxrjrf5r55nzjmddr4zk4
