@@ -148,6 +148,7 @@ class ContributeDatabase(Model):
         self.module_data_interface = None
         self.data = ContributeData()
         self.writer_addresses = []  # which addresses should write to the db
+        self.loaded = False
 
     def initialize(self, client: AgentDBClient, agent_address: str):
         """Initialize agent"""
@@ -369,6 +370,12 @@ class ContributeDatabase(Model):
     def load_from_remote_db(self):
         """Load data from the remote database."""
 
+        if self.loaded:
+            return
+
+        if self.client.agent is None:
+            yield from self.client.ensure_agent_is_loaded()
+
         attributes = yield from self.client.get_all_agent_instance_attributes_parsed(
             self.client.agent
         )
@@ -408,6 +415,8 @@ class ContributeDatabase(Model):
         for tweet_id, tweet in self.data.tweets.items():
             user = self.get_user_by_attribute("twitter_id", tweet.twitter_user_id)
             user.tweets[tweet_id] = tweet
+
+        self.loaded = True
 
     def get_next_user_id(self):
         """Get next user id"""

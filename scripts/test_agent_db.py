@@ -677,11 +677,11 @@ if __name__ == "__main__":
     # Initialize the client
     client = AgentDBClient(
         base_url=os.getenv("AGENT_DB_BASE_URL"),
-        eth_address=os.getenv("AGENT_ADDRESS"),
-        private_key=os.getenv("AGENT_PRIVATE_KEY"),
+        eth_address=os.getenv("CONTRIBUTE_DB_ADDRESS"),
+        private_key=os.getenv("CONTRIBUTE_DB_PKEY"),
     )
 
-    init_database_from_ceramic(client)
+    # init_database_from_ceramic(client)
 
-    # contribute_db = ContributeDatabase(client)
-    # contribute_db.load_from_remote_db()
+    contribute_db = ContributeDatabase(client)
+    contribute_db.load_from_remote_db()

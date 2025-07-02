@@ -18,26 +18,6 @@
 #
 # ------------------------------------------------------------------------------
 
-
-# -*- coding: utf-8 -*-
-# ------------------------------------------------------------------------------
-#
-#   Copyright 2023-2024 Valory AG
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-#
-# ------------------------------------------------------------------------------
-
 """This module contains classes to interact with AgentDB."""
 
 import json
@@ -99,10 +79,23 @@ class AgentDBClient(Model):
 
     def sign_using_pkey(self, message_to_sign: str):
         """Sign using pkey"""
+        if isinstance(message_to_sign, bytes):
+            message_to_sign = str(message_to_sign)
+
         signed_message = Account.sign_message(  # pylint: disable=no-value-for-parameter
             encode_defunct(text=message_to_sign), private_key=self.private_key
         )
         return signed_message
+
+    def ensure_agent_is_loaded(self):
+        """Ensure agent is loaded"""
+        if self.agent is None:
+            self.agent = yield from self.get_agent_instance_by_address(self.address)
+            self.agent_type = (
+                self.get_agent_type_by_type_id(self.agent.type_id)
+                if self.agent
+                else None
+            )
 
     def _sign_request(self, endpoint):
         """Generate authentication"""
@@ -112,13 +105,7 @@ class AgentDBClient(Model):
                 "Signing function not set. Use set_external_funcs to set it."
             )
 
-        if self.agent is None:
-            self.agent = yield from self.get_agent_instance_by_address(self.address)
-            self.agent_type = (
-                self.get_agent_type_by_type_id(self.agent.type_id)
-                if self.agent
-                else None
-            )
+        yield from self.ensure_agent_is_loaded()
 
         timestamp = int(datetime.now(timezone.utc).timestamp())
         message_to_sign = f"timestamp:{timestamp},endpoint:{endpoint}"

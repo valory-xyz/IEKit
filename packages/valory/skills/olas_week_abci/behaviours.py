@@ -40,6 +40,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
 )
 from packages.valory.skills.abstract_round_abci.common import RandomnessBehaviour
 from packages.valory.skills.abstract_round_abci.models import Requests
+from packages.valory.skills.contribute_db_abci.behaviours import ContributeDBBehaviour
 from packages.valory.skills.olas_week_abci.dialogues import LlmDialogue, LlmDialogues
 from packages.valory.skills.olas_week_abci.models import (
     OpenAICalls,
@@ -140,7 +141,7 @@ def build_thread(raw_text: str, week: int, year: int) -> list:
     )
 
 
-class OlasWeekBaseBehaviour(BaseBehaviour, ABC):
+class OlasWeekBaseBehaviour(ContributeDBBehaviour, ABC):
     """Base behaviour for the common apps' skill."""
 
     @property

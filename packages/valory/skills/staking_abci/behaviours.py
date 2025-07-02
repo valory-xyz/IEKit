@@ -38,6 +38,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
+from packages.valory.skills.contribute_db_abci.behaviours import ContributeDBBehaviour
 from packages.valory.skills.staking_abci.models import Params, SharedState
 from packages.valory.skills.staking_abci.rounds import (
     ActivityScorePayload,
@@ -65,7 +66,7 @@ BASE_CHAIN_ID = "base"
 SECONDS_IN_DAY = 86400
 
 
-class StakingBaseBehaviour(BaseBehaviour, ABC):
+class StakingBaseBehaviour(ContributeDBBehaviour, ABC):
     """Base behaviour for the staking_abci skill."""
 
     @property

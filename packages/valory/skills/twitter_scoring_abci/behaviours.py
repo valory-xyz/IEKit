@@ -38,6 +38,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     BaseBehaviour,
 )
 from packages.valory.skills.abstract_round_abci.common import RandomnessBehaviour
+from packages.valory.skills.contribute_db_abci.behaviours import ContributeDBBehaviour
 from packages.valory.skills.contribute_db_abci.contribute_models import (
     ContributeUser,
     UserTweet,
@@ -122,7 +123,7 @@ def parse_evaluation(data: str) -> Dict:
     return json.loads(sub_string)
 
 
-class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
+class TwitterScoringBaseBehaviour(ContributeDBBehaviour, ABC):
     """Base behaviour for the common apps' skill."""
 
     @property

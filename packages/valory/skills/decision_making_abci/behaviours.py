@@ -29,6 +29,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
+from packages.valory.skills.contribute_db_abci.behaviours import ContributeDBBehaviour
 from packages.valory.skills.decision_making_abci.models import Params, SharedState
 from packages.valory.skills.decision_making_abci.rounds import (
     DecisionMakingAbciApp,
@@ -112,7 +113,7 @@ previous_event_to_task_preparation_cls = {
 }
 
 
-class DecisionMakingBaseBehaviour(BaseBehaviour, ABC):
+class DecisionMakingBaseBehaviour(ContributeDBBehaviour, ABC):
     """Base behaviour for the decision_making_abci skill."""
 
     @property
@@ -140,6 +141,7 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
+            yield from self.context.contribute_db.load_from_remote_db()
             updates, event = yield from self.get_updates_and_event()
             payload_content = json.dumps(
                 {"updates": updates, "event": event}, sort_keys=True
