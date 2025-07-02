@@ -304,3 +304,4 @@ type: connection
 config:
   host: 0.0.0.0
   target_skill_id: valory/impact_evaluator_abci:0.1.0
+  port: ${int:8000}

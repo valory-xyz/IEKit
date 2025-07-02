@@ -65,6 +65,9 @@ PATH_TO_VAR = {
     # AgentDB
     "models/params/args/contribute_db_pkey": "CONTRIBUTE_DB_PKEY",
     "models/agent_db_client/args/base_url": "AGENT_DB_BASE_URL",
+
+    # Http server
+    "config/port": "HTTP_SERVER_PORT"
 }
 
 CONFIG_REGEX = r"\${.*?:(.*)}"
