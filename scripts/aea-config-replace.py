@@ -67,7 +67,10 @@ PATH_TO_VAR = {
     "models/agent_db_client/args/base_url": "AGENT_DB_BASE_URL",
 
     # Http server
-    "config/port": "HTTP_SERVER_PORT"
+    "config/port": "HTTP_SERVER_PORT",
+
+    # Secrets
+    "models/params/args/centaur_id_to_secrets": "CENTAUR_ID_TO_SECRETS"
 }
 
 CONFIG_REGEX = r"\${.*?:(.*)}"

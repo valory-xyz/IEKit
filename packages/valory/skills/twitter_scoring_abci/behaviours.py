@@ -172,7 +172,7 @@ class TwitterScoringBaseBehaviour(ContributeDBBehaviour, ABC):
         """Get the active campaigns"""
         module_data = self.context.contribute_db.data.module_data
         active_hashtags = [
-            f"%23{campaign['hashtag'].replace('#', '').strip()}"  # %23 = hashtag
+            f"%23{campaign.hashtag.replace('#', '').strip()}"  # %23 = hashtag
             for campaign in module_data.twitter_campaigns.campaigns
             if campaign.status == "live"
         ]

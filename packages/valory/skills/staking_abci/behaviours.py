@@ -482,20 +482,19 @@ class DAAPreparationBehaviour(StakingBaseBehaviour):
         # If the user has not tweeted in the last 24 hours, they're not a DAA
         for user in self.context.contribute_db.data.users.values():
 
-            if not user["service_multisig"]:
+            if not user.service_multisig:
                 continue
 
-            if not user["tweets"]:
+            if not user.tweets:
                 continue
 
             # Check the latest tweet time
-            tweet_ts = list(user["tweets"].values())[-1]["timestamp"]
-            tweet_time = datetime.fromtimestamp(tweet_ts, tz=timezone.utc)
+            tweet_time = list(user.tweets.values())[-1].timestamp
 
             if (now_utc - tweet_time).total_seconds() > SECONDS_IN_DAY:
                 continue
 
-            active_multisigs.append(user["service_multisig"])
+            active_multisigs.append(user.service_multisig)
 
         self.context.logger.info(f"Safes marked as DAAs: {active_multisigs}")
 

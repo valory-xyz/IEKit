@@ -19,6 +19,7 @@
 
 """This module contains the shared state for the abci skill of DecisionMakingAbciApp."""
 
+import json
 from typing import Any
 
 from packages.valory.skills.abstract_round_abci.models import BaseParams
@@ -59,6 +60,9 @@ class Params(BaseParams):
         self.prompt_template = DEFAULT_PROMPT
         self.shortener_prompt_template = SHORTENER_PROMPT
 
+        self.centaur_id_to_secrets = json.loads(
+            self._ensure("centaur_id_to_secrets", kwargs, str)
+        )
         self.transaction_service_url = self._ensure(
             "transaction_service_url", kwargs, str
         )

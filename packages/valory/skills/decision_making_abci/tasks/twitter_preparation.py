@@ -45,7 +45,7 @@ class TwitterPreparation(TaskPreparation):
     def check_extra_conditions(self):
         """Validate Twitter credentials"""
         yield
-        secrets = self.params.centaur_id_to_secrets[0]["twitter"]
+        secrets = self.params.centaur_id_to_secrets[CENTAUR_ID]["twitter"]
 
         if sorted(secrets.keys()) != sorted(
             ["consumer_key", "consumer_secret", "access_token", "access_secret"]
@@ -128,13 +128,6 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
     def _post_task(self):
         """Task postprocessing"""
-        if (
-            self.synchronized_data.previous_decision_event
-            == Event.FORCE_DB_UPDATE.value
-        ):
-            self.logger.info("Not running post_task because this was a force db update")
-            return {}, None
-
         updates, event = yield from super()._post_task()
 
         # Set the scheduled tweet as posted
@@ -163,13 +156,6 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
     def check_extra_conditions(self):
         """Check extra conditions"""
-        if (
-            self.synchronized_data.previous_decision_event
-            == Event.FORCE_DB_UPDATE.value
-        ):
-            self.logger.info("Not running again because this was a force db update")
-            return False
-
         proceed = yield from super().check_extra_conditions()
         if not proceed:
             return False

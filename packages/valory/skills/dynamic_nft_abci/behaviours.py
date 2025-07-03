@@ -103,7 +103,7 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
         """Get token id to address data."""
 
         from_block = (
-            self.context.contribute_db.module_data.dynamic_nft.last_parsed_block
+            self.context.contribute_db.data.module_data.dynamic_nft.last_parsed_block
         )
         if from_block is None:
             self.context.logger.warning(

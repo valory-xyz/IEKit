@@ -39,7 +39,7 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
     """CampaignValidationPreparation"""
 
-    task_name = "campaign_validation"
+    task_name = "twitter_campaigns"
     task_event = Event.CAMPAIGN_VALIDATION.value
 
     def check_extra_conditions(self):
@@ -51,7 +51,7 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
         """Preparations before running the task"""
         yield
 
-        for campaign in self.data.twitter_campaigns.campaigns:
+        for campaign in self.data.campaigns:
             self.logger.info(
                 f"Checking campaign proposal {campaign.id} #{campaign.hashtag} [{campaign.status}]"
             )
@@ -108,7 +108,6 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
             # Ignore void and finished states
             else:
                 self.logger.info("The campaign does not need to be updated")
-                return
 
             updates = {}
             self.context.contribute_db.update_module_data(self.data)

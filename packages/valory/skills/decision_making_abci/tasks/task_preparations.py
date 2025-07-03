@@ -21,6 +21,7 @@
 
 from packages.valory.skills.contribute_db_abci.contribute_models import ModuleConfig
 
+
 SECONDS_IN_DAY = 24 * 3600
 
 DEFAULT_CONFIG = ModuleConfig(
@@ -54,9 +55,10 @@ class TaskPreparation:
             self.context.contribute_db.data.module_data, self.task_name, None
         )
         self.config = getattr(
-            self.context.contribute_db.data.module_configs, self.task_name, None
+            self.context.contribute_db.data.module_configs,
+            self.task_name,
+            DEFAULT_CONFIG,
         )
-        self.config = self.config or DEFAULT_CONFIG
         self.log_config()
 
     def log_config(self):

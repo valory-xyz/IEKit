@@ -97,8 +97,9 @@ class StakingPreparation(TaskPreparation):
         # Update the last run time
         plugin_config.last_run = self.now_utc
 
+        updates = {}
         yield
-        return None
+        return updates, None
 
     def get_epoch_end(
         self, staking_contract_address
@@ -429,8 +430,9 @@ class StakingDAAPreparation(TaskPreparation):
         # Update the last run time
         plugin_config.last_run = self.now_utc
 
+        updates = {}
         yield
-        return None
+        return updates, None
 
     def check_extra_conditions(self):
         """Check user staking threshold"""
