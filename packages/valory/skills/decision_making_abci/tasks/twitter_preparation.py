@@ -106,7 +106,6 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
         if self.tweets_need_update:
             self.data.tweets = self.updated_tweets
-            event = Event.FORCE_DB_UPDATE.value
 
         if self.pending_tweets:
             tweet = self.get_tweet()

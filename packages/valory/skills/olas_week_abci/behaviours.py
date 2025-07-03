@@ -162,7 +162,7 @@ class OlasWeekBaseBehaviour(ContributeDBBehaviour, ABC):
     def _check_twitter_limits(self) -> Tuple:
         """Check if the daily limit has exceeded or not"""
 
-        module_data = self.context.contribute_db.data.twitter
+        module_data = self.context.contribute_db.data.module_data.twitter
         number_of_tweets_pulled_today = module_data.number_of_tweets_pulled_today
         last_tweet_pull_window_reset = module_data.last_tweet_pull_window_reset
 

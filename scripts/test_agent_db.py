@@ -20,7 +20,7 @@
 
 """Test the AgentDBClient class."""
 
-# pylint: disable=unused-variable,too-many-arguments,too-many-instance-attributes,wrong-import-position
+# pylint: disable=unused-variable,too-many-arguments,too-many-instance-attributes,wrong-import-position,redefined-outer-name
 
 import os
 import sys

@@ -20,6 +20,7 @@
 """This package contains the logic for task preparations."""
 import uuid
 
+from packages.valory.skills.contribute_db_abci.contribute_models import ServiceTweet
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
@@ -29,7 +30,7 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 class WeekInOlasCreatePreparation(TaskPreparation):
     """WeekInOlasCreatePreparation"""
 
-    task_name = "week_in_olas"
+    task_name = "scheduled_tweet"
     task_event = Event.WEEK_IN_OLAS_CREATE.value
 
     def check_extra_conditions(self):
@@ -49,8 +50,12 @@ class WeekInOlasCreatePreparation(TaskPreparation):
         # Update the last run time
         self.config.last_run = self.now_utc
 
+        if not self.synchronized_data.summary_tweets:
+            self.logger.info("The summary tweet was empty. Skipping...")
+            return {}, None
+
         # Add the new thread to proposed tweets
-        thread = {
+        thread_data = {
             "text": self.synchronized_data.summary_tweets,
             "posted": False,
             "voters": [],
@@ -65,9 +70,9 @@ class WeekInOlasCreatePreparation(TaskPreparation):
             "executionAttempts": [],
         }
 
-        self.logger.info(f"Added WiO to the tweet list:\n{thread}")
+        self.logger.info(f"Added WiO to the tweet list:\n{thread_data}")
 
-        self.data.tweets.append(thread)
+        self.data.tweets.append(ServiceTweet(**thread_data))
         self.context.contribute_db.update_module_data(self.data)
 
         updates = {}
