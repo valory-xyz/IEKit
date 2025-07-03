@@ -685,3 +685,4 @@ if __name__ == "__main__":
 
     contribute_db = ContributeDatabase(client)
     contribute_db.load_from_remote_db()
+    import pdb;pdb.set_trace()

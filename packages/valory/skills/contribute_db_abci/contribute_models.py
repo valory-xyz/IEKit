@@ -20,7 +20,7 @@
 """This module contains definitions for Twitter models."""
 
 import re
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from typing import Dict, List, Optional
 from uuid import UUID
 
@@ -186,7 +186,8 @@ class ModuleConfig(BaseModel):
     def parse_utc_datetime(cls, v):
         """Parse the last_run datetime string to a datetime object."""
         if isinstance(v, str) and v.endswith(" UTC"):
-            v = v[:-4]  # Remove the trailing ' UTC'
+            # v = v[:-4]  # Remove the trailing ' UTC'
+            v = v.replace(" UTC", "+00:00")
         return v
 
 

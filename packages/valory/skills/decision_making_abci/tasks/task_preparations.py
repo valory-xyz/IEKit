@@ -19,7 +19,17 @@
 
 """This package contains the logic for task preparations."""
 
+from packages.valory.skills.contribute_db_abci.contribute_models import ModuleConfig
+
 SECONDS_IN_DAY = 24 * 3600
+
+DEFAULT_CONFIG = ModuleConfig(
+    daily=False,
+    weekly=None,
+    enabled=True,
+    last_run=None,
+    run_hour_utc=0,
+)
 
 
 class TaskPreparation:
@@ -44,8 +54,9 @@ class TaskPreparation:
             self.context.contribute_db.data.module_data, self.task_name, None
         )
         self.config = getattr(
-            self.context.contribute_db.data.module_configs, self.task_name
+            self.context.contribute_db.data.module_configs, self.task_name, None
         )
+        self.config = self.config or DEFAULT_CONFIG
         self.log_config()
 
     def log_config(self):

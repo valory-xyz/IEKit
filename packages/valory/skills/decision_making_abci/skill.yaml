@@ -19,7 +19,7 @@ fingerprint:
   tasks/score_preparations.py: bafybeie7cfot24zcyod5becz6t5lasvva77httfkw57qmvgjk35d3qluxa
   tasks/signature_validation.py: bafybeihbwrv72hnh3ytko2i5oszqgdky2j6h2wse45wvuhf2j32lo2tsjy
   tasks/staking.py: bafybeiequnuw6toljk34a45dv4xsvagrnhbwxzxrjrf5r55nzjmddr4zk4
-  tasks/task_preparations.py: bafybeia2lumd2uk54psj72ybwfn5rzio7ewykcvjkstaauyhn4qonx4rz4
+  tasks/task_preparations.py: bafybeiajxrujvrztfcbnp3q3yr67xt6poqlmtaailnltbpjbf3a5ghptgy
   tasks/tweet_validation_preparation.py: bafybeihche5rbg6cly3t5eixha2waepw6sq4qkzygbd2i5fchfa5lclqbq
   tasks/twitter_preparation.py: bafybeiderhek5a7ifyf7xtbxqjkrxan7lq2go5hccwungcsrokvspgtkmu
   tasks/week_in_olas_preparations.py: bafybeifktmugvmatqxe7uiouh5bceyoya2ufvnffuddjzgv5bfht6v5p6y
@@ -54,8 +54,8 @@ protocols:
 - valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeifclzgoyulkyyigcwrqzmydyrj6c5d26xu7jk6cjbsed3pkls4pba
-- valory/staking_abci:0.1.0:bafybeiftlsgsvm5qwabehhiidcmbqy4zbk3uu7es6c2ltjg5yxdobjz4ha
-- valory/contribute_db_abci:0.1.0:bafybeidwtlky5lguq2i7kcizop2nk5vhptgvmqtgise63c3max5c4gq3by
+- valory/staking_abci:0.1.0:bafybeibx4w4ktjwhcsey6uqtpqxekotjydfh35inos5rfr7guw7rnl5iiq
+- valory/contribute_db_abci:0.1.0:bafybeih4rbmca6a3rqbgc32tsg6r5rf4hvrcletravmmjrifxkd2utvdae
 behaviours:
   main:
     args: {}
