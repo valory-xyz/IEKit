@@ -88,6 +88,7 @@ class ServiceTweet(BaseModel):
     """ServiceTweet"""
 
     text: List[str]
+    media_hashes: List[str] = []
     posted: bool = False
     voters: List[Voter] = []
     proposer: Proposer
@@ -185,9 +186,11 @@ class ModuleConfig(BaseModel):
     @classmethod
     def parse_utc_datetime(cls, v):
         """Parse the last_run datetime string to a datetime object."""
-        if isinstance(v, str) and v.endswith(" UTC"):
-            # v = v[:-4]  # Remove the trailing ' UTC'
-            v = v.replace(" UTC", "+00:00")
+        if isinstance(v, str):
+            if v.endswith(" UTC"):
+                v = v[:-4]  # Remove the trailing ' UTC'
+            if not v.endswith("+00:00") and not v.endswith("Z"):
+                v += "+00:00"
         return v
 
 
