@@ -9,11 +9,11 @@ fingerprint:
   __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
   behaviours.py: bafybeidpmvfvnshqp57c6hny2hirvbmxblcj4p43geso4qatlwi76szatu
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
-  fsm_specification.yaml: bafybeiba7uqjj5lxjbrl4ufw2ncakgcfcxgwlqp2mfxr37e45zos7se34u
+  fsm_specification.yaml: bafybeiegwozjcrotksyxeio56vcrwgpnxktpycrcozi6gssth7xwqb4iie
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
   models.py: bafybeiegm7oknasrcezxvypa3nf6mkictkewsfoiqtljkbb466is6rgfnq
   payloads.py: bafybeic6jrms2xs2odykwwngr5yyqm6cus7cyihdbxux26glpq3573q3ay
-  rounds.py: bafybeihmd5vnr5juqnt2voptvwzkq5ihdj3iy2dcoifqvvhvrxmdr4mqde
+  rounds.py: bafybeidxssc3muexhbq4kizkoxtz7kwhofvbxet32u2kb5rglpu6me2dai
   tasks/campaign_validation_preparation.py: bafybeiaduuzqnttr74tksno56fkboigxhloyaun6coijrwsoi3piofivlu
   tasks/finished_pipeline_preparation.py: bafybeig6ibvp6qvwsflsriiesjlmtbjv2j7q3nh4hy7kzvypvva424cl6i
   tasks/score_preparations.py: bafybeie7cfot24zcyod5becz6t5lasvva77httfkw57qmvgjk35d3qluxa
@@ -54,8 +54,8 @@ protocols:
 - valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeifclzgoyulkyyigcwrqzmydyrj6c5d26xu7jk6cjbsed3pkls4pba
-- valory/staking_abci:0.1.0:bafybeib64ijjicckwt5wblhp6efx4h7bpdwfnydw4jp2lzake2nxcnzpoe
-- valory/contribute_db_abci:0.1.0:bafybeieurqhpape47alejpjryibsp3cozmrqgiap64c2bj37rx47k4yzri
+- valory/staking_abci:0.1.0:bafybeigcaxqlxorco6b6qqtqk5vh4z5wbgxgid4vhkngiwikdcn4ymq2ym
+- valory/contribute_db_abci:0.1.0:bafybeidwqxzvwtjesvznvxcr6fehkdfroalv5z5fazsmsbt2dxhezwtski
 behaviours:
   main:
     args: {}

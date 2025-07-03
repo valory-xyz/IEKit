@@ -184,10 +184,6 @@ class PostTxDecisionMakingRound(CollectSameUntilThresholdRound):
         return None
 
 
-class FinishedDecisionMakingDBLoadRound(DegenerateRound):
-    """FinishedDecisionMakingDBLoadRound"""
-
-
 class FinishedDecisionMakingWriteTwitterRound(DegenerateRound):
     """FinishedDecisionMakingWriteTwitterRound"""
 
@@ -264,7 +260,6 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.DONE: PostTxDecisionMakingRound,
             Event.NO_MAJORITY: PostTxDecisionMakingRound,
         },
-        FinishedDecisionMakingDBLoadRound: {},
         FinishedDecisionMakingWriteTwitterRound: {},
         FinishedDecisionMakingScoreRound: {},
         FinishedDecisionMakingDoneRound: {},
@@ -279,7 +274,6 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingDAARound: {},
     }
     final_states: Set[AppState] = {
-        FinishedDecisionMakingDBLoadRound,
         FinishedDecisionMakingWriteTwitterRound,
         FinishedDecisionMakingScoreRound,
         FinishedDecisionMakingDoneRound,
@@ -302,7 +296,6 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         PostTxDecisionMakingRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedDecisionMakingDBLoadRound: set(),
         FinishedDecisionMakingWriteTwitterRound: {"write_data"},
         FinishedDecisionMakingScoreRound: set(),
         FinishedDecisionMakingDoneRound: set(),

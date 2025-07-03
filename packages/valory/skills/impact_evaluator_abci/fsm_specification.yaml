@@ -28,7 +28,6 @@ alphabet_in:
 - POST_TX_MECH
 - PRE_MECH
 - PROCESS_UPDATES
-- READ_CONTRIBUTE_DB
 - RESET_AND_PAUSE_TIMEOUT
 - RESET_TIMEOUT
 - RETRIEVE_HASHTAGS
@@ -137,7 +136,6 @@ transition_func:
     (DecisionMakingRound, CAMPAIGN_VALIDATION): DecisionMakingRound
     (DecisionMakingRound, DONE): ResetAndPauseRound
     (DecisionMakingRound, NO_MAJORITY): DecisionMakingRound
-    (DecisionMakingRound, READ_CONTRIBUTE_DB): DBLoadRound
     (DecisionMakingRound, ROUND_TIMEOUT): DecisionMakingRound
     (DecisionMakingRound, SCHEDULED_TWEET): RandomnessTwitterRound
     (DecisionMakingRound, SCORE): TwitterDecisionMakingRound
@@ -206,9 +204,9 @@ transition_func:
     (RandomnessTwitterRound, DONE): SelectKeeperTwitterRound
     (RandomnessTwitterRound, NO_MAJORITY): RandomnessTwitterRound
     (RandomnessTwitterRound, ROUND_TIMEOUT): RandomnessTwitterRound
-    (RegistrationRound, DONE): DecisionMakingRound
+    (RegistrationRound, DONE): DBLoadRound
     (RegistrationRound, NO_MAJORITY): RegistrationRound
-    (RegistrationStartupRound, DONE): DecisionMakingRound
+    (RegistrationStartupRound, DONE): DBLoadRound
     (ResetAndPauseRound, DONE): DecisionMakingRound
     (ResetAndPauseRound, NO_MAJORITY): RegistrationRound
     (ResetAndPauseRound, RESET_AND_PAUSE_TIMEOUT): RegistrationRound
