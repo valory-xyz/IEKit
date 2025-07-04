@@ -92,6 +92,8 @@ skill_exception_policy: stop_and_exit
 dependencies:
   open-aea-ledger-ethereum:
     version: ==1.65.0
+  typing_extensions:
+    version: ==4.13.2
 default_connection: null
 ---
 public_id: valory/openai:0.1.0
