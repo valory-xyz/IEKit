@@ -140,6 +140,9 @@ extra:
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
+    agent_db_client:
+      args:
+        base_url: ${AGENT_DB_BASE_URL:str:https://afmdb.autonolas.tech}
 1:
   models:
     benchmark_tool:
@@ -232,6 +235,9 @@ extra:
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
+    agent_db_client:
+      args:
+        base_url: ${AGENT_DB_BASE_URL:str:https://afmdb.autonolas.tech}
 2:
   models:
     benchmark_tool:
@@ -324,6 +330,9 @@ extra:
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
+    agent_db_client:
+      args:
+        base_url: ${AGENT_DB_BASE_URL:str:https://afmdb.autonolas.tech}
 3:
   models:
     benchmark_tool:
@@ -420,6 +429,9 @@ extra:
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
+    agent_db_client:
+      args:
+        base_url: ${AGENT_DB_BASE_URL:str:https://afmdb.autonolas.tech}
 ---
 public_id: valory/ledger:0.19.0
 type: connection
