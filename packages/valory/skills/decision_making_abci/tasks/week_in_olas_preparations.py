@@ -73,7 +73,9 @@ class WeekInOlasCreatePreparation(TaskPreparation):
         self.logger.info(f"Added WiO to the tweet list:\n{thread_data}")
 
         self.data.tweets.append(ServiceTweet(**thread_data))
-        yield from self.context.contribute_db.update_module_data(self.context.contribute_db.data.module_data)
+        yield from self.context.contribute_db.update_module_data(
+            self.context.contribute_db.data.module_data
+        )
 
         updates = {}
         yield

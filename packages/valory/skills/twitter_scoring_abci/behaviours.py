@@ -88,6 +88,7 @@ HTTP_OK = 200
 HTTP_TOO_MANY_REQUESTS = 429
 RETWEET_START = "RT @"
 BASE_CHAIN_ID = "base"
+MAX_TWEETS_PER_CALL = 100
 
 
 def is_minimal_effort_tweet(tweet: str) -> str:
@@ -491,6 +492,9 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
         api_args = self.params.twitter_mentions_args.replace(
             "{since_id}", str(next_tweet_id)
         )
+        number_of_tweets_remaining_today = min(
+            MAX_TWEETS_PER_CALL, number_of_tweets_remaining_today
+        )
         api_args = api_args.replace(
             "{max_results}", str(number_of_tweets_remaining_today)
         )
@@ -768,6 +772,9 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
             "{search_query}", str(search_query)
         )
         api_args = api_args.replace("{since_id}", str(next_tweet_id))
+        number_of_tweets_remaining_today = min(
+            MAX_TWEETS_PER_CALL, number_of_tweets_remaining_today
+        )
         api_args = api_args.replace(
             "{max_results}", str(number_of_tweets_remaining_today)
         )
@@ -1178,7 +1185,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
                 yield from contribute_db.create_tweet(tweet)
 
-            user = yield from contribute_db.get_user_by_attribute("twitter_id", author_id)
+            user = yield from contribute_db.get_user_by_attribute(
+                "twitter_id", author_id
+            )
 
             # User data to update
             user_data = {
@@ -1205,7 +1214,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 user.tweets = user_data["tweets"]
 
             # For existing users, all existing user data is replaced except points, which are added
-            yield from contribute_db.create_or_update_user_by_key("twitter_id", author_id, user)
+            yield from contribute_db.create_or_update_user_by_key(
+                "twitter_id", author_id, user
+            )
 
         module_data = contribute_db.data.module_data
 

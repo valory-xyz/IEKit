@@ -381,7 +381,9 @@ class AgentDBClient(Model):
                 "skip": skip,
                 "limit": 100,
             }
-            self.logger.info(f"Reading agent attributes from {skip} to {skip + 100}... ")
+            self.logger.info(
+                f"Reading agent attributes from {skip} to {skip + 100}... "
+            )
             result = yield from self._request(
                 method="GET",
                 endpoint=endpoint,

@@ -200,7 +200,9 @@ class ContributeDatabase(Model):
                 agent_type=contribute_type,
                 eth_address=self.client.eth_address,
             )
-            self.logger.info(f"Created agent instance: {contribute_instance.agent_name}")
+            self.logger.info(
+                f"Created agent instance: {contribute_instance.agent_name}"
+            )
 
         self.agent = contribute_instance
         self.client.agent = contribute_instance
@@ -224,7 +226,9 @@ class ContributeDatabase(Model):
     def create_tweet(self, tweet: UserTweet) -> Optional[AttributeInstance]:
         """Create a tweet attribute instance"""
 
-        self.logger.info(f"Creating tweet: {tweet.tweet_id} for user {tweet.twitter_user_id}")
+        self.logger.info(
+            f"Creating tweet: {tweet.tweet_id} for user {tweet.twitter_user_id}"
+        )
 
         # Create the new tweet
         tweet_instance = None
@@ -390,7 +394,9 @@ class ContributeDatabase(Model):
             attr_data = attribute["attr_value"] | {
                 "attribute_instance_id": attribute["attr_id"]
             }
-            self.logger.info(f"Loading attribute: {attr_name} with id: {attribute['attr_id']}")
+            self.logger.info(
+                f"Loading attribute: {attr_name} with id: {attribute['attr_id']}"
+            )
 
             if attr_name == "tweet":
                 tweet = UserTweet(**attr_data)

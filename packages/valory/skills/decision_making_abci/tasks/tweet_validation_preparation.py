@@ -79,7 +79,9 @@ class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
 
             tweet.proposer.verified = is_valid
 
-            yield from self.context.contribute_db.update_module_data(self.context.contribute_db.data.module_data)
+            yield from self.context.contribute_db.update_module_data(
+                self.context.contribute_db.data.module_data
+            )
 
         return updates, self.task_event
 

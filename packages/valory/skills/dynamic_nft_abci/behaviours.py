@@ -149,7 +149,9 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
 
         # Update token_ids in the contribut_db
         for token_id, address in new_token_id_to_address.items():
-            user = yield from contribute_db.get_user_by_attribute("wallet_address", address)
+            user = yield from contribute_db.get_user_by_attribute(
+                "wallet_address", address
+            )
 
             # Create a new user if it does not exist
             # Update user in the following cases:
