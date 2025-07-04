@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiasfbratsbsxyji2k2xeft3jdqaajwqskjsvbjsqht4mrew6wb2km
-  behaviours.py: bafybeihwnhfc62qdqnpxoabnpjfpihdvotgpaqgk7kwcf6rjnjwlc4krsu
+  behaviours.py: bafybeibusr4v2no2n4oy73rts4ikvnxhaddqzte4h43imsppx6tzrs53wi
   dialogues.py: bafybeiabtq2to7x6bbbnxzrvupz5rky4b6k73y2lw5dmclb6xx74nuzxe4
   fsm_specification.yaml: bafybeibkm4iniyjt7ofqredclpvvudtfjbmuatccnblygvqnfucsuymbxy
   handlers.py: bafybeihzfnw5arauc5erif552ib543h2imy5psjppj2elrrhobggfp4kwe
@@ -31,8 +31,8 @@ protocols:
 - valory/http:1.0.0:bafybeih4azmfwtamdbkhztkm4xitep3gx6tfdnoz6tvllmaqnhu3klejfa
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeifclzgoyulkyyigcwrqzmydyrj6c5d26xu7jk6cjbsed3pkls4pba
-- valory/decision_making_abci:0.1.0:bafybeieyysmvgpn3wt6sutd5ryknuyp2gvl7s6gnfb4n2uzyvi2gfcmusi
-- valory/contribute_db_abci:0.1.0:bafybeidwqxzvwtjesvznvxcr6fehkdfroalv5z5fazsmsbt2dxhezwtski
+- valory/decision_making_abci:0.1.0:bafybeia6suw5zfbol5nu2dgzm6a2d54xr7z3kfbuckdkmench4opr54s4q
+- valory/contribute_db_abci:0.1.0:bafybeidnw35kwboindyds2gog6kzczrolskiqfsbdpadtl2g55ybcqnceu
 behaviours:
   main:
     args: {}

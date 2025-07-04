@@ -381,7 +381,7 @@ class AgentDBClient(Model):
                 "skip": skip,
                 "limit": 100,
             }
-            print(f"Reading agent attributes from {skip} to {skip + 100}... ", end="")
+            self.logger.info(f"Reading agent attributes from {skip} to {skip + 100}... ")
             result = yield from self._request(
                 method="GET",
                 endpoint=endpoint,
@@ -391,10 +391,10 @@ class AgentDBClient(Model):
             )
 
             if result is None:
-                print("Error fetching agent attributes")
+                self.logger.error("Error fetching agent attributes")
                 continue
 
-            print(f"got {len(result)} attributes")
+            self.logger.info(f"got {len(result)} attributes")
 
             raw_attributes += result
             skip = len(raw_attributes)

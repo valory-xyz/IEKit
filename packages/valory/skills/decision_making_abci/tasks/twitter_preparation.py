@@ -146,7 +146,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
                 tweet.executionAttempts[-1].verified = True
                 break
 
-        self.context.contribute_db.update_module_data(self.data)
+        yield from self.context.contribute_db.update_module_data(self.context.contribute_db.data.module_data)
         return updates, event
 
     def get_tweet(self):

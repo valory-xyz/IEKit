@@ -1176,9 +1176,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                     else None
                 )
 
-                contribute_db.create_tweet(tweet)
+                yield from contribute_db.create_tweet(tweet)
 
-            user = contribute_db.get_user_by_attribute("twitter_id", author_id)
+            user = yield from contribute_db.get_user_by_attribute("twitter_id", author_id)
 
             # User data to update
             user_data = {
@@ -1205,7 +1205,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 user.tweets = user_data["tweets"]
 
             # For existing users, all existing user data is replaced except points, which are added
-            contribute_db.create_or_update_user_by_key("twitter_id", author_id, user)
+            yield from contribute_db.create_or_update_user_by_key("twitter_id", author_id, user)
 
         module_data = contribute_db.data.module_data
 
@@ -1239,7 +1239,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         # Update the current_period
         module_data.twitter.current_period = today
 
-        contribute_db.update_module_data(module_data)
+        yield from contribute_db.update_module_data(module_data)
 
         self.context.logger.info("Finished updating the db:")
         return

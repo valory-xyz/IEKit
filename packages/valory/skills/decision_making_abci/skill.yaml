@@ -14,15 +14,15 @@ fingerprint:
   models.py: bafybeiegm7oknasrcezxvypa3nf6mkictkewsfoiqtljkbb466is6rgfnq
   payloads.py: bafybeic6jrms2xs2odykwwngr5yyqm6cus7cyihdbxux26glpq3573q3ay
   rounds.py: bafybeidxssc3muexhbq4kizkoxtz7kwhofvbxet32u2kb5rglpu6me2dai
-  tasks/campaign_validation_preparation.py: bafybeiaduuzqnttr74tksno56fkboigxhloyaun6coijrwsoi3piofivlu
+  tasks/campaign_validation_preparation.py: bafybeieupl6nxw47vxuxxyavw6kiljspjjvfl53c32krxzjqqr6g4kn45q
   tasks/finished_pipeline_preparation.py: bafybeig6ibvp6qvwsflsriiesjlmtbjv2j7q3nh4hy7kzvypvva424cl6i
   tasks/score_preparations.py: bafybeie7cfot24zcyod5becz6t5lasvva77httfkw57qmvgjk35d3qluxa
   tasks/signature_validation.py: bafybeihbwrv72hnh3ytko2i5oszqgdky2j6h2wse45wvuhf2j32lo2tsjy
   tasks/staking.py: bafybeidcoyq2qbnqdmrowyud2wj7rooxzg2jel4itafrlykrg2l4sebm7m
   tasks/task_preparations.py: bafybeifj72naspy3hkmdb6xkkgg4sclpjpgxvzhp4nwjn2z4x3ujbf4oue
-  tasks/tweet_validation_preparation.py: bafybeihatbvs7feca4qqwjwrwv5xuvkyq3a2hxnydhqvbxkmpvjh5bqgt4
-  tasks/twitter_preparation.py: bafybeic3ypgdtqzvzjxcxmb5qx5qsbj32noi4esq33fwthzz2os52aixzm
-  tasks/week_in_olas_preparations.py: bafybeictwezwauailsu7z2fqddshovtzmchk56kofmojuf24xm72fflfmi
+  tasks/tweet_validation_preparation.py: bafybeiesnyri6mqjkpos6kcmqqvi6euvhewxfj7gre52bwa5jdysxg2hv4
+  tasks/twitter_preparation.py: bafybeib5iuuxdkzytc65acdus2clud4x3mqtwtgdxcmpn2cdbagmzuxkda
+  tasks/week_in_olas_preparations.py: bafybeiclobke2uagoilcgxc5k7twnfu33euefils4kh7fmmvyd3hbmyxne
   test_tools/__init__.py: bafybeiagwxhcqhvnfhf7yejawmjkle6c7eb4o4hjoy363dahmnyq22xmua
   test_tools/tasks.py: bafybeiecu32iciko26ncglpxkzwlb6ifrvgknmcisthotkqhn7eku25qrm
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
@@ -54,8 +54,8 @@ protocols:
 - valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeifclzgoyulkyyigcwrqzmydyrj6c5d26xu7jk6cjbsed3pkls4pba
-- valory/staking_abci:0.1.0:bafybeigcaxqlxorco6b6qqtqk5vh4z5wbgxgid4vhkngiwikdcn4ymq2ym
-- valory/contribute_db_abci:0.1.0:bafybeidwqxzvwtjesvznvxcr6fehkdfroalv5z5fazsmsbt2dxhezwtski
+- valory/staking_abci:0.1.0:bafybeicngzbdaalydcrnumxxpf4i3cnn2x5ui72cg5vaa7c6komewxfgei
+- valory/contribute_db_abci:0.1.0:bafybeidnw35kwboindyds2gog6kzczrolskiqfsbdpadtl2g55ybcqnceu
 behaviours:
   main:
     args: {}

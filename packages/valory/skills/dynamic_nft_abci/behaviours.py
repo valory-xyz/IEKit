@@ -149,7 +149,7 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
 
         # Update token_ids in the contribut_db
         for token_id, address in new_token_id_to_address.items():
-            user = contribute_db.get_user_by_attribute("wallet_address", address)
+            user = yield from contribute_db.get_user_by_attribute("wallet_address", address)
 
             # Create a new user if it does not exist
             # Update user in the following cases:
@@ -161,7 +161,7 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
 
             if user.token_id is None or int(token_id) < int(user.token_id):
                 user.token_id = token_id
-                contribute_db.create_or_update_user_by_key(
+                yield from contribute_db.create_or_update_user_by_key(
                     "wallet_address", address, user
                 )
 
@@ -185,7 +185,7 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
         # Last parsed block
         module_data = contribute_db.data.module_data
         module_data.dynamic_nft.last_parsed_block = last_parsed_block
-        contribute_db.update_module_data(module_data)
+        yield from contribute_db.update_module_data(module_data)
 
         # Last update time
         last_update_time = cast(

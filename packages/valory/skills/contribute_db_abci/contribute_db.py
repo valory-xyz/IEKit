@@ -168,7 +168,12 @@ class ContributeDatabase(Model):
             raise ValueError(
                 "Writer addresses is empty. No agent will write to AgentDB!"
             )
-        return self.agent_address in self.writer_addresses
+        if self.agent_address in self.writer_addresses:
+            self.logger.info("I am the AgentDB writer")
+            return True
+        else:
+            self.logger.info("I am ot the AgentDB writer")
+            return False
 
     def register(self):
         """Register agent and all definitions"""
@@ -180,7 +185,7 @@ class ContributeDatabase(Model):
                 type_name="contribute",
                 description="A service that tracks contributions to the Olas ecosystem.",
             )
-            print(f"Created agent type: {contribute_type.type_name}")
+            self.logger.info(f"Created agent type: {contribute_type.type_name}")
 
         self.agent_type = contribute_type
         self.client.agent_type = contribute_type
@@ -195,7 +200,7 @@ class ContributeDatabase(Model):
                 agent_type=contribute_type,
                 eth_address=self.client.eth_address,
             )
-            print(f"Created agent instance: {contribute_instance.agent_name}")
+            self.logger.info(f"Created agent instance: {contribute_instance.agent_name}")
 
         self.agent = contribute_instance
         self.client.agent = contribute_instance
@@ -219,7 +224,7 @@ class ContributeDatabase(Model):
     def create_tweet(self, tweet: UserTweet) -> Optional[AttributeInstance]:
         """Create a tweet attribute instance"""
 
-        print(f"Creating tweet: {tweet.tweet_id} for user {tweet.twitter_user_id}")
+        self.logger.info(f"Creating tweet: {tweet.tweet_id} for user {tweet.twitter_user_id}")
 
         # Create the new tweet
         tweet_instance = None
@@ -259,7 +264,7 @@ class ContributeDatabase(Model):
 
     def create_user(self, user: ContributeUser) -> Optional[AttributeInstance]:
         """Create a user attribute instance"""
-        print(f"Creating user: {user.id} with twitter_id {user.twitter_id}")
+        self.logger.info(f"Creating user: {user.id} with twitter_id {user.twitter_id}")
 
         # Avoid user duplication
         is_duplicate, existing_user = self.is_duplicate_user(user)
@@ -319,7 +324,7 @@ class ContributeDatabase(Model):
         self, config: ModuleConfigs
     ) -> Optional[AttributeInstance]:
         """Create a plugin config attribute instance"""
-        print("Creating module configs")
+        self.logger.info("Creating module configs")
         module_configs_instance = None
         if self.is_writer():
             module_configs_instance = (
@@ -345,7 +350,7 @@ class ContributeDatabase(Model):
 
     def create_module_data(self, data: ModuleData) -> Optional[AttributeInstance]:
         """Create a plugin data attribute instance"""
-        print("Creating module data")
+        self.logger.info("Creating module data")
         module_data_instance = None
         if self.is_writer():
             module_data_instance = (
@@ -385,7 +390,7 @@ class ContributeDatabase(Model):
             attr_data = attribute["attr_value"] | {
                 "attribute_instance_id": attribute["attr_id"]
             }
-            print(f"Loading attribute: {attr_name} with id: {attribute['attr_id']}")
+            self.logger.info(f"Loading attribute: {attr_name} with id: {attribute['attr_id']}")
 
             if attr_name == "tweet":
                 tweet = UserTweet(**attr_data)
