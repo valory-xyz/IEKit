@@ -9,9 +9,9 @@ fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
   behaviours.py: bafybeigcvodybauatvybm47grm4wqpcpghwmdtw6zdoli3gufvk2hmxmuu
   composition.py: bafybeihdifgovru3kqwswyvztf3faai264tarwa62fa52o5yyrmfihxsru
-  dialogues.py: bafybeig7smk5zlttlbrl74ivdv7b7yw2x5fygil6zmrotzn5r3brhxvnm4
+  dialogues.py: bafybeiaho6vtf5tje7w7yyg4ozezynucmyq7ayvtybow2m62rfj4wcltmq
   fsm_specification.yaml: bafybeihndb5ndoiv3a3vkhac4v525kgu7hziu52xazmkiwkvdo3ncltlzi
-  handlers.py: bafybeibew3jt2x7wrmgl2fkvjsexk3yluiah4vwcahhujdle6l5jgmglx4
+  handlers.py: bafybeifgfg6r7c4h3kcvcrrztnw72gsjiz4uylrezsptwg6p3s4zgdn7lm
   models.py: bafybeidgrdjoouvuw6y32s7nf2ydeanxtb3aa5nb47ryky4aklx2c5u46a
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
   tests/test_behaviours.py: bafybeifkazsevd6vsfaapulouxepez3rl24y3rxgja5zhmj7s323zdjlmq
@@ -34,9 +34,10 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeid4alawv3oz4gdyom5uevrgzfsahbwabi37r7gomsetwqiq66g6cm
 - valory/decision_making_abci:0.1.0:bafybeieyysmvgpn3wt6sutd5ryknuyp2gvl7s6gnfb4n2uzyvi2gfcmusi
 - valory/twitter_write_abci:0.1.0:bafybeieywzotyhslqvegpsjqkod34skmhllpvulis37dmfyrafguh73eg4
-- valory/olas_week_abci:0.1.0:bafybeif6gqv732fyegvhou6lic3loysefch7wu4bivrk3kdm5xhca5gdre
+- valory/olas_week_abci:0.1.0:bafybeidjgwbnfjz7kxlnfvnsjvr5xf6nm5cd4igwsnrhtjlswc3epda2si
 - valory/mech_interact_abci:0.1.0:bafybeic73sfduvn75x4jfsvvpqhoxuwae75g2p4ahuuyalluvblltriqii
 - valory/staking_abci:0.1.0:bafybeigcaxqlxorco6b6qqtqk5vh4z5wbgxgid4vhkngiwikdcn4ymq2ym
+- valory/llm_abci:0.1.0:bafybeifozx3u2xsryym34rnekl3zz7y2tcx6zxfde3gktneimikcru5qq4
 behaviours:
   main:
     args: {}
@@ -57,6 +58,9 @@ handlers:
   ledger_api:
     args: {}
     class_name: LedgerApiHandler
+  llm:
+    args: {}
+    class_name: LlmHandler
   signing:
     args: {}
     class_name: SigningHandler
@@ -89,6 +93,9 @@ models:
   ledger_api_dialogues:
     args: {}
     class_name: LedgerApiDialogues
+  llm_dialogues:
+    args: {}
+    class_name: LlmDialogues
   acn_dialogues:
     args: {}
     class_name: AcnDialogues

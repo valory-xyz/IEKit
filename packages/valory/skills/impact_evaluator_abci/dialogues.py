@@ -61,6 +61,8 @@ from packages.valory.skills.abstract_round_abci.dialogues import (
 from packages.valory.skills.abstract_round_abci.dialogues import (
     TendermintDialogues as BaseTendermintDialogues,
 )
+from packages.valory.skills.llm_abci.dialogues import LlmDialogue as BaseLlmDialogue
+from packages.valory.skills.llm_abci.dialogues import LlmDialogues as BaseLlmDialogues
 from packages.valory.skills.mech_interact_abci.dialogues import (
     AcnDialogue as BaseAcnDialogue,
 )
@@ -101,6 +103,10 @@ TendermintDialogues = BaseTendermintDialogues
 
 IpfsDialogue = BaseIpfsDialogue
 IpfsDialogues = BaseIpfsDialogues
+
+
+LlmDialogue = BaseLlmDialogue
+LlmDialogues = BaseLlmDialogues
 
 
 TwitterDialogue = BaseTwitterDialogue

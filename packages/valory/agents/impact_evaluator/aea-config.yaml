@@ -20,7 +20,7 @@ connections:
 - valory/http_client:0.23.0:bafybeid5ffvg76ejjoese7brj5ji3lx66cu7p2ixfwflpo6rgofkypfd7y
 - valory/ledger:0.19.0:bafybeibdsjmy4w2eyilbqc7yzutopl65qpeyspxwz7mjvirr52twhjlf5y
 - valory/p2p_libp2p_client:0.1.0:bafybeic6ayusdwy4dks75njwk32ac7ur7salgllwf4fdc34ue5z2k5iz4q
-- valory/openai:0.1.0:bafybeiaryip2lbiluf7vjsdq6r5qiqdesmhqevrzekfrxpugfypqja6gae
+- valory/openai:0.1.0:bafybeicm2uvsixb53fh4nl4ib4zzvd36yvvw4hqxslv73eskvecirpm2pu
 - valory/twitter:0.1.0:bafybeicwav25v43cx7mrhyjdxrzuyujjqvfvvgtumfajbqfwx4te4pa3k4
 contracts:
 - valory/dynamic_contribution:0.1.0:bafybeidwxmviasw6obn2kguewv54dq5ukfcymxqrjzfnwb7of3xt6qaxm4
@@ -46,7 +46,7 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeigyae3cvcfts547w56w6oqoq4z5nq4ypmftoftf4jgtlbndzu45lu
 - valory/abstract_round_abci:0.1.0:bafybeifclzgoyulkyyigcwrqzmydyrj6c5d26xu7jk6cjbsed3pkls4pba
-- valory/impact_evaluator_abci:0.1.0:bafybeigp533vxjg4e7uzkyfbexcxzttb2ymiusrqt55wgkphrc3a53qztm
+- valory/impact_evaluator_abci:0.1.0:bafybeiggpsf7wwdc6t7c4txihbdr4ivifl35j65jiwogfvdrezjk2cvltu
 - valory/twitter_scoring_abci:0.1.0:bafybeiclbfkykc3vtrsibotjb76jqcrl3cpo7gkhj3kodg2u4iq6lq34be
 - valory/agent_db_abci:0.1.0:bafybeiefkwfdvu4tyr4gjnx2fds2k4lcemuvsdioe2nanz4kpazixf3rxe
 - valory/contribute_db_abci:0.1.0:bafybeidwqxzvwtjesvznvxcr6fehkdfroalv5z5fazsmsbt2dxhezwtski
@@ -57,9 +57,10 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeid4alawv3oz4gdyom5uevrgzfsahbwabi37r7gomsetwqiq66g6cm
 - valory/twitter_write_abci:0.1.0:bafybeieywzotyhslqvegpsjqkod34skmhllpvulis37dmfyrafguh73eg4
 - valory/decision_making_abci:0.1.0:bafybeieyysmvgpn3wt6sutd5ryknuyp2gvl7s6gnfb4n2uzyvi2gfcmusi
-- valory/olas_week_abci:0.1.0:bafybeif6gqv732fyegvhou6lic3loysefch7wu4bivrk3kdm5xhca5gdre
+- valory/olas_week_abci:0.1.0:bafybeidjgwbnfjz7kxlnfvnsjvr5xf6nm5cd4igwsnrhtjlswc3epda2si
 - valory/mech_interact_abci:0.1.0:bafybeic73sfduvn75x4jfsvvpqhoxuwae75g2p4ahuuyalluvblltriqii
 - valory/staking_abci:0.1.0:bafybeigcaxqlxorco6b6qqtqk5vh4z5wbgxgid4vhkngiwikdcn4ymq2ym
+- valory/llm_abci:0.1.0:bafybeifozx3u2xsryym34rnekl3zz7y2tcx6zxfde3gktneimikcru5qq4
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -99,7 +100,7 @@ default_connection: null
 public_id: valory/openai:0.1.0
 type: connection
 config:
-  engine: ${str:text-davinci-003}
+  engine: ${str:gpt-4}
   max_tokens: ${int:500}
   openai_api_key: ${str:null}
   temperature: ${float:0.7}

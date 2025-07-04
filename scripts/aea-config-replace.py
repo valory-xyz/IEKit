@@ -52,13 +52,14 @@ PATH_TO_VAR = {
     "models/params/args/transaction_service_url": "TRANSACTION_SERVICE_URL",
 
     # Twitter
-    "config/twitter_api_bearer_token": "TWITTER_API_BEARER_TOKEN",
+    "models/params/args/twitter_api_bearer_token": "TWITTER_API_BEARER_TOKEN",
     "config/use_twitter_staging_api": "USE_TWITTER_STAGING_API",
     "config/twitter_staging_api": "TWITTER_STAGING_API",
 
     # OpenAI
     "config/use_openai_staging_api": "USE_OPENAI_STAGING_API",
     "config/openai_staging_api": "OPENAI_STAGING_API",
+    "config/openai_api_key": "OPENAI_API_KEY",
 
     # Staking
     "models/params/args/staking_activity_threshold": "STAKING_ACTIVITY_THRESHOLD",
