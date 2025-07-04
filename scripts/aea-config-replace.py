@@ -52,6 +52,7 @@ PATH_TO_VAR = {
     "models/params/args/transaction_service_url": "TRANSACTION_SERVICE_URL",
 
     # Twitter
+    "config/twitter_api_bearer_token": "TWITTER_API_BEARER_TOKEN",
     "config/use_twitter_staging_api": "USE_TWITTER_STAGING_API",
     "config/twitter_staging_api": "TWITTER_STAGING_API",
 

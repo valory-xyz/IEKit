@@ -34,7 +34,7 @@
         "agent/valory/impact_evaluator/0.1.0": "bafybeiftq5eo7hiyc323mdollqpfj2ecd4e764svovjj6arj3y3kj3s3ea",
         "agent/valory/farcaster_test/0.1.0": "bafybeiaoromegnd7jirh6d52qvqb6w7eal7ussjq2adwski4yiqlfu5bqq",
         "service/valory/impact_evaluator/0.1.0": "bafybeieqr3ajg2intdjhsbrx7eujlhjlnidbrguyd64qwk42zoqeky7pra",
-        "service/valory/impact_evaluator_local/0.1.0": "bafybeigllfxqhezgbyw27huuwrxeinkxlhpok4vazsbrcqwwxwwor66n6u"
+        "service/valory/impact_evaluator_local/0.1.0": "bafybeid2wmnue4pymlgmhacvwrvdogwzfa7i7yb7apy5oa3mtv6zqfz7bq"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm",

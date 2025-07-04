@@ -87,7 +87,7 @@ models:
       token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
       whitelist_api_key: null
       whitelist_endpoint: http://localhost
-      points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:null}
+      points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}}
       twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
       twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
       twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
@@ -135,6 +135,9 @@ models:
   randomness_api:
     args:
       url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
+  agent_db_client:
+    args:
+      base_url: ${AGENT_DB_BASE_URL:str:https://afmdb.autonolas.tech}
 ---
 public_id: valory/ledger:0.19.0
 type: connection
