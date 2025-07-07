@@ -18,6 +18,7 @@
 #
 # ------------------------------------------------------------------------------
 
+"""Propel"""
 
 import json
 import logging
@@ -113,13 +114,13 @@ class Agent:
         )
 
         try:
-            response = requests.get(healthcheck_url, verify=False)
+            response = requests.get(healthcheck_url, verify=False)  # nosec
             if response.status_code != HTTP_OK:
                 return False, {}
             response_json = response.json()
             is_healthy = response_json["is_transitioning_fast"]
             return is_healthy, response_json
-        except Exception:
+        except Exception: # pylint: disable=broad-except
             return False, {}
 
     def healthcheck(self) -> Tuple[bool, Optional[str]]:
