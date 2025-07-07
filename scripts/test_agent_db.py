@@ -29,7 +29,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import json
 from datetime import datetime, timezone
-from typing import Any, List, Optional, Dict
+from typing import Any, Dict, List, Optional
 
 import dotenv
 import requests

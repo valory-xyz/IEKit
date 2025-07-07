@@ -26,8 +26,8 @@ from typing import Any, Callable, Dict, List, Optional, Union
 
 from aea.skills.base import Model
 from eth_account import Account
-from eth_account.messages import encode_defunct
 from eth_account.datastructures import SignedMessage
+from eth_account.messages import encode_defunct
 
 from packages.valory.skills.agent_db_abci.agent_db_models import (
     AgentInstance,
