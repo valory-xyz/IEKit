@@ -49,7 +49,6 @@ py-eth-sig-utils = "*"
 protobuf = "<4.25.0,>=4.21.6"
 farcaster = "==0.7.11"
 rich = "==13.9.4"
-propel-client = "==0.0.15"
 
 [requires]
 python_version = "3.10"
