@@ -29,7 +29,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import json
 from datetime import datetime, timezone
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Dict
 
 import dotenv
 import requests
@@ -69,6 +69,7 @@ class AgentDBClient:
         self.base_url = base_url.rstrip("/")
         self.eth_address = eth_address
         self.private_key = private_key
+        self._attribute_definition_cache: Dict[int, AttributeDefinition] = {}
         self.agent = self.get_agent_instance_by_address(self.eth_address)
         self.agent_type = (
             self.get_agent_type_by_type_id(self.agent.type_id) if self.agent else None
@@ -105,6 +106,10 @@ class AgentDBClient:
                 payload["auth"] = self._sign_request(endpoint)
             else:
                 payload = payload | self._sign_request(endpoint)
+
+        print(
+            f"Making {method} request to {url} with payload: {payload} and params: {params}"
+        )
 
         response = requests.request(
             method, url, headers=headers, json=payload, params=params
@@ -215,9 +220,15 @@ class AgentDBClient:
         self, attr_id: int
     ) -> Optional[AttributeDefinition]:
         """Get attribute definition by id"""
+        if attr_id in self._attribute_definition_cache:
+            return self._attribute_definition_cache[attr_id]
         endpoint = f"/api/attributes/{attr_id}"
         result = self._request("GET", endpoint)
-        return AttributeDefinition.model_validate(result) if result else None
+        if result:
+            definition = AttributeDefinition.model_validate(result)
+            self._attribute_definition_cache[attr_id] = definition
+            return definition
+        return None
 
     def get_attribute_definitions_by_agent_type(self, agent_type: AgentType):
         """Get attributes by agent type"""
@@ -278,12 +289,12 @@ class AgentDBClient:
         self,
         agent_instance: AgentInstance,
         attribute_def: AttributeDefinition,
-        attribute_instance: AttributeInstance,
+        attribute_instance_id: int,
         value: Any,
         value_type="string",
     ) -> Optional[AttributeInstance]:
         """Update attribute instance"""
-        endpoint = f"/api/agent-attributes/{attribute_instance.attribute_id}"
+        endpoint = f"/api/agent-attributes/{attribute_instance_id}"
         payload = {f"{value_type}_value": value}
         payload = {
             "agent_id": agent_instance.agent_id,
@@ -408,7 +419,7 @@ class JsonAttributeInterface:
         return attr_instance
 
     def update_instance(
-        self, attr_instance: AttributeInstance, model: BaseModel
+        self, model: BaseModel
     ) -> Optional[AttributeInstance]:
         """Update an attribute instance"""
         attr_def = self.client.get_attribute_definition_by_name(self.attribute_name)
@@ -419,7 +430,7 @@ class JsonAttributeInterface:
         updated_instance = self.client.update_attribute_instance(
             agent_instance=self.client.agent,
             attribute_def=attr_def,
-            attribute_instance=attr_instance,
+            attribute_instance_id=model.attribute_instance_id,
             value=model.model_dump(mode="json"),
             value_type="json",
         )
@@ -518,13 +529,12 @@ class ContributeDatabase:
 
         # Update the user
         user.tweets[tweet.tweet_id] = tweet
-        user_instance = self.client.get_attribute_instance_by_attribute_id(user.attribute_instance_id)
-        self.user_interface.update_instance(user_instance, user)
+        self.user_interface.update_instance(user)
         return tweet_instance
 
-    def update_tweet(self, attr_instance: AttributeInstance, tweet: UserTweet) -> Optional[AttributeInstance]:
+    def update_tweet(self, tweet: UserTweet) -> Optional[AttributeInstance]:
         """Update a tweet attribute instance"""
-        return self.tweet_interface.update_instance(attr_instance, tweet)
+        return self.tweet_interface.update_instance(tweet)
 
     def create_user(self, user: ContributeUser) -> Optional[AttributeInstance]:
         """Create a user attribute instance"""
@@ -534,9 +544,10 @@ class ContributeDatabase:
             self.data.users[user.id] = user
         return user_instance
 
-    def update_user(self, attr_instance: AttributeInstance, user: ContributeUser) -> Optional[AttributeInstance]:
+    def update_user(self, user: ContributeUser) -> Optional[AttributeInstance]:
         """Update a user attribute instance"""
-        return self.user_interface.update_instance(attr_instance, user)
+        result = self.user_interface.update_instance(user)
+        return result
 
     def create_module_configs(self, config: ModuleConfigs) -> Optional[AttributeInstance]:
         """Create a plugin config attribute instance"""
@@ -547,9 +558,9 @@ class ContributeDatabase:
             self.data.module_configs.attribute_instance_id = module_configs_instance.attribute_id
         return module_configs_instance
 
-    def update_module_configs(self, attr_instance: AttributeInstance, configs: ModuleConfigs) -> Optional[AttributeInstance]:
+    def update_module_configs(self, configs: ModuleConfigs) -> Optional[AttributeInstance]:
         """Update a plugin config attribute instance"""
-        return self.module_configs_interface.update_instance(attr_instance, configs)
+        return self.module_configs_interface.update_instance(configs)
 
     def create_module_data(self, data: ModuleData) -> Optional[AttributeInstance]:
         """Create a plugin data attribute instance"""
@@ -560,9 +571,17 @@ class ContributeDatabase:
             self.data.module_data.attribute_instance_id = module_data_instance.attribute_id
         return module_data_instance
 
-    def update_module_data(self, attr_instance: AttributeInstance, data: ModuleData) -> Optional[AttributeInstance]:
+    def update_module_data(self, data: ModuleData) -> Optional[AttributeInstance]:
         """Update a plugin data attribute instance"""
-        return self.module_data_interface.update_instance(attr_instance, data)
+        return self.module_data_interface.update_instance(data)
+
+    def create_or_update_user_by_key(self, key: str, value: Any, user: ContributeUser):
+        """Creates or updates a user"""
+        user = self.get_user_by_attribute(key, value)
+        if not user:
+            self.create_user(user)
+        else:
+            self.update_user(user)
 
     def load_from_remote_db(self):
         """Load data from the remote database."""
@@ -672,7 +691,8 @@ def init_database_from_ceramic(db_client):
     contribute_data.module_data.attribute_instance_id = module_data_attribute.attribute_id
 
 
-if __name__ == "__main__":
+def main():
+    """Main"""
 
     # Initialize the client
     client = AgentDBClient(
@@ -685,3 +705,7 @@ if __name__ == "__main__":
 
     contribute_db = ContributeDatabase(client)
     contribute_db.load_from_remote_db()
+
+
+if __name__ == "__main__":
+    main()

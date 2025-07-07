@@ -27,6 +27,7 @@ from typing import Any, Callable, Dict, List, Optional, Union
 from aea.skills.base import Model
 from eth_account import Account
 from eth_account.messages import encode_defunct
+from eth_account.datastructures import SignedMessage
 
 from packages.valory.skills.agent_db_abci.agent_db_models import (
     AgentInstance,
@@ -79,8 +80,9 @@ class AgentDBClient(Model):
 
     def sign_using_pkey(self, message_to_sign: str):
         """Sign using pkey"""
+        yield
         if isinstance(message_to_sign, bytes):
-            message_to_sign = str(message_to_sign)
+            message_to_sign = message_to_sign.decode("utf-8")
 
         signed_message = Account.sign_message(  # pylint: disable=no-value-for-parameter
             encode_defunct(text=message_to_sign), private_key=self.private_key
@@ -111,6 +113,8 @@ class AgentDBClient(Model):
         message_to_sign = f"timestamp:{timestamp},endpoint:{endpoint}"
 
         signature_hex = yield from self.signing_func(message_to_sign.encode("utf-8"))
+        if isinstance(signature_hex, SignedMessage):
+            signature_hex = signature_hex.signature.hex()
 
         auth_data = {
             "agent_id": self.agent.agent_id,
