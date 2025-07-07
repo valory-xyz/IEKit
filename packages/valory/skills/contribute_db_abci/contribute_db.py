@@ -311,18 +311,16 @@ class ContributeDatabase(Model):
         """Update a user attribute instance"""
         if not self.is_writer():
             return None
-        return self.user_interface.update_instance(user)
+        result = yield from self.user_interface.update_instance(user)
+        return result
 
     def create_or_update_user_by_key(self, key: str, value: Any, user: ContributeUser):
         """Creates or updates a user"""
         user = self.get_user_by_attribute(key, value)
         if not user:
-            self.create_user(user)
+            yield from self.create_user(user)
         else:
-            attribute_instance = yield from self.user_interface.get_instance(
-                user.attribute_instance_id
-            )
-            self.update_user(attribute_instance, user)
+            yield from self.update_user(user)
 
     def create_module_configs(
         self, config: ModuleConfigs

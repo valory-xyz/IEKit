@@ -1185,7 +1185,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
                 yield from contribute_db.create_tweet(tweet)
 
-            user = yield from contribute_db.get_user_by_attribute(
+            user = contribute_db.get_user_by_attribute(
                 "twitter_id", author_id
             )
 
