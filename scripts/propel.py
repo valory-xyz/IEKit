@@ -31,9 +31,14 @@ from typing import Dict, List, Optional, Tuple
 import dotenv
 import requests
 import urllib3
-from propel_client.constants import PROPEL_SERVICE_BASE_URL
-from propel_client.cred_storage import CredentialStorage
-from propel_client.propel import HttpRequestError, PropelClient
+from propel_client.constants import (
+    PROPEL_SERVICE_BASE_URL,  # pylint: disable=import-error
+)
+from propel_client.cred_storage import CredentialStorage  # pylint: disable=import-error
+from propel_client.propel import (  # pylint: disable=import-error
+    HttpRequestError,
+    PropelClient,
+)
 
 
 logger = logging.getLogger("propel")
