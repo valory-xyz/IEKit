@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """This module contains the handlers for the skill of MechInteractAbciApp."""
+
 from typing import cast
 
 from aea.protocols.base import Message
@@ -101,5 +102,5 @@ class AcnHandler(Handler):
             )
             return
 
-        self.current_mech_response.response_data = message.content
+        self.current_mech_response.response_data = cast(bytes, message.content)
         self.current_mech_response.sender_address = message.sender

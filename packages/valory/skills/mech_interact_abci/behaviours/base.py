@@ -21,7 +21,6 @@
 
 import json
 from abc import ABC
-from dataclasses import asdict, is_dataclass
 from datetime import datetime, timedelta
 from typing import Any, Callable, Generator, List, Optional, cast
 
@@ -30,6 +29,9 @@ from aea.configurations.data_types import PublicId
 from packages.valory.contracts.agent_registry.contract import AgentRegistryContract
 from packages.valory.contracts.mech.contract import Mech
 from packages.valory.contracts.mech_marketplace.contract import MechMarketplace
+from packages.valory.contracts.mech_marketplace_legacy.contract import (
+    MechMarketplaceLegacy,
+)
 from packages.valory.contracts.mech_mm.contract import MechMM
 from packages.valory.protocols.contract_api import ContractApiMessage
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
@@ -57,6 +59,8 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
         self.multisend_batches: List[MultisendBatch] = []
         self.multisend_data = b""
         self._safe_tx_hash = ""
+        self._is_marketplace_v2_compatible: Optional[bool] = None
+        self._compatibility_check_performed: bool = False
 
     @property
     def synchronized_data(self) -> SynchronizedData:
@@ -187,6 +191,25 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
         )
         return status
 
+    def _mech_marketplace_legacy_contract_interact(
+        self,
+        contract_callable: str,
+        data_key: str,
+        placeholder: str,
+        **kwargs: Any,
+    ) -> WaitableConditionType:
+        """Interact with the mech marketplace contract."""
+        status = yield from self.contract_interact(
+            performative=ContractApiMessage.Performative.GET_RAW_TRANSACTION,  # type: ignore
+            contract_address=self.params.mech_marketplace_config.mech_marketplace_address,
+            contract_public_id=MechMarketplaceLegacy.contract_id,
+            contract_callable=contract_callable,
+            data_key=data_key,
+            placeholder=placeholder,
+            **kwargs,
+        )
+        return status
+
     def agent_registry_contract_interact(
         self,
         contract_callable: str,
@@ -246,12 +269,133 @@ class MechInteractBaseBehaviour(BaseBehaviour, ABC):
 
         self.set_done()
 
+    def _get_mech_address(self) -> str:
+        """Get the current mech address."""
+        return self.params.mech_marketplace_config.priority_mech_address.lower()
 
-class DataclassEncoder(json.JSONEncoder):
-    """A custom JSON encoder for dataclasses."""
+    def _detect_marketplace_compatibility(self) -> WaitableConditionType:
+        """Detect if the marketplace/mech contract supports v2 features."""
 
-    def default(self, o: Any) -> Any:
-        """The default JSON encoder."""
-        if is_dataclass(o):
-            return asdict(o)
-        return super().default(o)
+        if self._compatibility_check_performed:
+            return True  # Use in-memory cached result
+
+        mech_address = self._get_mech_address()
+        compatibility_cache = self.synchronized_data.marketplace_compatibility_cache
+
+        # Check if we already know this mech address
+        if mech_address in compatibility_cache:
+            cached_value = compatibility_cache[mech_address]
+
+            # Handle different cache formats during transition
+            if isinstance(cached_value, str):
+                # New string format: "v1" or "v2"
+                self._is_marketplace_v2_compatible = cached_value == "v2"
+                cached_version = cached_value
+            elif isinstance(cached_value, bool):
+                # Old boolean format: True = v2, False = v1
+                self._is_marketplace_v2_compatible = cached_value
+                cached_version = "v2" if cached_value else "v1"
+            elif isinstance(cached_value, dict):
+                # Old dict format: get 'compatible' field
+                compatible = cached_value.get("compatible", False)
+                self._is_marketplace_v2_compatible = compatible
+                cached_version = "v2" if compatible else "v1"
+            else:
+                # Unknown format, fall through to detection
+                self.context.logger.warning(
+                    f"Unknown cache format for {mech_address}: {type(cached_value)}"
+                )
+                cached_version = None
+
+            if cached_version:
+                self._compatibility_check_performed = True
+                self.context.logger.info(
+                    f"Using cached compatibility for {mech_address}: {cached_version}"
+                )
+                return True
+
+        self.context.logger.info(
+            f"Detecting marketplace compatibility for new mech: {mech_address}"
+        )
+
+        # Try calling get_payment_type on the mech address
+        try:
+            status = yield from self._mech_mm_contract_interact(
+                contract_callable="get_payment_type",
+                data_key="payment_type",
+                placeholder="_temp_payment_type_check",
+                chain_id=self.params.mech_chain_id,
+            )
+
+            if status:
+                self.context.logger.info(f"Mech {mech_address} supports v2 features")
+                self._is_marketplace_v2_compatible = True
+            else:
+                self.context.logger.info(f"Mech {mech_address} uses v1 features")
+                self._is_marketplace_v2_compatible = False
+
+        except Exception as e:
+            self.context.logger.warning(
+                f"Feature detection failed for mech {mech_address}: {e}. "
+                "Defaulting to v1 (legacy mode)"
+            )
+            self._is_marketplace_v2_compatible = False
+
+        self._compatibility_check_performed = True
+        return True
+
+    def get_updated_compatibility_cache(self) -> str:
+        """Get the updated compatibility cache as JSON string for synchronized data."""
+
+        try:
+            # Get current cache and convert old formats to new string format
+            current_cache = {}
+            raw_cache = self.synchronized_data.marketplace_compatibility_cache
+
+            # Convert old cache formats to new string format
+            for key, value in raw_cache.items():
+                if isinstance(value, bool):
+                    # Old boolean format: True = v2, False = v1
+                    current_cache[key] = "v2" if value else "v1"
+                elif isinstance(value, dict):
+                    # Old dict format: get 'compatible' field
+                    compatible = value.get("compatible", False)
+                    current_cache[key] = "v2" if compatible else "v1"
+                elif isinstance(value, str):
+                    # New string format: keep as is
+                    current_cache[key] = value
+
+            if (
+                self._compatibility_check_performed
+                and self._is_marketplace_v2_compatible is not None
+            ):
+                mech_address = self._get_mech_address()
+                version = "v2" if self._is_marketplace_v2_compatible else "v1"
+                current_cache[mech_address] = version
+                self.context.logger.info(f"Updated cache: {mech_address} = {version}")
+
+            return json.dumps(current_cache)
+        except Exception as e:
+            self.context.logger.warning(f"Failed to serialize compatibility cache: {e}")
+            return "{}"
+
+    @property
+    def is_marketplace_v2_compatible(self) -> bool:
+        """Returns True if the marketplace supports v2 features."""
+
+        if not self._compatibility_check_performed:
+            raise ValueError(
+                "Compatibility check must be performed before accessing this property"
+            )
+        return self._is_marketplace_v2_compatible or False
+
+    def should_use_marketplace_v2(self) -> bool:
+        """Determine if marketplace v2 flow should be used."""
+
+        if not self.params.use_mech_marketplace:
+            return False  # Configuration explicitly disables marketplace
+
+        if not self._compatibility_check_performed:
+            raise ValueError("Compatibility check must be performed first")
+
+        return self._is_marketplace_v2_compatible or False

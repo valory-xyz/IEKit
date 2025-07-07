@@ -20,7 +20,7 @@
 """This module contains the class to connect to a Mech contract."""
 
 import concurrent.futures
-from typing import Any, Callable, Dict, List, cast
+from typing import Any, Callable, Dict, List, Optional, Tuple, cast
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId
@@ -28,7 +28,9 @@ from aea.contracts.base import Contract
 from aea.crypto.base import LedgerApi
 from aea_ledger_ethereum import EthereumApi
 from eth_typing import HexStr
-from web3.types import BlockData, BlockIdentifier, EventData, TxReceipt
+from eth_utils import event_abi_to_log_topic
+from web3._utils.events import get_event_data
+from web3.types import BlockData, BlockIdentifier, EventData, FilterParams, TxReceipt
 
 
 PUBLIC_ID = PublicId.from_str("valory/mech:0.1.0")
@@ -176,10 +178,7 @@ class Mech(Contract):
 
     @classmethod
     def get_price(
-        cls,
-        ledger_api: EthereumApi,
-        contract_address: str,
-        **kwargs: Any
+        cls, ledger_api: EthereumApi, contract_address: str, **kwargs: Any
     ) -> JSONLike:
         """Get the price of a request."""
         contract_address = ledger_api.api.to_checksum_address(contract_address)
@@ -193,7 +192,7 @@ class Mech(Contract):
         ledger_api: LedgerApi,
         contract_address: str,
         request_data: bytes,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> Dict[str, bytes]:
         """Gets the encoded arguments for a request tx, which should only be called via the multisig.
 
@@ -215,7 +214,7 @@ class Mech(Contract):
         expected_logs: int,
         event_name: str,
         *args: Any,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> JSONLike:
         """Process the logs of the given event."""
         ledger_api = cast(EthereumApi, ledger_api)
@@ -234,7 +233,9 @@ class Mech(Contract):
             if event_args is None or any(
                 expected_key not in event_args for expected_key in args
             ):
-                return {"error": f"The emitted event's ({event_name}) logs for tx {tx_hash} do not match the expected format: {log}"}
+                return {
+                    "error": f"The emitted event's ({event_name}) logs for tx {tx_hash} do not match the expected format: {log}"
+                }
             results.append({arg_name: event_args[arg_name] for arg_name in args})
 
         return dict(results=results)
@@ -246,7 +247,7 @@ class Mech(Contract):
         contract_address: str,
         tx_hash: HexStr,
         expected_logs: int = 1,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> JSONLike:
         """
         Process the request receipt to get the requestId and the given data from the `Request` event's logs.
@@ -261,9 +262,17 @@ class Mech(Contract):
         contract_address = ledger_api.api.to_checksum_address(contract_address)
         res = {}
         for abi in partial_abis:
-            contract_instance = ledger_api.api.eth.contract(contract_address, abi=abi)
+            contract_instance = ledger_api.api.eth.contract(
+                address=contract_address, abi=abi
+            )
             res = cls._process_event(
-                ledger_api, contract_instance, tx_hash, expected_logs, "Request", "requestId", "data"
+                ledger_api,
+                contract_instance,
+                tx_hash,
+                expected_logs,
+                "Request",
+                "requestId",
+                "data",
             )
             if "error" not in res:
                 return res
@@ -277,7 +286,7 @@ class Mech(Contract):
         contract_address: str,
         tx_hash: HexStr,
         expected_logs: int = 1,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> JSONLike:
         """
         Process the request receipt to get the requestId and the delivered data if the `Deliver` event has been emitted.
@@ -291,27 +300,121 @@ class Mech(Contract):
         contract_address = ledger_api.api.to_checksum_address(contract_address)
         res = {}
         for abi in partial_abis:
-            contract_instance = ledger_api.api.eth.contract(contract_address, abi=abi)
+            contract_instance = ledger_api.api.eth.contract(
+                address=contract_address, abi=abi
+            )
             res = cls._process_event(
-                ledger_api, contract_instance, tx_hash, expected_logs, "Deliver", "requestId", "data"
+                ledger_api,
+                contract_instance,
+                tx_hash,
+                expected_logs,
+                "Deliver",
+                "requestId",
+                "data",
             )
             if "error" not in res:
                 return res
 
         return res
+
     @classmethod
     def get_block_number(
         cls,
         ledger_api: EthereumApi,
         contract_address: str,
         tx_hash: HexStr,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> JSONLike:
         """Get the number of the block in which the tx of the given hash was settled."""
         contract_address = ledger_api.api.to_checksum_address(contract_address)
         receipt: TxReceipt = ledger_api.api.eth.get_transaction_receipt(tx_hash)
         block: BlockData = ledger_api.api.eth.get_block(receipt["blockNumber"])
         return dict(number=block["number"])
+
+    @classmethod
+    def _process_abi_for_response(
+        cls,
+        abi_index: int,
+        abi: Any,
+        ledger_api: EthereumApi,
+        contract_address: str,
+        request_id: int,
+        from_block: BlockIdentifier,
+        to_block: BlockIdentifier,
+    ) -> Tuple[Dict[str, Any], bool]:
+        """
+        Process a single ABI to find a response for the given request ID.
+
+        Args:
+            abi_index: The index of the ABI being processed
+            abi: The ABI to process
+            ledger_api: The ledger API
+            contract_address: The contract address
+            request_id: The request ID to search for
+            from_block: The block to start searching from
+            to_block: The block to end searching at
+
+        Returns:
+            A tuple containing:
+            - The result (data on success, error/info message on failure)
+            - A boolean indicating if this is a successful final result
+        """
+        contract_instance = ledger_api.api.eth.contract(
+            address=contract_address, abi=abi
+        )
+
+        # Find the Deliver event in this ABI
+        deliver_event_abi = None
+        for event_spec in abi:
+            if (
+                event_spec.get("name") == "Deliver"
+                and event_spec.get("type") == "event"
+            ):
+                deliver_event_abi = event_spec
+                break
+
+        if deliver_event_abi is None:
+            return {"error": f"No Deliver event found in ABI {abi_index}"}, False
+
+        event_topic = event_abi_to_log_topic(deliver_event_abi)
+
+        filter_params: FilterParams = {
+            "fromBlock": from_block,
+            "toBlock": to_block,
+            "address": contract_instance.address,
+            "topics": [event_topic],
+        }
+
+        w3 = ledger_api.api.eth
+        logs = w3.get_logs(filter_params)
+        delivered = [
+            event_data
+            for log in logs
+            if request_id
+            == (event_data := get_event_data(w3.codec, deliver_event_abi, log))
+            .get("args", {})
+            .get("requestId", None)
+        ]
+        n_delivered = len(delivered)
+
+        if n_delivered == 0:
+            return {
+                "info": f"The mech ({contract_address}) has not delivered a response yet for request with id {request_id}."
+            }, False
+        elif n_delivered != 1:
+            return {
+                "error": f"A single response was expected by the mech ({contract_address}) for request with id {request_id}. Received {n_delivered} responses: {delivered}."
+            }, False
+        else:
+            delivered_event = delivered.pop()
+            deliver_args = delivered_event.get("args", None)
+            if deliver_args is None or "data" not in deliver_args:
+                return {
+                    "error": f"The mech's response does not match the expected format: {delivered_event}"
+                }, False
+            else:
+                # SUCCESS! Return immediately
+                return dict(data=deliver_args["data"]), True
 
     @classmethod
     def get_response(
@@ -322,7 +425,7 @@ class Mech(Contract):
         from_block: BlockIdentifier = "earliest",
         to_block: BlockIdentifier = "latest",
         timeout: float = FIVE_MINUTES,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> JSONLike:
         """Filter the `Deliver` events emitted by the contract and get the data of the given `request_id`."""
         contract_address = ledger_api.api.to_checksum_address(contract_address)
@@ -330,32 +433,24 @@ class Mech(Contract):
 
         def get_responses() -> Any:
             """Get the responses from the contract."""
-            contract_instance = cls.get_instance(ledger_api, contract_address)
-            deliver_filter = contract_instance.events.Deliver.build_filter()
-            deliver_filter.fromBlock = from_block
-            deliver_filter.toBlock = to_block
-            deliver_filter.args.requestId.match_single(request_id)
-            delivered = list(deliver_filter.deploy(ledger_api.api).get_all_entries())
-            n_delivered = len(delivered)
-
-            if n_delivered == 0:
-                info = f"The mech ({contract_address}) has not delivered a response yet for request with id {request_id}."
-                return {"info": info}
-
-            if n_delivered != 1:
-                error = (
-                    f"A single response was expected by the mech ({contract_address}) for request with id {request_id}. "
-                    f"Received {n_delivered} responses: {delivered}."
+            last_result = {}
+            for abi_index, abi in enumerate(partial_abis):
+                result, is_final = cls._process_abi_for_response(
+                    abi_index,
+                    abi,
+                    ledger_api,
+                    contract_address,
+                    request_id,
+                    from_block,
+                    to_block,
                 )
-                return error
 
-            delivered_event = delivered.pop()
-            deliver_args = delivered_event.get("args", None)
-            if deliver_args is None or "data" not in deliver_args:
-                error = f"The mech's response does not match the expected format: {delivered_event}"
-                return error
+                if is_final:
+                    return result
 
-            return dict(data=deliver_args["data"])
+                last_result = result
+
+            return last_result
 
         data, err = cls.execute_with_timeout(get_responses, timeout=timeout)
         if err is not None:
@@ -365,10 +460,7 @@ class Mech(Contract):
 
     @classmethod
     def get_mech_id(
-        cls,
-        ledger_api: EthereumApi,
-        contract_address: str,
-        **kwargs: Any
+        cls, ledger_api: EthereumApi, contract_address: str, **kwargs: Any
     ) -> JSONLike:
         """Get the price of a request."""
         contract_address = ledger_api.api.to_checksum_address(contract_address)
@@ -378,11 +470,7 @@ class Mech(Contract):
 
     @classmethod
     def get_requests_count(
-        cls,
-        ledger_api: EthereumApi,
-        contract_address: str,
-        address: str,
-        **kwargs: Any
+        cls, ledger_api: EthereumApi, contract_address: str, address: str, **kwargs: Any
     ) -> JSONLike:
         """Get the requests count."""
         contract_address = ledger_api.api.to_checksum_address(contract_address)
@@ -392,10 +480,18 @@ class Mech(Contract):
         return {"requests_count": requests_count}
 
     @classmethod
-    def get_pending_requests(cls, ledger_api: EthereumApi, contract_address: str, sender_address: str, **kwargs: Any) -> JSONLike:
+    def get_pending_requests(
+        cls,
+        ledger_api: EthereumApi,
+        contract_address: str,
+        sender_address: str,
+        **kwargs: Any,
+    ) -> JSONLike:
         """Get the pending requests."""
         contract_address = ledger_api.api.to_checksum_address(contract_address)
         sender_address = ledger_api.api.to_checksum_address(sender_address)
         contract_instance = cls.get_instance(ledger_api, contract_address)
-        pending_requests = contract_instance.functions.mapUndeliveredRequestsCounts(sender_address).call()
+        pending_requests = contract_instance.functions.mapUndeliveredRequestsCounts(
+            sender_address
+        ).call()
         return {"pending_requests": pending_requests}

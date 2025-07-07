@@ -34,7 +34,9 @@ packages/valory/skills/termination_abci
 packages/open_aea
 *.pyc
 .vscode/
+.zed/
 .coverage*
+.dmypy.json
 
 .env
 

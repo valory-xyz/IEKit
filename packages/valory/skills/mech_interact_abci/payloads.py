@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ class MechRequestPayload(BaseTxPayload):
     safe_contract_address: Optional[str]
     mech_requests: Optional[str]
     mech_responses: Optional[str]
+    marketplace_compatibility_cache: Optional[str]  # ToDO
 
 
 @dataclass(frozen=True)

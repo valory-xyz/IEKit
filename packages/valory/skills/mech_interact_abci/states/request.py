@@ -41,6 +41,7 @@ class MechRequestRound(MechInteractionRound):
         get_name(SynchronizedData.safe_contract_address),
         get_name(SynchronizedData.mech_requests),
         get_name(SynchronizedData.mech_responses),
+        get_name(SynchronizedData.marketplace_compatibility_cache),
     )
     collection_key = get_name(SynchronizedData.participant_to_requests)
     none_event = Event.SKIP_REQUEST

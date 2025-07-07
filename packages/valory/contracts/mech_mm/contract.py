@@ -19,8 +19,7 @@
 
 """This module contains the class to connect to a Mech contract."""
 
-import concurrent.futures
-from typing import Any, Callable, Dict, List, cast
+from typing import Any, Dict, List, cast
 
 from aea.common import JSONLike
 from aea.configurations.base import PublicId
@@ -29,7 +28,9 @@ from aea.crypto.base import LedgerApi
 from aea_ledger_ethereum import EthereumApi
 from aea_ledger_ethereum.ethereum import rpc_call_with_timeout
 from eth_typing import HexStr
-from web3.types import BlockData, BlockIdentifier, EventData, TxReceipt
+from eth_utils import event_abi_to_log_topic
+from web3._utils.events import get_event_data
+from web3.types import BlockIdentifier, EventData, FilterParams, TxReceipt
 
 
 PUBLIC_ID = PublicId.from_str("valory/mech_mm:0.1.0")
@@ -121,12 +122,26 @@ class MechMM(Contract):
         def get_responses() -> Any:
             """Get the responses from the contract."""
             contract_instance = cls.get_instance(ledger_api, contract_address)
-            deliver_filter = contract_instance.events.Deliver.build_filter()
-            deliver_filter.fromBlock = from_block
-            deliver_filter.toBlock = to_block
-            # Match against bytes32 requestId
-            deliver_filter.args.requestId.match_single(request_id)
-            delivered = list(deliver_filter.deploy(ledger_api.api).get_all_entries())
+            event_abi = contract_instance.events.Deliver().abi
+            event_topic = event_abi_to_log_topic(event_abi)
+
+            filter_params: FilterParams = {
+                "fromBlock": from_block,
+                "toBlock": to_block,
+                "address": contract_instance.address,
+                "topics": [event_topic],
+            }
+
+            w3 = ledger_api.api.eth
+            logs = w3.get_logs(filter_params)
+            delivered = [
+                event_data
+                for log in logs
+                if request_id
+                == (event_data := get_event_data(w3.codec, event_abi, log))
+                .get("args", {})
+                .get("requestId", None)
+            ]
             n_delivered = len(delivered)
 
             if n_delivered == 0:
@@ -194,3 +209,21 @@ class MechMM(Contract):
             contract_instance, "maxDeliveryRate"
         )
         return dict(max_delivery_rate=max_delivery_rate)
+
+    @classmethod
+    def get_service_id(
+        cls,
+        ledger_api: EthereumApi,
+        contract_address: str,
+        **kwargs: Any,
+    ) -> JSONLike:
+        """Get the service id of the mech.
+
+        :param ledger_api: the ledger API object
+        :param contract_address: the contract address
+        :return: the service id
+        """
+        contract_address = ledger_api.api.to_checksum_address(contract_address)
+        contract_instance = cls.get_instance(ledger_api, contract_address)
+        service_id = ledger_api.contract_method_call(contract_instance, "serviceId")
+        return dict(service_id=service_id)
