@@ -69,36 +69,36 @@ from packages.valory.skills.decision_making_abci.tasks.week_in_olas_preparations
 previous_event_to_task_preparation_cls = {
     None: {
         "prev": None,
+        "next": WeekInOlasCreatePreparation,
+    },
+    Event.WEEK_IN_OLAS_CREATE.value: {
+        "prev": WeekInOlasCreatePreparation,
+        "next": TweetValidationPreparation,
+    },
+    Event.TWEET_VALIDATION.value: {
+        "prev": TweetValidationPreparation,
+        "next": ScheduledTweetPreparation,
+    },
+    Event.SCHEDULED_TWEET.value: {
+        "prev": ScheduledTweetPreparation,
+        "next": CampaignValidationPreparation,
+    },
+    Event.CAMPAIGN_VALIDATION.value: {
+        "prev": CampaignValidationPreparation,
+        "next": StakingActivityPreparation,
+    },
+    Event.STAKING_ACTIVITY.value: {
+        "prev": StakingActivityPreparation,
+        "next": StakingCheckpointPreparation,
+    },
+    Event.STAKING_CHECKPOINT.value: {
+        "prev": StakingCheckpointPreparation,
+        "next": StakingDAAPreparation,
+    },
+    Event.STAKING_DAA_UPDATE.value: {
+        "prev": StakingDAAPreparation,
         "next": ScorePreparation,
     },
-    # Event.WEEK_IN_OLAS_CREATE.value: {
-    #     "prev": WeekInOlasCreatePreparation,
-    #     "next": TweetValidationPreparation,
-    # },
-    # Event.TWEET_VALIDATION.value: {
-    #     "prev": TweetValidationPreparation,
-    #     "next": ScheduledTweetPreparation,
-    # },
-    # Event.SCHEDULED_TWEET.value: {
-    #     "prev": ScheduledTweetPreparation,
-    #     "next": CampaignValidationPreparation,
-    # },
-    # Event.CAMPAIGN_VALIDATION.value: {
-    #     "prev": CampaignValidationPreparation,
-    #     "next": StakingActivityPreparation,
-    # },
-    # Event.STAKING_ACTIVITY.value: {
-    #     "prev": StakingActivityPreparation,
-    #     "next": StakingCheckpointPreparation,
-    # },
-    # Event.STAKING_CHECKPOINT.value: {
-    #     "prev": StakingCheckpointPreparation,
-    #     "next": StakingDAAPreparation,
-    # },
-    # Event.STAKING_DAA_UPDATE.value: {
-    #     "prev": StakingDAAPreparation,
-    #     "next": ScorePreparation,
-    # },
     Event.SCORE.value: {
         "prev": ScorePreparation,
         "next": FinishedPipelinePreparation,
