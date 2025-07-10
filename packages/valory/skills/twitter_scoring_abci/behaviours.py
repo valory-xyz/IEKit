@@ -1136,13 +1136,10 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             author_id = tweet.twitter_user_id
             twitter_name = tweet_data["username"]
             new_points = tweet.points
-            wallet_address = self.get_registration(tweet.text)
+            wallet_address = self.get_registration(tweet_data["text"])
 
             # Check this user's point limit per period
-            user = (
-                contribute_db.get_user_by_attribute("twitter_id", tweet["author_id"])
-                or ContributeUser()
-            )
+            user = contribute_db.get_user_by_attribute("twitter_id", author_id)
 
             current_period_points = user.current_period_points if user else 0
 
@@ -1168,11 +1165,19 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                         if staking_contract_address
                         else None
                     )
+            else:
+                user = ContributeUser(
+                    id=contribute_db.get_next_user_id(),
+                    twitter_id=author_id,
+                    twitter_handle=twitter_name,
+                    tweets={},
+                )
+                yield from contribute_db.create_user(user)
 
             # Store the tweet id and awarded points
             if tweet_id not in user.tweets:
                 # Keep in mind that we store the updated points if the user has reached max_points_per_period
-                campaign = get_campaign(tweet["text"], active_hashtags)
+                campaign = get_campaign(tweet_data["text"], active_hashtags)
 
                 tweet.points = new_points
                 tweet.campaign = campaign
@@ -1185,31 +1190,22 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
                 yield from contribute_db.create_tweet(tweet)
 
-            user = contribute_db.get_user_by_attribute("twitter_id", author_id)
-
             # User data to update
             user_data = {
                 "points": int(new_points),
-                "twitter_handle": twitter_name,
                 "current_period_points": int(current_period_points),
-                "tweets": user.tweets if user else {tweet_id: tweet},
             }
 
             # If this is a registration
             if wallet_address:
                 self.context.logger.info(
-                    f"Detected a Twitter registration for @{twitter_name}: {wallet_address}. Tweet: {tweet['text']}"
+                    f"Detected a Twitter registration for @{twitter_name}: {wallet_address}. Tweet: {tweet_data['text']}"
                 )
                 user_data["wallet_address"] = wallet_address
 
-            if not user:
-                user_data["id"] = contribute_db.get_next_user_id()
-                user = ContributeUser(**user_data)
-            else:
-                user.points += user_data["points"]
-                user.twitter_handle = user_data["twitter_name"]
-                user.current_period_points = user_data["current_period_points"]
-                user.tweets = user_data["tweets"]
+            user.points += user_data["points"]
+            user.twitter_handle = twitter_name
+            user.current_period_points = user_data["current_period_points"]
 
             # For existing users, all existing user data is replaced except points, which are added
             yield from contribute_db.create_or_update_user_by_key(
@@ -1241,7 +1237,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             self.synchronized_data.last_tweet_pull_window_reset
         )
         if last_tweet_pull_window_reset:
-            module_data.twitter.last_tweet_pull_window_reset = str(
+            module_data.twitter.last_tweet_pull_window_reset = (
                 last_tweet_pull_window_reset
             )
 
