@@ -329,14 +329,12 @@ class StakingActivityPreparation(StakingPreparation):
                 if v.epoch == this_epoch and v.campaign
             }
             this_epoch_not_counted_tweets = {
-                k: v
-                for k, v in this_epoch_tweets.items()
-                if not v["counted_for_activity"]
+                k: v for k, v in this_epoch_tweets.items() if not v.counted_for_activity
             }
 
-            this_epoch_points = sum(t["points"] for t in this_epoch_tweets.values())
+            this_epoch_points = sum(t.points for t in this_epoch_tweets.values())
             this_epoch_not_counted_points = sum(
-                t["points"] for t in this_epoch_not_counted_tweets.values()
+                t.points for t in this_epoch_not_counted_tweets.values()
             )
 
             # Since we count each POINTS_PER_ACTIVITY_UPDATE as one update, it can be the case
@@ -358,7 +356,7 @@ class StakingActivityPreparation(StakingPreparation):
             # Group tweets to build new updates. This is not evident and requires
             # an algorithm that optimizes how to group them in order to maximize the number of updates for the user
             not_counted_tweet_id_to_points = {
-                k: v["points"] for k, v in this_epoch_not_counted_tweets.items()
+                k: v.points for k, v in this_epoch_not_counted_tweets.items()
             }
 
             (updates, selected_tweets) = group_tweets(

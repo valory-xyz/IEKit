@@ -21,6 +21,7 @@ autonomy build-image
 
 # Copy .env file
 cp $REPO_PATH/.env .
+source .env
 
 # Copy the keys and build the deployment
 cp $REPO_PATH/keys.json .

@@ -23,6 +23,7 @@ from typing import Any, Optional, Tuple
 
 from aea.skills.base import Model
 from pydantic import BaseModel
+from pydantic_core._pydantic_core import ValidationError
 
 from packages.valory.skills.agent_db_abci.agent_db_client import (
     AgentDBClient,
@@ -396,25 +397,31 @@ class ContributeDatabase(Model):
                 f"Loading attribute: {attr_name} with id: {attribute['attr_id']}"
             )
 
-            if attr_name == "tweet":
-                tweet = UserTweet(**attr_data)
-                self.data.tweets[tweet.tweet_id] = tweet
-                continue
+            try:
+                if attr_name == "tweet":
+                    tweet = UserTweet(**attr_data)
+                    self.data.tweets[tweet.tweet_id] = tweet
+                    continue
 
-            if attr_name == "user":
-                attr_data["tweets"] = {}
-                user = ContributeUser(**attr_data)
-                self.data.users[user.id] = user
-                continue
+                if attr_name == "user":
+                    attr_data["tweets"] = {}
+                    user = ContributeUser(**attr_data)
+                    self.data.users[user.id] = user
+                    continue
 
-            if attr_name == "module_configs":
-                module_configs = ModuleConfigs(**attr_data)
-                self.data.module_configs = module_configs
-                continue
+                if attr_name == "module_configs":
+                    module_configs = ModuleConfigs(**attr_data)
+                    self.data.module_configs = module_configs
+                    continue
 
-            if attr_name == "module_data":
-                module_data = ModuleData(**attr_data)
-                self.data.module_data = module_data
+                if attr_name == "module_data":
+                    module_data = ModuleData(**attr_data)
+                    self.data.module_data = module_data
+                    continue
+            except ValidationError:
+                self.logger.info(
+                    f"Attribute validation error. Skipping...\n{attribute}"
+                )
                 continue
 
             raise ValueError(f"Unknown attribute name: {attr_name}")
@@ -424,6 +431,18 @@ class ContributeDatabase(Model):
         for tweet_id, tweet in self.data.tweets.items():
             user = self.get_user_by_attribute("twitter_id", tweet.twitter_user_id)
             user.tweets[tweet_id] = tweet
+
+        if not self.data.tweets:
+            self.logger.error("No tweets found in the database.")
+
+        if not self.data.users:
+            self.logger.error("No users found in the database.")
+
+        if not self.data.module_configs:
+            self.logger.error("No module configs found in the database.")
+
+        if not self.data.module_data:
+            self.logger.error("No module data found in the database.")
 
         self.loaded = True
 
