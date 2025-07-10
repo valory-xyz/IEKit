@@ -432,6 +432,18 @@ class ContributeDatabase(Model):
             user = self.get_user_by_attribute("twitter_id", tweet.twitter_user_id)
             user.tweets[tweet_id] = tweet
 
+        if not self.data.tweets:
+            self.logger.error("No tweets found in the database.")
+
+        if not self.data.users:
+            self.logger.error("No users found in the database.")
+
+        if not self.data.module_configs:
+            self.logger.error("No module configs found in the database.")
+
+        if not self.data.module_data:
+            self.logger.error("No module data found in the database.")
+
         self.loaded = True
 
     def get_next_user_id(self):
