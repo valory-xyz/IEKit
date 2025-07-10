@@ -48,10 +48,10 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 dotenv.load_dotenv(override=True)
 
 HTTP_OK = 200
-CONTRIBUTE_SERVICE_NAME = "contribute"
-PROPEL_TEST_KEYS = [24, 25, 26, 27]
+CONTRIBUTE_SERVICE_NAME = "test_contribute"
+PROPEL_TEST_KEYS = [359, 360, 361, 362]
 CONTRIBUTE_VARIABLES = [
-    "CONTRIBUTE_ALL_PARTICIPANTS",
+    "TEST_CONTRIBUTE_ALL_PARTICIPANTS",
     "CONTRIBUTE_AUTONOMY_AGENT_MEMORY_LIMIT",
     "CONTRIBUTE_AUTONOMY_AGENT_MEMORY_REQUEST",
     "CONTRIBUTE_BASE_LEDGER_RPC",
@@ -64,8 +64,9 @@ CONTRIBUTE_VARIABLES = [
     "CONTRIBUTE_OPENAI_API_KEY_2",
     "CONTRIBUTE_OPENAI_API_KEY_3",
     "CONTRIBUTE_TWITTER_API_BEARER_TOKEN",
-    "AGENT_DB_BASE_URL",
     "CONTRIBUTE_DB_PKEY",
+    "AGENT_DB_BASE_URL",
+    "USE_ACN_FALSE",
 ]
 
 
@@ -302,10 +303,10 @@ def deploy_contribute():
     # Load the service hash
     with open(Path("packages", "packages.json"), "r", encoding="utf-8") as f:
         packages = json.load(f)
-        service_ipfs_hash = packages["dev"]["service/valory/impact_evaluator/0.1.0"]
+        service_ipfs_hash = packages["dev"]["service/valory/impact_evaluator_local/0.1.0"]
 
     propel = Propel()
-    propel.deploy(CONTRIBUTE_SERVICE_NAME, CONTRIBUTE_VARIABLES, service_ipfs_hash, 4)
+    propel.deploy(CONTRIBUTE_SERVICE_NAME, CONTRIBUTE_VARIABLES, service_ipfs_hash, 1)
 
 
 if __name__ == "__main__":
