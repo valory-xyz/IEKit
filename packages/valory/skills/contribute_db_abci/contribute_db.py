@@ -430,6 +430,12 @@ class ContributeDatabase(Model):
 
         for tweet_id, tweet in self.data.tweets.items():
             user = self.get_user_by_attribute("twitter_id", tweet.twitter_user_id)
+            if not user:
+                self.logger.error(
+                    f"User with twitter_id {tweet.twitter_user_id} not found for tweet {tweet}. Skipping this tweet..."
+                )
+                continue
+
             user.tweets[tweet_id] = tweet
 
         if not self.data.tweets:
