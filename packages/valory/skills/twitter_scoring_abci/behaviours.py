@@ -1136,7 +1136,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             author_id = tweet.twitter_user_id
             twitter_name = tweet_data["username"]
             new_points = tweet.points
-            wallet_address = self.get_registration(tweet.text)
+            wallet_address = self.get_registration(tweet_data["text"])
 
             # Check this user's point limit per period
             user = (
