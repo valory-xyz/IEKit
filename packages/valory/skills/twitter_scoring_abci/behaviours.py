@@ -1237,9 +1237,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             self.synchronized_data.last_tweet_pull_window_reset
         )
         if last_tweet_pull_window_reset:
-            module_data.twitter.last_tweet_pull_window_reset = str(
-                last_tweet_pull_window_reset
-            )
+            module_data.twitter.last_tweet_pull_window_reset = last_tweet_pull_window_reset
 
         # Update the current_period
         module_data.twitter.current_period = today
