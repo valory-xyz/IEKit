@@ -362,6 +362,8 @@ class TwitterDecisionMakingBehaviour(TwitterScoringBaseBehaviour):
 
         self.context.logger.info(f"Performed tasks: {performed_tasks}")
 
+        return Event.DB_UPDATE.value
+
         if Event.SELECT_KEEPERS.value not in performed_tasks:
             return Event.SELECT_KEEPERS.value
 
