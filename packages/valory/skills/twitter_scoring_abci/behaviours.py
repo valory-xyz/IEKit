@@ -1140,7 +1140,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
             # Check this user's point limit per period
             user = (
-                contribute_db.get_user_by_attribute("twitter_id", tweet["author_id"])
+                contribute_db.get_user_by_attribute("twitter_id", author_id)
                 or ContributeUser()
             )
 
