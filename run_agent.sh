@@ -27,7 +27,8 @@ find . -empty -type d -delete
 make clean
 AUTONOMY_VERSION=v$(autonomy --version | grep -oP '(?<=version\s)\S+')
 AEA_VERSION=v$(aea --version | grep -oP '(?<=version\s)\S+')
-autonomy packages sync --source valory-xyz/open-aea:$AEA_VERSION --source valory-xyz/open-autonomy:$AUTONOMY_VERSION --update-packages
+MECH_INTERACT_VERSION=$AUTONOMY_VERSION
+autonomy packages sync --source valory-xyz/open-aea:$AEA_VERSION --source valory-xyz/open-autonomy:$AUTONOMY_VERSION  --source valory-xyz/mech-interact:$MECH_INTERACT_VERSION --update-packages
 
 # Ensure hashes are updated
 autonomy packages lock
