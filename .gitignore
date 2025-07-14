@@ -20,6 +20,12 @@ packages/valory/contracts/service_registry
 packages/valory/contracts/gnosis_safe
 packages/valory/contracts/gnosis_safe_proxy_factory
 packages/valory/contracts/multisend
+packages/valory/contracts/agent_registry
+packages/valory/contracts/mech_marketplace_legacy
+packages/valory/contracts/mech_marketplace
+packages/valory/contracts/mech
+packages/valory/contracts/mech_mm
+packages/valory/contracts/erc20
 packages/valory/protocols/*
 !packages/valory/protocols/twitter
 !packages/valory/protocols/llm
@@ -31,6 +37,7 @@ packages/valory/skills/reset_pause_abci
 packages/valory/skills/safe_deployment_abci
 packages/valory/skills/transaction_settlement_abci
 packages/valory/skills/termination_abci
+packages/valory/skills/mech_interact_abci
 packages/open_aea
 *.pyc
 .vscode/
