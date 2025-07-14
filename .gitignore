@@ -25,7 +25,7 @@ packages/valory/contracts/mech_marketplace_legacy
 packages/valory/contracts/mech_marketplace
 packages/valory/contracts/mech
 packages/valory/contracts/mech_mm
-packages/valory/contracts/mech_interact_abci
+packages/valory/contracts/erc20
 packages/valory/protocols/*
 !packages/valory/protocols/twitter
 !packages/valory/protocols/llm
@@ -37,7 +37,7 @@ packages/valory/skills/reset_pause_abci
 packages/valory/skills/safe_deployment_abci
 packages/valory/skills/transaction_settlement_abci
 packages/valory/skills/termination_abci
-packages/valory/skills/mech_interaction_abci
+packages/valory/skills/mech_interact_abci
 packages/open_aea
 *.pyc
 .vscode/
