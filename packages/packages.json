@@ -43,7 +43,7 @@
         "contract/valory/gnosis_safe_proxy_factory/0.1.0": "bafybeidfvyc6bw4uigv3jfcxr23vysctki6x5rh5htp2azhncib27ydxdm",
         "contract/valory/multisend/0.1.0": "bafybeig5byt5urg2d2bsecufxe5ql7f4mezg3mekfleeh32nmuusx66p4y",
         "contract/valory/gnosis_safe/0.1.0": "bafybeibgpgpi7w6xtxg3zr7tye3f6g6tu7fnvy7yxlgunbjqin3ou7e5pi",
-        "contract/valory/agent_registry/0.1.0": "bafybeia2eoorxpsfwnd2dnvgt2v3xxqez6d4zyxvqpnwo5oydcgxkr2uni",
+        "contract/valory/agent_registry/0.1.0": "bafybeiepkbcx5jrcvoc5nfarw6gt4so4izqxuiliu7gukdvmjiodynecvy",
         "contract/valory/mech_marketplace_legacy/0.1.0": "bafybeiafwem7v7po7xb7rag4zfdqe2uoaqki3xybviciypxr5w6zkoxgse",
         "contract/valory/mech_marketplace/0.1.0": "bafybeibxvb5txtnho4rc4hz3clghropfdfschthqxtcdai7hx2zycgdjga",
         "contract/valory/mech/0.1.0": "bafybeifthpyd2oq5izworldr755sigefinki7caath4aao3hrajpjbhbxe",
@@ -61,6 +61,6 @@
         "skill/valory/abstract_round_abci/0.1.0": "bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy",
         "skill/valory/termination_abci/0.1.0": "bafybeibtbboau3q5fxfviwm7lbeix4z55uptfqqiyiu6siivxwkp3o5pju",
         "skill/valory/transaction_settlement_abci/0.1.0": "bafybeic2ywzpwkyeqbzsvkbvurhsptemam4xtceihax2tmxmlxtgd3xpya",
-        "skill/valory/mech_interact_abci/0.1.0": "bafybeicje5clkcoml4nnra7t7w7fd4deya7dny6ow5dq6fdgzw2qg3z6sa"
+        "skill/valory/mech_interact_abci/0.1.0": "bafybeidi2nfkt5r7cckdd4equdfm5uwiuisrz2splo7om3hkriy5ohx22e"
     }
 }
