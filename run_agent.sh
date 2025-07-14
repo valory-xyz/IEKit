@@ -27,7 +27,7 @@ find . -empty -type d -delete
 make clean
 AUTONOMY_VERSION=v$(autonomy --version | grep -oP '(?<=version\s)\S+')
 AEA_VERSION=v$(aea --version | grep -oP '(?<=version\s)\S+')
-MECH_INTERACT_VERSION=$AUTONOMY_VERSION
+MECH_INTERACT_VERSION=v$(git ls-remote --tags --sort="v:refname" https://github.com/valory-xyz/mech-interact.git | tail -n1 | sed 's|.*refs/tags/||')
 autonomy packages sync --source valory-xyz/open-aea:$AEA_VERSION --source valory-xyz/open-autonomy:$AUTONOMY_VERSION  --source valory-xyz/mech-interact:$MECH_INTERACT_VERSION --update-packages
 
 # Ensure hashes are updated
