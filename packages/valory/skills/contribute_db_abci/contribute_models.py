@@ -219,7 +219,7 @@ class ModuleData(BaseModel):
 class ContributeData(BaseModel):
     """ContributeData"""
 
-    users: Dict[str, ContributeUser] = {}
+    users: Dict[int, ContributeUser] = {}
     tweets: Dict[str, UserTweet] = {}
     module_data: Optional[ModuleData] = None
     module_configs: Optional[ModuleConfigs] = None
