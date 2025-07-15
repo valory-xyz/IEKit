@@ -361,10 +361,10 @@ class AgentDBClient(Model):
         return AttributeInstance.model_validate(result) if result else None
 
     def delete_attribute_instance(
-        self, attribute_instance: AttributeInstance
+        self, attribute_instance_id: int
     ) -> Optional[AttributeInstance]:
         """Delete attribute instance"""
-        endpoint = f"/api/agent-attributes/{attribute_instance.attribute_id}"
+        endpoint = f"/api/agent-attributes/{attribute_instance_id}"
         result = yield from self._request(
             "DELETE", endpoint, auth=True, nested_auth=True
         )
