@@ -114,6 +114,8 @@ class AgentDBClient:
         response = requests.request(
             method, url, headers=headers, json=payload, params=params
         )
+        print(f"Response status: {response.status_code}")
+
         if response.status_code in [200, 201]:
             return response.json()
         if response.status_code == 404:
@@ -305,11 +307,11 @@ class AgentDBClient:
         return AttributeInstance.model_validate(result) if result else None
 
     def delete_attribute_instance(
-        self, attribute_instance: AttributeInstance
+        self, attribute_instance_id: int
     ) -> Optional[AttributeInstance]:
         """Delete attribute instance"""
-        endpoint = f"/api/agent-attributes/{attribute_instance.attribute_id}"
-        result = self._request("DELETE", endpoint, auth=True, nested_auth=True)
+        endpoint = f"/api/agent-attributes/{attribute_instance_id}"
+        result = self._request("DELETE", endpoint, auth=True, nested_auth=False)
         return AttributeInstance.model_validate(result) if result else None
 
     # Get all attributes of an agent instance
@@ -662,33 +664,66 @@ def load_ceramic_data():
     return combined_db
 
 
-def init_database_from_ceramic(db_client):
+def sync_remote_db(local_data, remote_db):
     """Initialize the contribute database from Ceramic data."""
-    contribute_db = ContributeDatabase(db_client)
-    contribute_db.register()
 
-    # Load the contribute data from JSON files
-    contribute_data = ContributeData(**load_ceramic_data())
-    contribute_data.sort()
+    remote_db.register()
 
     # Users
-    for user_id, user in contribute_data.users.items():
-        user_attribute = contribute_db.create_user(user)
-        user.attribute_instance_id = user_attribute.attribute_id if user_attribute else None
+    for user_id, user in local_data.users.items():
+
+        if user_id in remote_db.data.users:
+            print(f"Skipping user {user_id} as it already exists in the remote database.")
+            continue
+
+        user_attribute = remote_db.create_user(user)
+        remote_db.data.users[user_id].attribute_instance_id = user_attribute.attribute_id if user_attribute else None
 
     # Tweets
-    for i, tweet in enumerate(contribute_data.tweets.values()):
+    for i, tweet in enumerate(local_data.tweets.values()):
+
+        if tweet.tweet_id in remote_db.data.tweets:
+            print(f"Skipping tweet {tweet.tweet_id} as it already exists in the remote database.")
+            continue
+
         print(f"Creating tweet {i + 1}: {tweet.tweet_id} for user {tweet.twitter_user_id}")
-        tweet_attribute = contribute_db.create_tweet(tweet)
-        tweet.attribute_instance_id = tweet_attribute.attribute_id if tweet_attribute else None
+        tweet_attribute = remote_db.create_tweet(tweet)
+        remote_db.data.tweets[tweet.tweet_id].attribute_instance_id = tweet_attribute.attribute_id if tweet_attribute else None
 
     # ModuleConfigs
-    module_configs_attribute = contribute_db.create_module_configs(contribute_data.module_configs)
-    contribute_data.module_configs.attribute_instance_id = module_configs_attribute.attribute_id
+    module_configs_attribute = remote_db.create_module_configs(local_data.module_configs)
+    remote_db.data.module_configs.attribute_instance_id = module_configs_attribute.attribute_id
 
     # ModuleData
-    module_data_attribute = contribute_db.create_module_data(contribute_data.module_data)
-    contribute_data.module_data.attribute_instance_id = module_data_attribute.attribute_id
+    module_data_attribute = remote_db.create_module_data(local_data.module_data)
+    remote_db.data.module_data.attribute_instance_id = module_data_attribute.attribute_id
+
+
+def clear_remote_db(remote_db):
+    """Remove all data from the remote database."""
+
+    print("Clearing remote database...")
+
+    # Clear tweets
+    for tweet_id, tweet in remote_db.data.tweets.items():
+        if tweet.attribute_instance_id is not None:
+            remote_db.client.delete_attribute_instance(tweet.attribute_instance_id)
+
+    # Clear users
+    for user_id, user in remote_db.data.users.items():
+        if user.attribute_instance_id is not None:
+            print(f"Deleting user {user_id} with attribute instance ID {user.attribute_instance_id}")
+            remote_db.client.delete_attribute_instance(user.attribute_instance_id)
+
+    # Clear module configs
+    if remote_db.data.module_configs and remote_db.data.module_configs.attribute_instance_id:
+        remote_db.client.delete_attribute_instance(remote_db.data.module_configs.attribute_instance_id)
+
+    # Clear module data
+    if remote_db.data.module_data and remote_db.data.module_data.attribute_instance_id:
+        remote_db.client.delete_attribute_instance(remote_db.data.module_data.attribute_instance_id)
+
+    print("Remote database cleared")
 
 
 def main():
@@ -701,10 +736,21 @@ def main():
         private_key=os.getenv("CONTRIBUTE_DB_PKEY"),
     )
 
-    # init_database_from_ceramic(client)
+    # Load the contribute data from JSON files
+    local_data = ContributeData(**load_ceramic_data())
+    local_data.sort()
+    print(f"Local database: loaded {len(local_data.users)} users and {len(local_data.tweets)} tweets.")
 
-    contribute_db = ContributeDatabase(client)
-    contribute_db.load_from_remote_db()
+    # Load the remote database
+    remote_db = ContributeDatabase(client)
+    remote_db.load_from_remote_db()
+    print(f"Remote database: loaded {len(remote_db.data.users)} users and {len(remote_db.data.tweets)} tweets.")
+
+    # # Sync both databases
+    # sync_remote_db(local_data, remote_db)
+
+    # Clear the remote database
+    # clear_remote_db(remote_db)
 
 
 if __name__ == "__main__":
