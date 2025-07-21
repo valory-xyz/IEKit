@@ -12,10 +12,10 @@
         "connection/valory/openai/0.1.0": "bafybeicm2uvsixb53fh4nl4ib4zzvd36yvvw4hqxslv73eskvecirpm2pu",
         "connection/valory/farcaster/0.1.0": "bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi",
         "skill/valory/dynamic_nft_abci/0.1.0": "bafybeibpikh2urvfptzx2px7nfqqdcmbmih2x33qgy2ouarxezqdifcwjq",
-        "skill/valory/twitter_scoring_abci/0.1.0": "bafybeid33ifjwbfqqx5qnpzsqtp55piava34wpsfzsouttgzlig3gxzz2u",
+        "skill/valory/twitter_scoring_abci/0.1.0": "bafybeied7cqrw4mctpy4cpio5yzaxqzp4ki73q2rphxvyjuuez2cgvspji",
         "skill/valory/ceramic_read_abci/0.1.0": "bafybeigyt6jf5a4ucbdn44tspklpbeenxr57g2czlepqm227j5c6k7glw4",
         "skill/valory/ceramic_write_abci/0.1.0": "bafybeiets4e6zgh5q2uatze5us7gny2377eukqslfvw2l3gxvgbxqpw5qq",
-        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeihpw57zv2ib74tsewm3s47jjub45wrhglyixgco6vtcdfits6tuju",
+        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeidqexlihsuughv4vuyn33hwlsttbpgpo5fii3tcplyekvwcpbisx4",
         "skill/valory/twitter_write_abci/0.1.0": "bafybeiamg6pt2rejxftvgmjxvmicy3b3rxxaqpk2h3k7h3pgh4sfitttv4",
         "skill/valory/llm_abci/0.1.0": "bafybeigdt4i64l5ftfbxrk656myrxer2vgti2mkllfhfybzjmosqgj5the",
         "skill/valory/decision_making_abci/0.1.0": "bafybeiblbe44yfo2lelyduzcrdtpl4osw5lrwchw3iji43fmh5v4xb5tde",
@@ -25,10 +25,10 @@
         "skill/valory/staking_abci/0.1.0": "bafybeiaqgptrs4kjy46rntvhyd7nrjwqspymvcmota6oqmcj6l3ixrhqmu",
         "skill/valory/agent_db_abci/0.1.0": "bafybeiafb5buyau3fohmdij6vj34icyncernwr6ejh3ighnb7nmthzoaku",
         "skill/valory/contribute_db_abci/0.1.0": "bafybeicuyqdmqotntqkbzt6eb5qchv3hhn3ikuunnqfsqq7yywsf4m3wqe",
-        "agent/valory/impact_evaluator/0.1.0": "bafybeiegeidkfkda5u6ktwgqsay2x6gpubyy7eq27hrscuhrzeh7aftcku",
+        "agent/valory/impact_evaluator/0.1.0": "bafybeib3ud5v3vshawpxhla3p3draciavsacsxqxillt7cxqdeu2mqh4em",
         "agent/valory/farcaster_test/0.1.0": "bafybeic4ubvbkxfrrskpdhepttyst5louup4pfztuv4neqfrruicdwen4q",
-        "service/valory/impact_evaluator/0.1.0": "bafybeih2v2eiu3rerxf7paqknpvoll4pxtwe24gsth3ym3ocdaq5uv53tu",
-        "service/valory/impact_evaluator_local/0.1.0": "bafybeiecxjnju43n2wdelcdsqjqgcak3jkvdjsoqoyo5g4afc7zusx7caq"
+        "service/valory/impact_evaluator/0.1.0": "bafybeigpeleewdcrxghvhkxlnzz6bkm7eq2nqzwxrftpvccvl6izetbxve",
+        "service/valory/impact_evaluator_local/0.1.0": "bafybeibwxofhffl5afjqqjy3xcu4vu2hahua2dgengrdfcyanvj2zglkue"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm",
