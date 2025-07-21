@@ -173,7 +173,9 @@ class ContributeDatabase(Model):
             self.logger.info("I am the AgentDB writer")
             return True
         else:
-            self.logger.info("I am ot the AgentDB writer")
+            self.logger.info(
+                f"I am not the AgentDB writer. Writers are {self.writer_addresses}"
+            )
             return False
 
     def register(self):

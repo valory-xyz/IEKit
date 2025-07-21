@@ -241,8 +241,8 @@ class ContributeData(BaseModel):
 
     users: Dict[int, ContributeUser] = {}
     tweets: Dict[str, UserTweet] = {}
-    module_data: Optional[ModuleData] = None
-    module_configs: Optional[ModuleConfigs] = None
+    module_data: ModuleData
+    module_configs: ModuleConfigs
 
     def sort(self):
         """Sort users and tweets."""
