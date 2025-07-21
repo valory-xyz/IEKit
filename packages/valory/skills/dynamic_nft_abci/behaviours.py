@@ -82,7 +82,7 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
             ):
                 payload_data = TokenTrackRound.ERROR_PAYLOAD
             else:
-                payload_data = self.update_contribute_db(
+                payload_data = yield from self.update_contribute_db(
                     new_token_id_to_address, last_parsed_block
                 )
 
