@@ -439,16 +439,31 @@ class ContributeDatabase(Model):
             user.tweets[tweet_id] = tweet
 
         if not self.data.tweets:
-            self.logger.error("No tweets found in the database.")
+            raise ValueError("No tweets found in the database.")
 
         if not self.data.users:
-            self.logger.error("No users found in the database.")
+            raise ValueError("No users found in the database.")
 
         if not self.data.module_configs:
-            self.logger.error("No module configs found in the database.")
+            raise ValueError("No module configs found in the database.")
 
         if not self.data.module_data:
-            self.logger.error("No module data found in the database.")
+            raise ValueError("No module data found in the database.")
+
+        for i in [
+            "staking_daa",
+            "week_in_olas",
+            "scheduled_tweet",
+            "staking_activity",
+            "twitter_campaigns",
+            "staking_checkpoint",
+        ]:
+            if not hasattr(self.data.module_configs, i):
+                raise ValueError(f"Module config {i} not found in the database.")
+
+        for i in ["scheduled_tweet", "twitter_campaigns", "dynamic_nft", "twitter"]:
+            if not hasattr(self.data.module_data, i):
+                raise ValueError(f"Module data {i} not found in the database.")
 
         self.loaded = True
 

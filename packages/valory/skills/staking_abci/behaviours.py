@@ -491,6 +491,9 @@ class DAAPreparationBehaviour(StakingBaseBehaviour):
             # Check the latest tweet time
             tweet_time = list(user.tweets.values())[-1].timestamp
 
+            if not tweet_time:
+                continue
+
             if (now_utc - tweet_time).total_seconds() > SECONDS_IN_DAY:
                 continue
 
