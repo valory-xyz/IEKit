@@ -418,11 +418,11 @@ class ContributeDatabase(Model):
                     module_data = ModuleData(**attr_data)
                     self.data.module_data = module_data
                     continue
-            except ValidationError:
-                self.logger.info(
-                    f"Attribute validation error. Skipping...\n{attribute}"
-                )
-                continue
+
+            except ValidationError as e:
+                raise ValueError(
+                    f"Failed to load attribute {attr_name} with data {attr_data}. Error: {e}"
+                ) from e
 
             raise ValueError(f"Unknown attribute name: {attr_name}")
 

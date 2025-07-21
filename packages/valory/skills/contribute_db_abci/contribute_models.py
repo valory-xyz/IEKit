@@ -28,6 +28,20 @@ from pydantic import BaseModel, field_validator
 from pydantic_core import core_schema
 
 
+def parse_optional_int_value(v):
+    """Psrse integers"""
+    if v is None:
+        return None
+    if isinstance(v, int):
+        return v
+    if isinstance(v, str):
+        try:
+            return int(v)
+        except ValueError as e:
+            raise ValueError(f"Cannot convert {v!r} to int") from e
+    raise TypeError(f"Invalid type for int: {type(v)}")
+
+
 class EthereumAddress(str):
     """EthereumAddress"""
 
@@ -106,8 +120,8 @@ class ContributeUser(BaseModel):
     tweets: Dict[str, UserTweet] = {}
     token_id: Optional[str] = None
     discord_id: Optional[str] = None
-    service_id: Optional[str] = None
-    service_id_old: Optional[str] = None
+    service_id: Optional[int] = None
+    service_id_old: Optional[int] = None
     twitter_id: Optional[str] = None
     twitter_handle: Optional[str] = None
     discord_handle: Optional[str] = None
@@ -122,6 +136,12 @@ class ContributeUser(BaseModel):
         data = super().model_dump(mode=mode)
         data["tweets"] = list(data["tweets"].keys())  # We just store the tweet ids
         return data
+
+    @field_validator("id", "service_id", "service_id_old", mode="before")
+    @classmethod
+    def validate_int_fields(cls, v):
+        """Validate integer fields."""
+        return parse_optional_int_value(v)
 
 
 class Action(BaseModel):
