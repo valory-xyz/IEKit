@@ -8,8 +8,8 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeidtx5yecrqsufu5f4sjm2bcyjafwtioayq4ytk4txzllw3crbklq4
   behaviours.py: bafybeifjg7pndyaohqgjh3ejtlhtahuvzwj7coilfkn5hawbykx7g5dzem
-  contribute_db.py: bafybeigdic6hwcj6zewodn4n6gtpvnvx6iwvs23sqj7ppjkytkb7ykf6d4
-  contribute_models.py: bafybeigfesewqtwowatwbqeqiky5mqxseg4d4hxlijyi335kul56ezxjfa
+  contribute_db.py: bafybeifc7qmd6h7zy7uplysi5ivd6au57guo4r6wd4ovnkxzwompa7ysam
+  contribute_models.py: bafybeiafhcr64v7ugf6flfl5wxclvihpcdjdmkwxqt6ktyz6eraiglv7rm
   dialogues.py: bafybeifi7sbyed3cqsnuil4c33r53ehsjj3cn5reljgvvfhfo2lpmktkjm
   fsm_specification.yaml: bafybeiaid6gq4uoqsbsui2s3uza37art6qs5qq4rzj5vercjdptuzpa67a
   handlers.py: bafybeiaa2ezo5lyyv275uwl6sqcmicyqokanubm6j74tsewuizf5c6s3ri
@@ -22,7 +22,7 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy
-- valory/agent_db_abci:0.1.0:bafybeiafb5buyau3fohmdij6vj34icyncernwr6ejh3ighnb7nmthzoaku
+- valory/agent_db_abci:0.1.0:bafybeidi46debdyztqngnf77ugp2yhnvhvtpwc7m4jjmzse5qzvlv42dti
 behaviours:
   main:
     args: {}

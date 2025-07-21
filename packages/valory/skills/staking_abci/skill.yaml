@@ -25,7 +25,7 @@ protocols:
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy
 - valory/transaction_settlement_abci:0.1.0:bafybeic2ywzpwkyeqbzsvkbvurhsptemam4xtceihax2tmxmlxtgd3xpya
-- valory/contribute_db_abci:0.1.0:bafybeidkbze3me3uowpmloeso255wpfb3wjqm6y6mga373ix45hnpo4oni
+- valory/contribute_db_abci:0.1.0:bafybeic3qb6mvacv2c5oqp2daed7ojmka6b6tlz7uns2pr2qdhzjikunh4
 behaviours:
   main:
     args: {}
