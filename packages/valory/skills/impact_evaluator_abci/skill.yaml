@@ -34,9 +34,9 @@ skills:
 - valory/termination_abci:0.1.0:bafybeibtbboau3q5fxfviwm7lbeix4z55uptfqqiyiu6siivxwkp3o5pju
 - valory/transaction_settlement_abci:0.1.0:bafybeic2ywzpwkyeqbzsvkbvurhsptemam4xtceihax2tmxmlxtgd3xpya
 - valory/decision_making_abci:0.1.0:bafybeieo6egzxpvgdpahefzbghpyhuy5ikwu4aqicfxxuxmsbnlwy67y7i
-- valory/llm_abci:0.1.0:bafybeiegzlpp7lk4m5w23fn4kwadlof4z34g4uqqydki4hxkvap3wwtiui
+- valory/llm_abci:0.1.0:bafybeifbybryfkqf2o6n2wymbu3yogui5ndrgulw3umcxyo35hfj3nuodi
 - valory/twitter_write_abci:0.1.0:bafybeiamg6pt2rejxftvgmjxvmicy3b3rxxaqpk2h3k7h3pgh4sfitttv4
-- valory/olas_week_abci:0.1.0:bafybeiek6bduhnbddmo4lwhjnismejzruwxtvbfylk2gd4olw3tfonozoy
+- valory/olas_week_abci:0.1.0:bafybeidbnmfdtj7uvvp4d4jer7d63e6ayhxiizxe7tp3d5yd2g75msekaq
 - valory/mech_interact_abci:0.1.0:bafybeidi2nfkt5r7cckdd4equdfm5uwiuisrz2splo7om3hkriy5ohx22e
 - valory/staking_abci:0.1.0:bafybeiderd34zw5jq2xxat6aewaq7blgeemwutjnmloyzfdux5ppmn4uou
 behaviours:
