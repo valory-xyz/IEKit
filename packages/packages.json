@@ -27,8 +27,8 @@
         "skill/valory/contribute_db_abci/0.1.0": "bafybeiaycmvdntdwnmlw5fyimclyeqy3aqzsfhuo2nftkj77shvrfpbfya",
         "agent/valory/impact_evaluator/0.1.0": "bafybeiddg4oztnamlzewmwyxvngmcbrqueyhtprjd6jgonvisd5j722ow4",
         "agent/valory/farcaster_test/0.1.0": "bafybeic4ubvbkxfrrskpdhepttyst5louup4pfztuv4neqfrruicdwen4q",
-        "service/valory/impact_evaluator/0.1.0": "bafybeid2hojsif3ha6sidifjx4qhe5l6nsmeeh37frdpdbgaor2lufy6li",
-        "service/valory/impact_evaluator_local/0.1.0": "bafybeicl5mkm4ozzbc6ujqfmaa5tflwoex5qapf4336ftovakonthcj5yi"
+        "service/valory/impact_evaluator/0.1.0": "bafybeig3af6b4vknl5t7kt2wtpfvx5vkcwujvhnn6qnshe3jrkjkrwzwxe",
+        "service/valory/impact_evaluator_local/0.1.0": "bafybeiffk2ezyakatdailaxu4vhfsbmxx3z2ej3qaijdn3qnklszxtdeu4"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm",
