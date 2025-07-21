@@ -1107,7 +1107,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             self.context.logger.info(
                 f"Scoring period has changed from {current_period} to {today}. Resetting user period points..."
             )
-            for user in users:
+            for user in users.values():
                 user.current_period_points = 0
 
         active_hashtags = self.get_active_hashtags()
