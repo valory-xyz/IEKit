@@ -237,7 +237,7 @@ class Propel:
         """Logout"""
         self.client.logout()
 
-    def deploy(self, service_name, variables, service_ipfs_hash, number_of_agents):
+    def deploy(self, service_name, variables, service_ipfs_hash, number_of_agents, keys):
         """Deploy a service"""
 
         agent_names = [
@@ -282,7 +282,7 @@ class Propel:
 
             print(f"Creating agent {agent_name}...")
             self.client.agents_create(
-                key=PROPEL_TEST_KEYS[i],
+                key=keys[i],
                 name=agent_name,
                 service_ipfs_hash=service_ipfs_hash,
                 ingress_enabled=True,
@@ -323,18 +323,24 @@ class Propel:
 def deploy_contribute():
     """Deploy Contribute"""
 
+    # Test
+    # SERVICE_NAME_TEST = "impact_evaluator_local"
+
+    # Prod
+    SERVICE_NAME_PROD = "impact_evaluator"
+
     # Load the service hash
     with open(Path("packages", "packages.json"), "r", encoding="utf-8") as f:
         packages = json.load(f)
-        service_ipfs_hash = packages["dev"]["service/valory/impact_evaluator_local/0.1.0"]
+        service_ipfs_hash = packages["dev"][f"service/valory/{SERVICE_NAME_PROD}/0.1.0"]
 
     propel = Propel()
 
     # Test
-    # propel.deploy(CONTRIBUTE_SERVICE_NAME_TEST, CONTRIBUTE_VARIABLES_TEST, service_ipfs_hash, 1)
+    # propel.deploy(CONTRIBUTE_SERVICE_NAME_TEST, CONTRIBUTE_VARIABLES_TEST, service_ipfs_hash, 1, PROPEL_TEST_KEYS)
 
     # Prod
-    propel.deploy(CONTRIBUTE_SERVICE_NAME, CONTRIBUTE_VARIABLES_PROD, service_ipfs_hash, 4)
+    propel.deploy(CONTRIBUTE_SERVICE_NAME, CONTRIBUTE_VARIABLES_PROD, service_ipfs_hash, 4, PROPEL_PROD_KEYS)
 
 
 if __name__ == "__main__":
