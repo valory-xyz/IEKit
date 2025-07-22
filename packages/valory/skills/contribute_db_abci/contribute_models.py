@@ -168,29 +168,29 @@ class TwitterCampaign(BaseModel):
 class TwitterScoringData(BaseModel):
     """TwitterScoringData"""
 
-    current_period: date
-    latest_hashtag_tweet_id: str
-    latest_mention_tweet_id: str
-    last_tweet_pull_window_reset: float
-    number_of_tweets_pulled_today: int
+    current_period: date = datetime.min
+    latest_hashtag_tweet_id: str = "0"
+    latest_mention_tweet_id: str = "0"
+    last_tweet_pull_window_reset: float = 0
+    number_of_tweets_pulled_today: int = 0
 
 
 class DynamicNFTData(BaseModel):
     """DynamicNFTConfig"""
 
-    last_parsed_block: int
+    last_parsed_block: int = 0
 
 
 class ScheduledTweetConfig(BaseModel):
     """ScheduledTweetConfig"""
 
-    tweets: List[ServiceTweet]
+    tweets: List[ServiceTweet] = []
 
 
 class TwitterCampaignsConfig(BaseModel):
     """TwitterCampaignsConfig"""
 
-    campaigns: List[TwitterCampaign]
+    campaigns: List[TwitterCampaign] = []
 
 
 class ModuleConfig(BaseModel):
@@ -217,22 +217,22 @@ class ModuleConfig(BaseModel):
 class ModuleConfigs(BaseModel):
     """ModuleConfigs"""
 
-    staking_daa: ModuleConfig
-    week_in_olas: ModuleConfig
-    scheduled_tweet: ModuleConfig
-    staking_activity: ModuleConfig
-    twitter_campaigns: ModuleConfig
-    staking_checkpoint: ModuleConfig
+    staking_daa: ModuleConfig = ModuleConfig()
+    week_in_olas: ModuleConfig = ModuleConfig()
+    scheduled_tweet: ModuleConfig = ModuleConfig()
+    staking_activity: ModuleConfig = ModuleConfig()
+    twitter_campaigns: ModuleConfig = ModuleConfig()
+    staking_checkpoint: ModuleConfig = ModuleConfig()
     attribute_instance_id: Optional[int] = None
 
 
 class ModuleData(BaseModel):
     """ModuleData"""
 
-    scheduled_tweet: ScheduledTweetConfig
-    twitter_campaigns: TwitterCampaignsConfig
-    dynamic_nft: DynamicNFTData
-    twitter: TwitterScoringData
+    scheduled_tweet: ScheduledTweetConfig = ScheduledTweetConfig()
+    twitter_campaigns: TwitterCampaignsConfig = TwitterCampaignsConfig()
+    dynamic_nft: DynamicNFTData = DynamicNFTData()
+    twitter: TwitterScoringData = TwitterScoringData()
     attribute_instance_id: Optional[int] = None
 
 
@@ -241,8 +241,8 @@ class ContributeData(BaseModel):
 
     users: Dict[int, ContributeUser] = {}
     tweets: Dict[str, UserTweet] = {}
-    module_data: ModuleData
-    module_configs: ModuleConfigs
+    module_data: ModuleData = ModuleData()
+    module_configs: ModuleConfigs = ModuleConfigs()
 
     def sort(self):
         """Sort users and tweets."""
