@@ -32,9 +32,9 @@ protocols:
 - valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy
-- valory/decision_making_abci:0.1.0:bafybeifjfk7pg3rsxvcdvit7ifdr6c53ncb3mhahdmy7lcpn25wmi4nehm
+- valory/decision_making_abci:0.1.0:bafybeiavoq6k3erxtzgi7cgyl3itd4rmdrweakq2tcpilxwj4xw43gip7y
 - valory/mech_interact_abci:0.1.0:bafybeidi2nfkt5r7cckdd4equdfm5uwiuisrz2splo7om3hkriy5ohx22e
-- valory/contribute_db_abci:0.1.0:bafybeic3qb6mvacv2c5oqp2daed7ojmka6b6tlz7uns2pr2qdhzjikunh4
+- valory/contribute_db_abci:0.1.0:bafybeigosnmszigzei4jvgo7vcsc7lo5p23bhepahnhgtk2mudxxp3i54i
 behaviours:
   main:
     args: {}
