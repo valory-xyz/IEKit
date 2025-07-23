@@ -77,6 +77,7 @@ class AgentDBClient(Model):
             signing_func_or_pkey if isinstance(signing_func_or_pkey, str) else None
         )
         self.logger = logger
+        self.ensure_agent_is_loaded()
 
     def sign_using_pkey(self, message_to_sign: str):
         """Sign using pkey"""
