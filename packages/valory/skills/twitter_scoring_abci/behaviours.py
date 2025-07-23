@@ -1134,11 +1134,13 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
             tweet_data["tweet_id"] = tweet_id
             tweet_data["twitter_user_id"] = tweet_data["author_id"]
-            self.context.logger.info(f"Building tweet with data {tweet_data}")
+            self.context.logger.info(
+                f"Building tweet {tweet_id} with data {tweet_data}"
+            )
             tweet = UserTweet(**tweet_data)
             self.context.logger.info(f"Tweet = {tweet}")
 
-            self.context.logger.info(f"Updating db with tweet: {tweet}")
+            self.context.logger.info(f"Processing tweet: {tweet}")
 
             author_id = tweet.twitter_user_id
             twitter_name = tweet_data["username"]
@@ -1185,6 +1187,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                     twitter_handle=twitter_name,
                     tweets={},
                 )
+                self.context.logger.info(
+                    f"Creating a new user with twitter_id={author_id} and twitter_handle={twitter_name}"
+                )
                 yield from contribute_db.create_user(user)
 
             # Store the tweet id and awarded points
@@ -1200,6 +1205,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 else None
             )
 
+            self.context.logger.info(f"Adding tweet {tweet_id} to the database")
             yield from contribute_db.create_tweet(tweet)
 
             # User data to update
@@ -1220,6 +1226,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             user.current_period_points = user_data["current_period_points"]
 
             # For existing users, all existing user data is replaced except points, which are added
+            self.context.logger.info(
+                f"Updating or creating user twitter_id={author_id}"
+            )
             yield from contribute_db.create_or_update_user_by_key(
                 "twitter_id", author_id, user
             )
@@ -1256,6 +1265,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         # Update the current_period
         module_data.twitter.current_period = today
 
+        self.context.logger.info(
+            f"Updating twitter module data: latest_hashtag_tweet_id={latest_hashtag_tweet_id}  |  latest_mention_tweet_id={latest_mention_tweet_id}  |  number_of_tweets_pulled_today={number_of_tweets_pulled_today}"
+        )
         yield from contribute_db.update_module_data(module_data)
 
         self.context.logger.info("Finished updating the db:")
