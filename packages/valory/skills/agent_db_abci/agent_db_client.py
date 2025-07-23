@@ -145,8 +145,8 @@ class AgentDBClient(Model):
                 payload = payload | auth
 
         shortened_payload = json.dumps(payload)
-        if len(shortened_payload) > 500:
-            shortened_payload = shortened_payload[:500] + "..."
+        if len(shortened_payload) > 1000:
+            shortened_payload = shortened_payload[:1000] + "..."
         self.logger.info(
             f"Making {method} request to {url} with payload: {shortened_payload} and params: {params}"
         )
