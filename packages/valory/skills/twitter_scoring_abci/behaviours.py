@@ -1125,11 +1125,16 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         # Update data
         for tweet_id, tweet_data in tweets.items():
             if "points" not in tweet_data:
+                self.context.logger.info(
+                    f"Skipping tweet {tweet_id} because it has no points"
+                )
                 continue
 
             tweet_data["tweet_id"] = tweet_id
             tweet_data["twitter_user_id"] = tweet_data["author_id"]
+            self.context.logger.info(f"Building tweet with data {tweet_data}")
             tweet = UserTweet(**tweet_data)
+            self.context.logger.info(f"Tweet = {tweet}")
 
             self.context.logger.info(f"Updating db with tweet: {tweet}")
 
@@ -1140,6 +1145,12 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
             # Check this user's point limit per period
             user = contribute_db.get_user_by_attribute("twitter_id", author_id)
+
+            if user and tweet_id in user.tweets:
+                self.context.logger.info(
+                    f"Tweet {tweet_id} from user {author_id} already exists on the db. Skipping..."
+                )
+                continue
 
             current_period_points = user.current_period_points if user else 0
 
@@ -1175,20 +1186,19 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 yield from contribute_db.create_user(user)
 
             # Store the tweet id and awarded points
-            if tweet_id not in user.tweets:
-                # Keep in mind that we store the updated points if the user has reached max_points_per_period
-                campaign = get_campaign(tweet_data["text"], active_hashtags)
+            # Keep in mind that we store the updated points if the user has reached max_points_per_period
+            campaign = get_campaign(tweet_data["text"], active_hashtags)
 
-                tweet.points = new_points
-                tweet.campaign = campaign
-                tweet.epoch = contract_epoch
-                tweet.timestamp = (
-                    datetime.fromisoformat(tweet["created_at"].replace("Z", "+00:00"))
-                    if "created_at" in tweet
-                    else None
-                )
+            tweet.points = new_points
+            tweet.campaign = campaign
+            tweet.epoch = contract_epoch
+            tweet.timestamp = (
+                datetime.fromisoformat(tweet["created_at"].replace("Z", "+00:00"))
+                if "created_at" in tweet
+                else None
+            )
 
-                yield from contribute_db.create_tweet(tweet)
+            yield from contribute_db.create_tweet(tweet)
 
             # User data to update
             user_data = {
