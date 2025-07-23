@@ -608,6 +608,10 @@ class ContributeDatabase:
             if attr_name == "user":
                 attr_data["tweets"] = {}
                 user = ContributeUser(**attr_data)
+
+                if user.id in self.data.users:
+                    raise ValueError(f"User with id {user.id} already exists.\nExisting: {self.data.users[user.id]}\nNew: {user}")
+
                 self.data.users[user.id] = user
                 continue
 
