@@ -97,6 +97,11 @@ class JsonAttributeInterface:
         if not attr_def:
             raise ValueError(f"{self.attribute_name} attribute definition not found")
 
+        if model.attribute_instance_id is None:
+            raise ValueError(
+                f"Attribute instance ID is required for updating {self.attribute_name}."
+            )
+
         # Update the attribute instance
         updated_instance = yield from self.client.update_attribute_instance(
             agent_instance=self.client.agent,
@@ -234,6 +239,20 @@ class ContributeDatabase(Model):
     def create_tweet(self, tweet: UserTweet) -> Optional[AttributeInstance]:
         """Create a tweet attribute instance"""
 
+        # Check that the user exists
+        user = self.get_user_by_attribute("twitter_id", tweet.twitter_user_id)
+
+        if not user:
+            self.logger.info(
+                f"User with twitter_id {tweet.twitter_user_id} not found. Creating new user..."
+            )
+            user = ContributeUser(
+                id=self.get_next_user_id(),
+                twitter_id=tweet.twitter_user_id,
+                twitter_handle=tweet.twitter_handle,
+            )
+            yield from self.create_user(user)
+
         self.logger.info(
             f"Creating tweet: {tweet.tweet_id} for user {tweet.twitter_user_id}"
         )
@@ -248,14 +267,9 @@ class ContributeDatabase(Model):
         )
         self.data.tweets[tweet.tweet_id] = tweet
 
-        user = self.get_user_by_attribute("twitter_id", tweet.twitter_user_id)
-
-        if not user:
-            raise ValueError(
-                f"User with twitter_id {tweet.twitter_user_id} not found in the database."
-            )
-
         # Update the user
+        self.logger.info(f"Updating user {tweet.twitter_user_id} with new tweet")
+
         user.tweets[tweet.tweet_id] = tweet
 
         if self.is_writer():
@@ -276,7 +290,9 @@ class ContributeDatabase(Model):
 
     def create_user(self, user: ContributeUser) -> Optional[AttributeInstance]:
         """Create a user attribute instance"""
-        self.logger.info(f"Creating user: {user.id} with twitter_id {user.twitter_id}")
+        self.logger.info(
+            f"Creating user: {user.id} with twitter_handle {user.twitter_handle}"
+        )
 
         # Avoid user duplication
         is_duplicate, existing_user = self.is_duplicate_user(user)
@@ -288,8 +304,14 @@ class ContributeDatabase(Model):
         user_instance = None
         if self.is_writer():
             user_instance = yield from self.user_interface.create_instance(user)
+            user.attribute_instance_id = (
+                user_instance.attribute_id if user_instance else None
+            )
 
         self.data.users[user.id] = user
+        self.logger.info(
+            f"User {user.id} created [twitter_id={user.twitter_id}, twitter_handle={user.twitter_handle}]"
+        )
         return user_instance
 
     def is_duplicate_user(
@@ -326,8 +348,10 @@ class ContributeDatabase(Model):
         """Creates or updates a user"""
         user = self.get_user_by_attribute(key, value)
         if not user:
+            self.logger.info(f"User with {key}={value} not found. Creating...")
             yield from self.create_user(user)
         else:
+            self.logger.info(f"User with {key}={value} found. Updating...")
             yield from self.update_user(user)
 
     def create_module_configs(
@@ -413,6 +437,12 @@ class ContributeDatabase(Model):
                 if attr_name == "user":
                     attr_data["tweets"] = {}
                     user = ContributeUser(**attr_data)
+
+                    if user.id in self.data.users:
+                        raise ValueError(
+                            f"User with id {user.id} already exists.\nExisting: {self.data.users[user.id]}\nNew: {user}"
+                        )
+
                     self.data.users[user.id] = user
                     continue
 
@@ -476,4 +506,7 @@ class ContributeDatabase(Model):
 
     def get_next_user_id(self):
         """Get next user id"""
-        return len(self.data.users)
+        next_id = 0 if not self.data.users else sorted(self.data.users.keys())[-1] + 1
+        if next_id in self.data.users:
+            raise ValueError(f"Next user ID {next_id} already exists in the database.")
+        return next_id
