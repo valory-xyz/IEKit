@@ -509,9 +509,14 @@ class ContributeDatabase:
 
     def get_user_by_attribute(self, key, value) -> Optional[ContributeUser]:
         """Get a user by one of its attributes"""
+
+        if key not in ContributeUser.model_fields:
+            raise ValueError(f"Invalid user attribute: {key}")
+
         for user_id, user in self.data.users.items():
             if getattr(user, key, None) == value:
                 return user
+        print(f"User with {key}={value} not found in the database.")
         return None
 
     def create_tweet(self, tweet: UserTweet) -> Optional[AttributeInstance]:
@@ -624,6 +629,11 @@ class ContributeDatabase:
 
         for tweet_id, tweet in self.data.tweets.items():
             user = self.get_user_by_attribute("twitter_id", tweet.twitter_user_id)
+
+            if user is None:
+                print(f"Tweet with id {tweet_id} has no user associated with it. Skipping...")
+                continue
+
             user.tweets[tweet_id] = tweet
 
 
