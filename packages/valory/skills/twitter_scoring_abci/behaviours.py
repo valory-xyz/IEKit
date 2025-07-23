@@ -1095,6 +1095,8 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         module_data = contribute_db.data.module_data.twitter
         users = contribute_db.data.users
 
+        self.context.logger.info(f"Updating DB with tweets: {tweets}.")
+
         # Have we changed scoring period?
         now = cast(
             SharedState, self.context.state
