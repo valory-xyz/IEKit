@@ -298,7 +298,7 @@ class ContributeDatabase(Model):
         is_duplicate, existing_user = self.is_duplicate_user(user)
         if is_duplicate:
             raise ValueError(
-                f"Trying to create a duplicated user: {user}\nUser already exists: {existing_user}"
+                f"Trying to create a duplicated user:\n{user}\n\nUser already exists:\n{existing_user}"
             )
 
         user_instance = None
@@ -334,6 +334,9 @@ class ContributeDatabase(Model):
             field_value = getattr(user, field_name, None)
             existing_user = self.get_user_by_attribute(field_name, field_value)
             if field_value is not None and existing_user:
+                self.logger.warning(
+                    f"Found existing user with {field_name}={field_value}"
+                )
                 return True, existing_user
         return False, None
 
