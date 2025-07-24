@@ -225,11 +225,12 @@ def shorten_address(address: str) -> str:
 def print_table():
     """Prints the status table"""
 
+    contract_info = get_contract_info()
+
     # users = read_users_from_file()
     users = read_users_from_ceramic()
     staked_users = {k: v for k, v in users.items() if v.get("service_multisig")}
 
-    contract_info = get_contract_info()
     contributors_contract = load_contract(
         web3.to_checksum_address(CONTRIBUTORS_PROXY_CONTRACT_ADDRESS), CONTRIBUTORS_ABI_FILE, False
     )

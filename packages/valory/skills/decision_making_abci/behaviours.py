@@ -29,6 +29,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
+from packages.valory.skills.contribute_db_abci.behaviours import ContributeDBBehaviour
 from packages.valory.skills.decision_making_abci.models import Params, SharedState
 from packages.valory.skills.decision_making_abci.rounds import (
     DecisionMakingAbciApp,
@@ -45,14 +46,6 @@ from packages.valory.skills.decision_making_abci.tasks.campaign_validation_prepa
 from packages.valory.skills.decision_making_abci.tasks.finished_pipeline_preparation import (
     FinishedPipelinePreparation,
 )
-from packages.valory.skills.decision_making_abci.tasks.llm_preparation import (
-    LLMPreparation,
-)
-from packages.valory.skills.decision_making_abci.tasks.read_stream_preparation import (
-    ReadCentaursPreparation,
-    ReadContributeDBPreparation,
-    ReadManualPointsPreparation,
-)
 from packages.valory.skills.decision_making_abci.tasks.score_preparations import (
     ScorePreparation,
 )
@@ -65,16 +58,10 @@ from packages.valory.skills.decision_making_abci.tasks.tweet_validation_preparat
     TweetValidationPreparation,
 )
 from packages.valory.skills.decision_making_abci.tasks.twitter_preparation import (
-    DailyTweetPreparation,
     ScheduledTweetPreparation,
 )
 from packages.valory.skills.decision_making_abci.tasks.week_in_olas_preparations import (
     WeekInOlasCreatePreparation,
-)
-from packages.valory.skills.decision_making_abci.tasks.write_stream_preparation import (
-    DailyOrbisPreparation,
-    UpdateCentaursPreparation,
-    WriteContributeDBPreparation,
 )
 
 
@@ -82,30 +69,6 @@ from packages.valory.skills.decision_making_abci.tasks.write_stream_preparation 
 previous_event_to_task_preparation_cls = {
     None: {
         "prev": None,
-        "next": ReadContributeDBPreparation,
-    },
-    Event.READ_CONTRIBUTE_DB.value: {
-        "prev": ReadContributeDBPreparation,
-        "next": ReadManualPointsPreparation,
-    },
-    Event.READ_MANUAL_POINTS.value: {
-        "prev": ReadManualPointsPreparation,
-        "next": ReadCentaursPreparation,
-    },
-    Event.READ_CENTAURS.value: {
-        "prev": ReadCentaursPreparation,
-        "next": LLMPreparation,
-    },
-    Event.LLM.value: {
-        "prev": LLMPreparation,
-        "next": DailyTweetPreparation,
-    },
-    Event.DAILY_TWEET.value: {
-        "prev": DailyTweetPreparation,
-        "next": DailyOrbisPreparation,
-    },
-    Event.DAILY_ORBIS.value: {
-        "prev": DailyOrbisPreparation,
         "next": WeekInOlasCreatePreparation,
     },
     Event.WEEK_IN_OLAS_CREATE.value: {
@@ -117,11 +80,6 @@ previous_event_to_task_preparation_cls = {
         "next": ScheduledTweetPreparation,
     },
     Event.SCHEDULED_TWEET.value: {
-        "prev": ScheduledTweetPreparation,
-        "next": UpdateCentaursPreparation,
-    },
-    # Hack to force the db update after tweet update without tweeting
-    Event.FORCE_DB_UPDATE.value: {
         "prev": ScheduledTweetPreparation,
         "next": CampaignValidationPreparation,
     },
@@ -139,28 +97,16 @@ previous_event_to_task_preparation_cls = {
     },
     Event.STAKING_DAA_UPDATE.value: {
         "prev": StakingDAAPreparation,
-        "next": UpdateCentaursPreparation,
-    },
-    Event.UPDATE_CENTAURS.value: {
-        "prev": UpdateCentaursPreparation,
         "next": ScorePreparation,
     },
     Event.SCORE.value: {
         "prev": ScorePreparation,
-        "next": WriteContributeDBPreparation,
-    },
-    Event.WRITE_CONTRIBUTE_DB.value: {
-        "prev": WriteContributeDBPreparation,
         "next": FinishedPipelinePreparation,
-    },
-    Event.NEXT_CENTAUR.value: {
-        "prev": None,
-        "next": ReadContributeDBPreparation,
     },
 }
 
 
-class DecisionMakingBaseBehaviour(BaseBehaviour, ABC):
+class DecisionMakingBaseBehaviour(ContributeDBBehaviour, ABC):
     """Base behaviour for the decision_making_abci skill."""
 
     @property
@@ -285,7 +231,7 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
                 f"Skipping the {next_task_preparation_cls.__name__} task"
             )
             # Get the next task
-            if previous_decision_event != Event.NEXT_CENTAUR.value:
+            if previous_decision_event != Event.SCORE.value:
                 # Regular case: we just get the next task in the list
                 previous_decision_event_index = (
                     event_list.index(previous_decision_event) + 1
@@ -297,7 +243,7 @@ class DecisionMakingBehaviour(DecisionMakingBaseBehaviour):
                 # it means we are skipping the LLM task (it comes after a NEXT_CENTAUR event). In this case,
                 # we can directly skip to SCHEDULED_TWEET because skipping LLM means skipping DailyTwitter and DailyOrbis.
                 # Therefore, we act as if the previous task was DailyOrbis.
-                previous_decision_event = Event.DAILY_ORBIS.value
+                previous_decision_event = Event.WEEK_IN_OLAS_CREATE.value
 
             previous_task_skipped = True
 

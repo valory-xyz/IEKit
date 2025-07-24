@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 """This package contains the logic for task preparations."""
 import uuid
 
+from packages.valory.skills.contribute_db_abci.contribute_models import ServiceTweet
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
@@ -29,7 +30,7 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 class WeekInOlasCreatePreparation(TaskPreparation):
     """WeekInOlasCreatePreparation"""
 
-    task_name = "week_in_olas"
+    task_name = "scheduled_tweet"
     task_event = Event.WEEK_IN_OLAS_CREATE.value
 
     def check_extra_conditions(self):
@@ -45,16 +46,16 @@ class WeekInOlasCreatePreparation(TaskPreparation):
 
     def _post_task(self):
         """Task postprocessing"""
-        centaurs_data = self.synchronized_data.centaurs_data
-        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
 
         # Update the last run time
-        current_centaur["configuration"]["plugins"]["week_in_olas"][
-            "last_run"
-        ] = self.now_utc.strftime("%Y-%m-%d %H:%M:%S %Z")
+        self.config.last_run = self.now_utc
+
+        if not self.synchronized_data.summary_tweets:
+            self.logger.info("The summary tweet was empty. Skipping...")
+            return {}, None
 
         # Add the new thread to proposed tweets
-        thread = {
+        thread_data = {
             "text": self.synchronized_data.summary_tweets,
             "posted": False,
             "voters": [],
@@ -69,10 +70,13 @@ class WeekInOlasCreatePreparation(TaskPreparation):
             "executionAttempts": [],
         }
 
-        self.logger.info(f"Added WiO to the tweet list:\n{thread}")
+        self.logger.info(f"Added WiO to the tweet list:\n{thread_data}")
 
-        current_centaur["plugins_data"]["scheduled_tweet"]["tweets"].append(thread)
+        self.data.tweets.append(ServiceTweet(**thread_data))
+        yield from self.context.contribute_db.update_module_data(
+            self.context.contribute_db.data.module_data
+        )
 
-        updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
+        updates = {}
         yield
         return updates, None

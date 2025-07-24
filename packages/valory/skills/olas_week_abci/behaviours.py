@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
 )
 from packages.valory.skills.abstract_round_abci.common import RandomnessBehaviour
 from packages.valory.skills.abstract_round_abci.models import Requests
+from packages.valory.skills.contribute_db_abci.behaviours import ContributeDBBehaviour
 from packages.valory.skills.olas_week_abci.dialogues import LlmDialogue, LlmDialogues
 from packages.valory.skills.olas_week_abci.models import (
     OpenAICalls,
@@ -140,7 +141,7 @@ def build_thread(raw_text: str, week: int, year: int) -> list:
     )
 
 
-class OlasWeekBaseBehaviour(BaseBehaviour, ABC):
+class OlasWeekBaseBehaviour(ContributeDBBehaviour, ABC):
     """Base behaviour for the common apps' skill."""
 
     @property
@@ -160,22 +161,10 @@ class OlasWeekBaseBehaviour(BaseBehaviour, ABC):
 
     def _check_twitter_limits(self) -> Tuple:
         """Check if the daily limit has exceeded or not"""
-        try:
-            number_of_tweets_pulled_today = int(
-                self.context.ceramic_db["module_data"]["twitter"][
-                    "number_of_tweets_pulled_today"
-                ]
-            )
-            last_tweet_pull_window_reset = float(
-                self.context.ceramic_db["module_data"]["twitter"][
-                    "last_tweet_pull_window_reset"
-                ]
-            )
-        except KeyError:
-            number_of_tweets_pulled_today = 0
-            last_tweet_pull_window_reset = cast(
-                SharedState, self.context.state
-            ).round_sequence.last_round_transition_timestamp.timestamp()
+
+        module_data = self.context.contribute_db.data.module_data.twitter
+        number_of_tweets_pulled_today = module_data.number_of_tweets_pulled_today
+        last_tweet_pull_window_reset = module_data.last_tweet_pull_window_reset
 
         current_time = cast(
             SharedState, self.context.state

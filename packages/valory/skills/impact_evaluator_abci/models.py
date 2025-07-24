@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -27,20 +27,16 @@ from packages.valory.skills.abstract_round_abci.models import Requests as BaseRe
 from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
-from packages.valory.skills.ceramic_read_abci.models import (
-    Params as CeramicReadAbciParams,
+from packages.valory.skills.agent_db_abci.agent_db_client import (
+    AgentDBClient as BaseAgentDBClient,
 )
-from packages.valory.skills.ceramic_read_abci.rounds import Event as CeramicReadEvent
-from packages.valory.skills.ceramic_write_abci.models import (
-    Params as CeramicWriteAbciParams,
+from packages.valory.skills.contribute_db_abci.models import (
+    ContributeDatabase as BaseContributeDatabase,
 )
-from packages.valory.skills.ceramic_write_abci.models import (
-    RandomnessApi as CeramicWriteRandomnessApi,
+from packages.valory.skills.contribute_db_abci.models import (
+    Params as ContributeDBAbciParams,
 )
-from packages.valory.skills.ceramic_write_abci.rounds import Event as CeramicWriteEvent
-from packages.valory.skills.decision_making_abci.models import (
-    CeramicDB as DecisionMakingCeramicDB,
-)
+from packages.valory.skills.contribute_db_abci.rounds import Event as ContributeDBEvent
 from packages.valory.skills.decision_making_abci.models import (
     Params as DecisionMakingAbciParams,
 )
@@ -51,14 +47,9 @@ from packages.valory.skills.dynamic_nft_abci.models import (
     Params as DynamicNFTAbciParams,
 )
 from packages.valory.skills.dynamic_nft_abci.rounds import Event as DynamicNFTEvent
-from packages.valory.skills.generic_scoring_abci.rounds import (
-    Event as GenericScoringEvent,
-)
 from packages.valory.skills.impact_evaluator_abci.composition import (
     ImpactEvaluatorSkillAbciApp,
 )
-from packages.valory.skills.llm_abci.models import Params as LLMAbciParams
-from packages.valory.skills.llm_abci.rounds import Event as LLMEvent
 from packages.valory.skills.mech_interact_abci.models import (
     MechResponseSpecs as BaseMechResponseSpecs,
 )
@@ -80,28 +71,27 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
 )
 
 
-CeramicReadParams = CeramicReadAbciParams
-CeramicWriteParams = CeramicWriteAbciParams
+ContributeDBParams = ContributeDBAbciParams
 DynamicNFTParams = DynamicNFTAbciParams
 TwitterScoringParams = TwitterScoringAbciParams
-LLMParams = LLMAbciParams
 DecisionMakingParams = DecisionMakingAbciParams
 OlasWeekParams = OlasWeekAbciParams
 MechInteractParams = MechInteractAbciParams
 
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
-RandomnessApi = CeramicWriteRandomnessApi
 MechResponseSpecs = BaseMechResponseSpecs
-CeramicDB = DecisionMakingCeramicDB
-
-MARGIN = 5
-MULTIPLIER = 5
-CERAMIC_TIMEOUT_MULTIPLIER = 10
+AgentDBClient = BaseAgentDBClient
+ContributeDatabase = BaseContributeDatabase
 
 
 class RandomnessApi(ApiSpecs):
     """A model that wraps ApiSpecs for randomness api specifications."""
+
+
+MARGIN = 5
+MULTIPLIER = 5
+MULTIPLIER_DB = 10
 
 
 class SharedState(BaseSharedState):
@@ -112,21 +102,15 @@ class SharedState(BaseSharedState):
     def setup(self) -> None:
         """Set up."""
         super().setup()
-        ImpactEvaluatorSkillAbciApp.event_to_timeout[CeramicReadEvent.ROUND_TIMEOUT] = (
-            self.context.params.round_timeout_seconds * CERAMIC_TIMEOUT_MULTIPLIER
-        )
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
-            CeramicWriteEvent.ROUND_TIMEOUT
-        ] = (self.context.params.round_timeout_seconds * CERAMIC_TIMEOUT_MULTIPLIER)
+            ContributeDBEvent.ROUND_TIMEOUT
+        ] = (self.context.params.round_timeout_seconds * MULTIPLIER_DB)
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             TwitterScoringEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             TwitterScoringEvent.TWEET_EVALUATION_ROUND_TIMEOUT
         ] = self.context.params.tweet_evaluation_round_timeout
-        ImpactEvaluatorSkillAbciApp.event_to_timeout[
-            GenericScoringEvent.ROUND_TIMEOUT
-        ] = self.context.params.round_timeout_seconds
         ImpactEvaluatorSkillAbciApp.event_to_timeout[DynamicNFTEvent.ROUND_TIMEOUT] = (
             self.context.params.round_timeout_seconds * MULTIPLIER
         )
@@ -136,9 +120,6 @@ class SharedState(BaseSharedState):
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             ResetPauseEvent.RESET_AND_PAUSE_TIMEOUT
         ] = (self.context.params.reset_pause_duration + MARGIN)
-        ImpactEvaluatorSkillAbciApp.event_to_timeout[LLMEvent.ROUND_TIMEOUT] = (
-            self.context.params.round_timeout_seconds * MULTIPLIER
-        )
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             DecisionMakingEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds
@@ -154,9 +135,8 @@ class SharedState(BaseSharedState):
 
 
 class Params(
-    CeramicReadParams,
+    ContributeDBParams,
     TwitterScoringParams,
-    CeramicWriteParams,
     DynamicNFTParams,
     DecisionMakingParams,
     OlasWeekParams,

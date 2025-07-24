@@ -79,11 +79,6 @@ class SynchronizedData(BaseSynchronizedData):
         return self._get_deserialized("participant_to_checkpoint")
 
     @property
-    def pending_write(self) -> bool:
-        """Checks whether there are changes pending to be written to Ceramic."""
-        return cast(bool, self.db.get("pending_write", False))
-
-    @property
     def chain_id(self) -> Optional[str]:
         """Get the chain name where to send the transactions to."""
         return cast(str, self.db.get("chain_id", None))
@@ -105,10 +100,6 @@ class ActivityScoreRound(CollectSameUntilThresholdRound):
     synchronized_data_class = SynchronizedData
     extended_requirements = ()
 
-    selection_key = (
-        get_name(SynchronizedData.pending_write),
-    )
-
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
@@ -117,12 +108,10 @@ class ActivityScoreRound(CollectSameUntilThresholdRound):
             payload = ActivityScorePayload(*(("dummy_sender",) + self.most_voted_payload_values))
 
             # We have finished with the activity update
-            # Mark Ceramic for a write and clean updates
-            if payload.pending_write:
+            if payload.finished_update:
                 synchronized_data = self.synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
                     **{
-                        get_name(SynchronizedData.pending_write): True,
                         get_name(SynchronizedData.staking_multisig_to_updates): {},
                         get_name(SynchronizedData.staking_user_to_counted_tweets): {},
                     },

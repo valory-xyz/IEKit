@@ -67,11 +67,6 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(float, self.db.get("last_update_time", None))
 
     @property
-    def pending_write(self) -> bool:
-        """Checks whether there are changes pending to be written to Ceramic."""
-        return cast(bool, self.db.get("pending_write", False))
-
-    @property
     def token_event_retries(self) -> int:
         """Get the token id to points mapping."""
         return cast(int, self.db.get("token_event_retries", 0))
@@ -113,15 +108,12 @@ class TokenTrackRound(CollectSameUntilThresholdRound):
 
             token_id_to_points = payload["token_id_to_points"]
             last_update_time = payload["last_update_time"]
-            pending_write = payload["pending_write"]
-            self.context.ceramic_db.apply_diff(payload["ceramic_diff"])
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
                     get_name(SynchronizedData.token_id_to_points): token_id_to_points,
                     get_name(SynchronizedData.last_update_time): last_update_time,
-                    get_name(SynchronizedData.pending_write): pending_write,
                     get_name(SynchronizedData.token_event_retries): 0,
                 }
             )

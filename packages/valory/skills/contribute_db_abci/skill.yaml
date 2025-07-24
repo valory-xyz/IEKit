@@ -1,38 +1,32 @@
-name: generic_scoring_abci
+name: contribute_db_abci
 author: valory
 version: 0.1.0
 type: skill
-description: A skill that updates user scores with new points previously read from
-  a Ceramic stream.
+description: A skill that interacts with AgentDB to store Contribute data.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeihaf4n2h534ilvqfs3agmwlmumhsvkgiu6fo3gx6zt276og7cfncy
-  behaviours.py: bafybeiaqvzgatmvjd3izvny3cymyb6rhr3wiuvbdyowiq2u7risfbhx7se
-  dialogues.py: bafybeiedavgb5yja2mfqs4vvmbb276aj4ygoe65hvverxr7sz72wlss4iu
-  fsm_specification.yaml: bafybeice5u7emlcwemlfwxidpzgac2xs7eaarsolj6yw5ljbg6oojjj6li
-  handlers.py: bafybeidtzcefjwj5rqhk6xw7b4vlzsyfqs47y3kvrrbhxeypbz7mhenzum
-  models.py: bafybeib6dy2jo77soz3bivbvugepjrurvkue7qwiizdxbvzytk62s543wq
-  payloads.py: bafybeib7zsfjxhilao35g3zus4pslr3dr3q6m3ovhlyn5rwe2f63u44s44
-  rounds.py: bafybeigqnyear4fgzzkwlg47xt4a4lp4rvpj5iz5m3m4lkgo7emuc62ldq
-  tests/__init__.py: bafybeichcvoln3af5zl4rbefhdw5hd3n6dijbgygb3guiqgn7n2ad5vhrq
-  tests/test_behaviours.py: bafybeih5l77ptahizykrd42z5fhw27thghjgwkeo2dhc4fnbecn3m7nkmy
-  tests/test_dialogues.py: bafybeico5o7caxgecdthnh6lmafeeu6nee557tkerjkdiz5b2zvq77brpe
-  tests/test_handlers.py: bafybeideo23mza2zcunsttw6ye2tdadnc236mktrjhsqjyo5kxpflvqbtq
-  tests/test_models.py: bafybeifa4rdjpwlnqghnw4jqflqc5jy2pyiq456ieciah5xuptnl6ngxla
-  tests/test_payloads.py: bafybeiavj6xwd2i7ejbkweoevh66mvykbxe3cfysynl4kmsb4v6wvzg2um
-  tests/test_rounds.py: bafybeiefjgxbikuxotmwlj5efpsblbyo6xjobtuzlxkxaf2a57qvstcwdi
+  __init__.py: bafybeidtx5yecrqsufu5f4sjm2bcyjafwtioayq4ytk4txzllw3crbklq4
+  behaviours.py: bafybeifjg7pndyaohqgjh3ejtlhtahuvzwj7coilfkn5hawbykx7g5dzem
+  contribute_db.py: bafybeicx2y7rg4j2f2roigmidwhfpyubrv2rqbz6f3pnmkg7iryt542hue
+  contribute_models.py: bafybeihxslk7cvo5ta2dswvwfaarxguzgld4a52rxieqxr5yi7x3s5zjim
+  dialogues.py: bafybeifi7sbyed3cqsnuil4c33r53ehsjj3cn5reljgvvfhfo2lpmktkjm
+  fsm_specification.yaml: bafybeiaid6gq4uoqsbsui2s3uza37art6qs5qq4rzj5vercjdptuzpa67a
+  handlers.py: bafybeiaa2ezo5lyyv275uwl6sqcmicyqokanubm6j74tsewuizf5c6s3ri
+  models.py: bafybeidhuzii7yi2f5bu3r254y5e6emmwgqiqfhrpdvsiu2kiux5pkcriu
+  payloads.py: bafybeifbec4kwez563xce4jtqxrpfemz3sdh42y3liqaevtejtlb57rwwq
+  rounds.py: bafybeidyvviorxnu6u3hraqwzx5mrtvwsmqvrkige5eg45bhoehl7ktux4
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy
-- valory/decision_making_abci:0.1.0:bafybeieo6egzxpvgdpahefzbghpyhuy5ikwu4aqicfxxuxmsbnlwy67y7i
+- valory/agent_db_abci:0.1.0:bafybeig5vmynr4xsyjln6kydse72jbm56mkryv34aflj47gaai5t3g4hgm
 behaviours:
   main:
     args: {}
-    class_name: GenericScoringRoundBehaviour
+    class_name: ContributeDBRoundBehaviour
 handlers:
   abci:
     args: {}
@@ -114,9 +108,12 @@ models:
       retry_attempts: 400
       retry_timeout: 3
       round_timeout_seconds: 30.0
-      service_id: generic_scoring
+      service_id: contribute_db
       service_registry_address: null
-      setup: {}
+      setup:
+        all_participants: []
+        safe_contract_address: '0x0000000000000000000000000000000000000000'
+        consensus_threshold: null
       share_tm_config_on_startup: false
       sleep_time: 1
       tendermint_check_sleep_delay: 3
@@ -132,7 +129,19 @@ models:
       slash_threshold_amount: 10000000000000000
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
+      contribute_db_pkey: null
     class_name: Params
+  randomness_api:
+    args:
+      api_id: cloudflare
+      headers: {}
+      method: GET
+      parameters: {}
+      response_key: null
+      response_type: dict
+      retries: 5
+      url: https://drand.cloudflare.com/public/latest
+    class_name: RandomnessApi
   requests:
     args: {}
     class_name: Requests
@@ -145,8 +154,18 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
-  ceramic_db:
+  agent_db_client:
+    args:
+      base_url: https://afmdb.autonolas.tech
+    class_name: AgentDBClient
+  contribute_db:
     args: {}
-    class_name: CeramicDB
-dependencies: {}
+    class_name: ContributeDatabase
+dependencies:
+  pydantic:
+    version: ==2.9.2
+  eth_account:
+    version: ==0.8.0
+  pydantic_core:
+    version: ==2.23.4
 is_abstract: true

@@ -7,30 +7,27 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
-  behaviours.py: bafybeibmr3vzaktbl7tq7d6e3i7vrjnmc35xtkg2qx5xgzybn3xwmuczcq
+  behaviours.py: bafybeidpmvfvnshqp57c6hny2hirvbmxblcj4p43geso4qatlwi76szatu
   dialogues.py: bafybeic5nwnax5tz6plxi5rww6davp23vgb6fixnlhzv2isoknuvb2bhye
-  fsm_specification.yaml: bafybeihckbzmtewjwlbdvghzuadspopa25gsvtkgud5v6ymob6bnt4pium
+  fsm_specification.yaml: bafybeiegwozjcrotksyxeio56vcrwgpnxktpycrcozi6gssth7xwqb4iie
   handlers.py: bafybeibo54pwzdc5o4zwsqqaveiebxsfqtk2px5nh662bb5mxydtc2oz5q
-  models.py: bafybeihjb6d7teichpc725xtja53atvi7wwsos7rl5ltisj7orec2jy7ge
+  models.py: bafybeiegm7oknasrcezxvypa3nf6mkictkewsfoiqtljkbb466is6rgfnq
   payloads.py: bafybeic6jrms2xs2odykwwngr5yyqm6cus7cyihdbxux26glpq3573q3ay
-  rounds.py: bafybeialjritfpbp4ksnjkmlxstajzggvgxdsgu3vkxeueiy5f6yg65nqq
-  tasks/campaign_validation_preparation.py: bafybeiafgc7lzgtl6qwo3qsdpskipm4qeby6c5nmltm4x4yp3zcwn5a6z4
-  tasks/finished_pipeline_preparation.py: bafybeid652b53p7mtsbj3ksko3g2eezvg4nut2vukwvnfhxyfi4zkx3dym
-  tasks/llm_preparation.py: bafybeigivqniwvqzmhpqytrn5gz3gb5caa6nlvctkbycbk4cmtut6hvuvi
-  tasks/read_stream_preparation.py: bafybeicmjasiyecopfweobodzbmn3tbluu5q724uzzqkit6urn3lb5q354
+  rounds.py: bafybeidxssc3muexhbq4kizkoxtz7kwhofvbxet32u2kb5rglpu6me2dai
+  tasks/campaign_validation_preparation.py: bafybeig7roc5hao4nosmuwjzzfvepbjnedb7p37oy5ssfhjx7okw75mzty
+  tasks/finished_pipeline_preparation.py: bafybeig6ibvp6qvwsflsriiesjlmtbjv2j7q3nh4hy7kzvypvva424cl6i
   tasks/score_preparations.py: bafybeie7cfot24zcyod5becz6t5lasvva77httfkw57qmvgjk35d3qluxa
   tasks/signature_validation.py: bafybeihbwrv72hnh3ytko2i5oszqgdky2j6h2wse45wvuhf2j32lo2tsjy
-  tasks/staking.py: bafybeied5y4f7ns64wer2vubjes3br6xxwkrjvn4mwj3cmzo6qaixxu2vy
-  tasks/task_preparations.py: bafybeihfm3ms665fvz2qwmhmcwgl2ws5mt62pykomowoxpm6a46jlqvsmu
-  tasks/tweet_validation_preparation.py: bafybeif3wbfskiyuij7unx72euklms7owrzwzgdu462xatvypalm6xrgca
-  tasks/twitter_preparation.py: bafybeicqi2xw4tzsq2bi555z3sd3vi73p6ctswrtennko4nevklehn3pha
-  tasks/week_in_olas_preparations.py: bafybeidmx64rnkhfcqnsx7qwmcwz6s5okxbqwi4ztnfrrsfaxgsb6vdb3i
-  tasks/write_stream_preparation.py: bafybeiatdcckbobkaawnuphcgvjx2kgcuil7dtbunfpje7pfjd26gd2es4
+  tasks/staking.py: bafybeibfw4nyz36mdsv4im55vc4aufctrskmskuscmsibuackww25x7svi
+  tasks/task_preparations.py: bafybeifj72naspy3hkmdb6xkkgg4sclpjpgxvzhp4nwjn2z4x3ujbf4oue
+  tasks/tweet_validation_preparation.py: bafybeihxc2wsb3menylhwmjttprx3gpg6oedjq5bpju64lu54mz2w6fota
+  tasks/twitter_preparation.py: bafybeiaa3pudbyxa6w4htzy7ehijbuqahd74e6lai4z3rkmygfvcw2tga4
+  tasks/week_in_olas_preparations.py: bafybeibaowne5ko6iqbrdwdyiztwvknnqqavbjmkvfp2jzwrghov6myfwi
   test_tools/__init__.py: bafybeiagwxhcqhvnfhf7yejawmjkle6c7eb4o4hjoy363dahmnyq22xmua
   test_tools/tasks.py: bafybeiecu32iciko26ncglpxkzwlb6ifrvgknmcisthotkqhn7eku25qrm
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
   tests/centaur_configs.py: bafybeigkr2n3l7ibtxtwf5w2t6fygxxt5headnic4lh6wrs6tcbb2ghqgi
-  tests/test_behaviours.py: bafybeigt4ifqyyw23ejypquaqgecjrgmvtrgxustwmzucolgm6kr5gzdnu
+  tests/test_behaviours.py: bafybeibn5yomdwcgpmttv4liqupxv73ygnhw3aq4z6xgdcy5p4ynsx636a
   tests/test_campaign_validation.py: bafybeihpfaqjevuprse5uesw5ascbzyxylldcnpkjfuey7ytspriq2p5pu
   tests/test_ceramic_db.py: bafybeid44ytwdgnzjyarw3yirg6bz3ago7pdamufphjbh6rxa5d25zkdtq
   tests/test_dialogues.py: bafybeihxzcyy7xvg4lte4bv5hy2h4mozdzwvyaa36feu3oxv67jfvsyuoi
@@ -57,8 +54,8 @@ protocols:
 - valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy
-- valory/ceramic_read_abci:0.1.0:bafybeigyt6jf5a4ucbdn44tspklpbeenxr57g2czlepqm227j5c6k7glw4
-- valory/staking_abci:0.1.0:bafybeiderd34zw5jq2xxat6aewaq7blgeemwutjnmloyzfdux5ppmn4uou
+- valory/staking_abci:0.1.0:bafybeiaey3na6tcmsztul3ek3iu4v66mzem7k6cg7h3w76rql2fl5xmjsa
+- valory/contribute_db_abci:0.1.0:bafybeieofmuca5rqxpidqsl3fdvpc4kt6hmwrglwl6la36w6e4e2h4y2w4
 behaviours:
   main:
     args: {}

@@ -17,13 +17,16 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the handlers for the skill of ImpactEvaluatorAbciApp."""
+"""This module contains the handlers for the skill of AgentDBAbciApp."""
 
 from packages.valory.skills.abstract_round_abci.handlers import (
     ABCIRoundHandler as BaseABCIRoundHandler,
 )
 from packages.valory.skills.abstract_round_abci.handlers import (
     ContractApiHandler as BaseContractApiHandler,
+)
+from packages.valory.skills.abstract_round_abci.handlers import (
+    HttpHandler as BaseHttpHandler,
 )
 from packages.valory.skills.abstract_round_abci.handlers import (
     IpfsHandler as BaseIpfsHandler,
@@ -37,25 +40,12 @@ from packages.valory.skills.abstract_round_abci.handlers import (
 from packages.valory.skills.abstract_round_abci.handlers import (
     TendermintHandler as BaseTendermintHandler,
 )
-from packages.valory.skills.dynamic_nft_abci.handlers import (
-    HttpHandler as BaseHttpHandler,
-)
-from packages.valory.skills.llm_abci.handlers import LlmHandler as BaseLlmHandler
-from packages.valory.skills.mech_interact_abci.handlers import (
-    AcnHandler as BaseAcnHandler,
-)
-from packages.valory.skills.twitter_write_abci.handlers import (
-    TwitterHandler as BaseTwitterHandler,
-)
 
 
-ABCIRoundHandler = BaseABCIRoundHandler
+ABCIHandler = BaseABCIRoundHandler
 HttpHandler = BaseHttpHandler
 SigningHandler = BaseSigningHandler
 LedgerApiHandler = BaseLedgerApiHandler
 ContractApiHandler = BaseContractApiHandler
 TendermintHandler = BaseTendermintHandler
 IpfsHandler = BaseIpfsHandler
-TwitterHandler = BaseTwitterHandler
-LlmHandler = BaseLlmHandler
-AcnHandler = BaseAcnHandler

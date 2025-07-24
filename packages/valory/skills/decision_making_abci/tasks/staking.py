@@ -90,15 +90,14 @@ class StakingPreparation(TaskPreparation):
 
     def _post_task(self):
         """Preparations after running the task"""
-        centaurs_data = self.synchronized_data.centaurs_data
-        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
+        plugin_config = getattr(
+            self.context.contribute_db.data.module_configs, self.task_name
+        )
 
         # Update the last run time
-        current_centaur["configuration"]["plugins"][self.task_name][
-            "last_run"
-        ] = self.now_utc.strftime("%Y-%m-%d %H:%M:%S %Z")
+        plugin_config.last_run = self.now_utc
 
-        updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
+        updates = {}
         yield
         return updates, None
 
@@ -251,7 +250,7 @@ class StakingActivityPreparation(StakingPreparation):
         """Check user staking threshold"""
         yield
 
-        ceramic_db = self.context.ceramic_db
+        contribute_db = self.context.contribute_db
 
         # Get the current staking epochs
         staking_contract_to_epoch = {}
@@ -269,7 +268,7 @@ class StakingActivityPreparation(StakingPreparation):
             self.multisig_to_updates,
             self.user_to_counted_tweets,
         ) = yield from self.get_activity_updates(
-            ceramic_db.data["users"], staking_contract_to_epoch
+            contribute_db.data.users, staking_contract_to_epoch
         )
         pending_updates = len(self.multisig_to_updates)
 
@@ -306,20 +305,16 @@ class StakingActivityPreparation(StakingPreparation):
         multisig_to_updates = {}
         user_to_counted_tweets = {}
 
-        for user_id, user_data in users.items():
+        for user_id, user in users.items():
             # Skip the user if there is no service multisig or wallet
             # This means the user has not staked
-            if not user_data.get("service_multisig", None) or not user_data.get(
-                "wallet_address", None
-            ):
+            if not user.service_multisig or not user.wallet_address:
                 continue
 
-            service_multisig = user_data["service_multisig"]
+            service_multisig = user.service_multisig
 
             # Get this user's staking contract epoch
-            staking_contract = yield from self.get_staking_contract(
-                user_data["wallet_address"]
-            )
+            staking_contract = yield from self.get_staking_contract(user.wallet_address)
 
             if not staking_contract:
                 continue
@@ -330,18 +325,16 @@ class StakingActivityPreparation(StakingPreparation):
             # Also filter out tweets that do not belong to a campaign
             this_epoch_tweets = {
                 k: v
-                for k, v in user_data.get("tweets", {}).items()
-                if v["epoch"] == this_epoch and v["campaign"]
+                for k, v in user.tweets.items()
+                if v.epoch == this_epoch and v.campaign
             }
             this_epoch_not_counted_tweets = {
-                k: v
-                for k, v in this_epoch_tweets.items()
-                if not v["counted_for_activity"]
+                k: v for k, v in this_epoch_tweets.items() if not v.counted_for_activity
             }
 
-            this_epoch_points = sum(t["points"] for t in this_epoch_tweets.values())
+            this_epoch_points = sum(t.points for t in this_epoch_tweets.values())
             this_epoch_not_counted_points = sum(
-                t["points"] for t in this_epoch_not_counted_tweets.values()
+                t.points for t in this_epoch_not_counted_tweets.values()
             )
 
             # Since we count each POINTS_PER_ACTIVITY_UPDATE as one update, it can be the case
@@ -363,7 +356,7 @@ class StakingActivityPreparation(StakingPreparation):
             # Group tweets to build new updates. This is not evident and requires
             # an algorithm that optimizes how to group them in order to maximize the number of updates for the user
             not_counted_tweet_id_to_points = {
-                k: v["points"] for k, v in this_epoch_not_counted_tweets.items()
+                k: v.points for k, v in this_epoch_not_counted_tweets.items()
             }
 
             (updates, selected_tweets) = group_tweets(
@@ -428,15 +421,14 @@ class StakingDAAPreparation(TaskPreparation):
 
     def _post_task(self):
         """Preparations after running the task"""
-        centaurs_data = self.synchronized_data.centaurs_data
-        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
+        plugin_config = getattr(
+            self.context.contribute_db.data.module_configs, self.task_name
+        )
 
         # Update the last run time
-        current_centaur["configuration"]["plugins"][self.task_name][
-            "last_run"
-        ] = self.now_utc.strftime("%Y-%m-%d %H:%M:%S %Z")
+        plugin_config.last_run = self.now_utc
 
-        updates = {"centaurs_data": centaurs_data, "has_centaurs_changes": True}
+        updates = {}
         yield
         return updates, None
 

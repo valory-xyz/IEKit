@@ -1,0 +1,17 @@
+alphabet_in:
+- DONE
+- NO_MAJORITY
+- ROUND_TIMEOUT
+default_start_state: DBLoadRound
+final_states:
+- FinishedLoadingRound
+label: ContributeDBAbciApp
+start_states:
+- DBLoadRound
+states:
+- DBLoadRound
+- FinishedLoadingRound
+transition_func:
+    (DBLoadRound, DONE): FinishedLoadingRound
+    (DBLoadRound, NO_MAJORITY): DBLoadRound
+    (DBLoadRound, ROUND_TIMEOUT): DBLoadRound

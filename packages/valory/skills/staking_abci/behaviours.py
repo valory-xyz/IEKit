@@ -38,6 +38,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
+from packages.valory.skills.contribute_db_abci.behaviours import ContributeDBBehaviour
 from packages.valory.skills.staking_abci.models import Params, SharedState
 from packages.valory.skills.staking_abci.rounds import (
     ActivityScorePayload,
@@ -65,7 +66,7 @@ BASE_CHAIN_ID = "base"
 SECONDS_IN_DAY = 86400
 
 
-class StakingBaseBehaviour(BaseBehaviour, ABC):
+class StakingBaseBehaviour(ContributeDBBehaviour, ABC):
     """Base behaviour for the staking_abci skill."""
 
     @property
@@ -229,18 +230,18 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
 
             sender = self.context.agent_address
-            pending_write = False
+            finished_update = False
 
             # Check whether we just came back from settling an update
             if self.synchronized_data.tx_submitter == ActivityUpdatePreparationBehaviour.auto_behaviour_id():
                 staking_user_to_counted_tweets = self.synchronized_data.staking_user_to_counted_tweets
 
-                # For each user, update the last processed tweet on the model, and mark for Ceramic update
+                # For each user, update the last processed tweet on the model, and mark for data reset
                 for user_id, counter_tweets in staking_user_to_counted_tweets.items():
                     for tweet_id in counter_tweets:
-                        self.context.ceramic_db.data["users"][user_id]["tweets"][tweet_id]["counted_for_activity"] = True
-                pending_write = True
-                self.context.logger.info(f"Tweets counted for activity: {staking_user_to_counted_tweets}. Ceramic marked for update.")
+                        self.context.contribute_db.data.users[user_id]["tweets"][tweet_id]["counted_for_activity"] = True
+                finished_update = True
+                self.context.logger.info(f"Tweets counted for activity: {staking_user_to_counted_tweets}.")
 
             # Process new updates
             else:
@@ -248,7 +249,7 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
 
             payload = ActivityScorePayload(
                 sender=sender,
-                pending_write=pending_write
+                finished_update=finished_update
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -479,22 +480,24 @@ class DAAPreparationBehaviour(StakingBaseBehaviour):
 
         # Get the staked and active service multisigs
         # If the user has not tweeted in the last 24 hours, they're not a DAA
-        for user in self.context.ceramic_db.data["users"].values():
+        for user in self.context.contribute_db.data.users.values():
 
-            if not user["service_multisig"]:
+            if not user.service_multisig:
                 continue
 
-            if not user["tweets"]:
+            if not user.tweets:
                 continue
 
             # Check the latest tweet time
-            tweet_ts = list(user["tweets"].values())[-1]["timestamp"]
-            tweet_time = datetime.fromtimestamp(tweet_ts, tz=timezone.utc)
+            tweet_time = list(user.tweets.values())[-1].timestamp
+
+            if not tweet_time:
+                continue
 
             if (now_utc - tweet_time).total_seconds() > SECONDS_IN_DAY:
                 continue
 
-            active_multisigs.append(user["service_multisig"])
+            active_multisigs.append(user.service_multisig)
 
         self.context.logger.info(f"Safes marked as DAAs: {active_multisigs}")
 

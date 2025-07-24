@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2024 Valory AG
+#   Copyright 2021-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -51,25 +51,28 @@ PATH_TO_VAR = {
     "models/params/args/safe_contract_address_gnosis": "SAFE_CONTRACT_ADDRESS_GNOSIS",
     "models/params/args/transaction_service_url": "TRANSACTION_SERVICE_URL",
 
-    # Ceramic
-    "models/params/args/ceramic_api_base": "CERAMIC_API_BASE",
-    "models/params/args/ceramic_did_str": "CERAMIC_DID_STR",
-    "models/params/args/ceramic_did_seed": "CERAMIC_DID_SEED",
-    "models/params/args/ceramic_db_stream_id": "CERAMIC_DB_STREAM_ID",
-    "models/params/args/centaurs_stream_id": "CENTAURS_STREAM_ID",
-    "models/params/args/manual_points_stream_id": "MANUAL_POINTS_STREAM_ID",
-    "models/params/args/centaur_id_to_secrets": "CENTAUR_ID_TO_SECRETS",
-
     # Twitter
+    "models/params/args/twitter_api_bearer_token": "TWITTER_API_BEARER_TOKEN",
     "config/use_twitter_staging_api": "USE_TWITTER_STAGING_API",
     "config/twitter_staging_api": "TWITTER_STAGING_API",
 
     # OpenAI
     "config/use_openai_staging_api": "USE_OPENAI_STAGING_API",
     "config/openai_staging_api": "OPENAI_STAGING_API",
+    "config/openai_api_key": "OPENAI_API_KEY",
 
     # Staking
     "models/params/args/staking_activity_threshold": "STAKING_ACTIVITY_THRESHOLD",
+
+    # AgentDB
+    "models/params/args/contribute_db_pkey": "CONTRIBUTE_DB_PKEY",
+    "models/agent_db_client/args/base_url": "AGENT_DB_BASE_URL",
+
+    # Http server
+    "config/port": "HTTP_SERVER_PORT",
+
+    # Secrets
+    "models/params/args/centaur_id_to_secrets": "CENTAUR_ID_TO_SECRETS"
 }
 
 CONFIG_REGEX = r"\${.*?:(.*)}"

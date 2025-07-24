@@ -127,11 +127,6 @@ class SynchronizedData(MechInteractionSynchronizedData):
     """
 
     @property
-    def pending_write(self) -> bool:
-        """Checks whether there are changes pending to be written to Ceramic."""
-        return cast(bool, self.db.get("pending_write", False))
-
-    @property
     def api_retries(self) -> int:
         """Gets the number of API retries."""
         return cast(int, self.db.get("api_retries", 0))
@@ -180,16 +175,6 @@ class SynchronizedData(MechInteractionSynchronizedData):
     def are_keepers_set(self) -> bool:
         """Check whether keepers are set."""
         return self.db.get("most_voted_keeper_addresses", None) is not None
-
-    @property
-    def centaurs_data(self) -> list:
-        """Get the centaurs_data."""
-        return cast(list, self.db.get("centaurs_data", []))
-
-    @property
-    def current_centaur_index(self) -> int:
-        """Gets the current_centaur_index."""
-        return cast(int, self.db.get("current_centaur_index", 0))
 
 
 class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
@@ -337,9 +322,9 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
             else:
                 updates[
                     get_name(SynchronizedData.latest_mention_tweet_id)
-                ] = self.context.ceramic_db["module_data"]["twitter"][
-                    "latest_mention_tweet_id"
-                ]
+                ] = (
+                    self.context.contribute_db.data.module_data.twitter.latest_mention_tweet_id
+                )
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
@@ -476,9 +461,9 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
             else:
                 updates[
                     get_name(SynchronizedData.latest_hashtag_tweet_id)
-                ] = self.context.ceramic_db["module_data"]["twitter"][
-                    "latest_hashtag_tweet_id"
-                ]
+                ] = (
+                    self.context.contribute_db.module_data.twitter.latest_hashtag_tweet_id
+                )
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **updates,
@@ -615,12 +600,10 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
         if self.threshold_reached:
-            payload = json.loads(self.most_voted_payload)
             performed_twitter_tasks = cast(
                 SynchronizedData, self.synchronized_data
             ).performed_twitter_tasks
             performed_twitter_tasks["db_update"] = Event.DONE.value
-            self.context.ceramic_db.apply_diff(payload["ceramic_diff"])
 
             # Clear processed tweets that are no longer needed. Keep only those with no points yet.
             tweets = cast(SynchronizedData, self.synchronized_data).tweets
@@ -629,7 +612,6 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
                 **{
-                    get_name(SynchronizedData.pending_write): True,
                     get_name(
                         SynchronizedData.performed_twitter_tasks
                     ): performed_twitter_tasks,
@@ -771,7 +753,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
         Event.ROUND_TIMEOUT: 30.0,
         Event.TWEET_EVALUATION_ROUND_TIMEOUT: 600.0,
     }
-    cross_period_persisted_keys: FrozenSet[str] = frozenset(["pending_write", "tweets"])
+    cross_period_persisted_keys: FrozenSet[str] = frozenset(["tweets"])
     db_pre_conditions: Dict[AppState, Set[str]] = {
         TwitterDecisionMakingRound: set(),
     }

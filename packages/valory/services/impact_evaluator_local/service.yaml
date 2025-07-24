@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeicegermnfcyhjkit2vrd5nsosmwlwlthlmugdy3v6k7ja6ldbzuay
+agent: valory/impact_evaluator:0.1.0:bafybeidkpwrnwyowwubc7ts2cxurlgetpnr2qk2uh5lkyxf5shz4w3fty4
 number_of_agents: 1
 deployment:
   agent:
@@ -56,15 +56,6 @@ models:
     args:
       setup: *id001
       genesis_config: *id002
-      centaurs_stream_id: ${CENTAURS_STREAM_ID:str:dummy_centaurs_stream_id}
-      manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:manual_points_stream_id}
-      ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:ceramic_db_stream_id}
-      ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-clay.3boxlabs.com/}
-      ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
-      ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
-      ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
-      ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-      ceramic_did_str: ${CERAMIC_DID_STR:str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -96,7 +87,7 @@ models:
       token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
       whitelist_api_key: null
       whitelist_endpoint: http://localhost
-      points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:null}
+      points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}}
       twitter_api_base: ${TWITTER_API_BASE:str:https://api.twitter.com/}
       twitter_api_bearer_token: ${TWITTER_API_BEARER_TOKEN:str:null}
       twitter_mentions_endpoint: ${TWITTER_MENTIONS_ENDPOINT:str:2/users/1450081635559428107/mentions?}
@@ -123,7 +114,7 @@ models:
       transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
       veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
       tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
-      termination_from_block: ${TERMINATION_FROM_BLOCK:int:0}
+      termination_from_block: ${TERMINATION_FROM_BLOCK:int:22939400}
       mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
       mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
       agent_registry_address: ${AGENT_REGISTRY_ADDRESS:str:0x0000000000000000000000000000000000000000}
@@ -140,9 +131,13 @@ models:
       safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
       staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
       disable_wio_posting: ${DISABLE_WIO_POSTING:bool:false}
+      contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
   randomness_api:
     args:
       url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
+  agent_db_client:
+    args:
+      base_url: ${AGENT_DB_BASE_URL:str:https://afmdb.autonolas.tech}
 ---
 public_id: valory/ledger:0.19.0
 type: connection

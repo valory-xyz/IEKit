@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -25,23 +25,16 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-from packages.valory.skills.ceramic_read_abci.behaviours import (
-    CeramicReadRoundBehaviour,
-)
-from packages.valory.skills.ceramic_write_abci.behaviours import (
-    CeramicWriteRoundBehaviour,
+from packages.valory.skills.contribute_db_abci.behaviours import (
+    ContributeDBRoundBehaviour,
 )
 from packages.valory.skills.decision_making_abci.behaviours import (
     DecisionMakingRoundBehaviour,
 )
 from packages.valory.skills.dynamic_nft_abci.behaviours import DynamicNFTRoundBehaviour
-from packages.valory.skills.generic_scoring_abci.behaviours import (
-    GenericScoringRoundBehaviour,
-)
 from packages.valory.skills.impact_evaluator_abci.composition import (
     ImpactEvaluatorSkillAbciApp,
 )
-from packages.valory.skills.llm_abci.behaviours import LLMRoundBehaviour
 from packages.valory.skills.mech_interact_abci.behaviours.round_behaviour import (
     MechInteractRoundBehaviour,
 )
@@ -76,13 +69,10 @@ class ImpactEvaluatorConsensusBehaviour(AbstractRoundBehaviour):
     abci_app_cls = ImpactEvaluatorSkillAbciApp
     behaviours: Set[Type[BaseBehaviour]] = {
         *AgentRegistrationRoundBehaviour.behaviours,
-        *CeramicReadRoundBehaviour.behaviours,
-        *GenericScoringRoundBehaviour.behaviours,
+        *ContributeDBRoundBehaviour.behaviours,
         *TwitterScoringRoundBehaviour.behaviours,
         *DynamicNFTRoundBehaviour.behaviours,
-        *CeramicWriteRoundBehaviour.behaviours,
         *DecisionMakingRoundBehaviour.behaviours,
-        *LLMRoundBehaviour.behaviours,
         *TwitterWriteRoundBehaviour.behaviours,
         *ResetPauseABCIConsensusBehaviour.behaviours,
         *TransactionSettlementRoundBehaviour.behaviours,

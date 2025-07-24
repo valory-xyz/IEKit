@@ -17,9 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains the rounds of GenericScoringAbciApp."""
+"""This package contains the rounds of ContributeDBAbciApp."""
 
-import json
 from enum import Enum
 from typing import Dict, FrozenSet, Optional, Set, Tuple, cast
 
@@ -31,16 +30,15 @@ from packages.valory.skills.abstract_round_abci.base import (
     CollectSameUntilThresholdRound,
     DegenerateRound,
     EventToTimeout,
-    get_name,
 )
-from packages.valory.skills.generic_scoring_abci.payloads import GenericScoringPayload
+from packages.valory.skills.contribute_db_abci.payloads import DBLoadPayload
 
 
 class Event(Enum):
-    """GenericScoringAbciApp Events"""
+    """ContributeDBAbciApp Events"""
 
-    ROUND_TIMEOUT = "round_timeout"
     DONE = "done"
+    ROUND_TIMEOUT = "round_timeout"
     NO_MAJORITY = "no_majority"
 
 
@@ -52,37 +50,28 @@ class SynchronizedData(BaseSynchronizedData):
     """
 
     @property
-    def score_data(self) -> dict:
-        """Get the read_stream_id."""
-        return cast(dict, self.db.get_strict("score_data"))
-
-    @property
-    def pending_write(self) -> bool:
-        """Checks whether there are changes pending to be written to Ceramic."""
-        return cast(bool, self.db.get("pending_write", False))
+    def db_keeper(self) -> str:
+        """Get the tx_submitter."""
+        return cast(str, self.db.get_strict("db_keeper"))
 
 
-class GenericScoringRound(CollectSameUntilThresholdRound):
-    """GenericScoringRound"""
+class DBLoadRound(CollectSameUntilThresholdRound):
+    """A round for loading the DB"""
 
-    payload_class = GenericScoringPayload
+    payload_class = DBLoadPayload
     synchronized_data_class = SynchronizedData
     extended_requirements = ()
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
+
         if self.threshold_reached:
-            payload = json.loads(self.most_voted_payload)
-            self.context.ceramic_db.apply_diff(payload["ceramic_diff"])
+            # Get all the agents that have sent, sort them alphabetically and get the first one
+            # This will be the db keeper until it is down and therefore does not send any payload
+            db_keeper = sorted(list(self.collection.keys()))[0]
+            self.context.contribute_db.writer_addresses = [db_keeper]
 
-            synchronized_data = self.synchronized_data.update(
-                synchronized_data_class=SynchronizedData,
-                **{
-                    get_name(SynchronizedData.pending_write): payload["pending_write"],
-                }
-            )
-
-            return synchronized_data, Event.DONE
+            return self.synchronized_data, Event.DONE
 
         if not self.is_majority_possible(
             self.collection, self.synchronized_data.nb_participants
@@ -91,35 +80,31 @@ class GenericScoringRound(CollectSameUntilThresholdRound):
         return None
 
 
-class FinishedGenericScoringRound(DegenerateRound):
-    """FinishedGenericScoringRound"""
+class FinishedLoadingRound(DegenerateRound):
+    """FinishedLoadingRound"""
 
 
-class GenericScoringAbciApp(AbciApp[Event]):
-    """GenericScoringAbciApp"""
+class ContributeDBAbciApp(AbciApp[Event]):
+    """ContributeDBAbciApp"""
 
-    initial_round_cls: AppState = GenericScoringRound
-    initial_states: Set[AppState] = {GenericScoringRound}
+    initial_round_cls: AppState = DBLoadRound
+    initial_states: Set[AppState] = {DBLoadRound}
     transition_function: AbciAppTransitionFunction = {
-        GenericScoringRound: {
-            Event.DONE: FinishedGenericScoringRound,
-            Event.NO_MAJORITY: GenericScoringRound,
-            Event.ROUND_TIMEOUT: GenericScoringRound,
+        DBLoadRound: {
+            Event.DONE: FinishedLoadingRound,
+            Event.NO_MAJORITY: DBLoadRound,
+            Event.ROUND_TIMEOUT: DBLoadRound,
         },
-        FinishedGenericScoringRound: {},
+        FinishedLoadingRound: {},
     }
-    final_states: Set[AppState] = {FinishedGenericScoringRound}
+    final_states: Set[AppState] = {FinishedLoadingRound}
     event_to_timeout: EventToTimeout = {
         Event.ROUND_TIMEOUT: 30.0,
     }
-    cross_period_persisted_keys: FrozenSet[str] = frozenset(
-        [
-            "pending_write",
-        ]
-    )
+    cross_period_persisted_keys: FrozenSet[str] = frozenset()
     db_pre_conditions: Dict[AppState, Set[str]] = {
-        GenericScoringRound: set(),
+        DBLoadRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedGenericScoringRound: set(),
+        FinishedLoadingRound: set(),
     }

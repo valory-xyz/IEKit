@@ -38,6 +38,11 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     BaseBehaviour,
 )
 from packages.valory.skills.abstract_round_abci.common import RandomnessBehaviour
+from packages.valory.skills.contribute_db_abci.behaviours import ContributeDBBehaviour
+from packages.valory.skills.contribute_db_abci.contribute_models import (
+    ContributeUser,
+    UserTweet,
+)
 from packages.valory.skills.twitter_scoring_abci.models import (
     OpenAICalls,
     Params,
@@ -83,6 +88,7 @@ HTTP_OK = 200
 HTTP_TOO_MANY_REQUESTS = 429
 RETWEET_START = "RT @"
 BASE_CHAIN_ID = "base"
+MAX_TWEETS_PER_CALL = 100
 
 
 def is_minimal_effort_tweet(tweet: str) -> str:
@@ -118,7 +124,7 @@ def parse_evaluation(data: str) -> Dict:
     return json.loads(sub_string)
 
 
-class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
+class TwitterScoringBaseBehaviour(ContributeDBBehaviour, ABC):
     """Base behaviour for the common apps' skill."""
 
     @property
@@ -138,22 +144,9 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
 
     def _check_twitter_limits(self) -> Tuple:
         """Check if the daily limit has exceeded or not"""
-        try:
-            number_of_tweets_pulled_today = int(
-                self.context.ceramic_db["module_data"]["twitter"][
-                    "number_of_tweets_pulled_today"
-                ]
-            )
-            last_tweet_pull_window_reset = float(
-                self.context.ceramic_db["module_data"]["twitter"][
-                    "last_tweet_pull_window_reset"
-                ]
-            )
-        except KeyError:
-            number_of_tweets_pulled_today = 0
-            last_tweet_pull_window_reset = cast(
-                SharedState, self.context.state
-            ).round_sequence.last_round_transition_timestamp.timestamp()
+        module_data = self.context.contribute_db.data.module_data.twitter
+        number_of_tweets_pulled_today = module_data.number_of_tweets_pulled_today
+        last_tweet_pull_window_reset = module_data.last_tweet_pull_window_reset
 
         current_time = cast(
             SharedState, self.context.state
@@ -178,14 +171,11 @@ class TwitterScoringBaseBehaviour(BaseBehaviour, ABC):
 
     def get_active_hashtags(self) -> List[str]:
         """Get the active campaigns"""
-        centaurs_data = self.synchronized_data.centaurs_data
-        current_centaur = centaurs_data[self.synchronized_data.current_centaur_index]
+        module_data = self.context.contribute_db.data.module_data
         active_hashtags = [
-            f"%23{campaign['hashtag'].replace('#', '').strip()}"  # %23 = hashtag
-            for campaign in current_centaur["plugins_data"]["twitter_campaigns"][
-                "campaigns"
-            ]
-            if campaign["status"] == "live"
+            f"%23{campaign.hashtag.replace('#', '').strip()}"  # %23 = hashtag
+            for campaign in module_data.twitter_campaigns.campaigns
+            if campaign.status == "live"
         ]
         return active_hashtags
 
@@ -478,14 +468,8 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
         api_base = self.params.twitter_api_base
         api_endpoint = self.params.twitter_mentions_endpoint
-        try:
-            latest_mention_tweet_id = int(
-                self.context.ceramic_db["module_data"]["twitter"][
-                    "latest_mention_tweet_id"
-                ]
-            )
-        except KeyError:
-            latest_mention_tweet_id = 0
+        module_data = self.context.contribute_db.data.module_data.twitter
+        latest_mention_tweet_id = module_data.latest_mention_tweet_id
 
         number_of_tweets_remaining_today = (
             self.params.max_tweet_pulls_allowed - number_of_tweets_pulled_today
@@ -507,6 +491,9 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
         )
         api_args = self.params.twitter_mentions_args.replace(
             "{since_id}", str(next_tweet_id)
+        )
+        number_of_tweets_remaining_today = min(
+            MAX_TWEETS_PER_CALL, number_of_tweets_remaining_today
         )
         api_args = api_args.replace(
             "{max_results}", str(number_of_tweets_remaining_today)
@@ -647,7 +634,7 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
             break
 
         self.context.logger.info(
-            f"Got {len(tweets)} new mentions until tweet_id={latest_tweet_id}: {tweets.keys()}"
+            f"Got {len(tweets)} new mentions until tweet_id={latest_tweet_id}:\n{tweets}"
         )
 
         return {
@@ -742,14 +729,8 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
         api_base = self.params.twitter_api_base
         api_endpoint = self.params.twitter_search_endpoint
-        try:
-            latest_hashtag_tweet_id = int(
-                self.context.ceramic_db["module_data"]["twitter"][
-                    "latest_hashtag_tweet_id"
-                ]
-            )
-        except KeyError:
-            latest_hashtag_tweet_id = 0
+        module_data = self.context.contribute_db.data.module_data.twitter
+        latest_hashtag_tweet_id = module_data.latest_hashtag_tweet_id
 
         number_of_tweets_remaining_today = (
             self.params.max_tweet_pulls_allowed - number_of_tweets_pulled_today
@@ -791,6 +772,9 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
             "{search_query}", str(search_query)
         )
         api_args = api_args.replace("{since_id}", str(next_tweet_id))
+        number_of_tweets_remaining_today = min(
+            MAX_TWEETS_PER_CALL, number_of_tweets_remaining_today
+        )
         api_args = api_args.replace(
             "{max_results}", str(number_of_tweets_remaining_today)
         )
@@ -932,7 +916,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
             break
 
         self.context.logger.info(
-            f"Got {retrieved_tweets} new hashtag tweets until tweet_id={latest_tweet_id}: {tweets.keys()}"
+            f"Got {retrieved_tweets} new hashtag tweets until tweet_id={latest_tweet_id}:\n{tweets}"
         )
 
         return {
@@ -1091,10 +1075,10 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             sender = self.context.agent_address
-            ceramic_diff = yield from self.get_update_diff()
+            yield from self.update_db()
             payload = DBUpdatePayload(
                 sender=sender,
-                content=json.dumps({"ceramic_diff": ceramic_diff}, sort_keys=True),
+                content="",
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -1103,37 +1087,32 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         self.set_done()
 
-    def get_update_diff(self) -> Generator[None, None, Dict]:
+    def update_db(self) -> Generator[None, None, None]:
         """Calculate the new content of the DB"""
 
         tweets = self.synchronized_data.tweets
+        contribute_db = self.context.contribute_db
+        module_data = contribute_db.data.module_data.twitter
+        users = contribute_db.data.users
 
-        # Instantiate the db
-        ceramic_db_copy = self.context.ceramic_db.copy()
+        self.context.logger.info(f"Updating DB with tweets: {tweets}.")
 
         # Have we changed scoring period?
         now = cast(
             SharedState, self.context.state
         ).round_sequence.last_round_transition_timestamp.timestamp()
 
-        today = datetime.fromtimestamp(now).strftime("%Y-%m-%d")
-        current_period = ceramic_db_copy.data["module_data"]["twitter"][
-            "current_period"
-        ]
+        today = datetime.fromtimestamp(now).date()
+        current_period = module_data.current_period
         is_period_changed = today != current_period
         if is_period_changed:
             self.context.logger.info(
                 f"Scoring period has changed from {current_period} to {today}. Resetting user period points..."
             )
-            ceramic_db_copy.reset_period_points()
+            for user in users.values():
+                user.current_period_points = 0
 
         active_hashtags = self.get_active_hashtags()
-
-        # Replace the encoded %23 for #
-        active_hashtags = [i.replace("%23", "#") for i in active_hashtags]
-
-        # Add the mention as a campaign
-        active_hashtags.append("@autonolas")
 
         # Get the staking epoch
         staking_contract_to_epoch = {}
@@ -1146,23 +1125,38 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         )
 
         # Update data
-        for tweet_id, tweet in tweets.items():
-            if "points" not in tweet:
+        for tweet_id, tweet_data in tweets.items():
+            if "points" not in tweet_data:
+                self.context.logger.info(
+                    f"Skipping tweet {tweet_id} because it has no points"
+                )
                 continue
 
-            self.context.logger.info(f"Updating db with tweet: {tweet}")
+            tweet_data["tweet_id"] = tweet_id
+            tweet_data["twitter_user_id"] = tweet_data["author_id"]
+            self.context.logger.info(
+                f"Building tweet {tweet_id} with data {tweet_data}"
+            )
+            tweet = UserTweet(**tweet_data)
+            self.context.logger.info(f"Tweet = {tweet}")
 
-            author_id = str(tweet["author_id"])
-            twitter_name = tweet["username"]
-            new_points = tweet["points"]
-            wallet_address = self.get_registration(tweet["text"])
+            self.context.logger.info(f"Processing tweet: {tweet}")
+
+            author_id = tweet.twitter_user_id
+            twitter_name = tweet_data["username"]
+            new_points = tweet.points
+            wallet_address = self.get_registration(tweet_data["text"])
 
             # Check this user's point limit per period
-            user, _ = ceramic_db_copy.get_user_by_field(
-                "twitter_id", tweet["author_id"]
-            )
+            user = contribute_db.get_user_by_attribute("twitter_id", author_id)
 
-            current_period_points = user["current_period_points"] if user else 0
+            if user and tweet_id in user.tweets:
+                self.context.logger.info(
+                    f"Tweet {tweet_id} from user {author_id} already exists on the db. Skipping..."
+                )
+                continue
+
+            current_period_points = user.current_period_points if user else 0
 
             if current_period_points + new_points > self.params.max_points_per_period:
                 self.context.logger.info(
@@ -1176,96 +1170,108 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             # Get the user staking contract and the contract epoch (if the user is staked)
             contract_epoch = None
             if user:
-                service_multisig = user.get("service_multisig", None)
-                if service_multisig and user.get("wallet_address", None):
+                service_multisig = user.service_multisig
+                if service_multisig and user.wallet_address:
                     staking_contract_address = yield from self.get_staking_contract(
-                        user["wallet_address"]
+                        user.wallet_address
                     )
                     contract_epoch = (
                         staking_contract_to_epoch[staking_contract_address]
                         if staking_contract_address
                         else None
                     )
+            else:
+                user = ContributeUser(
+                    id=contribute_db.get_next_user_id(),
+                    twitter_id=author_id,
+                    twitter_handle=twitter_name,
+                    tweets={},
+                )
+                self.context.logger.info(
+                    f"Creating a new user with twitter_id={author_id} and twitter_handle={twitter_name}"
+                )
+                yield from contribute_db.create_user(user)
 
             # Store the tweet id and awarded points
-            user_tweets = {} if not user else user.get("tweets", {})
-            if tweet_id not in user_tweets:
-                # Keep in mind that we store the updated points if the user has reached max_points_per_period
-                campaign = get_campaign(tweet["text"], active_hashtags)
-                user_tweets[tweet_id] = {
-                    "points": new_points,
-                    "campaign": campaign,
-                    "epoch": contract_epoch,
-                    "timestamp": int(
-                        datetime.fromisoformat(
-                            tweet["created_at"].replace("Z", "+00:00")
-                        ).timestamp()
-                    )
-                    if "created_at" in tweet
-                    else None,
-                    "counted_for_activity": False,
-                }
+            # Keep in mind that we store the updated points if the user has reached max_points_per_period
+            campaign = get_campaign(tweet_data["text"], active_hashtags)
+
+            tweet.points = new_points
+            tweet.campaign = campaign
+            tweet.epoch = contract_epoch
+            tweet.timestamp = (
+                datetime.fromisoformat(tweet["created_at"].replace("Z", "+00:00"))
+                if "created_at" in tweet
+                else None
+            )
+
+            self.context.logger.info(f"Adding tweet {tweet_id} to the database")
+            yield from contribute_db.create_tweet(tweet)
 
             # User data to update
             user_data = {
                 "points": int(new_points),
-                "twitter_handle": twitter_name,
                 "current_period_points": int(current_period_points),
-                "tweets": user_tweets,
             }
 
             # If this is a registration
             if wallet_address:
                 self.context.logger.info(
-                    f"Detected a Twitter registration for @{twitter_name}: {wallet_address}. Tweet: {tweet['text']}"
+                    f"Detected a Twitter registration for @{twitter_name}: {wallet_address}. Tweet: {tweet_data['text']}"
                 )
                 user_data["wallet_address"] = wallet_address
 
-            # For existing users, all existing user data is replaced except points, which are added
-            ceramic_db_copy.update_or_create_user("twitter_id", author_id, user_data)
+            user.points += user_data["points"]
+            user.twitter_handle = twitter_name
+            user.current_period_points = user_data["current_period_points"]
 
-        # If a user has first contributed to one module (i.e. twitter) without registering a wallet,
-        # and later he/she contributes to another module, it could happen that we have two different
-        # entries on the database
-        ceramic_db_copy.merge_by_wallet()
+            # For existing users, all existing user data is replaced except points, which are added
+            self.context.logger.info(
+                f"Updating or creating user twitter_id={author_id}"
+            )
+            yield from contribute_db.create_or_update_user_by_key(
+                "twitter_id", author_id, user
+            )
+
+        module_data = contribute_db.data.module_data
 
         # Update the latest_hashtag_tweet_id
         latest_hashtag_tweet_id = self.synchronized_data.latest_hashtag_tweet_id
         if latest_hashtag_tweet_id:
-            ceramic_db_copy.data["module_data"]["twitter"][
-                "latest_hashtag_tweet_id"
-            ] = str(latest_hashtag_tweet_id)
+            module_data.twitter.latest_hashtag_tweet_id = str(latest_hashtag_tweet_id)
 
         # Update the latest_mention_tweet_id
         latest_mention_tweet_id = self.synchronized_data.latest_mention_tweet_id
         if latest_mention_tweet_id:
-            ceramic_db_copy.data["module_data"]["twitter"][
-                "latest_mention_tweet_id"
-            ] = str(latest_mention_tweet_id)
+            module_data.twitter.latest_mention_tweet_id = str(latest_mention_tweet_id)
 
         # Update the number of tweets made today
         number_of_tweets_pulled_today = (
             self.synchronized_data.number_of_tweets_pulled_today
         )
         if number_of_tweets_pulled_today:
-            ceramic_db_copy.data["module_data"]["twitter"][
-                "number_of_tweets_pulled_today"
-            ] = str(number_of_tweets_pulled_today)
+            module_data.twitter.number_of_tweets_pulled_today = (
+                number_of_tweets_pulled_today
+            )
 
         last_tweet_pull_window_reset = (
             self.synchronized_data.last_tweet_pull_window_reset
         )
         if last_tweet_pull_window_reset:
-            ceramic_db_copy.data["module_data"]["twitter"][
-                "last_tweet_pull_window_reset"
-            ] = str(last_tweet_pull_window_reset)
+            module_data.twitter.last_tweet_pull_window_reset = (
+                last_tweet_pull_window_reset
+            )
 
         # Update the current_period
-        ceramic_db_copy.data["module_data"]["twitter"]["current_period"] = today
-        diff = self.context.ceramic_db.diff(ceramic_db_copy)
+        module_data.twitter.current_period = today
 
-        self.context.logger.info(f"Finished updating the db:\n{diff}")
-        return diff
+        self.context.logger.info(
+            f"Updating twitter module data: latest_hashtag_tweet_id={latest_hashtag_tweet_id}  |  latest_mention_tweet_id={latest_mention_tweet_id}  |  number_of_tweets_pulled_today={number_of_tweets_pulled_today}"
+        )
+        yield from contribute_db.update_module_data(module_data)
+
+        self.context.logger.info("Finished updating the db:")
+        return
 
     def get_registration(self, text: str) -> Optional[str]:
         """Check if the tweet is a registration and return the wallet address"""
@@ -1279,9 +1285,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             wallet_address = Web3.to_checksum_address(address_match.group())
 
             address_to_twitter_handles = {
-                user["wallet_address"]: user["twitter_handle"]
-                for user in self.context.ceramic_db["users"].values()
-                if user["wallet_address"]
+                user.wallet_address: user.twitter_handle
+                for user in self.context.contribute_db.data.users.values()
+                if user.wallet_address
             }
 
             # Ignore registration if both address and Twitter handle already exist

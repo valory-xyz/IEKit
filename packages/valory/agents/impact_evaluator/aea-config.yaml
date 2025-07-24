@@ -20,7 +20,7 @@ connections:
 - valory/http_client:0.23.0:bafybeid5ffvg76ejjoese7brj5ji3lx66cu7p2ixfwflpo6rgofkypfd7y
 - valory/ledger:0.19.0:bafybeibdsjmy4w2eyilbqc7yzutopl65qpeyspxwz7mjvirr52twhjlf5y
 - valory/p2p_libp2p_client:0.1.0:bafybeic6ayusdwy4dks75njwk32ac7ur7salgllwf4fdc34ue5z2k5iz4q
-- valory/openai:0.1.0:bafybeidbhxdg4jpv2vlu4hm3ci7d76ebyw7dbyiivq5exzpplb5xjrigra
+- valory/openai:0.1.0:bafybeicevsj6xgojzsvl77pmsqft6vzemil4flhikkc6aljff7y5smeuhu
 - valory/twitter:0.1.0:bafybeicwav25v43cx7mrhyjdxrzuyujjqvfvvgtumfajbqfwx4te4pa3k4
 contracts:
 - valory/dynamic_contribution:0.1.0:bafybeie76wsemqek64b2sm4bidkewqzylokeid7efbuyj26kd44iezi4ia
@@ -47,22 +47,21 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeibfsmbjasqnb3lgmwj7dlxvlfbngdyqc7a4n5q2g7phvmv4ktehq4
 - valory/abstract_round_abci:0.1.0:bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy
-- valory/impact_evaluator_abci:0.1.0:bafybeidusww3lrwq4y524gjnvizf7uspwxfkc55r6zfbx4mm454nf5f6xi
-- valory/generic_scoring_abci:0.1.0:bafybeigqu3dmea7brq3l525sxq2irx3ie4ii7hrc2eisrjr2fsnpc24vp4
-- valory/twitter_scoring_abci:0.1.0:bafybeig5t6gxltuiw7hzpbfreotpow6fx274vhknvb7h5y2qbrlxo263am
-- valory/ceramic_read_abci:0.1.0:bafybeigyt6jf5a4ucbdn44tspklpbeenxr57g2czlepqm227j5c6k7glw4
-- valory/ceramic_write_abci:0.1.0:bafybeiets4e6zgh5q2uatze5us7gny2377eukqslfvw2l3gxvgbxqpw5qq
-- valory/dynamic_nft_abci:0.1.0:bafybeigcvfpjzbue3ubtcwstjej5wv27t7nhyj7bfjkxzhuzp4lznfknky
+- valory/impact_evaluator_abci:0.1.0:bafybeie4v3odtifev6ehfjai7m7ptojg4ya536wi4rc5z3mikk5oznzqre
+- valory/twitter_scoring_abci:0.1.0:bafybeibt6gaonyi6erlihv54k5njzj4cyetchlfrfoi2wi45okce3oxvvy
+- valory/agent_db_abci:0.1.0:bafybeig5vmynr4xsyjln6kydse72jbm56mkryv34aflj47gaai5t3g4hgm
+- valory/contribute_db_abci:0.1.0:bafybeieofmuca5rqxpidqsl3fdvpc4kt6hmwrglwl6la36w6e4e2h4y2w4
+- valory/dynamic_nft_abci:0.1.0:bafybeidan76pecwrbmv4rtteh3zmmuxkvptqflncizzcvsrbfpk7z47mi4
 - valory/registration_abci:0.1.0:bafybeidqadl26x5prbjgnkqrvjnbqxpo75jttm7vlvpgkoqghs5677rw5i
 - valory/reset_pause_abci:0.1.0:bafybeiachgo6reit2q4jw75mefw2acj4ldedeqmn3rewjm4dbzts2l7oxe
 - valory/termination_abci:0.1.0:bafybeibtbboau3q5fxfviwm7lbeix4z55uptfqqiyiu6siivxwkp3o5pju
 - valory/transaction_settlement_abci:0.1.0:bafybeic2ywzpwkyeqbzsvkbvurhsptemam4xtceihax2tmxmlxtgd3xpya
 - valory/twitter_write_abci:0.1.0:bafybeiamg6pt2rejxftvgmjxvmicy3b3rxxaqpk2h3k7h3pgh4sfitttv4
-- valory/decision_making_abci:0.1.0:bafybeieo6egzxpvgdpahefzbghpyhuy5ikwu4aqicfxxuxmsbnlwy67y7i
-- valory/llm_abci:0.1.0:bafybeici5ygcy7r4l6bnfisq7hdkt6j4jde6o3uejn4uyo4ssanlc2ot2a
-- valory/olas_week_abci:0.1.0:bafybeic3maqyrb34bmi5yyrycf3znez37shw6amgo2teccdnwju7ho6ama
+- valory/decision_making_abci:0.1.0:bafybeiedj5rps46y6tkqv6znqf55pt6ja73gvzxoyjyp3gwnppa7ex3ziy
+- valory/olas_week_abci:0.1.0:bafybeiayzecla7bxsaqmurr6sujum3ajacfc2wzl6h5alnnsgam7hrekim
 - valory/mech_interact_abci:0.1.0:bafybeidi2nfkt5r7cckdd4equdfm5uwiuisrz2splo7om3hkriy5ohx22e
-- valory/staking_abci:0.1.0:bafybeiderd34zw5jq2xxat6aewaq7blgeemwutjnmloyzfdux5ppmn4uou
+- valory/staking_abci:0.1.0:bafybeiaey3na6tcmsztul3ek3iu4v66mzem7k6cg7h3w76rql2fl5xmjsa
+- valory/llm_abci:0.1.0:bafybeiamxgtcobjsanthqdyi2pnnezsaio4jbkkh23e5wni57yoqv3n4oa
 default_ledger: ethereum
 required_ledgers:
 - ethereum
@@ -95,12 +94,14 @@ skill_exception_policy: stop_and_exit
 dependencies:
   open-aea-ledger-ethereum:
     version: ==1.65.0
+  typing_extensions:
+    version: ==4.13.2
 default_connection: null
 ---
 public_id: valory/openai:0.1.0
 type: connection
 config:
-  engine: ${str:text-davinci-003}
+  engine: ${str:gpt-4}
   max_tokens: ${int:500}
   openai_api_key: ${str:null}
   temperature: ${float:0.7}
@@ -184,17 +185,6 @@ models:
       log_dir: ${str:/logs}
   params:
     args:
-      centaurs_stream_id: ${str:kjzl6cwe1jw146h5momfk1vwzjq9vtg2ic4c1h5893usybetw3x338gu0ui2iih}
-      manual_points_stream_id: ${str:manual_points_stream_id}
-      ceramic_db_stream_id: ${str:ceramic_db_stream_id}
-      ceramic_api_base: ${str:https://ceramic-clay.3boxlabs.com/}
-      ceramic_api_create_endpoint: ${str:api/v0/streams}
-      ceramic_api_commit_endpoint: ${str:api/v0/commits}
-      ceramic_api_read_endpoint: ${str:api/v0/commits/{stream_id}}
-      ceramic_did_seed: ${str:0101010101010101010101010101010101010101010101010101010101010101}
-      ceramic_did_str: ${str:z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX}
-      default_read_target_property: ${str:default_read_target_property}
-      default_write_target_property: ${str:default_write_target_property}
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -298,6 +288,7 @@ models:
       use_acn_for_delivers: ${bool:false}
       staking_rewards_required_points: ${int:200}
       disable_wio_posting: ${bool:false}
+      contribute_db_pkey: ${str:null}
   randomness_api:
     args:
       api_id: cloudflare
@@ -308,9 +299,13 @@ models:
       response_type: dict
       retries: 5
       url: ${str:https://drand.cloudflare.com/public/latest}
+  agent_db_client:
+    args:
+      base_url: ${str:https://afmdb.autonolas.tech}
 ---
 public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
 type: connection
 config:
   host: 0.0.0.0
   target_skill_id: valory/impact_evaluator_abci:0.1.0
+  port: ${int:8000}

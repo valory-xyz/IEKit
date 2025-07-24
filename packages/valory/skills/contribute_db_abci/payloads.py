@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,15 +17,10 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the GenericScoringAbciApp."""
-
-from dataclasses import dataclass
+"""This module contains the transaction payloads of the ContributeDBAbciApp."""
 
 from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 
 
-@dataclass(frozen=True)
-class GenericScoringPayload(BaseTxPayload):
-    """Represent a transaction payload for the GenericScoringRound."""
-
-    content: str
+class DBLoadPayload(BaseTxPayload):
+    """Represent a transaction payload for the DBLoadRound."""

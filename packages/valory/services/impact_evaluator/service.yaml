@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeicegermnfcyhjkit2vrd5nsosmwlwlthlmugdy3v6k7ja6ldbzuay
+agent: valory/impact_evaluator:0.1.0:bafybeidkpwrnwyowwubc7ts2cxurlgetpnr2qk2uh5lkyxf5shz4w3fty4
 number_of_agents: 4
 deployment:
   agent:
@@ -57,15 +57,6 @@ extra:
       args:
         setup: *id001
         genesis_config: *id002
-        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw149xtnm40kvveyhywbkgp798nen6s9ul3dzdwuxh39cxyv480kwn}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81vhee620y3g9sdo7fwwd}
-        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
-        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
-        ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
-        ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
-        ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
-        ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-        ceramic_did_str: ${CERAMIC_DID_STR:str:z6MkoyCcAaqBKvoEi3FumHZ1NtJEwcN73A6sjHjF3RMhBhcc}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -129,7 +120,7 @@ extra:
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
         veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
         tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
-        termination_from_block: ${TERMINATION_FROM_BLOCK:int:19717045}
+        termination_from_block: ${TERMINATION_FROM_BLOCK:int:22939400}
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
         mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
         use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:false}
@@ -145,9 +136,13 @@ extra:
         agent_registry_address: ${AGENT_REGISTRY_ADDRESS:str:0x0000000000000000000000000000000000000000}
         use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
         disable_wio_posting: ${DISABLE_WIO_POSTING:bool:true}
+        contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
+    agent_db_client:
+      args:
+        base_url: ${AGENT_DB_BASE_URL:str:https://afmdb.autonolas.tech}
 1:
   models:
     benchmark_tool:
@@ -157,15 +152,6 @@ extra:
       args:
         setup: *id001
         genesis_config: *id002
-        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw149xtnm40kvveyhywbkgp798nen6s9ul3dzdwuxh39cxyv480kwn}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81vhee620y3g9sdo7fwwd}
-        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
-        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
-        ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
-        ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
-        ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
-        ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-        ceramic_did_str: ${CERAMIC_DID_STR:str:z6MkoyCcAaqBKvoEi3FumHZ1NtJEwcN73A6sjHjF3RMhBhcc}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -229,7 +215,7 @@ extra:
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
         veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
         tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
-        termination_from_block: ${TERMINATION_FROM_BLOCK:int:19717045}
+        termination_from_block: ${TERMINATION_FROM_BLOCK:int:22939400}
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
         mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
         use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:false}
@@ -245,9 +231,13 @@ extra:
         agent_registry_address: ${AGENT_REGISTRY_ADDRESS:str:0x0000000000000000000000000000000000000000}
         use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
         disable_wio_posting: ${DISABLE_WIO_POSTING:bool:true}
+        contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
+    agent_db_client:
+      args:
+        base_url: ${AGENT_DB_BASE_URL:str:https://afmdb.autonolas.tech}
 2:
   models:
     benchmark_tool:
@@ -257,15 +247,6 @@ extra:
       args:
         setup: *id001
         genesis_config: *id002
-        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw149xtnm40kvveyhywbkgp798nen6s9ul3dzdwuxh39cxyv480kwn}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81vhee620y3g9sdo7fwwd}
-        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
-        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
-        ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
-        ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
-        ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
-        ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-        ceramic_did_str: ${CERAMIC_DID_STR:str:z6MkoyCcAaqBKvoEi3FumHZ1NtJEwcN73A6sjHjF3RMhBhcc}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -329,7 +310,7 @@ extra:
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
         veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
         tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
-        termination_from_block: ${TERMINATION_FROM_BLOCK:int:19717045}
+        termination_from_block: ${TERMINATION_FROM_BLOCK:int:22939400}
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
         mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
         use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:false}
@@ -345,9 +326,13 @@ extra:
         use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
         staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
         disable_wio_posting: ${DISABLE_WIO_POSTING:bool:true}
+        contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
+    agent_db_client:
+      args:
+        base_url: ${AGENT_DB_BASE_URL:str:https://afmdb.autonolas.tech}
 3:
   models:
     benchmark_tool:
@@ -357,15 +342,6 @@ extra:
       args:
         setup: *id001
         genesis_config: *id002
-        centaurs_stream_id: ${CENTAURS_STREAM_ID:str:kjzl6cwe1jw149xtnm40kvveyhywbkgp798nen6s9ul3dzdwuxh39cxyv480kwn}
-        manual_points_stream_id: ${MANUAL_POINTS_STREAM_ID:str:kjzl6cwe1jw147zqxps1qx93iy10iwxnp1k7r6jh9q81vhee620y3g9sdo7fwwd}
-        ceramic_db_stream_id: ${CERAMIC_DB_STREAM_ID:str:kjzl6cwe1jw146te3celljfbea607sy1cv9r2juatta04ig5z73avzcwct7vue1}
-        ceramic_api_base: ${CERAMIC_API_BASE:str:https://ceramic-valory.hirenodes.io/}
-        ceramic_api_create_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/streams}
-        ceramic_api_commit_endpoint: ${CERAMIC_API_COMMIT_ENDPOINT:str:api/v0/commits}
-        ceramic_api_read_endpoint: ${CERAMIC_API_READ_ENDPOINT:str:api/v0/commits/{stream_id}}
-        ceramic_did_seed: ${CERAMIC_DID_SEED:str:0101010101010101010101010101010101010101010101010101010101010101}
-        ceramic_did_str: ${CERAMIC_DID_STR:str:z6MkoyCcAaqBKvoEi3FumHZ1NtJEwcN73A6sjHjF3RMhBhcc}
         cleanup_history_depth: 1
         cleanup_history_depth_current: null
         drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -433,7 +409,7 @@ extra:
         transaction_service_url: ${TRANSACTION_SERVICE_URL:str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
         veolas_delegation_address: ${VEOLAS_DELEGATION_ADDRESS:str:0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68}
         tweet_consensus_veolas: ${TWEET_CONSENSUS_VEOLAS:int:2000000}
-        termination_from_block: ${TERMINATION_FROM_BLOCK:int:19717045}
+        termination_from_block: ${TERMINATION_FROM_BLOCK:int:22939400}
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
         mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
         use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:false}
@@ -449,9 +425,13 @@ extra:
         safe_contract_address_gnosis: ${SAFE_CONTRACT_ADDRESS_GNOSIS:str:0x6B47A6a481dD717526Feaad358fF873f7760B074}
         staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
         disable_wio_posting: ${DISABLE_WIO_POSTING:bool:true}
+        contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
+    agent_db_client:
+      args:
+        base_url: ${AGENT_DB_BASE_URL:str:https://afmdb.autonolas.tech}
 ---
 public_id: valory/ledger:0.19.0
 type: connection

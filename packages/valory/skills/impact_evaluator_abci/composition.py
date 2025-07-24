@@ -19,12 +19,9 @@
 
 """This package contains round behaviours of ImpactEvaluatorSkillAbciApp."""
 
-import packages.valory.skills.ceramic_read_abci.rounds as CeramicReadAbci
-import packages.valory.skills.ceramic_write_abci.rounds as CeramicWriteAbci
+import packages.valory.skills.contribute_db_abci.rounds as ContributeDBAbci
 import packages.valory.skills.decision_making_abci.rounds as DecisionMakingAbci
 import packages.valory.skills.dynamic_nft_abci.rounds as DynamicNFTAbci
-import packages.valory.skills.generic_scoring_abci.rounds as GenericScoringAbci
-import packages.valory.skills.llm_abci.rounds as LLMAbciApp
 import packages.valory.skills.mech_interact_abci.rounds as MechInteractAbci
 import packages.valory.skills.mech_interact_abci.states.final_states as MechFinalStates
 import packages.valory.skills.mech_interact_abci.states.request as MechRequestStates
@@ -51,23 +48,16 @@ from packages.valory.skills.termination_abci.rounds import (
 # Here we define how the transition between the FSMs should happen
 # more information here: https://open-autonomy.docs.autonolas.tech/open-autonomy/key_concepts/fsm_app_introduction/?h=composition#composition-of-fsm-apps
 abci_app_transition_mapping: AbciAppTransitionMapping = {
-    RegistrationAbci.FinishedRegistrationRound: DecisionMakingAbci.DecisionMakingRound,
-    DecisionMakingAbci.FinishedDecisionMakingReadCentaursRound: CeramicReadAbci.StreamReadRound,
-    DecisionMakingAbci.FinishedDecisionMakingLLMRound: LLMAbciApp.LLMRandomnessRound,
+    RegistrationAbci.FinishedRegistrationRound: ContributeDBAbci.DBLoadRound,
+    ContributeDBAbci.FinishedLoadingRound: DecisionMakingAbci.DecisionMakingRound,
     DecisionMakingAbci.FinishedDecisionMakingWriteTwitterRound: TwitterWriteAbciApp.RandomnessTwitterRound,
-    DecisionMakingAbci.FinishedDecisionMakingWriteOrbisRound: CeramicWriteAbci.RandomnessRound,
-    DecisionMakingAbci.FinishedDecisionMakingUpdateCentaurRound: CeramicWriteAbci.RandomnessRound,
-    DecisionMakingAbci.FinishedDecisionMakingReadContributeDBRound: CeramicReadAbci.StreamReadRound,
-    DecisionMakingAbci.FinishedDecisionMakingWriteContributeDBRound: CeramicWriteAbci.RandomnessRound,
-    DecisionMakingAbci.FinishedDecisionMakingReadManualPointsRound: CeramicReadAbci.StreamReadRound,
-    DecisionMakingAbci.FinishedDecisionMakingScoreRound: GenericScoringAbci.GenericScoringRound,
     DecisionMakingAbci.FinishedDecisionMakingDoneRound: ResetAndPauseAbci.ResetAndPauseRound,
     DecisionMakingAbci.FinishedDecisionMakingWeekInOlasRound: WeekInOlasAbciApp.OlasWeekDecisionMakingRound,
-    GenericScoringAbci.FinishedGenericScoringRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     TwitterScoringAbci.FinishedTwitterCollectionRound: MechRequestStates.MechRequestRound,
     MechFinalStates.FinishedMechRequestRound: TxSettlementAbci.RandomnessTransactionSubmissionRound,
     TxSettlementAbci.FinishedTransactionSubmissionRound: DecisionMakingAbci.PostTxDecisionMakingRound,
     TxSettlementAbci.FailedRound: MechRequestStates.MechRequestRound,
+    DecisionMakingAbci.FinishedDecisionMakingScoreRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     DecisionMakingAbci.FinishedDecisionMakingActivityRound: StakingAbci.ActivityScoreRound,
     DecisionMakingAbci.FinishedDecisionMakingCheckpointRound: StakingAbci.CheckpointPreparationRound,
     DecisionMakingAbci.FinishedPostMechResponseRound: MechResponseStates.MechResponseRound,
@@ -85,11 +75,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     TwitterScoringAbci.FinishedTwitterScoringRound: DynamicNFTAbci.TokenTrackRound,
     WeekInOlasAbciApp.FinishedWeekInOlasRound: DecisionMakingAbci.DecisionMakingRound,
     DynamicNFTAbci.FinishedTokenTrackRound: DecisionMakingAbci.DecisionMakingRound,
-    LLMAbciApp.FinishedLLMRound: DecisionMakingAbci.DecisionMakingRound,
     TwitterWriteAbciApp.FinishedTwitterWriteRound: DecisionMakingAbci.DecisionMakingRound,
-    CeramicReadAbci.FinishedReadingRound: DecisionMakingAbci.DecisionMakingRound,
-    CeramicWriteAbci.FinishedVerificationRound: DecisionMakingAbci.DecisionMakingRound,
-    CeramicWriteAbci.FinishedMaxRetriesRound: CeramicWriteAbci.RandomnessRound,
     ResetAndPauseAbci.FinishedResetAndPauseRound: DecisionMakingAbci.DecisionMakingRound,
     ResetAndPauseAbci.FinishedResetAndPauseErrorRound: RegistrationAbci.RegistrationRound,
 }
@@ -105,13 +91,10 @@ ImpactEvaluatorSkillAbciApp = chain(
     (
         RegistrationAbci.AgentRegistrationAbciApp,
         DecisionMakingAbci.DecisionMakingAbciApp,
-        LLMAbciApp.LLMAbciApp,
         TwitterWriteAbciApp.TwitterWriteAbciApp,
-        CeramicReadAbci.CeramicReadAbciApp,
-        GenericScoringAbci.GenericScoringAbciApp,
         TwitterScoringAbci.TwitterScoringAbciApp,
         DynamicNFTAbci.DynamicNFTAbciApp,
-        CeramicWriteAbci.CeramicWriteAbciApp,
+        ContributeDBAbci.ContributeDBAbciApp,
         ResetAndPauseAbci.ResetPauseAbciApp,
         WeekInOlasAbciApp.WeekInOlasAbciApp,
         TxSettlementAbci.TransactionSubmissionAbciApp,

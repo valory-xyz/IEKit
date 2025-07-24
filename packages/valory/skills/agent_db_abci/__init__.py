@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,10 +17,9 @@
 #
 # ------------------------------------------------------------------------------
 
-"""Test the dialogues.py module of the GenericScoring."""
+"""This module contains the implementation of the agent_db skill."""
 
-import packages.valory.skills.generic_scoring_abci.dialogues  # noqa
+from aea.configurations.base import PublicId
 
 
-def test_import() -> None:
-    """Test that the 'dialogues.py' of the GenericScoring can be imported."""
+PUBLIC_ID = PublicId.from_str("valory/agent_db_abci:0.1.0")

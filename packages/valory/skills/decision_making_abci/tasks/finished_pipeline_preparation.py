@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -37,20 +37,9 @@ class FinishedPipelinePreparation(TaskPreparation):
     def _pre_task(self):
         """Preparations before running the task"""
         yield
-        next_centaur_index = self.get_next_centaur_index()
-        updates = {"current_centaur_index": next_centaur_index}
-
-        self.logger.info(
-            f"Next centaur index: {next_centaur_index} [{len(self.synchronized_data.centaurs_data)}]"
-        )
+        updates = {}
 
         return (
             updates,
-            Event.DONE.value if next_centaur_index == 0 else Event.NEXT_CENTAUR.value,
+            Event.DONE.value,
         )
-
-    def get_next_centaur_index(self):
-        """Get the next centaur index"""
-        current_centaur_index = self.synchronized_data.current_centaur_index
-        n_centaurs = len(self.synchronized_data.centaurs_data)
-        return (current_centaur_index + 1) % n_centaurs

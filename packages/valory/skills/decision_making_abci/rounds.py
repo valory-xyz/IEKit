@@ -39,7 +39,6 @@ from packages.valory.skills.decision_making_abci.payloads import (
 
 
 TWEET_LENGTH = 280
-MAX_REPROMPTS = 2
 
 
 class Event(Enum):
@@ -47,21 +46,12 @@ class Event(Enum):
 
     ROUND_TIMEOUT = "round_timeout"
     NO_MAJORITY = "no_majority"
-    READ_CENTAURS = "read_centaurs"
-    LLM = "llm"
-    DAILY_TWEET = "daily_tweet"
-    DAILY_ORBIS = "daily_orbis"
     SCHEDULED_TWEET = "scheduled_tweet"
     SCORE = "score"
-    UPDATE_CENTAURS = "update_centaurs"
-    NEXT_CENTAUR = "next_centaur"
     DONE = "done"
-    READ_CONTRIBUTE_DB = "read_contribute_db"
-    READ_MANUAL_POINTS = "read_manual_points"
     WRITE_CONTRIBUTE_DB = "write_contribute_db"
     WEEK_IN_OLAS_CREATE = "week_in_olas_create"
     TWEET_VALIDATION = "tweet_validation"
-    FORCE_DB_UPDATE = "force_db_update"
     CAMPAIGN_VALIDATION = "campaign_validation"
     STAKING_ACTIVITY = "staking_activity"
     STAKING_CHECKPOINT = "staking_checkpoint"
@@ -85,11 +75,6 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(str, self.db.get("previous_decision_event", None))
 
     @property
-    def centaurs_data(self) -> list:
-        """Get the centaurs_data."""
-        return cast(list, self.db.get("centaurs_data", []))
-
-    @property
     def llm_prompt_templates(self) -> list:
         """Get the llm_prompt_templates."""
         return cast(list, self.db.get_strict("llm_prompt_templates"))
@@ -103,11 +88,6 @@ class SynchronizedData(BaseSynchronizedData):
     def llm_results(self) -> list:
         """Get the llm_results."""
         return cast(list, self.db.get("llm_results", []))
-
-    @property
-    def read_stream_id(self) -> Optional[str]:
-        """Get the read_stream_id."""
-        return cast(str, self.db.get("read_stream_id", None))
 
     @property
     def daily_tweet(self) -> str:
@@ -125,29 +105,9 @@ class SynchronizedData(BaseSynchronizedData):
         return cast(int, self.db.get("re_prompt_attempts", 0))
 
     @property
-    def current_centaur_index(self) -> int:
-        """Gets the current_centaur_index."""
-        return cast(int, self.db.get("current_centaur_index", 0))
-
-    @property
-    def has_centaurs_changes(self) -> bool:
-        """Gets the has_centaurs_changes."""
-        return cast(bool, self.db.get("has_centaurs_changes", False))
-
-    @property
-    def pending_write(self) -> bool:
-        """Checks whether there are changes pending to be written to Ceramic."""
-        return cast(bool, self.db.get("pending_write", False))
-
-    @property
     def summary_tweets(self) -> list:
         """Get the summary_tweets."""
         return cast(list, self.db.get("summary_tweets", []))
-
-    @property
-    def write_results(self) -> list:
-        """Get the write_results."""
-        return cast(list, self.db.get("write_results", []))
 
     @property
     def tx_submitter(self) -> str:
@@ -167,10 +127,10 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
         if self.threshold_reached:
             # We reference all the events here to prevent the check-abciapp-specs tool from complaining
             # since this round receives the event via payload
-            # Event.NO_MAJORITY, Event.DONE, Event.UPDATE_CENTAURS, Event.READ_CENTAURS,
-            # Event.SCHEDULED_TWEET, Event.LLM, Event.DAILY_ORBIS, Event.DAILY_TWEET, Event.NEXT_CENTAUR
-            # Event.SCORE, Event.READ_CONTRIBUTE_DB, Event.READ_MANUAL_POINTS, Event.WRITE_CONTRIBUTE_DB
-            # Event.WEEK_IN_OLAS_CREATE, Event.TWEET_VALIDATION, Event.FORCE_DB_UPDATE, Event.CAMPAIGN_VALIDATION
+            # Event.NO_MAJORITY, Event.DONE,
+            # Event.SCHEDULED_TWEET,
+            # Event.SCORE, Event.WRITE_CONTRIBUTE_DB
+            # Event.WEEK_IN_OLAS_CREATE, Event.TWEET_VALIDATION, Event.CAMPAIGN_VALIDATION
             # Event.STAKING_ACTIVITY, Event.STAKING_CHECKPOINT, Event.STAKING_DAA_UPDATE
 
             payload = json.loads(self.most_voted_payload)
@@ -183,7 +143,6 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
                         **payload["updates"],
                         "previous_decision_event": event.value,
                         "score_data": dict(),
-                        "centaurs_data": list(),
                     }
                 )
             else:
@@ -225,36 +184,12 @@ class PostTxDecisionMakingRound(CollectSameUntilThresholdRound):
         return None
 
 
-class FinishedDecisionMakingReadCentaursRound(DegenerateRound):
-    """FinishedDecisionMakingReadCentaursRound"""
-
-
-class FinishedDecisionMakingLLMRound(DegenerateRound):
-    """FinishedDecisionMakingLLMRound"""
-
-
 class FinishedDecisionMakingWriteTwitterRound(DegenerateRound):
     """FinishedDecisionMakingWriteTwitterRound"""
 
 
-class FinishedDecisionMakingWriteOrbisRound(DegenerateRound):
-    """FinishedDecisionMakingWriteOrbisRound"""
-
-
-class FinishedDecisionMakingUpdateCentaurRound(DegenerateRound):
-    """FinishedDecisionMakingUpdateCentaurRound"""
-
-
-class FinishedDecisionMakingReadContributeDBRound(DegenerateRound):
-    """FinishedDecisionMakingReadContributeDBRound"""
-
-
 class FinishedDecisionMakingWriteContributeDBRound(DegenerateRound):
     """FinishedDecisionMakingWriteContributeDBRound"""
-
-
-class FinishedDecisionMakingReadManualPointsRound(DegenerateRound):
-    """FinishedDecisionMakingReadManualPointsRound"""
 
 
 class FinishedDecisionMakingScoreRound(DegenerateRound):
@@ -304,20 +239,11 @@ class DecisionMakingAbciApp(AbciApp[Event]):
     initial_states: Set[AppState] = {DecisionMakingRound, PostTxDecisionMakingRound}
     transition_function: AbciAppTransitionFunction = {
         DecisionMakingRound: {
-            Event.READ_CENTAURS: FinishedDecisionMakingReadCentaursRound,
-            Event.LLM: FinishedDecisionMakingLLMRound,
-            Event.DAILY_TWEET: FinishedDecisionMakingWriteTwitterRound,
             Event.TWEET_VALIDATION: DecisionMakingRound,
             Event.SCHEDULED_TWEET: FinishedDecisionMakingWriteTwitterRound,
-            Event.FORCE_DB_UPDATE: DecisionMakingRound,
             Event.WEEK_IN_OLAS_CREATE: FinishedDecisionMakingWeekInOlasRound,
-            Event.DAILY_ORBIS: FinishedDecisionMakingWriteOrbisRound,
-            Event.UPDATE_CENTAURS: FinishedDecisionMakingUpdateCentaurRound,
             Event.SCORE: FinishedDecisionMakingScoreRound,
-            Event.READ_CONTRIBUTE_DB: FinishedDecisionMakingReadContributeDBRound,
             Event.WRITE_CONTRIBUTE_DB: FinishedDecisionMakingWriteContributeDBRound,
-            Event.READ_MANUAL_POINTS: FinishedDecisionMakingReadManualPointsRound,
-            Event.NEXT_CENTAUR: DecisionMakingRound,
             Event.DONE: FinishedDecisionMakingDoneRound,
             Event.NO_MAJORITY: DecisionMakingRound,
             Event.ROUND_TIMEOUT: DecisionMakingRound,
@@ -334,16 +260,10 @@ class DecisionMakingAbciApp(AbciApp[Event]):
             Event.DONE: PostTxDecisionMakingRound,
             Event.NO_MAJORITY: PostTxDecisionMakingRound,
         },
-        FinishedDecisionMakingReadCentaursRound: {},
-        FinishedDecisionMakingLLMRound: {},
         FinishedDecisionMakingWriteTwitterRound: {},
-        FinishedDecisionMakingWriteOrbisRound: {},
         FinishedDecisionMakingScoreRound: {},
-        FinishedDecisionMakingUpdateCentaurRound: {},
         FinishedDecisionMakingDoneRound: {},
-        FinishedDecisionMakingReadContributeDBRound: {},
         FinishedDecisionMakingWriteContributeDBRound: {},
-        FinishedDecisionMakingReadManualPointsRound: {},
         FinishedDecisionMakingWeekInOlasRound: {},
         FinishedDecisionMakingActivityRound: {},
         FinishedDecisionMakingCheckpointRound: {},
@@ -354,16 +274,10 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         FinishedDecisionMakingDAARound: {},
     }
     final_states: Set[AppState] = {
-        FinishedDecisionMakingReadCentaursRound,
-        FinishedDecisionMakingLLMRound,
         FinishedDecisionMakingWriteTwitterRound,
-        FinishedDecisionMakingWriteOrbisRound,
         FinishedDecisionMakingScoreRound,
-        FinishedDecisionMakingUpdateCentaurRound,
         FinishedDecisionMakingDoneRound,
-        FinishedDecisionMakingReadContributeDBRound,
         FinishedDecisionMakingWriteContributeDBRound,
-        FinishedDecisionMakingReadManualPointsRound,
         FinishedDecisionMakingWeekInOlasRound,
         FinishedDecisionMakingActivityRound,
         FinishedDecisionMakingCheckpointRound,
@@ -382,16 +296,10 @@ class DecisionMakingAbciApp(AbciApp[Event]):
         PostTxDecisionMakingRound: set(),
     }
     db_post_conditions: Dict[AppState, Set[str]] = {
-        FinishedDecisionMakingReadCentaursRound: set(),
-        FinishedDecisionMakingLLMRound: {"llm_prompt_templates", "llm_values"},
         FinishedDecisionMakingWriteTwitterRound: {"write_data"},
-        FinishedDecisionMakingWriteOrbisRound: {"write_data"},
         FinishedDecisionMakingScoreRound: set(),
-        FinishedDecisionMakingUpdateCentaurRound: set(),
         FinishedDecisionMakingDoneRound: set(),
-        FinishedDecisionMakingReadContributeDBRound: set(),
         FinishedDecisionMakingWriteContributeDBRound: set(),
-        FinishedDecisionMakingReadManualPointsRound: set(),
         FinishedDecisionMakingWeekInOlasRound: set(),
         FinishedDecisionMakingActivityRound: set(),
         FinishedDecisionMakingCheckpointRound: set(),

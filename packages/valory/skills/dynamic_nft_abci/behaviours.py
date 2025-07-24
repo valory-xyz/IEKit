@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -32,6 +32,8 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
+from packages.valory.skills.contribute_db_abci.behaviours import ContributeDBBehaviour
+from packages.valory.skills.contribute_db_abci.contribute_models import ContributeUser
 from packages.valory.skills.dynamic_nft_abci.models import Params, SharedState
 from packages.valory.skills.dynamic_nft_abci.payloads import TokenTrackPayload
 from packages.valory.skills.dynamic_nft_abci.rounds import (
@@ -45,7 +47,7 @@ NULL_ADDRESS = "0x0000000000000000000000000000000000000000"
 DEFAULT_POINTS = 0
 
 
-class DynamicNFTBaseBehaviour(BaseBehaviour, ABC):
+class DynamicNFTBaseBehaviour(ContributeDBBehaviour, ABC):
     """Base behaviour for the common apps' skill."""
 
     @property
@@ -80,7 +82,7 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
             ):
                 payload_data = TokenTrackRound.ERROR_PAYLOAD
             else:
-                payload_data = self.update_ceramic_db(
+                payload_data = yield from self.update_contribute_db(
                     new_token_id_to_address, last_parsed_block
                 )
 
@@ -99,13 +101,11 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
         self,
     ) -> Generator[None, None, Tuple[dict, Optional[int]]]:
         """Get token id to address data."""
-        try:
-            from_block = int(
-                self.context.ceramic_db["module_data"]["dynamic_nft"][
-                    "last_parsed_block"
-                ]
-            )
-        except KeyError:
+
+        from_block = (
+            self.context.contribute_db.data.module_data.dynamic_nft.last_parsed_block
+        )
+        if from_block is None:
             self.context.logger.warning(
                 f"last_parsed_block is not set. Using default earliest_block_to_monitor={self.params.earliest_block_to_monitor}"
             )
@@ -135,55 +135,47 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
         )
         return data, last_block
 
-    def update_ceramic_db(
+    def update_contribute_db(
         self, new_token_id_to_address: Dict, last_parsed_block: int
     ) -> Dict:
         """Calculate the new content of the DB"""
-
-        pending_write = self.synchronized_data.pending_write
 
         # We store a token_id to points mapping so it is quick
         # to retrieve the scores for a given token_id, which is done
         # during each request to the handler
         token_id_to_points = self.synchronized_data.token_id_to_points
 
-        # Instantiate the db
-        ceramic_db_copy = self.context.ceramic_db.copy()
+        contribute_db = self.context.contribute_db
 
-        # Update token_ids in the ceramic_db
+        # Update token_ids in the contribut_db
         for token_id, address in new_token_id_to_address.items():
-            user, _ = ceramic_db_copy.get_user_by_field("wallet_address", address)
+            user = contribute_db.get_user_by_attribute("wallet_address", address)
 
             # Create a new user if it does not exist
             # Update user in the following cases:
             # - User exists and its current token_id is None
             # - User exists and its current token_id is greater than the one in this iteration (only the first minted token is assigned to the user)
-            if (
-                not user
-                or user["token_id"] is None
-                or int(token_id) < int(user["token_id"])
-            ):
-                ceramic_db_copy.update_or_create_user(
-                    "wallet_address", address, {"token_id": token_id}
-                )
-                pending_write = True  # user is created or updated
+            if not user:
+                user_id = contribute_db.get_next_user_id()
+                user = ContributeUser(id=user_id)
 
-        # If a user has first contributed to one module (i.e. twitter) without registering a wallet,
-        # and later he/she contributes to another module, it could happen that we have two different
-        # entries on the database
-        ceramic_db_copy.merge_by_wallet()
+            if user.token_id is None or int(token_id) < int(user.token_id):
+                user.token_id = token_id
+                yield from contribute_db.create_or_update_user_by_key(
+                    "wallet_address", address, user
+                )
 
         # Rebuild token_to_points
         new_token_id_to_points = {
-            user["token_id"]: user["points"]
-            for user in ceramic_db_copy.data["users"].values()
-            if user["token_id"]
+            user.token_id: user.points
+            for user in contribute_db.data.users.values()
+            if user.token_id
         }
 
-        # ceramic_db only stores the first minted token for each user
+        # contribute_db only stores the first minted token for each user
         # We add the extra tokens to new_token_id_to_points and assing a score of 0
         for token_id in new_token_id_to_address.keys():
-            user, _ = ceramic_db_copy.get_user_by_field("token_id", token_id)
+            user, _ = contribute_db.get_user_by_attribute("token_id", token_id)
             if not user:
                 new_token_id_to_points[token_id] = DEFAULT_POINTS
 
@@ -191,9 +183,9 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
         token_id_to_points.update(new_token_id_to_points)
 
         # Last parsed block
-        ceramic_db_copy.data["module_data"]["dynamic_nft"]["last_parsed_block"] = str(
-            last_parsed_block
-        )
+        module_data = contribute_db.data.module_data
+        module_data.dynamic_nft.last_parsed_block = last_parsed_block
+        yield from contribute_db.update_module_data(module_data)
 
         # Last update time
         last_update_time = cast(
@@ -203,8 +195,6 @@ class TokenTrackBehaviour(DynamicNFTBaseBehaviour):
         data = {
             "last_update_time": last_update_time,
             "token_id_to_points": token_id_to_points,
-            "ceramic_diff": self.context.ceramic_db.diff(ceramic_db_copy),
-            "pending_write": pending_write,
         }
 
         self.context.logger.info("Token data updated")
