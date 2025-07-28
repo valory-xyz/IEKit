@@ -1196,6 +1196,8 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             # Keep in mind that we store the updated points if the user has reached max_points_per_period
             campaign = get_campaign(tweet_data["text"], active_hashtags)
 
+            self.context.logger.info(f"Campaign for tweet {tweet_id} is {campaign}")
+
             tweet.points = new_points
             tweet.campaign = campaign
             tweet.epoch = contract_epoch
