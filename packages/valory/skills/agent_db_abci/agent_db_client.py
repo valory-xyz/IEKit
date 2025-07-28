@@ -147,15 +147,23 @@ class AgentDBClient(Model):
         shortened_payload = json.dumps(payload)
         if len(shortened_payload) > 1000:
             shortened_payload = shortened_payload[:1000] + "..."
+
         self.logger.info(
             f"Making {method} request to {url} with payload: {shortened_payload} and params: {params}"
         )
 
-        content = json.dumps(payload).encode() if payload else None
+        try:
+            content = json.dumps(payload).encode() if payload else None
 
-        response = yield from self.http_request_func(
-            method=method, url=url, content=content, headers=headers, parameters=params
-        )
+            response = yield from self.http_request_func(
+                method=method,
+                url=url,
+                content=content,
+                headers=headers,
+                parameters=params,
+            )
+        except Exception as e:
+            raise ValueError(f"Request failed: {e}") from e
 
         self.logger.info(f"Response status: {response.status_code}")
 
