@@ -79,18 +79,3 @@ class TwitterSelectKeepersPayload(BaseTxPayload):
     """Represent a transaction payload of type 'select_keeper'."""
 
     keepers: str
-
-
-@dataclass(frozen=True)
-class DBUpdateRandomnessPayload(BaseTxPayload):
-    """Represent a transaction payload of type 'randomness'."""
-
-    round_id: int
-    randomness: str
-
-
-@dataclass(frozen=True)
-class DBUpdateSelectKeeperPayload(BaseTxPayload):
-    """Represent a transaction payload of type 'select_keeper'."""
-
-    keepers: str
