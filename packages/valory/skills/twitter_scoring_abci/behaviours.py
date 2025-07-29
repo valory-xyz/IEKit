@@ -1331,6 +1331,4 @@ class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
         TwitterSelectKeepersBehaviour,
         PostMechRequestBehaviour,
         PreMechRequestBehaviour,
-        DBUpdateRandomnessBehaviour,
-        DBUpdateSelectKeeperBehaviour,
     ]
