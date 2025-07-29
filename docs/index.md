@@ -31,7 +31,7 @@ In order to run a local demo service based on the IEKit:
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeih7dzu6mrwdqfhkejmmb3awqf7tqog33d2cuwe62cq2bm4aksffqy --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeifor3zwkqgyusparfnkbnqbnpvtzjeuljzrjc677ifybi64xkptoa --service
     ```
 
 3. Build the Docker image of the service agents
