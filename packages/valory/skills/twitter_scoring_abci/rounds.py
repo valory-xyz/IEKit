@@ -599,29 +599,31 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
 
     def end_block(self) -> Optional[Tuple[BaseSynchronizedData, Event]]:
         """Process the end of the block."""
+        if self.threshold_reached:
+            performed_twitter_tasks = cast(
+                SynchronizedData, self.synchronized_data
+            ).performed_twitter_tasks
+            performed_twitter_tasks["db_update"] = Event.DONE.value
 
-        if self.keeper_payload is None:
-            return None
+            # Clear processed tweets that are no longer needed. Keep only those with no points yet.
+            tweets = cast(SynchronizedData, self.synchronized_data).tweets
+            tweets = {k: v for k, v in tweets.items() if "points" not in v}
 
-        performed_twitter_tasks = cast(
-            SynchronizedData, self.synchronized_data
-        ).performed_twitter_tasks
-        performed_twitter_tasks["db_update"] = Event.DONE.value
-
-        # Clear processed tweets that are no longer needed. Keep only those with no points yet.
-        tweets = cast(SynchronizedData, self.synchronized_data).tweets
-        tweets = {k: v for k, v in tweets.items() if "points" not in v}
-
-        synchronized_data = self.synchronized_data.update(
-            synchronized_data_class=SynchronizedData,
-            **{
-                get_name(
-                    SynchronizedData.performed_twitter_tasks
-                ): performed_twitter_tasks,
-                get_name(SynchronizedData.tweets): tweets,
-            },
-        )
-        return synchronized_data, Event.DONE
+            synchronized_data = self.synchronized_data.update(
+                synchronized_data_class=SynchronizedData,
+                **{
+                    get_name(
+                        SynchronizedData.performed_twitter_tasks
+                    ): performed_twitter_tasks,
+                    get_name(SynchronizedData.tweets): tweets,
+                },
+            )
+            return synchronized_data, Event.DONE
+        if not self.is_majority_possible(
+            self.collection, self.synchronized_data.nb_participants
+        ):
+            return self.synchronized_data, Event.NO_MAJORITY
+        return None
 
 
 class TwitterRandomnessRound(CollectSameUntilThresholdRound):
