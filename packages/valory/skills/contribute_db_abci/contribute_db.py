@@ -219,10 +219,10 @@ class ContributeDatabase(Model):
         if not self.is_writer():
             return
 
-        self.tweet_interface.create_definition()
-        self.user_interface.create_definition()
-        self.module_configs_interface.create_definition()
-        self.module_data_interface.create_definition()
+        yield from self.tweet_interface.create_definition()
+        yield from self.user_interface.create_definition()
+        yield from self.module_configs_interface.create_definition()
+        yield from self.module_data_interface.create_definition()
 
     def get_user_by_attribute(self, key, value) -> Optional[ContributeUser]:
         """Get a user by one of its attributes"""
