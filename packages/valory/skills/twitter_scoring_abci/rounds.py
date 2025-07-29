@@ -34,6 +34,7 @@ from packages.valory.skills.abstract_round_abci.base import (
     CollectSameUntilThresholdRound,
     DegenerateRound,
     EventToTimeout,
+    OnlyKeeperSendsRound,
     get_name,
 )
 from packages.valory.skills.mech_interact_abci.states.base import (
@@ -41,6 +42,8 @@ from packages.valory.skills.mech_interact_abci.states.base import (
 )
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
+    DBUpdateRandomnessPayload,
+    DBUpdateSelectKeeperPayload,
     PostMechRequestPayload,
     PreMechRequestPayload,
     TwitterDecisionMakingPayload,
@@ -590,7 +593,7 @@ class PostMechRequestRound(CollectSameUntilThresholdRound):
         return None
 
 
-class DBUpdateRound(CollectSameUntilThresholdRound):
+class DBUpdateRound(OnlyKeeperSendsRound):
     """DBUpdateRound"""
 
     payload_class = DBUpdatePayload
@@ -675,6 +678,33 @@ class TwitterSelectKeepersRound(CollectSameUntilThresholdRound):
         return None
 
 
+class DBUpdateRandomnessRound(CollectSameUntilThresholdRound):
+    """A round for generating randomness"""
+
+    payload_class = DBUpdateRandomnessPayload
+    synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    collection_key = get_name(SynchronizedData.participant_to_randomness)
+    selection_key = (
+        get_name(SynchronizedData.most_voted_randomness_round),
+        get_name(SynchronizedData.most_voted_randomness),
+    )
+    extended_requirements = ()
+
+
+class DBUpdateSelectKeeperRound(CollectSameUntilThresholdRound):
+    """A round in which a keeper is selected for transaction submission"""
+
+    payload_class = DBUpdateSelectKeeperPayload
+    synchronized_data_class = SynchronizedData
+    done_event = Event.DONE
+    no_majority_event = Event.NO_MAJORITY
+    collection_key = get_name(SynchronizedData.participant_to_selection)
+    selection_key = get_name(SynchronizedData.most_voted_keeper_address)
+    extended_requirements = ()
+
+
 class FinishedTwitterScoringRound(DegenerateRound):
     """FinishedTwitterScoringRound"""
 
@@ -695,7 +725,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
             Event.RETRIEVE_MENTIONS: TwitterMentionsCollectionRound,
             Event.PRE_MECH: PreMechRequestRound,
             Event.POST_MECH: PostMechRequestRound,
-            Event.DB_UPDATE: DBUpdateRound,
+            Event.DB_UPDATE: DBUpdateRandomnessRound,
             Event.DONE: FinishedTwitterScoringRound,
             Event.ROUND_TIMEOUT: TwitterDecisionMakingRound,
             Event.NO_MAJORITY: TwitterDecisionMakingRound,
@@ -736,6 +766,16 @@ class TwitterScoringAbciApp(AbciApp[Event]):
             Event.DONE: TwitterDecisionMakingRound,
             Event.ROUND_TIMEOUT: PreMechRequestRound,
             Event.NO_MAJORITY: PostMechRequestRound,
+        },
+        DBUpdateRandomnessRound: {
+            Event.DONE: DBUpdateSelectKeeperRound,
+            Event.ROUND_TIMEOUT: DBUpdateRandomnessRound,
+            Event.NO_MAJORITY: DBUpdateRandomnessRound,
+        },
+        DBUpdateSelectKeeperRound: {
+            Event.DONE: DBUpdateRound,
+            Event.ROUND_TIMEOUT: DBUpdateSelectKeeperRound,
+            Event.NO_MAJORITY: DBUpdateSelectKeeperRound,
         },
         DBUpdateRound: {
             Event.DONE: TwitterDecisionMakingRound,

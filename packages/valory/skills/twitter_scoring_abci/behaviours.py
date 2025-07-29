@@ -50,6 +50,8 @@ from packages.valory.skills.twitter_scoring_abci.models import (
 )
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
+    DBUpdateRandomnessPayload,
+    DBUpdateSelectKeeperPayload,
     PostMechRequestPayload,
     PreMechRequestPayload,
     TwitterDecisionMakingPayload,
@@ -60,7 +62,9 @@ from packages.valory.skills.twitter_scoring_abci.payloads import (
 )
 from packages.valory.skills.twitter_scoring_abci.prompts import tweet_evaluation_prompt
 from packages.valory.skills.twitter_scoring_abci.rounds import (
+    DBUpdateRandomnessRound,
     DBUpdateRound,
+    DBUpdateSelectKeeperRound,
     ERROR_API_LIMITS,
     ERROR_GENERIC,
     Event,
@@ -1065,12 +1069,49 @@ class PostMechRequestBehaviour(TwitterScoringBaseBehaviour):
         self.set_done()
 
 
+class DBUpdateRandomnessBehaviour(RandomnessBehaviour):
+    """Retrieve randomness."""
+
+    matching_round = DBUpdateRandomnessRound
+    payload_class = DBUpdateRandomnessPayload
+
+
+class SelectKeeperCeramicBehaviour(SelectKeeperBehaviour, CeramicWriteBaseBehaviour):
+    """Select the keeper agent."""
+
+    matching_round = DBUpdateSelectKeeperRound
+    payload_class = DBUpdateSelectKeeperPayload
+
+
 class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
     """DBUpdateBehaviour"""
 
     matching_round: Type[AbstractRound] = DBUpdateRound
 
-    def async_act(self) -> Generator:
+    def _i_am_not_sending(self) -> bool:
+        """Indicates if the current agent is the sender or not."""
+        return (
+            self.context.agent_address
+            != self.synchronized_data.most_voted_keeper_address
+        )
+
+    def async_act(self) -> Generator[None, None, None]:
+        """Do the action"""
+        if self._i_am_not_sending():
+            yield from self._not_sender_act()
+        else:
+            yield from self._sender_act()
+
+    def _not_sender_act(self) -> Generator:
+        """Do the non-sender action."""
+        with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
+            self.context.logger.info(
+                f"Waiting for the keeper to do its keeping: {self.synchronized_data.most_voted_keeper_address}"
+            )
+            yield from self.wait_until_round_end()
+        self.set_done()
+
+    def _sender_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
 
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
