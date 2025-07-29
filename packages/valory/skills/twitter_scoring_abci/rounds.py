@@ -170,6 +170,11 @@ class SynchronizedData(MechInteractionSynchronizedData):
         return cast(dict, self.db.get("performed_twitter_tasks", {}))
 
     @property
+    def most_voted_keeper_address(self) -> str:
+        """Get the most_voted_keeper_address."""
+        return cast(str, self.db.get_strict("most_voted_keeper_address"))
+
+    @property
     def most_voted_keeper_addresses(self) -> list:
         """Get the most_voted_keeper_addresses."""
         return cast(list, self.db.get_strict("most_voted_keeper_addresses"))
