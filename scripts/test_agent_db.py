@@ -766,6 +766,13 @@ def main():
     # Clear the remote database
     # clear_remote_db(remote_db)
 
+    # remote_db.data.module_data.twitter.latest_hashtag_tweet_id = "1949742537033253329"
+    # remote_db.data.module_data.twitter.latest_mention_tweet_id = "1949742537033253329"
+    # remote_db.data.module_data.twitter.current_period = "2025-07-28T00:00:00+00:00"
+
+    # remote_db.update_module_data(remote_db.data.module_data)
+    print(remote_db.data.module_data.twitter)
+
 
 if __name__ == "__main__":
     main()

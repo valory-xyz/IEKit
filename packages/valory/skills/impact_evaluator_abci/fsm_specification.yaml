@@ -64,7 +64,9 @@ states:
 - CollectSignatureRound
 - DAAPreparationRound
 - DBLoadRound
+- DBUpdateRandomnessRound
 - DBUpdateRound
+- DBUpdateSelectKeeperRound
 - DecisionMakingRound
 - FinalizationRound
 - FinishedDecisionMakingWriteContributeDBRound
@@ -130,9 +132,15 @@ transition_func:
     (DBLoadRound, DONE): DecisionMakingRound
     (DBLoadRound, NO_MAJORITY): DBLoadRound
     (DBLoadRound, ROUND_TIMEOUT): DBLoadRound
+    (DBUpdateRandomnessRound, DONE): DBUpdateSelectKeeperRound
+    (DBUpdateRandomnessRound, NO_MAJORITY): DBUpdateRandomnessRound
+    (DBUpdateRandomnessRound, ROUND_TIMEOUT): DBUpdateRandomnessRound
     (DBUpdateRound, DONE): TwitterDecisionMakingRound
     (DBUpdateRound, NO_MAJORITY): DBUpdateRound
     (DBUpdateRound, ROUND_TIMEOUT): DBUpdateRound
+    (DBUpdateSelectKeeperRound, DONE): DBUpdateRound
+    (DBUpdateSelectKeeperRound, NO_MAJORITY): DBUpdateSelectKeeperRound
+    (DBUpdateSelectKeeperRound, ROUND_TIMEOUT): DBUpdateSelectKeeperRound
     (DecisionMakingRound, CAMPAIGN_VALIDATION): DecisionMakingRound
     (DecisionMakingRound, DONE): ResetAndPauseRound
     (DecisionMakingRound, NO_MAJORITY): DecisionMakingRound
@@ -238,7 +246,7 @@ transition_func:
     (TokenTrackRound, DONE): DecisionMakingRound
     (TokenTrackRound, NO_MAJORITY): TokenTrackRound
     (TokenTrackRound, ROUND_TIMEOUT): TokenTrackRound
-    (TwitterDecisionMakingRound, DB_UPDATE): DBUpdateRound
+    (TwitterDecisionMakingRound, DB_UPDATE): DBUpdateRandomnessRound
     (TwitterDecisionMakingRound, DONE): TokenTrackRound
     (TwitterDecisionMakingRound, NO_MAJORITY): TwitterDecisionMakingRound
     (TwitterDecisionMakingRound, POST_MECH): PostMechRequestRound

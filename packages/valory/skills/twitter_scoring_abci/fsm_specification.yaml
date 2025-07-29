@@ -20,7 +20,9 @@ label: TwitterScoringAbciApp
 start_states:
 - TwitterDecisionMakingRound
 states:
+- DBUpdateRandomnessRound
 - DBUpdateRound
+- DBUpdateSelectKeeperRound
 - FinishedTwitterCollectionRound
 - FinishedTwitterScoringRound
 - PostMechRequestRound
@@ -31,9 +33,15 @@ states:
 - TwitterRandomnessRound
 - TwitterSelectKeepersRound
 transition_func:
+    (DBUpdateRandomnessRound, DONE): DBUpdateSelectKeeperRound
+    (DBUpdateRandomnessRound, NO_MAJORITY): DBUpdateRandomnessRound
+    (DBUpdateRandomnessRound, ROUND_TIMEOUT): DBUpdateRandomnessRound
     (DBUpdateRound, DONE): TwitterDecisionMakingRound
     (DBUpdateRound, NO_MAJORITY): DBUpdateRound
     (DBUpdateRound, ROUND_TIMEOUT): DBUpdateRound
+    (DBUpdateSelectKeeperRound, DONE): DBUpdateRound
+    (DBUpdateSelectKeeperRound, NO_MAJORITY): DBUpdateSelectKeeperRound
+    (DBUpdateSelectKeeperRound, ROUND_TIMEOUT): DBUpdateSelectKeeperRound
     (PostMechRequestRound, DONE): TwitterDecisionMakingRound
     (PostMechRequestRound, NO_MAJORITY): PostMechRequestRound
     (PostMechRequestRound, ROUND_TIMEOUT): PreMechRequestRound
@@ -41,7 +49,7 @@ transition_func:
     (PreMechRequestRound, NO_MAJORITY): PreMechRequestRound
     (PreMechRequestRound, ROUND_TIMEOUT): PreMechRequestRound
     (PreMechRequestRound, SKIP_EVALUATION): FinishedTwitterScoringRound
-    (TwitterDecisionMakingRound, DB_UPDATE): DBUpdateRound
+    (TwitterDecisionMakingRound, DB_UPDATE): DBUpdateRandomnessRound
     (TwitterDecisionMakingRound, DONE): FinishedTwitterScoringRound
     (TwitterDecisionMakingRound, NO_MAJORITY): TwitterDecisionMakingRound
     (TwitterDecisionMakingRound, POST_MECH): PostMechRequestRound

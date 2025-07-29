@@ -37,7 +37,10 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-from packages.valory.skills.abstract_round_abci.common import RandomnessBehaviour
+from packages.valory.skills.abstract_round_abci.common import (
+    RandomnessBehaviour,
+    SelectKeeperBehaviour,
+)
 from packages.valory.skills.contribute_db_abci.behaviours import ContributeDBBehaviour
 from packages.valory.skills.contribute_db_abci.contribute_models import (
     ContributeUser,
@@ -1076,7 +1079,7 @@ class DBUpdateRandomnessBehaviour(RandomnessBehaviour):
     payload_class = DBUpdateRandomnessPayload
 
 
-class SelectKeeperCeramicBehaviour(SelectKeeperBehaviour, CeramicWriteBaseBehaviour):
+class DBUpdateSelectKeeperBehaviour(SelectKeeperBehaviour):
     """Select the keeper agent."""
 
     matching_round = DBUpdateSelectKeeperRound
@@ -1369,4 +1372,6 @@ class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
         TwitterSelectKeepersBehaviour,
         PostMechRequestBehaviour,
         PreMechRequestBehaviour,
+        DBUpdateRandomnessBehaviour,
+        DBUpdateSelectKeeperBehaviour,
     ]
