@@ -430,9 +430,6 @@ class ContributeDatabase(Model):
             attr_data = attribute["attr_value"] | {
                 "attribute_instance_id": attribute["attr_id"]
             }
-            self.logger.info(
-                f"Loading attribute: {attr_name} with id: {attribute['attr_id']}"
-            )
 
             try:
                 if attr_name == "tweet":

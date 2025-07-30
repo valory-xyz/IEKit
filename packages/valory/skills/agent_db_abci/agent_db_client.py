@@ -148,14 +148,6 @@ class AgentDBClient(Model):
             else:
                 payload = payload | auth
 
-        shortened_payload = json.dumps(payload)
-        if len(shortened_payload) > 1000:
-            shortened_payload = shortened_payload[:1000] + "..."
-
-        self.logger.info(
-            f"Making {method} request to {url} with payload: {shortened_payload} and params: {params}"
-        )
-
         try:
             content = json.dumps(payload).encode() if payload else None
 
@@ -169,10 +161,17 @@ class AgentDBClient(Model):
         except Exception as e:
             raise ValueError(f"Request failed: {e}") from e
 
-        self.logger.info(f"Response status: {response.status_code}")
-
         if response.status_code in [200, 201]:
             return json.loads(response.body)
+
+        # Log if the request failed
+        shortened_payload = json.dumps(payload)
+        if len(shortened_payload) > 1000:
+            shortened_payload = shortened_payload[:1000] + "..."
+
+        self.logger.error(
+            f"Made {method} request to {url} with payload: {shortened_payload} and params: {params}\n\nResponse was: {response.status_code}"
+        )
 
         if response.status_code == 404:
             return None
@@ -410,9 +409,6 @@ class AgentDBClient(Model):
                 "skip": skip,
                 "limit": 100,
             }
-            self.logger.info(
-                f"Reading agent attributes from {skip} to {skip + 100}... "
-            )
             result = yield from self._request(
                 method="GET",
                 endpoint=endpoint,
@@ -424,8 +420,6 @@ class AgentDBClient(Model):
             if result is None:
                 self.logger.error("Error fetching agent attributes")
                 continue
-
-            self.logger.info(f"got {len(result)} attributes")
 
             raw_attributes += result
             skip = len(raw_attributes)
