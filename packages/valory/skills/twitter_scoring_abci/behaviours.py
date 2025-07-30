@@ -1127,6 +1127,8 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             f"Staking contracts to epoch: {staking_contract_to_epoch}"
         )
 
+        scored_tweets = []
+
         # Update data
         for tweet_id, tweet_data in tweets.items():
             if "points" not in tweet_data:
@@ -1212,6 +1214,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
             self.context.logger.info(f"Adding tweet {tweet_id} to the database")
             yield from contribute_db.create_tweet(tweet)
+            scored_tweets.append(tweet_id)
 
             # User data to update
             user_data = {
@@ -1237,6 +1240,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             yield from contribute_db.create_or_update_user_by_key(
                 "twitter_id", author_id, user
             )
+
+        scored_tweets = list(sorted(scored_tweets))
+        self.context.logger.info(f"Scored tweets: {scored_tweets}")
 
         module_data = contribute_db.data.module_data
         update_needed = False

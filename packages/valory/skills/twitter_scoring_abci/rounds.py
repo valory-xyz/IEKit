@@ -607,7 +607,12 @@ class DBUpdateRound(CollectSameUntilThresholdRound):
 
             # Clear processed tweets that are no longer needed. Keep only those with no points yet.
             tweets = cast(SynchronizedData, self.synchronized_data).tweets
-            tweets = {k: v for k, v in tweets.items() if "points" not in v}
+
+            tweets_to_clear = [k for k, v in tweets.items() if "points" in v]
+
+            self.context.logger.info(f"Cleared tweets: {tweets_to_clear}")
+
+            tweets = {k: v for k, v in tweets.items() if k not in tweets_to_clear}
 
             synchronized_data = self.synchronized_data.update(
                 synchronized_data_class=SynchronizedData,
