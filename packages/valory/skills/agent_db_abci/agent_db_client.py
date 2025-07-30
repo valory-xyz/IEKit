@@ -58,6 +58,7 @@ class AgentDBClient(Model):
         self.private_key: Optional[str] = None
         self.http_request_func: Callable = None
         self.logger: Callable = None
+        self.sleep_func: Callable = None
 
     def initialize(
         self,
@@ -65,6 +66,7 @@ class AgentDBClient(Model):
         http_request_func: Callable,
         signing_func_or_pkey: Union[Callable, str],
         logger: Callable,
+        sleep_func: Callable,
     ):
         """Inject external functions"""
         self.address = address
@@ -78,6 +80,7 @@ class AgentDBClient(Model):
             signing_func_or_pkey if isinstance(signing_func_or_pkey, str) else None
         )
         self.logger = logger
+        self.sleep_func = sleep_func
         self.ensure_agent_is_loaded()
 
     def sign_using_pkey(self, message_to_sign: str):

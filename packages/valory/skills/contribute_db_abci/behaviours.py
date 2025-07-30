@@ -52,6 +52,7 @@ class ContributeDBBehaviour(BaseBehaviour, ABC):
             http_request_func=self.get_http_response,
             signing_func_or_pkey=self.params.contribute_db_pkey,
             logger=self.context.logger,
+            sleep_func=self.sleep,
         )
 
         self.context.contribute_db.initialize(

@@ -47,6 +47,7 @@ class AgentDBBehaviour(BaseBehaviour, ABC):
             http_request_func=self.get_http_response,
             signing_func=self.get_signature,
             logger=self.context.logger,
+            sleep_func=self.sleep,
         )
 
 
