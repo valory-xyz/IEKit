@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeiaxb63hpickyjxvsrkzcmophtdzd27rqwvznngdrye465to4fufii
-  agent_db_client.py: bafybeibrs2twnj7kugi2rs2ihncztocb42z3yktigh44jjajzzxpsk2w2e
+  agent_db_client.py: bafybeihsdavgh2emiqw7oxpnoxr64bizitqvroqcb2uvjhky2dbzckjbuy
   agent_db_models.py: bafybeihbc4aautx7vjxifotynifx5nnu7vkaduzgelbngbtfsngknlinda
   behaviours.py: bafybeibixhiiqlcnjnesxdtgy7hovlc2bdraqll6x3xjbjniwe7gawpk7a
   dialogues.py: bafybeifmodah5c75hcwa4vygcvmk5cvj4kpmfy5qwyov7kvgqn6gipupqi
