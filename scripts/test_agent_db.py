@@ -63,7 +63,7 @@ CONTRIBUTE = "contribute"
 
 def are_models_different(model1: BaseModel, model2: BaseModel) -> bool:
     """Get the different attributes between two Pydantic models."""
-    if type(model1) != type(model2):
+    if not isinstance(model2, type(model1)):
         raise ValueError("Models must be of the same type to compare attributes.")
 
     diffs = []
