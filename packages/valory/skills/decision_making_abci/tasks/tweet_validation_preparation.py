@@ -53,7 +53,7 @@ class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
         """Preparations before running the task"""
         updates = {}
 
-        for tweet in self.data.tweets:
+        for tweet in self.module_data.scheduled_tweet.tweets:
             tweet_text = tweet.text if isinstance(tweet.text, str) else tweet.text[0]
 
             self.logger.info(f"Checking tweet proposal: {tweet_text}")

@@ -105,7 +105,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
         event = None
 
         if self.tweets_need_update:
-            self.data.tweets = self.updated_tweets
+            self.module_data.scheduled_tweet.tweets = self.updated_tweets
 
         if self.pending_tweets:
             tweet = self.get_tweet()
@@ -140,7 +140,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
         posted_tweet_id = pending_tweets[0]["request_id"]
 
-        for tweet in self.data.tweets:
+        for tweet in self.module_data.scheduled_tweet.tweets:
             if tweet.request_id == posted_tweet_id:
                 tweet.posted = True
                 tweet.executionAttempts[-1].verified = True
@@ -161,7 +161,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
         if not proceed:
             return False
 
-        if not self.data.tweets:
+        if not self.module_data.scheduled_tweet.tweets:
             return False
 
         self.pending_tweets = yield from self.get_pending_tweets()
@@ -177,7 +177,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
         """Get not yet posted tweets that need to be posted"""
 
         pending_tweets = []
-        for tweet in self.data.tweets:
+        for tweet in self.module_data.scheduled_tweet.tweets:
             self.logger.info(f"Checking tweet: text={tweet.text}")
 
             # Ignore posted tweets
@@ -228,7 +228,7 @@ class ScheduledTweetPreparation(TwitterPreparation, SignatureValidationMixin):
 
             pending_tweets.append(tweet)
 
-        self.updated_tweets = self.data.tweets
+        self.updated_tweets = self.module_data.scheduled_tweet.tweets
 
         return pending_tweets
 

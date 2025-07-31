@@ -51,7 +51,7 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
         """Preparations before running the task"""
         yield
 
-        for campaign in self.data.campaigns:
+        for campaign in self.module_data.twitter_campaigns.campaigns:
             self.logger.info(
                 f"Checking campaign proposal {campaign.id} #{campaign.hashtag} [{campaign.status}]"
             )
