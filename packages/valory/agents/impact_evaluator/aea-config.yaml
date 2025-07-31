@@ -47,18 +47,18 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeibfsmbjasqnb3lgmwj7dlxvlfbngdyqc7a4n5q2g7phvmv4ktehq4
 - valory/abstract_round_abci:0.1.0:bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy
-- valory/impact_evaluator_abci:0.1.0:bafybeibk33nvp7ze2wnxntk6cosmuglustwdfzeozzuiwamymjacwno2iq
-- valory/twitter_scoring_abci:0.1.0:bafybeigiluhprbcrk2xyit7ceiuqgjosvvokl2f2zkb2oblpevkwlq6tky
+- valory/impact_evaluator_abci:0.1.0:bafybeihbkikw5hjljc32luw6abgreqlk27ahgpfv6jwirodgvdzncqvw3e
+- valory/twitter_scoring_abci:0.1.0:bafybeihpqhnn72qkox45fakrfdcac2cqnwdf443pu6jmddm2yeptt3ibge
 - valory/agent_db_abci:0.1.0:bafybeic7fatdnzwcxtbxldznslggzfyyvnrlaevhx3pyhjxuhk64aekcrq
 - valory/contribute_db_abci:0.1.0:bafybeibg6mbjbuiiq772zlqiohsni3tesj7kpvrwt2276hffgy2n7fwy7i
-- valory/dynamic_nft_abci:0.1.0:bafybeif4udpzxltmuibluczhejroc6675yup7asbo7iyk227tdn6fqauvy
+- valory/dynamic_nft_abci:0.1.0:bafybeif2ujekbvr4up7r7qco3ais3v2wy2kcmtkyn5kjmynuryqslxchvy
 - valory/registration_abci:0.1.0:bafybeidqadl26x5prbjgnkqrvjnbqxpo75jttm7vlvpgkoqghs5677rw5i
 - valory/reset_pause_abci:0.1.0:bafybeiachgo6reit2q4jw75mefw2acj4ldedeqmn3rewjm4dbzts2l7oxe
 - valory/termination_abci:0.1.0:bafybeibtbboau3q5fxfviwm7lbeix4z55uptfqqiyiu6siivxwkp3o5pju
 - valory/transaction_settlement_abci:0.1.0:bafybeic2ywzpwkyeqbzsvkbvurhsptemam4xtceihax2tmxmlxtgd3xpya
 - valory/twitter_write_abci:0.1.0:bafybeiamg6pt2rejxftvgmjxvmicy3b3rxxaqpk2h3k7h3pgh4sfitttv4
-- valory/decision_making_abci:0.1.0:bafybeies6wynbtf7pgmyvu5mlmtmj4nshyj2guethqxpfuoc3l6emnhjey
-- valory/olas_week_abci:0.1.0:bafybeicw5uahzcfy5ctoylk6m4le2a3bhofbplbbhjbygxnepfiluaybjm
+- valory/decision_making_abci:0.1.0:bafybeicdt7oqx2366y72hbqtg5h4qszmgc6xgqw6r62e54cjcs5ecqwxnm
+- valory/olas_week_abci:0.1.0:bafybeiepcdab7ovce23jrgppbs6cjpf7bscivs7ue57nfe6bcm55kqw6d4
 - valory/mech_interact_abci:0.1.0:bafybeidi2nfkt5r7cckdd4equdfm5uwiuisrz2splo7om3hkriy5ohx22e
 - valory/staking_abci:0.1.0:bafybeib24yfydbrkwvhgeihug54zbcgl5k5yhltbxb73rhlvt43roepkvq
 - valory/llm_abci:0.1.0:bafybeiamxgtcobjsanthqdyi2pnnezsaio4jbkkh23e5wni57yoqv3n4oa

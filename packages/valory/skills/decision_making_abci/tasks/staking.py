@@ -428,6 +428,9 @@ class StakingDAAPreparation(TaskPreparation):
         # Update the last run time
         plugin_config.last_run = self.now_utc
 
+        yield from self.context.contribute_db.update_module_configs(
+            self.context.contribute_db.data.module_configs
+        )
         updates = {}
         yield
         return updates, None
