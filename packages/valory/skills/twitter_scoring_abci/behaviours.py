@@ -1124,6 +1124,8 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             f"Staking contracts to epoch: {staking_contract_to_epoch}"
         )
 
+        scored_tweets = []
+
         # Update data
         for tweet_id, tweet_data in tweets.items():
             if "points" not in tweet_data:
@@ -1196,6 +1198,8 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             # Keep in mind that we store the updated points if the user has reached max_points_per_period
             campaign = get_campaign(tweet_data["text"], active_hashtags)
 
+            self.context.logger.info(f"Campaign for tweet {tweet_id} is {campaign}")
+
             tweet.points = new_points
             tweet.campaign = campaign
             tweet.epoch = contract_epoch
@@ -1207,6 +1211,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
             self.context.logger.info(f"Adding tweet {tweet_id} to the database")
             yield from contribute_db.create_tweet(tweet)
+            scored_tweets.append(tweet_id)
 
             # User data to update
             user_data = {
@@ -1233,44 +1238,59 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 "twitter_id", author_id, user
             )
 
+        scored_tweets = list(sorted(scored_tweets))
+        self.context.logger.info(f"Scored tweets: {scored_tweets}")
+
         module_data = contribute_db.data.module_data
+        update_needed = False
 
         # Update the latest_hashtag_tweet_id
         latest_hashtag_tweet_id = self.synchronized_data.latest_hashtag_tweet_id
-        if latest_hashtag_tweet_id:
+        if latest_hashtag_tweet_id is not None:
             module_data.twitter.latest_hashtag_tweet_id = str(latest_hashtag_tweet_id)
+            update_needed = True
 
         # Update the latest_mention_tweet_id
         latest_mention_tweet_id = self.synchronized_data.latest_mention_tweet_id
-        if latest_mention_tweet_id:
+        if latest_mention_tweet_id is not None:
             module_data.twitter.latest_mention_tweet_id = str(latest_mention_tweet_id)
+            update_needed = True
 
         # Update the number of tweets made today
         number_of_tweets_pulled_today = (
             self.synchronized_data.number_of_tweets_pulled_today
         )
-        if number_of_tweets_pulled_today:
+        if number_of_tweets_pulled_today is not None:
             module_data.twitter.number_of_tweets_pulled_today = (
                 number_of_tweets_pulled_today
             )
+            update_needed = True
 
         last_tweet_pull_window_reset = (
             self.synchronized_data.last_tweet_pull_window_reset
         )
-        if last_tweet_pull_window_reset:
+        if last_tweet_pull_window_reset is not None:
             module_data.twitter.last_tweet_pull_window_reset = (
                 last_tweet_pull_window_reset
             )
+            update_needed = True
 
         # Update the current_period
-        module_data.twitter.current_period = today
+        if module_data.twitter.current_period != today:
+            module_data.twitter.current_period = today
+            update_needed = True
 
-        self.context.logger.info(
-            f"Updating twitter module data: latest_hashtag_tweet_id={latest_hashtag_tweet_id}  |  latest_mention_tweet_id={latest_mention_tweet_id}  |  number_of_tweets_pulled_today={number_of_tweets_pulled_today}"
-        )
-        yield from contribute_db.update_module_data(module_data)
+        if update_needed:
+            self.context.logger.info(
+                f"Updating twitter module data: latest_hashtag_tweet_id={latest_hashtag_tweet_id}  |  latest_mention_tweet_id={latest_mention_tweet_id}  |  number_of_tweets_pulled_today={number_of_tweets_pulled_today}"
+            )
+            yield from contribute_db.update_module_data(module_data)
+        else:
+            self.context.logger.info(
+                "No changes in the twitter module data, skipping update."
+            )
 
-        self.context.logger.info("Finished updating the db:")
+        self.context.logger.info("Finished updating the db")
         return
 
     def get_registration(self, text: str) -> Optional[str]:

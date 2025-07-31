@@ -24,19 +24,19 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy
-- valory/agent_db_abci:0.1.0:bafybeig5vmynr4xsyjln6kydse72jbm56mkryv34aflj47gaai5t3g4hgm
-- valory/contribute_db_abci:0.1.0:bafybeieofmuca5rqxpidqsl3fdvpc4kt6hmwrglwl6la36w6e4e2h4y2w4
-- valory/twitter_scoring_abci:0.1.0:bafybeibt6gaonyi6erlihv54k5njzj4cyetchlfrfoi2wi45okce3oxvvy
-- valory/dynamic_nft_abci:0.1.0:bafybeidan76pecwrbmv4rtteh3zmmuxkvptqflncizzcvsrbfpk7z47mi4
+- valory/agent_db_abci:0.1.0:bafybeic7fatdnzwcxtbxldznslggzfyyvnrlaevhx3pyhjxuhk64aekcrq
+- valory/contribute_db_abci:0.1.0:bafybeianypl3xoodajw2he5tmula2mw7jgudnjgoca3onjnx4ddubaixga
+- valory/twitter_scoring_abci:0.1.0:bafybeih46fofrimzjt7cl3mx3eim6t2czfsxrtnc6y7cuhjxolpms3ol5a
+- valory/dynamic_nft_abci:0.1.0:bafybeiajnwjizuqthrquzkygghp3xz2l3gc6e3edleluvip3ohalt5xrca
 - valory/registration_abci:0.1.0:bafybeidqadl26x5prbjgnkqrvjnbqxpo75jttm7vlvpgkoqghs5677rw5i
 - valory/reset_pause_abci:0.1.0:bafybeiachgo6reit2q4jw75mefw2acj4ldedeqmn3rewjm4dbzts2l7oxe
 - valory/termination_abci:0.1.0:bafybeibtbboau3q5fxfviwm7lbeix4z55uptfqqiyiu6siivxwkp3o5pju
 - valory/transaction_settlement_abci:0.1.0:bafybeic2ywzpwkyeqbzsvkbvurhsptemam4xtceihax2tmxmlxtgd3xpya
-- valory/decision_making_abci:0.1.0:bafybeiedj5rps46y6tkqv6znqf55pt6ja73gvzxoyjyp3gwnppa7ex3ziy
+- valory/decision_making_abci:0.1.0:bafybeidlnru77qgxsuagoxb47u2tmyyn7b4dbnxi3diqvxqbm6l5daedkm
 - valory/twitter_write_abci:0.1.0:bafybeiamg6pt2rejxftvgmjxvmicy3b3rxxaqpk2h3k7h3pgh4sfitttv4
-- valory/olas_week_abci:0.1.0:bafybeiayzecla7bxsaqmurr6sujum3ajacfc2wzl6h5alnnsgam7hrekim
+- valory/olas_week_abci:0.1.0:bafybeibfcufzldmhdhfjsq4uf7ummwar2lnsp2etgwfbryvgdfcek3nhsi
 - valory/mech_interact_abci:0.1.0:bafybeidi2nfkt5r7cckdd4equdfm5uwiuisrz2splo7om3hkriy5ohx22e
-- valory/staking_abci:0.1.0:bafybeiaey3na6tcmsztul3ek3iu4v66mzem7k6cg7h3w76rql2fl5xmjsa
+- valory/staking_abci:0.1.0:bafybeibildw6ewk5oy37zr7wzajxml5l75xvw67mhvvdm73tj5zbedykea
 - valory/llm_abci:0.1.0:bafybeiamxgtcobjsanthqdyi2pnnezsaio4jbkkh23e5wni57yoqv3n4oa
 behaviours:
   main:

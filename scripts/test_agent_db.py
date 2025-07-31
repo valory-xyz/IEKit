@@ -61,6 +61,26 @@ CONTRIBUTE = "contribute"
 # https://afmdb.autonolas.tech/docs#/default/read_attribute_definitions_by_type_api_agent_types__type_id__attributes__get
 
 
+def are_models_different(model1: BaseModel, model2: BaseModel) -> bool:
+    """Get the different attributes between two Pydantic models."""
+    if not isinstance(model2, type(model1)):
+        raise ValueError("Models must be of the same type to compare attributes.")
+
+    diffs = []
+    dict1 = model1.model_dump(mode="json")
+    dict2 = model2.model_dump(mode="json")
+
+    for key in dict1.keys():
+        if dict1[key] != dict2[key]:
+            diffs.append(key)
+
+    are_different = len(diffs) > 0
+
+    if are_different:
+        print(f"Different attributes detected: {diffs}")
+    return are_different
+
+
 class AgentDBClient:
     """AgentDBClient"""
 
@@ -107,17 +127,17 @@ class AgentDBClient:
             else:
                 payload = payload | self._sign_request(endpoint)
 
-        print(
-            f"Making {method} request to {url} with payload: {payload} and params: {params}"
-        )
-
         response = requests.request(
             method, url, headers=headers, json=payload, params=params
         )
-        print(f"Response status: {response.status_code}")
 
         if response.status_code in [200, 201]:
             return response.json()
+
+        print(
+            f"Made {method} request to {url} with payload: {payload} and params: {params}. Response: {response.status_code}. Response text: {getattr(response, 'text', '')}"
+        )
+
         if response.status_code == 404:
             return None
         raise Exception(f"Request failed: {response.status_code} - {response.text}")
@@ -522,21 +542,39 @@ class ContributeDatabase:
     def create_tweet(self, tweet: UserTweet) -> Optional[AttributeInstance]:
         """Create a tweet attribute instance"""
 
-        # Create the new tweet
-        tweet_instance = self.tweet_interface.create_instance(tweet)
-        tweet.attribute_instance_id = tweet_instance.attribute_id if tweet_instance else None
-        self.data.tweets[tweet.tweet_id] = tweet
-
+        # Check that the user exists
         user = self.get_user_by_attribute("twitter_id", tweet.twitter_user_id)
 
         if not user:
-            raise ValueError(
-                f"User with twitter_id {tweet.twitter_user_id} not found in the database."
+            print(
+                f"User with twitter_id {tweet.twitter_user_id} not found. Creating new user..."
             )
+            user = ContributeUser(
+                id=self.get_next_user_id(),
+                twitter_id=tweet.twitter_user_id,
+                twitter_handle=tweet.twitter_handle,
+            )
+            self.create_user(user)
+
+        print(
+            f"Creating tweet: {tweet.tweet_id} for user {tweet.twitter_user_id}"
+        )
+
+        # Create the new tweet
+        tweet_instance = self.tweet_interface.create_instance(tweet)
+
+        tweet.attribute_instance_id = (
+            tweet_instance.attribute_id if tweet_instance else None
+        )
+        self.data.tweets[tweet.tweet_id] = tweet
 
         # Update the user
+        print(f"Updating user {tweet.twitter_user_id} with new tweet")
+
         user.tweets[tweet.tweet_id] = tweet
+
         self.user_interface.update_instance(user)
+
         return tweet_instance
 
     def update_tweet(self, tweet: UserTweet) -> Optional[AttributeInstance]:
@@ -640,6 +678,13 @@ class ContributeDatabase:
 
             user.tweets[tweet_id] = tweet
 
+    def get_next_user_id(self):
+        """Get next user id"""
+        next_id = 0 if not self.data.users else sorted(self.data.users.keys())[-1] + 1
+        if next_id in self.data.users:
+            raise ValueError(f"Next user ID {next_id} already exists in the database.")
+        return next_id
+
 
 def load_ceramic_data():
     """Load the contribute database from JSON files."""
@@ -684,33 +729,41 @@ def sync_remote_db(local_data, remote_db):
     remote_db.register()
 
     # Users
-    for user_id, user in local_data.users.items():
+    for user_id, local_user in local_data.users.items():
 
-        if user_id in remote_db.data.users:
-            print(f"Skipping user {user_id} as it already exists in the remote database.")
+        # Add new users to the remote db
+        if user_id not in remote_db.data.users:
+            print(f"Creating user {user_id} with twitter_id {local_user.twitter_id}")
+            user_attribute = remote_db.create_user(local_user)
+            remote_db.data.users[user_id].attribute_instance_id = user_attribute.attribute_id if user_attribute else None
             continue
 
-        user_attribute = remote_db.create_user(user)
-        remote_db.data.users[user_id].attribute_instance_id = user_attribute.attribute_id if user_attribute else None
+        remote_user = remote_db.data.users[user_id]
+
+        # Update existing users
+        local_user.attribute_instance_id = remote_user.attribute_instance_id
+        if are_models_different(remote_user, local_user):
+            print(f"Updating user {user_id} with new data")
+            remote_db.update_user(local_user)
 
     # Tweets
-    for i, tweet in enumerate(local_data.tweets.values()):
+    for i, local_tweet in enumerate(local_data.tweets.values()):
 
-        if tweet.tweet_id in remote_db.data.tweets:
-            print(f"Skipping tweet {tweet.tweet_id} as it already exists in the remote database.")
+        # Skip existing tweets
+        if local_tweet.tweet_id in remote_db.data.tweets:
             continue
 
-        print(f"Creating tweet {i + 1}: {tweet.tweet_id} for user {tweet.twitter_user_id}")
-        tweet_attribute = remote_db.create_tweet(tweet)
-        remote_db.data.tweets[tweet.tweet_id].attribute_instance_id = tweet_attribute.attribute_id if tweet_attribute else None
+        print(f"Creating tweet {i + 1}: {local_tweet.tweet_id} for user {local_tweet.twitter_user_id}")
+        tweet_attribute = remote_db.create_tweet(local_tweet)
+        remote_db.data.tweets[local_tweet.tweet_id].attribute_instance_id = tweet_attribute.attribute_id if tweet_attribute else None
 
     # ModuleConfigs
-    module_configs_attribute = remote_db.create_module_configs(local_data.module_configs)
-    remote_db.data.module_configs.attribute_instance_id = module_configs_attribute.attribute_id
+    local_data.module_configs.attribute_instance_id = remote_db.data.module_configs.attribute_instance_id
+    remote_db.update_module_configs(local_data.module_configs)
 
     # ModuleData
-    module_data_attribute = remote_db.create_module_data(local_data.module_data)
-    remote_db.data.module_data.attribute_instance_id = module_data_attribute.attribute_id
+    local_data.module_data.attribute_instance_id = remote_db.data.module_data.attribute_instance_id
+    remote_db.update_module_data(local_data.module_data)
 
 
 def clear_remote_db(remote_db):
@@ -751,9 +804,9 @@ def main():
     )
 
     # Load the contribute data from JSON files
-    # local_data = ContributeData(**load_ceramic_data())
-    # local_data.sort()
-    # print(f"Local database: loaded {len(local_data.users)} users and {len(local_data.tweets)} tweets.")
+    local_data = ContributeData(**load_ceramic_data())
+    local_data.sort()
+    print(f"Local database: loaded {len(local_data.users)} users and {len(local_data.tweets)} tweets.")
 
     # Load the remote database
     remote_db = ContributeDatabase(client)
@@ -761,7 +814,7 @@ def main():
     print(f"Remote database: loaded {len(remote_db.data.users)} users and {len(remote_db.data.tweets)} tweets.")
 
     # Sync both databases
-    # sync_remote_db(local_data, remote_db)
+    sync_remote_db(local_data, remote_db)
 
     # Clear the remote database
     # clear_remote_db(remote_db)

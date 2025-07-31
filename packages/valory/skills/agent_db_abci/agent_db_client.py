@@ -49,7 +49,8 @@ class AgentDBClient(Model):
         """Constructor"""
         super().__init__(**kwargs)
         self.base_url: str = base_url.rstrip("/")
-        self._attribute_definition_cache: Dict[int, AttributeDefinition] = {}
+        self._id_to_attribute_definition_cache: Dict[int, AttributeDefinition] = {}
+        self._name_to_attribute_definition_cache: Dict[str, AttributeDefinition] = {}
         self.agent: AgentInstance = None
         self.agent_type = None
         self.address: str = None
@@ -57,6 +58,7 @@ class AgentDBClient(Model):
         self.private_key: Optional[str] = None
         self.http_request_func: Callable = None
         self.logger: Callable = None
+        self.sleep_func: Callable = None
 
     def initialize(
         self,
@@ -64,6 +66,7 @@ class AgentDBClient(Model):
         http_request_func: Callable,
         signing_func_or_pkey: Union[Callable, str],
         logger: Callable,
+        sleep_func: Callable,
     ):
         """Inject external functions"""
         self.address = address
@@ -77,6 +80,7 @@ class AgentDBClient(Model):
             signing_func_or_pkey if isinstance(signing_func_or_pkey, str) else None
         )
         self.logger = logger
+        self.sleep_func = sleep_func
         self.ensure_agent_is_loaded()
 
     def sign_using_pkey(self, message_to_sign: str):
@@ -144,23 +148,30 @@ class AgentDBClient(Model):
             else:
                 payload = payload | auth
 
-        shortened_payload = json.dumps(payload)
-        if len(shortened_payload) > 1000:
-            shortened_payload = shortened_payload[:1000] + "..."
-        self.logger.info(
-            f"Making {method} request to {url} with payload: {shortened_payload} and params: {params}"
-        )
+        try:
+            content = json.dumps(payload).encode() if payload else None
 
-        content = json.dumps(payload).encode() if payload else None
-
-        response = yield from self.http_request_func(
-            method=method, url=url, content=content, headers=headers, parameters=params
-        )
-
-        self.logger.info(f"Response status: {response.status_code}")
+            response = yield from self.http_request_func(
+                method=method,
+                url=url,
+                content=content,
+                headers=headers,
+                parameters=params,
+            )
+        except Exception as e:
+            raise ValueError(f"Request failed: {e}") from e
 
         if response.status_code in [200, 201]:
             return json.loads(response.body)
+
+        # Log if the request failed
+        shortened_payload = json.dumps(payload)
+        if len(shortened_payload) > 1000:
+            shortened_payload = shortened_payload[:1000] + "..."
+
+        self.logger.error(
+            f"Made {method} request to {url} with payload: {shortened_payload} and params: {params}\n\nResponse was: {response.status_code}"
+        )
 
         if response.status_code == 404:
             return None
@@ -269,22 +280,29 @@ class AgentDBClient(Model):
         self, attr_name: str
     ) -> Optional[AttributeDefinition]:
         """Get attribute definition by name"""
+        if attr_name in self._name_to_attribute_definition_cache:
+            return self._name_to_attribute_definition_cache[attr_name]
+
         endpoint = f"/api/attributes/name/{attr_name}"
         result = yield from self._request("GET", endpoint)
-        return AttributeDefinition.model_validate(result) if result else None
+        if result:
+            definition = AttributeDefinition.model_validate(result)
+            self._name_to_attribute_definition_cache[attr_name] = definition
+            return definition
+        return None
 
     def get_attribute_definition_by_id(
         self, attr_id: int
     ) -> Optional[AttributeDefinition]:
         """Get attribute definition by id"""
-        if attr_id in self._attribute_definition_cache:
-            return self._attribute_definition_cache[attr_id]
+        if attr_id in self._id_to_attribute_definition_cache:
+            return self._id_to_attribute_definition_cache[attr_id]
 
         endpoint = f"/api/attributes/{attr_id}"
         result = yield from self._request("GET", endpoint)
         if result:
             definition = AttributeDefinition.model_validate(result)
-            self._attribute_definition_cache[attr_id] = definition
+            self._id_to_attribute_definition_cache[attr_id] = definition
             return definition
         return None
 
@@ -391,9 +409,6 @@ class AgentDBClient(Model):
                 "skip": skip,
                 "limit": 100,
             }
-            self.logger.info(
-                f"Reading agent attributes from {skip} to {skip + 100}... "
-            )
             result = yield from self._request(
                 method="GET",
                 endpoint=endpoint,
@@ -405,8 +420,6 @@ class AgentDBClient(Model):
             if result is None:
                 self.logger.error("Error fetching agent attributes")
                 continue
-
-            self.logger.info(f"got {len(result)} attributes")
 
             raw_attributes += result
             skip = len(raw_attributes)
