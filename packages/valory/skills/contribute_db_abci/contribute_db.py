@@ -40,7 +40,7 @@ from packages.valory.skills.contribute_db_abci.contribute_models import (
 
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 CONTRIBUTE = "contribute"
-NON_WRITER_WAIT = 1
+NON_WRITER_WAIT = 2
 
 
 class JsonAttributeInterface:
