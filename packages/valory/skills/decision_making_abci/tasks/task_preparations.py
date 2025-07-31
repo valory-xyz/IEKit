@@ -51,9 +51,8 @@ class TaskPreparation:
         self.context = context
 
         self.logger.info(f"Instantiated task {self.__class__.__name__}")
-        self.data = getattr(
-            self.context.contribute_db.data.module_data, self.task_name, None
-        )
+        self.module_data = self.context.contribute_db.data.module_data
+
         self.config = getattr(
             self.context.contribute_db.data.module_configs,
             self.task_name,
