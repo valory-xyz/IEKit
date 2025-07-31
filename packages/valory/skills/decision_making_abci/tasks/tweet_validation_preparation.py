@@ -34,7 +34,7 @@ CENTAUR_ID = "2"
 class TweetValidationPreparation(TaskPreparation, SignatureValidationMixin):
     """TweetValidationPreparation"""
 
-    task_name = "scheduled_tweet"
+    task_name = "tweet_validation"
     task_event = Event.TWEET_VALIDATION.value
 
     def check_extra_conditions(self):
