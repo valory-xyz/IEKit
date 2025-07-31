@@ -819,6 +819,9 @@ def main():
     # Clear the remote database
     # clear_remote_db(remote_db)
 
+    with open("contribute_db.json", "w", encoding="utf-8") as file:
+        json.dump(remote_db.data.model_dump(mode="json"), file, indent=4)
+
 
 if __name__ == "__main__":
     main()
