@@ -20,9 +20,9 @@ fingerprint:
   tasks/signature_validation.py: bafybeihbwrv72hnh3ytko2i5oszqgdky2j6h2wse45wvuhf2j32lo2tsjy
   tasks/staking.py: bafybeibfw4nyz36mdsv4im55vc4aufctrskmskuscmsibuackww25x7svi
   tasks/task_preparations.py: bafybeifj72naspy3hkmdb6xkkgg4sclpjpgxvzhp4nwjn2z4x3ujbf4oue
-  tasks/tweet_validation_preparation.py: bafybeihxc2wsb3menylhwmjttprx3gpg6oedjq5bpju64lu54mz2w6fota
+  tasks/tweet_validation_preparation.py: bafybeicspgjzmalp3lprsdj5ksrl475pny7myon6tbsbv4koxc4jobpenu
   tasks/twitter_preparation.py: bafybeiaa3pudbyxa6w4htzy7ehijbuqahd74e6lai4z3rkmygfvcw2tga4
-  tasks/week_in_olas_preparations.py: bafybeibaowne5ko6iqbrdwdyiztwvknnqqavbjmkvfp2jzwrghov6myfwi
+  tasks/week_in_olas_preparations.py: bafybeib23yx6v2befebntvk76oe7uhrg5fflbnrdjka4rejumwnx7gzryq
   test_tools/__init__.py: bafybeiagwxhcqhvnfhf7yejawmjkle6c7eb4o4hjoy363dahmnyq22xmua
   test_tools/tasks.py: bafybeiecu32iciko26ncglpxkzwlb6ifrvgknmcisthotkqhn7eku25qrm
   tests/__init__.py: bafybeiff447fuzkdgyp5yoqqstzv2pyi2uiokng6lzrtfnsgspocghwypi
@@ -54,8 +54,8 @@ protocols:
 - valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy
-- valory/staking_abci:0.1.0:bafybeibildw6ewk5oy37zr7wzajxml5l75xvw67mhvvdm73tj5zbedykea
-- valory/contribute_db_abci:0.1.0:bafybeianypl3xoodajw2he5tmula2mw7jgudnjgoca3onjnx4ddubaixga
+- valory/staking_abci:0.1.0:bafybeib24yfydbrkwvhgeihug54zbcgl5k5yhltbxb73rhlvt43roepkvq
+- valory/contribute_db_abci:0.1.0:bafybeibg6mbjbuiiq772zlqiohsni3tesj7kpvrwt2276hffgy2n7fwy7i
 behaviours:
   main:
     args: {}

@@ -30,7 +30,7 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 class WeekInOlasCreatePreparation(TaskPreparation):
     """WeekInOlasCreatePreparation"""
 
-    task_name = "scheduled_tweet"
+    task_name = "week_in_olas"
     task_event = Event.WEEK_IN_OLAS_CREATE.value
 
     def check_extra_conditions(self):
