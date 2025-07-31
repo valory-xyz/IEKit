@@ -804,9 +804,9 @@ def main():
     )
 
     # Load the contribute data from JSON files
-    local_data = ContributeData(**load_ceramic_data())
-    local_data.sort()
-    print(f"Local database: loaded {len(local_data.users)} users and {len(local_data.tweets)} tweets.")
+    # local_data = ContributeData(**load_ceramic_data())
+    # local_data.sort()
+    # print(f"Local database: loaded {len(local_data.users)} users and {len(local_data.tweets)} tweets.")
 
     # Load the remote database
     remote_db = ContributeDatabase(client)
@@ -814,7 +814,7 @@ def main():
     print(f"Remote database: loaded {len(remote_db.data.users)} users and {len(remote_db.data.tweets)} tweets.")
 
     # Sync both databases
-    sync_remote_db(local_data, remote_db)
+    # sync_remote_db(local_data, remote_db)
 
     # Clear the remote database
     # clear_remote_db(remote_db)
