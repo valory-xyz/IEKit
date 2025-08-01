@@ -107,7 +107,7 @@ class SharedState(BaseSharedState):
         ] = (self.context.params.round_timeout_seconds * MULTIPLIER_DB)
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             TwitterScoringEvent.ROUND_TIMEOUT
-        ] = self.context.params.round_timeout_seconds
+        ] = self.context.params.round_timeout_seconds * MULTIPLIER
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             TwitterScoringEvent.TWEET_EVALUATION_ROUND_TIMEOUT
         ] = self.context.params.tweet_evaluation_round_timeout
