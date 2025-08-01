@@ -90,12 +90,12 @@ class StakingPreparation(TaskPreparation):
 
     def _post_task(self):
         """Preparations after running the task"""
-        plugin_config = getattr(
-            self.context.contribute_db.data.module_configs, self.task_name
-        )
-
         # Update the last run time
-        plugin_config.last_run = self.now_utc
+        self.config.last_run = self.now_utc
+
+        yield from self.context.contribute_db.update_module_configs(
+            self.context.contribute_db.data.module_configs
+        )
 
         updates = {}
         yield
@@ -421,12 +421,9 @@ class StakingDAAPreparation(TaskPreparation):
 
     def _post_task(self):
         """Preparations after running the task"""
-        plugin_config = getattr(
-            self.context.contribute_db.data.module_configs, self.task_name
-        )
 
         # Update the last run time
-        plugin_config.last_run = self.now_utc
+        self.config.last_run = self.now_utc
 
         yield from self.context.contribute_db.update_module_configs(
             self.context.contribute_db.data.module_configs
