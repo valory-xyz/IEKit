@@ -72,7 +72,7 @@ class DBLoadRound(CollectSameUntilThresholdRound):
             db_keeper = participants[period_count % len(participants)]
             self.context.contribute_db.writer_addresses = [db_keeper]
             self.context.logger.info(
-                f"DB keeper for period {period_count} is {db_keeper} [Participants = {self.collection.keys()}]"
+                f"DB keeper for period {period_count} is {db_keeper} [Participants = {participants}]"
             )
 
             return self.synchronized_data, Event.DONE
