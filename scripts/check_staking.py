@@ -27,8 +27,6 @@ from pathlib import Path
 from typing import Dict, Optional
 
 import dotenv
-from ceramic.ceramic import Ceramic
-from ceramic.streams import CONTRIBUTE_PROD_DB_STREAM_ID
 from rich.console import Console
 from rich.table import Table
 from test_agent_db import AgentDBClient, ContributeDatabase
