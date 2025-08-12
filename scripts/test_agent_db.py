@@ -349,14 +349,14 @@ class AgentDBClient:
                 "skip": skip,
                 "limit": 100,
             }
-            print(f"Reading agent attributes from {skip} to {skip + 100}... ", end="")
+            # print(f"Reading agent attributes from {skip} to {skip + 100}... ", end="")
             result = self._request(method="GET", endpoint=endpoint, payload={"agent_attr": payload}, params=params, auth=True)
 
             if result is None:
                 print("Error fetching agent attributes")
                 continue
 
-            print(f"got {len(result)} attributes")
+            # print(f"got {len(result)} attributes")
 
             raw_attributes += result
             skip = len(raw_attributes)
@@ -636,7 +636,7 @@ class ContributeDatabase:
         for attribute in attributes:
             attr_name = attribute["attr_name"]
             attr_data = attribute["attr_value"] | {"attribute_instance_id": attribute["attr_id"]}
-            print(f"Loading attribute: {attr_name} with id: {attribute['attr_id']}")
+            # print(f"Loading attribute: {attr_name} with id: {attribute['attr_id']}")
 
             if attr_name == "tweet":
                 tweet = UserTweet(**attr_data)
