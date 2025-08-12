@@ -238,8 +238,14 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
 
                 # For each user, update the last processed tweet on the model, and mark for data reset
                 for user_id, counter_tweets in staking_user_to_counted_tweets.items():
+
+                    user = self.context.contribute_db.data.users[int(user_id)]
+
                     for tweet_id in counter_tweets:
-                        self.context.contribute_db.data.users[user_id]["tweets"][tweet_id]["counted_for_activity"] = True
+                        tweet = user.tweets[tweet_id]
+                        tweet.counted_for_activity = True
+                        yield from self.context.contribute_db.update_tweet(tweet)
+
                 finished_update = True
                 self.context.logger.info(f"Tweets counted for activity: {staking_user_to_counted_tweets}.")
 

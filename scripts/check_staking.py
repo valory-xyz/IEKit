@@ -27,10 +27,9 @@ from pathlib import Path
 from typing import Dict, Optional
 
 import dotenv
-from ceramic.ceramic import Ceramic
-from ceramic.streams import CONTRIBUTE_PROD_DB_STREAM_ID
 from rich.console import Console
 from rich.table import Table
+from test_agent_db import AgentDBClient, ContributeDatabase
 from web3 import Web3
 from web3.contract import Contract
 
@@ -71,11 +70,19 @@ CONTRIBUTORS_ABI_FILE = Path("scripts", "contributors.json")
 CONTRIBUTORS_PROXY_CONTRACT_ADDRESS = "0x343F2B005cF6D70bA610CD9F1F1927049414B582"
 
 
-def read_users_from_ceramic() -> Dict:
-    """Read users from Ceramic"""
-    ceramic = Ceramic(os.getenv("CERAMIC_API_BASE"))
-    user_db, _, _ = ceramic.get_data(CONTRIBUTE_PROD_DB_STREAM_ID)
-    return user_db["users"]
+def read_users_from_db() -> Dict:
+    """Read users from AgentDB"""
+    # Initialize the client
+    client = AgentDBClient(
+        base_url=os.getenv("AGENT_DB_BASE_URL"),
+        eth_address=os.getenv("CONTRIBUTE_DB_ADDRESS"),
+        private_key=os.getenv("CONTRIBUTE_DB_PKEY"),
+    )
+    # Load the remote database
+    remote_db = ContributeDatabase(client)
+    remote_db.load_from_remote_db()
+
+    return remote_db.data.users
 
 
 def read_users_from_file() -> Dict:
@@ -172,7 +179,7 @@ def get_contract_info() -> Dict:
 def get_user_info(user_data: Dict, contract_info: Dict, contributors_contract: Contract) -> Dict:  # pylint: disable=too-many-locals
     """Get user info"""
 
-    user_wallet = user_data["wallet_address"]
+    user_wallet = user_data.wallet_address
     _, service_id, _, staking_contract_address = contributors_contract.functions.mapAccountServiceInfo(user_wallet).call()
 
     if service_id == 0:
@@ -192,8 +199,8 @@ def get_user_info(user_data: Dict, contract_info: Dict, contributors_contract: C
     # this_epoch_rewards = staking_token_contract.functions.calculateStakingLastReward(service_id).call()   # needs fixing
     this_epoch = contract_info[staking_contract_name]["epoch"]
 
-    this_epoch_tweets = [t for t in user_data["tweets"].values() if t["epoch"] == this_epoch]
-    this_epoch_points = sum(t["points"] for t in this_epoch_tweets)
+    this_epoch_tweets = [t for t in user_data.tweets.values() if t.epoch == this_epoch]
+    this_epoch_points = sum(t.points for t in this_epoch_tweets)
 
     required_points = POINTS_PER_UPDATE * contract_info[staking_contract_name]['required_updates']
     color = GREEN if this_epoch_points >= required_points else YELLOW
@@ -228,8 +235,8 @@ def print_table():
     contract_info = get_contract_info()
 
     # users = read_users_from_file()
-    users = read_users_from_ceramic()
-    staked_users = {k: v for k, v in users.items() if v.get("service_multisig")}
+    users = read_users_from_db()
+    staked_users = {k: v for k, v in users.items() if v.service_multisig}
 
     contributors_contract = load_contract(
         web3.to_checksum_address(CONTRIBUTORS_PROXY_CONTRACT_ADDRESS), CONTRIBUTORS_ABI_FILE, False
@@ -244,14 +251,14 @@ def print_table():
     for user_id, user_data in staked_users.items():
 
         user_info = get_user_info(user_data, contract_info, contributors_contract)
-        handle = str(user_data.get("twitter_handle", None))
+        handle = str(user_data.twitter_handle)
 
         # Double check stakiing status using info from the chain
         if user_info["staked"]:
             row = [
-                user_id,
+                str(user_id),
                 "@" + handle,
-                shorten_address(user_data["service_multisig"]),
+                shorten_address(user_data.service_multisig),
                 user_info["staking_contract_name"],
                 user_info["epoch"] + f" [{user_info['next_epoch_start']}]" if not user_info["evicted"] else EVICTED,
                 user_info["this_epoch_tweets"],
@@ -263,9 +270,9 @@ def print_table():
 
         else:
             row = [
-                user_id,
+                str(user_id),
                 "@" + handle,
-                shorten_address(user_data["service_multisig"]),
+                shorten_address(user_data.service_multisig),
                 UNSTAKED,
                 UNSTAKED,
                 UNSTAKED,
@@ -279,6 +286,7 @@ def print_table():
 
     console = Console()
     console.print(table, justify="center")
+
 
 if __name__ == "__main__":
     print_table()

@@ -66,10 +66,14 @@ class DBLoadRound(CollectSameUntilThresholdRound):
         """Process the end of the block."""
 
         if self.threshold_reached:
-            # Get all the agents that have sent, sort them alphabetically and get the first one
-            # This will be the db keeper until it is down and therefore does not send any payload
-            db_keeper = sorted(list(self.collection.keys()))[0]
+            # Get all the agents that have sent, sort them alphabetically and use the period count to determine the db keeper.
+            period_count = self.synchronized_data.period_count
+            participants = sorted(list(self.collection.keys()))
+            db_keeper = participants[period_count % len(participants)]
             self.context.contribute_db.writer_addresses = [db_keeper]
+            self.context.logger.info(
+                f"DB keeper for period {period_count} is {db_keeper} [Participants = {participants}]"
+            )
 
             return self.synchronized_data, Event.DONE
 
