@@ -414,6 +414,8 @@ class ContributeDatabase(Model):
     def load_from_remote_db(self):
         """Load data from the remote database."""
 
+        self.data = ContributeData()
+
         if self.client.agent is None:
             yield from self.client.ensure_agent_is_loaded()
 
