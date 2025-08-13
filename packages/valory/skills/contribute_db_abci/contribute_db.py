@@ -155,7 +155,6 @@ class ContributeDatabase(Model):
         self.module_data_interface = None
         self.data = ContributeData()
         self.writer_addresses = []  # which addresses should write to the db
-        self.loaded = False
 
     def initialize(self, client: AgentDBClient, agent_address: str):
         """Initialize agent"""
@@ -415,8 +414,7 @@ class ContributeDatabase(Model):
     def load_from_remote_db(self):
         """Load data from the remote database."""
 
-        if self.loaded:
-            return
+        self.data = ContributeData()
 
         if self.client.agent is None:
             yield from self.client.ensure_agent_is_loaded()
@@ -504,8 +502,6 @@ class ContributeDatabase(Model):
         for i in ["scheduled_tweet", "twitter_campaigns", "dynamic_nft", "twitter"]:
             if not hasattr(self.data.module_data, i):
                 raise ValueError(f"Module data {i} not found in the database.")
-
-        self.loaded = True
 
     def get_next_user_id(self):
         """Get next user id"""
