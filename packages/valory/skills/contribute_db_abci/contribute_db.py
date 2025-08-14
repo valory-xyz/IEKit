@@ -40,7 +40,7 @@ from packages.valory.skills.contribute_db_abci.contribute_models import (
 
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 CONTRIBUTE = "contribute"
-NON_WRITER_WAIT = 4
+NON_WRITER_WAIT = 3
 
 
 class JsonAttributeInterface:
@@ -179,10 +179,11 @@ class ContributeDatabase(Model):
             return True
         else:
             self.logger.info(
-                f"I am not the AgentDB writer. Writers are {self.writer_addresses}"
+                f"I am not the AgentDB writer. Writers are {self.writer_addresses}.\nI'll wait for {NON_WRITER_WAIT} seconds."
             )
             # Wait for a short time to allow the writer to do its thing
-            self.client.sleep_func(NON_WRITER_WAIT)
+            yield from self.client.sleep_func(NON_WRITER_WAIT)
+            self.logger.info("Done waiting")
             return False
 
     def register(self):
