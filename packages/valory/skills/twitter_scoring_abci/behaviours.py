@@ -1142,6 +1142,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
             tweet_data["tweet_id"] = tweet_id
             tweet_data["twitter_user_id"] = tweet_data["author_id"]
+            tweet_data["timestamp"] = tweet_data["created_at"]
             self.context.logger.info(
                 f"Building tweet {tweet_id} with data {tweet_data}"
             )
@@ -1215,7 +1216,9 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 else None
             )
 
-            self.context.logger.info(f"Adding tweet {tweet_id} to the database")
+            self.context.logger.info(
+                f"Adding tweet {tweet_id} to the database:\n{tweet}"
+            )
             yield from contribute_db.create_tweet(tweet)
             scored_tweets.append(tweet_id)
 
