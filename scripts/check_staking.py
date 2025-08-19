@@ -29,7 +29,7 @@ from typing import Dict, Optional
 import dotenv
 from rich.console import Console
 from rich.table import Table
-from test_agent_db import AgentDBClient, ContributeDatabase
+from agent_db import AgentDBClient, ContributeDatabase
 from web3 import Web3
 from web3.contract import Contract
 
