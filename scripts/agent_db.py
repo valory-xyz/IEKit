@@ -819,8 +819,21 @@ def main():
     # Clear the remote database
     # clear_remote_db(remote_db)
 
+    # Store the remote database to a JSON file
     with open("contribute_db.json", "w", encoding="utf-8") as file:
         json.dump(remote_db.data.model_dump(mode="json"), file, indent=4)
+
+    # EXAMPLES ------------------------------------------------------------------------------------------------------
+
+    # Ideally, only modify the database when the service is stopped or during reset and pause round
+
+    # Disable week in olas
+    # remote_db.data.module_configs.week_in_olas.enabled = False   # set the week in olas plugin to disabled
+    # remote_db.update_module_configs(remote_db.data.module_configs)  # update the remote db
+
+    # Disable scheduled tweets
+    # remote_db.data.module_configs.scheduled_tweet.enabled = False  # set the scheduled tweet plugin to disabled
+    # remote_db.update_module_configs(remote_db.data.module_configs)  # update the remote db
 
 
 if __name__ == "__main__":
