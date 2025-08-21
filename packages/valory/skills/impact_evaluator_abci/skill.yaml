@@ -32,9 +32,9 @@ skills:
 - valory/reset_pause_abci:0.1.0:bafybeiachgo6reit2q4jw75mefw2acj4ldedeqmn3rewjm4dbzts2l7oxe
 - valory/termination_abci:0.1.0:bafybeibtbboau3q5fxfviwm7lbeix4z55uptfqqiyiu6siivxwkp3o5pju
 - valory/transaction_settlement_abci:0.1.0:bafybeic2ywzpwkyeqbzsvkbvurhsptemam4xtceihax2tmxmlxtgd3xpya
-- valory/decision_making_abci:0.1.0:bafybeig7bcopj4zdcgwlkrwkqic2oa35coax4rq25rqc4a6mpo53et4dom
+- valory/decision_making_abci:0.1.0:bafybeig3bjanlxqbob7tdcgffu4t4aewinn76b723plrdlic2262xgnmzy
 - valory/twitter_write_abci:0.1.0:bafybeiamg6pt2rejxftvgmjxvmicy3b3rxxaqpk2h3k7h3pgh4sfitttv4
-- valory/olas_week_abci:0.1.0:bafybeiddxte2ugozadxzayxmr6diop6syjcyu3ni4yaapjptrhbw2bm5bm
+- valory/olas_week_abci:0.1.0:bafybeihi2wmq25kk5zf4haad2mgm6boojy7cznzq2kmb5ywsrryr7dn7zq
 - valory/mech_interact_abci:0.1.0:bafybeidi2nfkt5r7cckdd4equdfm5uwiuisrz2splo7om3hkriy5ohx22e
 - valory/staking_abci:0.1.0:bafybeidrpoepijkzs42bri7uvjkbuibxqep3ybfqvppo727qr4nzbdkooi
 - valory/llm_abci:0.1.0:bafybeiamxgtcobjsanthqdyi2pnnezsaio4jbkkh23e5wni57yoqv3n4oa

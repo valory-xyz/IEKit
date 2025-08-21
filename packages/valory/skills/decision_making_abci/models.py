@@ -35,12 +35,12 @@ from packages.valory.skills.decision_making_abci.rounds import DecisionMakingAbc
 
 DEFAULT_PROMPT = """
 Using the information in the text below, craft an engaging and relevant post that highlights key insights or facts from the text.
-The post should be limited to {n_chars} characters. IMPORTANT: under absolutely no circumstances use links, hashtags # or emojis.
+The post should be limited to {n_chars} characters. IMPORTANT: under absolutely no circumstances use links, campaigns # or emojis.
 Text: {memory}
 """
 
 SHORTENER_PROMPT = """
-Rewrite the tweet to fit {n_chars} characters. If in doubt, make it shorter. IMPORTANT: under absolutely no circumstances use links, hashtags # or emojis.
+Rewrite the tweet to fit {n_chars} characters. If in doubt, make it shorter. IMPORTANT: under absolutely no circumstances use links, campaigns # or emojis.
 Text: {text}
 """
 

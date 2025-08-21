@@ -79,7 +79,7 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
 
 ONE_DAY = 86400.0
 ADDRESS_REGEX = r"0x[a-fA-F0-9]{40}"
-MENTION_OR_HASHTAG_REGEX = r"(?:#\w+|@\w+)"
+MENTION_OR_CAMPAIGN_REGEX = r"(?:#\w+|@\w+)"
 TAGLINE = "I'm linking my wallet to @Autonolas Contribute:"
 DEFAULT_TWEET_POINTS = 100
 TWEET_QUALITY_TO_POINTS = {"LOW": 1, "AVERAGE": 2, "HIGH": 3}
@@ -92,8 +92,8 @@ MAX_TWEETS_PER_CALL = 100
 
 
 def is_minimal_effort_tweet(tweet: str) -> str:
-    """Remove mentions and hashtags from a tweet and checks whether there is more text"""
-    cleaned_tweet = re.sub(MENTION_OR_HASHTAG_REGEX, "", tweet).strip()
+    """Remove mentions and campaigns from a tweet and checks whether there is more text"""
+    cleaned_tweet = re.sub(MENTION_OR_CAMPAIGN_REGEX, "", tweet).strip()
     print(cleaned_tweet)
     return len(cleaned_tweet) < 10
 
@@ -764,7 +764,7 @@ class TwitterCampaignsCollectionBehaviour(TwitterScoringBaseBehaviour):
         # TODO: If there are no active campaigns, skip this
         # If we do this, we also need to handle the case where we've been a lot of
         # time without pulling tweets -> pagination, API limits, etc...
-        # if not active_hashtags: # noqa:E800
+        # if not active_campaigns: # noqa:E800
         #     return {  # noqa:E800
         #         "tweets": {},  # noqa:E800
         #         "latest_hashtag_tweet_id": int(latest_hashtag_tweet_id),  # noqa:E800
