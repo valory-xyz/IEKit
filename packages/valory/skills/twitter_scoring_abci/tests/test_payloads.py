@@ -28,8 +28,8 @@ from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
     PreMechRequestPayload,
+    TwitterCampaignsCollectionPayload,
     TwitterDecisionMakingPayload,
-    TwitterHashtagsCollectionPayload,
     TwitterMentionsCollectionPayload,
     TwitterRandomnessPayload,
     TwitterSelectKeepersPayload,
@@ -52,7 +52,7 @@ class PayloadTestCase:
             content="payload_test_content",
         ),
         PayloadTestCase(
-            payload_cls=TwitterHashtagsCollectionPayload,
+            payload_cls=TwitterCampaignsCollectionPayload,
             content="payload_test_content",
         ),
         PayloadTestCase(

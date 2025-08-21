@@ -52,8 +52,8 @@ from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
     PostMechRequestPayload,
     PreMechRequestPayload,
+    TwitterCampaignsCollectionPayload,
     TwitterDecisionMakingPayload,
-    TwitterHashtagsCollectionPayload,
     TwitterMentionsCollectionPayload,
     TwitterRandomnessPayload,
     TwitterSelectKeepersPayload,
@@ -68,8 +68,8 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     PostMechRequestRound,
     PreMechRequestRound,
     SynchronizedData,
+    TwitterCampaignsCollectionRound,
     TwitterDecisionMakingRound,
-    TwitterHashtagsCollectionRound,
     TwitterMentionsCollectionRound,
     TwitterRandomnessRound,
     TwitterScoringAbciApp,
@@ -79,7 +79,7 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
 
 ONE_DAY = 86400.0
 ADDRESS_REGEX = r"0x[a-fA-F0-9]{40}"
-MENTION_OR_HASHTAG_REGEX = r"(?:#\w+|@\w+)"
+MENTION_OR_CAMPAIGN_REGEX = r"(?:#\w+|@\w+)"
 TAGLINE = "I'm linking my wallet to @Autonolas Contribute:"
 DEFAULT_TWEET_POINTS = 100
 TWEET_QUALITY_TO_POINTS = {"LOW": 1, "AVERAGE": 2, "HIGH": 3}
@@ -92,8 +92,8 @@ MAX_TWEETS_PER_CALL = 100
 
 
 def is_minimal_effort_tweet(tweet: str) -> str:
-    """Remove mentions and hashtags from a tweet and checks whether there is more text"""
-    cleaned_tweet = re.sub(MENTION_OR_HASHTAG_REGEX, "", tweet).strip()
+    """Remove mentions and campaigns from a tweet and checks whether there is more text"""
+    cleaned_tweet = re.sub(MENTION_OR_CAMPAIGN_REGEX, "", tweet).strip()
     print(cleaned_tweet)
     return len(cleaned_tweet) < 10
 
@@ -154,7 +154,7 @@ class TwitterScoringBaseBehaviour(ContributeDBBehaviour, ABC):
 
         # 15 min window limit
         if self.synchronized_data.sleep_until:
-            time_window_close = self.synchronized_data.sleep_until
+            time_window_close = float(self.synchronized_data.sleep_until)
             if current_time < time_window_close:
                 return True, 0, current_time
 
@@ -169,15 +169,15 @@ class TwitterScoringBaseBehaviour(ContributeDBBehaviour, ABC):
         # Window has not expired and we have not reached the max number of tweets
         return False, number_of_tweets_pulled_today, last_tweet_pull_window_reset
 
-    def get_active_hashtags(self) -> List[str]:
+    def get_active_campaigns(self) -> List[str]:
         """Get the active campaigns"""
         module_data = self.context.contribute_db.data.module_data
-        active_hashtags = [
+        active_campaigns = [
             f"%23{campaign.hashtag.replace('#', '').strip()}"  # %23 = hashtag
             for campaign in module_data.twitter_campaigns.campaigns
             if campaign.status == "live"
         ]
-        return active_hashtags
+        return active_campaigns
 
     def get_staking_epoch(
         self, staking_contract_address
@@ -365,8 +365,8 @@ class TwitterDecisionMakingBehaviour(TwitterScoringBaseBehaviour):
         if Event.SELECT_KEEPERS.value not in performed_tasks:
             return Event.SELECT_KEEPERS.value
 
-        if Event.RETRIEVE_HASHTAGS.value not in performed_tasks:
-            return Event.RETRIEVE_HASHTAGS.value
+        if Event.RETRIEVE_CAMPAIGNS.value not in performed_tasks:
+            return Event.RETRIEVE_CAMPAIGNS.value
 
         if Event.RETRIEVE_MENTIONS.value not in performed_tasks:
             return Event.RETRIEVE_MENTIONS.value
@@ -550,14 +550,18 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
                 return {
                     "tweets": None,
-                    "error": ERROR_API_LIMITS
-                    if response.status_code == HTTP_TOO_MANY_REQUESTS
-                    else ERROR_GENERIC,
+                    "error": (
+                        ERROR_API_LIMITS
+                        if response.status_code == HTTP_TOO_MANY_REQUESTS
+                        else ERROR_GENERIC
+                    ),
                     "latest_mention_tweet_id": None,
                     "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
-                    "sleep_until": reset_ts
-                    if response.status_code == HTTP_TOO_MANY_REQUESTS
-                    else self.synchronized_data.sleep_until,
+                    "sleep_until": (
+                        reset_ts
+                        if response.status_code == HTTP_TOO_MANY_REQUESTS
+                        else self.synchronized_data.sleep_until
+                    ),
                 }
 
             api_data = json.loads(response.body)
@@ -645,10 +649,10 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
         }
 
 
-class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
-    """TwitterHashtagsCollectionBehaviour"""
+class TwitterCampaignsCollectionBehaviour(TwitterScoringBaseBehaviour):
+    """TwitterCampaignsCollectionBehaviour"""
 
-    matching_round: Type[AbstractRound] = TwitterHashtagsCollectionRound
+    matching_round: Type[AbstractRound] = TwitterCampaignsCollectionRound
 
     def _i_am_not_sending(self) -> bool:
         """Indicates if the current agent is one of the sender or not."""
@@ -704,14 +708,14 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
                 }
 
             else:
-                # Get hashtags from Twitter
+                # Get campaigns from Twitter
                 payload_data = yield from self._get_twitter_hashtag_search(
                     number_of_tweets_pulled_today=number_of_tweets_pulled_today
                 )
 
             payload_data["last_tweet_pull_window_reset"] = last_tweet_pull_window_reset
             sender = self.context.agent_address
-            payload = TwitterHashtagsCollectionPayload(
+            payload = TwitterCampaignsCollectionPayload(
                 sender=sender, content=json.dumps(payload_data, sort_keys=True)
             )
 
@@ -751,14 +755,14 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
             int(latest_hashtag_tweet_id) + 1 if int(latest_hashtag_tweet_id) != 0 else 0
         )
 
-        # Dynamicaly build the search query using the hashtags in the centaurs stream
-        active_hashtags = self.get_active_hashtags()
-        self.context.logger.info(f"Active campaigns: {active_hashtags}")
+        # Dynamicaly build the search query using the campaigns in the centaurs stream
+        active_campaigns = self.get_active_campaigns()
+        self.context.logger.info(f"Active campaigns: {active_campaigns}")
 
         # TODO: If there are no active campaigns, skip this
         # If we do this, we also need to handle the case where we've been a lot of
         # time without pulling tweets -> pagination, API limits, etc...
-        # if not active_hashtags: # noqa:E800
+        # if not active_campaigns: # noqa:E800
         #     return {  # noqa:E800
         #         "tweets": {},  # noqa:E800
         #         "latest_hashtag_tweet_id": int(latest_hashtag_tweet_id),  # noqa:E800
@@ -766,7 +770,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
         #         "sleep_until": None,  # we reset this on a successful request  # noqa:E800
         #     }  # noqa:E800
 
-        search_query = "%20OR%20".join(active_hashtags)  # %20 = space
+        search_query = "%20OR%20".join(active_campaigns)  # %20 = space
 
         api_args = self.params.twitter_search_args.replace(
             "{search_query}", str(search_query)
@@ -781,7 +785,7 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
         api_url = api_base + api_endpoint + api_args
         headers = dict(Authorization=f"Bearer {self.params.twitter_api_bearer_token}")
 
-        self.context.logger.info(f"Retrieving hashtags from Twitter API [{api_url}]")
+        self.context.logger.info(f"Retrieving campaigns from Twitter API [{api_url}]")
 
         next_token = None
         latest_tweet_id = None
@@ -824,20 +828,24 @@ class TwitterHashtagsCollectionBehaviour(TwitterScoringBaseBehaviour):
                 )
 
                 self.context.logger.error(
-                    f"Error retrieving hashtags from Twitter [{response.status_code}]: {response.body}"
+                    f"Error retrieving campaigns from Twitter [{response.status_code}]: {response.body}"
                     f"API limits: {remaining}/{limit}. Window reset: {reset}"
                 )
 
                 return {
                     "tweets": None,
-                    "error": ERROR_API_LIMITS
-                    if response.status_code == HTTP_TOO_MANY_REQUESTS
-                    else ERROR_GENERIC,
+                    "error": (
+                        ERROR_API_LIMITS
+                        if response.status_code == HTTP_TOO_MANY_REQUESTS
+                        else ERROR_GENERIC
+                    ),
                     "latest_mention_tweet_id": None,
                     "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
-                    "sleep_until": reset_ts
-                    if response.status_code == HTTP_TOO_MANY_REQUESTS
-                    else self.synchronized_data.sleep_until,
+                    "sleep_until": (
+                        reset_ts
+                        if response.status_code == HTTP_TOO_MANY_REQUESTS
+                        else self.synchronized_data.sleep_until
+                    ),
                 }
 
             api_data = json.loads(response.body)
@@ -1112,13 +1120,13 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
             for user in users.values():
                 user.current_period_points = 0
 
-        active_hashtags = self.get_active_hashtags()
+        active_campaigns = self.get_active_campaigns()
 
         # Replace the encoded %23 for #
-        active_hashtags = [i.replace("%23", "#") for i in active_hashtags]
+        active_campaigns = [i.replace("%23", "#") for i in active_campaigns]
 
         # Add the mention as a campaign
-        active_hashtags.append("@autonolas")
+        active_campaigns.append("@autonolas")
 
         # Get the staking epoch
         staking_contract_to_epoch = {}
@@ -1203,7 +1211,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
             # Store the tweet id and awarded points
             # Keep in mind that we store the updated points if the user has reached max_points_per_period
-            campaign = get_campaign(tweet_data["text"], active_hashtags)
+            campaign = get_campaign(tweet_data["text"], active_campaigns)
 
             self.context.logger.info(f"Campaign for tweet {tweet_id} is {campaign}")
 
@@ -1332,7 +1340,7 @@ class TwitterScoringRoundBehaviour(AbstractRoundBehaviour):
     behaviours: Set[Type[BaseBehaviour]] = [
         TwitterDecisionMakingBehaviour,
         TwitterMentionsCollectionBehaviour,
-        TwitterHashtagsCollectionBehaviour,
+        TwitterCampaignsCollectionBehaviour,
         DBUpdateBehaviour,
         TwitterRandomnessBehaviour,
         TwitterSelectKeepersBehaviour,

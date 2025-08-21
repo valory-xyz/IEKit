@@ -50,8 +50,8 @@ from packages.valory.skills.twitter_scoring_abci.behaviours import (
     PostMechRequestBehaviour,
     PreMechRequestBehaviour,
     TAGLINE,
+    TwitterCampaignsCollectionBehaviour,
     TwitterDecisionMakingBehaviour,
-    TwitterHashtagsCollectionBehaviour,
     TwitterMentionsCollectionBehaviour,
     TwitterRandomnessBehaviour,
     TwitterScoringBaseBehaviour,
@@ -266,7 +266,7 @@ DUMMY_REGISTRATIONS_RESPONSE_MISSING_INCLUDES = {
     "meta": {"result_count": 1, "newest_id": "1", "oldest_id": "0"},
 }
 
-DUMMY_HASHTAGS_RESPONSE = {
+DUMMY_CAMPAIGNS_RESPONSE = {
     "data": [
         {"author_id": "1286010187325812739", "text": "dummy_text", "id": "1"},
         {"author_id": "1286010187325812739", "text": "dummy_text", "id": "2"},
@@ -565,10 +565,10 @@ class TestMentionsCollectionBehaviourSerial(BaseBehaviourTest):
         self.complete(test_case.event)
 
 
-class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
+class TestCampaignsCollectionBehaviour(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
-    behaviour_class = TwitterHashtagsCollectionBehaviour
+    behaviour_class = TwitterCampaignsCollectionBehaviour
     next_behaviour_class = TwitterDecisionMakingBehaviour
 
     @pytest.mark.parametrize(
@@ -692,10 +692,10 @@ class TestHashtagsCollectionBehaviour(BaseBehaviourTest):
         self.complete(test_case.event)
 
 
-class TestHashtagsCollectionBehaviourSerial(BaseBehaviourTest):
-    """TestHashtagsCollectionBehaviourSerial"""
+class TestCampaignsCollectionBehaviourSerial(BaseBehaviourTest):
+    """TestCampaignsCollectionBehaviourSerial"""
 
-    behaviour_class = TwitterHashtagsCollectionBehaviour
+    behaviour_class = TwitterCampaignsCollectionBehaviour
     next_behaviour_class = TwitterDecisionMakingBehaviour
 
     @pytest.mark.parametrize(
@@ -779,7 +779,7 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE,
                         ),
-                        json.dumps(DUMMY_HASHTAGS_RESPONSE),
+                        json.dumps(DUMMY_CAMPAIGNS_RESPONSE),
                     ],
                     "headers": [""],
                     "status_codes": [404],
@@ -802,7 +802,7 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_DATA,
                         ),
-                        json.dumps(DUMMY_HASHTAGS_RESPONSE),
+                        json.dumps(DUMMY_CAMPAIGNS_RESPONSE),
                     ],
                     "status_codes": [200],
                 },
@@ -824,7 +824,7 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_META,
                         ),
-                        json.dumps(DUMMY_HASHTAGS_RESPONSE),
+                        json.dumps(DUMMY_CAMPAIGNS_RESPONSE),
                     ],
                     "status_codes": [200],
                 },
@@ -885,11 +885,11 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
         self._test_done_flag_set()
 
 
-class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
+class TestCampaignsCollectionBehaviourAPIError(BaseBehaviourTest):
     """Tests BinanceObservationBehaviour"""
 
-    behaviour_class = TwitterHashtagsCollectionBehaviour
-    next_behaviour_class = TwitterHashtagsCollectionBehaviour
+    behaviour_class = TwitterCampaignsCollectionBehaviour
+    next_behaviour_class = TwitterCampaignsCollectionBehaviour
 
     @pytest.mark.parametrize(
         "test_case, kwargs",
@@ -911,7 +911,7 @@ class TestHashtagsCollectionBehaviourAPIError(BaseBehaviourTest):
                         TWITTER_REGISTRATIONS_URL.format(max_results=120),
                     ],
                     "bodies": [
-                        json.dumps(DUMMY_HASHTAGS_RESPONSE),
+                        json.dumps(DUMMY_CAMPAIGNS_RESPONSE),
                     ],
                     "headers": [""],
                     "status_codes": [404],
@@ -1031,9 +1031,9 @@ class TestTwitterDecisionMakingBehaviour(BaseBehaviourTest):
                 BehaviourTestCase(
                     "Happy path",
                     initial_data=dict(performed_twitter_tasks={"select_keepers": None}),
-                    event=Event.RETRIEVE_HASHTAGS,
+                    event=Event.RETRIEVE_CAMPAIGNS,
                 ),
-                TwitterHashtagsCollectionBehaviour,
+                TwitterCampaignsCollectionBehaviour,
             ),
             (
                 BehaviourTestCase(
@@ -1041,7 +1041,7 @@ class TestTwitterDecisionMakingBehaviour(BaseBehaviourTest):
                     initial_data=dict(
                         performed_twitter_tasks={
                             "select_keepers": None,
-                            "retrieve_hashtags": None,
+                            "retrieve_campaigns": None,
                         }
                     ),
                     event=Event.RETRIEVE_MENTIONS,
@@ -1054,7 +1054,7 @@ class TestTwitterDecisionMakingBehaviour(BaseBehaviourTest):
                     initial_data=dict(
                         performed_twitter_tasks={
                             "select_keepers": None,
-                            "retrieve_hashtags": None,
+                            "retrieve_campaigns": None,
                             "retrieve_mentions": None,
                         }
                     ),
@@ -1068,7 +1068,7 @@ class TestTwitterDecisionMakingBehaviour(BaseBehaviourTest):
                     initial_data=dict(
                         performed_twitter_tasks={
                             "select_keepers": None,
-                            "retrieve_hashtags": None,
+                            "retrieve_campaigns": None,
                             "retrieve_mentions": None,
                             "pre_mech": None,
                         }
@@ -1083,7 +1083,7 @@ class TestTwitterDecisionMakingBehaviour(BaseBehaviourTest):
                     initial_data=dict(
                         performed_twitter_tasks={
                             "select_keepers": None,
-                            "retrieve_hashtags": None,
+                            "retrieve_campaigns": None,
                             "retrieve_mentions": None,
                             "pre_mech": None,
                             "post_mech": None,
@@ -1099,7 +1099,7 @@ class TestTwitterDecisionMakingBehaviour(BaseBehaviourTest):
                     initial_data=dict(
                         performed_twitter_tasks={
                             "select_keepers": None,
-                            "retrieve_hashtags": None,
+                            "retrieve_campaigns": None,
                             "retrieve_mentions": None,
                             "pre_mech": None,
                             "post_mech": None,

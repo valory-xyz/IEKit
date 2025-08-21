@@ -27,9 +27,9 @@ from pathlib import Path
 from typing import Dict, Optional
 
 import dotenv
+from agent_db import AgentDBClient, ContributeDatabase
 from rich.console import Console
 from rich.table import Table
-from agent_db import AgentDBClient, ContributeDatabase
 from web3 import Web3
 from web3.contract import Contract
 
