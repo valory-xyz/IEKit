@@ -1,35 +1,35 @@
 alphabet_in:
-- API_ERROR
-- DB_UPDATE
-- DONE
-- DONE_API_LIMITS
-- DONE_MAX_RETRIES
-- NO_MAJORITY
-- POST_MECH
-- PRE_MECH
-- RETRIEVE_HASHTAGS
-- RETRIEVE_MENTIONS
-- ROUND_TIMEOUT
-- SELECT_KEEPERS
-- SKIP_EVALUATION
+    - API_ERROR
+    - DB_UPDATE
+    - DONE
+    - DONE_API_LIMITS
+    - DONE_MAX_RETRIES
+    - NO_MAJORITY
+    - POST_MECH
+    - PRE_MECH
+    - RETRIEVE_CAMPAIGNS
+    - RETRIEVE_MENTIONS
+    - ROUND_TIMEOUT
+    - SELECT_KEEPERS
+    - SKIP_EVALUATION
 default_start_state: TwitterDecisionMakingRound
 final_states:
-- FinishedTwitterCollectionRound
-- FinishedTwitterScoringRound
+    - FinishedTwitterCollectionRound
+    - FinishedTwitterScoringRound
 label: TwitterScoringAbciApp
 start_states:
-- TwitterDecisionMakingRound
+    - TwitterDecisionMakingRound
 states:
-- DBUpdateRound
-- FinishedTwitterCollectionRound
-- FinishedTwitterScoringRound
-- PostMechRequestRound
-- PreMechRequestRound
-- TwitterDecisionMakingRound
-- TwitterHashtagsCollectionRound
-- TwitterMentionsCollectionRound
-- TwitterRandomnessRound
-- TwitterSelectKeepersRound
+    - DBUpdateRound
+    - FinishedTwitterCollectionRound
+    - FinishedTwitterScoringRound
+    - PostMechRequestRound
+    - PreMechRequestRound
+    - TwitterDecisionMakingRound
+    - TwitterCampaignsCollectionRound
+    - TwitterMentionsCollectionRound
+    - TwitterRandomnessRound
+    - TwitterSelectKeepersRound
 transition_func:
     (DBUpdateRound, DONE): TwitterDecisionMakingRound
     (DBUpdateRound, NO_MAJORITY): DBUpdateRound
@@ -46,16 +46,16 @@ transition_func:
     (TwitterDecisionMakingRound, NO_MAJORITY): TwitterDecisionMakingRound
     (TwitterDecisionMakingRound, POST_MECH): PostMechRequestRound
     (TwitterDecisionMakingRound, PRE_MECH): PreMechRequestRound
-    (TwitterDecisionMakingRound, RETRIEVE_HASHTAGS): TwitterHashtagsCollectionRound
+    (TwitterDecisionMakingRound, RETRIEVE_CAMPAIGNS): TwitterCampaignsCollectionRound
     (TwitterDecisionMakingRound, RETRIEVE_MENTIONS): TwitterMentionsCollectionRound
     (TwitterDecisionMakingRound, ROUND_TIMEOUT): TwitterDecisionMakingRound
     (TwitterDecisionMakingRound, SELECT_KEEPERS): TwitterRandomnessRound
-    (TwitterHashtagsCollectionRound, API_ERROR): TwitterHashtagsCollectionRound
-    (TwitterHashtagsCollectionRound, DONE): TwitterDecisionMakingRound
-    (TwitterHashtagsCollectionRound, DONE_API_LIMITS): TwitterDecisionMakingRound
-    (TwitterHashtagsCollectionRound, DONE_MAX_RETRIES): TwitterDecisionMakingRound
-    (TwitterHashtagsCollectionRound, NO_MAJORITY): TwitterRandomnessRound
-    (TwitterHashtagsCollectionRound, ROUND_TIMEOUT): TwitterRandomnessRound
+    (TwitterCampaignsCollectionRound, API_ERROR): TwitterCampaignsCollectionRound
+    (TwitterCampaignsCollectionRound, DONE): TwitterDecisionMakingRound
+    (TwitterCampaignsCollectionRound, DONE_API_LIMITS): TwitterDecisionMakingRound
+    (TwitterCampaignsCollectionRound, DONE_MAX_RETRIES): TwitterDecisionMakingRound
+    (TwitterCampaignsCollectionRound, NO_MAJORITY): TwitterRandomnessRound
+    (TwitterCampaignsCollectionRound, ROUND_TIMEOUT): TwitterRandomnessRound
     (TwitterMentionsCollectionRound, API_ERROR): TwitterMentionsCollectionRound
     (TwitterMentionsCollectionRound, DONE): TwitterDecisionMakingRound
     (TwitterMentionsCollectionRound, DONE_API_LIMITS): TwitterDecisionMakingRound
