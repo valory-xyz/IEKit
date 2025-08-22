@@ -244,9 +244,9 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
             if "error" in payload:
                 # API limits
                 if payload["error"] == ERROR_API_LIMITS:
-                    performed_twitter_tasks["retrieve_mentions"] = (
-                        Event.DONE_MAX_RETRIES.value
-                    )
+                    performed_twitter_tasks[
+                        "retrieve_mentions"
+                    ] = Event.DONE_MAX_RETRIES.value
 
                     synchronized_data = self.synchronized_data.update(
                         synchronized_data_class=SynchronizedData,
@@ -267,9 +267,9 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
 
                 # Other API errors
                 if api_retries >= MAX_API_RETRIES:
-                    performed_twitter_tasks["retrieve_mentions"] = (
-                        Event.DONE_MAX_RETRIES.value
-                    )
+                    performed_twitter_tasks[
+                        "retrieve_mentions"
+                    ] = Event.DONE_MAX_RETRIES.value
                     synchronized_data = self.synchronized_data.update(
                         synchronized_data_class=SynchronizedData,
                         **{
@@ -320,7 +320,9 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
                     "latest_mention_tweet_id"
                 ]
             else:
-                updates[get_name(SynchronizedData.latest_mention_tweet_id)] = (
+                updates[
+                    get_name(SynchronizedData.latest_mention_tweet_id)
+                ] = (
                     self.context.contribute_db.data.module_data.twitter.latest_mention_tweet_id
                 )
 
@@ -381,9 +383,9 @@ class TwitterCampaignsCollectionRound(CollectSameUntilThresholdRound):
             if "error" in payload:
                 # API limits
                 if payload["error"] == ERROR_API_LIMITS:
-                    performed_twitter_tasks["retrieve_campaigns"] = (
-                        Event.DONE_MAX_RETRIES.value
-                    )
+                    performed_twitter_tasks[
+                        "retrieve_campaigns"
+                    ] = Event.DONE_MAX_RETRIES.value
 
                     synchronized_data = self.synchronized_data.update(
                         synchronized_data_class=SynchronizedData,
@@ -404,9 +406,9 @@ class TwitterCampaignsCollectionRound(CollectSameUntilThresholdRound):
 
                 # Other API errors
                 if api_retries >= MAX_API_RETRIES:
-                    performed_twitter_tasks["retrieve_campaigns"] = (
-                        Event.DONE_MAX_RETRIES.value
-                    )
+                    performed_twitter_tasks[
+                        "retrieve_campaigns"
+                    ] = Event.DONE_MAX_RETRIES.value
                     synchronized_data = self.synchronized_data.update(
                         synchronized_data_class=SynchronizedData,
                         **{
@@ -457,7 +459,9 @@ class TwitterCampaignsCollectionRound(CollectSameUntilThresholdRound):
                     "latest_campaign_tweet_id"
                 ]
             else:
-                updates[get_name(SynchronizedData.latest_campaign_tweet_id)] = (
+                updates[
+                    get_name(SynchronizedData.latest_campaign_tweet_id)
+                ] = (
                     self.context.contribute_db.data.module_data.twitter.latest_hashtag_tweet_id
                 )
             synchronized_data = self.synchronized_data.update(
