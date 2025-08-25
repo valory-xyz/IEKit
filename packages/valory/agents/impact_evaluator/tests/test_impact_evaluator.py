@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -69,8 +69,8 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     DBUpdateRound,
     PostMechRequestRound,
     PreMechRequestRound,
+    TwitterCampaignsCollectionRound,
     TwitterDecisionMakingRound,
-    TwitterHashtagsCollectionRound,
     TwitterMentionsCollectionRound,
     TwitterRandomnessRound,
     TwitterSelectKeepersRound,
@@ -82,32 +82,25 @@ HAPPY_PATH: Tuple[RoundChecks, ...] = (
     RoundChecks(RegistrationStartupRound.auto_round_id(), n_periods=1),
     RoundChecks(StreamReadRound.auto_round_id(), n_periods=3),
     RoundChecks(GenericScoringRound.auto_round_id(), n_periods=2),
-
     # Keeper
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
     RoundChecks(TwitterRandomnessRound.auto_round_id(), n_periods=2),
     RoundChecks(TwitterSelectKeepersRound.auto_round_id(), n_periods=2),
-
     # Twitter API
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
     RoundChecks(TwitterMentionsCollectionRound.auto_round_id(), n_periods=2),
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
-    RoundChecks(TwitterHashtagsCollectionRound.auto_round_id(), n_periods=2),
-
+    RoundChecks(TwitterCampaignsCollectionRound.auto_round_id(), n_periods=2),
     # Mech evaluation
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
     RoundChecks(PreMechRequestRound.auto_round_id(), n_periods=2),
-
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
     RoundChecks(PostMechRequestRound.auto_round_id(), n_periods=2),
-
     # DB update
     RoundChecks(TwitterDecisionMakingRound.auto_round_id(), n_periods=2),
     RoundChecks(DBUpdateRound.auto_round_id(), n_periods=2),
-
     # Check token
     RoundChecks(TokenTrackRound.auto_round_id(), n_periods=2),
-
     # Write db and reset
     RoundChecks(RandomnessRound.auto_round_id(), n_periods=2),
     RoundChecks(SelectKeeperRound.auto_round_id(), n_periods=2),
@@ -120,7 +113,7 @@ HAPPY_PATH: Tuple[RoundChecks, ...] = (
 STRICT_CHECK_STRINGS = (
     "Got data from Ceramic API",
     "Retrieved new mentions",
-    "Retrieved new hashtags",
+    "Retrieved new campaigns",
     "Got token_id to address data up to block",
     "Data verification successful",
     "Period end",

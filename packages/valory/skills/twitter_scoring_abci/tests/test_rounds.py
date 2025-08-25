@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -48,8 +48,8 @@ from packages.valory.skills.abstract_round_abci.test_tools.rounds import (
 from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
     PreMechRequestPayload,
+    TwitterCampaignsCollectionPayload,
     TwitterDecisionMakingPayload,
-    TwitterHashtagsCollectionPayload,
     TwitterMentionsCollectionPayload,
     TwitterRandomnessPayload,
     TwitterSelectKeepersPayload,
@@ -59,8 +59,8 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     Event,
     PreMechRequestRound,
     SynchronizedData,
+    TwitterCampaignsCollectionRound,
     TwitterDecisionMakingRound,
-    TwitterHashtagsCollectionRound,
     TwitterMentionsCollectionRound,
     TwitterRandomnessRound,
     TwitterSelectKeepersRound,
@@ -117,7 +117,7 @@ def get_dummy_mentions_collection_payload_serialized(api_error: bool = False) ->
     )
 
 
-def get_dummy_hashtags_collection_payload_serialized(api_error: bool = False) -> str:
+def get_dummy_campaigns_collection_payload_serialized(api_error: bool = False) -> str:
     """Dummy twitter observation payload"""
     if api_error:
         return json.dumps({"error": "generic", "sleep_until": None})
@@ -255,10 +255,10 @@ class TestMentionsCollectionRound(BaseTwitterScoringRoundTest):
         self.run_test(test_case)
 
 
-class TestHashtagsCollectionRound(BaseTwitterScoringRoundTest):
+class TestCampaignsCollectionRound(BaseTwitterScoringRoundTest):
     """Tests for TwitterMentionsCollectionRound."""
 
-    round_class = TwitterHashtagsCollectionRound
+    round_class = TwitterCampaignsCollectionRound
 
     @pytest.mark.parametrize(
         "test_case",
@@ -267,16 +267,16 @@ class TestHashtagsCollectionRound(BaseTwitterScoringRoundTest):
                 name="Happy path",
                 initial_data={},
                 payloads=get_payloads(
-                    payload_cls=TwitterHashtagsCollectionPayload,
-                    data=get_dummy_hashtags_collection_payload_serialized(),
+                    payload_cls=TwitterCampaignsCollectionPayload,
+                    data=get_dummy_campaigns_collection_payload_serialized(),
                 ),
                 final_data={
                     "tweets": json.loads(
-                        get_dummy_hashtags_collection_payload_serialized()
+                        get_dummy_campaigns_collection_payload_serialized()
                     )["tweets"],
                 },
                 event=Event.DONE,
-                most_voted_payload=get_dummy_hashtags_collection_payload_serialized(),
+                most_voted_payload=get_dummy_campaigns_collection_payload_serialized(),
                 synchronized_data_attr_checks=[],
                 ceramic_db={"module_data": {"twitter": {"latest_hashtag_tweet_id": 0}}},
             ),
@@ -284,14 +284,14 @@ class TestHashtagsCollectionRound(BaseTwitterScoringRoundTest):
                 name="API error",
                 initial_data={},
                 payloads=get_payloads(
-                    payload_cls=TwitterHashtagsCollectionPayload,
-                    data=get_dummy_hashtags_collection_payload_serialized(
+                    payload_cls=TwitterCampaignsCollectionPayload,
+                    data=get_dummy_campaigns_collection_payload_serialized(
                         api_error=True
                     ),
                 ),
                 final_data={},
                 event=Event.API_ERROR,
-                most_voted_payload=get_dummy_hashtags_collection_payload_serialized(
+                most_voted_payload=get_dummy_campaigns_collection_payload_serialized(
                     api_error=True
                 ),
                 synchronized_data_attr_checks=[],
@@ -302,14 +302,14 @@ class TestHashtagsCollectionRound(BaseTwitterScoringRoundTest):
                     "api_retries": 1,
                 },
                 payloads=get_payloads(
-                    payload_cls=TwitterHashtagsCollectionPayload,
-                    data=get_dummy_hashtags_collection_payload_serialized(
+                    payload_cls=TwitterCampaignsCollectionPayload,
+                    data=get_dummy_campaigns_collection_payload_serialized(
                         api_error=True
                     ),
                 ),
                 final_data={},
                 event=Event.DONE_MAX_RETRIES,
-                most_voted_payload=get_dummy_hashtags_collection_payload_serialized(
+                most_voted_payload=get_dummy_campaigns_collection_payload_serialized(
                     api_error=True
                 ),
                 synchronized_data_attr_checks=[],
@@ -334,11 +334,11 @@ class TestDecisionMakingRound(BaseTwitterScoringRoundTest):
                 initial_data={},
                 payloads=get_payloads(
                     payload_cls=TwitterDecisionMakingPayload,
-                    data=Event.RETRIEVE_HASHTAGS.value,
+                    data=Event.RETRIEVE_CAMPAIGNS.value,
                 ),
                 final_data={},
-                event=Event.RETRIEVE_HASHTAGS,
-                most_voted_payload=Event.RETRIEVE_HASHTAGS.value,
+                event=Event.RETRIEVE_CAMPAIGNS,
+                most_voted_payload=Event.RETRIEVE_CAMPAIGNS.value,
                 synchronized_data_attr_checks=[],
             ),
         ),

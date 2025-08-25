@@ -53,7 +53,7 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
 
         for campaign in self.module_data.twitter_campaigns.campaigns:
             self.logger.info(
-                f"Checking campaign proposal {campaign.id} #{campaign.hashtag} [{campaign.status}]"
+                f"Checking campaign proposal {campaign.id} {campaign.hashtag} [{campaign.status}]"
             )
 
             # Get campaign start and end times
