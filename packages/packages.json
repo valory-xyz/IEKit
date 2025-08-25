@@ -12,10 +12,10 @@
         "connection/valory/openai/0.1.0": "bafybeicevsj6xgojzsvl77pmsqft6vzemil4flhikkc6aljff7y5smeuhu",
         "connection/valory/farcaster/0.1.0": "bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi",
         "skill/valory/dynamic_nft_abci/0.1.0": "bafybeie66p2vnpcenh7masau6akqud7qhstzo7l2mv7zsllvbnrl5ysii4",
-        "skill/valory/twitter_scoring_abci/0.1.0": "bafybeihyhgdbeloopsfewc5cmgl5mcvchfuu3ewicxtl67tex4xzpd4whe",
+        "skill/valory/twitter_scoring_abci/0.1.0": "bafybeibrvgy6uweynmyx7crbu2gl6k62ptqzifhxzy5vd6lbu66w7dgeiy",
         "skill/valory/ceramic_read_abci/0.1.0": "bafybeigyt6jf5a4ucbdn44tspklpbeenxr57g2czlepqm227j5c6k7glw4",
         "skill/valory/ceramic_write_abci/0.1.0": "bafybeiets4e6zgh5q2uatze5us7gny2377eukqslfvw2l3gxvgbxqpw5qq",
-        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeiaenpcudpwao5bnqmnlv3ubksmegrsrpqiqacxflcrgxudjmfyw7m",
+        "skill/valory/impact_evaluator_abci/0.1.0": "bafybeidvfobqn2xaxw6vzi73gqsuthgtqekolh2czo76ycjklrqupmhi4a",
         "skill/valory/twitter_write_abci/0.1.0": "bafybeiamg6pt2rejxftvgmjxvmicy3b3rxxaqpk2h3k7h3pgh4sfitttv4",
         "skill/valory/llm_abci/0.1.0": "bafybeiamxgtcobjsanthqdyi2pnnezsaio4jbkkh23e5wni57yoqv3n4oa",
         "skill/valory/decision_making_abci/0.1.0": "bafybeig7bcopj4zdcgwlkrwkqic2oa35coax4rq25rqc4a6mpo53et4dom",
@@ -25,10 +25,10 @@
         "skill/valory/staking_abci/0.1.0": "bafybeidrpoepijkzs42bri7uvjkbuibxqep3ybfqvppo727qr4nzbdkooi",
         "skill/valory/agent_db_abci/0.1.0": "bafybeic7fatdnzwcxtbxldznslggzfyyvnrlaevhx3pyhjxuhk64aekcrq",
         "skill/valory/contribute_db_abci/0.1.0": "bafybeigqgxaquufko6v3wtrhjaogge2ygynojkijlwuba4o6yojsyw6vye",
-        "agent/valory/impact_evaluator/0.1.0": "bafybeigtgf6gpymufowdhijno7mnafipwfxhdhpnvctekmjbyrrwi6bhx4",
+        "agent/valory/impact_evaluator/0.1.0": "bafybeibp77gyeom5m7nhb4mxninsus4wby34tukdrenmweux5h34denufq",
         "agent/valory/farcaster_test/0.1.0": "bafybeic4ubvbkxfrrskpdhepttyst5louup4pfztuv4neqfrruicdwen4q",
-        "service/valory/impact_evaluator/0.1.0": "bafybeifmrwjlnbljkvs6747xpnatr3e3qjxmcguo36mtlvusjx357vpn7a",
-        "service/valory/impact_evaluator_local/0.1.0": "bafybeiaktt6y54ukfjvoophcjoucq3d4rrdrp3bwnzzv5ikdqm5hzxtzrq"
+        "service/valory/impact_evaluator/0.1.0": "bafybeibs6226q3qnrf43xzwolhsqtetxbomarm35ps3zfota7wgx5cmr2i",
+        "service/valory/impact_evaluator_local/0.1.0": "bafybeigvwp6fowexifj6a5ruvnzrzvfhntto5lgwzxksaqnzabi7opwula"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm",
@@ -46,7 +46,7 @@
         "contract/valory/gnosis_safe/0.1.0": "bafybeibgpgpi7w6xtxg3zr7tye3f6g6tu7fnvy7yxlgunbjqin3ou7e5pi",
         "contract/valory/agent_registry/0.1.0": "bafybeiepkbcx5jrcvoc5nfarw6gt4so4izqxuiliu7gukdvmjiodynecvy",
         "contract/valory/mech_marketplace_legacy/0.1.0": "bafybeiafwem7v7po7xb7rag4zfdqe2uoaqki3xybviciypxr5w6zkoxgse",
-        "contract/valory/mech_marketplace/0.1.0": "bafybeibigvscbk5tbfgwlnu6bpnng7yiahyqoholepj7q6sy53gl7w4nbi",
+        "contract/valory/mech_marketplace/0.1.0": "bafybeibxvb5txtnho4rc4hz3clghropfdfschthqxtcdai7hx2zycgdjga",
         "contract/valory/mech/0.1.0": "bafybeifthpyd2oq5izworldr755sigefinki7caath4aao3hrajpjbhbxe",
         "contract/valory/mech_mm/0.1.0": "bafybeibbz2hlyvtg6yfojzdnou2xqbpu32a4mjvn2xidfypvwy5oj6gx4u",
         "contract/valory/erc20/0.1.0": "bafybeif2ad3gsp7zhmw55rpfy7kiooqjswanyvjisdu43kqaoycspfrbui",
@@ -62,6 +62,6 @@
         "skill/valory/abstract_round_abci/0.1.0": "bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy",
         "skill/valory/termination_abci/0.1.0": "bafybeibtbboau3q5fxfviwm7lbeix4z55uptfqqiyiu6siivxwkp3o5pju",
         "skill/valory/transaction_settlement_abci/0.1.0": "bafybeic2ywzpwkyeqbzsvkbvurhsptemam4xtceihax2tmxmlxtgd3xpya",
-        "skill/valory/mech_interact_abci/0.1.0": "bafybeihwuhjifsksoht35q6wk2qwwkzsqvo6sjgzwapyeg2wr7w2lpjp3m"
+        "skill/valory/mech_interact_abci/0.1.0": "bafybeidi2nfkt5r7cckdd4equdfm5uwiuisrz2splo7om3hkriy5ohx22e"
     }
 }
