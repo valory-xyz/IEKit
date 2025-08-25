@@ -129,7 +129,7 @@ def main() -> None:
             )
         except Exception as e:
             print(f"Exception while replacing {path}:\n{e}")
-            # raise ValueError from e
+            raise ValueError from e
 
     # Dump the updated config
     with open(Path(AGENT_NAME, "aea-config.yaml"), "w", encoding="utf-8") as file:
