@@ -173,7 +173,7 @@ class TwitterScoringBaseBehaviour(ContributeDBBehaviour, ABC):
         """Get the active campaigns"""
         module_data = self.context.contribute_db.data.module_data
         active_campaigns = [
-            f"%23{campaign.hashtag.replace('#', '').strip()}"  # %23 = hashtag
+            f"{campaign.hashtag.replace('#', '').strip()}"  # No longer using #
             for campaign in module_data.twitter_campaigns.campaigns
             if campaign.status == "live"
         ]
@@ -709,7 +709,7 @@ class TwitterCampaignsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
             else:
                 # Get campaigns from Twitter
-                payload_data = yield from self._get_twitter_campaign_search(
+                payload_data = self._get_twitter_campaign_search(
                     number_of_tweets_pulled_today=number_of_tweets_pulled_today
                 )
 
@@ -1124,9 +1124,6 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         active_campaigns = self.get_active_campaigns()
 
-        # Replace the encoded %23 for #
-        active_campaigns = [i.replace("%23", "#") for i in active_campaigns]
-
         # Add the mention as a campaign
         active_campaigns.append("@autonolas")
 
@@ -1258,7 +1255,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         module_data = contribute_db.data.module_data
         update_needed = False
 
-        # Update the latest_hashtag_tweet_id
+        # Update the latest_campaign_tweet_id
         latest_campaign_tweet_id = self.synchronized_data.latest_campaign_tweet_id
         if latest_campaign_tweet_id is not None:
             module_data.twitter.latest_hashtag_tweet_id = str(latest_campaign_tweet_id)

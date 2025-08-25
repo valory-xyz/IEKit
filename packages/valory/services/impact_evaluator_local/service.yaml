@@ -9,10 +9,14 @@ fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
 <<<<<<< HEAD
+<<<<<<< HEAD
 agent: valory/impact_evaluator:0.1.0:bafybeibp77gyeom5m7nhb4mxninsus4wby34tukdrenmweux5h34denufq
 =======
 agent: valory/impact_evaluator:0.1.0:bafybeicsboerzropewqvlzkq6i2es7t6rc72qzzmvcaol7fy4cg4l6gk7m
 >>>>>>> 7fa2f11c (wip)
+=======
+agent: valory/impact_evaluator:0.1.0:bafybeiavoydk66op2mubht44kzex3pfu72yoskuxierm4ddv6zyqhrr33a
+>>>>>>> 609ac75f (changed search to remove hashtags)
 number_of_agents: 1
 deployment:
   agent:
