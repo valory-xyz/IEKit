@@ -32,8 +32,8 @@ class TwitterMentionsCollectionPayload(BaseTxPayload):
 
 
 @dataclass(frozen=True)
-class TwitterHashtagsCollectionPayload(BaseTxPayload):
-    """Represent a transaction payload for the TwitterHashtagsCollectionRound."""
+class TwitterCampaignsCollectionPayload(BaseTxPayload):
+    """Represent a transaction payload for the TwitterCampaignsCollectionRound."""
 
     content: str
 

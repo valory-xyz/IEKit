@@ -27,9 +27,9 @@ from pathlib import Path
 from typing import Dict, Optional
 
 import dotenv
+from agent_db import AgentDBClient, ContributeDatabase
 from rich.console import Console
 from rich.table import Table
-from agent_db import AgentDBClient, ContributeDatabase
 from web3 import Web3
 from web3.contract import Contract
 
@@ -52,20 +52,22 @@ STAKING_CONTRACTS = {
     "Beta 1 (100 OLAS)": {
         "address": "0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4",
         "slots": 100,
-        "required_updates": 1
+        "required_updates": 1,
     },
     "Beta 2 (300 OLAS)": {
         "address": "0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387",
         "slots": 100,
-        "required_updates": 3
+        "required_updates": 3,
     },
     "Beta 3 (500 OLAS)": {
         "address": "0x28877FFc6583170a4C9eD0121fc3195d06fd3A26",
         "slots": 100,
-        "required_updates": 5
+        "required_updates": 5,
     },
 }
-STAKING_ABI_FILE = Path("packages", "valory", "contracts", "staking", "build", "staking.json")
+STAKING_ABI_FILE = Path(
+    "packages", "valory", "contracts", "staking", "build", "staking.json"
+)
 CONTRIBUTORS_ABI_FILE = Path("scripts", "contributors.json")
 CONTRIBUTORS_PROXY_CONTRACT_ADDRESS = "0x343F2B005cF6D70bA610CD9F1F1927049414B582"
 
@@ -153,10 +155,14 @@ def get_contract_info() -> Dict:
 
         epoch = staking_token_contract.functions.epochCounter().call()
         ids = staking_token_contract.functions.getServiceIds().call()
-        next_epoch_start = datetime.fromtimestamp(staking_token_contract.functions.getNextRewardCheckpointTimestamp().call())
+        next_epoch_start = datetime.fromtimestamp(
+            staking_token_contract.functions.getNextRewardCheckpointTimestamp().call()
+        )
 
         contract_info[contract_name]["epoch"] = epoch
-        contract_info[contract_name]["next_epoch_start"] = next_epoch_start.strftime("%Y-%m-%d %H:%M:%S")
+        contract_info[contract_name]["next_epoch_start"] = next_epoch_start.strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
         contract_info[contract_name]["slots"] = contract_data["slots"]
         contract_info[contract_name]["used_slots"] = len(ids)
         contract_info[contract_name]["free_slots"] = contract_data["slots"] - len(ids)
@@ -166,7 +172,7 @@ def get_contract_info() -> Dict:
             contract_data["address"],
             str(epoch),
             next_epoch_start.strftime("%Y-%m-%d %H:%M:%S"),
-            f"{len(ids):3d} / {contract_data['slots']:3d}"
+            f"{len(ids):3d} / {contract_data['slots']:3d}",
         ]
         table.add_row(*row, style=GREEN)
 
@@ -176,33 +182,40 @@ def get_contract_info() -> Dict:
     return contract_info
 
 
-def get_user_info(user_data: Dict, contract_info: Dict, contributors_contract: Contract) -> Dict:  # pylint: disable=too-many-locals
+def get_user_info(  # pylint: disable=too-many-locals
+    user_data: Dict, contract_info: Dict, contributors_contract: Contract
+) -> Dict:
     """Get user info"""
 
     user_wallet = user_data.wallet_address
-    _, service_id, _, staking_contract_address = contributors_contract.functions.mapAccountServiceInfo(user_wallet).call()
+    _, service_id, _, staking_contract_address = (
+        contributors_contract.functions.mapAccountServiceInfo(user_wallet).call()
+    )
 
     if service_id == 0:
-        return {
-            "staked": False,
-            "color": RED
-        }
+        return {"staked": False, "color": RED}
 
     staking_token_contract = load_contract(
         web3.to_checksum_address(staking_contract_address), STAKING_ABI_FILE, True
     )
     staking_contract_name = get_contract_by_address(staking_contract_address)
 
-    is_evicted = staking_token_contract.functions.getStakingState(service_id).call() == 2
+    is_evicted = (
+        staking_token_contract.functions.getStakingState(service_id).call() == 2
+    )
 
-    accrued_rewards = staking_token_contract.functions.calculateStakingReward(service_id).call()
+    accrued_rewards = staking_token_contract.functions.calculateStakingReward(
+        service_id
+    ).call()
     # this_epoch_rewards = staking_token_contract.functions.calculateStakingLastReward(service_id).call()   # needs fixing
     this_epoch = contract_info[staking_contract_name]["epoch"]
 
     this_epoch_tweets = [t for t in user_data.tweets.values() if t.epoch == this_epoch]
     this_epoch_points = sum(t.points for t in this_epoch_tweets)
 
-    required_points = POINTS_PER_UPDATE * contract_info[staking_contract_name]['required_updates']
+    required_points = (
+        POINTS_PER_UPDATE * contract_info[staking_contract_name]["required_updates"]
+    )
     color = GREEN if this_epoch_points >= required_points else YELLOW
     if is_evicted:
         color = RED
@@ -218,7 +231,7 @@ def get_user_info(user_data: Dict, contract_info: Dict, contributors_contract: C
         "next_epoch_start": contract_info[staking_contract_name]["next_epoch_start"],
         # "this_epoch_rewards": f"{this_epoch_rewards / 1e18:6.2f}",
         "accrued_rewards": f"{accrued_rewards / 1e18:6.2f}",
-        "color": color
+        "color": color,
     }
 
     return user_info
@@ -239,11 +252,24 @@ def print_table():
     staked_users = {k: v for k, v in users.items() if v.service_multisig}
 
     contributors_contract = load_contract(
-        web3.to_checksum_address(CONTRIBUTORS_PROXY_CONTRACT_ADDRESS), CONTRIBUTORS_ABI_FILE, False
+        web3.to_checksum_address(CONTRIBUTORS_PROXY_CONTRACT_ADDRESS),
+        CONTRIBUTORS_ABI_FILE,
+        False,
     )
 
-    table = Table(title=f"Contribute staking status [{datetime.now().strftime('%H:%M:%S %Y-%m-%d')}]")
-    columns = ["User ID", "X handle", "Service Safe", "Contract", "Epoch", "Tweets (this epoch)", "Points (this epoch)", "Rewards (accrued)"]
+    table = Table(
+        title=f"Contribute staking status [{datetime.now().strftime('%H:%M:%S %Y-%m-%d')}]"
+    )
+    columns = [
+        "User ID",
+        "X handle",
+        "Service Safe",
+        "Contract",
+        "Epoch",
+        "Tweets (this epoch)",
+        "Points (this epoch)",
+        "Rewards (accrued)",
+    ]
 
     for column in columns:
         table.add_column(column)
@@ -260,7 +286,11 @@ def print_table():
                 "@" + handle,
                 shorten_address(user_data.service_multisig),
                 user_info["staking_contract_name"],
-                user_info["epoch"] + f" [{user_info['next_epoch_start']}]" if not user_info["evicted"] else EVICTED,
+                (
+                    user_info["epoch"] + f" [{user_info['next_epoch_start']}]"
+                    if not user_info["evicted"]
+                    else EVICTED
+                ),
                 user_info["this_epoch_tweets"],
                 user_info["this_epoch_points"] + " / " + user_info["required_points"],
                 # user_info["this_epoch_rewards"],

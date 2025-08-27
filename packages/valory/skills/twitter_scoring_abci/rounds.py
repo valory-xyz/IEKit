@@ -43,8 +43,8 @@ from packages.valory.skills.twitter_scoring_abci.payloads import (
     DBUpdatePayload,
     PostMechRequestPayload,
     PreMechRequestPayload,
+    TwitterCampaignsCollectionPayload,
     TwitterDecisionMakingPayload,
-    TwitterHashtagsCollectionPayload,
     TwitterMentionsCollectionPayload,
     TwitterRandomnessPayload,
     TwitterSelectKeepersPayload,
@@ -110,7 +110,7 @@ class Event(Enum):
     ROUND_TIMEOUT = "round_timeout"
     TWEET_EVALUATION_ROUND_TIMEOUT = "tweet_evaluation_round_timeout"
     API_ERROR = "api_error"
-    RETRIEVE_HASHTAGS = "retrieve_hashtags"
+    RETRIEVE_CAMPAIGNS = "retrieve_campaigns"
     RETRIEVE_MENTIONS = "retrieve_mentions"
     PRE_MECH = "pre_mech"
     POST_MECH = "post_mech"
@@ -147,9 +147,9 @@ class SynchronizedData(MechInteractionSynchronizedData):
         return cast(dict, self.db.get("latest_mention_tweet_id", None))
 
     @property
-    def latest_hashtag_tweet_id(self) -> dict:
-        """Get the latest_hashtag_tweet_id."""
-        return cast(dict, self.db.get("latest_hashtag_tweet_id", None))
+    def latest_campaign_tweet_id(self) -> dict:
+        """Get the latest_campaign_tweet_id."""
+        return cast(dict, self.db.get("latest_campaign_tweet_id", None))
 
     @property
     def number_of_tweets_pulled_today(self) -> dict:
@@ -189,7 +189,7 @@ class TwitterDecisionMakingRound(CollectSameUntilThresholdRound):
         if self.threshold_reached:
             event = Event(self.most_voted_payload)
             # Reference events to avoid tox -e check-abciapp-specs failures
-            # Event.DONE, Event.DB_UPDATE, Event.RETRIEVE_MENTIONS, Event.RETRIEVE_HASHTAGS, Event.SELECT_KEEPERS
+            # Event.DONE, Event.DB_UPDATE, Event.RETRIEVE_MENTIONS, Event.RETRIEVE_CAMPAIGNS, Event.SELECT_KEEPERS
             # Event.POST_MECH, Event.PRE_MECH
             return self.synchronized_data, event
         if not self.is_majority_possible(
@@ -338,10 +338,10 @@ class TwitterMentionsCollectionRound(CollectSameUntilThresholdRound):
         return None
 
 
-class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
-    """TwitterHashtagsCollectionRound"""
+class TwitterCampaignsCollectionRound(CollectSameUntilThresholdRound):
+    """TwitterCampaignsCollectionRound"""
 
-    payload_class = TwitterHashtagsCollectionPayload
+    payload_class = TwitterCampaignsCollectionPayload
     synchronized_data_class = SynchronizedData
     extended_requirements = ()
 
@@ -384,7 +384,7 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
                 # API limits
                 if payload["error"] == ERROR_API_LIMITS:
                     performed_twitter_tasks[
-                        "retrieve_hashtags"
+                        "retrieve_campaigns"
                     ] = Event.DONE_MAX_RETRIES.value
 
                     synchronized_data = self.synchronized_data.update(
@@ -407,7 +407,7 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
                 # Other API errors
                 if api_retries >= MAX_API_RETRIES:
                     performed_twitter_tasks[
-                        "retrieve_hashtags"
+                        "retrieve_campaigns"
                     ] = Event.DONE_MAX_RETRIES.value
                     synchronized_data = self.synchronized_data.update(
                         synchronized_data_class=SynchronizedData,
@@ -434,7 +434,7 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
 
             # Happy path
             previous_tweets = cast(SynchronizedData, self.synchronized_data).tweets
-            performed_twitter_tasks["retrieve_hashtags"] = Event.DONE.value
+            performed_twitter_tasks["retrieve_campaigns"] = Event.DONE.value
             new_tweets = payload["tweets"]
 
             updates = {
@@ -454,13 +454,13 @@ class TwitterHashtagsCollectionRound(CollectSameUntilThresholdRound):
                 get_name(SynchronizedData.sleep_until): payload["sleep_until"],
             }
 
-            if payload["latest_hashtag_tweet_id"]:
-                updates[get_name(SynchronizedData.latest_hashtag_tweet_id)] = payload[
-                    "latest_hashtag_tweet_id"
+            if payload["latest_campaign_tweet_id"]:
+                updates[get_name(SynchronizedData.latest_campaign_tweet_id)] = payload[
+                    "latest_campaign_tweet_id"
                 ]
             else:
                 updates[
-                    get_name(SynchronizedData.latest_hashtag_tweet_id)
+                    get_name(SynchronizedData.latest_campaign_tweet_id)
                 ] = (
                     self.context.contribute_db.data.module_data.twitter.latest_hashtag_tweet_id
                 )
@@ -696,7 +696,7 @@ class TwitterScoringAbciApp(AbciApp[Event]):
     transition_function: AbciAppTransitionFunction = {
         TwitterDecisionMakingRound: {
             Event.SELECT_KEEPERS: TwitterRandomnessRound,
-            Event.RETRIEVE_HASHTAGS: TwitterHashtagsCollectionRound,
+            Event.RETRIEVE_CAMPAIGNS: TwitterCampaignsCollectionRound,
             Event.RETRIEVE_MENTIONS: TwitterMentionsCollectionRound,
             Event.PRE_MECH: PreMechRequestRound,
             Event.POST_MECH: PostMechRequestRound,
@@ -723,11 +723,11 @@ class TwitterScoringAbciApp(AbciApp[Event]):
             Event.NO_MAJORITY: TwitterRandomnessRound,
             Event.ROUND_TIMEOUT: TwitterRandomnessRound,
         },
-        TwitterHashtagsCollectionRound: {
+        TwitterCampaignsCollectionRound: {
             Event.DONE: TwitterDecisionMakingRound,
             Event.DONE_MAX_RETRIES: TwitterDecisionMakingRound,
             Event.DONE_API_LIMITS: TwitterDecisionMakingRound,
-            Event.API_ERROR: TwitterHashtagsCollectionRound,
+            Event.API_ERROR: TwitterCampaignsCollectionRound,
             Event.NO_MAJORITY: TwitterRandomnessRound,
             Event.ROUND_TIMEOUT: TwitterRandomnessRound,
         },
