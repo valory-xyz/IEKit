@@ -91,9 +91,12 @@ BASE_CHAIN_ID = "base"
 MAX_TWEETS_PER_CALL = 100
 
 
-def is_minimal_effort_tweet(tweet: str) -> str:
-    """Remove mentions and hashtags from a tweet and checks whether there is more text"""
+def is_minimal_effort_tweet(tweet: str, campaigns: Optional[List[str]] = None) -> bool:
+    """Remove mentions and campaigns from a tweet and checks whether there is more text"""
     cleaned_tweet = re.sub(MENTION_OR_HASHTAG_REGEX, "", tweet).strip()
+    if campaigns is not None:
+        for campaign in campaigns:
+            cleaned_tweet = cleaned_tweet.replace(campaign, "").strip()
     print(cleaned_tweet)
     return len(cleaned_tweet) < 10
 
@@ -173,7 +176,7 @@ class TwitterScoringBaseBehaviour(ContributeDBBehaviour, ABC):
         """Get the active campaigns"""
         module_data = self.context.contribute_db.data.module_data
         active_campaigns = [
-            f"%23{campaign.hashtag.replace('#', '').strip()}"  # %23 = hashtag
+            f"{campaign.hashtag.replace('#', '').strip()}"  # No longer using #
             for campaign in module_data.twitter_campaigns.campaigns
             if campaign.status == "live"
         ]
@@ -764,7 +767,7 @@ class TwitterCampaignsCollectionBehaviour(TwitterScoringBaseBehaviour):
         # TODO: If there are no active campaigns, skip this
         # If we do this, we also need to handle the case where we've been a lot of
         # time without pulling tweets -> pagination, API limits, etc...
-        # if not active_hashtags: # noqa:E800
+        # if not active_campaigns: # noqa:E800
         #     return {  # noqa:E800
         #         "tweets": {},  # noqa:E800
         #         "latest_hashtag_tweet_id": int(latest_hashtag_tweet_id),  # noqa:E800
@@ -904,7 +907,7 @@ class TwitterCampaignsCollectionBehaviour(TwitterScoringBaseBehaviour):
                     continue
 
                 # Skip minimal effort tweets
-                if is_minimal_effort_tweet(tweet["text"]):
+                if is_minimal_effort_tweet(tweet["text"], active_campaigns):
                     continue
 
                 retrieved_tweets += 1
@@ -1124,9 +1127,6 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
 
         active_campaigns = self.get_active_campaigns()
 
-        # Replace the encoded %23 for #
-        active_campaigns = [i.replace("%23", "#") for i in active_campaigns]
-
         # Add the mention as a campaign
         active_campaigns.append("@autonolas")
 
@@ -1258,7 +1258,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
         module_data = contribute_db.data.module_data
         update_needed = False
 
-        # Update the latest_hashtag_tweet_id
+        # Update the latest_campaign_tweet_id
         latest_campaign_tweet_id = self.synchronized_data.latest_campaign_tweet_id
         if latest_campaign_tweet_id is not None:
             module_data.twitter.latest_hashtag_tweet_id = str(latest_campaign_tweet_id)
