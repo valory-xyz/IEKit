@@ -91,11 +91,12 @@ BASE_CHAIN_ID = "base"
 MAX_TWEETS_PER_CALL = 100
 
 
-def is_minimal_effort_tweet(tweet: str, campaigns: Optional[List[str]] = []) -> str:
+def is_minimal_effort_tweet(tweet: str, campaigns: Optional[List[str]] = None) -> bool:
     """Remove mentions and campaigns from a tweet and checks whether there is more text"""
     cleaned_tweet = re.sub(MENTION_OR_HASHTAG_REGEX, "", tweet).strip()
-    for campaign in campaigns:
-        cleaned_tweet = cleaned_tweet.replace(campaign, "").strip()
+    if campaigns is not None:
+        for campaign in campaigns:
+            cleaned_tweet = cleaned_tweet.replace(campaign, "").strip()
     print(cleaned_tweet)
     return len(cleaned_tweet) < 10
 
