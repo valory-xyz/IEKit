@@ -140,7 +140,7 @@ models:
       prompt_template: 'Using the information in the text below, craft an engaging
         and relevant post that highlights key insights or facts from the text. The
         post should be limited to 280 characters and should include a call to action.
-        IMPORTANT: under absolutely no circumstances use campaigns #. The end of the
+        IMPORTANT: under absolutely no circumstances use hashtags #. The end of the
         post should include this sentence: "This post was automatically generated
         by the {name} Centaur: https://www.launchcentaurs.com/centaur/{id}". Text:
         {memory}'
