@@ -711,7 +711,7 @@ class TwitterCampaignsCollectionBehaviour(TwitterScoringBaseBehaviour):
 
             else:
                 # Get campaigns from Twitter
-                payload_data = self._get_twitter_campaign_search(
+                payload_data = yield from self._get_twitter_campaign_search(
                     number_of_tweets_pulled_today=number_of_tweets_pulled_today
                 )
 
