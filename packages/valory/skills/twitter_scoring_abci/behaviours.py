@@ -91,9 +91,11 @@ BASE_CHAIN_ID = "base"
 MAX_TWEETS_PER_CALL = 100
 
 
-def is_minimal_effort_tweet(tweet: str) -> str:
+def is_minimal_effort_tweet(tweet: str, campaigns: Optional[List[str]]) -> str:
     """Remove mentions and campaigns from a tweet and checks whether there is more text"""
     cleaned_tweet = re.sub(MENTION_OR_CAMPAIGN_REGEX, "", tweet).strip()
+    for campaign in campaigns:
+        cleaned_tweet = cleaned_tweet.replace(campaign, "").strip()
     print(cleaned_tweet)
     return len(cleaned_tweet) < 10
 
@@ -904,7 +906,7 @@ class TwitterCampaignsCollectionBehaviour(TwitterScoringBaseBehaviour):
                     continue
 
                 # Skip minimal effort tweets
-                if is_minimal_effort_tweet(tweet["text"]):
+                if is_minimal_effort_tweet(tweet["text"], active_campaigns):
                     continue
 
                 retrieved_tweets += 1
