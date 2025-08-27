@@ -79,7 +79,7 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
 
 ONE_DAY = 86400.0
 ADDRESS_REGEX = r"0x[a-fA-F0-9]{40}"
-MENTION_OR_CAMPAIGN_REGEX = r"(?:#\w+|@\w+)"
+MENTION_OR_HASHTAG_REGEX = r"(?:#\w+|@\w+)"
 TAGLINE = "I'm linking my wallet to @Autonolas Contribute:"
 DEFAULT_TWEET_POINTS = 100
 TWEET_QUALITY_TO_POINTS = {"LOW": 1, "AVERAGE": 2, "HIGH": 3}
@@ -93,7 +93,7 @@ MAX_TWEETS_PER_CALL = 100
 
 def is_minimal_effort_tweet(tweet: str, campaigns: Optional[List[str]]) -> str:
     """Remove mentions and campaigns from a tweet and checks whether there is more text"""
-    cleaned_tweet = re.sub(MENTION_OR_CAMPAIGN_REGEX, "", tweet).strip()
+    cleaned_tweet = re.sub(MENTION_OR_HASHTAG_REGEX, "", tweet).strip()
     for campaign in campaigns:
         cleaned_tweet = cleaned_tweet.replace(campaign, "").strip()
     print(cleaned_tweet)
