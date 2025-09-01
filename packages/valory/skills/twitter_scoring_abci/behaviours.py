@@ -234,7 +234,7 @@ def get_campaign(tweet: Union[str, List[str]], campaigns: List[str]) -> Optional
     # Handle threads
     if isinstance(tweet, list):
         tweet = (" ").join(tweet)
-    matches = [campaign for campaign in campaigns if campaign in tweet]
+    matches = [campaign for campaign in campaigns if campaign.lower() in tweet.lower()]
     return (
         matches[0] if matches else None
     )  # For now, we will return only the first campaign that matches
