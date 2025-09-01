@@ -1,5 +1,5 @@
 ![IEKit](images/iekit.svg){ align=left }
-The Impact Evaluator Kit (IEKit) is an enhanced version of the [CoordinationKit](https://open-autonomy.docs.autonolas.tech/product/coordinationkit/), which leverages [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) to automate the tracking and rewarding of users' contributions on the ecosystem. We provide a demo agent service based on the IEKit which is designed to track contributions in the form of Twitter mentions of the Autonolas DAO ([@autonolas](https://twitter.com/autonolas)). Generic scores can be also read from a [Ceramic stream](https://developers.ceramic.network/docs/advanced/standards/stream-programs/). The demo service implements three main features:
+The Impact Evaluator Kit (IEKit) is an enhanced version of the CoordinationKit, which leverages [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) to automate the tracking and rewarding of users' contributions on the ecosystem. We provide a demo agent service based on the IEKit which is designed to track contributions in the form of Twitter mentions of the Autonolas DAO ([@autonolas](https://twitter.com/autonolas)). Generic scores can be also read from a [Ceramic stream](https://developers.ceramic.network/docs/advanced/standards/stream-programs/). The demo service implements three main features:
 
 1. **Monitor for new users' registrations.** Reads registered users both from tweets that contain the current campaigns and also from a [Ceramic stream](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) that contains user data like discord ids and wallet addresses.
 
@@ -31,7 +31,7 @@ In order to run a local demo service based on the IEKit:
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeie6cdvdmgjpqdlntef4oyya7pucuon5yltu6f5xtl4lo2o2ta3mga --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeietwqsqmepkx6pgwl6w2x2pdbwyjsxel5bjxtvh7lnufzsflpijk4 --service
     ```
 
 3. Build the Docker image of the service agents
