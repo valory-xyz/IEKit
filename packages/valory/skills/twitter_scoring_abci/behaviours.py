@@ -1239,6 +1239,7 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                     f"Detected a Twitter registration for @{twitter_name}: {wallet_address}. Tweet: {tweet_data['text']}"
                 )
                 user_data["wallet_address"] = wallet_address
+                user.wallet_address = wallet_address
 
             user.points += user_data["points"]
             user.twitter_handle = twitter_name
