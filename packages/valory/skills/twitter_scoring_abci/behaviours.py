@@ -474,7 +474,7 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
         # This is a workaround as the mentions endpoint seems to be broken
         # and not returning some tweets.
         # https://github.com/valory-xyz/IEKit/issues/307
-        # api_endpoint = self.params.twitter_mentions_endpoint
+        # api_endpoint = self.params.twitter_mentions_endpoint # noqa: E800
         api_endpoint = self.params.twitter_search_endpoint
 
         module_data = self.context.contribute_db.data.module_data.twitter
