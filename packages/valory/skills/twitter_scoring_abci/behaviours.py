@@ -470,7 +470,13 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
         """Get Twitter mentions"""
 
         api_base = self.params.twitter_api_base
-        api_endpoint = self.params.twitter_mentions_endpoint
+
+        # This is a workaround as the mentions endpoint seems to be broken
+        # and not returning some tweets.
+        # https://github.com/valory-xyz/IEKit/issues/307
+        # api_endpoint = self.params.twitter_mentions_endpoint
+        api_endpoint = self.params.twitter_search_endpoint
+
         module_data = self.context.contribute_db.data.module_data.twitter
         latest_mention_tweet_id = module_data.latest_mention_tweet_id
 
@@ -501,6 +507,10 @@ class TwitterMentionsCollectionBehaviour(TwitterScoringBaseBehaviour):
         api_args = api_args.replace(
             "{max_results}", str(number_of_tweets_remaining_today)
         )
+
+        # WORKAROUND. Refer to the comment above about using the search endpoint
+        api_args = "query=@autonolas" + "&" + api_args
+
         api_url = api_base + api_endpoint + api_args
         headers = dict(Authorization=f"Bearer {self.params.twitter_api_bearer_token}")
 
