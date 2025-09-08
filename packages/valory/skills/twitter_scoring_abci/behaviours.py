@@ -1133,7 +1133,12 @@ class DBUpdateBehaviour(TwitterScoringBaseBehaviour):
                 f"Scoring period has changed from {current_period} to {today}. Resetting user period points..."
             )
             for user in users.values():
-                user.current_period_points = 0
+                if user.current_period_points != 0:
+                    self.context.logger.info(
+                        f"Resetting user {user.twitter_handle} ({user.twitter_id}) current_period_points from {user.current_period_points} to 0"
+                    )
+                    user.current_period_points = 0
+                    yield from contribute_db.update_user(user)
 
         active_campaigns = self.get_active_campaigns()
 
