@@ -18,7 +18,7 @@ The service demonstrates the applicability of the IEKit to build a particular us
 
 In order to run a local demo service based on the IEKit:
 
-1. [Set up your system](https://open-autonomy.docs.autonolas.tech/open-autonomy/guides/set_up/) to work with the Open Autonomy framework. We recommend that you use these commands:
+1. [Set up your system](https://stack.olas.network/open-autonomy/guides/set_up/) to work with the Open Autonomy framework. We recommend that you use these commands:
 
     ```bash
     mkdir your_workspace && cd your_workspace
