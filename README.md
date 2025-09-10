@@ -1,5 +1,5 @@
 # IEKit
-An toolkit for autonomous services implementing a decentralized Impact Evaluator built with the [Open Autonomy](https://open-autonomy.docs.autonolas.tech/open-autonomy/) framework.
+An toolkit for autonomous services implementing a decentralized Impact Evaluator built with the [Open Autonomy](https://stack.olas.network/open-autonomy/) framework.
 
 The demo service for the IEKit tracks mentions of [@autonolas](https://twitter.com/autonolas) on Twitter, assigns scores to them and writes those scores to a [Ceramic](https://ceramic.network/) stream.
 

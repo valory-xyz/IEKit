@@ -18,7 +18,7 @@ The service demonstrates the applicability of the IEKit to build a particular us
 
 In order to run a local demo service based on the IEKit:
 
-1. [Set up your system](https://open-autonomy.docs.autonolas.tech/open-autonomy/guides/set_up/) to work with the Open Autonomy framework. We recommend that you use these commands:
+1. [Set up your system](https://stack.olas.network/open-autonomy/guides/set_up/) to work with the Open Autonomy framework. We recommend that you use these commands:
 
     ```bash
     mkdir your_workspace && cd your_workspace
@@ -31,7 +31,7 @@ In order to run a local demo service based on the IEKit:
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeiab2ftbnbxw66wjbul6z6bel6fjtrtwgxayaraqx22m4q62tooan4 --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeigy6a23mxjt6s27kcnivbc2lhjzoujjth3vf2k43v2img5fmfcvta --service
     ```
 
 3. Build the Docker image of the service agents
