@@ -83,6 +83,7 @@ class TestOpenAICalls:
             (start_time + 0.5, 5, start_time),
             (dummy_current_time, 0, dummy_current_time),
         ],
+        ids=["window_not_expired", "window_expired"],
     )
     def test_reset(
         self, mock_current_time, assert_calls_in_window, assert_current_time

@@ -177,9 +177,6 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
-  ceramic_db:
-    args: {}
-    class_name: CeramicDB
 dependencies:
   web3:
     version: <7,>=6.0.0

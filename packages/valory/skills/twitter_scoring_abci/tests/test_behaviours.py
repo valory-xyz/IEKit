@@ -20,11 +20,11 @@
 """This package contains round behaviours of TwitterScoringAbciApp."""
 
 import json
-from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Optional, Type, cast
+from unittest.mock import MagicMock
 
 import pytest
 from aea.exceptions import AEAActException
@@ -43,8 +43,7 @@ from packages.valory.skills.abstract_round_abci.test_tools.base import (
 from packages.valory.skills.abstract_round_abci.test_tools.common import (
     BaseRandomnessBehaviourTest,
 )
-from packages.valory.skills.decision_making_abci.models import CeramicDBBase
-from packages.valory.skills.decision_making_abci.tests import centaur_configs
+from packages.valory.skills.contribute_db_abci.contribute_models import ContributeUser
 from packages.valory.skills.twitter_scoring_abci.behaviours import (
     DBUpdateBehaviour,
     PostMechRequestBehaviour,
@@ -68,16 +67,24 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
 )
 
 
-DUMMY_CENTAURS_DATA = [
-    centaur_configs.ENABLED_CENTAUR,
-    centaur_configs.DISABLED_CENTAUR,
-]
-
 PACKAGE_DIR = Path(__file__).parent.parent
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
-TWITTER_MENTIONS_URL = "https://api.twitter.com/2/users/1450081635559428107/mentions?tweet.fields=author_id,created_at,public_metrics&user.fields=name&expansions=author_id&max_results={max_results}&since_id=0"
-TWITTER_REGISTRATIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=%23OlasNetwork&tweet.fields=author_id,created_at,conversation_id,public_metrics&user.fields=name&expansions=author_id&max_results={max_results}&since_id=0"
+TWITTER_MENTIONS_URL = "https://api.twitter.com/2/tweets/search/recent?query=@autonolas&tweet.fields=author_id,created_at,public_metrics&user.fields=name&expansions=author_id&max_results={max_results}&since_id=2"  # Workaround. Refer to issue #307
+TWITTER_SEARCH_URL = "https://api.twitter.com/2/tweets/search/recent?query=Olas%20AI%20Agents&tweet.fields=author_id,created_at,conversation_id,public_metrics&user.fields=name&expansions=author_id&max_results={max_results}&since_id=0"
+
+
+PARAM_OVERRIDES = {
+    "twitter_max_pages": 10,
+    "staking_contract_addresses": [
+        "0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4",
+        "0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387",
+        "0x28877FFc6583170a4C9eD0121fc3195d06fd3A26",
+    ],
+    "contribute_db_pkey": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "twitter_search_args": "query=Olas%20AI%20Agents&tweet.fields=author_id,created_at,conversation_id,public_metrics&user.fields=name&expansions=author_id&max_results=120&since_id=0",
+    "contributors_contract_address": "0x343F2B005cF6D70bA610CD9F1F1927049414B582",
+}
 
 DUMMY_MENTIONS_RESPONSE = {
     "data": [
@@ -285,6 +292,81 @@ DUMMY_CAMPAIGNS_RESPONSE = {
 }
 
 
+def get_mocked_contribute_db():
+    """
+    Create a mocked contribute_db with controllable user points.
+    users: dict mapping user_id -> current_period_points
+    """
+    users = {
+        "1": ContributeUser(
+            id=1,
+            current_period_points=0,
+            twitter_handle="dummy_1",
+            service_multisig=None,
+            wallet_address=None,
+        ),
+        "2": ContributeUser(
+            id=2,
+            current_period_points=0,
+            twitter_handle="dummy_2",
+            service_multisig=None,
+            wallet_address=None,
+        ),
+        "3": ContributeUser(
+            id=3,
+            current_period_points=0,
+            twitter_handle="dummy_3",
+            service_multisig=None,
+            wallet_address=None,
+        ),
+        "4": ContributeUser(
+            id=4,
+            current_period_points=0,
+            twitter_handle="dummy_4",
+            service_multisig=None,
+            wallet_address=None,
+        ),
+        "5": ContributeUser(
+            id=5,
+            current_period_points=0,
+            twitter_handle="dummy_5",
+            service_multisig=None,
+            wallet_address=None,
+        ),
+    }
+
+    contribute_db = MagicMock()
+
+    def _get_user_by_attribute(attr, value):
+        return users.get(value, None)
+
+    contribute_db.get_user_by_attribute.side_effect = _get_user_by_attribute
+    return contribute_db
+
+
+def get_mocked_agent_db(
+    number_of_tweets_pulled_today: int = 1,
+    last_tweet_pull_window_reset: int = 1993903085,
+    latest_hashtag_tweet_id: int = 0,
+    campaigns: list = None,
+    current_scoring_period=datetime.now().date(),
+):
+    """Factory to create a fresh mocked agent DB per test with full control over parameters."""
+    if campaigns is None:
+        campaigns = []
+    return MagicMock(
+        module_data=MagicMock(
+            twitter=MagicMock(
+                number_of_tweets_pulled_today=number_of_tweets_pulled_today,
+                last_tweet_pull_window_reset=last_tweet_pull_window_reset,
+                latest_hashtag_tweet_id=latest_hashtag_tweet_id,
+                current_period=current_scoring_period,
+            ),
+            twitter_campaigns=MagicMock(campaigns=campaigns),
+        )
+    )
+
+
 @dataclass
 class BehaviourTestCase:
     """BehaviourTestCase"""
@@ -293,7 +375,7 @@ class BehaviourTestCase:
     initial_data: Dict[str, Any]
     event: Event
     next_behaviour_class: Optional[Type[TwitterScoringBaseBehaviour]] = None
-    ceramic_db: Optional[Any] = None
+    agent_db: Optional[Any] = None
 
 
 class BaseBehaviourTest(FSMBehaviourBaseCase):
@@ -310,20 +392,14 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
     @classmethod
     def setup_class(cls, **kwargs: Any) -> None:
         """Setup class"""
-        super().setup_class(
-            param_overrides={
-                "twitter_max_pages": 10,
-                "staking_contract_addresses": [
-                    "0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4",
-                    "0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387",
-                    "0x28877FFc6583170a4C9eD0121fc3195d06fd3A26",
-                ],
-            }
-        )
+        super().setup_class(param_overrides=PARAM_OVERRIDES)
+        # inject before behaviour instantiation
+        cls._skill.skill_context.agent_db_client = MagicMock()
+        cls._skill.skill_context.contribute_db = get_mocked_contribute_db()
         cls.llm_handler = cls._skill.skill_context.handlers.llm
 
     def fast_forward(
-        self, data: Optional[Dict[str, Any]] = None, ceramic_db: Optional[Any] = None
+        self, data: Optional[Dict[str, Any]] = None, agent_db: Optional[Any] = None
     ) -> None:
         """Fast-forward on initialization"""
 
@@ -336,8 +412,8 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
         self.skill.skill_context.state.round_sequence._last_round_transition_timestamp = (
             datetime.now()
         )
-        if ceramic_db:
-            self.skill.skill_context.ceramic_db = ceramic_db
+        if agent_db:
+            self.skill.skill_context.contribute_db.data = agent_db
 
         assert (
             self.behaviour.current_behaviour.auto_behaviour_id()  # type: ignore
@@ -358,7 +434,7 @@ class BaseBehaviourTest(FSMBehaviourBaseCase):
 
 
 class TestMentionsCollectionBehaviour(BaseBehaviourTest):
-    """Tests BinanceObservationBehaviour"""
+    """Tests TestMentionsCollectionBehaviour"""
 
     behaviour_class = TwitterMentionsCollectionBehaviour
     next_behaviour_class = TwitterDecisionMakingBehaviour
@@ -375,11 +451,12 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                         ],
                     ),
+                    agent_db=get_mocked_agent_db(),
                     event=Event.DONE,
                 ),
                 {
                     "request_urls": [
-                        TWITTER_MENTIONS_URL.format(max_results=120),
+                        TWITTER_MENTIONS_URL.format(max_results=100),
                     ],
                     "request_headers": [
                         "Authorization: Bearer <default_bearer_token>\r\n",
@@ -404,12 +481,13 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                         ],
                     ),
+                    agent_db=get_mocked_agent_db(),
                     event=Event.DONE,
                 ),
                 {
                     "request_urls": [
-                        TWITTER_MENTIONS_URL.format(max_results=120),
-                        TWITTER_MENTIONS_URL.format(max_results=120)
+                        TWITTER_MENTIONS_URL.format(max_results=100),
+                        TWITTER_MENTIONS_URL.format(max_results=100)
                         + "&pagination_token=dummy_next_token",
                     ],
                     "request_headers": [
@@ -438,10 +516,11 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
                         ],
                     ),
                     event=Event.DONE,
+                    agent_db=get_mocked_agent_db(),
                 ),
                 {
                     "request_urls": [
-                        TWITTER_MENTIONS_URL.format(max_results=120),
+                        TWITTER_MENTIONS_URL.format(max_results=100),
                     ],
                     "request_headers": [
                         "Authorization: Bearer <default_bearer_token>\r\n",
@@ -456,10 +535,11 @@ class TestMentionsCollectionBehaviour(BaseBehaviourTest):
                 },
             ),
         ],
+        ids=["Happy path", "Happy path, multi-page", "Happy path, result_count=0"],
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
         """Run tests."""
-        self.fast_forward(test_case.initial_data)
+        self.fast_forward(test_case.initial_data, test_case.agent_db)
         self.behaviour.act_wrapper()
         for i in range(len(kwargs.get("request_urls"))):
             self.mock_http_request(
@@ -499,14 +579,7 @@ class TestMentionsCollectionBehaviourSerial(BaseBehaviourTest):
                         ],
                     ),
                     event=Event.DONE,
-                    ceramic_db={
-                        "module_data": {
-                            "twitter": {
-                                "number_of_tweets_pulled_today": 10000,
-                                "last_tweet_pull_window_reset": 1993903085,
-                            }
-                        }
-                    },
+                    agent_db=get_mocked_agent_db(number_of_tweets_pulled_today=10000),
                 ),
                 {
                     "request_urls": [],
@@ -523,28 +596,19 @@ class TestMentionsCollectionBehaviourSerial(BaseBehaviourTest):
                         sleep_until=datetime.now().timestamp() + 200.00,
                     ),
                     event=Event.DONE,
-                    ceramic_db={
-                        "module_data": {
-                            "twitter": {
-                                "number_of_tweets_pulled_today": 10000,
-                                "last_tweet_pull_window_reset": 1993903085,
-                            }
-                        }
-                    },
+                    agent_db=get_mocked_agent_db(number_of_tweets_pulled_today=10000),
                 ),
                 {
                     "request_urls": [],
                 },
             ),
         ],
+        ids=["API daily limit reached", "15 minute window limit"],
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
         """Run tests."""
-        ceramic_db = None
-        if test_case.ceramic_db:
-            ceramic_db = CeramicDBBase()
-            ceramic_db.load(test_case.ceramic_db)
-        self.fast_forward(test_case.initial_data, ceramic_db)
+
+        self.fast_forward(test_case.initial_data, test_case.agent_db)
         self.behaviour.act_wrapper()
         for i in range(len(kwargs.get("request_urls"))):
             self.mock_http_request(
@@ -582,13 +646,13 @@ class TestCampaignsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.DONE,
+                    agent_db=get_mocked_agent_db(),
                 ),
                 {
                     "request_urls": [
-                        TWITTER_REGISTRATIONS_URL.format(max_results=120),
+                        TWITTER_SEARCH_URL.format(max_results=120),
                     ],
                     "request_headers": [
                         "Authorization: Bearer <default_bearer_token>\r\n",
@@ -613,14 +677,14 @@ class TestCampaignsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.DONE,
+                    agent_db=get_mocked_agent_db(),
                 ),
                 {
                     "request_urls": [
-                        TWITTER_REGISTRATIONS_URL.format(max_results=120),
-                        TWITTER_REGISTRATIONS_URL.format(max_results=120)
+                        TWITTER_SEARCH_URL.format(max_results=120),
+                        TWITTER_SEARCH_URL.format(max_results=120)
                         + "&pagination_token=dummy_next_token",
                     ],
                     "request_headers": [
@@ -647,13 +711,13 @@ class TestCampaignsCollectionBehaviour(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.DONE,
+                    agent_db=get_mocked_agent_db(),
                 ),
                 {
                     "request_urls": [
-                        TWITTER_REGISTRATIONS_URL.format(max_results=120),
+                        TWITTER_SEARCH_URL.format(max_results=120),
                     ],
                     "request_headers": [
                         "Authorization: Bearer <default_bearer_token>\r\n",
@@ -668,10 +732,11 @@ class TestCampaignsCollectionBehaviour(BaseBehaviourTest):
                 },
             ),
         ],
+        ids=["Happy path", "Happy path, multi-page", "Happy path, result_count=0"],
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
         """Run tests."""
-        self.fast_forward(test_case.initial_data)
+        self.fast_forward(test_case.initial_data, test_case.agent_db)
         self.behaviour.act_wrapper()
         for i in range(len(kwargs.get("request_urls"))):
             self.mock_http_request(
@@ -711,28 +776,18 @@ class TestCampaignsCollectionBehaviourSerial(BaseBehaviourTest):
                         ],
                     ),
                     event=Event.DONE,
-                    ceramic_db={
-                        "module_data": {
-                            "twitter": {
-                                "number_of_tweets_pulled_today": 10000,
-                                "last_tweet_pull_window_reset": 1993903085,
-                            }
-                        }
-                    },
+                    agent_db=get_mocked_agent_db(number_of_tweets_pulled_today=10000),
                 ),
                 {
                     "request_urls": [],
                 },
             ),
         ],
+        ids=["API daily limit reached"],
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
         """Run tests."""
-        ceramic_db = None
-        if test_case.ceramic_db:
-            ceramic_db = CeramicDBBase()
-            ceramic_db.load(test_case.ceramic_db)
-        self.fast_forward(test_case.initial_data, ceramic_db)
+        self.fast_forward(test_case.initial_data, test_case.agent_db)
         self.behaviour.act_wrapper()
         for i in range(len(kwargs.get("request_urls"))):
             self.mock_http_request(
@@ -772,9 +827,10 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                         ],
                     ),
                     event=Event.API_ERROR,
+                    agent_db=get_mocked_agent_db(),
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL.format(max_results=120)],
+                    "urls": [TWITTER_MENTIONS_URL.format(max_results=100)],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE,
@@ -795,9 +851,10 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                         ],
                     ),
                     event=Event.API_ERROR,
+                    agent_db=get_mocked_agent_db(),
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL.format(max_results=120)],
+                    "urls": [TWITTER_MENTIONS_URL.format(max_results=100)],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_DATA,
@@ -817,9 +874,10 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                         ],
                     ),
                     event=Event.API_ERROR,
+                    agent_db=get_mocked_agent_db(),
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL.format(max_results=120)],
+                    "urls": [TWITTER_MENTIONS_URL.format(max_results=100)],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_META,
@@ -839,9 +897,10 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                         ],
                     ),
                     event=Event.API_ERROR,
+                    agent_db=get_mocked_agent_db(),
                 ),
                 {
-                    "urls": [TWITTER_MENTIONS_URL.format(max_results=120)],
+                    "urls": [TWITTER_MENTIONS_URL.format(max_results=100)],
                     "bodies": [
                         json.dumps(
                             DUMMY_MENTIONS_RESPONSE_MISSING_INCLUDES,
@@ -852,10 +911,16 @@ class TestMentionsCollectionBehaviourAPIError(BaseBehaviourTest):
                 },
             ),
         ],
+        ids=[
+            "API error mentions: 404",
+            "API error mentions: missing data",
+            "API error mentions: missing meta",
+            "API error mentions: missing includes",
+        ],
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
         """Run tests."""
-        self.fast_forward(test_case.initial_data)
+        self.fast_forward(test_case.initial_data, agent_db=test_case.agent_db)
         self.behaviour.act_wrapper()
         for i in range(len(kwargs.get("urls"))):
             self.mock_http_request(
@@ -902,13 +967,13 @@ class TestCampaignsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.API_ERROR,
+                    agent_db=get_mocked_agent_db(),
                 ),
                 {
                     "urls": [
-                        TWITTER_REGISTRATIONS_URL.format(max_results=120),
+                        TWITTER_SEARCH_URL.format(max_results=120),
                     ],
                     "bodies": [
                         json.dumps(DUMMY_CAMPAIGNS_RESPONSE),
@@ -925,13 +990,13 @@ class TestCampaignsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.API_ERROR,
+                    agent_db=get_mocked_agent_db(),
                 ),
                 {
                     "urls": [
-                        TWITTER_REGISTRATIONS_URL.format(max_results=120),
+                        TWITTER_SEARCH_URL.format(max_results=120),
                     ],
                     "bodies": [
                         json.dumps(
@@ -949,13 +1014,13 @@ class TestCampaignsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.API_ERROR,
+                    agent_db=get_mocked_agent_db(),
                 ),
                 {
                     "urls": [
-                        TWITTER_REGISTRATIONS_URL.format(max_results=120),
+                        TWITTER_SEARCH_URL.format(max_results=120),
                     ],
                     "bodies": [
                         json.dumps(DUMMY_REGISTRATIONS_RESPONSE_MISSING_META),
@@ -971,12 +1036,12 @@ class TestCampaignsCollectionBehaviourAPIError(BaseBehaviourTest):
                             "test_agent_address",
                             "test_agent_address",
                         ],
-                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.API_ERROR,
+                    agent_db=get_mocked_agent_db(),
                 ),
                 {
-                    "urls": [TWITTER_REGISTRATIONS_URL.format(max_results=120)],
+                    "urls": [TWITTER_SEARCH_URL.format(max_results=120)],
                     "bodies": [
                         json.dumps(
                             DUMMY_REGISTRATIONS_RESPONSE_MISSING_INCLUDES,
@@ -987,10 +1052,16 @@ class TestCampaignsCollectionBehaviourAPIError(BaseBehaviourTest):
                 },
             ),
         ],
+        ids=[
+            "API error registrations: 404",
+            "API error registrations: missing data",
+            "API error registrations: missing meta",
+            "API error registrations: missing includes",
+        ],
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
         """Run tests."""
-        self.fast_forward(test_case.initial_data)
+        self.fast_forward(test_case.initial_data, test_case.agent_db)
         self.behaviour.act_wrapper()
         for i in range(len(kwargs.get("urls"))):
             self.mock_http_request(
@@ -1188,7 +1259,7 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
                             "1": {
                                 "author_id": "1",
                                 "points": 900,
-                                "username": "dummy",
+                                "username": "dummy_1",
                                 "text": "dummy text",
                                 "created_at": "2024-05-31T08:26:53.000Z",
                             },
@@ -1209,7 +1280,7 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
                             "4": {
                                 "author_id": "1",
                                 "points": 10000,  # too many points during this period
-                                "username": "dummy",
+                                "username": "dummy_1",
                                 "text": "dummy text",
                                 "created_at": "2024-05-31T08:26:53.000Z",
                             },
@@ -1225,34 +1296,18 @@ class TestDBUpdateBehaviour(BaseBehaviourTest):
                         latest_hashtag_tweet_id=1,
                         number_of_tweets_pulled_today=1,
                         last_tweet_pull_window_reset=1993903085,  # in 10 years
-                        centaurs_data=deepcopy(DUMMY_CENTAURS_DATA),
                     ),
                     event=Event.DONE,
-                    ceramic_db={
-                        "users": {
-                            "0": {
-                                "twitter_id": "1",
-                                "points": 0,
-                                "wallet_address": None,
-                                "service_multisig": None,
-                                "token_id": None,
-                                "discord_id": None,
-                            }
-                        },
-                        "module_data": {"twitter": {"current_period": "2023-09-04"}},
-                    },
+                    agent_db=get_mocked_agent_db(),
                 ),
                 {},
             ),
         ],
+        ids=["Happy path"],
     )
     def test_run(self, test_case: BehaviourTestCase, kwargs: Any) -> None:
         """Run tests."""
-        ceramic_db = None
-        if test_case.ceramic_db:
-            ceramic_db = CeramicDBBase()
-            ceramic_db.load(test_case.ceramic_db)
-        self.fast_forward(test_case.initial_data, ceramic_db)
+        self.fast_forward(test_case.initial_data, test_case.agent_db)
         self.behaviour.act_wrapper()
 
         #  3 staking contracts
@@ -1280,6 +1335,15 @@ class TestRandomnessBehaviour(BaseRandomnessBehaviourTest):
     randomness_behaviour_class = TwitterRandomnessBehaviour
     next_behaviour_class = TwitterSelectKeepersBehaviour
     done_event = Event.DONE
+
+    @classmethod
+    def setup_class(cls, **kwargs: Any) -> None:
+        """Setup class"""
+        super().setup_class(param_overrides=PARAM_OVERRIDES)
+        # inject before behaviour instantiation
+        cls._skill.skill_context.agent_db_client = MagicMock()
+        cls._skill.skill_context.contribute_db = get_mocked_contribute_db()
+        cls.llm_handler = cls._skill.skill_context.handlers.llm
 
 
 class BaseSelectKeepersBehaviourTest(BaseBehaviourTest):
