@@ -293,10 +293,7 @@ DUMMY_CAMPAIGNS_RESPONSE = {
 
 
 def get_mocked_contribute_db():
-    """
-    Create a mocked contribute_db with controllable user points.
-    users: dict mapping user_id -> current_period_points
-    """
+    """Factory to create a fresh mocked contribute DB per test with full control over parameters."""
     users = {
         "1": ContributeUser(
             id=1,
@@ -349,11 +346,14 @@ def get_mocked_agent_db(
     last_tweet_pull_window_reset: int = 1993903085,
     latest_hashtag_tweet_id: int = 0,
     campaigns: list = None,
-    current_scoring_period=datetime.now().date(),
+    current_scoring_period=None,
 ):
     """Factory to create a fresh mocked agent DB per test with full control over parameters."""
     if campaigns is None:
         campaigns = []
+
+    if current_scoring_period is None:
+        current_scoring_period = datetime.now().date()
     return MagicMock(
         module_data=MagicMock(
             twitter=MagicMock(
@@ -1341,7 +1341,7 @@ class TestRandomnessBehaviour(BaseRandomnessBehaviourTest):
         """Setup class"""
         super().setup_class(param_overrides=PARAM_OVERRIDES)
         # inject before behaviour instantiation
-        cls._skill.skill_context.agent_db_client = MagicMock()
+        cls._skill.skill_context.agent_db_client = get_mocked_agent_db()
         cls._skill.skill_context.contribute_db = get_mocked_contribute_db()
         cls.llm_handler = cls._skill.skill_context.handlers.llm
 
