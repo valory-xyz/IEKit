@@ -132,7 +132,6 @@ jobs:
           gitleaks detect --report-format json --report-path leak_report -v
 
   test:
-    if: false
     continue-on-error: True
     needs:
       - lock_check
