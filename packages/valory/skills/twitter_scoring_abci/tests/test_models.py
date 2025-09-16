@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2024 Valory AG
+#   Copyright 2023-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -83,6 +83,7 @@ class TestOpenAICalls:
             (start_time + 0.5, 5, start_time),
             (dummy_current_time, 0, dummy_current_time),
         ],
+        ids=["window_not_expired", "window_expired"],
     )
     def test_reset(
         self, mock_current_time, assert_calls_in_window, assert_current_time

@@ -108,7 +108,7 @@ def get_dummy_mentions_collection_payload_serialized(api_error: bool = False) ->
     return json.dumps(
         {
             "tweets": {"my_tweet": {}},
-            "latest_mention_tweet_id": False,
+            "latest_mention_tweet_id": 1,
             "number_of_tweets_pulled_today": 0,
             "last_tweet_pull_window_reset": 0,
             "sleep_until": None,
@@ -124,7 +124,7 @@ def get_dummy_campaigns_collection_payload_serialized(api_error: bool = False) -
     return json.dumps(
         {
             "tweets": {"my_tweet": {}},
-            "latest_hashtag_tweet_id": False,
+            "latest_campaign_tweet_id": 1,
             "number_of_tweets_pulled_today": 0,
             "last_tweet_pull_window_reset": 0,
             "sleep_until": None,
