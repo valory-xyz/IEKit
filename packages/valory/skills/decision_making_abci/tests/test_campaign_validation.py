@@ -27,6 +27,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+from packages.valory.skills.contribute_db_abci.contribute_models import TwitterCampaign
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.campaign_validation_preparation import (
     CampaignValidationPreparation,
@@ -63,7 +64,6 @@ class CampaignValidationTestCase:
     proposer_verified: bool
     centaur_configs: Optional[Any] = None
     logger_message: Optional[Any] = None
-    yields: bool = True
 
 
 class BaseCampaignValidationPreparationTest:
@@ -73,11 +73,11 @@ class BaseCampaignValidationPreparationTest:
         """Set up the class."""
         self.behaviour = MagicMock()
         self.synchronized_data = MagicMock()
-        self.synchronized_data.centaurs_data = DUMMY_CENTAURS_DATA
-        self.synchronized_data.centaurs_data[0]["plugins_data"]["twitter_campaigns"][
-            "campaigns"
-        ] = [campaign]
         self.context = MagicMock()
+
+        self.context.contribute_db.data.module_data.twitter_campaigns.campaigns = [
+            TwitterCampaign(**campaign)
+        ]
 
         # Modify the consensus veolas power to force consensus
         self.behaviour.params.tweet_consensus_veolas = 0
@@ -100,23 +100,18 @@ class BaseCampaignValidationPreparationTest:
 
     def _pre_task_base_test(self, test_case: CampaignValidationTestCase):
         """Test the _pre_task method."""
-        self.mock_campaign_validation_preparation.synchronized_data.centaurs_data = (
-            DUMMY_CENTAURS_DATA
-        )
-        self.mock_campaign_validation_preparation.synchronized_data.current_centaur_index = (
-            0
-        )
         gen = self.mock_campaign_validation_preparation._pre_task()
-        if test_case.yields:
-            next(gen)
+
         calls = test_case.logger_message
         self.mock_campaign_validation_preparation.logger.info.assert_has_calls(
             calls, any_order=True
         )
-        with pytest.raises(StopIteration):
-            next(gen)
 
-        updates, event = test_case.exception_message
+        with pytest.raises(StopIteration) as exception_info:
+            while True:
+                next(gen)
+
+        updates, event = exception_info.value.value
         return updates, event
 
 
@@ -131,11 +126,8 @@ class TestCampaignValidationPreparation(BaseCampaignValidationPreparationTest):
                 campaign=PROPOSED_TO_VOTING_CAMPAIGN,
                 campaign_validation_preparation_class=CampaignValidationPreparation,
                 exception_message=(
-                    {
-                        "centaurs_data": DUMMY_CENTAURS_DATA,
-                        "has_centaurs_changes": True,
-                    },
-                    Event.TWEET_VALIDATION.value,
+                    {},
+                    Event.CAMPAIGN_VALIDATION.value,
                 ),
                 logger_message=[],
                 has_updates=True,
@@ -147,11 +139,8 @@ class TestCampaignValidationPreparation(BaseCampaignValidationPreparationTest):
                 campaign=PROPOSED_TO_VOID_CAMPAIGN,
                 campaign_validation_preparation_class=CampaignValidationPreparation,
                 exception_message=(
-                    {
-                        "centaurs_data": DUMMY_CENTAURS_DATA,
-                        "has_centaurs_changes": True,
-                    },
-                    Event.TWEET_VALIDATION.value,
+                    {},
+                    Event.CAMPAIGN_VALIDATION.value,
                 ),
                 logger_message=[],
                 has_updates=True,
@@ -163,110 +152,89 @@ class TestCampaignValidationPreparation(BaseCampaignValidationPreparationTest):
                 campaign=VOTING_TO_VOID_CAMPAIGN,
                 campaign_validation_preparation_class=CampaignValidationPreparation,
                 exception_message=(
-                    {
-                        "centaurs_data": DUMMY_CENTAURS_DATA,
-                        "has_centaurs_changes": True,
-                    },
-                    Event.TWEET_VALIDATION.value,
+                    {},
+                    Event.CAMPAIGN_VALIDATION.value,
                 ),
                 logger_message=[],
                 has_updates=True,
                 end_status="void",
                 proposer_verified=True,
-                yields=False,
             ),
             CampaignValidationTestCase(
                 name="Voting to scheduled",
                 campaign=VOTING_TO_SCHEDULED_CAMPAIGN,
                 campaign_validation_preparation_class=CampaignValidationPreparation,
                 exception_message=(
-                    {
-                        "centaurs_data": DUMMY_CENTAURS_DATA,
-                        "has_centaurs_changes": True,
-                    },
-                    Event.TWEET_VALIDATION.value,
+                    {},
+                    Event.CAMPAIGN_VALIDATION.value,
                 ),
                 logger_message=[],
                 has_updates=True,
                 end_status="scheduled",
                 proposer_verified=True,
-                yields=False,
             ),
             CampaignValidationTestCase(
                 name="Scheduled to live",
                 campaign=SCHEDULED_TO_LIVE_CAMPAIGN,
                 campaign_validation_preparation_class=CampaignValidationPreparation,
                 exception_message=(
-                    {
-                        "centaurs_data": DUMMY_CENTAURS_DATA,
-                        "has_centaurs_changes": True,
-                    },
-                    Event.TWEET_VALIDATION.value,
+                    {},
+                    Event.CAMPAIGN_VALIDATION.value,
                 ),
                 logger_message=[],
                 has_updates=True,
                 end_status="live",
                 proposer_verified=True,
-                yields=False,
             ),
             CampaignValidationTestCase(
                 name="Live to ended",
                 campaign=LIVE_TO_ENDED_CAMPAIGN,
                 campaign_validation_preparation_class=CampaignValidationPreparation,
                 exception_message=(
-                    {
-                        "centaurs_data": DUMMY_CENTAURS_DATA,
-                        "has_centaurs_changes": True,
-                    },
-                    Event.TWEET_VALIDATION.value,
+                    {},
+                    Event.CAMPAIGN_VALIDATION.value,
                 ),
                 logger_message=[],
                 has_updates=True,
                 end_status="ended",
                 proposer_verified=True,
-                yields=False,
             ),
             CampaignValidationTestCase(
                 name="Ended to ended",
                 campaign=ENDED_TO_ENDED_CAMPAIGN,
                 campaign_validation_preparation_class=CampaignValidationPreparation,
                 exception_message=(
-                    {
-                        "centaurs_data": DUMMY_CENTAURS_DATA,
-                        "has_centaurs_changes": False,
-                    },
-                    Event.TWEET_VALIDATION.value,
+                    {},
+                    Event.CAMPAIGN_VALIDATION.value,
                 ),
                 logger_message=[],
                 has_updates=False,
                 end_status="ended",
                 proposer_verified=True,
-                yields=False,
             ),
         ],
+        ids=lambda x: x.name,
     )
     @patch(
         "packages.valory.skills.decision_making_abci.tasks.campaign_validation_preparation.CampaignValidationPreparation.is_contract"
     )
-    def test_pre_task(
+    def test__pre_task(
         self,
         mock_is_contract,
         test_case: CampaignValidationTestCase,
     ):
-        """Test the _post_task method."""
+        """Test the _pre_task method."""
         mock_is_contract.return_value = {"is_contract": False}
         self.set_up(test_case.campaign)
         self.create_tweet_validation_object(
             test_case.campaign_validation_preparation_class
         )
-        updates, event = yield from self._pre_task_base_test(test_case)
+        updates, event = self._pre_task_base_test(test_case)
 
-        assert event == Event.TWEET_VALIDATION.value
-        assert updates["has_centaurs_changes"] is test_case.has_updates
-
-        campaigns = updates["centaurs_data"][0]["plugins_data"]["twitter_campaigns"][
-            "campaigns"
+        assert (updates, event) == test_case.exception_message
+        campaign = self.mock_campaign_validation_preparation.context.contribute_db.data.module_data.twitter_campaigns.campaigns[
+            0
         ]
 
-        assert campaigns[0]["proposer"]["verified"] is test_case.proposer_verified
-        assert campaigns[0]["status"] == test_case.end_status
+        assert campaign.proposer.verified is test_case.proposer_verified
+        assert campaign.status == test_case.end_status

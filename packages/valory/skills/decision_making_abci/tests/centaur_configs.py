@@ -79,40 +79,84 @@ ENABLED_CENTAUR = {
         "scheduled_tweet": {
             "tweets": [
                 {
-                    "request_id": "dummy_id_1",
+                    "request_id": "00000000-0000-0000-0000-000000000000",
                     "posted": False,
                     "proposer": {
                         "address": "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf",
                         "signature": "0x37904bcb8b6e11ae894856c1d722209397e548219f000fc172f9a58a064718dd634fa00ace138383dfe807f479a0cf22588edb3fd61bfea2f85378a7513c6cc41c",
                         "verified": None,
                     },
-                    "text": "My agreed tweet: execute",
+                    "text": ["My agreed tweet: execute"],
                     "voters": [
-                        {"0x6c6766E04eF971367D27E720d1d161a9B495D647": 0},
-                        {"0x7885d121ed8Aa3c919AA4d407F197Dc29E33cAf0": 0},
+                        {
+                            "address": list(DUMMY_ACCOUNTS.keys())[0],
+                            "signature": sign_campaign_proposal(
+                                "OlasNetwork",
+                                list(DUMMY_ACCOUNTS.values())[0],
+                            ),
+                            "votingPower": 0,
+                        },
+                        {
+                            "address": list(DUMMY_ACCOUNTS.keys())[1],
+                            "signature": sign_campaign_proposal(
+                                "OlasNetwork",
+                                list(DUMMY_ACCOUNTS.values())[1],
+                            ),
+                            "votingPower": 0,
+                        },
                     ],
                     "executionAttempts": [],
+                    "action_id": "",
+                    "createdDate": 1734102210.160343,
                 },
                 {
-                    "request_id": "dummy_id_2",
+                    "request_id": "00000000-0000-0000-0000-000000000000",
                     "posted": False,
                     "proposer": {
                         "address": "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf",
                         "signature": "0x37904bcb8b6e11ae894856c1d722209397e548219f000fc172f9a58a064718dd634fa00ace138383dfe807f479a0cf22588edb3fd61bfea2f85378a7513c6cc41c",
                         "verified": None,
                     },
-                    "text": "My agreed tweet: dont execute",
+                    "text": ["My agreed tweet: dont execute"],
                     "voters": [
-                        {"0x6c6766E04eF971367D27E720d1d161a9B495D647": 0},
-                        {"0x7885d121ed8Aa3c919AA4d407F197Dc29E33cAf0": 0},
+                        {
+                            "address": list(DUMMY_ACCOUNTS.keys())[0],
+                            "signature": sign_campaign_proposal(
+                                "OlasNetwork",
+                                list(DUMMY_ACCOUNTS.values())[0],
+                            ),
+                            "votingPower": 0,
+                        },
+                        {
+                            "address": list(DUMMY_ACCOUNTS.keys())[1],
+                            "signature": sign_campaign_proposal(
+                                "OlasNetwork",
+                                list(DUMMY_ACCOUNTS.values())[1],
+                            ),
+                            "votingPower": 0,
+                        },
                     ],
                     "executionAttempts": [],
+                    "action_id": "",
+                    "createdDate": 1734102210.160343,
                 },
             ]
         },
         "twitter_campaigns": {
             "campaigns": [
-                {"id": "123456789", "hashtag": "OlasNetwork", "status": "live"}
+                {
+                    "id": "OlasNetwork",
+                    "hashtag": "OlasNetwork",
+                    "status": "live",
+                    "voters": [],
+                    "proposer": {
+                        "address": "0x0000000000000000000000000000000000000000",
+                        "signature": "",
+                        "verified": False,
+                    },
+                    "start_ts": 0,
+                    "end_ts": 4885453704,
+                }
             ]
         },
     },
@@ -231,12 +275,7 @@ ALREADY_RAN["configuration"]["plugins"]["daily_tweet"]["last_run"] = (
 )
 
 DUMMY_CENTAUR_ID_TO_SECRETS_OK = {
-    "4e77a3b1-5762-4782-830e-0e56c6c05c6f": {
-        "orbis": {
-            "context": "kjzl6cwe1jw149t1dw8kb1p2hzo3e0bmyuaihswjb0yl8ze9bho5vf036yy7z1a",
-            "did_seed": "0101010101010101010101010101010101010101010101010101010101010101",
-            "did_str": "z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX",
-        },
+    "2": {
         "twitter": {
             "consumer_key": "dummy_consumer_key",
             "consumer_secret": "dummy_consumer_secret",
@@ -248,23 +287,10 @@ DUMMY_CENTAUR_ID_TO_SECRETS_OK = {
 
 DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_ID = {}
 
-DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_TWITTER = {
-    "4e77a3b1-5762-4782-830e-0e56c6c05c6f": {
-        "orbis": {
-            "context": "kjzl6cwe1jw149t1dw8kb1p2hzo3e0bmyuaihswjb0yl8ze9bho5vf036yy7z1a",
-            "did_seed": "0101010101010101010101010101010101010101010101010101010101010101",
-            "did_str": "z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX",
-        },
-    }
-}
+DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_TWITTER = {"2": {}}
 
 DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_TWITTER_KEY = {
-    "4e77a3b1-5762-4782-830e-0e56c6c05c6f": {
-        "orbis": {
-            "context": "kjzl6cwe1jw149t1dw8kb1p2hzo3e0bmyuaihswjb0yl8ze9bho5vf036yy7z1a",
-            "did_seed": "0101010101010101010101010101010101010101010101010101010101010101",
-            "did_str": "z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX",
-        },
+    "2": {
         "twitter": {
             "consumer_secret": "dummy_consumer_secret",
             "access_token": "dummy_access_token",
@@ -332,7 +358,7 @@ PROPOSED_TO_VOID_CAMPAIGN = {
 }
 
 VOTING_TO_VOID_CAMPAIGN = {
-    "id": "proposed_to_void",
+    "id": "voting_to_void",
     "hashtag": "OlasNetwork",
     "start_ts": NOW_TS,  # start time reached without votes
     "end_ts": 0,
@@ -348,7 +374,7 @@ VOTING_TO_VOID_CAMPAIGN = {
 }
 
 VOTING_TO_SCHEDULED_CAMPAIGN = {
-    "id": "proposed_to_void",
+    "id": "voting_to_scheduled",
     "hashtag": "OlasNetwork",
     "start_ts": NOW_TS + 1000,
     "end_ts": NOW_TS + 2000,
@@ -362,7 +388,7 @@ VOTING_TO_SCHEDULED_CAMPAIGN = {
 }
 
 SCHEDULED_TO_LIVE_CAMPAIGN = {
-    "id": "proposed_to_void",
+    "id": "scheduled_to_live",
     "hashtag": "OlasNetwork",
     "start_ts": NOW_TS,
     "end_ts": NOW_TS + 1000,
@@ -376,7 +402,7 @@ SCHEDULED_TO_LIVE_CAMPAIGN = {
 }
 
 LIVE_TO_ENDED_CAMPAIGN = {
-    "id": "proposed_to_void",
+    "id": "live_to_ended",
     "hashtag": "OlasNetwork",
     "start_ts": 0,
     "end_ts": NOW_TS,
@@ -390,7 +416,7 @@ LIVE_TO_ENDED_CAMPAIGN = {
 }
 
 ENDED_TO_ENDED_CAMPAIGN = {
-    "id": "proposed_to_void",
+    "id": "ended_to_ended",
     "hashtag": "OlasNetwork",
     "start_ts": 0,
     "end_ts": NOW_TS,

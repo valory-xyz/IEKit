@@ -79,18 +79,8 @@ class TestFinishedPipelinePreparation(unittest.TestCase):
         with pytest.raises(StopIteration) as excinfo:
             next(gen)
 
-        exception_message = {
-            "current_centaur_index": self.mock_finished_pipeline_preparation.get_next_centaur_index()
-        }, Event.NEXT_CENTAUR.value
+        exception_message = {}, Event.DONE.value
         assert str(exception_message) in str(excinfo.value)
-
-        self.mock_finished_pipeline_preparation.logger.info.assert_called_with(
-            f"Next centaur index: {self.mock_finished_pipeline_preparation.get_next_centaur_index()} [{len(self.mock_finished_pipeline_preparation.synchronized_data.centaurs_data)}]"
-        )
-
-    def test_get_next_centaur_index(self):
-        """Test get_next_centaur_index."""
-        assert self.mock_finished_pipeline_preparation.get_next_centaur_index() == 1
 
     def test_check_conditions_proceeds_extra_conditions(self):
         """Test check_conditions proceeds extra_conditions."""

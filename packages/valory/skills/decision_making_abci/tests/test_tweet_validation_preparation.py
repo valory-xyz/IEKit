@@ -26,6 +26,7 @@ from unittest.mock import MagicMock, call, patch
 
 import pytest
 
+from packages.valory.skills.contribute_db_abci.contribute_models import ServiceTweet
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.tweet_validation_preparation import (
     TweetValidationPreparation,
@@ -150,6 +151,54 @@ DUMMY_CENTAURS_DATA_B = [
     },
 ]
 
+SCHEDULED_TWEETS = [
+    {
+        "posted": True,
+        "proposer": {
+            "address": "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf",
+            "signature": "0x37904bcb8b6e11ae894856c1d722209397e548219f000fc172f9a58a064718dd634fa00ace138383dfe807f479a0cf22588edb3fd61bfea2f85378a7513c6cc41c",
+            "verified": None,
+        },
+        "text": ["My agreed tweet: dummy"],
+        "media_hashes": [],
+        "voters": [],
+        "action_id": "",
+        "request_id": "00000000-0000-0000-0000-000000000000",
+        "executionAttempts": [],
+        "createdDate": 1734102210.160343,
+    },
+    {
+        "posted": False,
+        "proposer": {
+            "address": "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf",
+            "signature": "0x37904bcb8b6e11ae894856c1d722209397e548219f000fc172f9a58a064718dd634fa00ace138383dfe807f479a0cf22588edb3fd61bfea2f85378a7513c6cc41c",
+            "verified": True,
+        },
+        "text": ["My agreed tweet: dummy"],
+        "media_hashes": [],
+        "voters": [],
+        "action_id": "",
+        "executionAttempts": [],
+        "createdDate": 1734102210.160343,
+        "request_id": "00000000-0000-0000-0000-000000000000",
+    },
+    {
+        "posted": False,
+        "proposer": {
+            "address": "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf",
+            "signature": "0x37904bcb8b6e11ae894856c1d722209397e548219f000fc172f9a58a064718dd634fa00ace138383dfe807f479a0cf22588edb3fd61bfea2f85378a7513c6cc41c",
+            "verified": None,
+        },
+        "text": ["My agreed tweet: dummy"],
+        "media_hashes": [],
+        "voters": [],
+        "action_id": "",
+        "request_id": "00000000-0000-0000-0000-000000000000",
+        "createdDate": 1734102210.160343,
+        "executionAttempts": [],
+    },
+]
+
 
 class BaseTweetValidationPreparationTest:
     """Base class for TweetValidationPreparation tests."""
@@ -158,7 +207,7 @@ class BaseTweetValidationPreparationTest:
         """Set up the class."""
         self.behaviour = MagicMock()
         self.synchronized_data = MagicMock()
-        self.synchronized_data.centaurs_data = DUMMY_CENTAURS_DATA
+        # self.synchronized_data.centaurs_data = DUMMY_CENTAURS_DATA
         self.context = MagicMock()
 
     def create_tweet_validation_object(self, tweet_validation_preparation_class):
@@ -251,6 +300,7 @@ class TestTweetValidationPreparation(BaseTweetValidationPreparationTest):
                 centaur_configs=centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_OK,
             ),
         ],
+        ids=lambda x: x.name,
     )
     def test_check_extra_conditions(self, test_case: TweetValidationTestCase):
         """Test the check_extra_conditions method when the centaur id is not in centaur id to secrets."""
@@ -261,7 +311,13 @@ class TestTweetValidationPreparation(BaseTweetValidationPreparationTest):
         self.mock_tweet_validation_preparation.params.centaur_id_to_secrets = (
             test_case.centaur_configs
         )
-        self.check_extra_conditions_test(test_case)
+        gen = self.mock_tweet_validation_preparation.check_extra_conditions()
+        next(gen)
+        with pytest.raises(StopIteration) as excinfo:
+            next(gen)
+
+        exception_message = test_case.exception_message
+        assert str(exception_message) in str(excinfo.value)
 
     @pytest.mark.parametrize(
         "test_case",
@@ -289,10 +345,7 @@ class TestTweetValidationPreparation(BaseTweetValidationPreparationTest):
                 name="Happy Path",
                 tweet_validation_preparation_class=TweetValidationPreparation,
                 exception_message=(
-                    {
-                        "centaurs_data": DUMMY_CENTAURS_DATA_B,
-                        "has_centaurs_changes": True,
-                    },
+                    {},
                     Event.TWEET_VALIDATION.value,
                 ),
                 logger_message=[
@@ -311,10 +364,24 @@ class TestTweetValidationPreparation(BaseTweetValidationPreparationTest):
         mock_is_contract,
         test_case: TweetValidationTestCase,
     ):
-        """Test the _post_task method."""
+        """Test the _pre_task method."""
         mock_is_contract.return_value = {"is_contract": True}
         self.set_up()
         self.create_tweet_validation_object(
             test_case.tweet_validation_preparation_class
         )
-        self._pre_task_base_test(test_case)
+
+        self.mock_tweet_validation_preparation.module_data.scheduled_tweet.tweets = [
+            ServiceTweet(**tweet) for tweet in SCHEDULED_TWEETS
+        ]
+        gen = self.mock_tweet_validation_preparation._pre_task()
+        next(gen)
+        calls = test_case.logger_message
+        self.mock_tweet_validation_preparation.logger.info.assert_has_calls(
+            calls, any_order=True
+        )
+        with pytest.raises(StopIteration) as excinfo:
+            next(gen)
+
+        exception_message = test_case.exception_message
+        assert str(exception_message) in str(excinfo.value)
