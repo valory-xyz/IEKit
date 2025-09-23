@@ -66,7 +66,7 @@ class Proposer(BaseModel):
 
     address: EthereumAddress
     signature: str
-    verified: bool = False
+    verified: Optional[bool] = False
 
 
 class Voter(BaseModel):

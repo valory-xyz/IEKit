@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2024 Valory AG
+#   Copyright 2021-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import pytest
 
 from packages.valory.skills.decision_making_abci.rounds import Event
 from packages.valory.skills.decision_making_abci.tasks.twitter_preparation import (
-    DailyTweetPreparation,
     ScheduledTweetPreparation,
     TwitterPreparation,
 )
@@ -72,6 +71,9 @@ DUMMY_CENTAURS_DATA_TWEET_POSTED = deepcopy(DUMMY_CENTAURS_DATA_ONE_TWEET)
 DUMMY_CENTAURS_DATA_TWEET_POSTED[0]["plugins_data"]["scheduled_tweet"]["tweets"][0][
     "posted"
 ] = True
+# DUMMY_CENTAURS_DATA_TWEET_POSTED[0]["module_data"] = DUMMY_CENTAURS_DATA_TWEET_POSTED[
+#     0
+# ]["plugins_data"]
 
 DUMMY_CENTAURS_DATA_NOT_TWEET_PROPOSER_VERIFIED = deepcopy(
     DUMMY_CENTAURS_DATA_ONE_TWEET
@@ -86,7 +88,7 @@ DUMMY_CENTAURS_DATA_NOT_EXECUTION[0]["plugins_data"]["scheduled_tweet"]["tweets"
 ]["verified"] = True
 DUMMY_CENTAURS_DATA_NOT_EXECUTION[0]["plugins_data"]["scheduled_tweet"]["tweets"][0][
     "executionAttempts"
-] = None
+] = []
 
 DUMMY_CENTAURS_DATA_EXECUTION_NOT_VERIFIED = deepcopy(DUMMY_CENTAURS_DATA_ONE_TWEET)
 DUMMY_CENTAURS_DATA_EXECUTION_NOT_VERIFIED[0]["plugins_data"]["scheduled_tweet"][
@@ -94,7 +96,13 @@ DUMMY_CENTAURS_DATA_EXECUTION_NOT_VERIFIED[0]["plugins_data"]["scheduled_tweet"]
 ][0]["proposer"]["verified"] = True
 DUMMY_CENTAURS_DATA_EXECUTION_NOT_VERIFIED[0]["plugins_data"]["scheduled_tweet"][
     "tweets"
-][0]["executionAttempts"] = [{"verified": False}]
+][0]["executionAttempts"] = [
+    {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "verified": False,
+        "dateCreated": 1732293572046.0,
+    }
+]
 
 DUMMY_CENTAURS_DATA_NO_VOTERS = deepcopy(DUMMY_CENTAURS_DATA_ONE_TWEET)
 DUMMY_CENTAURS_DATA_NO_VOTERS[0]["plugins_data"]["scheduled_tweet"]["tweets"][0][
@@ -102,10 +110,16 @@ DUMMY_CENTAURS_DATA_NO_VOTERS[0]["plugins_data"]["scheduled_tweet"]["tweets"][0]
 ]["verified"] = True
 DUMMY_CENTAURS_DATA_NO_VOTERS[0]["plugins_data"]["scheduled_tweet"]["tweets"][0][
     "executionAttempts"
-] = [{"verified": None}]
+] = [
+    {
+        "id": "080085ff-f780-4b42-b911-fe356f04836f",
+        "verified": None,
+        "dateCreated": 1732293572046.0,
+    }
+]
 DUMMY_CENTAURS_DATA_NO_VOTERS[0]["plugins_data"]["scheduled_tweet"]["tweets"][0][
     "voters"
-] = None
+] = []
 
 
 class BaseTwitterPreparationTest(BaseTaskTest):
@@ -172,6 +186,7 @@ class TestTwitterPreparation(BaseTwitterPreparationTest):
                 },
             ),
         ],
+        ids=lambda x: x.name,
     )
     def test_check_extra_conditions(self, test_case: TaskTestCase):
         """Test the check_extra_conditions method."""
@@ -194,10 +209,7 @@ class TestTwitterPreparation(BaseTwitterPreparationTest):
                     },
                 },
                 exception_message=(
-                    {
-                        "centaurs_data": DUMMY_CENTAURS_DATA_ACTIONS,
-                        "has_centaurs_changes": True,
-                    },
+                    {},
                     None,
                 ),
             ),
@@ -214,14 +226,12 @@ class TestTwitterPreparation(BaseTwitterPreparationTest):
                     },
                 },
                 exception_message=(
-                    {
-                        "centaurs_data": DUMMY_CENTAURS_DATA_NO_ACTIONS,
-                        "has_centaurs_changes": True,
-                    },
+                    {},
                     None,
                 ),
             ),
         ],
+        ids=lambda x: x.name,
     )
     def test__post_task(self, test_case: TaskTestCase):
         """Test the _post_task method."""
@@ -251,162 +261,6 @@ class TestTwitterPreparation(BaseTwitterPreparationTest):
         self.create_task_preparation_object(test_case)
         with pytest.raises(NotImplementedError):
             self.mock_task_preparation_object.get_tweet()
-
-
-class TestDailyTweetPreparation(BaseTwitterPreparationTest):
-    """Test DailyTweetPreparation."""
-
-    @pytest.mark.parametrize(
-        "test_case",
-        [
-            TaskTestCase(
-                name="Centaur ID to secrets missing id",
-                task_preparation_class=DailyTweetPreparation,
-                exception_message=False,
-                initial_data={
-                    "centaur_id_to_secrets": deepcopy(
-                        centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_ID
-                    ),
-                    "synchronized_data": {"centaurs_data": copy(DUMMY_CENTAURS_DATA)},
-                },
-            ),
-            TaskTestCase(
-                name="Centaur ID to secrets missing twitter",
-                task_preparation_class=DailyTweetPreparation,
-                exception_message=False,
-                initial_data={
-                    "centaur_id_to_secrets": copy(
-                        centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_TWITTER
-                    ),
-                    "synchronized_data": {"centaurs_data": copy(DUMMY_CENTAURS_DATA)},
-                },
-            ),
-            TaskTestCase(
-                name="Centaur ID to secrets missing twitter key",
-                task_preparation_class=DailyTweetPreparation,
-                exception_message=False,
-                initial_data={
-                    "centaur_id_to_secrets": copy(
-                        centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_MISSING_TWITTER_KEY
-                    ),
-                    "synchronized_data": {"centaurs_data": copy(DUMMY_CENTAURS_DATA)},
-                },
-            ),
-            TaskTestCase(
-                name="Happy Path",
-                task_preparation_class=DailyTweetPreparation,
-                exception_message=True,
-                initial_data={
-                    "centaur_id_to_secrets": copy(
-                        centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_OK
-                    ),
-                    "synchronized_data": {"centaurs_data": copy(DUMMY_CENTAURS_DATA)},
-                },
-            ),
-        ],
-    )
-    def test_check_extra_conditions(self, test_case: TaskTestCase):
-        """Test the check_extra_conditions method."""
-        super().check_extra_conditions_test(test_case)
-
-    @pytest.mark.parametrize(
-        "test_case",
-        [
-            TaskTestCase(
-                name="Happy Path",
-                task_preparation_class=DailyTweetPreparation,
-                exception_message=(
-                    {
-                        "write_data": [
-                            {
-                                "text": "dummy text",
-                                "media_hashes": "dummy media hashes",
-                                "credentials": {
-                                    "consumer_key": "dummy_consumer_key",
-                                    "consumer_secret": "dummy_consumer_secret",
-                                    "access_token": "dummy_access_token",
-                                    "access_secret": "dummy_access_secret",
-                                },
-                            }
-                        ],
-                    },
-                    Event.DAILY_TWEET.value,
-                ),
-                initial_data={
-                    "centaur_id_to_secrets": centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_OK,
-                    "synchronized_data": {
-                        "centaurs_data": DUMMY_CENTAURS_DATA,
-                        "daily_tweet": {
-                            "text": "dummy text",
-                            "media_hashes": "dummy media hashes",
-                        },
-                    },
-                },
-            ),
-        ],
-    )
-    def test__pre_task(self, test_case: TaskTestCase):
-        """Test the _pre_task method."""
-        super()._pre_task_base_test(test_case)
-
-    @pytest.mark.parametrize(
-        "test_case",
-        [
-            TaskTestCase(
-                name="Happy Path",
-                task_preparation_class=DailyTweetPreparation,
-                initial_data={
-                    "centaur_id_to_secrets": centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_OK,
-                    "synchronized_data": {
-                        "centaurs_data": DUMMY_CENTAURS_DATA,
-                        "tweet_ids": ["dummy_id_1"],
-                    },
-                },
-                exception_message=(
-                    {
-                        "centaurs_data": DUMMY_CENTAURS_DATA_ACTIONS_DAILY_TWEET,
-                        "has_centaurs_changes": True,
-                    },
-                    None,
-                ),
-            ),
-            TaskTestCase(
-                name="No actions",
-                task_preparation_class=DailyTweetPreparation,
-                initial_data={
-                    "centaur_id_to_secrets": centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_OK,
-                    "synchronized_data": {
-                        "centaurs_data": [deepcopy(centaur_configs.NO_ACTIONS)],
-                        "tweet_ids": ["dummy_id_1"],
-                    },
-                },
-                exception_message=(
-                    {
-                        "centaurs_data": DUMMY_CENTAURS_DATA_NO_ACTIONS_DAILY_TWEET,
-                        "has_centaurs_changes": True,
-                    },
-                    None,
-                ),
-            ),
-        ],
-    )
-    def test__post_task(self, test_case: TaskTestCase):
-        """Test the _post_task method."""
-        super()._post_task_base_test(test_case)
-
-    @pytest.mark.parametrize(
-        "test_case",
-        [
-            TaskTestCase(
-                name="Happy Path",
-                task_preparation_class=DailyTweetPreparation,
-                exception_message=None,
-            ),
-        ],
-    )
-    def test_get_tweet(self, test_case: TaskTestCase):
-        """Test get_tweet."""
-        super().get_tweet_test(test_case)
 
 
 class TestScheduledTweetPreparation(BaseTwitterPreparationTest):
@@ -445,25 +299,6 @@ class TestScheduledTweetPreparation(BaseTwitterPreparationTest):
                     "synchronized_data": {"centaurs_data": DUMMY_CENTAURS_DATA},
                     "extra_data": {
                         "tweets_need_update": False,
-                        "pending_tweets": False,
-                    },
-                },
-            ),
-            TaskTestCase(
-                name="Tweets need update",
-                task_preparation_class=ScheduledTweetPreparation,
-                exception_message=(
-                    {
-                        "centaurs_data": DUMMY_CENTAURS_DATA_NO_TWEETS,
-                        "has_centaurs_changes": True,
-                    },
-                    Event.FORCE_DB_UPDATE.value,
-                ),
-                initial_data={
-                    "centaur_id_to_secrets": centaur_configs.DUMMY_CENTAUR_ID_TO_SECRETS_OK,
-                    "synchronized_data": {"centaurs_data": DUMMY_CENTAURS_DATA},
-                    "extra_data": {
-                        "tweets_need_update": True,
                         "pending_tweets": False,
                     },
                 },
@@ -509,21 +344,7 @@ class TestScheduledTweetPreparation(BaseTwitterPreparationTest):
         "test_case",
         [
             TaskTestCase(
-                name="Happy Path",
-                task_preparation_class=DailyTweetPreparation,
-                exception_message=None,
-            ),
-        ],
-    )
-    def test_get_tweet(self, test_case: TaskTestCase):
-        """Test get_tweet."""
-        super().get_tweet_test(test_case)
-
-    @pytest.mark.parametrize(
-        "test_case",
-        [
-            TaskTestCase(
-                name="Tweet posted",
+                name="Tweet already posted",
                 task_preparation_class=ScheduledTweetPreparation,
                 initial_data={
                     "synchronized_data": {
@@ -588,6 +409,7 @@ class TestScheduledTweetPreparation(BaseTwitterPreparationTest):
                 },
             ),
         ],
+        ids=lambda x: x.name,
     )
     def test_get_pending_tweets(self, test_case: TaskTestCase):
         """Test get_pending_tweets."""

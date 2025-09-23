@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2024 Valory AG
+#   Copyright 2021-2025 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -38,6 +38,10 @@ class TestWeekInOlasPreparation(unittest.TestCase):
         """Set up the tests."""
         self.behaviour = MagicMock()
         self.synchronized_data = MagicMock()
+        self.synchronized_data.summary_tweets = [
+            "This is a summary tweet.",
+            "This is another summary tweet.",
+        ]
         self.context = MagicMock()
         self.mock_week_in_olas_create_preparation = WeekInOlasCreatePreparation(
             datetime.now(timezone.utc),
@@ -45,6 +49,7 @@ class TestWeekInOlasPreparation(unittest.TestCase):
             self.synchronized_data,
             self.context,
         )
+        self.mock_week_in_olas_create_preparation.now_utc = datetime.now(timezone.utc)
 
     def test_check_extra_conditions(self):
         """Test the check_extra_conditions method."""
@@ -71,10 +76,7 @@ class TestWeekInOlasPreparation(unittest.TestCase):
             next(gen)
 
         exception_message = (
-            {
-                "centaurs_data": self.mock_week_in_olas_create_preparation.synchronized_data.centaurs_data,
-                "has_centaurs_changes": True,
-            },
+            {},
             None,
         )
         assert str(exception_message) in str(excinfo.value)

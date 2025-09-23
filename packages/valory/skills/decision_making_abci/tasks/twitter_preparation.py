@@ -42,9 +42,14 @@ CENTAUR_ID = "2"
 class TwitterPreparation(TaskPreparation):
     """TwitterPreparation"""
 
+    task_name = "twitter_preparation"
+
     def check_extra_conditions(self):
         """Validate Twitter credentials"""
         yield
+        if "twitter" not in self.params.centaur_id_to_secrets.get(CENTAUR_ID, {}):
+            return False
+
         secrets = self.params.centaur_id_to_secrets[CENTAUR_ID]["twitter"]
 
         if sorted(secrets.keys()) != sorted(

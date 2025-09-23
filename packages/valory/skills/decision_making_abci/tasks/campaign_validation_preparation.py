@@ -50,7 +50,7 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
     def _pre_task(self):
         """Preparations before running the task"""
         yield
-
+        updates = {}
         for campaign in self.module_data.twitter_campaigns.campaigns:
             self.logger.info(
                 f"Checking campaign proposal {campaign.id} {campaign.hashtag} [{campaign.status}]"
@@ -109,7 +109,6 @@ class CampaignValidationPreparation(TaskPreparation, SignatureValidationMixin):
             else:
                 self.logger.info("The campaign does not need to be updated")
 
-            updates = {}
             yield from self.context.contribute_db.update_module_data(
                 self.context.contribute_db.data.module_data
             )
