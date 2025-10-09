@@ -145,7 +145,7 @@ class DynamicContributionContract(Contract):
 
             w3 = ledger_api.api.eth
             logs = w3.get_logs(filter_params)
-            entries = [get_event_data(w3.codec, event_abi, log) for log in logs]
+            entries += [get_event_data(w3.codec, event_abi, log) for log in logs]
 
         token_id_to_member = {
             str(entry["args"]["id"]): entry["args"]["to"] for entry in entries
