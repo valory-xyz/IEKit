@@ -12,7 +12,7 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
-- valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
+- valory/srr:0.1.0:bafybeic2a7zy7laa73ieoerrel4kgp55jq7ektiqoay2jwlovmxlnrjtle
 class_name: FarcasterConnection
 config:
   farcaster_mnemonic: null

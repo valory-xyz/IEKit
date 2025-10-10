@@ -25,14 +25,14 @@ fingerprint:
   tests/test_rounds.py: bafybeiei2srj4ggs3pln7vxxt4walhrtsegveimxdcbckyng2i6wv53vy4
 fingerprint_ignore_patterns: []
 connections:
-- valory/openai:0.1.0:bafybeicevsj6xgojzsvl77pmsqft6vzemil4flhikkc6aljff7y5smeuhu
+- valory/openai:0.1.0:bafybeie2dgsxkht5diajnlse4phql4vvgxnb65zfoo7wvs5nien4q62oku
 contracts: []
 protocols:
-- valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
+- valory/llm:1.0.0:bafybeiardrklsughnm6tdnc3seqderlnq5nj4xolgnk42crr3kxexjlrfe
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy
-- valory/decision_making_abci:0.1.0:bafybeibycftzffpkhtzdk7uzjzhzuyxa3mybiqdsiabxt7yqlp6feyfqky
-- valory/contribute_db_abci:0.1.0:bafybeigq2vsbju2jf67hatmmz7uyo55e44beka5v7e7vj6yyrqqpdrxkd4
+- valory/abstract_round_abci:0.1.0:bafybeiemzg3e2hc5hjnpqj4kulxq4mjz65ktelqdgb6wvxekiwudjp63uu
+- valory/decision_making_abci:0.1.0:bafybeici5puz35pzqq2nxprzn5rrsdv3adfuoo7vtnzbaprwizdwyosgpa
+- valory/contribute_db_abci:0.1.0:bafybeib5fhcqqhqawqmjachtxfe6m2ooabk7lzt6sge4mnewzy2xavut5y
 behaviours:
   main:
     args: {}
