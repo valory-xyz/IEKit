@@ -106,8 +106,8 @@ class MechMarketplaceLegacy(Contract):
         """
         contract_address = ledger_api.api.to_checksum_address(contract_address)
         contract_instance = cls.get_instance(ledger_api, contract_address)
-        encoded_data = contract_instance.encodeABI(
-            fn_name="request",
+        encoded_data = contract_instance.encode_abi(
+            abi_element_identifier="request",
             args=(
                 request_data,
                 priority_mech,

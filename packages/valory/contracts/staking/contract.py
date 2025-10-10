@@ -98,7 +98,7 @@ class Staking(Contract):
     ) -> Dict[str, bytes]:
         """Build an ERC20 approval."""
         contract_instance = cls.get_instance(ledger_api, contract_address)
-        data = contract_instance.encodeABI("checkpoint", args=())
+        data = contract_instance.encode_abi("checkpoint", args=())
         return {"data": bytes.fromhex(data[2:])}
 
     @classmethod
@@ -115,7 +115,7 @@ class Staking(Contract):
         )
         multisigs = [Web3.to_checksum_address(a) for a in updates.keys()]
         activity_changes = [int(v) for v in updates.values()]
-        data = contract_instance.encodeABI("increaseActivity", args=(multisigs,activity_changes))
+        data = contract_instance.encode_abi("increaseActivity", args=(multisigs,activity_changes))
         return {"data": bytes.fromhex(data[2:])}
 
     @classmethod
