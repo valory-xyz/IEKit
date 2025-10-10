@@ -4,7 +4,7 @@ version: 0.1.0
 type: connection
 description: Connection for interacting with the twitter API.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeibxwzkyh7odchnlkeczpguencdjiizm4nezfmi4drybn2zd25xdkq
   connection.py: bafybeierlebgcuq3q7sepfhf2swfzm2rhxjdx3cogefjixjfpsyknkr26u
@@ -30,6 +30,6 @@ dependencies:
   requests:
     version: ==2.28.1
   open-aea-cli-ipfs:
-    version: ==1.65.0
+    version: ==2.0.6
 is_abstract: false
 cert_requests: []

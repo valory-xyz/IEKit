@@ -4,7 +4,7 @@ version: 0.1.0
 type: skill
 description: The llm abci sends a prompt to a LLM and gets the response.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeidg5pe5vztpbns7h76v2rnebiltwze5kgdw5rn2scr5zhqm36mctu
   behaviours.py: bafybeif4a2nxe6t3ipvook4kjyidycodbyjlfgx4m5szvuqlhvzwovt4gy

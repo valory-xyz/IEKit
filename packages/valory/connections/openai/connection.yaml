@@ -4,7 +4,7 @@ version: 0.1.0
 type: connection
 description: The openai connection provides a wrapper around OpenAI SDK.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeiagnziswj5tll4yzx63u4hvat4yieoaaqt5b67chvvqxg5th5mxz4
   connection.py: bafybeib3rhiizzi2cyn4oixoqmus237iwkkpzfywqa2fbgajy6qmd6csbm

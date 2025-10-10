@@ -3,7 +3,7 @@ author: valory
 version: 0.1.0
 license: Apache-2.0
 description: The impact evaluator agent.
-aea_version: '>=1.19.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeialhcja5fhf2ahyx5no2aajvnfhh4tj7ihhx65qpoohc4n5wfr76q
   tests/__init__.py: bafybeibknjewfed3d5ypi46ipuzfxdcps5ief2hfd3a2tfvm4gjtzzblme
@@ -93,7 +93,7 @@ logging_config:
 skill_exception_policy: stop_and_exit
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==1.65.0
+    version: ==2.0.6
   typing_extensions:
     version: ==4.13.2
 default_connection: null

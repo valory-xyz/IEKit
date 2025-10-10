@@ -5,7 +5,7 @@ type: skill
 description: An abci skill that reads mentions from the Twitter API and assigns scores
   to the users.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeifmfivpoooso45mltpffcv3vvonhrtycv443aqpzm6cetrkwopsdi
   behaviours.py: bafybeigifdcoq54tlirfzd7b474bo3mihwhgwoa324h5qfldguf7bnx4zy
