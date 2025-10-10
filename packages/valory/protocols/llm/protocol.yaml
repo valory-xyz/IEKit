@@ -7,7 +7,7 @@ description: A protocol for LLM requests and responses.
 license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
-  README.md: bafybeicetvgjqzw4lgggv2kxwsxshery2mow3becpquk3b4qdb5g6p76tm
+  README.md: bafybeihmypqhtpj4uhvxigobkcsovlgmo7igk556g5ymi6hwjnruavgpda
   __init__.py: bafybeihpfshhgdil3vzraagsfrq42cirxvg7ced5duhpe6kbqgo7g7v72m
   dialogues.py: bafybeigspfpqhdvgnwbiahxsc2qlilmzbcxyrffcwoilvnb7hx76uanul4
   llm.proto: bafybeiah7wq6spk7sr2ctwlutj3dn6sq3erbgm6ihja7abl7czoyoanyu4

@@ -23,16 +23,16 @@ fingerprint:
   tests/test_rounds.py: bafybeifj5mqzrl2d5jykqdgletlhytaw2yidnshgyejxmyeunh6cqshje4
 fingerprint_ignore_patterns: []
 connections:
-- valory/http_server:0.22.0:bafybeic3jpkum7g6qo6x6vdrmvvhj7vqw7ec2op72uc3yfhmnlp5hn3joy
+- valory/http_server:0.22.0:bafybeicmy3phyy3ckvlfumioiadwlmlt5dijkp3mhezkxgx7kigigwe3rm
 contracts:
-- valory/dynamic_contribution:0.1.0:bafybeie76wsemqek64b2sm4bidkewqzylokeid7efbuyj26kd44iezi4ia
+- valory/dynamic_contribution:0.1.0:bafybeifvrz3kn6ipsua34woctkfzmr5gihnlvuxmtmfspxpzmfcvmrb5tu
 protocols:
-- valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
-- valory/http:1.0.0:bafybeih4azmfwtamdbkhztkm4xitep3gx6tfdnoz6tvllmaqnhu3klejfa
+- valory/contract_api:1.0.0:bafybeicmo2ufeoqyyczkom6xp3nwmhosd75kpe4xfwn7gaz6vegj732b4m
+- valory/http:1.0.0:bafybeibxab2yfpchusrzw4rgrasjomtpphazanpivhhtznmuao5ny2lsmi
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy
-- valory/decision_making_abci:0.1.0:bafybeibycftzffpkhtzdk7uzjzhzuyxa3mybiqdsiabxt7yqlp6feyfqky
-- valory/contribute_db_abci:0.1.0:bafybeigq2vsbju2jf67hatmmz7uyo55e44beka5v7e7vj6yyrqqpdrxkd4
+- valory/abstract_round_abci:0.1.0:bafybeiemzg3e2hc5hjnpqj4kulxq4mjz65ktelqdgb6wvxekiwudjp63uu
+- valory/decision_making_abci:0.1.0:bafybeici5puz35pzqq2nxprzn5rrsdv3adfuoo7vtnzbaprwizdwyosgpa
+- valory/contribute_db_abci:0.1.0:bafybeib5fhcqqhqawqmjachtxfe6m2ooabk7lzt6sge4mnewzy2xavut5y
 behaviours:
   main:
     args: {}
