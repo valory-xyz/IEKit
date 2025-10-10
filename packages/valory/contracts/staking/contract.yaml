@@ -4,7 +4,7 @@ version: 0.1.0
 type: contract
 description: contribute staking contract
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   README.md: bafybeiclvbed42bmvsm3qqxosfu4kxbc6vuhxaant2od2hmszpkznh3z74
   __init__.py: bafybeif5vpc3dfrlxlch7brbhmdwksabyzddpfqgm56vdbbkek3t3br6ke
@@ -17,6 +17,6 @@ contract_interface_paths:
   ethereum: build/staking.json
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==1.65.0
+    version: ==2.0.6
   web3:
-    version: <7,>=6.0.0
+    version: <8,>=7.0.0

@@ -4,7 +4,7 @@ version: 0.1.0
 type: skill
 description: A skill that dynamically updates NFT images according to user scores.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeiasfbratsbsxyji2k2xeft3jdqaajwqskjsvbjsqht4mrew6wb2km
   behaviours.py: bafybeifph6l4wzyeqmphgbjksluqk2fn2z6m6ysvn2pyeyjqbaplmg2bnu

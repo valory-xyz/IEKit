@@ -4,7 +4,7 @@ version: 0.1.0
 type: skill
 description: A skill that writes data to a Ceramic stream.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeic3je64koagffola4n4khlbp4jdfhonyl6dwmodwz4r4oglnbwyma
   behaviours.py: bafybeidbyaegrzh6fxpudujdl3yp7nnlkue6benok4vzbh3422ooyjorxe

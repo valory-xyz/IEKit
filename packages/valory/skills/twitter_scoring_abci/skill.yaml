@@ -5,7 +5,7 @@ type: skill
 description: A skill that reads mentions from the Twitter API and assigns scores to
   the users.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
   behaviours.py: bafybeidqs27tkllg5upibladfbjyuz26pgcmuyvupwiwy6bwrp7k6qovda
@@ -179,5 +179,5 @@ models:
     class_name: TendermintDialogues
 dependencies:
   web3:
-    version: <7,>=6.0.0
+    version: <8,>=7.0.0
 is_abstract: true

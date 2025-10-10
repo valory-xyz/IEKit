@@ -4,7 +4,7 @@ version: 0.1.0
 type: skill
 description: This skill publishes casts to farcaster.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeiesk2lgewhrjm2oksend43a3bzne5dphfl2t56d5qzilbsforabn4
   behaviours.py: bafybeiapl3m6e2fwopapxdpnsimhxnj2fwxzacyxxxiug3lq6wklysutza

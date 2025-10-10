@@ -4,7 +4,7 @@ version: 0.1.0
 type: connection
 description: The farcaster connection provides a wrapper around Farcaster SDK.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeigwa4fd4m4rlk2ulhwbiul4rcrr4p6t4cais6to4ge2qz4ng3yo4i
   connection.py: bafybeieq5lzzpaqvp4czwlr25nv5dcg5aji4ou4vnwxljz2z5aw5pa2gxu

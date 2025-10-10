@@ -4,7 +4,7 @@ version: 0.1.0
 type: contract
 description: Agent mech marketplace contract.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   README.md: bafybeic3ldpphjsteilzj36ittzrj2jm55qwp2fn7qubbf4q4wpdpzm6y4
   __init__.py: bafybeih566schek7lxlxjkfb2medntav3kfnnqfhog35iolgljfxsobaxu
@@ -17,10 +17,10 @@ contract_interface_paths:
   ethereum: build/mech.json
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==1.65.0
+    version: ==2.0.6
   web3:
-    version: <7,>=6.0.0
+    version: <8,>=7.0.0
   eth_typing: {}
   eth-utils:
-    version: ==2.2.0
+    version: ==5.3.0
   hexbytes: {}
