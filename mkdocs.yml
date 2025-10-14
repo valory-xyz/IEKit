@@ -83,8 +83,8 @@ extra:
   open_autonomy_repository: '[Open Autonomy repository](https://github.com/valory-xyz/open-autonomy)'
   autonolas_whitepaper: '[Autonolas Whitepaper](https://www.autonolas.network/documents/whitepaper/Whitepaper%20v1.0.pdf)'
   autonolas_protocol: '[Autonolas Protocol](https://open-autonomy.docs.autonolas.tech/protocol)'
-  autonolas_protocol_registry_dapp_link: 'https://registry.olas.network'
-  autonolas_protocol_registry_dapp: '[Autonolas Protocol web app](https://registry.olas.network)'
+  autonolas_protocol_registry_dapp_link: 'https://marketplace.olas.network'
+  autonolas_protocol_registry_dapp: '[Autonolas Protocol web app](https://marketplace.olas.network)'
   autonolas_protocol_tokenomics_dapp: '[Autonolas Tokenomics web app](https://tokenomics.olas.network)'
   social:
     - icon: fontawesome/brands/twitter
