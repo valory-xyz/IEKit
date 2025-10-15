@@ -31,10 +31,10 @@ protocols:
 - valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
 - valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy
-- valory/decision_making_abci:0.1.0:bafybeibycftzffpkhtzdk7uzjzhzuyxa3mybiqdsiabxt7yqlp6feyfqky
-- valory/mech_interact_abci:0.1.0:bafybeidi2nfkt5r7cckdd4equdfm5uwiuisrz2splo7om3hkriy5ohx22e
-- valory/contribute_db_abci:0.1.0:bafybeigq2vsbju2jf67hatmmz7uyo55e44beka5v7e7vj6yyrqqpdrxkd4
+- valory/abstract_round_abci:0.1.0:bafybeifsuf7sh5vlugnqinbqe2f7vnssuqyxcrzqgotohhwqewyjeibneu
+- valory/decision_making_abci:0.1.0:bafybeidmca3tphgtshcwqiuccalhxvcjzaofnhmokfnrvzecvr75ctxvga
+- valory/mech_interact_abci:0.1.0:bafybeifhwy6encscbgqcahb5luupjoirw4vomgzp2e3cpork4nggvc5mnu
+- valory/contribute_db_abci:0.1.0:bafybeigc2biaqbdqhrmfgsg22v5mjlshu4lsbm72c623phomrxexyi2z6a
 behaviours:
   main:
     args: {}

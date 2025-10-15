@@ -23,21 +23,21 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy
-- valory/agent_db_abci:0.1.0:bafybeic7fatdnzwcxtbxldznslggzfyyvnrlaevhx3pyhjxuhk64aekcrq
-- valory/contribute_db_abci:0.1.0:bafybeigq2vsbju2jf67hatmmz7uyo55e44beka5v7e7vj6yyrqqpdrxkd4
-- valory/twitter_scoring_abci:0.1.0:bafybeifnc6epcnqdpxkgk3ndc7jm7ok5hpoa7rw3aneejcua5l7x5s5wfe
-- valory/dynamic_nft_abci:0.1.0:bafybeieft5uvch5hedzhcg5eavgppxdgct7imxtup654iayr4rvayw7ukq
-- valory/registration_abci:0.1.0:bafybeidqadl26x5prbjgnkqrvjnbqxpo75jttm7vlvpgkoqghs5677rw5i
-- valory/reset_pause_abci:0.1.0:bafybeiachgo6reit2q4jw75mefw2acj4ldedeqmn3rewjm4dbzts2l7oxe
-- valory/termination_abci:0.1.0:bafybeibtbboau3q5fxfviwm7lbeix4z55uptfqqiyiu6siivxwkp3o5pju
-- valory/transaction_settlement_abci:0.1.0:bafybeic2ywzpwkyeqbzsvkbvurhsptemam4xtceihax2tmxmlxtgd3xpya
-- valory/decision_making_abci:0.1.0:bafybeibycftzffpkhtzdk7uzjzhzuyxa3mybiqdsiabxt7yqlp6feyfqky
-- valory/twitter_write_abci:0.1.0:bafybeiamg6pt2rejxftvgmjxvmicy3b3rxxaqpk2h3k7h3pgh4sfitttv4
-- valory/olas_week_abci:0.1.0:bafybeifz7wx7g6v3agy7d7shfgzwaask7hngn5el5yjo3vbtnzqm3fgk34
-- valory/mech_interact_abci:0.1.0:bafybeidi2nfkt5r7cckdd4equdfm5uwiuisrz2splo7om3hkriy5ohx22e
-- valory/staking_abci:0.1.0:bafybeia2drank4tiakic53rii6epjsclhiva4wxrrpitymyy4l2tmr7wym
-- valory/llm_abci:0.1.0:bafybeiamxgtcobjsanthqdyi2pnnezsaio4jbkkh23e5wni57yoqv3n4oa
+- valory/abstract_round_abci:0.1.0:bafybeifsuf7sh5vlugnqinbqe2f7vnssuqyxcrzqgotohhwqewyjeibneu
+- valory/agent_db_abci:0.1.0:bafybeiaagfmnvzgykpjqpbi4a74gx2yobyidqz53j27heqzzfpjfgfiddq
+- valory/contribute_db_abci:0.1.0:bafybeigc2biaqbdqhrmfgsg22v5mjlshu4lsbm72c623phomrxexyi2z6a
+- valory/twitter_scoring_abci:0.1.0:bafybeia75dik2xarl4vn7vtqtozofkzhagwoivefazjie2geevz6ito7ge
+- valory/dynamic_nft_abci:0.1.0:bafybeied5t45kpetjhpf3jvzerjtrxpma5iqbsdwabw75qeotltnhmcb7a
+- valory/registration_abci:0.1.0:bafybeie6rd7zlws4rxzkwka5mzhk56mn6clj3ocxbkbgeaiawv2c6b6jtm
+- valory/reset_pause_abci:0.1.0:bafybeian7gymp6x6rn55uaf4u3dgirbzr43xvnsj2ev27stkadikjqz4du
+- valory/termination_abci:0.1.0:bafybeiht4uj5j3qqf2hewtzah7vcabb7okkjgi65jb76ddfltvjpk6bzxi
+- valory/transaction_settlement_abci:0.1.0:bafybeiem4qoc2pdpxoingjqp3qnrdjwho67pd6amy7o3xjr5mpdrepctve
+- valory/decision_making_abci:0.1.0:bafybeidmca3tphgtshcwqiuccalhxvcjzaofnhmokfnrvzecvr75ctxvga
+- valory/twitter_write_abci:0.1.0:bafybeigjcad2fatq3svnzgxvvfx7mopm5ppmrpbcp72it5rc7z7iaotgfu
+- valory/olas_week_abci:0.1.0:bafybeia5n7lyupej7ctivfek6yhkthsdnhwtlue6qdkrs3wpswzk4dzppa
+- valory/mech_interact_abci:0.1.0:bafybeifhwy6encscbgqcahb5luupjoirw4vomgzp2e3cpork4nggvc5mnu
+- valory/staking_abci:0.1.0:bafybeidepcejjzkhdg2i7cmmqppdo2hmky5gn72drppblmpzdxw3qt2nma
+- valory/llm_abci:0.1.0:bafybeifgx4ubx55z7f3uq4fdjjh2nvqscuww6ua3suhxiijwu4ll4uus3q
 behaviours:
   main:
     args: {}
@@ -186,7 +186,6 @@ models:
       serious_slash_unit_amount: 8000000000000000
       multisend_batch_size: 50
       mech_contract_address: '0x77af31De935740567Cf4fF1986D04B2c964A786a'
-      mech_request_price: null
       ipfs_address: https://gateway.autonolas.tech/ipfs/
       default_chain_id: ethereum
       transaction_service_url: https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/
