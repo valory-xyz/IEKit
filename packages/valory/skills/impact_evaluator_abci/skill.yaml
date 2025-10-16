@@ -8,7 +8,7 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
   behaviours.py: bafybeigcvodybauatvybm47grm4wqpcpghwmdtw6zdoli3gufvk2hmxmuu
-  composition.py: bafybeif4ktkjfnsslbsp4t42rijr5t6l6v5aeydkfnrifpwihttapdccua
+  composition.py: bafybeicbvwwthov3w6ej2hzosjs7adcext5nutchsjrzflcyuupwtzibaa
   dialogues.py: bafybeiaho6vtf5tje7w7yyg4ozezynucmyq7ayvtybow2m62rfj4wcltmq
   fsm_specification.yaml: bafybeiedx6ekzqvw4kzydqdprt2h3jrxa5k4myrfymkngbbybrcjpjj7wa
   handlers.py: bafybeifgfg6r7c4h3kcvcrrztnw72gsjiz4uylrezsptwg6p3s4zgdn7lm
@@ -186,6 +186,7 @@ models:
       serious_slash_unit_amount: 8000000000000000
       multisend_batch_size: 50
       mech_contract_address: '0x77af31De935740567Cf4fF1986D04B2c964A786a'
+      mech_request_price: null
       ipfs_address: https://gateway.autonolas.tech/ipfs/
       default_chain_id: ethereum
       transaction_service_url: https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/

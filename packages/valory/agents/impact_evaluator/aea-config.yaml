@@ -41,7 +41,6 @@ contracts:
 - valory/nft_sales:0.1.0:bafybeidychvnkjjw3ucrcicogxahfwn4j73dliyw7divyyrlsxnowav3wy
 - valory/lock_payment_condition:0.1.0:bafybeigai3izamf7abolq347krjoafrogbdoz2sis4zfco7u6ougjskjzy
 - valory/agreement_store_manager:0.1.0:bafybeib4arfjefyephkdoovgtqsafgzdxpvtcqjdjlhvcq5m3wtkdqdfem
-- valory/transfer_nft_condition:0.1.0:bafybeibvcrlgfuy5wt2xolzqsywbzfaquwfdvqn44ppcdka2ymk3e5kxm4
 - valory/subscription_provider:0.1.0:bafybeic4udkvbsajuwscnqsm7tf6monwqyos4qvgbako6lch3zhtfxrc7q
 protocols:
 - open_aea/signing:1.0.0:bafybeig2d36zxy65vd7fwhs7scotuktydcarm74aprmrb5nioiymr3yixm
@@ -57,7 +56,7 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeieteucm3rudnnbesnu53wbv3ojnhrwqbvfrsqwvhg6ksgriqyl67i
 - valory/abstract_round_abci:0.1.0:bafybeifsuf7sh5vlugnqinbqe2f7vnssuqyxcrzqgotohhwqewyjeibneu
-- valory/impact_evaluator_abci:0.1.0:bafybeihagf5urfbkpyviavutll5pebkxs4zf56652ldtlwbkhqaxvf5hwu
+- valory/impact_evaluator_abci:0.1.0:bafybeibvcrjsbqegc33j6ak3djds4w4oghbiv5fl6tf7fmpixiibfbyfnu
 - valory/twitter_scoring_abci:0.1.0:bafybeia75dik2xarl4vn7vtqtozofkzhagwoivefazjie2geevz6ito7ge
 - valory/agent_db_abci:0.1.0:bafybeiaagfmnvzgykpjqpbi4a74gx2yobyidqz53j27heqzzfpjfgfiddq
 - valory/contribute_db_abci:0.1.0:bafybeigc2biaqbdqhrmfgsg22v5mjlshu4lsbm72c623phomrxexyi2z6a
@@ -276,6 +275,7 @@ models:
       serious_slash_unit_amount: ${int:8000000000000000}
       multisend_batch_size: ${int:50}
       mech_contract_address: ${str:0x77af31De935740567Cf4fF1986D04B2c964A786a}
+      mech_request_price: ${int:null}
       ipfs_address: ${str:https://gateway.autonolas.tech/ipfs/}
       default_chain_id: ${str:ethereum}
       transaction_service_url: ${str:https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/}
