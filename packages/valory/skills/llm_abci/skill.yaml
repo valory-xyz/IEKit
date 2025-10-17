@@ -133,6 +133,7 @@ models:
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
       termination_sleep: 900
+      mech_wrapped_native_token_address: '0x0000000000000000000000000000000000000000'
       tx_timeout: 10.0
       use_termination: false
       validate_timeout: 1205

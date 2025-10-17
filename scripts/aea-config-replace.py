@@ -50,6 +50,10 @@ PATH_TO_VAR = {
     "models/params/args/safe_contract_address_base": "SAFE_CONTRACT_ADDRESS_BASE",
     "models/params/args/safe_contract_address_gnosis": "SAFE_CONTRACT_ADDRESS_GNOSIS",
     "models/params/args/transaction_service_url": "TRANSACTION_SERVICE_URL",
+    "models/params/args/mech_wrapped_native_token_address": "MECH_WRAPPED_NATIVE_TOKEN_ADDRESS",
+    "models/params/args/mech_contract_address": "MECH_CONTRACT_ADDRESS",
+    "models/params/args/on_chain_service_id": "ON_CHAIN_SERVICE_ID",
+    "models/params/args/use_mech_marketplace": "USE_MECH_MARKETPLACE",
 
     # Twitter
     "models/params/args/twitter_api_bearer_token": "TWITTER_API_BEARER_TOKEN",
