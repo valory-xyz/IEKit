@@ -10,7 +10,7 @@ fingerprint:
   behaviours.py: bafybeigcvodybauatvybm47grm4wqpcpghwmdtw6zdoli3gufvk2hmxmuu
   composition.py: bafybeicbvwwthov3w6ej2hzosjs7adcext5nutchsjrzflcyuupwtzibaa
   dialogues.py: bafybeiaho6vtf5tje7w7yyg4ozezynucmyq7ayvtybow2m62rfj4wcltmq
-  fsm_specification.yaml: bafybeiedx6ekzqvw4kzydqdprt2h3jrxa5k4myrfymkngbbybrcjpjj7wa
+  fsm_specification.yaml: bafybeidsmnicpafnx7rawfa3uhbze6457qqrrbmsdehbcr7dvd6puk5v5e
   handlers.py: bafybeifgfg6r7c4h3kcvcrrztnw72gsjiz4uylrezsptwg6p3s4zgdn7lm
   models.py: bafybeieupgfwzehyybexi2mws3quywx4szvgag7xc45vbyodor3iw4nhem
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
@@ -26,7 +26,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeifsuf7sh5vlugnqinbqe2f7vnssuqyxcrzqgotohhwqewyjeibneu
 - valory/agent_db_abci:0.1.0:bafybeicjwksitszrma42kwkc4rxd32p5bubdl3amnnjfqxbew3niaqy6pq
 - valory/contribute_db_abci:0.1.0:bafybeih63hudi4txtcicpmfebk3nzlvh75m522h3bk4ygqad736kn53bii
-- valory/twitter_scoring_abci:0.1.0:bafybeih7bzzdfad3jf6rlfudgcnof5xig3svd7qxkhbo6ae5ablrhfev7e
+- valory/twitter_scoring_abci:0.1.0:bafybeigulfwnsgki72jydky2agluslway25tdalcdnpbvtdnftn54fld7e
 - valory/dynamic_nft_abci:0.1.0:bafybeibbglusm5zmf6zlb5unv3f2mlo6yndxa5fw3tg4ieyrrzpsqssauy
 - valory/registration_abci:0.1.0:bafybeie6rd7zlws4rxzkwka5mzhk56mn6clj3ocxbkbgeaiawv2c6b6jtm
 - valory/reset_pause_abci:0.1.0:bafybeian7gymp6x6rn55uaf4u3dgirbzr43xvnsj2ev27stkadikjqz4du

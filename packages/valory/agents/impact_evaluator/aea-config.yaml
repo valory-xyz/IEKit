@@ -56,8 +56,8 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeieteucm3rudnnbesnu53wbv3ojnhrwqbvfrsqwvhg6ksgriqyl67i
 - valory/abstract_round_abci:0.1.0:bafybeifsuf7sh5vlugnqinbqe2f7vnssuqyxcrzqgotohhwqewyjeibneu
-- valory/impact_evaluator_abci:0.1.0:bafybeic5uaxrshkardgxg2iyuxbxkp2rcwot5hsvuqqxnjrs5xuyg6vwpi
-- valory/twitter_scoring_abci:0.1.0:bafybeih7bzzdfad3jf6rlfudgcnof5xig3svd7qxkhbo6ae5ablrhfev7e
+- valory/impact_evaluator_abci:0.1.0:bafybeicv4eul7idfbq5m2s5nmv7j5d62thfspf2yut33euucixqscstvtq
+- valory/twitter_scoring_abci:0.1.0:bafybeigulfwnsgki72jydky2agluslway25tdalcdnpbvtdnftn54fld7e
 - valory/agent_db_abci:0.1.0:bafybeicjwksitszrma42kwkc4rxd32p5bubdl3amnnjfqxbew3niaqy6pq
 - valory/contribute_db_abci:0.1.0:bafybeih63hudi4txtcicpmfebk3nzlvh75m522h3bk4ygqad736kn53bii
 - valory/dynamic_nft_abci:0.1.0:bafybeibbglusm5zmf6zlb5unv3f2mlo6yndxa5fw3tg4ieyrrzpsqssauy
@@ -286,7 +286,7 @@ models:
       mech_chain_id: ${str:gnosis}
       mech_interaction_sleep_time: ${int:10}
       use_mech_marketplace: ${bool:true}
-      mech_marketplace_config: ${dict:{"mech_marketplace_address":"0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB","priority_mech_address":"0xC05e7412439bD7e91730a6880E18d5D5873F632C","priority_mech_staking_instance_address":"0x998dEFafD094817EF329f6dc79c703f1CF18bC90","priority_mech_service_id":975,"requester_staking_instance_address":"0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d","response_timeout":300}}
+      mech_marketplace_config: ${dict:{"mech_marketplace_address":"0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB","priority_mech_address":"0xC05e7412439bD7e91730a6880E18d5D5873F632C","priority_mech_staking_instance_address":"0x998dEFafD094817EF329f6dc79c703f1CF18bC90","priority_mech_service_id":0,"requester_staking_instance_address":"0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d","response_timeout":300}}
       checkpoint_threshold_minutes: ${int:600}
       staking_activity_threshold: ${int:5}
       staking_contract_addresses: ${list:["0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4","0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387","0x28877FFc6583170a4C9eD0121fc3195d06fd3A26"]}
