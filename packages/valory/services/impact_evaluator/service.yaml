@@ -419,7 +419,7 @@ extra:
         use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:true}
         agent_registry_address: ${AGENT_REGISTRY_ADDRESS:str:0x0000000000000000000000000000000000000000}
         use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
-        mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB","priority_mech_address":"","priority_mech_staking_instance_address":"0x998dEFafD094817EF329f6dc79c703f1CF18bC90","priority_mech_service_id":0,"requester_staking_instance_address":"0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d","response_timeout":300}}
+        mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB","priority_mech_address":"0xC05e7412439bD7e91730a6880E18d5D5873F632C","priority_mech_staking_instance_address":"0x998dEFafD094817EF329f6dc79c703f1CF18bC90","priority_mech_service_id":0,"requester_staking_instance_address":"0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d","response_timeout":300}}
         checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
         staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4","0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387","0x28877FFc6583170a4C9eD0121fc3195d06fd3A26"]}
