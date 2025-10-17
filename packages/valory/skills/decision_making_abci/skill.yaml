@@ -4,7 +4,7 @@ version: 0.1.0
 type: skill
 description: An abci skill that implements the decision logic of the centaur.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeicq2o3mkcgbmi4hkmpr3c6fieemutea2gxthymxnbhpemrzlcp2la
   behaviours.py: bafybeidpmvfvnshqp57c6hny2hirvbmxblcj4p43geso4qatlwi76szatu

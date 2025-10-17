@@ -3,7 +3,7 @@ author: valory
 version: 0.1.0
 license: Apache-2.0
 description: The impact evaluator agent.
-aea_version: '>=1.19.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeiatca7tc6weiyw7zame2rcm7ihchahqwzavoz6uqchs4w7ejpbmqa
 fingerprint_ignore_patterns: []
@@ -67,7 +67,7 @@ logging_config:
 skill_exception_policy: stop_and_exit
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==1.65.0
+    version: ==2.0.6
 default_connection: null
 ---
 public_id: valory/farcaster:0.1.0
