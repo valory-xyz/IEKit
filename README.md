@@ -1,15 +1,15 @@
 # IEKit
 An toolkit for autonomous services implementing a decentralized Impact Evaluator built with the [Open Autonomy](https://stack.olas.network/open-autonomy/) framework.
 
-The demo service for the IEKit tracks mentions of [@autonolas](https://twitter.com/autonolas) on Twitter, assigns scores to them and writes those scores to a [Ceramic](https://ceramic.network/) stream.
+The demo AI agent for the IEKit tracks mentions of [@autonolas](https://twitter.com/autonolas) on Twitter, assigns scores to them and writes those scores to a [Ceramic](https://ceramic.network/) stream.
 
-## Running a demo service
+## Running a demo AI agent
 
-To learn how to run a demo service based on the IEKit, read the ~~IEKit technical docs~~(Deprecated and docs need to be updated).
+To learn how to run a demo AI agent based on the IEKit, read the ~~IEKit technical docs~~(Deprecated and docs need to be updated).
 
 ## For Developers
 
-Prepare the environment to build your own IEKit-based service.
+Prepare the environment to build your own IEKit-based AI agent.
 
 - Clone the repository:
 
@@ -47,6 +47,6 @@ Prepare the environment to build your own IEKit-based service.
 
 - Fill in the required env vars in `.sample_env`
 
-- Run a single agent service:
+- Run a single agent instance AI agent:
 
       bash run_service_single.sh

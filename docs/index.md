@@ -1,14 +1,14 @@
 ![IEKit](images/iekit.svg){ align=left }
-The Impact Evaluator Kit (IEKit) is an enhanced version of the CoordinationKit, which leverages [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) to automate the tracking and rewarding of users' contributions on the ecosystem. We provide a demo agent service based on the IEKit which is designed to track contributions in the form of Twitter mentions of the Autonolas DAO ([@autonolas](https://twitter.com/autonolas)). Generic scores can be also read from a [Ceramic stream](https://developers.ceramic.network/docs/advanced/standards/stream-programs/). The demo service implements three main features:
+The Impact Evaluator Kit (IEKit) is an enhanced version of the CoordinationKit, which leverages [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) to automate the tracking and rewarding of users' contributions on the ecosystem. We provide a demo AI agent based on the IEKit which is designed to track contributions in the form of Twitter mentions of the Autonolas DAO ([@autonolas](https://twitter.com/autonolas)). Generic scores can be also read from a [Ceramic stream](https://developers.ceramic.network/docs/advanced/standards/stream-programs/). The demo AI agent implements three main features:
 
 1. **Monitor for new users' registrations.** Reads registered users both from tweets that contain the current campaigns and also from a [Ceramic stream](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) that contains user data like discord ids and wallet addresses.
 
-2. **Monitor for users' contributions.** The service periodically scans for new mentions of @autonolas on Twitter and updates to the scores stream, and increments and updates the score of the corresponding user.
+2. **Monitor for users' contributions.** The AI agent periodically scans for new mentions of @autonolas on Twitter and updates to the scores stream, and increments and updates the score of the corresponding user.
 
-3. **Update the badge of users according to their score.** To access the badge image associated to a user's NFT, the metadata URI associated to it is redirected to an agent in the service. Upon reading the concrete NFT from the request, the service provides the IPFS address of the image, which is updated periodically in relation to the user's score.
+3. **Update the badge of users according to their score.** To access the badge image associated to a user's NFT, the metadata URI associated to it is redirected to an agent blueprint in the AI agent. Upon reading the concrete NFT from the request, the AI agent provides the IPFS address of the image, which is updated periodically in relation to the user's score.
 
-The demo service uses dedicated [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) as a persistent solution to store users' scores and registration metadata.
-The service demonstrates the applicability of the IEKit to build a particular use case, but of course, the IEKit is modular by design and can be adapted to a range of custom impact evaluators.
+The demo AI agent uses dedicated [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) as a persistent solution to store users' scores and registration metadata.
+The AI agent demonstrates the applicability of the IEKit to build a particular use case, but of course, the IEKit is modular by design and can be adapted to a range of custom impact evaluators.
 
 ## Demo
 
@@ -16,7 +16,7 @@ The service demonstrates the applicability of the IEKit to build a particular us
 
     This section is under active development - please report issues in the [Autonolas Discord](https://discord.com/invite/z2PT65jKqQ).
 
-In order to run a local demo service based on the IEKit:
+In order to run a local demo AI agent based on the IEKit:
 
 1. [Set up your system](https://stack.olas.network/open-autonomy/guides/set_up/) to work with the Open Autonomy framework. We recommend that you use these commands:
 
@@ -31,17 +31,17 @@ In order to run a local demo service based on the IEKit:
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeihtwryurqpl3mvuq7sonjysu2ifa6qjqevmsyi3gjdi53evswgz4e --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeidfa7yla7zovfjblbwusqfsxkwg2i467ffvptqsw4yv4iddinuqly --service
     ```
 
-3. Build the Docker image of the service agents
+3. Build the Docker image of the agent blueprint
 
     ```bash
     cd impact_evaluator
     autonomy build-image
     ```
 
-4. Prepare the `keys.json` file containing the wallet address and the private key for each of the agents.
+4. Prepare the `keys.json` file containing the wallet address and the private key for each of the agent instances.
 
     ??? example "Example of a `keys.json` file"
 
@@ -68,17 +68,17 @@ In order to run a local demo service based on the IEKit:
         ]
         ```
 
-5. Prepare the environment and build the service deployment.
+5. Prepare the environment and build the AI agent deployment.
 
     1. Create [Twitter API Authentication Tokens](https://developer.twitter.com/en/portal/dashboard) and an [OpenAI API key](https://openai.com/blog/openai-api).
 
     2. Create a Ceramic Decentralized Identity (DID) using [Glaze](https://github.com/ceramicstudio/js-glaze).
 
-    3. Using the DID created in the previous step, create three empty Ceramic streams. The service will optionally read generic scores from the first one and will write scores to the second one. The third one will store some tool configurations. Alternatively, the [`create_streams.py` script from the IEKit repo](https://github.com/valory-xyz/IEKit) can be used to create some dummy streams.
+    3. Using the DID created in the previous step, create three empty Ceramic streams. The AI agent will optionally read generic scores from the first one and will write scores to the second one. The third one will store some tool configurations. Alternatively, the [`create_streams.py` script from the IEKit repo](https://github.com/valory-xyz/IEKit) can be used to create some dummy streams.
 
     4. Create an API key for [Infura](https://www.infura.io/) or your preferred provider. You will need both Ethereum and Gnosis Chain RPCs.
 
-    5. Deploy a [Safe](https://app.safe.global/welcome) on Gnosis chain and set your agents as the owners so they can interact with it. The service will send Mech requests using the Safe. Alternatively, use [Olas protocol frontend](https://registry.olas.network/ethereum/services) to mint the service, and a Safe will be automatically deployed for you.
+    5. Deploy a [Safe](https://app.safe.global/welcome) on Gnosis chain and set your agent instances as the owners so they can interact with it. The AI agent will send Mech requests using the Safe. Alternatively, use [Olas protocol frontend](https://marketplace.olas.network/ethereum/ai-agents) to mint the AI agent, and a Safe will be automatically deployed for you.
 
     6. Create an `.env` file with the required environment variables, modifying its values to your needs.
 
@@ -114,7 +114,7 @@ In order to run a local demo service based on the IEKit:
         ETHEREUM_LEDGER_RPC=
         GNOSIS_LEDGER_RPC=
 
-        # Agent addresses and Safe. Agents must be owners of the safe, which is used for Mech interactions.
+        # agent instances addresses and AI agent Safe. agent instance must be owners of the AI agent safe, which is used for Mech interactions.
         ALL_PARTICIPANTS='["<agent_address>","<agent_address>","<agent_address>"."<agent_address>"]'
         SAFE_CONTRACT_ADDRESS=
 
@@ -135,15 +135,15 @@ In order to run a local demo service based on the IEKit:
         export $(grep -v '^#' .env | xargs)
         ```
 
-    7. Copy the keys.json file inside the service's folder.
+    7. Copy the keys.json file inside the AI agent's folder.
 
-    8. Build the service deployment.
+    8. Build the AI agent deployment.
 
         ```bash
         autonomy deploy build keys.json -ltm
         ```
 
-6. Run the service.
+6. Run the AI agent.
 
     ```bash
     cd abci_build_{uuid}
@@ -153,13 +153,13 @@ In order to run a local demo service based on the IEKit:
     Where `{uuid}` is a 4-character random hash.
     You can cancel the local execution at any time by pressing ++ctrl+c++.
 
-7. Check that the service is running. Open a separate terminal and execute the command below. You should see the service transitioning along different states.
+7. Check that the AI agent is running. Open a separate terminal and execute the command below. You should see the AI agent transitioning along different states.
 
     ```bash
     docker logs -f impactevaluator_abci_0 | grep -E 'Entered|round is done'
     ```
 
-8. You can try some examples on how to curl the service endpoints from inside one of the agent containers. For example:
+8. You can try some examples on how to curl the AI agent endpoints from inside one of the agent blueprint containers. For example:
 
     ```bash
     # Get the metadata for the token with id=1
@@ -174,7 +174,7 @@ In order to run a local demo service based on the IEKit:
       "attributes": []
     }
 
-    # Get the service health status
+    # Get the AI agent health status
     curl localhost:8000/healthcheck | jq
 
     # Output
@@ -188,10 +188,10 @@ In order to run a local demo service based on the IEKit:
 ## Build
 
 1. Fork the [IEKit repository](https://github.com/valory-xyz/iekit).
-2. Make the necessary adjustments to tailor the service to your needs. This could include:
+2. Make the necessary adjustments to tailor the AI agent to your needs. This could include:
     * Adjust configuration parameters (e.g., in the `service.yaml` file).
-    * Expand the service finite-state machine with your custom states.
-3. Run your service as detailed above.
+    * Expand the AI agent finite-state machine with your custom states.
+3. Run your AI agent as detailed above.
 
 !!! tip "Looking for help building your own?"
 
