@@ -1,103 +1,105 @@
 alphabet_in:
-    - API_ERROR
-    - CAMPAIGN_VALIDATION
-    - CHECK_HISTORY
-    - CHECK_LATE_ARRIVING_MESSAGE
-    - CHECK_TIMEOUT
-    - CONTINUE
-    - CONTRACT_ERROR
-    - DB_UPDATE
-    - DONE
-    - DONE_API_LIMITS
-    - DONE_MAX_RETRIES
-    - DONE_SKIP
-    - EVALUATE
-    - FINALIZATION_FAILED
-    - FINALIZE_TIMEOUT
-    - INCORRECT_SERIALIZATION
-    - INSUFFICIENT_FUNDS
-    - NEGATIVE
-    - NONE
-    - NO_ALLOWANCE
-    - NO_MAJORITY
-    - OPENAI_CALL_CHECK
-    - POST_MECH
-    - POST_TX_ACTIVITY_UPDATE
-    - POST_TX_CHECKPOINT
-    - POST_TX_DAA
-    - POST_TX_MECH
-    - PRE_MECH
-    - PROCESS_UPDATES
-    - RESET_AND_PAUSE_TIMEOUT
-    - RESET_TIMEOUT
-    - RETRIEVE_CAMPAIGNS
-    - RETRIEVE_MENTIONS
-    - RETRIEVE_TWEETS
-    - ROUND_TIMEOUT
-    - SCHEDULED_TWEET
-    - SCORE
-    - SELECT_KEEPERS
-    - SKIP_EVALUATION
-    - SKIP_REQUEST
-    - STAKING_ACTIVITY
-    - STAKING_CHECKPOINT
-    - STAKING_DAA_UPDATE
-    - SUSPICIOUS_ACTIVITY
-    - TWEET_EVALUATION_ROUND_TIMEOUT
-    - TWEET_VALIDATION
-    - VALIDATE_TIMEOUT
-    - WEEK_IN_OLAS_CREATE
-    - WRITE_CONTRIBUTE_DB
+- API_ERROR
+- BUY_SUBSCRIPTION
+- CAMPAIGN_VALIDATION
+- CHECK_HISTORY
+- CHECK_LATE_ARRIVING_MESSAGE
+- CHECK_TIMEOUT
+- CONTINUE
+- CONTRACT_ERROR
+- DB_UPDATE
+- DONE
+- DONE_API_LIMITS
+- DONE_MAX_RETRIES
+- DONE_SKIP
+- EVALUATE
+- FINALIZATION_FAILED
+- FINALIZE_TIMEOUT
+- INCORRECT_SERIALIZATION
+- INSUFFICIENT_FUNDS
+- NEGATIVE
+- NONE
+- NO_ALLOWANCE
+- NO_MAJORITY
+- OPENAI_CALL_CHECK
+- POST_MECH
+- POST_TX_ACTIVITY_UPDATE
+- POST_TX_CHECKPOINT
+- POST_TX_DAA
+- POST_TX_MECH
+- PRE_MECH
+- PROCESS_UPDATES
+- RESET_AND_PAUSE_TIMEOUT
+- RESET_TIMEOUT
+- RETRIEVE_CAMPAIGNS
+- RETRIEVE_MENTIONS
+- RETRIEVE_TWEETS
+- ROUND_TIMEOUT
+- SCHEDULED_TWEET
+- SCORE
+- SELECT_KEEPERS
+- SKIP_EVALUATION
+- SKIP_REQUEST
+- STAKING_ACTIVITY
+- STAKING_CHECKPOINT
+- STAKING_DAA_UPDATE
+- SUSPICIOUS_ACTIVITY
+- TWEET_EVALUATION_ROUND_TIMEOUT
+- TWEET_VALIDATION
+- VALIDATE_TIMEOUT
+- WEEK_IN_OLAS_CREATE
+- WRITE_CONTRIBUTE_DB
 default_start_state: RegistrationStartupRound
 final_states:
-    - FinishedDecisionMakingWriteContributeDBRound
+- FinishedDecisionMakingWriteContributeDBRound
 label: ImpactEvaluatorSkillAbciApp
 start_states:
-    - RegistrationRound
-    - RegistrationStartupRound
+- RegistrationRound
+- RegistrationStartupRound
 states:
-    - ActivityScoreRound
-    - ActivityUpdatePreparationRound
-    - CheckLateTxHashesRound
-    - CheckTransactionHistoryRound
-    - CheckpointPreparationRound
-    - CollectSignatureRound
-    - DAAPreparationRound
-    - DBLoadRound
-    - DBUpdateRound
-    - DecisionMakingRound
-    - FinalizationRound
-    - FinishedDecisionMakingWriteContributeDBRound
-    - MechRequestRound
-    - MechResponseRound
-    - OlasWeekDecisionMakingRound
-    - OlasWeekEvaluationRound
-    - OlasWeekOpenAICallCheckRound
-    - OlasWeekRandomnessRound
-    - OlasWeekSelectKeepersRound
-    - OlasWeekTweetCollectionRound
-    - PostMechRequestRound
-    - PostTxDecisionMakingRound
-    - PreMechRequestRound
-    - RandomnessTransactionSubmissionRound
-    - RandomnessTwitterRound
-    - RegistrationRound
-    - RegistrationStartupRound
-    - ResetAndPauseRound
-    - ResetRound
-    - SelectKeeperTransactionSubmissionARound
-    - SelectKeeperTransactionSubmissionBAfterTimeoutRound
-    - SelectKeeperTransactionSubmissionBRound
-    - SelectKeeperTwitterRound
-    - SynchronizeLateMessagesRound
-    - TokenTrackRound
-    - TwitterDecisionMakingRound
-    - TwitterCampaignsCollectionRound
-    - TwitterMentionsCollectionRound
-    - TwitterRandomnessRound
-    - TwitterSelectKeepersRound
-    - TwitterWriteRound
-    - ValidateTransactionRound
+- ActivityScoreRound
+- ActivityUpdatePreparationRound
+- CheckLateTxHashesRound
+- CheckTransactionHistoryRound
+- CheckpointPreparationRound
+- CollectSignatureRound
+- DAAPreparationRound
+- DBLoadRound
+- DBUpdateRound
+- DecisionMakingRound
+- FinalizationRound
+- FinishedDecisionMakingWriteContributeDBRound
+- MechPurchaseSubscriptionRound
+- MechRequestRound
+- MechResponseRound
+- OlasWeekDecisionMakingRound
+- OlasWeekEvaluationRound
+- OlasWeekOpenAICallCheckRound
+- OlasWeekRandomnessRound
+- OlasWeekSelectKeepersRound
+- OlasWeekTweetCollectionRound
+- PostMechRequestRound
+- PostTxDecisionMakingRound
+- PreMechRequestRound
+- RandomnessTransactionSubmissionRound
+- RandomnessTwitterRound
+- RegistrationRound
+- RegistrationStartupRound
+- ResetAndPauseRound
+- ResetRound
+- SelectKeeperTransactionSubmissionARound
+- SelectKeeperTransactionSubmissionBAfterTimeoutRound
+- SelectKeeperTransactionSubmissionBRound
+- SelectKeeperTwitterRound
+- SynchronizeLateMessagesRound
+- TokenTrackRound
+- TwitterCampaignsCollectionRound
+- TwitterDecisionMakingRound
+- TwitterMentionsCollectionRound
+- TwitterRandomnessRound
+- TwitterSelectKeepersRound
+- TwitterWriteRound
+- ValidateTransactionRound
 transition_func:
     (ActivityScoreRound, DONE): DecisionMakingRound
     (ActivityScoreRound, NO_MAJORITY): ActivityScoreRound
@@ -151,6 +153,11 @@ transition_func:
     (FinalizationRound, FINALIZATION_FAILED): SelectKeeperTransactionSubmissionBRound
     (FinalizationRound, FINALIZE_TIMEOUT): SelectKeeperTransactionSubmissionBAfterTimeoutRound
     (FinalizationRound, INSUFFICIENT_FUNDS): SelectKeeperTransactionSubmissionBRound
+    (MechPurchaseSubscriptionRound, DONE): MechRequestRound
+    (MechPurchaseSubscriptionRound, NONE): MechPurchaseSubscriptionRound
+    (MechPurchaseSubscriptionRound, NO_MAJORITY): MechPurchaseSubscriptionRound
+    (MechPurchaseSubscriptionRound, ROUND_TIMEOUT): MechPurchaseSubscriptionRound
+    (MechRequestRound, BUY_SUBSCRIPTION): MechPurchaseSubscriptionRound
     (MechRequestRound, DONE): RandomnessTransactionSubmissionRound
     (MechRequestRound, NO_MAJORITY): MechRequestRound
     (MechRequestRound, ROUND_TIMEOUT): MechRequestRound
@@ -238,6 +245,12 @@ transition_func:
     (TokenTrackRound, DONE): DecisionMakingRound
     (TokenTrackRound, NO_MAJORITY): TokenTrackRound
     (TokenTrackRound, ROUND_TIMEOUT): TokenTrackRound
+    (TwitterCampaignsCollectionRound, API_ERROR): TwitterCampaignsCollectionRound
+    (TwitterCampaignsCollectionRound, DONE): TwitterDecisionMakingRound
+    (TwitterCampaignsCollectionRound, DONE_API_LIMITS): TwitterDecisionMakingRound
+    (TwitterCampaignsCollectionRound, DONE_MAX_RETRIES): TwitterDecisionMakingRound
+    (TwitterCampaignsCollectionRound, NO_MAJORITY): TwitterRandomnessRound
+    (TwitterCampaignsCollectionRound, ROUND_TIMEOUT): TwitterRandomnessRound
     (TwitterDecisionMakingRound, DB_UPDATE): DBUpdateRound
     (TwitterDecisionMakingRound, DONE): TokenTrackRound
     (TwitterDecisionMakingRound, NO_MAJORITY): TwitterDecisionMakingRound
@@ -247,12 +260,6 @@ transition_func:
     (TwitterDecisionMakingRound, RETRIEVE_MENTIONS): TwitterMentionsCollectionRound
     (TwitterDecisionMakingRound, ROUND_TIMEOUT): TwitterDecisionMakingRound
     (TwitterDecisionMakingRound, SELECT_KEEPERS): TwitterRandomnessRound
-    (TwitterCampaignsCollectionRound, API_ERROR): TwitterCampaignsCollectionRound
-    (TwitterCampaignsCollectionRound, DONE): TwitterDecisionMakingRound
-    (TwitterCampaignsCollectionRound, DONE_API_LIMITS): TwitterDecisionMakingRound
-    (TwitterCampaignsCollectionRound, DONE_MAX_RETRIES): TwitterDecisionMakingRound
-    (TwitterCampaignsCollectionRound, NO_MAJORITY): TwitterRandomnessRound
-    (TwitterCampaignsCollectionRound, ROUND_TIMEOUT): TwitterRandomnessRound
     (TwitterMentionsCollectionRound, API_ERROR): TwitterMentionsCollectionRound
     (TwitterMentionsCollectionRound, DONE): TwitterDecisionMakingRound
     (TwitterMentionsCollectionRound, DONE_API_LIMITS): TwitterDecisionMakingRound

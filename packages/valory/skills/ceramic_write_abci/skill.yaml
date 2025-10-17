@@ -28,8 +28,8 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy
-- valory/ceramic_read_abci:0.1.0:bafybeigyt6jf5a4ucbdn44tspklpbeenxr57g2czlepqm227j5c6k7glw4
+- valory/abstract_round_abci:0.1.0:bafybeifsuf7sh5vlugnqinbqe2f7vnssuqyxcrzqgotohhwqewyjeibneu
+- valory/ceramic_read_abci:0.1.0:bafybeidzq5eegaikgmeu7qauyfjbplkvddneqiz46ffnijrrahogtw7s74
 behaviours:
   main:
     args: {}
@@ -80,6 +80,7 @@ models:
     args:
       multisend_address: '0x0000000000000000000000000000000000000000'
       termination_sleep: 900
+      mech_wrapped_native_token_address: '0x0000000000000000000000000000000000000000'
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
       ceramic_api_create_endpoint: api/v0/streams
       ceramic_api_commit_endpoint: api/v0/commits

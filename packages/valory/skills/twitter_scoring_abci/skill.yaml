@@ -10,7 +10,7 @@ fingerprint:
   __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
   behaviours.py: bafybeidqs27tkllg5upibladfbjyuz26pgcmuyvupwiwy6bwrp7k6qovda
   dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
-  fsm_specification.yaml: bafybeibuxuzp4ypl5eu5y47qp52plff2haobyltpc3mnkxcnkgwhxzeqce
+  fsm_specification.yaml: bafybeigcelpml5zuzd6fgbneb2y72momepiqqisvbrjjv2kua7obltheje
   handlers.py: bafybeid3nqvcyotqj5g5hlgrz57nf7vpjysmgvsxe3p7644f4z5dcwqn6u
   models.py: bafybeifs5zyg6ra24x2kvy4xdukhwzpivjvb4hd3ryuezc7tpsishskixe
   payloads.py: bafybeigsmk5g5fqr6p27oojtjviogzwpiukquisy7fnoxkeyuzkumevbrm
@@ -31,10 +31,10 @@ protocols:
 - valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
 - valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiey45kkbniukmtpdjduwazpyygaiayeo7mh3tu6wfbau2bxvuljmy
-- valory/decision_making_abci:0.1.0:bafybeibycftzffpkhtzdk7uzjzhzuyxa3mybiqdsiabxt7yqlp6feyfqky
-- valory/mech_interact_abci:0.1.0:bafybeidi2nfkt5r7cckdd4equdfm5uwiuisrz2splo7om3hkriy5ohx22e
-- valory/contribute_db_abci:0.1.0:bafybeigq2vsbju2jf67hatmmz7uyo55e44beka5v7e7vj6yyrqqpdrxkd4
+- valory/abstract_round_abci:0.1.0:bafybeifsuf7sh5vlugnqinbqe2f7vnssuqyxcrzqgotohhwqewyjeibneu
+- valory/decision_making_abci:0.1.0:bafybeiggerwyycxz665ggyeainzycwmi4ynkztn4yuvr2fgv6re3p3q6we
+- valory/mech_interact_abci:0.1.0:bafybeifhwy6encscbgqcahb5luupjoirw4vomgzp2e3cpork4nggvc5mnu
+- valory/contribute_db_abci:0.1.0:bafybeih63hudi4txtcicpmfebk3nzlvh75m522h3bk4ygqad736kn53bii
 behaviours:
   main:
     args: {}
@@ -85,6 +85,7 @@ models:
     args:
       multisend_address: '0x0000000000000000000000000000000000000000'
       termination_sleep: 900
+      mech_wrapped_native_token_address: '0x0000000000000000000000000000000000000000'
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31

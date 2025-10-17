@@ -24,14 +24,14 @@ In order to run a local demo AI agent based on the IEKit:
     mkdir your_workspace && cd your_workspace
     touch Pipfile && pipenv --python 3.10 && pipenv shell
 
-    pipenv install open-autonomy[all]==0.18.2
+    pipenv install open-autonomy[all]==0.19.9
     autonomy init --remote --ipfs --reset --author=your_name
     ```
 
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeidfa7yla7zovfjblbwusqfsxkwg2i467ffvptqsw4yv4iddinuqly --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeic72omny5enwobqnihnllwdvgefrmg3dhftlq7o664lvujolgvzb4 --service
     ```
 
 3. Build the Docker image of the agent blueprint
@@ -101,7 +101,7 @@ In order to run a local demo AI agent based on the IEKit:
         TWITTER_API_BASE=https://api.twitter.com/
         TWITTER_MENTIONS_ENDPOINT=twitter/2/users/1/mentions?
         TWITTER_SEARCH_ENDPOINT=twitter/2/tweets/search/recent?
-        MECH_CONTRACT_ADDRESS=0x77af31De935740567Cf4fF1986D04B2c964A786a
+        MECH_CONTRACT_ADDRESS=0xC05e7412439bD7e91730a6880E18d5D5873F632C
         TWITTER_STAGING_API=http://host.docker.internal:5000/twitter/create_tweet
         TRANSACTION_SERVICE_URL=https://safe-transaction-goerli.safe.global/api/v1/messages/{message_hash}/
         USE_TERMINATION=false
