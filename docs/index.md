@@ -31,7 +31,7 @@ In order to run a local demo AI agent based on the IEKit:
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeiemc256rngzi5tsxmbzkgzbt3x6ud3skqmc3ktxrmuwxfsyumc2su --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeibferu5d7wo5mi5muaogxyrbwzhcznzcavbsefunoizpc6opghi6q --service
     ```
 
 3. Build the Docker image of the agent blueprint
@@ -101,7 +101,7 @@ In order to run a local demo AI agent based on the IEKit:
         TWITTER_API_BASE=https://api.twitter.com/
         TWITTER_MENTIONS_ENDPOINT=twitter/2/users/1/mentions?
         TWITTER_SEARCH_ENDPOINT=twitter/2/tweets/search/recent?
-        MECH_CONTRACT_ADDRESS=0xC05e7412439bD7e91730a6880E18d5D5873F632C
+        MECH_CONTRACT_ADDRESS=0xB3C6319962484602b00d5587e965946890b82101
         TWITTER_STAGING_API=http://host.docker.internal:5000/twitter/create_tweet
         TRANSACTION_SERVICE_URL=https://safe-transaction-goerli.safe.global/api/v1/messages/{message_hash}/
         USE_TERMINATION=false
