@@ -4,7 +4,7 @@ version: 0.1.0
 type: skill
 description: The chained abci for the impact_evaluator skill.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: ">=1.0.0, <2.0.0"
 fingerprint:
   __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
   behaviours.py: bafybeigcvodybauatvybm47grm4wqpcpghwmdtw6zdoli3gufvk2hmxmuu
@@ -23,21 +23,21 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeifsuf7sh5vlugnqinbqe2f7vnssuqyxcrzqgotohhwqewyjeibneu
-- valory/agent_db_abci:0.1.0:bafybeicjwksitszrma42kwkc4rxd32p5bubdl3amnnjfqxbew3niaqy6pq
-- valory/contribute_db_abci:0.1.0:bafybeih63hudi4txtcicpmfebk3nzlvh75m522h3bk4ygqad736kn53bii
-- valory/twitter_scoring_abci:0.1.0:bafybeigulfwnsgki72jydky2agluslway25tdalcdnpbvtdnftn54fld7e
-- valory/dynamic_nft_abci:0.1.0:bafybeibbglusm5zmf6zlb5unv3f2mlo6yndxa5fw3tg4ieyrrzpsqssauy
-- valory/registration_abci:0.1.0:bafybeie6rd7zlws4rxzkwka5mzhk56mn6clj3ocxbkbgeaiawv2c6b6jtm
-- valory/reset_pause_abci:0.1.0:bafybeian7gymp6x6rn55uaf4u3dgirbzr43xvnsj2ev27stkadikjqz4du
-- valory/termination_abci:0.1.0:bafybeiht4uj5j3qqf2hewtzah7vcabb7okkjgi65jb76ddfltvjpk6bzxi
-- valory/transaction_settlement_abci:0.1.0:bafybeiem4qoc2pdpxoingjqp3qnrdjwho67pd6amy7o3xjr5mpdrepctve
-- valory/decision_making_abci:0.1.0:bafybeiggerwyycxz665ggyeainzycwmi4ynkztn4yuvr2fgv6re3p3q6we
-- valory/twitter_write_abci:0.1.0:bafybeidhtte5rhie5omqvpyucujpejtu5rwu2w4hambwtueexqn3sdty4e
-- valory/olas_week_abci:0.1.0:bafybeiaxnrw4ov54arl3pkj5sjsfeezgtys7qmtgtc4p4fa5ock33isg2i
-- valory/mech_interact_abci:0.1.0:bafybeifhwy6encscbgqcahb5luupjoirw4vomgzp2e3cpork4nggvc5mnu
-- valory/staking_abci:0.1.0:bafybeigzmjhi3sprgmcu2eja7qcycs7yc7yhfvkqxw6ixkwstimevsltsy
-- valory/llm_abci:0.1.0:bafybeidnv5roo5i6uzj66o7gjhumjnnfhfvh6ipmlohpf3bnt2dtf4wzta
+  - valory/abstract_round_abci:0.1.0:bafybeifsuf7sh5vlugnqinbqe2f7vnssuqyxcrzqgotohhwqewyjeibneu
+  - valory/agent_db_abci:0.1.0:bafybeicjwksitszrma42kwkc4rxd32p5bubdl3amnnjfqxbew3niaqy6pq
+  - valory/contribute_db_abci:0.1.0:bafybeih63hudi4txtcicpmfebk3nzlvh75m522h3bk4ygqad736kn53bii
+  - valory/twitter_scoring_abci:0.1.0:bafybeigulfwnsgki72jydky2agluslway25tdalcdnpbvtdnftn54fld7e
+  - valory/dynamic_nft_abci:0.1.0:bafybeibbglusm5zmf6zlb5unv3f2mlo6yndxa5fw3tg4ieyrrzpsqssauy
+  - valory/registration_abci:0.1.0:bafybeie6rd7zlws4rxzkwka5mzhk56mn6clj3ocxbkbgeaiawv2c6b6jtm
+  - valory/reset_pause_abci:0.1.0:bafybeian7gymp6x6rn55uaf4u3dgirbzr43xvnsj2ev27stkadikjqz4du
+  - valory/termination_abci:0.1.0:bafybeiht4uj5j3qqf2hewtzah7vcabb7okkjgi65jb76ddfltvjpk6bzxi
+  - valory/transaction_settlement_abci:0.1.0:bafybeiem4qoc2pdpxoingjqp3qnrdjwho67pd6amy7o3xjr5mpdrepctve
+  - valory/decision_making_abci:0.1.0:bafybeiggerwyycxz665ggyeainzycwmi4ynkztn4yuvr2fgv6re3p3q6we
+  - valory/twitter_write_abci:0.1.0:bafybeidhtte5rhie5omqvpyucujpejtu5rwu2w4hambwtueexqn3sdty4e
+  - valory/olas_week_abci:0.1.0:bafybeiaxnrw4ov54arl3pkj5sjsfeezgtys7qmtgtc4p4fa5ock33isg2i
+  - valory/mech_interact_abci:0.1.0:bafybeifhwy6encscbgqcahb5luupjoirw4vomgzp2e3cpork4nggvc5mnu
+  - valory/staking_abci:0.1.0:bafybeigzmjhi3sprgmcu2eja7qcycs7yc7yhfvkqxw6ixkwstimevsltsy
+  - valory/llm_abci:0.1.0:bafybeidnv5roo5i6uzj66o7gjhumjnnfhfvh6ipmlohpf3bnt2dtf4wzta
 behaviours:
   main:
     args: {}
@@ -104,37 +104,38 @@ models:
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
-      dynamic_contribution_contract_address: '0x5FbDB2315678afecb367f032d93F642f64180aa3'
+      dynamic_contribution_contract_address: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
       earliest_block_to_monitor: 8053690
       genesis_config:
-        genesis_time: '2022-09-26T00:00:00.000000000Z'
+        genesis_time: "2022-09-26T00:00:00.000000000Z"
         chain_id: chain-c4daS1
         consensus_params:
           block:
-            max_bytes: '22020096'
-            max_gas: '-1'
-            time_iota_ms: '1000'
+            max_bytes: "22020096"
+            max_gas: "-1"
+            time_iota_ms: "1000"
           evidence:
-            max_age_num_blocks: '100000'
-            max_age_duration: '172800000000000'
-            max_bytes: '1048576'
+            max_age_num_blocks: "100000"
+            max_age_duration: "172800000000000"
+            max_bytes: "1048576"
           validator:
             pub_key_types:
-            - ed25519
+              - ed25519
           version: {}
-        voting_power: '10'
+        voting_power: "10"
       keeper_timeout: 30.0
       max_attempts: 10
       max_healthcheck: 120
-      multisend_address: '0x0000000000000000000000000000000000000000'
+      multisend_address: "0x0000000000000000000000000000000000000000"
       termination_sleep: 900
-      mech_wrapped_native_token_address: '0x0000000000000000000000000000000000000000'
+      mech_wrapped_native_token_address: "0x0000000000000000000000000000000000000000"
       termination_from_block: 0
       init_fallback_gas: 0
       keeper_allowed_retries: 3
       reset_pause_duration: 10
       on_chain_service_id: null
-      points_to_image_hashes: '{"0": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm",
+      points_to_image_hashes:
+        '{"0": "bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm",
         "100": "bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q", "50000":
         "bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4", "100000": "bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy",
         "150000": "bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}'
@@ -149,7 +150,7 @@ models:
       service_registry_address: null
       setup:
         all_participants: []
-        safe_contract_address: '0x0000000000000000000000000000000000000000'
+        safe_contract_address: "0x0000000000000000000000000000000000000000"
         consensus_threshold: null
       share_tm_config_on_startup: false
       sleep_time: 1
@@ -179,42 +180,42 @@ models:
       validate_timeout: 1205
       finalize_timeout: 60.0
       history_check_timeout: 1205
-      centaur_id_to_secrets: '{}'
+      centaur_id_to_secrets: "{}"
       use_slashing: false
       slash_cooldown_hours: 3
       slash_threshold_amount: 10000000000000000
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
       multisend_batch_size: 50
-      mech_contract_address: '0xC05e7412439bD7e91730a6880E18d5D5873F632C'
+      mech_contract_address: "0xB3C6319962484602b00d5587e965946890b82101"
       mech_request_price: null
       ipfs_address: https://gateway.autonolas.tech/ipfs/
       default_chain_id: ethereum
       transaction_service_url: https://safe-transaction-mainnet.safe.global/api/v1/messages/{message_hash}/
-      veolas_delegation_address: '0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68'
+      veolas_delegation_address: "0x2f1ea3bc39f1a052460cac722e64c1f89c3c1e68"
       tweet_consensus_veolas: 2000000
       mech_chain_id: gnosis
       mech_interaction_sleep_time: 10
       use_mech_marketplace: true
       mech_marketplace_config:
-        mech_marketplace_address: '0x0000000000000000000000000000000000000000'
-        priority_mech_address: '0xC05e7412439bD7e91730a6880E18d5D5873F632C'
-        priority_mech_staking_instance_address: '0x998dEFafD094817EF329f6dc79c703f1CF18bC90'
+        mech_marketplace_address: "0x0000000000000000000000000000000000000000"
+        priority_mech_address: "0xB3C6319962484602b00d5587e965946890b82101"
+        priority_mech_staking_instance_address: "0x998dEFafD094817EF329f6dc79c703f1CF18bC90"
         priority_mech_service_id: 975
-        requester_staking_instance_address: '0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d'
+        requester_staking_instance_address: "0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d"
         response_timeout: 300
       checkpoint_threshold_minutes: 60
       staking_activity_threshold: 5
-      agent_registry_address: '0x0000000000000000000000000000000000000000'
+      agent_registry_address: "0x0000000000000000000000000000000000000000"
       use_acn_for_delivers: false
       staking_contract_addresses:
-      - '0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4'
-      - '0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387'
-      - '0x28877FFc6583170a4C9eD0121fc3195d06fd3A26'
-      contributors_contract_address: '0x343F2B005cF6D70bA610CD9F1F1927049414B582'
+        - "0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4"
+        - "0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387"
+        - "0x28877FFc6583170a4C9eD0121fc3195d06fd3A26"
+      contributors_contract_address: "0x343F2B005cF6D70bA610CD9F1F1927049414B582"
       epoch_end_threshold_minutes: 60
-      safe_contract_address_base: '0x0000000000000000000000000000000000000000'
-      safe_contract_address_gnosis: '0x0000000000000000000000000000000000000000'
+      safe_contract_address_base: "0x0000000000000000000000000000000000000000"
+      safe_contract_address_gnosis: "0x0000000000000000000000000000000000000000"
       staking_rewards_required_points: 200
       disable_wio_posting: false
       contribute_db_pkey: null
@@ -240,7 +241,7 @@ models:
       response_key: result
       response_type: str
       retries: 5
-      url: ''
+      url: ""
     class_name: MechResponseSpecs
   requests:
     args: {}
