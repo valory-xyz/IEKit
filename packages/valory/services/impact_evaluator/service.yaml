@@ -1,15 +1,14 @@
 name: impact_evaluator
 author: valory
 version: 0.1.0
-description:
-  A service that tracks community members' contributions, scores them and
+description: A service that tracks community members' contributions, scores them and
   updates their NFT images autonomously.
-aea_version: ">=1.0.0, <2.0.0"
+aea_version: '>=1.0.0, <2.0.0'
 license: Apache-2.0
 fingerprint:
   README.md: bafybeicl27mon3d6nan5vld4pwf32ocawmojisgelpljjheqi4jvksxg2y
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeid433l6ejnjmuvvcf2rfybb2wsscvmyrlixqchixea6cnudaq7oxa
+agent: valory/impact_evaluator:0.1.0:bafybeiccygws7k3v53wri56pg7dhk4vqrwdsr3maztgx3crznqyeaz3zsi
 number_of_agents: 4
 deployment:
   agent:
@@ -33,22 +32,22 @@ extra:
         all_participants: ${ALL_PARTICIPANTS:list:["0xc6D322afc319EC651eF8e194f37cC52f3137c393","0x0b20d156A207EDC2d1D30936b5a7B9F077A0c89e","0x5E0fbDb17A976c653a7ab48146d72F3a59dfab37","0x1d1b64C0d38fbd270813Eea35e6F2652337E1e5f"]}
         consensus_threshold: null
       genesis_config: &id002
-        genesis_time: "2022-09-26T00:00:00.000000000Z"
+        genesis_time: '2022-09-26T00:00:00.000000000Z'
         chain_id: chain-c4daS1
         consensus_params:
           block:
-            max_bytes: "22020096"
-            max_gas: "-1"
-            time_iota_ms: "1000"
+            max_bytes: '22020096'
+            max_gas: '-1'
+            time_iota_ms: '1000'
           evidence:
-            max_age_num_blocks: "100000"
-            max_age_duration: "172800000000000"
-            max_bytes: "1048576"
+            max_age_num_blocks: '100000'
+            max_age_duration: '172800000000000'
+            max_bytes: '1048576'
           validator:
             pub_key_types:
-              - ed25519
+            - ed25519
           version: {}
-        voting_power: "10"
+        voting_power: '10'
 0:
   models:
     benchmark_tool:
@@ -477,16 +476,16 @@ public_id: valory/p2p_libp2p_client:0.1.0
 type: connection
 config:
   nodes:
-    - uri: ${ACN_URI:str:acn.autonolas.tech:9005}
-      public_key: ${ACN_NODE_PUBLIC_KEY:str:02d3a830c9d6ea1ae91936951430dee11f4662f33118b02190693be835359a9d77}
-cert_requests:
-  - identifier: acn
-    ledger_id: ethereum
-    message_format: "{public_key}"
-    not_after: "2023-01-01"
-    not_before: "2022-01-01"
+  - uri: ${ACN_URI:str:acn.autonolas.tech:9005}
     public_key: ${ACN_NODE_PUBLIC_KEY:str:02d3a830c9d6ea1ae91936951430dee11f4662f33118b02190693be835359a9d77}
-    save_path: .certs/acn_cosmos_11000.txt
+cert_requests:
+- identifier: acn
+  ledger_id: ethereum
+  message_format: '{public_key}'
+  not_after: '2023-01-01'
+  not_before: '2022-01-01'
+  public_key: ${ACN_NODE_PUBLIC_KEY:str:02d3a830c9d6ea1ae91936951430dee11f4662f33118b02190693be835359a9d77}
+  save_path: .certs/acn_cosmos_11000.txt
 ---
 public_id: valory/openai:0.1.0
 type: connection
