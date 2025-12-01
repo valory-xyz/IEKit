@@ -186,7 +186,7 @@ models:
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
       multisend_batch_size: 50
-      mech_contract_address: '0xB3C6319962484602b00d5587e965946890b82101'
+      mech_contract_address: '0xC05e7412439bD7e91730a6880E18d5D5873F632C'
       mech_request_price: null
       ipfs_address: https://gateway.autonolas.tech/ipfs/
       default_chain_id: ethereum
@@ -198,7 +198,7 @@ models:
       use_mech_marketplace: true
       mech_marketplace_config:
         mech_marketplace_address: '0x0000000000000000000000000000000000000000'
-        priority_mech_address: '0xB3C6319962484602b00d5587e965946890b82101'
+        priority_mech_address: '0xC05e7412439bD7e91730a6880E18d5D5873F632C'
         priority_mech_staking_instance_address: '0x998dEFafD094817EF329f6dc79c703f1CF18bC90'
         priority_mech_service_id: 975
         requester_staking_instance_address: '0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d'

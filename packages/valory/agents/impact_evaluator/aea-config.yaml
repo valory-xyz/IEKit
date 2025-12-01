@@ -275,7 +275,7 @@ models:
       light_slash_unit_amount: ${int:5000000000000000}
       serious_slash_unit_amount: ${int:8000000000000000}
       multisend_batch_size: ${int:50}
-      mech_contract_address: ${str:0xB3C6319962484602b00d5587e965946890b82101}
+      mech_contract_address: ${str:0xC05e7412439bD7e91730a6880E18d5D5873F632C}
       mech_request_price: ${int:null}
       ipfs_address: ${str:https://gateway.autonolas.tech/ipfs/}
       default_chain_id: ${str:ethereum}
@@ -286,7 +286,7 @@ models:
       mech_chain_id: ${str:gnosis}
       mech_interaction_sleep_time: ${int:10}
       use_mech_marketplace: ${bool:true}
-      mech_marketplace_config: ${dict:{"mech_marketplace_address":"0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB","priority_mech_address":"0xB3C6319962484602b00d5587e965946890b82101","priority_mech_staking_instance_address":"0x998dEFafD094817EF329f6dc79c703f1CF18bC90","priority_mech_service_id":0,"requester_staking_instance_address":"0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d","response_timeout":300}}
+      mech_marketplace_config: ${dict:{"mech_marketplace_address":"0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB","priority_mech_address":"0xC05e7412439bD7e91730a6880E18d5D5873F632C","priority_mech_staking_instance_address":"0x998dEFafD094817EF329f6dc79c703f1CF18bC90","priority_mech_service_id":0,"requester_staking_instance_address":"0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d","response_timeout":300}}
       checkpoint_threshold_minutes: ${int:600}
       staking_activity_threshold: ${int:5}
       staking_contract_addresses: ${list:["0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4","0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387","0x28877FFc6583170a4C9eD0121fc3195d06fd3A26"]}
