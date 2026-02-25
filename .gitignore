@@ -49,6 +49,9 @@ packages/valory/contracts/agreement_store_manager
 packages/valory/contracts/transfer_nft_condition
 packages/valory/contracts/subscription_provider
 packages/open_aea
+packages/valory/connections/openai
+packages/valory/protocols/llm
+packages/valory/protocols/srr
 *.pyc
 .vscode/
 .zed/
