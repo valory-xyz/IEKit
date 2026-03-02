@@ -1,13 +1,13 @@
 ![IEKit](images/iekit.svg){ align=left }
-The Impact Evaluator Kit (IEKit) is an enhanced version of the CoordinationKit, which leverages [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) to automate the tracking and rewarding of users' contributions on the ecosystem. We provide a demo AI agent based on the IEKit which is designed to track contributions in the form of Twitter mentions of the Autonolas DAO ([@autonolas](https://twitter.com/autonolas)). Generic scores can be also read from a [Ceramic stream](https://developers.ceramic.network/docs/advanced/standards/stream-programs/). The demo AI agent implements three main features:
+The Impact Evaluator Kit (IEKit) is an enhanced version of the CoordinationKit, which leverages [AgentsDB](https://github.com/valory-xyz/agents_fun_mirror_db) to automate the tracking and rewarding of users' contributions on the ecosystem. We provide a demo AI agent based on the IEKit which is designed to track contributions in the form of Twitter mentions of the Autonolas DAO ([@autonolas](https://twitter.com/autonolas)). Generic scores can be also read from [AgentsDB](https://github.com/valory-xyz/agents_fun_mirror_db). The demo AI agent implements three main features:
 
-1. **Monitor for new users' registrations.** Reads registered users both from tweets that contain the current campaigns and also from a [Ceramic stream](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) that contains user data like discord ids and wallet addresses.
+1. **Monitor for new users' registrations.** Reads registered users both from tweets that contain the current campaigns and also from a [AgentsDB](https://github.com/valory-xyz/agents_fun_mirror_db) that contains user data like discord ids and wallet addresses.
 
 2. **Monitor for users' contributions.** The AI agent periodically scans for new mentions of @autonolas on Twitter and updates to the scores stream, and increments and updates the score of the corresponding user.
 
 3. **Update the badge of users according to their score.** To access the badge image associated to a user's NFT, the metadata URI associated to it is redirected to an agent blueprint in the AI agent. Upon reading the concrete NFT from the request, the AI agent provides the IPFS address of the image, which is updated periodically in relation to the user's score.
 
-The demo AI agent uses dedicated [Ceramic streams](https://developers.ceramic.network/docs/advanced/standards/stream-programs/) as a persistent solution to store users' scores and registration metadata.
+The demo AI agent uses [AgentsDB](https://github.com/valory-xyz/agents_fun_mirror_db) as a persistent solution to store users' scores and registration metadata.
 The AI agent demonstrates the applicability of the IEKit to build a particular use case, but of course, the IEKit is modular by design and can be adapted to a range of custom impact evaluators.
 
 ## Demo
