@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -119,8 +119,10 @@ def make_git_request(url: str) -> requests.Response:
     """Make git request"""
     auth = os.environ.get("GITHUB_AUTH")
     if auth is None:
-        return requests.get(url=url)
-    return requests.get(url=url, headers={"Authorization": f"Bearer {auth}"})
+        return requests.get(url=url, timeout=60)
+    return requests.get(
+        url=url, headers={"Authorization": f"Bearer {auth}"}, timeout=60
+    )
 
 
 def get_latest_tag(repo: str) -> str:

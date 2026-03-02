@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2025 Valory AG
+#   Copyright 2023-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -135,9 +135,9 @@ class TwitterWriteRound(OnlyKeeperSendsRound):
                 synchronized_data_class=SynchronizedData,
                 **{
                     get_name(SynchronizedData.tweet_ids): tweet_ids,
-                    get_name(SynchronizedData.write_index): 0
-                    if finished_tweeting
-                    else write_index,
+                    get_name(SynchronizedData.write_index): (
+                        0 if finished_tweeting else write_index
+                    ),
                 }
             ),
             Event.DONE if finished_tweeting else Event.CONTINUE,

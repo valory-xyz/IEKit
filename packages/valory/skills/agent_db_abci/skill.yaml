@@ -7,7 +7,7 @@ license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeiaxb63hpickyjxvsrkzcmophtdzd27rqwvznngdrye465to4fufii
-  agent_db_client.py: bafybeihsdavgh2emiqw7oxpnoxr64bizitqvroqcb2uvjhky2dbzckjbuy
+  agent_db_client.py: bafybeigsi3icbzzbd4e2wib7sq5bcnlygexlqrclz2tm2nv7kkvvzukcaq
   agent_db_models.py: bafybeihbc4aautx7vjxifotynifx5nnu7vkaduzgelbngbtfsngknlinda
   behaviours.py: bafybeibixhiiqlcnjnesxdtgy7hovlc2bdraqll6x3xjbjniwe7gawpk7a
   dialogues.py: bafybeifmodah5c75hcwa4vygcvmk5cvj4kpmfy5qwyov7kvgqn6gipupqi
@@ -21,7 +21,7 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeifsuf7sh5vlugnqinbqe2f7vnssuqyxcrzqgotohhwqewyjeibneu
+- valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
 behaviours:
   main:
     args: {}

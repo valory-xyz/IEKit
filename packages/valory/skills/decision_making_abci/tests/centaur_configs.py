@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2025 Valory AG
+#   Copyright 2021-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -36,8 +36,8 @@ DUMMY_ACCOUNTS = {
 
 def sign_message(message_text, private_key):
     """Sign a message"""
-    message_hash = messages.defunct_hash_message(text=message_text)
-    signed_message = w3.eth.account.signHash(message_hash, private_key=private_key)
+    message_hash = messages.encode_defunct(text=message_text)
+    signed_message = w3.eth.account.sign_message(message_hash, private_key=private_key)
     signature = signed_message.signature
     hex_signature = (
         signature.hex()

@@ -23,6 +23,7 @@ packages/valory/contracts/multisend
 packages/valory/contracts/agent_registry
 packages/valory/contracts/mech_marketplace_legacy
 packages/valory/contracts/mech_marketplace
+packages/valory/contracts/agent_mech
 packages/valory/contracts/mech
 packages/valory/contracts/mech_mm
 packages/valory/contracts/erc20
