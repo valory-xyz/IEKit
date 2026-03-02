@@ -10,7 +10,7 @@ fingerprint:
   tests/helpers/__init__.py: bafybeif7verbag26h6i35gr5rlatxl7veq4drup5ykwdvhgtussf2jreei
   tests/helpers/constants.py: bafybeibbokz7gzdlubnjwxrmh4tqckc7j75hfy3ae6l5a63mrbd4hp6l7u
   tests/helpers/data/json_server/data.json: bafybeid3uvl3vnmudpanc64wgwdvxwlyajnuolivrqpdypa5ortdb66a6a
-  tests/helpers/docker.py: bafybeihlg5thdrcaiuzyte5s7x25mikqfyxdjwuqvhmeddluyjdkzhuhqi
+  tests/helpers/docker.py: bafybeid637ulfko5b4wjyxh33pe4rconcjjnlucioci2hr53soncamppgi
   tests/helpers/fixtures.py: bafybeidfsamzdrqqkdra4ektollyfkhiyb2iqymy6djavgewon2cb23vwu
   tests/test_impact_evaluator.py: bafybeiadzxpgj3owrzfyjdaiv7muwhm2qjdvgboftipsife44cyu2vgixq
 fingerprint_ignore_patterns: []
