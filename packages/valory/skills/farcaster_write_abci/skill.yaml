@@ -16,12 +16,12 @@ fingerprint:
   rounds.py: bafybeicrwyo3usuxenslfc2hkqtrj36c3wgvx6etiwewiqcjjucvt26lbi
 fingerprint_ignore_patterns: []
 connections:
-- valory/farcaster:0.1.0:bafybeibbdas7lxbipksodaphjms3uop7vnzjqkroktjq2g6wbvgtlldaxi
+- valory/farcaster:0.1.0:bafybeiatpa4tot5locswdiagsnd5ivnpyponggdejb2k3haa55gd4g7b4y
 contracts: []
 protocols:
-- valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
+- valory/srr:0.1.0:bafybeiee2dgy6r2z5x6vu2ug5vcxvfgg4v3liq2x7v3hxchtp45mwnchg4
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeifsuf7sh5vlugnqinbqe2f7vnssuqyxcrzqgotohhwqewyjeibneu
+- valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
 behaviours:
   main:
     args: {}
