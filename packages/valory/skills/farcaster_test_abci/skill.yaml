@@ -4,7 +4,7 @@ version: 0.1.0
 type: skill
 description: The chained abci for the farcaster_test skill.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeihrdg7ppm4zxmrbfscm7t6ftonw667zivzl3c6kwdtvpcwmugqr3i
   behaviours.py: bafybeiencqonbknwiptgpw6ab7hj4ba5if5ztolghcsqkymf3hmubjozxe
@@ -18,10 +18,10 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeifsuf7sh5vlugnqinbqe2f7vnssuqyxcrzqgotohhwqewyjeibneu
-- valory/registration_abci:0.1.0:bafybeie6rd7zlws4rxzkwka5mzhk56mn6clj3ocxbkbgeaiawv2c6b6jtm
-- valory/reset_pause_abci:0.1.0:bafybeian7gymp6x6rn55uaf4u3dgirbzr43xvnsj2ev27stkadikjqz4du
-- valory/farcaster_write_abci:0.1.0:bafybeigotrw4nu22msei5nsx5nuacumpm6wje44ivxwqimoqcwyj3mlddy
+- valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
+- valory/registration_abci:0.1.0:bafybeie3dfore53bxvbokqiarzuwulzlyt4vz5mifb4t3gxl6drwkblfha
+- valory/reset_pause_abci:0.1.0:bafybeicffwijiecbqc6z22nowir2fgwwqzwu6vokzuwgd5wa3zxromxevm
+- valory/farcaster_write_abci:0.1.0:bafybeiau72faqdep2zhskqqayajdwylxsjd6grgxmg3d7l3ouvuchcxcua
 behaviours:
   main:
     args: {}
@@ -98,7 +98,7 @@ models:
       max_healthcheck: 120
       multisend_address: '0x0000000000000000000000000000000000000000'
       termination_sleep: 900
-      mech_wrapped_native_token_address: '0x0000000000000000000000000000000000000000'
+      mech_wrapped_native_token_address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'
       termination_from_block: 0
       init_fallback_gas: 0
       keeper_allowed_retries: 3

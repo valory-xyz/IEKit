@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2023 Valory AG
+#   Copyright 2021-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ from aea.common import JSONLike
 from aea.configurations.base import PublicId
 from aea.contracts.base import Contract
 from aea_ledger_ethereum import EthereumApi
+from hexbytes import HexBytes
 
 
 PUBLIC_ID = PublicId.from_str("valory/compatibility_fallback_handler:0.1.0")
@@ -59,8 +60,11 @@ class CompatibilityFallbackHandlerContract(Contract):
             _data=safe_message,
             _signature=signature,
         )
+        hex_result = (
+            result.hex() if not isinstance(result, HexBytes) else result.to_0x_hex()
+        )
 
-        return {"valid": result.hex() == MAGIC_VALUE}
+        return {"valid": hex_result == MAGIC_VALUE}
 
     @classmethod
     def is_contract(
@@ -71,7 +75,7 @@ class CompatibilityFallbackHandlerContract(Contract):
     ) -> Optional[JSONLike]:
         """Gets the contract code."""
 
-        code = ledger_api.api.eth.get_code(wallet_address).hex()
+        code = ledger_api.api.eth.get_code(wallet_address).to_0x_hex()
         return {"is_contract": code != "0x"}
 
     @classmethod

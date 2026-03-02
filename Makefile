@@ -75,7 +75,7 @@ generators:
 .PHONY: common-checks-1
 common-checks-1:
 	tomte check-copyright --author valory --exclude-part abci  --exclude-part http_client  --exclude-part ipfs  --exclude-part ledger  --exclude-part p2p_libp2p_client  --exclude-part gnosis_safe  --exclude-part gnosis_safe_proxy_factory  --exclude-part multisend  --exclude-part service_registry  --exclude-part acn  --exclude-part contract_api  --exclude-part http  --exclude-part ipfs  --exclude-part ledger_api --exclude-part tendermint --exclude-part abstract_abci --exclude-part abstract_round_abci --exclude-part registration_abci --exclude-part reset_pause_abci --exclude-part termination_abci --exclude-part transaction_settlement_abci --exclude-part http_server
-	tomte check-doc-links --url-skips "https://goerli.infura.io/v3/<infura_api_key>" --url-skips "https://twitter.com/autonolas" --url-skips "https://developer.twitter.com/en/portal/dashboard" --url-skips "https://ceramic-clay.3boxlabs.com/" --url-skips "https://api.twitter.com/" --url-skips "http://host.docker.internal:5000/twitter/create_tweet"  --http-skips "http://host.docker.internal:5000/twitter/create_tweet"  --url-skips "https://safe-transaction-goerli.safe.global/api/v1/messages/{message_hash}/"
+	tomte check-doc-links --url-skips "https://goerli.infura.io/v3/<infura_api_key>" --url-skips "https://twitter.com/autonolas" --url-skips "https://developer.twitter.com/en/portal/dashboard" --url-skips "https://ceramic-clay.3boxlabs.com/" --url-skips "https://api.twitter.com/" --url-skips "http://host.docker.internal:5000/twitter/create_tweet"  --http-skips "http://host.docker.internal:5000/twitter/create_tweet"  --url-skips "https://safe-transaction-goerli.safe.global/api/v1/messages/{message_hash}/" --url-skips https://github.com/valory-xyz/agents_fun_mirror_db
 	tox -p -e check-hash -e check-packages -e check-doc-hashes
 
 .PHONY: test
@@ -108,24 +108,6 @@ test:
 
 v := $(shell pip -V | grep virtualenvs)
 
-.PHONY: new_env
-new_env: clean
-	if [ ! -z "$(which svn)" ];\
-	then\
-		echo "The development setup requires SVN, exit";\
-		exit 1;\
-	fi;\
-
-	if [ -z "$v" ];\
-	then\
-		pipenv --rm;\
-		pipenv --clear;\
-		pipenv --python 3.10;\
-		pipenv install --dev --skip-lock;\
-		echo "Enter virtual environment with all development dependencies now: 'pipenv shell'.";\
-	else\
-		echo "In a virtual environment! Exit first: 'exit'.";\
-	fi
 
 .PHONY: fix-abci-app-specs
 fix-abci-app-specs:
@@ -164,3 +146,12 @@ all-linters:
 	tox -e darglint
 	tox -e pylint
 	tox -e mypy
+
+.PHONY: run-agent
+run-agent:
+	mkdir -p ./logs && \
+	bash -c 'TIMESTAMP=$$(date +%d-%m-%y_%H-%M); \
+	LOG_FILE="./logs/agent_log_$$TIMESTAMP.log"; \
+	LATEST_LOG_FILE="./logs/agent_log_latest.log"; \
+	echo "Running agent and logging to $$LOG_FILE"; \
+	bash run_agent.sh 2>&1 | tee $$LOG_FILE $$LATEST_LOG_FILE'

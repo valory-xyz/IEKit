@@ -4,7 +4,7 @@ version: 0.1.0
 type: skill
 description: A skill that reads data from a Ceramic stream.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeibciswqz4enbsrvhpueewvbsmaqd7k4la2dowl2n4th7fn5ffnpqu
   behaviours.py: bafybeialw5js54xbguv6tgzxb2qm7bexgm3kq57cwhkuyxmiswu233uc74
@@ -28,7 +28,7 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeifsuf7sh5vlugnqinbqe2f7vnssuqyxcrzqgotohhwqewyjeibneu
+- valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
 behaviours:
   main:
     args: {}
@@ -79,7 +79,7 @@ models:
     args:
       multisend_address: '0x0000000000000000000000000000000000000000'
       termination_sleep: 900
-      mech_wrapped_native_token_address: '0x0000000000000000000000000000000000000000'
+      mech_wrapped_native_token_address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
       ceramic_api_read_endpoint: api/v0/commits/{stream_id}
       default_read_stream_id: default_read_stream_id

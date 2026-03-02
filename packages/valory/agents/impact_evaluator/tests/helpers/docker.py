@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -108,7 +108,7 @@ class ImpactEvaluatorNetworkDockerImage(DockerImage):
                     "params": [DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS],
                     "id": 1,
                 }
-                response = requests.post(
+                response = requests.post(  # nosec B113
                     f"{self.addr}:{self.port}",
                     json=body,
                 )
@@ -185,7 +185,7 @@ class MockTwitterApi(DockerImage):
         """
         for i in range(max_attempts):
             try:
-                response = requests.get(f"{self.addr}:{self.port}")
+                response = requests.get(f"{self.addr}:{self.port}")  # nosec B113
                 enforce(response.status_code == 200, "")
                 return True
             except Exception as e:  # pylint: disable=broad-except

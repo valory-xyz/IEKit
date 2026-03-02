@@ -23,6 +23,7 @@ packages/valory/contracts/multisend
 packages/valory/contracts/agent_registry
 packages/valory/contracts/mech_marketplace_legacy
 packages/valory/contracts/mech_marketplace
+packages/valory/contracts/agent_mech
 packages/valory/contracts/mech
 packages/valory/contracts/mech_mm
 packages/valory/contracts/erc20
@@ -49,11 +50,16 @@ packages/valory/contracts/agreement_store_manager
 packages/valory/contracts/transfer_nft_condition
 packages/valory/contracts/subscription_provider
 packages/open_aea
+packages/valory/connections/openai
+packages/valory/protocols/llm
+packages/valory/protocols/srr
 *.pyc
 .vscode/
 .zed/
 .coverage*
 .dmypy.json
+agent/
+logs/
 
 .env
 

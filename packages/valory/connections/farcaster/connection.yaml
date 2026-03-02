@@ -4,7 +4,7 @@ version: 0.1.0
 type: connection
 description: The farcaster connection provides a wrapper around Farcaster SDK.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeigwa4fd4m4rlk2ulhwbiul4rcrr4p6t4cais6to4ge2qz4ng3yo4i
   connection.py: bafybeieq5lzzpaqvp4czwlr25nv5dcg5aji4ou4vnwxljz2z5aw5pa2gxu
@@ -12,7 +12,7 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
-- valory/srr:0.1.0:bafybeihrixgptxuqpf2s4nujypwlv5aed2nboozq5kl4c26cxw6r7si2x4
+- valory/srr:0.1.0:bafybeiee2dgy6r2z5x6vu2ug5vcxvfgg4v3liq2x7v3hxchtp45mwnchg4
 class_name: FarcasterConnection
 config:
   farcaster_mnemonic: null
@@ -20,6 +20,6 @@ excluded_protocols: []
 restricted_to_protocols: []
 dependencies:
   farcaster:
-    version: ==0.7.11
+    version: ==0.7.12
 is_abstract: false
 cert_requests: []

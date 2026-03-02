@@ -4,7 +4,7 @@ version: 0.1.0
 type: skill
 description: The llm abci sends a prompt to a LLM and gets the response.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeidg5pe5vztpbns7h76v2rnebiltwze5kgdw5rn2scr5zhqm36mctu
   behaviours.py: bafybeif4a2nxe6t3ipvook4kjyidycodbyjlfgx4m5szvuqlhvzwovt4gy
@@ -23,12 +23,12 @@ fingerprint:
   tests/test_rounds.py: bafybeicoiykxooup743nzzzfzc3m4uvsab5bljeipgcoo2hke54fcab3xa
 fingerprint_ignore_patterns: []
 connections:
-- valory/openai:0.1.0:bafybeicevsj6xgojzsvl77pmsqft6vzemil4flhikkc6aljff7y5smeuhu
+- valory/openai:0.1.0:bafybeih7ysimgh4jwcp4bnhvauh2g65cvs3srndwulnuhazdlp7zx6f3hu
 contracts: []
 protocols:
-- valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
+- valory/llm:1.0.0:bafybeiardrklsughnm6tdnc3seqderlnq5nj4xolgnk42crr3kxexjlrfe
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeifsuf7sh5vlugnqinbqe2f7vnssuqyxcrzqgotohhwqewyjeibneu
+- valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
 behaviours:
   main:
     args: {}
@@ -133,7 +133,7 @@ models:
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
       termination_sleep: 900
-      mech_wrapped_native_token_address: '0x0000000000000000000000000000000000000000'
+      mech_wrapped_native_token_address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'
       tx_timeout: 10.0
       use_termination: false
       validate_timeout: 1205

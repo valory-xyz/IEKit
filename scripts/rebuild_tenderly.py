@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2024 Valory AG
+#   Copyright 2021-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@ def _delete_vnet(
     print(response)
 
 
-def _create_vnet(  # pylint: disable=too-many-arguments
+def _create_vnet(  # pylint: disable=too-many-arguments, too-many-positional-arguments
     tenderly_access_key: str,
     account_slug: str,
     project_slug: str,

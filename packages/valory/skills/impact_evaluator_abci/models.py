@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2025 Valory AG
+#   Copyright 2023-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -54,6 +54,12 @@ from packages.valory.skills.mech_interact_abci.models import (
     MechResponseSpecs as BaseMechResponseSpecs,
 )
 from packages.valory.skills.mech_interact_abci.models import (
+    MechToolsSpecs as InteractMechToolsSpecs,
+)
+from packages.valory.skills.mech_interact_abci.models import (
+    MechsSubgraph as InteractMechsSubgraph,
+)
+from packages.valory.skills.mech_interact_abci.models import (
     Params as MechInteractAbciParams,
 )
 from packages.valory.skills.mech_interact_abci.rounds import Event as MechInteractEvent
@@ -83,6 +89,8 @@ BenchmarkTool = BaseBenchmarkTool
 MechResponseSpecs = BaseMechResponseSpecs
 AgentDBClient = BaseAgentDBClient
 ContributeDatabase = BaseContributeDatabase
+MechToolsSpecs = InteractMechToolsSpecs
+MechsSubgraph = InteractMechsSubgraph
 
 
 class RandomnessApi(ApiSpecs):
@@ -114,9 +122,9 @@ class SharedState(BaseSharedState):
         ImpactEvaluatorSkillAbciApp.event_to_timeout[DynamicNFTEvent.ROUND_TIMEOUT] = (
             self.context.params.round_timeout_seconds * MULTIPLIER
         )
-        ImpactEvaluatorSkillAbciApp.event_to_timeout[
-            ResetPauseEvent.ROUND_TIMEOUT
-        ] = self.context.params.round_timeout_seconds
+        ImpactEvaluatorSkillAbciApp.event_to_timeout[ResetPauseEvent.ROUND_TIMEOUT] = (
+            self.context.params.round_timeout_seconds
+        )
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             ResetPauseEvent.RESET_AND_PAUSE_TIMEOUT
         ] = (self.context.params.reset_pause_duration + MARGIN)
@@ -129,9 +137,9 @@ class SharedState(BaseSharedState):
         ImpactEvaluatorSkillAbciApp.event_to_timeout[
             MechInteractEvent.ROUND_TIMEOUT
         ] = self.context.params.round_timeout_seconds
-        ImpactEvaluatorSkillAbciApp.event_to_timeout[
-            StakingEvent.ROUND_TIMEOUT
-        ] = self.context.params.round_timeout_seconds
+        ImpactEvaluatorSkillAbciApp.event_to_timeout[StakingEvent.ROUND_TIMEOUT] = (
+            self.context.params.round_timeout_seconds
+        )
 
 
 class Params(

@@ -5,7 +5,7 @@ type: skill
 description: A skill that reads mentions from the Twitter API and assigns scores to
   the users.
 license: Apache-2.0
-aea_version: '>=1.0.0, <2.0.0'
+aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
   behaviours.py: bafybeidqs27tkllg5upibladfbjyuz26pgcmuyvupwiwy6bwrp7k6qovda
@@ -15,7 +15,7 @@ fingerprint:
   models.py: bafybeifs5zyg6ra24x2kvy4xdukhwzpivjvb4hd3ryuezc7tpsishskixe
   payloads.py: bafybeigsmk5g5fqr6p27oojtjviogzwpiukquisy7fnoxkeyuzkumevbrm
   prompts.py: bafybeidab3wypfzjia6fcj4svo4rzrnbuvqhivqhvdzzglfhl34bnnzm3e
-  rounds.py: bafybeig5fsk2k6bnmxvskdbgs6pyscr2hyli3ecl7gzzvjjwjgczflwfka
+  rounds.py: bafybeigohjgvub2lguvsuympysi57idsm2bu3y62ddrslmewzngjnubnfa
   tests/__init__.py: bafybeidwzzd4ejsyf3aryd5kmrvd63h7ajgqyrxphmfaacvpjnneacejay
   tests/test_behaviours.py: bafybeigp6o6tb7ahumd6nzupcwooaoumqdekagurczlru76fcmjtrmbwhe
   tests/test_dialogues.py: bafybeiheyq7klonzb7rnjub2i22h7bmsnoimn2pq4j7ofikt3yovstvgt4
@@ -26,15 +26,15 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/staking:0.1.0:bafybeihqox2s4v6m3eirukxs4ducepr4zvvwazinb2cxmw7ycpig4ppoeu
+- valory/staking:0.1.0:bafybeicara3sigvjqogzhacsnlml3xq6af3vjr6bez45gfipbu4bx4iy5e
 protocols:
-- valory/llm:1.0.0:bafybeihj2orqapokafg7co3wlogwgf6cckaaj2bz3nuv4rm3opkoyhrlp4
-- valory/contract_api:1.0.0:bafybeid247uig2ekykdumh7ewhp2cdq7rchaeqjj6e7urx35zfpdl5zrn4
+- valory/llm:1.0.0:bafybeiardrklsughnm6tdnc3seqderlnq5nj4xolgnk42crr3kxexjlrfe
+- valory/contract_api:1.0.0:bafybeigl7mxuyxngk4gztgygeccbgdfrllx73kwbvvkjvtkfw6ionyd56q
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeifsuf7sh5vlugnqinbqe2f7vnssuqyxcrzqgotohhwqewyjeibneu
-- valory/decision_making_abci:0.1.0:bafybeiggerwyycxz665ggyeainzycwmi4ynkztn4yuvr2fgv6re3p3q6we
-- valory/mech_interact_abci:0.1.0:bafybeifhwy6encscbgqcahb5luupjoirw4vomgzp2e3cpork4nggvc5mnu
-- valory/contribute_db_abci:0.1.0:bafybeih63hudi4txtcicpmfebk3nzlvh75m522h3bk4ygqad736kn53bii
+- valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
+- valory/decision_making_abci:0.1.0:bafybeibq4ehm5uqqmowfnrndzs5tfql4xu5p73mt4kvgl3664oz7fpm7ou
+- valory/mech_interact_abci:0.1.0:bafybeienj5jzbq2x5hpedqwpa46rmprcdc42536zjyxkmsemjs3jjhl5oe
+- valory/contribute_db_abci:0.1.0:bafybeigvkcxsblfgnysehfbd4x7otqn6icxm4yxfigyinnnlbrso5ahvw4
 behaviours:
   main:
     args: {}
@@ -85,7 +85,7 @@ models:
     args:
       multisend_address: '0x0000000000000000000000000000000000000000'
       termination_sleep: 900
-      mech_wrapped_native_token_address: '0x0000000000000000000000000000000000000000'
+      mech_wrapped_native_token_address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -180,5 +180,5 @@ models:
     class_name: TendermintDialogues
 dependencies:
   web3:
-    version: <7,>=6.0.0
+    version: <8,>=7.0.0
 is_abstract: true

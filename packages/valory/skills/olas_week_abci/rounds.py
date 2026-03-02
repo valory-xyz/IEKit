@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2025 Valory AG
+#   Copyright 2023-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -240,9 +240,9 @@ class OlasWeekTweetCollectionRound(CollectSameUntilThresholdRound):
             if "error" in payload:
                 # API limits
                 if payload["error"] == ERROR_API_LIMITS:
-                    performed_olas_week_tasks[
-                        "retrieve_tweets"
-                    ] = Event.DONE_MAX_RETRIES.value
+                    performed_olas_week_tasks["retrieve_tweets"] = (
+                        Event.DONE_MAX_RETRIES.value
+                    )
 
                     synchronized_data = self.synchronized_data.update(
                         synchronized_data_class=SynchronizedData,
@@ -263,9 +263,9 @@ class OlasWeekTweetCollectionRound(CollectSameUntilThresholdRound):
 
                 # Other API errors
                 if api_retries >= MAX_API_RETRIES:
-                    performed_olas_week_tasks[
-                        "retrieve_tweets"
-                    ] = Event.DONE_MAX_RETRIES.value
+                    performed_olas_week_tasks["retrieve_tweets"] = (
+                        Event.DONE_MAX_RETRIES.value
+                    )
                     synchronized_data = self.synchronized_data.update(
                         synchronized_data_class=SynchronizedData,
                         **{
