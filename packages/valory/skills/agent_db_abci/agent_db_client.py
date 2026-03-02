@@ -119,7 +119,7 @@ class AgentDBClient(Model):
 
         signature_hex = yield from self.signing_func(message_to_sign.encode("utf-8"))
         if isinstance(signature_hex, SignedMessage):
-            signature_hex = signature_hex.signature.hex()
+            signature_hex = signature_hex.signature.to_0x_hex()
 
         auth_data = {
             "agent_id": self.agent.agent_id,

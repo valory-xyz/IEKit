@@ -24,6 +24,7 @@ from copy import deepcopy
 from datetime import datetime, timezone
 
 from eth_account import messages
+from hexbytes import HexBytes
 from web3.auto import w3
 
 
@@ -37,8 +38,13 @@ def sign_message(message_text, private_key):
     """Sign a message"""
     message_hash = messages.defunct_hash_message(text=message_text)
     signed_message = w3.eth.account.signHash(message_hash, private_key=private_key)
-    signature = signed_message.signature.hex()
-    return signature
+    signature = signed_message.signature
+    hex_signature = (
+        signature.hex()
+        if not isinstance(signature, HexBytes)
+        else signature.to_0x_hex()
+    )
+    return hex_signature
 
 
 def sign_campaign_proposal(hashtag, private_key):

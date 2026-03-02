@@ -24,6 +24,7 @@ import packages.valory.skills.decision_making_abci.rounds as DecisionMakingAbci
 import packages.valory.skills.dynamic_nft_abci.rounds as DynamicNFTAbci
 import packages.valory.skills.mech_interact_abci.rounds as MechInteractAbci
 import packages.valory.skills.mech_interact_abci.states.final_states as MechFinalStates
+import packages.valory.skills.mech_interact_abci.states.mech_version as MechVersionStates
 import packages.valory.skills.mech_interact_abci.states.request as MechRequestStates
 import packages.valory.skills.mech_interact_abci.states.response as MechResponseStates
 import packages.valory.skills.olas_week_abci.rounds as WeekInOlasAbciApp
@@ -53,12 +54,14 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     DecisionMakingAbci.FinishedDecisionMakingWriteTwitterRound: TwitterWriteAbciApp.RandomnessTwitterRound,
     DecisionMakingAbci.FinishedDecisionMakingDoneRound: ResetAndPauseAbci.ResetAndPauseRound,
     DecisionMakingAbci.FinishedDecisionMakingWeekInOlasRound: WeekInOlasAbciApp.OlasWeekDecisionMakingRound,
-    TwitterScoringAbci.FinishedTwitterCollectionRound: MechRequestStates.MechRequestRound,
+    TwitterScoringAbci.FinishedTwitterCollectionRound: MechVersionStates.MechVersionDetectionRound,
     MechFinalStates.FinishedMechRequestRound: TxSettlementAbci.RandomnessTransactionSubmissionRound,
     TxSettlementAbci.FinishedTransactionSubmissionRound: DecisionMakingAbci.PostTxDecisionMakingRound,
     TxSettlementAbci.FailedRound: MechRequestStates.MechRequestRound,
     DecisionMakingAbci.FinishedDecisionMakingScoreRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     DecisionMakingAbci.FinishedDecisionMakingActivityRound: StakingAbci.ActivityScoreRound,
+    MechFinalStates.FinishedMechLegacyDetectedRound: MechRequestStates.MechRequestRound,
+    MechFinalStates.FinishedMechInformationRound: MechRequestStates.MechRequestRound,
     DecisionMakingAbci.FinishedDecisionMakingCheckpointRound: StakingAbci.CheckpointPreparationRound,
     DecisionMakingAbci.FinishedPostMechResponseRound: MechResponseStates.MechResponseRound,
     DecisionMakingAbci.FinishedPostActivityUpdateRound: StakingAbci.ActivityScoreRound,
@@ -72,7 +75,7 @@ abci_app_transition_mapping: AbciAppTransitionMapping = {
     MechFinalStates.FinishedMechResponseRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     MechFinalStates.FinishedMechRequestSkipRound: TwitterScoringAbci.TwitterDecisionMakingRound,
     MechFinalStates.FinishedMechResponseTimeoutRound: MechResponseStates.MechResponseRound,
-    MechFinalStates.FinishedMechPurchaseSubscriptionRound: MechRequestStates.MechRequestRound,
+    MechFinalStates.FinishedMechPurchaseSubscriptionRound: MechVersionStates.MechVersionDetectionRound,
     TwitterScoringAbci.FinishedTwitterScoringRound: DynamicNFTAbci.TokenTrackRound,
     WeekInOlasAbciApp.FinishedWeekInOlasRound: DecisionMakingAbci.DecisionMakingRound,
     DynamicNFTAbci.FinishedTokenTrackRound: DecisionMakingAbci.DecisionMakingRound,

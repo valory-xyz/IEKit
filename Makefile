@@ -108,24 +108,6 @@ test:
 
 v := $(shell pip -V | grep virtualenvs)
 
-.PHONY: new_env
-new_env: clean
-	if [ ! -z "$(which svn)" ];\
-	then\
-		echo "The development setup requires SVN, exit";\
-		exit 1;\
-	fi;\
-
-	if [ -z "$v" ];\
-	then\
-		pipenv --rm;\
-		pipenv --clear;\
-		pipenv --python 3.10;\
-		pipenv install --dev --skip-lock;\
-		echo "Enter virtual environment with all development dependencies now: 'pipenv shell'.";\
-	else\
-		echo "In a virtual environment! Exit first: 'exit'.";\
-	fi
 
 .PHONY: fix-abci-app-specs
 fix-abci-app-specs:
@@ -164,3 +146,12 @@ all-linters:
 	tox -e darglint
 	tox -e pylint
 	tox -e mypy
+
+.PHONY: run-agent
+run-agent:
+	mkdir -p ./logs && \
+	bash -c 'TIMESTAMP=$$(date +%d-%m-%y_%H-%M); \
+	LOG_FILE="./logs/agent_log_$$TIMESTAMP.log"; \
+	LATEST_LOG_FILE="./logs/agent_log_latest.log"; \
+	echo "Running agent and logging to $$LOG_FILE"; \
+	bash run_agent.sh 2>&1 | tee $$LOG_FILE $$LATEST_LOG_FILE'

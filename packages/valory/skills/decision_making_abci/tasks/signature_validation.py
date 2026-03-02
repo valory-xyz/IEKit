@@ -23,11 +23,7 @@ import json
 from typing import cast
 
 from eth_account.account import Account
-from eth_account.messages import (
-    _hash_eip191_message,
-    encode_defunct,
-    encode_structured_data,
-)
+from eth_account.messages import _hash_eip191_message, encode_defunct, encode_typed_data
 from eth_utils.curried import keccak
 from eth_utils.exceptions import ValidationError
 
@@ -56,7 +52,7 @@ def fix_message_types(message_object):
 
 def build_safe_typed_message(message_object):
     """Build the safe message for a typed message"""
-    encoded = encode_structured_data(message_object)
+    encoded = encode_typed_data(full_message=message_object)
     hashed = _hash_eip191_message(encoded)
     return hashed
 

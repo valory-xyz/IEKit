@@ -7,43 +7,34 @@ cleanup() {
     echo "Tendermint terminated"
 }
 
-# Load env vars
-source .env
-repo_path=$PWD
-
 # Link cleanup to the exit signal
 trap cleanup EXIT
 
 # Remove previous agent if exists
-if test -d impact_evaluator; then
+if test -d agent; then
   echo "Removing previous agent build"
-  rm -r impact_evaluator
+  sudo rm -r agent
 fi
 
 # Remove empty directories to avoid wrong hashes
 find . -empty -type d -delete
-
-# Ensure that third party packages are correctly synced
 make clean
-AUTONOMY_VERSION=v$(autonomy --version | grep -oP '(?<=version\s)\S+')
-AEA_VERSION=v$(aea --version | grep -oP '(?<=version\s)\S+')
-MECH_INTERACT_VERSION=v$(git ls-remote --tags --sort="v:refname" https://github.com/valory-xyz/mech-interact.git | tail -n1 | sed 's|.*refs/tags/||')
-autonomy packages sync --source valory-xyz/open-aea:$AEA_VERSION --source valory-xyz/open-autonomy:$AUTONOMY_VERSION  --source valory-xyz/mech-interact:$MECH_INTERACT_VERSION --update-packages
 
 # Ensure hashes are updated
 autonomy packages lock
 
 # Fetch the agent
-autonomy fetch --local --agent valory/impact_evaluator
+autonomy fetch --local --agent valory/impact_evaluator --alias agent
 
 # Replace params with env vars
 source .env
 python scripts/aea-config-replace.py
 
 # Copy and add the keys and issue certificates
-cd impact_evaluator
+cd agent
 cp $PWD/../ethereum_private_key.txt .
 autonomy add-key ethereum ethereum_private_key.txt
+autonomy add-key ethereum ethereum_private_key.txt --connection
 autonomy issue-certificates
 
 # Run tendermint

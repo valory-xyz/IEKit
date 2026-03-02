@@ -102,7 +102,7 @@ logging_config:
 skill_exception_policy: stop_and_exit
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==2.0.6
+    version: ==2.0.8
   typing_extensions:
     version: ==4.13.2
 default_connection: null
@@ -221,7 +221,7 @@ models:
       max_healthcheck: 120
       multisend_address: ${str:0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761}
       termination_sleep: ${int:900}
-      mech_wrapped_native_token_address: ${str:0x0000000000000000000000000000000000000000}
+      mech_wrapped_native_token_address: ${str:0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d}
       init_fallback_gas: ${int:0}
       keeper_allowed_retries: 3
       reset_pause_duration: ${int:300}
@@ -286,7 +286,7 @@ models:
       mech_chain_id: ${str:gnosis}
       mech_interaction_sleep_time: ${int:10}
       use_mech_marketplace: ${bool:true}
-      mech_marketplace_config: ${dict:{"mech_marketplace_address":"0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB","priority_mech_address":"0xC05e7412439bD7e91730a6880E18d5D5873F632C","priority_mech_staking_instance_address":"0x998dEFafD094817EF329f6dc79c703f1CF18bC90","priority_mech_service_id":0,"requester_staking_instance_address":"0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d","response_timeout":300}}
+      mech_marketplace_config: ${dict:{"mech_marketplace_address":"0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB","priority_mech_address":"0xC05e7412439bD7e91730a6880E18d5D5873F632C","priority_mech_staking_instance_address":"0x998dEFafD094817EF329f6dc79c703f1CF18bC90","priority_mech_service_id":0,"requester_staking_instance_address":"0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d","use_dynamic_mech_selection":false,"response_timeout":300}}
       checkpoint_threshold_minutes: ${int:600}
       staking_activity_threshold: ${int:5}
       staking_contract_addresses: ${list:["0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4","0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387","0x28877FFc6583170a4C9eD0121fc3195d06fd3A26"]}
@@ -299,6 +299,9 @@ models:
       staking_rewards_required_points: ${int:200}
       disable_wio_posting: ${bool:false}
       contribute_db_pkey: ${str:null}
+      irrelevant_tools: ${list:[]}
+      ignored_mechs: ${list:[]}
+      penalize_mech_time_window: ${int:1800}
   randomness_api:
     args:
       api_id: cloudflare
@@ -312,6 +315,27 @@ models:
   agent_db_client:
     args:
       base_url: ${str:https://afmdb.autonolas.tech}
+  mech_tools:
+    args:
+      headers:
+        Content-Type: ${str:application/json}
+      method: ${str:GET}
+      response_key: ${str:tools}
+      response_type: ${str:list}
+      retries: ${int:5}
+      url: ${str:''}
+  mechs_subgraph:
+    args:
+      headers:
+        Content-Type: ${str:application/json}
+      method: ${str:POST}
+      response_key: ${str:data:meches}
+      response_type: ${str:list}
+      error_key: ${str:errors}
+      error_index: ${int:0}
+      error_type: ${str:dict}
+      retries: ${int:5}
+      url: ${str:https://subgraph.staging.autonolas.tech/subgraphs/name/marketplace-gnosis-v0_7_0}
 ---
 public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfeztlgrlcoxhr7kf6nbq
 type: connection

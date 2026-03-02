@@ -67,7 +67,7 @@ extra:
         max_healthcheck: 120
         multisend_address: ${MULTISEND_ADDRESS:str:0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761}
         termination_sleep: ${TERMINATION_SLEEP:int:900}
-        mech_wrapped_native_token_address: ${MECH_WRAPPED_NATIVE_TOKEN_ADDRESS:str:0x0000000000000000000000000000000000000000}
+        mech_wrapped_native_token_address: ${MECH_WRAPPED_NATIVE_TOKEN_ADDRESS:str:0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d}
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
         on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:6}
         reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:30}
@@ -125,7 +125,7 @@ extra:
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
         mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
         use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:true}
-        mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB","priority_mech_address":"0xC05e7412439bD7e91730a6880E18d5D5873F632C","priority_mech_staking_instance_address":"0x998dEFafD094817EF329f6dc79c703f1CF18bC90","priority_mech_service_id":0,"requester_staking_instance_address":"0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d","response_timeout":300}}
+        mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB","priority_mech_address":"0xC05e7412439bD7e91730a6880E18d5D5873F632C","priority_mech_staking_instance_address":"0x998dEFafD094817EF329f6dc79c703f1CF18bC90","priority_mech_service_id":0,"requester_staking_instance_address":"0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d","use_dynamic_mech_selection":false,"response_timeout":300}}
         checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
         staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4","0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387","0x28877FFc6583170a4C9eD0121fc3195d06fd3A26"]}
@@ -138,6 +138,9 @@ extra:
         use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
         disable_wio_posting: ${DISABLE_WIO_POSTING:bool:true}
         contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
+        irrelevant_tools: ${IRRELEVANT_TOOLS:list:[]}
+        ignored_mechs: ${IGNORED_MECHS:list:[]}
+        penalize_mech_time_window: ${PENALIZE_MECH_TIME_WINDOW:int:1800}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
@@ -163,7 +166,7 @@ extra:
         max_healthcheck: 120
         multisend_address: ${MULTISEND_ADDRESS:str:0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761}
         termination_sleep: ${TERMINATION_SLEEP:int:900}
-        mech_wrapped_native_token_address: ${MECH_WRAPPED_NATIVE_TOKEN_ADDRESS:str:0x0000000000000000000000000000000000000000}
+        mech_wrapped_native_token_address: ${MECH_WRAPPED_NATIVE_TOKEN_ADDRESS:str:0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d}
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
         on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:6}
         reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:30}
@@ -221,7 +224,7 @@ extra:
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
         mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
         use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:true}
-        mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB","priority_mech_address":"0xC05e7412439bD7e91730a6880E18d5D5873F632C","priority_mech_staking_instance_address":"0x998dEFafD094817EF329f6dc79c703f1CF18bC90","priority_mech_service_id":0,"requester_staking_instance_address":"0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d","response_timeout":300}}
+        mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB","priority_mech_address":"0xC05e7412439bD7e91730a6880E18d5D5873F632C","priority_mech_staking_instance_address":"0x998dEFafD094817EF329f6dc79c703f1CF18bC90","priority_mech_service_id":0,"requester_staking_instance_address":"0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d","use_dynamic_mech_selection":false,"response_timeout":300}}
         checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
         staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4","0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387","0x28877FFc6583170a4C9eD0121fc3195d06fd3A26"]}
@@ -234,6 +237,9 @@ extra:
         use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
         disable_wio_posting: ${DISABLE_WIO_POSTING:bool:true}
         contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
+        irrelevant_tools: ${IRRELEVANT_TOOLS:list:[]}
+        ignored_mechs: ${IGNORED_MECHS:list:[]}
+        penalize_mech_time_window: ${PENALIZE_MECH_TIME_WINDOW:int:1800}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
@@ -262,7 +268,7 @@ extra:
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
         on_chain_service_id: ${ON_CHAIN_SERVICE_ID:int:6}
         reset_tendermint_after: ${RESET_TENDERMINT_AFTER:int:30}
-        mech_wrapped_native_token_address: ${MECH_WRAPPED_NATIVE_TOKEN_ADDRESS:str:0x0000000000000000000000000000000000000000}
+        mech_wrapped_native_token_address: ${MECH_WRAPPED_NATIVE_TOKEN_ADDRESS:str:0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d}
         retry_attempts: 400
         retry_timeout: 3
         request_retry_delay: 1.0
@@ -317,7 +323,7 @@ extra:
         mech_chain_id: ${MECH_CHAIN_ID:str:gnosis}
         mech_interaction_sleep_time: ${MECH_INTERACTION_SLEEP_TIME:int:10}
         use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:true}
-        mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB","priority_mech_address":"0xC05e7412439bD7e91730a6880E18d5D5873F632C","priority_mech_staking_instance_address":"0x998dEFafD094817EF329f6dc79c703f1CF18bC90","priority_mech_service_id":0,"requester_staking_instance_address":"0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d","response_timeout":300}}
+        mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB","priority_mech_address":"0xC05e7412439bD7e91730a6880E18d5D5873F632C","priority_mech_staking_instance_address":"0x998dEFafD094817EF329f6dc79c703f1CF18bC90","priority_mech_service_id":0,"requester_staking_instance_address":"0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d","use_dynamic_mech_selection":false,"response_timeout":300}}
         checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
         staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4","0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387","0x28877FFc6583170a4C9eD0121fc3195d06fd3A26"]}
@@ -330,6 +336,9 @@ extra:
         staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
         disable_wio_posting: ${DISABLE_WIO_POSTING:bool:true}
         contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
+        irrelevant_tools: ${IRRELEVANT_TOOLS:list:[]}
+        ignored_mechs: ${IGNORED_MECHS:list:[]}
+        penalize_mech_time_window: ${PENALIZE_MECH_TIME_WINDOW:int:1800}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
@@ -355,7 +364,7 @@ extra:
         max_healthcheck: 120
         multisend_address: ${MULTISEND_ADDRESS:str:0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761}
         termination_sleep: ${TERMINATION_SLEEP:int:900}
-        mech_wrapped_native_token_address: ${MECH_WRAPPED_NATIVE_TOKEN_ADDRESS:str:0x0000000000000000000000000000000000000000}
+        mech_wrapped_native_token_address: ${MECH_WRAPPED_NATIVE_TOKEN_ADDRESS:str:0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d}
         init_fallback_gas: ${INIT_FALLBACK_GAS:int:0}
         keeper_allowed_retries: 3
         reset_pause_duration: ${RESET_PAUSE_DURATION:int:300}
@@ -419,7 +428,7 @@ extra:
         use_mech_marketplace: ${USE_MECH_MARKETPLACE:bool:true}
         agent_registry_address: ${AGENT_REGISTRY_ADDRESS:str:0x0000000000000000000000000000000000000000}
         use_acn_for_delivers: ${USE_ACN_FOR_DELIVERS:bool:false}
-        mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB","priority_mech_address":"0xC05e7412439bD7e91730a6880E18d5D5873F632C","priority_mech_staking_instance_address":"0x998dEFafD094817EF329f6dc79c703f1CF18bC90","priority_mech_service_id":0,"requester_staking_instance_address":"0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d","response_timeout":300}}
+        mech_marketplace_config: ${MECH_MARKETPLACE_CONFIG:dict:{"mech_marketplace_address":"0x735FAAb1c4Ec41128c367AFb5c3baC73509f70bB","priority_mech_address":"0xC05e7412439bD7e91730a6880E18d5D5873F632C","priority_mech_staking_instance_address":"0x998dEFafD094817EF329f6dc79c703f1CF18bC90","priority_mech_service_id":0,"requester_staking_instance_address":"0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d","use_dynamic_mech_selection":false,"response_timeout":300}}
         checkpoint_threshold_minutes: ${CHECKPOINT_THRESHOLD_MINUTES:int:600}
         staking_activity_threshold: ${STAKING_ACTIVITY_THRESHOLD:int:5}
         staking_contract_addresses: ${STAKING_CONTRACT_ADDRESSES:list:["0xe2E68dDafbdC0Ae48E39cDd1E778298e9d865cF4","0x6Ce93E724606c365Fc882D4D6dfb4A0a35fE2387","0x28877FFc6583170a4C9eD0121fc3195d06fd3A26"]}
@@ -430,6 +439,9 @@ extra:
         staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
         disable_wio_posting: ${DISABLE_WIO_POSTING:bool:true}
         contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
+        irrelevant_tools: ${IRRELEVANT_TOOLS:list:[]}
+        ignored_mechs: ${IGNORED_MECHS:list:[]}
+        penalize_mech_time_window: ${PENALIZE_MECH_TIME_WINDOW:int:1800}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}

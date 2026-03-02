@@ -128,7 +128,7 @@ models:
       max_healthcheck: 120
       multisend_address: '0x0000000000000000000000000000000000000000'
       termination_sleep: 900
-      mech_wrapped_native_token_address: '0x0000000000000000000000000000000000000000'
+      mech_wrapped_native_token_address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'
       termination_from_block: 0
       init_fallback_gas: 0
       keeper_allowed_retries: 3
@@ -203,6 +203,7 @@ models:
         priority_mech_service_id: 975
         requester_staking_instance_address: '0xeF44Fb0842DDeF59D37f85D61A1eF492bbA6135d'
         response_timeout: 300
+        use_dynamic_mech_selection: false
       checkpoint_threshold_minutes: 60
       staking_activity_threshold: 5
       agent_registry_address: '0x0000000000000000000000000000000000000000'
@@ -218,7 +219,38 @@ models:
       staking_rewards_required_points: 200
       disable_wio_posting: false
       contribute_db_pkey: null
+      irrelevant_tools: []
+      ignored_mechs: []
+      penalize_mech_time_window: 1800
     class_name: Params
+  mech_tools:
+    args:
+      api_id: mech_tools
+      headers:
+        Content-Type: application/json
+      method: GET
+      parameters: {}
+      response_key: tools
+      response_type: list
+      retries: 5
+      url: ''
+    class_name: MechToolsSpecs
+  mechs_subgraph:
+    args:
+      api_id: mechs
+      headers:
+        Content-Type: application/json
+      method: POST
+      parameters: {}
+      response_key: data:meches
+      response_type: list
+      error_key: errors
+      error_index: 0
+      error_type: dict
+      retries: 5
+      url: https://subgraph.staging.autonolas.tech/subgraphs/name/marketplace-gnosis-v0_7_0
+      delivery_rate_cap: 10000000000000000
+    class_name: MechsSubgraph
   randomness_api:
     args:
       api_id: cloudflare
@@ -266,5 +298,5 @@ models:
     class_name: ContributeDatabase
 dependencies:
   open-aea-cli-ipfs:
-    version: ==2.0.6
+    version: ==2.0.8
 is_abstract: false

@@ -20,6 +20,6 @@ excluded_protocols: []
 restricted_to_protocols: []
 dependencies:
   farcaster:
-    version: ==0.7.11
+    version: ==0.7.12
 is_abstract: false
 cert_requests: []

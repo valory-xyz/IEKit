@@ -80,7 +80,7 @@ models:
     args:
       multisend_address: '0x0000000000000000000000000000000000000000'
       termination_sleep: 900
-      mech_wrapped_native_token_address: '0x0000000000000000000000000000000000000000'
+      mech_wrapped_native_token_address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'
       ceramic_api_base: https://ceramic-clay.3boxlabs.com/
       ceramic_api_create_endpoint: api/v0/streams
       ceramic_api_commit_endpoint: api/v0/commits

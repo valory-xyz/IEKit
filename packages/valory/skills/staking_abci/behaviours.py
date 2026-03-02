@@ -146,7 +146,9 @@ class StakingBaseBehaviour(ContributeDBBehaviour, ABC):
 
         return safe_tx_hash
 
-    def get_staked_services(self, staking_contract_address: str) -> Generator[None, None, Optional[List]]:
+    def get_staked_services(
+        self, staking_contract_address: str
+    ) -> Generator[None, None, Optional[List]]:
         """Get the services staked on a contract"""
         contract_api_msg = yield from self.get_contract_api_response(
             performative=ContractApiMessage.Performative.GET_STATE,  # type: ignore
@@ -163,7 +165,9 @@ class StakingBaseBehaviour(ContributeDBBehaviour, ABC):
 
         service_ids = cast(str, contract_api_msg.state.body["service_ids"])
 
-        self.context.logger.info(f"Got {len(service_ids)} staked services for contract {staking_contract_address}")
+        self.context.logger.info(
+            f"Got {len(service_ids)} staked services for contract {staking_contract_address}"
+        )
 
         return service_ids
 
@@ -204,15 +208,21 @@ class StakingBaseBehaviour(ContributeDBBehaviour, ABC):
         epoch_end = datetime.fromtimestamp(epoch_end_ts, tz=timezone.utc)
         return epoch_end
 
-    def is_checkpoint_callable(self, staking_contract_address) -> Generator[None, None, bool]:
+    def is_checkpoint_callable(
+        self, staking_contract_address
+    ) -> Generator[None, None, bool]:
         """Check if the epoch has ended"""
         epoch_end = yield from self.get_epoch_end(staking_contract_address)
 
         if not epoch_end:
-            self.context.logger.error(f"Could not get the epoch end for contract {staking_contract_address}")
+            self.context.logger.error(
+                f"Could not get the epoch end for contract {staking_contract_address}"
+            )
             return False
 
-        self.context.logger.info(f"Epoch end for contract {staking_contract_address} is {epoch_end.strftime('%Y-%m-%d %H:%M:%S')}")
+        self.context.logger.info(
+            f"Epoch end for contract {staking_contract_address} is {epoch_end.strftime('%Y-%m-%d %H:%M:%S')}"
+        )
 
         # If the epoch end is in the past, the epoch has ended and
         # no one has called the checkpoint
@@ -233,8 +243,13 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
             finished_update = False
 
             # Check whether we just came back from settling an update
-            if self.synchronized_data.tx_submitter == ActivityUpdatePreparationBehaviour.auto_behaviour_id():
-                staking_user_to_counted_tweets = self.synchronized_data.staking_user_to_counted_tweets
+            if (
+                self.synchronized_data.tx_submitter
+                == ActivityUpdatePreparationBehaviour.auto_behaviour_id()
+            ):
+                staking_user_to_counted_tweets = (
+                    self.synchronized_data.staking_user_to_counted_tweets
+                )
 
                 # For each user, update the last processed tweet on the model, and mark for data reset
                 for user_id, counter_tweets in staking_user_to_counted_tweets.items():
@@ -247,15 +262,16 @@ class ActivityScoreBehaviour(StakingBaseBehaviour):
                         yield from self.context.contribute_db.update_tweet(tweet)
 
                 finished_update = True
-                self.context.logger.info(f"Tweets counted for activity: {staking_user_to_counted_tweets}.")
+                self.context.logger.info(
+                    f"Tweets counted for activity: {staking_user_to_counted_tweets}."
+                )
 
             # Process new updates
             else:
                 self.context.logger.info("Processing activity updates")
 
             payload = ActivityScorePayload(
-                sender=sender,
-                finished_update=finished_update
+                sender=sender, finished_update=finished_update
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -280,7 +296,7 @@ class ActivityUpdatePreparationBehaviour(StakingBaseBehaviour):
                 sender=sender,
                 tx_submitter=self.auto_behaviour_id(),
                 tx_hash=tx_hash,
-                safe_contract_address=self.params.safe_contract_address_base
+                safe_contract_address=self.params.safe_contract_address_base,
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -288,7 +304,6 @@ class ActivityUpdatePreparationBehaviour(StakingBaseBehaviour):
             yield from self.wait_until_round_end()
 
         self.set_done()
-
 
     def get_activity_update_hash(self) -> Generator[None, None, Optional[str]]:
         """Prepare the activity update tx"""
@@ -325,8 +340,7 @@ class ActivityUpdatePreparationBehaviour(StakingBaseBehaviour):
 
         # Prepare the safe transaction
         safe_tx_hash = yield from self._build_safe_tx_hash(
-            to_address=self.params.contributors_contract_address,
-            data=data_bytes
+            to_address=self.params.contributors_contract_address, data=data_bytes
         )
 
         return safe_tx_hash
@@ -347,7 +361,7 @@ class CheckpointPreparationBehaviour(StakingBaseBehaviour):
                 sender=sender,
                 tx_submitter=self.auto_behaviour_id(),
                 tx_hash=tx_hash,
-                safe_contract_address=self.params.safe_contract_address_base
+                safe_contract_address=self.params.safe_contract_address_base,
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -358,23 +372,27 @@ class CheckpointPreparationBehaviour(StakingBaseBehaviour):
 
     def get_checkpoint_hash(self) -> Generator[None, None, Optional[str]]:
         """Prepare the checkpoint tx"""
-        self.context.logger.info(
-            "Preparing checkpoint calls"
-        )
+        self.context.logger.info("Preparing checkpoint calls")
 
         multi_send_txs = []
 
         for staking_contract_address in self.params.staking_contract_addresses:
 
             # Check if there is some service staked on this contract
-            services_staked = yield from self.get_staked_services(staking_contract_address)
+            services_staked = yield from self.get_staked_services(
+                staking_contract_address
+            )
             if not services_staked:
                 continue
 
             # Check if this checkpoint needs to be called
-            is_checkpoint_callable = yield from self.is_checkpoint_callable(staking_contract_address)
+            is_checkpoint_callable = yield from self.is_checkpoint_callable(
+                staking_contract_address
+            )
             if not is_checkpoint_callable:
-                self.context.logger.info(f"Checkpoint is not callable for contract {staking_contract_address}")
+                self.context.logger.info(
+                    f"Checkpoint is not callable for contract {staking_contract_address}"
+                )
                 continue
 
             # Use the contract api to interact with the staking contract
@@ -387,13 +405,18 @@ class CheckpointPreparationBehaviour(StakingBaseBehaviour):
             )
 
             # Check that the response is what we expect
-            if response_msg.performative != ContractApiMessage.Performative.RAW_TRANSACTION:
+            if (
+                response_msg.performative
+                != ContractApiMessage.Performative.RAW_TRANSACTION
+            ):
                 self.context.logger.error(
                     f"Error while preparing the checkpoint call: {response_msg}"
                 )
                 return None
 
-            data_bytes = cast(bytes, response_msg.raw_transaction.body.get("data", None))
+            data_bytes = cast(
+                bytes, response_msg.raw_transaction.body.get("data", None)
+            )
 
             if data_bytes is None:
                 self.context.logger.error(
@@ -409,7 +432,9 @@ class CheckpointPreparationBehaviour(StakingBaseBehaviour):
                     "data": data_bytes,
                 }
             )
-            self.context.logger.info(f"Added checkpoint call for contract {staking_contract_address}")
+            self.context.logger.info(
+                f"Added checkpoint call for contract {staking_contract_address}"
+            )
 
         if not multi_send_txs:
             return None
@@ -445,7 +470,7 @@ class CheckpointPreparationBehaviour(StakingBaseBehaviour):
             to_address=self.params.multisend_address,
             value=ZERO_VALUE,  # the safe is not moving any native value into the multisend
             data=bytes.fromhex(multisend_data),
-            operation=SafeOperation.DELEGATE_CALL.value
+            operation=SafeOperation.DELEGATE_CALL.value,
         )
 
         return safe_tx_hash
@@ -466,7 +491,7 @@ class DAAPreparationBehaviour(StakingBaseBehaviour):
                 sender=sender,
                 tx_submitter=self.auto_behaviour_id(),
                 tx_hash=tx_hash,
-                safe_contract_address=self.params.safe_contract_address_base
+                safe_contract_address=self.params.safe_contract_address_base,
             )
 
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
@@ -477,9 +502,8 @@ class DAAPreparationBehaviour(StakingBaseBehaviour):
 
     def get_daa_hash(self) -> Generator[None, None, Optional[str]]:
         """Prepare the DAA update tx"""
-        self.context.logger.info(
-            "Preparing DAA update"
-        )
+
+        self.context.logger.info("Preparing DAA update")
         now_utc = self._get_utc_time()
 
         active_multisigs: List[str] = []
@@ -551,7 +575,7 @@ class DAAPreparationBehaviour(StakingBaseBehaviour):
             to_address=self.params.multisend_address,
             value=ZERO_VALUE,  # the safe is not moving any native value into the multisend
             data=bytes.fromhex(multisend_data),
-            operation=SafeOperation.DELEGATE_CALL.value
+            operation=SafeOperation.DELEGATE_CALL.value,
         )
 
         return safe_tx_hash
@@ -566,5 +590,5 @@ class StakingRoundBehaviour(AbstractRoundBehaviour):
         ActivityScoreBehaviour,
         ActivityUpdatePreparationBehaviour,
         CheckpointPreparationBehaviour,
-        DAAPreparationBehaviour
+        DAAPreparationBehaviour,
     ]

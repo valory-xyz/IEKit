@@ -57,6 +57,8 @@ packages/valory/protocols/srr
 .zed/
 .coverage*
 .dmypy.json
+agent/
+logs/
 
 .env
 

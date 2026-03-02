@@ -31,7 +31,7 @@ Prepare the environment to build your own IEKit-based AI agent.
 
 - Create development environment:
 
-      make new_env && pipenv shell
+      poetry install && poetry shell
 
 - Configure command line:
 
