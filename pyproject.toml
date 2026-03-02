@@ -20,6 +20,7 @@ classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
 ]
 
 [[tool.poetry.packages]]
@@ -27,7 +28,7 @@ include = "packages"
 
 
 [tool.poetry.dependencies]
-python = "<3.11,>=3.10"
+python = "<3.12,>=3.10"
 open-autonomy = "==0.21.8"
 requests = "<2.32.5,>=2.28.1"
 py-multibase = "==1.0.3"
