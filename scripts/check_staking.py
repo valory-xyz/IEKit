@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2025 Valory AG
+#   Copyright 2021-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -27,11 +27,12 @@ from pathlib import Path
 from typing import Dict, Optional
 
 import dotenv
-from agent_db import AgentDBClient, ContributeDatabase
 from rich.console import Console
 from rich.table import Table
 from web3 import Web3
 from web3.contract import Contract
+
+from agent_db import AgentDBClient, ContributeDatabase
 
 
 dotenv.load_dotenv(override=True)
