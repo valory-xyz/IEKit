@@ -36,8 +36,8 @@ DUMMY_ACCOUNTS = {
 
 def sign_message(message_text, private_key):
     """Sign a message"""
-    message_hash = messages.defunct_hash_message(text=message_text)
-    signed_message = w3.eth.account.signHash(message_hash, private_key=private_key)
+    message_hash = messages.encode_defunct(text=message_text)
+    signed_message = w3.eth.account.sign_message(message_hash, private_key=private_key)
     signature = signed_message.signature
     hex_signature = (
         signature.hex()
