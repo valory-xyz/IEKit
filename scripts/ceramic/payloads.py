@@ -92,7 +92,9 @@ def sign_ed25519(payload: dict, did: str, seed: str):
     jws = JsonWebSignature()
     protected = {"alg": "EdDSA", "kid": did + "#" + did.split(":")[-1]}
     signature = jws.serialize_compact(protected, payload_b64decoded, key_ed25519)
-    signature_data = dict(zip(('protected', 'payload', 'signature'), signature.decode('utf-8').split('.')))
+    signature_data = dict(
+        zip(("protected", "payload", "signature"), signature.decode("utf-8").split("."))
+    )
 
     return json.dumps(signature_data, sort_keys=True)
 
@@ -236,8 +238,14 @@ def build_genesis_payload(did: str, did_seed: str, data: dict, extra_metadata: d
 
 
 def build_commit_payload(
-    did: str, did_seed: str, stream_id: str, initial_data: dict, final_data: dict, genesis_cid: str, previous_cid: str
-):
+    did: str,
+    did_seed: str,
+    stream_id: str,
+    initial_data: dict,
+    final_data: dict,
+    genesis_cid: str,
+    previous_cid: str,
+):  # pylint: disable=too-many-positional-arguments
     """Build a commit payload"""
 
     # Create a diff patch from the old data to the new one

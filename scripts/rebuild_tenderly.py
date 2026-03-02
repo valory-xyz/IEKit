@@ -82,7 +82,7 @@ def _delete_vnet(
     print(response)
 
 
-def _create_vnet(  # pylint: disable=too-many-arguments
+def _create_vnet(  # pylint: disable=too-many-arguments, too-many-positional-arguments
     tenderly_access_key: str,
     account_slug: str,
     project_slug: str,

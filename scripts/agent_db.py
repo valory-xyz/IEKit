@@ -116,7 +116,7 @@ class AgentDBClient:
 
     def _request(
         self, method, endpoint, payload=None, params=None, auth=False, nested_auth=True
-    ):
+    ):  # pylint: disable=too-many-positional-arguments
         """Make the request"""
         url = f"{self.base_url}{endpoint}"
         headers = {"Content-Type": "application/json"}
@@ -128,7 +128,7 @@ class AgentDBClient:
                 payload = payload | self._sign_request(endpoint)
 
         response = requests.request(
-            method, url, headers=headers, json=payload, params=params
+            method, url, headers=headers, json=payload, params=params, timeout=60
         )
 
         if response.status_code in [200, 201]:
@@ -140,7 +140,9 @@ class AgentDBClient:
 
         if response.status_code == 404:
             return None
-        raise Exception(f"Request failed: {response.status_code} - {response.text}")
+        raise Exception(  # pylint: disable=broad-exception-raised
+            f"Request failed: {response.status_code} - {response.text}"
+        )
 
     # Agent Type Methods
 
@@ -217,7 +219,7 @@ class AgentDBClient:
         data_type: str,
         default_value: str,
         is_required: bool = False,
-    ):
+    ):  # pylint: disable=too-many-positional-arguments
         """Create attribute definition"""
         endpoint = f"/api/agent-types/{agent_type.type_id}/attributes/"
         payload = {
@@ -301,13 +303,11 @@ class AgentDBClient:
         self, attribute_id: int
     ) -> Optional[AttributeInstance]:
         """Get attribute instance by attribute ID"""
-        endpoint = (
-            f"/api/agent-attributes/{attribute_id}"
-        )
+        endpoint = f"/api/agent-attributes/{attribute_id}"
         result = self._request("GET", endpoint)
         return AttributeInstance.model_validate(result) if result else None
 
-    def update_attribute_instance(
+    def update_attribute_instance(  # pylint: disable=too-many-positional-arguments
         self,
         agent_instance: AgentInstance,
         attribute_def: AttributeDefinition,
@@ -350,7 +350,13 @@ class AgentDBClient:
                 "limit": 100,
             }
             # print(f"Reading agent attributes from {skip} to {skip + 100}... ", end="")
-            result = self._request(method="GET", endpoint=endpoint, payload={"agent_attr": payload}, params=params, auth=True)
+            result = self._request(
+                method="GET",
+                endpoint=endpoint,
+                payload={"agent_attr": payload},
+                params=params,
+                auth=True,
+            )
 
             if result is None:
                 print("Error fetching agent attributes")
@@ -410,7 +416,9 @@ class JsonAttributeInterface:
     def __init__(self, client_: AgentDBClient):
         """Constructor"""
         self.client = client_
-        self.attr_def = self.client.get_attribute_definition_by_name(self.attribute_name)
+        self.attr_def = self.client.get_attribute_definition_by_name(
+            self.attribute_name
+        )
 
     def create_definition(self):
         """Create the attribute definition"""
@@ -423,9 +431,7 @@ class JsonAttributeInterface:
             )
             print(f"Created attribute definition: {self.attribute_name}")
 
-    def create_instance(
-        self, model: BaseModel
-    ) -> Optional[AttributeInstance]:
+    def create_instance(self, model: BaseModel) -> Optional[AttributeInstance]:
         """Create an attribute instance"""
         attr_def = self.client.get_attribute_definition_by_name(self.attribute_name)
         if not attr_def:
@@ -440,9 +446,7 @@ class JsonAttributeInterface:
         )
         return attr_instance
 
-    def update_instance(
-        self, model: BaseModel
-    ) -> Optional[AttributeInstance]:
+    def update_instance(self, model: BaseModel) -> Optional[AttributeInstance]:
         """Update an attribute instance"""
         attr_def = self.client.get_attribute_definition_by_name(self.attribute_name)
         if not attr_def:
@@ -461,21 +465,25 @@ class JsonAttributeInterface:
 
 class TweetAttributeInterface(JsonAttributeInterface):
     """TweetAttribute"""
+
     attribute_name = "tweet"
 
 
 class UserAttributeInterface(JsonAttributeInterface):
     """UserAttribute"""
+
     attribute_name = "user"
 
 
 class ModuleConfigsAttributeInterface(JsonAttributeInterface):
     """ModuleConfigsAttribute"""
+
     attribute_name = "module_configs"
 
 
 class ModuleDataAttributeInterface(JsonAttributeInterface):
     """ModuleDataAttribute"""
+
     attribute_name = "module_data"
 
 
@@ -509,7 +517,9 @@ class ContributeDatabase:
         self.client.agent_type = contribute_type
 
         # Create Contribute instance
-        contribute_instance = self.client.get_agent_instance_by_address(self.client.eth_address)
+        contribute_instance = self.client.get_agent_instance_by_address(
+            self.client.eth_address
+        )
         if not contribute_instance:
             contribute_instance = self.client.create_agent_instance(
                 agent_name="Contribute",
@@ -556,9 +566,7 @@ class ContributeDatabase:
             )
             self.create_user(user)
 
-        print(
-            f"Creating tweet: {tweet.tweet_id} for user {tweet.twitter_user_id}"
-        )
+        print(f"Creating tweet: {tweet.tweet_id} for user {tweet.twitter_user_id}")
 
         # Create the new tweet
         tweet_instance = self.tweet_interface.create_instance(tweet)
@@ -594,16 +602,22 @@ class ContributeDatabase:
         result = self.user_interface.update_instance(user)
         return result
 
-    def create_module_configs(self, config: ModuleConfigs) -> Optional[AttributeInstance]:
+    def create_module_configs(
+        self, config: ModuleConfigs
+    ) -> Optional[AttributeInstance]:
         """Create a plugin config attribute instance"""
         print("Creating module configs")
         module_configs_instance = self.module_configs_interface.create_instance(config)
         if module_configs_instance:
             self.data.module_configs = config
-            self.data.module_configs.attribute_instance_id = module_configs_instance.attribute_id
+            self.data.module_configs.attribute_instance_id = (
+                module_configs_instance.attribute_id
+            )
         return module_configs_instance
 
-    def update_module_configs(self, configs: ModuleConfigs) -> Optional[AttributeInstance]:
+    def update_module_configs(
+        self, configs: ModuleConfigs
+    ) -> Optional[AttributeInstance]:
         """Update a plugin config attribute instance"""
         return self.module_configs_interface.update_instance(configs)
 
@@ -613,7 +627,9 @@ class ContributeDatabase:
         module_data_instance = self.module_data_interface.create_instance(data)
         if module_data_instance:
             self.data.module_data = data
-            self.data.module_data.attribute_instance_id = module_data_instance.attribute_id
+            self.data.module_data.attribute_instance_id = (
+                module_data_instance.attribute_id
+            )
         return module_data_instance
 
     def update_module_data(self, data: ModuleData) -> Optional[AttributeInstance]:
@@ -631,11 +647,15 @@ class ContributeDatabase:
     def load_from_remote_db(self):
         """Load data from the remote database."""
 
-        attributes = self.client.get_all_agent_instance_attributes_parsed(self.client.agent)
+        attributes = self.client.get_all_agent_instance_attributes_parsed(
+            self.client.agent
+        )
 
         for attribute in attributes:
             attr_name = attribute["attr_name"]
-            attr_data = attribute["attr_value"] | {"attribute_instance_id": attribute["attr_id"]}
+            attr_data = attribute["attr_value"] | {
+                "attribute_instance_id": attribute["attr_id"]
+            }
             # print(f"Loading attribute: {attr_name} with id: {attribute['attr_id']}")
 
             if attr_name == "tweet":
@@ -648,7 +668,9 @@ class ContributeDatabase:
                 user = ContributeUser(**attr_data)
 
                 if user.id in self.data.users:
-                    raise ValueError(f"User with id {user.id} already exists.\nExisting: {self.data.users[user.id]}\nNew: {user}")
+                    raise ValueError(
+                        f"User with id {user.id} already exists.\nExisting: {self.data.users[user.id]}\nNew: {user}"
+                    )
 
                 self.data.users[user.id] = user
                 continue
@@ -663,9 +685,7 @@ class ContributeDatabase:
                 self.data.module_data = module_data
                 continue
 
-            raise ValueError(
-                f"Unknown attribute name: {attr_name}"
-            )
+            raise ValueError(f"Unknown attribute name: {attr_name}")
 
         self.data.sort()
 
@@ -673,7 +693,9 @@ class ContributeDatabase:
             user = self.get_user_by_attribute("twitter_id", tweet.twitter_user_id)
 
             if user is None:
-                print(f"Tweet with id {tweet_id} has no user associated with it. Skipping...")
+                print(
+                    f"Tweet with id {tweet_id} has no user associated with it. Skipping..."
+                )
                 continue
 
             user.tweets[tweet_id] = tweet
@@ -711,7 +733,9 @@ def load_ceramic_data():
             if not tweet["proposer"]["address"]:
                 tweet["proposer"]["address"] = ZERO_ADDRESS
 
-    print(f"Loaded {len(user_db['users'])} users and {len(tweets)} tweets from contribute_db.json")
+    print(
+        f"Loaded {len(user_db['users'])} users and {len(tweets)} tweets from contribute_db.json"
+    )
 
     # Combine the data
     combined_db = {
@@ -735,7 +759,9 @@ def sync_remote_db(local_data, remote_db):
         if user_id not in remote_db.data.users:
             print(f"Creating user {user_id} with twitter_id {local_user.twitter_id}")
             user_attribute = remote_db.create_user(local_user)
-            remote_db.data.users[user_id].attribute_instance_id = user_attribute.attribute_id if user_attribute else None
+            remote_db.data.users[user_id].attribute_instance_id = (
+                user_attribute.attribute_id if user_attribute else None
+            )
             continue
 
         remote_user = remote_db.data.users[user_id]
@@ -753,16 +779,24 @@ def sync_remote_db(local_data, remote_db):
         if local_tweet.tweet_id in remote_db.data.tweets:
             continue
 
-        print(f"Creating tweet {i + 1}: {local_tweet.tweet_id} for user {local_tweet.twitter_user_id}")
+        print(
+            f"Creating tweet {i + 1}: {local_tweet.tweet_id} for user {local_tweet.twitter_user_id}"
+        )
         tweet_attribute = remote_db.create_tweet(local_tweet)
-        remote_db.data.tweets[local_tweet.tweet_id].attribute_instance_id = tweet_attribute.attribute_id if tweet_attribute else None
+        remote_db.data.tweets[local_tweet.tweet_id].attribute_instance_id = (
+            tweet_attribute.attribute_id if tweet_attribute else None
+        )
 
     # ModuleConfigs
-    local_data.module_configs.attribute_instance_id = remote_db.data.module_configs.attribute_instance_id
+    local_data.module_configs.attribute_instance_id = (
+        remote_db.data.module_configs.attribute_instance_id
+    )
     remote_db.update_module_configs(local_data.module_configs)
 
     # ModuleData
-    local_data.module_data.attribute_instance_id = remote_db.data.module_data.attribute_instance_id
+    local_data.module_data.attribute_instance_id = (
+        remote_db.data.module_data.attribute_instance_id
+    )
     remote_db.update_module_data(local_data.module_data)
 
 
@@ -779,16 +813,25 @@ def clear_remote_db(remote_db):
     # Clear users
     for user_id, user in remote_db.data.users.items():
         if user.attribute_instance_id is not None:
-            print(f"Deleting user {user_id} with attribute instance ID {user.attribute_instance_id}")
+            print(
+                f"Deleting user {user_id} with attribute instance ID {user.attribute_instance_id}"
+            )
             remote_db.client.delete_attribute_instance(user.attribute_instance_id)
 
     # Clear module configs
-    if remote_db.data.module_configs and remote_db.data.module_configs.attribute_instance_id:
-        remote_db.client.delete_attribute_instance(remote_db.data.module_configs.attribute_instance_id)
+    if (
+        remote_db.data.module_configs
+        and remote_db.data.module_configs.attribute_instance_id
+    ):
+        remote_db.client.delete_attribute_instance(
+            remote_db.data.module_configs.attribute_instance_id
+        )
 
     # Clear module data
     if remote_db.data.module_data and remote_db.data.module_data.attribute_instance_id:
-        remote_db.client.delete_attribute_instance(remote_db.data.module_data.attribute_instance_id)
+        remote_db.client.delete_attribute_instance(
+            remote_db.data.module_data.attribute_instance_id
+        )
 
     print("Remote database cleared")
 
@@ -811,7 +854,9 @@ def main():
     # Load the remote database
     remote_db = ContributeDatabase(client)
     remote_db.load_from_remote_db()
-    print(f"Remote database: loaded {len(remote_db.data.users)} users and {len(remote_db.data.tweets)} tweets.")
+    print(
+        f"Remote database: loaded {len(remote_db.data.users)} users and {len(remote_db.data.tweets)} tweets."
+    )
 
     # Sync both databases
     # sync_remote_db(local_data, remote_db)

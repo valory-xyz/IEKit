@@ -142,13 +142,13 @@ class Agent:
         )
 
         try:
-            response = requests.get(healthcheck_url, verify=False)  # nosec
+            response = requests.get(healthcheck_url, verify=False, timeout=60)  # nosec
             if response.status_code != HTTP_OK:
                 return False, {}
             response_json = response.json()
             is_healthy = response_json["is_transitioning_fast"]
             return is_healthy, response_json
-        except Exception: # pylint: disable=broad-except
+        except Exception:  # pylint: disable=broad-except
             return False, {}
 
     def healthcheck(self) -> Tuple[bool, Optional[str]]:
@@ -237,12 +237,12 @@ class Propel:
         """Logout"""
         self.client.logout()
 
-    def deploy(self, service_name, variables, service_ipfs_hash, number_of_agents, keys):
+    def deploy(
+        self, service_name, variables, service_ipfs_hash, number_of_agents, keys
+    ):  # pylint: disable=too-many-positional-arguments
         """Deploy a service"""
 
-        agent_names = [
-            f"{service_name}_agent_{i}" for i in range(number_of_agents)
-        ]
+        agent_names = [f"{service_name}_agent_{i}" for i in range(number_of_agents)]
 
         # Check if Contribute is already deployed and stop it
         existing_agents = []
@@ -340,7 +340,13 @@ def deploy_contribute():
     # propel.deploy(CONTRIBUTE_SERVICE_NAME_TEST, CONTRIBUTE_VARIABLES_TEST, service_ipfs_hash, 1, PROPEL_TEST_KEYS)
 
     # Prod
-    propel.deploy(CONTRIBUTE_SERVICE_NAME, CONTRIBUTE_VARIABLES_PROD, service_ipfs_hash, 4, PROPEL_PROD_KEYS)
+    propel.deploy(
+        CONTRIBUTE_SERVICE_NAME,
+        CONTRIBUTE_VARIABLES_PROD,
+        service_ipfs_hash,
+        4,
+        PROPEL_PROD_KEYS,
+    )
 
 
 if __name__ == "__main__":
