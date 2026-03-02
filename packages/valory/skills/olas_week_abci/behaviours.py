@@ -518,13 +518,17 @@ class OlasWeekTweetCollectionBehaviour(OlasWeekBaseBehaviour):
 
                 return {
                     "tweets": None,
-                    "error": ERROR_API_LIMITS
-                    if response.status_code == HTTP_TOO_MANY_REQUESTS
-                    else ERROR_GENERIC,
+                    "error": (
+                        ERROR_API_LIMITS
+                        if response.status_code == HTTP_TOO_MANY_REQUESTS
+                        else ERROR_GENERIC
+                    ),
                     "number_of_tweets_pulled_today": number_of_tweets_pulled_today,
-                    "sleep_until": reset_ts
-                    if response.status_code == HTTP_TOO_MANY_REQUESTS
-                    else self.synchronized_data.sleep_until,
+                    "sleep_until": (
+                        reset_ts
+                        if response.status_code == HTTP_TOO_MANY_REQUESTS
+                        else self.synchronized_data.sleep_until
+                    ),
                 }
 
             api_data = json.loads(response.body)
