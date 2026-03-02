@@ -29,10 +29,10 @@ contracts:
 - valory/multisend:0.1.0:bafybeidjdgi2kyexajirj3cnpzgse4y5u664b2blztt4flv6i7knlecyr4
 - valory/service_registry:0.1.0:bafybeibzuktplryzlfhdyahcbldfh5dz6pnvukigzbejeuvlvv24774lpi
 - valory/veolas_delegation:0.1.0:bafybeia6euzdshikbmv7adoft777rexzhhqcytaq3rsh7x6tzw5kr467zm
-- valory/mech_marketplace:0.1.0:bafybeibbxutph6qbaldnq3o5kiaqgubc6jhgxappf33u2t7udnwajhmbf4
+- valory/agent_mech:0.1.0:bafybeibvtxsxeuymbmxyyn7rj46m3skylupr7qib5eptqluklz4apr77iq
 - valory/mech_marketplace_legacy:0.1.0:bafybeigh3o7kxyaulnvcbld2h6cmae6ma6yei2xram2hqifcftn5f3bw7q
 - valory/staking:0.1.0:bafybeicara3sigvjqogzhacsnlml3xq6af3vjr6bez45gfipbu4bx4iy5e
-- valory/agent_registry:0.1.0:bafybeigl7bqvjyvryxuugpx6ogn4n6d2hryebup3x4hxhfirpjm6kjw4vq
+- valory/agent_registry:0.1.0:bafybeiekiqeq5usfbwbpgi35phy44kdxehf3mi7ucnl2kjv2zqc5s5eto4
 - valory/ierc1155:0.1.0:bafybeid5whskodle54bifmwjzkaqfmkzngqga6jtmbhvlzigel2f5mghda
 - valory/nvm_balance_tracker_token:0.1.0:bafybeiapcxwvr4hshevutwzs7vv3eza6ueosnj2wt2fb7yjwvl6e73mmqq
 - valory/nvm_balance_tracker_native:0.1.0:bafybeicu32o3rpp2ouacssybsgnhabojzwem2s6eh7lqunq2fkcxi2kmmy
@@ -56,8 +56,8 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeic5wohfvzro366vaxvm6q7qx6ck5dx2rycfu2bve2pkbwf7o263sq
 - valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
-- valory/impact_evaluator_abci:0.1.0:bafybeichrbm4rbziinxkdod2qfb67isrhmerdudpomkddeucytwctqakv4
-- valory/twitter_scoring_abci:0.1.0:bafybeib7gyvc755j3uq6h63s2czk7eq7vxlwzbx2rocfgy54xliy2oo3vy
+- valory/impact_evaluator_abci:0.1.0:bafybeidlngrsp7e7gscwc3btgp4ndmjxlb7dqmrlpmga226nk3wyt5lnia
+- valory/twitter_scoring_abci:0.1.0:bafybeigqfgl6huyfly2gakxbfxybcy6u3gcjkswydmw6tqhqcdnlyeyjje
 - valory/agent_db_abci:0.1.0:bafybeieml5e5wgkb65ywxhv2npaieyxo7a243tsfdapara7zxon5wy725a
 - valory/contribute_db_abci:0.1.0:bafybeigvkcxsblfgnysehfbd4x7otqn6icxm4yxfigyinnnlbrso5ahvw4
 - valory/dynamic_nft_abci:0.1.0:bafybeifl22fsj2kp53rlkp6dcfn7c3prwqesehvktsgh5dkusw6afrc2ja
@@ -68,7 +68,7 @@ skills:
 - valory/twitter_write_abci:0.1.0:bafybeibga6afin2u2rmpgc6uzrj4r3myf5b52b2mygyrtgu57cfwpijxeu
 - valory/decision_making_abci:0.1.0:bafybeiblf6agx7zhs4hpqjmeabzjqbavcyl7aubxyvxonbkyqrbc6fj4iu
 - valory/olas_week_abci:0.1.0:bafybeigabdzmsdvkdyjl2qv75yrsh4ugjgdwlrsrkzlqmlxwfz4ylaurhm
-- valory/mech_interact_abci:0.1.0:bafybeiffz7arijdfjko47rqrkcs5eobyj4vmal5pmiuhopmot24qrigwdy
+- valory/mech_interact_abci:0.1.0:bafybeienj5jzbq2x5hpedqwpa46rmprcdc42536zjyxkmsemjs3jjhl5oe
 - valory/staking_abci:0.1.0:bafybeid46f4gncsgx57a23hrgblk646errpnsitxujn2wrltvc3bhmsc7u
 - valory/llm_abci:0.1.0:bafybeicdnngo3rzhfyu2pn5tmdlz23flukdxytxji62kngnpyc4kwlestu
 default_ledger: ethereum
