@@ -158,7 +158,7 @@ models:
       tendermint_max_retries: 5
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
-      token_uri_base: https://pfp.staging.autonolas.tech/
+      token_uri_base: https://pfp.autonolas.tech/
       twitter_api_base: https://api.twitter.com/
       twitter_api_bearer_token: <default_bearer_token>
       twitter_mentions_endpoint: 2/users/1450081635559428107/mentions?

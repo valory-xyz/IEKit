@@ -134,8 +134,8 @@ class HttpHandler(BaseHttpHandler):
         Examples:
             localhost:8000/0
             127.0.0.1:8000/100
-            https://pfp.staging.autonolas.tech/45
-            http://pfp.staging.autonolas.tech/120
+            https://pfp.autonolas.tech/45
+            http://pfp.autonolas.tech/120
 
         :param url: the url to check
         :returns: the handling method if the message is intended to be handled by this handler, None otherwise, and the regex captures
