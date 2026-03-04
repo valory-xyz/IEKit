@@ -222,6 +222,7 @@ models:
       irrelevant_tools: []
       ignored_mechs: []
       penalize_mech_time_window: 1800
+      deliveries_lookback_days: 30
     class_name: Params
   mech_tools:
     args:

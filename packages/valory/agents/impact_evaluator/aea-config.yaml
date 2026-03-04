@@ -302,6 +302,7 @@ models:
       irrelevant_tools: ${list:[]}
       ignored_mechs: ${list:[]}
       penalize_mech_time_window: ${int:1800}
+      deliveries_lookback_days: ${int:30}
   randomness_api:
     args:
       api_id: cloudflare

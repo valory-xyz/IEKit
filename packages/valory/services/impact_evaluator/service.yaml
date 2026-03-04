@@ -442,6 +442,7 @@ extra:
         irrelevant_tools: ${IRRELEVANT_TOOLS:list:[]}
         ignored_mechs: ${IGNORED_MECHS:list:[]}
         penalize_mech_time_window: ${PENALIZE_MECH_TIME_WINDOW:int:1800}
+        deliveries_lookback_days: ${DELIVERIES_LOOKBACK_DAYS:int:30}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}

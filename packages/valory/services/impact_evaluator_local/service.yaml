@@ -132,6 +132,7 @@ models:
       staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
       disable_wio_posting: ${DISABLE_WIO_POSTING:bool:false}
       contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
+      deliveries_lookback_days: ${DELIVERIES_LOOKBACK_DAYS:int:30}
   randomness_api:
     args:
       url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}
