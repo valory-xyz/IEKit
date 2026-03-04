@@ -56,11 +56,11 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeic5wohfvzro366vaxvm6q7qx6ck5dx2rycfu2bve2pkbwf7o263sq
 - valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
-- valory/impact_evaluator_abci:0.1.0:bafybeidp3ztewuirwh4uyyo2sjt75t34l2yxuh22ox6uxlrszgo6totkqm
+- valory/impact_evaluator_abci:0.1.0:bafybeicuzlt3jued3n4cmnyfaf3m5uyg3iwff73loycr7arrlwcqkzdws4
 - valory/twitter_scoring_abci:0.1.0:bafybeifvrxv2t3qg43rz47mawkmt5vxa5wnid2yyz4kzl4dwksm44kmnue
 - valory/agent_db_abci:0.1.0:bafybeieml5e5wgkb65ywxhv2npaieyxo7a243tsfdapara7zxon5wy725a
 - valory/contribute_db_abci:0.1.0:bafybeigvkcxsblfgnysehfbd4x7otqn6icxm4yxfigyinnnlbrso5ahvw4
-- valory/dynamic_nft_abci:0.1.0:bafybeied3xcmpa5vpjmx3x6i2sz7q4uu25wfx5vsjhztqtlsahsri3pvqe
+- valory/dynamic_nft_abci:0.1.0:bafybeia7ugpbeadmtxzdbtvovmfyvhtd555aubkfb74b53vgbawftftxyq
 - valory/registration_abci:0.1.0:bafybeie3dfore53bxvbokqiarzuwulzlyt4vz5mifb4t3gxl6drwkblfha
 - valory/reset_pause_abci:0.1.0:bafybeicffwijiecbqc6z22nowir2fgwwqzwu6vokzuwgd5wa3zxromxevm
 - valory/termination_abci:0.1.0:bafybeiaylk6haefa2xex55krizafzwo2v5tpkcoflw5hiwaqm3qxice23m
