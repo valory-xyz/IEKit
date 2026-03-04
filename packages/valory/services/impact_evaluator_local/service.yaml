@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeign56hilwuoa6bgos3uqabss4gew4vadkik7vhj3ucpqw6nxtqtpe
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeiaeddbhamit3hl654ot7ssqdtfzrl5zqihwlolfr22r4f75dv252a
+agent: valory/impact_evaluator:0.1.0:bafybeibfrswk3ys76widymso3eqmn3bjib2qgkg7dputdqqykcwpvpe2zm
 number_of_agents: 1
 deployment:
   agent:
@@ -132,6 +132,7 @@ models:
       staking_rewards_required_points: ${STAKING_REWARDS_REQUIRED_POINTS:int:200}
       disable_wio_posting: ${DISABLE_WIO_POSTING:bool:false}
       contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
+      deliveries_lookback_days: ${DELIVERIES_LOOKBACK_DAYS:int:30}
   randomness_api:
     args:
       url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}

@@ -8,7 +8,7 @@ license: Apache-2.0
 fingerprint:
   README.md: bafybeicl27mon3d6nan5vld4pwf32ocawmojisgelpljjheqi4jvksxg2y
 fingerprint_ignore_patterns: []
-agent: valory/impact_evaluator:0.1.0:bafybeiaeddbhamit3hl654ot7ssqdtfzrl5zqihwlolfr22r4f75dv252a
+agent: valory/impact_evaluator:0.1.0:bafybeibfrswk3ys76widymso3eqmn3bjib2qgkg7dputdqqykcwpvpe2zm
 number_of_agents: 4
 deployment:
   agent:
@@ -86,7 +86,7 @@ extra:
         tendermint_max_retries: 5
         tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_0:str:impactevaluator_tm_0:26656}
-        token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
+        token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.autonolas.tech/}
         whitelist_api_key: null
         whitelist_endpoint: http://localhost
         points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}}
@@ -185,7 +185,7 @@ extra:
         tendermint_max_retries: 5
         tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_1:str:impactevaluator_tm_1:26656}
-        token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
+        token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.autonolas.tech/}
         whitelist_api_key: null
         whitelist_endpoint: http://localhost
         points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}}
@@ -284,7 +284,7 @@ extra:
         tendermint_max_retries: 5
         tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_2:str:impactevaluator_tm_2:26656}
-        token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
+        token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.autonolas.tech/}
         whitelist_api_key: null
         whitelist_endpoint: http://localhost
         points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}}
@@ -385,7 +385,7 @@ extra:
         tendermint_max_retries: 5
         tendermint_url: ${TENDERMINT_URL:str:http://localhost:26657}
         tendermint_p2p_url: ${TENDERMINT_P2P_URL_3:str:impactevaluator_tm_3:26656}
-        token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.staging.autonolas.tech/}
+        token_uri_base: ${TOKEN_URI_BASE:str:https://pfp.autonolas.tech/}
         whitelist_api_key: null
         whitelist_endpoint: http://localhost
         points_to_image_hashes: ${POINTS_TO_IMAGE_HASHES:str:{"0":"bafybeiabtdl53v2a3irrgrg7eujzffjallpymli763wvhv6gceurfmcemm","100":"bafybeid46w6yzbehir7ackcnsyuasdkun5aq7jnckt4sknvmiewpph776q","50000":"bafybeigbxlwzljbxnlwteupmt6c6k7k2m4bbhunvxxa53dc7niuedilnr4","100000":"bafybeiawxpq4mqckbau3mjwzd3ic2o7ywlhp6zqo7jnaft26zeqm3xsjjy","150000":"bafybeie6k53dupf7rf6622rzfxu3dmlv36hytqrmzs5yrilxwcrlhrml2m"}}
@@ -442,6 +442,7 @@ extra:
         irrelevant_tools: ${IRRELEVANT_TOOLS:list:[]}
         ignored_mechs: ${IGNORED_MECHS:list:[]}
         penalize_mech_time_window: ${PENALIZE_MECH_TIME_WINDOW:int:1800}
+        deliveries_lookback_days: ${DELIVERIES_LOOKBACK_DAYS:int:30}
     randomness_api:
       args:
         url: ${DRAND_ENDPOINT:str:https://api.drand.sh/public/latest}

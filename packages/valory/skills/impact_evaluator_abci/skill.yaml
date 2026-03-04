@@ -26,8 +26,8 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
 - valory/agent_db_abci:0.1.0:bafybeieml5e5wgkb65ywxhv2npaieyxo7a243tsfdapara7zxon5wy725a
 - valory/contribute_db_abci:0.1.0:bafybeigvkcxsblfgnysehfbd4x7otqn6icxm4yxfigyinnnlbrso5ahvw4
-- valory/twitter_scoring_abci:0.1.0:bafybeih7aet6ytvy6igi7bju52sb7rutkoxnqpl3wfsmgi5w5fmodaklqe
-- valory/dynamic_nft_abci:0.1.0:bafybeidm6xndxf2emr2gkexyuqxeigcwu3hjgedbqxiqptwim5xgy6ggoy
+- valory/twitter_scoring_abci:0.1.0:bafybeifvrxv2t3qg43rz47mawkmt5vxa5wnid2yyz4kzl4dwksm44kmnue
+- valory/dynamic_nft_abci:0.1.0:bafybeia7ugpbeadmtxzdbtvovmfyvhtd555aubkfb74b53vgbawftftxyq
 - valory/registration_abci:0.1.0:bafybeie3dfore53bxvbokqiarzuwulzlyt4vz5mifb4t3gxl6drwkblfha
 - valory/reset_pause_abci:0.1.0:bafybeicffwijiecbqc6z22nowir2fgwwqzwu6vokzuwgd5wa3zxromxevm
 - valory/termination_abci:0.1.0:bafybeiaylk6haefa2xex55krizafzwo2v5tpkcoflw5hiwaqm3qxice23m
@@ -35,7 +35,7 @@ skills:
 - valory/decision_making_abci:0.1.0:bafybeibq4ehm5uqqmowfnrndzs5tfql4xu5p73mt4kvgl3664oz7fpm7ou
 - valory/twitter_write_abci:0.1.0:bafybeibga6afin2u2rmpgc6uzrj4r3myf5b52b2mygyrtgu57cfwpijxeu
 - valory/olas_week_abci:0.1.0:bafybeihpqy6psqtazynohsqzslbrwsir5ip3zjzedt4y5jmgkeqg7ts6fy
-- valory/mech_interact_abci:0.1.0:bafybeienj5jzbq2x5hpedqwpa46rmprcdc42536zjyxkmsemjs3jjhl5oe
+- valory/mech_interact_abci:0.1.0:bafybeifmewonamynusdi3sz5qenlr3f7mu67sic33aub5uzc2w3mpqsyqa
 - valory/staking_abci:0.1.0:bafybeid46f4gncsgx57a23hrgblk646errpnsitxujn2wrltvc3bhmsc7u
 - valory/llm_abci:0.1.0:bafybeicdnngo3rzhfyu2pn5tmdlz23flukdxytxji62kngnpyc4kwlestu
 behaviours:
@@ -158,7 +158,7 @@ models:
       tendermint_max_retries: 5
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
-      token_uri_base: https://pfp.staging.autonolas.tech/
+      token_uri_base: https://pfp.autonolas.tech/
       twitter_api_base: https://api.twitter.com/
       twitter_api_bearer_token: <default_bearer_token>
       twitter_mentions_endpoint: 2/users/1450081635559428107/mentions?
@@ -222,6 +222,7 @@ models:
       irrelevant_tools: []
       ignored_mechs: []
       penalize_mech_time_window: 1800
+      deliveries_lookback_days: 30
     class_name: Params
   mech_tools:
     args:
@@ -248,7 +249,7 @@ models:
       error_index: 0
       error_type: dict
       retries: 5
-      url: https://subgraph.staging.autonolas.tech/subgraphs/name/marketplace-gnosis-v0_7_0
+      url: https://api.subgraph.autonolas.tech/api/proxy/marketplace-gnosis
       delivery_rate_cap: 10000000000000000
     class_name: MechsSubgraph
   randomness_api:

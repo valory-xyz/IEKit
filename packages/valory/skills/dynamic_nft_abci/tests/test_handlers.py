@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023 Valory AG
+#   Copyright 2023-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ PACKAGE_DIR = Path(__file__).parent.parent
 
 HTTP_SERVER_SENDER = str(HTTP_SERVER_PUBLIC_ID.without_hash())
 
-TOKEN_URI_BASE = "https://pfp.staging.autonolas.tech/"  # nosec
+TOKEN_URI_BASE = "https://pfp.autonolas.tech/"  # nosec
 
 
 def get_dummy_metadata(token_id, image_hash, points=10):
@@ -373,18 +373,18 @@ class TestHttpHandler(BaseSkillTestCase):
         [
             ("wrong_url", "get", None),
             (
-                "http://pfp.staging.autonolas.tech/healthcheck",
+                "http://pfp.autonolas.tech/healthcheck",
                 "get",
                 "_handle_get_health",
             ),
             (
-                "http://pfp.staging.autonolas.tech/healt-hcheck",
+                "http://pfp.autonolas.tech/healt-hcheck",
                 "get",
                 "_handle_bad_request",
             ),
-            ("http://pfp.staging.autonolas.tech/1", "get", "_handle_get_metadata"),
-            ("http://pfp.staging.autonolas.tech/999", "get", "_handle_get_metadata"),
-            ("http://pfp.staging.autonolas.tech/-999", "get", "_handle_bad_request"),
+            ("http://pfp.autonolas.tech/1", "get", "_handle_get_metadata"),
+            ("http://pfp.autonolas.tech/999", "get", "_handle_get_metadata"),
+            ("http://pfp.autonolas.tech/-999", "get", "_handle_bad_request"),
             (
                 "https://b1f305361a323839.agent.propel.staging.autonolas.tech/1",
                 "get",
