@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2024 Valory AG
+#   Copyright 2021-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -39,7 +39,6 @@ from packages.valory.protocols.twitter.dialogues import (
     TwitterDialogues as BaseTwitterDialogues,
 )
 from packages.valory.protocols.twitter.message import TwitterMessage
-
 
 PUBLIC_ID = PublicId.from_str("valory/twitter:0.1.0")
 MEDIA_DIR = "/tmp"   # nosec

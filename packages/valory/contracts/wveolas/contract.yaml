@@ -8,7 +8,7 @@ aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeibtn3d7h6xkaudftjmqi47rg6c45nvbjbu77rcnhalj7xxujzgbru
   build/wveolas.json: bafybeid4ypbtauutpx4hktinxecxecp2moxzny5cyky3anp6peu33slax4
-  contract.py: bafybeib52j57zi2tsm7g4bnv75nxdbmbmsxmf7coxw3cyzgrdxzctlzgmy
+  contract.py: bafybeicxnu5pz2365g5lof222cdacjf3p27c3crt4rmohkjxswcphgam5y
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: WveOLASContract
@@ -16,4 +16,4 @@ contract_interface_paths:
   ethereum: build/wveolas.json
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==2.0.8
+    version: ==2.1.0rc6

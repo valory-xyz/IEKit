@@ -45,7 +45,6 @@ from packages.valory.skills.termination_abci.rounds import (
     TerminationAbciApp,
 )
 
-
 # Here we define how the transition between the FSMs should happen
 # more information here: https://open-autonomy.docs.autonolas.tech/open-autonomy/key_concepts/fsm_app_introduction/?h=composition#composition-of-fsm-apps
 abci_app_transition_mapping: AbciAppTransitionMapping = {

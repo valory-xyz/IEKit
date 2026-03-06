@@ -7,29 +7,29 @@ description: An abci skill that reads mentions from the Twitter API and assigns 
 license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
-  __init__.py: bafybeifmfivpoooso45mltpffcv3vvonhrtycv443aqpzm6cetrkwopsdi
+  __init__.py: bafybeicfu3wssdfd2ptlulpf26bnzkqkdsal6ampwhene47icmpdauo5be
   behaviours.py: bafybeigifdcoq54tlirfzd7b474bo3mihwhgwoa324h5qfldguf7bnx4zy
-  dialogues.py: bafybeicbuuhc6u3oih6yeziqs7dqi2tebmahdgpc6sd5fzgqyjek6qhwty
+  dialogues.py: bafybeicnefjt2vxy7dhmrxzl2wp5fcb5c4so2fdldzi22ka66cr3fqul6m
   fsm_specification.yaml: bafybeif77zpgvvwjxxpeakzbi5ftsjejlsryeyjhkzddpvqkcq6wrxzufy
-  handlers.py: bafybeibofqqb5dvfugwjzuwmm5ktcumwzdak43uyfvythrdrfhk7wcacne
+  handlers.py: bafybeiesz634smtaehcx2qritviwpjwu6l5oash36vktsub6gtccuol7iu
   models.py: bafybeidfipifkwti4lut4uzlyfy5rflxgszresbe2qprfn4enokte4x5v4
   payloads.py: bafybeidpewmdpyumwuufkymibgeviivymrieh7sjkctdwizahn45nbuniq
   rounds.py: bafybeihhxpma6wwisf375j3ym5ga4ysliz5es2hfeadoucgnnb4mamhqsu
   tests/__init__.py: bafybeigh6rf2j2zt66rq7buojs7zsgxguv2pmav2p4lfi3xx5ayseexp2y
-  tests/test_behaviours.py: bafybeiejh5bbrt5ln66lrlckdtdmlbqxibif6bw723asf2kcjeknjnrvye
+  tests/test_behaviours.py: bafybeihyjho6v62tdc3j3fseqsffc6qiuk5wbw2bhziddlmdur6m6x7sqa
   tests/test_dialogues.py: bafybeihcg2g7e53foxtikjidybhck6nvh7246ic3sgjlc6nr7gnmmsalna
   tests/test_handlers.py: bafybeie6vov5jknpaqtkukh42lidfn3wigvw3q3lyxf6rexcdd4la7coka
   tests/test_models.py: bafybeianlpj6dbpluowz64ydwvgr2stvurron4slc6tmdlxelrhlntf5nm
-  tests/test_payloads.py: bafybeietwilb3bgj6dvic435iz7cjwsirbgk42pyddhg6ihorqcl7sbhma
-  tests/test_rounds.py: bafybeihmp5cnruopzf2qfxubhlhnrjsauavo2zx5ubdutmubhnnoedpxim
+  tests/test_payloads.py: bafybeibpiptfzmalyhy4v654p6jpl4z5e4vnge2gwzvdklk5pxakngfjey
+  tests/test_rounds.py: bafybeihdnucla7stplsjaum7f74t4oe56rijuntn3fevjzpntwnas4uptq
 fingerprint_ignore_patterns: []
 connections:
-- valory/twitter:0.1.0:bafybeibuv7yuyhq5woovevaarpmj26cssanoqun2vfaaur3udoiyymhpdm
+- valory/twitter:0.1.0:bafybeiezgml5vepewll35fterxsz2dalkohjfe62pvjpi2cezzqang5lo4
 contracts: []
 protocols:
-- valory/twitter:0.1.0:bafybeihqpwyzg3wmxcdbdddsd7mwtivod3mu42uw3dug53voxikcokyk7m
+- valory/twitter:0.1.0:bafybeifmbmfgrooontyletvwlpugx2ewl3nro3pry6a2ix3jxmpy64pvze
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
+- valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
 behaviours:
   main:
     args: {}

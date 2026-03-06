@@ -26,7 +26,6 @@ from aea.contracts.base import Contract
 from aea.crypto.base import LedgerApi
 from web3 import Web3
 
-
 PUBLIC_ID = PublicId.from_str("valory/staking:0.1.0")
 
 CONTRIBUTORS_ABI = [

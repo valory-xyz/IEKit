@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2025 Valory AG
+#   Copyright 2021-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import json
 import os
 
 from ceramic.ceramic import Ceramic  # pylint: disable=import-error
-
 
 DUMMY_DID = {
     "did": "did:key:z6MkszfuezSP8ftgHRhMr8AX8uyTjtKpcia4bP19TBgmhEPs",

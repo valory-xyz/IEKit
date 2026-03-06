@@ -8,7 +8,7 @@ aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeigyd3v35lzfmckfrucgknh55arblioofflclkw72e4m2elizwkj24
   build/DelegateContribute.json: bafybeigeu2df4b3637s7vwcbqe2vdau6cuk3rbxvkc32bg2byljidiblgm
-  contract.py: bafybeieljzh5oc45koauuon4bz7kor5iezzgpqjdbztywlys7fbkr6mf7q
+  contract.py: bafybeibisbcn447a2wezmlmwtyuw5fw4qa3haajnc54k4nawwae6qr77oe
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: VeOLASDelegationContract
@@ -16,4 +16,4 @@ contract_interface_paths:
   ethereum: build/DelegateContribute.json
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==2.0.8
+    version: ==2.1.0rc6

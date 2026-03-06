@@ -6,38 +6,38 @@ description: The chained abci for the impact_evaluator skill.
 license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
-  __init__.py: bafybeigmhxenrqb2ysjhcm2au2lang4abyny6irkzqqg4dtclz6net6zpy
+  __init__.py: bafybeif3nyjx2bjbisjnbw4egvphyqjierycec5cpobg4gajyuinvn4lfq
   behaviours.py: bafybeigcvodybauatvybm47grm4wqpcpghwmdtw6zdoli3gufvk2hmxmuu
-  composition.py: bafybeiek5vetyti23kntdktbfyfyoohq55yt6dasl2pssrh25hvv25apuu
-  dialogues.py: bafybeiaho6vtf5tje7w7yyg4ozezynucmyq7ayvtybow2m62rfj4wcltmq
+  composition.py: bafybeica7hk5oecr4wibs34kmh5ccmodgr7yshymj7rwww47ggazuamxay
+  dialogues.py: bafybeibywayq7jcplwlonc67ooxr7v3t3nfqv3ganlqcyx6fvoe373u6ni
   fsm_specification.yaml: bafybeianv2bf32axso45elxz6up3ovpgabokcjelrpfd22haiexugfwoxq
-  handlers.py: bafybeifgfg6r7c4h3kcvcrrztnw72gsjiz4uylrezsptwg6p3s4zgdn7lm
-  models.py: bafybeigfifkpb32ub735zlmsdqms5yyank3aovzclu455lcuiip5mwefye
+  handlers.py: bafybeihwmof2ynla3vyj5uzlfltqhtc2d7hfnq3jx3jfsb24q4x3dypvpa
+  models.py: bafybeih4zqw73qtvnyaofcjdlwcch7dmg6rpshbugdwu5stpeuowsryqhi
   tests/__init__.py: bafybeievwzwojvq4aofk5kjpf4jzygfes7ew6s6svc6b6frktjnt3sicce
-  tests/test_behaviours.py: bafybeifkazsevd6vsfaapulouxepez3rl24y3rxgja5zhmj7s323zdjlmq
+  tests/test_behaviours.py: bafybeiaf3f33ltyotmnnsihrnbirspn5gtjgzdzdss6zhxeetwp56ficcu
   tests/test_dialogues.py: bafybeieaos2byphju6i6xvytppqqcuqqvnpilnflsy73l3wqazzjttbg7m
   tests/test_handlers.py: bafybeiacfkjcxqw73vk36wmilpq2wmejwyfy4sycosgswgzpq35tfvr2ia
-  tests/test_models.py: bafybeia66e3peyycqutyu3yhshqd6ctolisggrsegagpf5vplwiy53gnum
+  tests/test_models.py: bafybeifnyyb7wcnrdu2uk3tnb4pehf7dr6pn5k24iidfqo4nytopkpc3qa
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
-- valory/agent_db_abci:0.1.0:bafybeieml5e5wgkb65ywxhv2npaieyxo7a243tsfdapara7zxon5wy725a
-- valory/contribute_db_abci:0.1.0:bafybeigvkcxsblfgnysehfbd4x7otqn6icxm4yxfigyinnnlbrso5ahvw4
-- valory/twitter_scoring_abci:0.1.0:bafybeifvrxv2t3qg43rz47mawkmt5vxa5wnid2yyz4kzl4dwksm44kmnue
-- valory/dynamic_nft_abci:0.1.0:bafybeia7ugpbeadmtxzdbtvovmfyvhtd555aubkfb74b53vgbawftftxyq
-- valory/registration_abci:0.1.0:bafybeie3dfore53bxvbokqiarzuwulzlyt4vz5mifb4t3gxl6drwkblfha
-- valory/reset_pause_abci:0.1.0:bafybeicffwijiecbqc6z22nowir2fgwwqzwu6vokzuwgd5wa3zxromxevm
-- valory/termination_abci:0.1.0:bafybeiaylk6haefa2xex55krizafzwo2v5tpkcoflw5hiwaqm3qxice23m
-- valory/transaction_settlement_abci:0.1.0:bafybeifbumqyemwzffxtn3kwucxx55ja57mhmfalo7fqlkq2hnjwqhfp74
-- valory/decision_making_abci:0.1.0:bafybeibq4ehm5uqqmowfnrndzs5tfql4xu5p73mt4kvgl3664oz7fpm7ou
-- valory/twitter_write_abci:0.1.0:bafybeibga6afin2u2rmpgc6uzrj4r3myf5b52b2mygyrtgu57cfwpijxeu
-- valory/olas_week_abci:0.1.0:bafybeihpqy6psqtazynohsqzslbrwsir5ip3zjzedt4y5jmgkeqg7ts6fy
-- valory/mech_interact_abci:0.1.0:bafybeifmewonamynusdi3sz5qenlr3f7mu67sic33aub5uzc2w3mpqsyqa
-- valory/staking_abci:0.1.0:bafybeid46f4gncsgx57a23hrgblk646errpnsitxujn2wrltvc3bhmsc7u
-- valory/llm_abci:0.1.0:bafybeicdnngo3rzhfyu2pn5tmdlz23flukdxytxji62kngnpyc4kwlestu
+- valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
+- valory/agent_db_abci:0.1.0:bafybeibx6wy23pxzdymzxm5imghml4qbkfwc5ojd6dbib35ala34plm4xe
+- valory/contribute_db_abci:0.1.0:bafybeie4px35xxps7ugmobhclvoekvezxa57ysh42hxorf6pxvkxixb2va
+- valory/twitter_scoring_abci:0.1.0:bafybeiawr5jlctbljurdxfpn5yauyoz3panr5pw4xy62fkjhv7nlm3q2yu
+- valory/dynamic_nft_abci:0.1.0:bafybeidevnruaftcxg474faawuqwhavwso6hi7ej72ntyxfk2tytbe6mei
+- valory/registration_abci:0.1.0:bafybeihjgfzqvuymqgku6mwqih7hlvqwr2tmdjrip3m6unt5l4e55bshkm
+- valory/reset_pause_abci:0.1.0:bafybeih6bjalcohxytg6hj3doy5dhkxonrxpqgcnclyf6tnmuyfbom2usy
+- valory/termination_abci:0.1.0:bafybeiarjw4hhu2vf56yxqb4jh3kmk4hfxvqahygn6scc3rfnlogjkwwpe
+- valory/transaction_settlement_abci:0.1.0:bafybeigivknq755rbnelrdemaz3vm4x7jkofvaskm34uh36pbbg6uiquo4
+- valory/decision_making_abci:0.1.0:bafybeibnjen5wbddj5uiyukvcuvwu3xhcl3zxx6tbuvmo3prjwvli5v774
+- valory/twitter_write_abci:0.1.0:bafybeidkn56akhxqsxtdqlbqqllhjdmjofqwcqd62nm2htfnqwmefhgei4
+- valory/olas_week_abci:0.1.0:bafybeicogeiwetgycekp6dxa6xumtogjajvhamn3izywq37fiki344xqiu
+- valory/mech_interact_abci:0.1.0:bafybeiae75nslw4o7fgqnctigpxftj2y477hxgnuq5amqadxylsjx5fyse
+- valory/staking_abci:0.1.0:bafybeiczigqxyur5jzoe3fgidopg2qjyksugzbqjfqy3mk4tw7xlehmkvi
+- valory/llm_abci:0.1.0:bafybeiaie5ecpamwu6dz5kse253nf6lk34lmcvscsxmocuyrh5am5l6xtm
 behaviours:
   main:
     args: {}
@@ -299,5 +299,5 @@ models:
     class_name: ContributeDatabase
 dependencies:
   open-aea-cli-ipfs:
-    version: ==2.0.8
+    version: ==2.1.0rc6
 is_abstract: false

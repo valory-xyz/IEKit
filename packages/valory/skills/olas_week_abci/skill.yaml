@@ -7,20 +7,20 @@ description: A skill that weekly tweets from a Twitter account and creates a sum
 license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
-  __init__.py: bafybeibvgxh4baqhxapbbryg7qlglf4czricwqqs34gjs5vwwppg5nuvsq
-  behaviours.py: bafybeibw7mwb53r7yancdvtyhwuv2ubbfptid7erhzbzhww73q2o72n764
-  dialogues.py: bafybeia7zebqkgbubzenskcrgjocgyd2pc3q5yxcjddte4emys32qt6xpm
+  __init__.py: bafybeig4n376iyf5pm73ojn57pti6kjxzn3jsud5cgt7spsifpv4byo2ki
+  behaviours.py: bafybeiagebbhez5rriz6sfamregrvsmq6ywvipstwyqddrzzaexp7hnn6y
+  dialogues.py: bafybeih7x64gfvr4q5s6pofmgrlxm6qxqx7fkpkfymwnh3p2y4qhm4xlvy
   fsm_specification.yaml: bafybeienycmc4m3wurhlsuj7hfumrsx5id3qfdn6eisoze4gdzeeojlrbu
-  handlers.py: bafybeialoqm2byetvqqrjujhk3qzgdgsrzmhakmzwdop2cr24kswipl6ti
+  handlers.py: bafybeiarjb4czs7rdgjumzgbuk4bihs3ydybnfafrne5lth4oijzfn4knu
   models.py: bafybeiepwuppied2gre6k4aiuscsigpl47pnqotl5syzehcbdnjauanacy
   payloads.py: bafybeietg3ceghstjx5bytqv2t377k5pyww3cdq7zg7d7lxhscwmfelai4
   prompts.py: bafybeiaod4e6knvmjl6jjqnlpcushy6iab4sfax2tevskxuirfu36afeta
-  rounds.py: bafybeigljffwac7nciui42fril2o4q3ofzcofb6cfkhpaqnjrokm435eei
+  rounds.py: bafybeih66k3f232hv5h5ljw7cnj7nggqxvggckyfvupulzuy32znmqik3q
   tests/__init__.py: bafybeidq5udnnehzozdjfpk3kdckymq4jvuwmvsjkhpr3ngggc3dhv4uza
-  tests/test_behaviours.py: bafybeiggerp25yg72unmg5jfs3umyz4if5sxq7urvfi6jqw6a5qjnb75ky
-  tests/test_dialogues.py: bafybeidogs4455nqgl54wj6ed6zh6jzmsg4aaavpibeqexs5fx3um57e7a
+  tests/test_behaviours.py: bafybeiedgw25dswfigeo6r2imitr7prpegbsaqhert46wyut25y6kmszwu
+  tests/test_dialogues.py: bafybeigb3gcfzm7pl3hlfymptf3pkxelvt2zzwfkgb7zkuehq4caun4w24
   tests/test_handlers.py: bafybeiggkevxvq52fotuwg265xrqfqmfoe3jjamvxdldxlnonu77ctioua
-  tests/test_models.py: bafybeigtk3gexs7ukeeojbkcawkouuq3mav56f5oi5wbt7q3yzd6do6buq
+  tests/test_models.py: bafybeigv5ax4y6oqifmu5btyxmp32bagfi5b3p75hl4j644o32ijwad3ou
   tests/test_payloads.py: bafybeif6aj5cjp7uhcvuxa4s2zuqk6s53oxsbx5uxlpudgu7aqhqn7djvy
   tests/test_rounds.py: bafybeiei2srj4ggs3pln7vxxt4walhrtsegveimxdcbckyng2i6wv53vy4
 fingerprint_ignore_patterns: []
@@ -30,9 +30,9 @@ contracts: []
 protocols:
 - valory/llm:1.0.0:bafybeiardrklsughnm6tdnc3seqderlnq5nj4xolgnk42crr3kxexjlrfe
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
-- valory/decision_making_abci:0.1.0:bafybeibq4ehm5uqqmowfnrndzs5tfql4xu5p73mt4kvgl3664oz7fpm7ou
-- valory/contribute_db_abci:0.1.0:bafybeigvkcxsblfgnysehfbd4x7otqn6icxm4yxfigyinnnlbrso5ahvw4
+- valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
+- valory/decision_making_abci:0.1.0:bafybeibnjen5wbddj5uiyukvcuvwu3xhcl3zxx6tbuvmo3prjwvli5v774
+- valory/contribute_db_abci:0.1.0:bafybeie4px35xxps7ugmobhclvoekvezxa57ysh42hxorf6pxvkxixb2va
 behaviours:
   main:
     args: {}

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2025 Valory AG
+#   Copyright 2021-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ from typing import Optional
 
 import jsonschema
 from ceramic.ceramic import Ceramic
-
 
 # Do not use the following keys for production
 # Create your own DID using tools from Ceramic, like the glaze suite:

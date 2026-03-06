@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2025 Valory AG
+#   Copyright 2023-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -65,7 +65,6 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     SynchronizedData,
     TwitterScoringAbciApp,
 )
-
 
 PACKAGE_DIR = Path(__file__).parent.parent
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"

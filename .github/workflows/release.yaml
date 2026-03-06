@@ -10,16 +10,16 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-24.04]
         python-version: ["3.10"]
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-versions }}
       - uses: addnab/docker-run-action@v3
         with:
-          image: valory/open-autonomy-user:0.21.8
+          image: valory/open-autonomy-user:0.21.12rc4
           options: -v ${{ github.workspace }}:/work
           run: |
             echo "Pushing Packages"
@@ -34,19 +34,19 @@ jobs:
       - "publish-packages"
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-24.04]
         python-version: ["3.10"]
     env:
       DOCKER_USER: ${{secrets.DOCKER_USER}}
       DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
       - name: Set up tag and vars
         uses: addnab/docker-run-action@v3
         with:
-          image: valory/open-autonomy-user:0.21.8
+          image: valory/open-autonomy-user:0.21.12rc4
           options: -v ${{ github.workspace }}:/work
           run: |
             echo "Setting Tag Images"
@@ -69,7 +69,7 @@ jobs:
       - uses: addnab/docker-run-action@v3
         name: Build Images
         with:
-          image: valory/open-autonomy-user:0.21.8
+          image: valory/open-autonomy-user:0.21.12rc4
           options: -v ${{ github.workspace }}:/work -e DOCKER_USER -e DOCKER_PASSWORD
           shell: bash
           run: |
@@ -94,13 +94,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-24.04]
         python-version: ["3.10"]
     env:
       CMD: "propel -U ${{ vars.PROPEL_BASE_URL }}"
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-versions }}
       - name: Install dependencies

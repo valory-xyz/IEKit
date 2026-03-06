@@ -35,7 +35,6 @@ from packages.valory.agents.impact_evaluator.tests.helpers.constants import (
     DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS,
 )
 
-
 DEFAULT_HARDHAT_ADDR = "http://127.0.0.1"
 DEFAULT_HARDHAT_PORT = 8545
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2025 Valory AG
+#   Copyright 2023-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
     TaskPreparation,
 )
 from packages.valory.skills.staking_abci.behaviours import BASE_CHAIN_ID
-
 
 POINTS_PER_ACTIVITY_UPDATE = 200
 
@@ -359,7 +358,7 @@ class StakingActivityPreparation(StakingPreparation):
                 k: v.points for k, v in this_epoch_not_counted_tweets.items()
             }
 
-            (updates, selected_tweets) = group_tweets(
+            updates, selected_tweets = group_tweets(
                 not_counted_tweet_id_to_points, points_pending_from_previous_run
             )
 

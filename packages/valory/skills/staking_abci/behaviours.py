@@ -57,7 +57,6 @@ from packages.valory.skills.transaction_settlement_abci.payload_tools import (
 )
 from packages.valory.skills.transaction_settlement_abci.rounds import TX_HASH_LENGTH
 
-
 # Define some constants
 ZERO_VALUE = 0
 EMPTY_CALL_DATA = b"0x"

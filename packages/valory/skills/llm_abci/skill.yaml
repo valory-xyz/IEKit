@@ -6,21 +6,21 @@ description: The llm abci sends a prompt to a LLM and gets the response.
 license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
-  __init__.py: bafybeidg5pe5vztpbns7h76v2rnebiltwze5kgdw5rn2scr5zhqm36mctu
+  __init__.py: bafybeibxezeujksmrlo74xs3p3krmjtiijijjdfo4dvem7zb7xakxktlsi
   behaviours.py: bafybeif4a2nxe6t3ipvook4kjyidycodbyjlfgx4m5szvuqlhvzwovt4gy
-  dialogues.py: bafybeihdakfnmps5o7n5rgepn3fl3lzttqsddhiny7mh7ddwhniutri6bq
+  dialogues.py: bafybeibldztdogkjsdoasedasm7sh6znnir7kl7kyb3cibrjwdevp4ncue
   fsm_specification.yaml: bafybeiacrxj62sgah76222d5dlenjy2xb3kdrl2uon6pgy2fklbm6cr6j4
-  handlers.py: bafybeihex227foehp7a7wfc6vh25ahk5g65b5itu325hph2xj33mgp6kue
+  handlers.py: bafybeifjekw3krl5o55gfnbwxcrwq7oaafk2he67eqq3ccvhwehayduvuy
   models.py: bafybeiceu7qfg3ul2qao23o3gdncnafnqphm3m4fne6b3mzkb4en63kwjm
   payloads.py: bafybeidfdtjquup47cec43er2zegkthmdd5qrwq6myfn67djbclm5jzwey
   rounds.py: bafybeigkysvl5zzuxxqojxtiibyfwentk5epv6wpmypctbhje7helt77ce
   tests/__init__.py: bafybeiclpwhs7vo63ze27dtvpj3mvoastflkxkahnvhsa6qv2u2cecxli4
-  tests/test_behaviours.py: bafybeifggljp365fnq5sm2i5f2buitssufouquwevs2lv25rmt3bxnog5q
+  tests/test_behaviours.py: bafybeigzyy37h7sdjkgh6frqotb6y6x6sriom77dhfaslihr4h267rd3pq
   tests/test_dialogues.py: bafybeihljhagavbiwamrrjbgafcabnl3orbgsqhoo2inlts32dwbim65yq
   tests/test_handlers.py: bafybeib747uxd7uhf2kvw5cmkqa2keusnnbecg63d5xg3z4bobyajf4emq
   tests/test_models.py: bafybeifekfvbabdtqez6ndrsg36jxegonqpe3eep4fkdoimtsiowav7pj4
   tests/test_payloads.py: bafybeigjwkyudyyeehozseu63p4knj2jcx6rrq5x2u4hweirse4holt224
-  tests/test_rounds.py: bafybeicoiykxooup743nzzzfzc3m4uvsab5bljeipgcoo2hke54fcab3xa
+  tests/test_rounds.py: bafybeiaryn7ljl43byx2avqdyhjggg4pgmh2gsmwxql3xwipqufwitddgu
 fingerprint_ignore_patterns: []
 connections:
 - valory/openai:0.1.0:bafybeih7ysimgh4jwcp4bnhvauh2g65cvs3srndwulnuhazdlp7zx6f3hu
@@ -28,7 +28,7 @@ contracts: []
 protocols:
 - valory/llm:1.0.0:bafybeiardrklsughnm6tdnc3seqderlnq5nj4xolgnk42crr3kxexjlrfe
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
+- valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
 behaviours:
   main:
     args: {}

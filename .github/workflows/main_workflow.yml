@@ -10,18 +10,18 @@ on:
 jobs:
   lock_check:
     continue-on-error: False
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        os: [ ubuntu-24.04, macos-15, windows-2025 ]
         python-version: [ "3.10" ]
 
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -40,16 +40,16 @@ jobs:
 
     strategy:
       matrix:
-        os: [ ubuntu-latest ]
+        os: [ ubuntu-24.04 ]
         python-version: [ "3.10" ]
 
     timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -57,8 +57,8 @@ jobs:
           sudo apt-get update --fix-missing
           sudo apt-get autoremove
           sudo apt-get autoclean
-          pip install tomte[tox,cli]==0.2.14
-          pip install --upgrade setuptools==60.10.0
+          pip install tomte[tox,cli]==0.6.1
+          pip install --upgrade "setuptools<=81.0.0"
       - name: Check copyright headers
         run: tomte check-copyright --author valory --exclude-part abci  --exclude-part http_client  --exclude-part ipfs  --exclude-part ledger  --exclude-part p2p_libp2p_client  --exclude-part gnosis_safe  --exclude-part gnosis_safe_proxy_factory  --exclude-part multisend  --exclude-part service_registry  --exclude-part acn  --exclude-part contract_api  --exclude-part http  --exclude-part ipfs  --exclude-part ledger_api --exclude-part tendermint --exclude-part abstract_abci --exclude-part abstract_round_abci --exclude-part registration_abci --exclude-part reset_pause_abci --exclude-part termination_abci --exclude-part transaction_settlement_abci  --exclude-part http_server
       - name: License compatibility check
@@ -74,14 +74,14 @@ jobs:
 
     strategy:
       matrix:
-        os: [ ubuntu-latest ]
+        os: [ ubuntu-24.04 ]
         python-version: [ "3.10.6" ]
 
     timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -89,8 +89,8 @@ jobs:
           sudo apt-get update --fix-missing
           sudo apt-get autoremove
           sudo apt-get autoclean
-          pip install tomte[tox,cli]==0.2.14
-          pip install --upgrade setuptools==60.10.0
+          pip install tomte[tox,cli]==0.6.1
+          pip install --upgrade "setuptools<=81.0.0"
           # install Protobuf compiler
           wget https://github.com/protocolbuffers/protobuf/releases/download/v24.3/protoc-24.3-linux-x86_64.zip
           unzip protoc-24.3-linux-x86_64.zip -d protoc
@@ -117,9 +117,9 @@ jobs:
 
   scan:
     name: gitleaks
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - uses: actions/setup-go@v5
@@ -141,28 +141,28 @@ jobs:
 
     strategy:
       matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
-        python-version: ["3.10", "3.11" ]
+        os: [ ubuntu-24.04, macos-15, windows-2025 ]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
 
     timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           submodules: recursive
           python-version: ${{ matrix.python-version }}
       - uses: actions/setup-go@v5
         with:
           go-version: "1.20.x"
-      - if: matrix.os == 'ubuntu-latest'
-        name: Install dependencies (ubuntu-latest)
+      - if: matrix.os == 'ubuntu-24.04'
+        name: Install dependencies (ubuntu-24.04)
         run: |
           sudo apt-get update --fix-missing
           sudo apt-get autoremove
           sudo apt-get autoclean
-          pip install tomte[tox]==0.2.14
-          pip install --upgrade setuptools==60.10.0
+          pip install tomte[tox]==0.6.1
+          pip install --upgrade "setuptools<=81.0.0"
 
           # install Protobuf compiler
           wget https://github.com/protocolbuffers/protobuf/releases/download/v24.3/protoc-24.3-linux-x86_64.zip
@@ -186,23 +186,22 @@ jobs:
           docker pull trufflesuite/ganache:beta
           docker pull valory/autonomous-fund-contracts:latest
 
-      - if: matrix.os == 'ubuntu-latest'
-        name: Unit tests (ubuntu-latest)
+      - if: matrix.os == 'ubuntu-24.04'
+        name: Unit tests (ubuntu-24.04)
         run: |
           tox -e py${{ matrix.python-version }}-linux -- -m 'not e2e'
 
-      - if: matrix.os == 'macos-latest'
-        name: Install dependencies (macos-latest)
+      - if: matrix.os == 'macos-15'
+        name: Install dependencies (macos-15)
         run: |
-          pip install tomte[tox]==0.2.14
+          pip install tomte[tox]==0.6.1
 
-          # brew install protobuf
-          # brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/72457f0166d5619a83f508f2345b22d0617b5021/Formula/protobuf.rb
-          wget https://github.com/protocolbuffers/protobuf/releases/download/v24.3/protoc-24.3-osx-x86_64.zip
-          unzip protoc-24.3-osx-x86_64.zip -d protoc
+          # install Protobuf compiler (ARM)
+          wget https://github.com/protocolbuffers/protobuf/releases/download/v24.3/protoc-24.3-osx-aarch_64.zip
+          unzip protoc-24.3-osx-aarch_64.zip -d protoc
 
-          # install protolint
-          curl -L -o protolint.tar.gz https://github.com/yoheimuta/protolint/releases/download/v0.50.2/protolint_0.50.2_darwin_amd64.tar.gz
+          # install protolint (ARM)
+          curl -L -o protolint.tar.gz https://github.com/yoheimuta/protolint/releases/download/v0.50.2/protolint_0.50.2_darwin_arm64.tar.gz
           tar -xzvf protolint.tar.gz
           sudo mv protolint /usr/local/bin/protolint
           sudo chmod +x /usr/local/bin/protolint
@@ -216,13 +215,13 @@ jobs:
           rm -rf go-ipfs
           ipfs init
 
-      - if: matrix.os == 'macos-latest'
-        name: Skills unit tests macos-latest
+      - if: matrix.os == 'macos-15'
+        name: Skills unit tests macos-15
         run: |
-          tox -e py${{ matrix.python-version }}-darwin -- -m 'not e2e'
+          tox -e py${{ matrix.python-version }}-darwin -- -m 'not e2e' --no-cov
 
-      - if: matrix.os == 'windows-latest'
-        name: Install dependencies (windows-latest)
+      - if: matrix.os == 'windows-2025'
+        name: Install dependencies (windows-2025)
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         run: |
@@ -234,7 +233,7 @@ jobs:
           choco install make -y
           # to check make was installed
           make --version
-          pip install tomte[tox]==0.2.14
+          pip install tomte[tox]==0.6.1
           # wget https://github.com/protocolbuffers/protobuf/releases/download/v24.3/protoc-24.3-win64.zip
           # unzip protoc-24.3-win64.zip -d protoc
           # sudo mv protoc/bin/protoc /usr/local/bin/protoc
@@ -247,14 +246,14 @@ jobs:
           cp ~\Apps\go-ipfs\ipfs.exe C:\Users\runneradmin\go\bin\
           ipfs init
 
-      - if: matrix.os == 'windows-latest'
-        name: Skills unit tests windows-latest
+      - if: matrix.os == 'windows-2025'
+        name: Skills unit tests windows-2025
         run: |
-          tox -e py${{ matrix.python-version }}-win -- -m 'not e2e'
+          tox -e py${{ matrix.python-version }}-win -- -m 'not e2e' --no-cov
 
-      - if: matrix.os == 'ubuntu-latest'
+      - if: matrix.os == 'ubuntu-24.04'
         name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
@@ -270,22 +269,22 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-latest ]
+        os: [ ubuntu-24.04 ]
         python-version: [ "3.10" ]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           submodules: recursive
           python-version: ${{ matrix.python-version }}
-      - if: matrix.os == 'ubuntu-latest'
-        name: Install dependencies (ubuntu-latest)
+      - if: matrix.os == 'ubuntu-24.04'
+        name: Install dependencies (ubuntu-24.04)
         run: |
           sudo apt-get update --fix-missing
           sudo apt-get autoremove
           sudo apt-get autoclean
-          pip install tomte[tox]==0.2.14
-          pip install --upgrade setuptools==60.10.0
+          pip install tomte[tox]==0.6.1
+          pip install --upgrade "setuptools<=81.0.0"
 
           # install Protobuf compiler
           wget https://github.com/protocolbuffers/protobuf/releases/download/v24.3/protoc-24.3-linux-x86_64.zip

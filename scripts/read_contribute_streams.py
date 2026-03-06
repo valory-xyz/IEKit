@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2025 Valory AG
+#   Copyright 2021-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ from ceramic.streams import (
     CONTRIBUTE_PROD_DB_STREAM_ID,
     CONTRIBUTE_PROD_MANUAL_STREAM_ID,
 )
-
 
 dotenv.load_dotenv(override=True)
 

@@ -70,7 +70,6 @@ from packages.valory.skills.olas_week_abci.rounds import (
     WeekInOlasAbciApp,
 )
 
-
 ONE_DAY = 86400.0
 HTTP_TOO_MANY_REQUESTS = 429
 MAX_TWEET_CHARS = 280

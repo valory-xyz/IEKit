@@ -60,7 +60,6 @@ from packages.valory.skills.dynamic_nft_abci.dialogues import (
 from packages.valory.skills.dynamic_nft_abci.models import SharedState
 from packages.valory.skills.dynamic_nft_abci.rounds import SynchronizedData
 
-
 ABCIRoundHandler = BaseABCIRoundHandler
 SigningHandler = BaseSigningHandler
 LedgerApiHandler = BaseLedgerApiHandler

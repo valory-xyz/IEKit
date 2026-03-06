@@ -6,13 +6,13 @@ description: A skill that serves as a base skill for others to interact with Age
 license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
-  __init__.py: bafybeiaxb63hpickyjxvsrkzcmophtdzd27rqwvznngdrye465to4fufii
-  agent_db_client.py: bafybeigsi3icbzzbd4e2wib7sq5bcnlygexlqrclz2tm2nv7kkvvzukcaq
+  __init__.py: bafybeihft4jwno2aqzvvmmkcajlcf2w4hfdnei6nf7ikkur3tt563zw7w4
+  agent_db_client.py: bafybeielgvhz6njcvgzj4ptpknqefsiwyqeyp7tqaj4gyefidqt5xei2ou
   agent_db_models.py: bafybeihbc4aautx7vjxifotynifx5nnu7vkaduzgelbngbtfsngknlinda
   behaviours.py: bafybeibixhiiqlcnjnesxdtgy7hovlc2bdraqll6x3xjbjniwe7gawpk7a
-  dialogues.py: bafybeifmodah5c75hcwa4vygcvmk5cvj4kpmfy5qwyov7kvgqn6gipupqi
+  dialogues.py: bafybeidxstlxb5lmp7nb2hxjhymwp7m64lwzkllcgjffxbv72wz7co5zli
   fsm_specification.yaml: bafybeigiboab2knxjw7jj7k7bne6osbnhs7rreo3mgtq5nfkrtpw47thze
-  handlers.py: bafybeicdplfliyfjuc5zfblbsusibw6sz7brk7jioby36zwt2thv2efrza
+  handlers.py: bafybeihvbgv6q4a3n4j22ltao4xbijvydxdte4o55xhpgupzevc5lxzppu
   models.py: bafybeiea6dp6zaftrznwtxiqec4ublfa37g5jpn7ff3sgynxvelpgzgaq4
   payloads.py: bafybeiaypbpipdwuvzntp7pbdissbapwhxnklm2xtimsee3ahdpf4hlire
   rounds.py: bafybeif4v3ka77zommvf7md7wwxz7ebdvbruhelwz2sviakhbmbtisqr7m
@@ -21,7 +21,7 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
+- valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
 behaviours:
   main:
     args: {}
@@ -148,9 +148,9 @@ models:
     class_name: AgentDBClient
 dependencies:
   pydantic:
-    version: ==2.9.2
+    version: ==2.12.5
   eth_account:
     version: ==0.8.0
   pydantic_core:
-    version: ==2.23.4
+    version: ==2.41.5
 is_abstract: true

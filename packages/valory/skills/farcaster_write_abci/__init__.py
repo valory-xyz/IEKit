@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2024 Valory AG
+#   Copyright 2021-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -41,6 +41,5 @@
 """This module contains the implementation of the default skill."""
 
 from aea.configurations.base import PublicId
-
 
 PUBLIC_ID = PublicId.from_str("valory/farcaster_write_abci:0.1.0")

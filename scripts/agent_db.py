@@ -25,7 +25,6 @@
 import os
 import sys
 
-
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import json
 from datetime import datetime, timezone
@@ -50,7 +49,6 @@ from packages.valory.skills.contribute_db_abci.contribute_models import (
     ModuleData,
     UserTweet,
 )
-
 
 dotenv.load_dotenv(override=True)
 

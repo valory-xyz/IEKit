@@ -8,14 +8,14 @@ license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   README.md: bafybeiecqal4dvv6lqfgweb2woj7xm7zinl762uumvd3jbz7asn4tbpkyi
-  __init__.py: bafybeih5sj6mqcrnmctng5tkyqwdvbvk7usvirvuldd4q5ou6x4xnrh5um
+  __init__.py: bafybeiczorbibku5apxh2gv6iss7zj2ed7e2jd4oosej2yjr6a5pblgbli
   dialogues.py: bafybeibxkkxvdzxgw5otuu4seej6rptybs7dzc3zbdmlalx6frxw5lsp2u
-  message.py: bafybeidlcwtwhcuql55loiuguu5j6bum36hz4klzbmnshryrk2jiomfn5u
+  message.py: bafybeic5rztm3f2i4trd44mfgu4izncodtrrjcpib4bhqh7hexlnm4fnny
   serialization.py: bafybeiahmlp56h6dmkvb7qtmt3f2sofpvnctdp3e6i4zjbitqrwe24dqwi
   tests/test_twitter_dialogues.py: bafybeibu4cmtkmf5iaf54axcny2yaan2dt56dorv5664tg37fnxhsjgpya
   tests/test_twitter_messages.py: bafybeie5eyw2t5n6ck3iu3l6yv543kmk4tpqwb4curjyzyzqdwubghonza
   twitter.proto: bafybeieaepg4kzjpzkbhg7amwfjmk77esizsjedkr524m6pd2cqfzykbgm
-  twitter_pb2.py: bafybeiexfvi6gta5wpk5tdhkpu2p3pq4lp253q22ld5u4kfln7erqz3aay
+  twitter_pb2.py: bafybeifmntf6p6lhlxxpl73f7yvswpulmfnmisehkdsdv6e5bsga3mc3gq
 fingerprint_ignore_patterns: []
 dependencies:
   protobuf: {}

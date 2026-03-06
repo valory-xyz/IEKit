@@ -50,7 +50,6 @@ from packages.valory.skills.twitter_scoring_abci.payloads import (
     TwitterSelectKeepersPayload,
 )
 
-
 MAX_API_RETRIES = 2
 ERROR_GENERIC = "generic"
 ERROR_API_LIMITS = "too many requests"

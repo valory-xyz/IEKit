@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2024 Valory AG
+#   Copyright 2021-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -33,7 +33,6 @@ from farcaster import Warpcast
 from packages.valory.protocols.srr.dialogues import SrrDialogue
 from packages.valory.protocols.srr.dialogues import SrrDialogues as BaseSrrDialogues
 from packages.valory.protocols.srr.message import SrrMessage
-
 
 PUBLIC_ID = PublicId.from_str("valory/farcaster:0.1.0")
 

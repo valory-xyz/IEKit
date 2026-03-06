@@ -7,34 +7,34 @@ description: A skill that reads mentions from the Twitter API and assigns scores
 license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
-  __init__.py: bafybeifudgakkjoyahuewp2o4gvqayw7nsgpyxw2ayrpgmzexurh2xomaq
-  behaviours.py: bafybeidqs27tkllg5upibladfbjyuz26pgcmuyvupwiwy6bwrp7k6qovda
-  dialogues.py: bafybeibdqzn37hbo2cq4skww4uh2zvvsjyaxxvdhxisefbdvmjp7rh53si
+  __init__.py: bafybeif4yakqlbjwpk6cysyipxvy2mwneqm57mvfaw4vrpfvnejp7vrz5q
+  behaviours.py: bafybeicd5fzndkrhd7dmqokzqgle3ikvk6swo6heipnhprkw7sblafdpym
+  dialogues.py: bafybeifpe7jcytg4oswmiearbhzjpy42pxjahszvimiolikspfpn6magta
   fsm_specification.yaml: bafybeigcelpml5zuzd6fgbneb2y72momepiqqisvbrjjv2kua7obltheje
-  handlers.py: bafybeid3nqvcyotqj5g5hlgrz57nf7vpjysmgvsxe3p7644f4z5dcwqn6u
+  handlers.py: bafybeia6nw25tpfilofdmvsvtvftf66x2bqs2vq54iejef5s3z57g5iqdq
   models.py: bafybeifs5zyg6ra24x2kvy4xdukhwzpivjvb4hd3ryuezc7tpsishskixe
   payloads.py: bafybeigsmk5g5fqr6p27oojtjviogzwpiukquisy7fnoxkeyuzkumevbrm
   prompts.py: bafybeidab3wypfzjia6fcj4svo4rzrnbuvqhivqhvdzzglfhl34bnnzm3e
-  rounds.py: bafybeigohjgvub2lguvsuympysi57idsm2bu3y62ddrslmewzngjnubnfa
+  rounds.py: bafybeiefm6ypyrmgnh4tuvi5nyvmlzg37zh4moqeenmfbcqxljzqltctjq
   tests/__init__.py: bafybeidwzzd4ejsyf3aryd5kmrvd63h7ajgqyrxphmfaacvpjnneacejay
-  tests/test_behaviours.py: bafybeigp6o6tb7ahumd6nzupcwooaoumqdekagurczlru76fcmjtrmbwhe
+  tests/test_behaviours.py: bafybeibmyzqqutkkamgm2qvkoyb5opsgl2sogikus7xsxohkq7whapqe7a
   tests/test_dialogues.py: bafybeiheyq7klonzb7rnjub2i22h7bmsnoimn2pq4j7ofikt3yovstvgt4
   tests/test_handlers.py: bafybeigevirvi3saepukke2zmp334btgsdxhj55o2vawj3hqam63miirg4
-  tests/test_models.py: bafybeign7lmbrvrqetschqxhntzsm7sztmsq4vqgsfp24jggr7pd3pgdjq
+  tests/test_models.py: bafybeiconkqju7ms54znjbxzwgoftadrpewy7m7yvdm45gtdxn2va6llq4
   tests/test_payloads.py: bafybeieb5hzv7i46pvt7cfk35df4apbj5mrjg33w4cdfouiek35iufxcry
-  tests/test_rounds.py: bafybeicuwrkzbgxjce2jzfzulncmhq5vcdsr3rosvdmisgzagkt6tstpby
+  tests/test_rounds.py: bafybeigbmaggq7e6vn7hh5t5ajopvjpjw4knhnbw6zgapwe5xz52lpfiiu
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/staking:0.1.0:bafybeicara3sigvjqogzhacsnlml3xq6af3vjr6bez45gfipbu4bx4iy5e
+- valory/staking:0.1.0:bafybeia5kcr7pdp7db5pfpjcmv4y4ly5y76hqha5olldwmax4lyntte6ga
 protocols:
 - valory/llm:1.0.0:bafybeiardrklsughnm6tdnc3seqderlnq5nj4xolgnk42crr3kxexjlrfe
-- valory/contract_api:1.0.0:bafybeigl7mxuyxngk4gztgygeccbgdfrllx73kwbvvkjvtkfw6ionyd56q
+- valory/contract_api:1.0.0:bafybeibld2xb5m7kyluiptkamp4nrt6oeomkohz7a3yppbv2oo7qw2e4la
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
-- valory/decision_making_abci:0.1.0:bafybeibq4ehm5uqqmowfnrndzs5tfql4xu5p73mt4kvgl3664oz7fpm7ou
-- valory/mech_interact_abci:0.1.0:bafybeifmewonamynusdi3sz5qenlr3f7mu67sic33aub5uzc2w3mpqsyqa
-- valory/contribute_db_abci:0.1.0:bafybeigvkcxsblfgnysehfbd4x7otqn6icxm4yxfigyinnnlbrso5ahvw4
+- valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
+- valory/decision_making_abci:0.1.0:bafybeibnjen5wbddj5uiyukvcuvwu3xhcl3zxx6tbuvmo3prjwvli5v774
+- valory/mech_interact_abci:0.1.0:bafybeiae75nslw4o7fgqnctigpxftj2y477hxgnuq5amqadxylsjx5fyse
+- valory/contribute_db_abci:0.1.0:bafybeie4px35xxps7ugmobhclvoekvezxa57ysh42hxorf6pxvkxixb2va
 behaviours:
   main:
     args: {}

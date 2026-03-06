@@ -7,12 +7,12 @@ license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeibxwzkyh7odchnlkeczpguencdjiizm4nezfmi4drybn2zd25xdkq
-  connection.py: bafybeierlebgcuq3q7sepfhf2swfzm2rhxjdx3cogefjixjfpsyknkr26u
+  connection.py: bafybeiexxvcuvpdz42gnvwed3qtuyng6xlhtp4z2igcasv2bkxzxmeajuy
   readme.md: bafybeihg5yfzgqvg5ngy7r2o5tfeqnelx2ffxw4po5hmheqjfhumpmxpoq
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
-- valory/twitter:0.1.0:bafybeihqpwyzg3wmxcdbdddsd7mwtivod3mu42uw3dug53voxikcokyk7m
+- valory/twitter:0.1.0:bafybeifmbmfgrooontyletvwlpugx2ewl3nro3pry6a2ix3jxmpy64pvze
 class_name: TwitterConnection
 config:
   access_secret: <access_secret>
@@ -30,6 +30,6 @@ dependencies:
   requests:
     version: ==2.28.1
   open-aea-cli-ipfs:
-    version: ==2.0.8
+    version: ==2.1.0rc6
 is_abstract: false
 cert_requests: []

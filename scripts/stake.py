@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2025 Valory AG
+#   Copyright 2021-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ from pathlib import Path
 
 import dotenv
 from web3 import Web3
-
 
 # Get the fork
 dotenv.load_dotenv(override=True)

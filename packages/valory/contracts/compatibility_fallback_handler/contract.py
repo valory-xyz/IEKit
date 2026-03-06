@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """This module contains the class to connect to a ERC20 contract."""
+
 import logging
 from typing import Optional
 
@@ -26,7 +27,6 @@ from aea.configurations.base import PublicId
 from aea.contracts.base import Contract
 from aea_ledger_ethereum import EthereumApi
 from hexbytes import HexBytes
-
 
 PUBLIC_ID = PublicId.from_str("valory/compatibility_fallback_handler:0.1.0")
 

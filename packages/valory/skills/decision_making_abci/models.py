@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2025 Valory AG
+#   Copyright 2023-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ from packages.valory.skills.abstract_round_abci.models import (
     SharedState as BaseSharedState,
 )
 from packages.valory.skills.decision_making_abci.rounds import DecisionMakingAbciApp
-
 
 DEFAULT_PROMPT = """Using the information in the text below, craft an engaging and relevant post that highlights key insights or facts from the text.
 The post should be limited to {n_chars} characters. IMPORTANT: under absolutely no circumstances use links, hashtags # or emojis.

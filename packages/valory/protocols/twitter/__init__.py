@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2023 Valory AG
+#   Copyright 2021-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -46,6 +46,5 @@ It was created with protocol buffer compiler version `libprotoc 24.3` and aea pr
 
 from packages.valory.protocols.twitter.message import TwitterMessage
 from packages.valory.protocols.twitter.serialization import TwitterSerializer
-
 
 TwitterMessage.serializer = TwitterSerializer

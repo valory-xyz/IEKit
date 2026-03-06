@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2025 Valory AG
+#   Copyright 2023-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """This package contains the logic for task preparations."""
+
 import uuid
 
 from packages.valory.skills.contribute_db_abci.contribute_models import ServiceTweet

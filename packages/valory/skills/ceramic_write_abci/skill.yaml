@@ -6,30 +6,30 @@ description: A skill that writes data to a Ceramic stream.
 license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
-  __init__.py: bafybeic3je64koagffola4n4khlbp4jdfhonyl6dwmodwz4r4oglnbwyma
-  behaviours.py: bafybeidbyaegrzh6fxpudujdl3yp7nnlkue6benok4vzbh3422ooyjorxe
+  __init__.py: bafybeib3652yamfgkoxbmwtittnrig3jdddolxhhninwdas4liyxa7ttde
+  behaviours.py: bafybeibasmbnylynqmvjoq3kplwbk7umwvxpqdm3s223taeigtuzypvhfy
   ceramic/__init__.py: bafybeias4e3s6p5qtx6mmmcwkcd6kvbdnudy7sxai7d2suk75aazzdzdie
-  ceramic/payloads.py: bafybeiazdmvlnl6mdbzyv22xiyxwruxxeoxtbasppc2orlazy5hrzevjuq
-  dialogues.py: bafybeifvrclkqpnl3dw46zwareemio6vgrqm4c5f3wfgv6rp267fcbyf5e
+  ceramic/payloads.py: bafybeigyf3jnw5pl2mnskfhe3x6oyt2xzrwln3vd4f3rq2xwiqceaunbf4
+  dialogues.py: bafybeiggx66huracu5puyrxcvefzpea2a4v3upawv2x3xzceqoj3yumj4y
   fsm_specification.yaml: bafybeigrqblzg5xzgep5gi24z2ie7i3t7mplkim73chvmkpotd3rzk6bem
-  handlers.py: bafybeib3aiosxhbyudcxtybdrvsmn6bvnl4ao3fwf2uc7lkidpnhvnucam
+  handlers.py: bafybeiacqwnz764lw2spljtyjdnrmdjrfalnwvl2yt4itsg7z64a6h6fjm
   models.py: bafybeibknj5hftb7y4djrurgo64uueffrphj4ladd64qjzbhtir2wagkia
   payloads.py: bafybeig63ibt5qa5sa4nw37gly3lvf4wwtps7vgr2zbvpp5zz6hzm66edq
   rounds.py: bafybeigiozy3ggixzb27ljpqqb7ovpqrrhk54lnkmq5y542dhfs6wchs74
   tests/__init__.py: bafybeigknrv5xw52pmcscrsxhtpibey5jbr26dss7o5eofery6ktd6w42e
-  tests/test_behaviours.py: bafybeighuno7ajmmchlhb2qwgzjewhjhzee7ain2qxqxvcc2eoox2hxw2m
+  tests/test_behaviours.py: bafybeicdulfxrkxt5b752w6khzktmidw3tezzjn4s5lmvg7e7v5lsbv2ky
   tests/test_dialogues.py: bafybeibvhslg6mwhvmeffhoho5olnmr56ohvx63onv63aryhaidizk3jou
   tests/test_handlers.py: bafybeih6yobt7ihsp32n6nliq3ourwfmgpc7lvb672timj7cqx4wg4n5ba
   tests/test_models.py: bafybeihqwbnrtarzos5tak2ywurtbel6fxodpupyk677aipdemaxlgs7qi
   tests/test_payloads.py: bafybeicbuestgyhvx6obesc25tcupca3oqracjo2oevl5x3bfrf7sj3eay
-  tests/test_rounds.py: bafybeig5t6zms73c2zndheg4mdqge7wkc4zcohxkbqwng6njqm3as55tam
+  tests/test_rounds.py: bafybeih3tqlmcrn6i4uobwnos2fwag4po5axaqyt3ux5ehsivd4gicjm4y
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
-- valory/ceramic_read_abci:0.1.0:bafybeidud2ipq2ucbif2bhr2cyzrrhlgjg6nmz2z4g5z7lcrqtxrjxr6ua
+- valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
+- valory/ceramic_read_abci:0.1.0:bafybeichglkicpsipvbngrti35p6sod6ptaa4am56wllfqvqi34rfp7blm
 behaviours:
   main:
     args: {}
@@ -167,7 +167,7 @@ models:
     class_name: TendermintDialogues
 dependencies:
   Authlib:
-    version: ==1.2.0
+    version: ==1.6.9
   dag-cbor:
     version: ==0.2.2
   cryptography:

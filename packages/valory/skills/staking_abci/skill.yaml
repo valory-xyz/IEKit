@@ -6,26 +6,26 @@ description: The scaffold skill is a scaffold for your own skill implementation.
 license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
-  __init__.py: bafybeie3oujhxxdr5s2lvc6cosbysezqycagw5mbwvxjw24k3dzcbtgg5m
-  behaviours.py: bafybeihxtwemqccg665lv7i7bbbtp2qf7h2zeum3n7otgfw3w3sro7exsu
-  dialogues.py: bafybeifmmpyiwetlcgykczsq4dgwvm7tipdupf2rwcndg5cmtm7jfoxwxm
+  __init__.py: bafybeig3drvquoqw67u3c33zkhhcwg3zvnd6o5mlzkmktf74ijenjj6b6q
+  behaviours.py: bafybeiautgmscbcvj76xbumblariak6bqhsrqociq3yq7y4bjv5xnthm5m
+  dialogues.py: bafybeibw3j2brioqssoy7jnilsqlfsz5twcdwwppkknmpkrt34xjeburpe
   fsm_specification.yaml: bafybeicjj2blynjtxejcjkr3fmb5mlvfxu4zpymqwurdciqvj5biz37ruu
-  handlers.py: bafybeiaufft2fwbbjbbc77md6xkq7prnzzi2nkkm2fipapgx54myabmb7y
+  handlers.py: bafybeicxxxcpdnlomfhzm3chsdo323mkvth575efux3fdyipb6ucw6ifuu
   models.py: bafybeicczxttdpcdm7nmm5ywacpqffk37dyamsmnp2gaptn7k6eany4lmq
   payloads.py: bafybeigulz4filagckh65usnkgatmsrkvx7imfxjw4kk5zysbhwa2xccfq
   rounds.py: bafybeicvqouuqqkrrpqqpxki5ofglrubugxvrplo4jhlzoqybwo6m5bc7a
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/gnosis_safe:0.1.0:bafybeia3ictpeosrza3tkxa7ad2io5txutcs44jgrqoqgdxhrjdu2fy4qy
-- valory/staking:0.1.0:bafybeicara3sigvjqogzhacsnlml3xq6af3vjr6bez45gfipbu4bx4iy5e
-- valory/multisend:0.1.0:bafybeidjdgi2kyexajirj3cnpzgse4y5u664b2blztt4flv6i7knlecyr4
+- valory/gnosis_safe:0.1.0:bafybeiamcgebbdbm3kzcvpeio4pjobzduz2cdlxrs7ufe4ere2zuompgwe
+- valory/staking:0.1.0:bafybeia5kcr7pdp7db5pfpjcmv4y4ly5y76hqha5olldwmax4lyntte6ga
+- valory/multisend:0.1.0:bafybeiaf3hapi3prgpjeugwhq64k7lqelo6kibhol5rkajt7id3knomp5q
 protocols:
-- valory/contract_api:1.0.0:bafybeigl7mxuyxngk4gztgygeccbgdfrllx73kwbvvkjvtkfw6ionyd56q
+- valory/contract_api:1.0.0:bafybeibld2xb5m7kyluiptkamp4nrt6oeomkohz7a3yppbv2oo7qw2e4la
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
-- valory/transaction_settlement_abci:0.1.0:bafybeifbumqyemwzffxtn3kwucxx55ja57mhmfalo7fqlkq2hnjwqhfp74
-- valory/contribute_db_abci:0.1.0:bafybeigvkcxsblfgnysehfbd4x7otqn6icxm4yxfigyinnnlbrso5ahvw4
+- valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
+- valory/transaction_settlement_abci:0.1.0:bafybeigivknq755rbnelrdemaz3vm4x7jkofvaskm34uh36pbbg6uiquo4
+- valory/contribute_db_abci:0.1.0:bafybeie4px35xxps7ugmobhclvoekvezxa57ysh42hxorf6pxvkxixb2va
 behaviours:
   main:
     args: {}

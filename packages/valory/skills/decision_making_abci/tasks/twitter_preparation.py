@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2025 Valory AG
+#   Copyright 2023-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -33,7 +33,6 @@ from packages.valory.skills.decision_making_abci.tasks.signature_validation impo
 from packages.valory.skills.decision_making_abci.tasks.task_preparations import (
     TaskPreparation,
 )
-
 
 # This comes from the time we could have multiple "Centaurs"
 CENTAUR_ID = "2"

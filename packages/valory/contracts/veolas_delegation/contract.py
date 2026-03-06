@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2021-2024 Valory AG
+#   Copyright 2021-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """This module contains the class to connect to the veolas_delegation contract."""
+
 import logging
 from typing import Optional
 
@@ -25,7 +26,6 @@ from aea.common import JSONLike
 from aea.configurations.base import PublicId
 from aea.contracts.base import Contract
 from aea_ledger_ethereum import EthereumApi
-
 
 PUBLIC_ID = PublicId.from_str("valory/veolas_delegation:0.1.0")
 

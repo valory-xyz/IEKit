@@ -8,14 +8,14 @@ aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeidk77j5zmvjhf42ie7grv33hzjedgc6vdiwn22uzhlwuo6xh6hmsi
   build/DynamicContribution.json: bafybeicq5ee4hba3h6tsluzvdrtyvzllpqsseqys66e24bfrpjlegnxome
-  contract.py: bafybeiawxcceofkcqywcb2vosubsnssq2u7dgaqin36rm6uoymbfxlaoii
+  contract.py: bafybeiediiel7ocowxt3qydky2dxxupz6dgl7edflre4c37rskkixfaw74
 fingerprint_ignore_patterns: []
 class_name: DynamicContributionContract
 contract_interface_paths:
   ethereum: build/DynamicContribution.json
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==2.0.8
+    version: ==2.1.0rc6
   web3:
     version: <8,>=7.0.0
   hexbytes: {}

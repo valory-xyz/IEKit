@@ -76,7 +76,6 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     Event as TwitterScoringEvent,
 )
 
-
 ContributeDBParams = ContributeDBAbciParams
 DynamicNFTParams = DynamicNFTAbciParams
 TwitterScoringParams = TwitterScoringAbciParams
