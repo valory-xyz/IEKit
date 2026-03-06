@@ -40,7 +40,7 @@ def main() -> None:
     # Build combined source lookup (later repos overwrite earlier ones)
     source_all: dict = {}
     for source_path in SOURCE_REPOS:
-        with open(source_path) as f:
+        with open(source_path, encoding="utf-8") as f:
             source = json.load(f)
         # Apply third_party first, then dev (dev takes priority within same repo)
         source_third = source.get("third_party", {})
@@ -48,7 +48,7 @@ def main() -> None:
         source_all.update(source_third)
         source_all.update(source_dev)
 
-    with open(TARGET_PACKAGES_JSON) as f:
+    with open(TARGET_PACKAGES_JSON, encoding="utf-8") as f:
         target = json.load(f)
 
     target_third = target.get("third_party", {})
@@ -69,7 +69,7 @@ def main() -> None:
 
     if mismatches:
         print(f"Found {len(mismatches)} mismatched hashes:\n")
-        for pkg, old, new in mismatches:
+        for pkg, _old, new in mismatches:
             print(f'  "{pkg}": "{new}",')
         print(f"\nReplace these in {TARGET_PACKAGES_JSON}")
 
