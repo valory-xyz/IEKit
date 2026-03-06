@@ -69,7 +69,7 @@ multiaddr = "==0.0.9"
 setuptools = "<=81.0.0"
 
 # Additional IEKit-specific deps
-Authlib = "==1.2.0"
+Authlib = "==1.6.9"
 cryptography = "==44.0.2"
 dag-cbor = "==0.2.2"
 jsonpatch = "==1.32"

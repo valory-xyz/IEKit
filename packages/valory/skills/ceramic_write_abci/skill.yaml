@@ -29,7 +29,7 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
-- valory/ceramic_read_abci:0.1.0:bafybeigskt4imx6wzrcoegniakh7vyfr3rj76znweqybagrwq43hee5gyu
+- valory/ceramic_read_abci:0.1.0:bafybeichglkicpsipvbngrti35p6sod6ptaa4am56wllfqvqi34rfp7blm
 behaviours:
   main:
     args: {}
@@ -167,7 +167,7 @@ models:
     class_name: TendermintDialogues
 dependencies:
   Authlib:
-    version: ==1.2.0
+    version: ==1.6.9
   dag-cbor:
     version: ==0.2.2
   cryptography:
