@@ -58,7 +58,7 @@ jobs:
           sudo apt-get autoremove
           sudo apt-get autoclean
           pip install tomte[tox,cli]==0.6.1
-          pip install --upgrade setuptools<=81.0.0
+          pip install --upgrade "setuptools<=81.0.0"
       - name: Check copyright headers
         run: tomte check-copyright --author valory --exclude-part abci  --exclude-part http_client  --exclude-part ipfs  --exclude-part ledger  --exclude-part p2p_libp2p_client  --exclude-part gnosis_safe  --exclude-part gnosis_safe_proxy_factory  --exclude-part multisend  --exclude-part service_registry  --exclude-part acn  --exclude-part contract_api  --exclude-part http  --exclude-part ipfs  --exclude-part ledger_api --exclude-part tendermint --exclude-part abstract_abci --exclude-part abstract_round_abci --exclude-part registration_abci --exclude-part reset_pause_abci --exclude-part termination_abci --exclude-part transaction_settlement_abci  --exclude-part http_server
       - name: License compatibility check
@@ -90,7 +90,7 @@ jobs:
           sudo apt-get autoremove
           sudo apt-get autoclean
           pip install tomte[tox,cli]==0.6.1
-          pip install --upgrade setuptools<=81.0.0
+          pip install --upgrade "setuptools<=81.0.0"
           # install Protobuf compiler
           wget https://github.com/protocolbuffers/protobuf/releases/download/v24.3/protoc-24.3-linux-x86_64.zip
           unzip protoc-24.3-linux-x86_64.zip -d protoc
@@ -162,7 +162,7 @@ jobs:
           sudo apt-get autoremove
           sudo apt-get autoclean
           pip install tomte[tox]==0.6.1
-          pip install --upgrade setuptools<=81.0.0
+          pip install --upgrade "setuptools<=81.0.0"
 
           # install Protobuf compiler
           wget https://github.com/protocolbuffers/protobuf/releases/download/v24.3/protoc-24.3-linux-x86_64.zip
@@ -285,7 +285,7 @@ jobs:
           sudo apt-get autoremove
           sudo apt-get autoclean
           pip install tomte[tox]==0.6.1
-          pip install --upgrade setuptools<=81.0.0
+          pip install --upgrade "setuptools<=81.0.0"
 
           # install Protobuf compiler
           wget https://github.com/protocolbuffers/protobuf/releases/download/v24.3/protoc-24.3-linux-x86_64.zip
