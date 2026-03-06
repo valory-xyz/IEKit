@@ -21,17 +21,17 @@ connections:
 - valory/ledger:0.19.0:bafybeidxzeygks5zcky4u2ztcdufzptssgf6uqytxofnn6yta7qq6jsim4
 - valory/p2p_libp2p_client:0.1.0:bafybeielj3jso3wvrarp5n5rq7llpw4vgxybqiyensgjalb5ubfiawwhhu
 - valory/openai:0.1.0:bafybeihuptdstz3ec3x3e4scu2cx7ppraexyab7a37jiim633wioaniq4e
-- valory/twitter:0.1.0:bafybeifdf5obfcadodte6odctm7died4q4a7lwgk6k2zu5ccj6adaltnby
+- valory/twitter:0.1.0:bafybeiezgml5vepewll35fterxsz2dalkohjfe62pvjpi2cezzqang5lo4
 contracts:
-- valory/dynamic_contribution:0.1.0:bafybeigivx6dujs2f6el5buur56dslt5x55wgec4nqo4fk7y7f33vobhsy
+- valory/dynamic_contribution:0.1.0:bafybeibmfs5f5gokw565moi6jntllbmzcoxtal7dtw6dgmkdcjq4pc4mse
 - valory/gnosis_safe:0.1.0:bafybeiamcgebbdbm3kzcvpeio4pjobzduz2cdlxrs7ufe4ere2zuompgwe
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeiha6fjcg4oyn557yrr5pv3e2rntdbt4rglkmjsjqdtzrqusl2cu4q
 - valory/multisend:0.1.0:bafybeiaf3hapi3prgpjeugwhq64k7lqelo6kibhol5rkajt7id3knomp5q
 - valory/service_registry:0.1.0:bafybeia66yhd3iyvuzojalivuj7yzyh4vi4cxnfoz22saax5257kmjcr6e
-- valory/veolas_delegation:0.1.0:bafybeibujlvbze36owb2bxzionegvzknatizcpm6nhgos3dm2whqh7hx64
+- valory/veolas_delegation:0.1.0:bafybeie2c3ox7yymhlxda7jtps2ixk4d4mfvmqjledqznm2dzqoiaccg54
 - valory/agent_mech:0.1.0:bafybeifamjf76fn3f7qjdv7jm5skrd4xcsnt43kq3zy6e5hnh6kwsjbjvq
 - valory/mech_marketplace_legacy:0.1.0:bafybeigq3i6oomfcolahjgqb4lufphulpkwag74kdrbzfunczyzmodc52e
-- valory/staking:0.1.0:bafybeicxgpexecx3botz2b3bj4iymimtu6czdcvpk7oaznb5tzyx6mvrdm
+- valory/staking:0.1.0:bafybeia5kcr7pdp7db5pfpjcmv4y4ly5y76hqha5olldwmax4lyntte6ga
 - valory/agent_registry:0.1.0:bafybeie6lvq3pgsu6sig7ner6rcfwvpnew5tq63mtexdgevwamakc3lh6y
 - valory/ierc1155:0.1.0:bafybeiczk3s6tl2j7x3jefj4pd27dywkhhkzjkitrp7mirjfmbqhwtmuwi
 - valory/nvm_balance_tracker_token:0.1.0:bafybeigzpycenglqc4jqojjwtlbu6qqfslab72m6irzkhjzyy52bvlk5l4
@@ -56,20 +56,20 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeie7omzycvazfg6edexn2k3fteuey3alopfmlwye6e44exfcxv5apa
 - valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
-- valory/impact_evaluator_abci:0.1.0:bafybeiftneinuxm3cozkcms7o6xkzt756kpokdyu2zewfvvgv3yvuqeorq
-- valory/twitter_scoring_abci:0.1.0:bafybeib6dp7czzkgsfbactzfilwiyp4ga7kvjb3p3qexkiz2s7sq2s5qyi
+- valory/impact_evaluator_abci:0.1.0:bafybeifj74id65qphw4goqyrd7pyhmvkdkmi5gsszwv7j66r72ham4ydz4
+- valory/twitter_scoring_abci:0.1.0:bafybeiapaxp3z7soeotyy2zrm4fvjqvunu3tcwddwbz3pgtwwsclbqqxwu
 - valory/agent_db_abci:0.1.0:bafybeicnho7ua2wxvhzzrcbb46cewgi73iv5y6yxtrdmj5bxgmks4zrg5a
 - valory/contribute_db_abci:0.1.0:bafybeicltoo4cet2uhcqlfj2fw2m3v2otfcn5wgsyt5utgj6thjapra4dy
-- valory/dynamic_nft_abci:0.1.0:bafybeigld3a6pe6dykkzpcenekvfyxj5k4vw7g4djoo343akdey4ubfxhq
+- valory/dynamic_nft_abci:0.1.0:bafybeiaifdmojggz2iet4h2mo6tlkgbfz2i7ub74pcfl42fxnfp4tku4ee
 - valory/registration_abci:0.1.0:bafybeihjgfzqvuymqgku6mwqih7hlvqwr2tmdjrip3m6unt5l4e55bshkm
 - valory/reset_pause_abci:0.1.0:bafybeih6bjalcohxytg6hj3doy5dhkxonrxpqgcnclyf6tnmuyfbom2usy
 - valory/termination_abci:0.1.0:bafybeiarjw4hhu2vf56yxqb4jh3kmk4hfxvqahygn6scc3rfnlogjkwwpe
 - valory/transaction_settlement_abci:0.1.0:bafybeigivknq755rbnelrdemaz3vm4x7jkofvaskm34uh36pbbg6uiquo4
-- valory/twitter_write_abci:0.1.0:bafybeico4lucrwovqp2cevtpca5pucu3ny43ff7wwbreixws7beoe4m7uu
-- valory/decision_making_abci:0.1.0:bafybeignu7w2ixh6hjq7rd56pw7i5o7sqsg5df7br3izgjaszr6fm457vy
-- valory/olas_week_abci:0.1.0:bafybeib67edd3q22y24vsxh4e3m6mjmobzjxtcliysky7uwlxf5tuwvsbi
+- valory/twitter_write_abci:0.1.0:bafybeidkn56akhxqsxtdqlbqqllhjdmjofqwcqd62nm2htfnqwmefhgei4
+- valory/decision_making_abci:0.1.0:bafybeihu6zidad6pdyfmawzdal2vq6k2dnhpm5dx5sne4zsga6x7bjknhy
+- valory/olas_week_abci:0.1.0:bafybeid4xthxvbuexxtpcs5mr2o5c2yeq52glgpghvkjypyxiqk6bma5rm
 - valory/mech_interact_abci:0.1.0:bafybeifdqcf3hx5vesbnj3362thsalde3uz5jcdtsntyvmdgn5eqsaogve
-- valory/staking_abci:0.1.0:bafybeiaodfc6kqecemtmv7oqwodxvtqy7wedux24exnz275iaoamkfqf5e
+- valory/staking_abci:0.1.0:bafybeiepafrdywyanfdgadocwpps7vgwkbruu56wuecetramyrkvwbmbqu
 - valory/llm_abci:0.1.0:bafybeig6s7cexuk4xvpgt2pkkrqysbgxzmsyxnjyp62xng7wau5n2a6yum
 default_ledger: ethereum
 required_ledgers:
@@ -102,7 +102,7 @@ logging_config:
 skill_exception_policy: stop_and_exit
 dependencies:
   open-aea-ledger-ethereum:
-    version: ==2.0.8
+    version: ==2.1.0rc6
   typing_extensions:
     version: ==4.13.2
 default_connection: null
