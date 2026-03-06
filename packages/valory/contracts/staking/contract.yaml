@@ -9,7 +9,7 @@ fingerprint:
   README.md: bafybeiclvbed42bmvsm3qqxosfu4kxbc6vuhxaant2od2hmszpkznh3z74
   __init__.py: bafybeif5vpc3dfrlxlch7brbhmdwksabyzddpfqgm56vdbbkek3t3br6ke
   build/staking.json: bafybeia2o6m3k6uwrz5qua5dcmljc3tfd477yjw6lsmfzoyjrjohtffuie
-  contract.py: bafybeicedts2dhor37cmvs72bn43laltcxuu2bqhgzkehlcjmdfevecute
+  contract.py: bafybeiavki7ej6fvh3oc6s2ktipg76figs6ruv2cmf3plxkahwzjedy7bm
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: Staking

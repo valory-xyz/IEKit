@@ -34,7 +34,6 @@ from packages.valory.protocols.srr.dialogues import SrrDialogue
 from packages.valory.protocols.srr.dialogues import SrrDialogues as BaseSrrDialogues
 from packages.valory.protocols.srr.message import SrrMessage
 
-
 PUBLIC_ID = PublicId.from_str("valory/farcaster:0.1.0")
 
 

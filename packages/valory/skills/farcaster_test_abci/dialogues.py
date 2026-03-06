@@ -68,7 +68,6 @@ from packages.valory.skills.farcaster_write_abci.dialogues import (
     SrrDialogues as BaseSrrDialogues,
 )
 
-
 AbciDialogue = BaseAbciDialogue
 AbciDialogues = BaseAbciDialogues
 

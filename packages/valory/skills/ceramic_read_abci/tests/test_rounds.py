@@ -38,7 +38,6 @@ from packages.valory.skills.ceramic_read_abci.rounds import (
     SynchronizedData,
 )
 
-
 MAX_PARTICIPANTS: int = 4
 
 

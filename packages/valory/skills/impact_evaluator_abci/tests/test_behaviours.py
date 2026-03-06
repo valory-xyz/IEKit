@@ -19,6 +19,7 @@
 # pylint: skip-file
 
 """This package contains round behaviours of the contribution skill."""
+
 from packages.valory.skills.impact_evaluator_abci.behaviours import (  # noqa
     ImpactEvaluatorConsensusBehaviour,
 )

@@ -45,7 +45,6 @@ from packages.valory.skills.olas_week_abci.payloads import (
     OpenAICallCheckPayload,
 )
 
-
 MAX_API_RETRIES = 2
 ERROR_GENERIC = "generic"
 ERROR_API_LIMITS = "too many requests"

@@ -53,7 +53,6 @@ from packages.valory.skills.ceramic_write_abci.rounds import (
     SynchronizedData,
 )
 
-
 PACKAGE_DIR = Path(__file__).parent.parent
 
 DUMMY_DID = "z6Mkon3Necd6NkkyfoGoHxid2znGc59LU3K7mubaRcFbLfLX"

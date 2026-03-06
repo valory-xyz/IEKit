@@ -30,7 +30,6 @@ from packages.valory.skills.dynamic_nft_abci.dialogues import (
     HttpDialogues,
 )
 
-
 PACKAGE_DIR = Path(__file__).parent.parent
 
 

@@ -41,7 +41,6 @@ from packages.valory.skills.farcaster_write_abci.rounds import (
 )
 from packages.valory.skills.reset_pause_abci.rounds import Event as ResetPauseEvent
 
-
 Requests = BaseRequests
 BenchmarkTool = BaseBenchmarkTool
 RandomnessApi = FarcasterWriteRandomnessApi

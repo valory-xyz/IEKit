@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """Test the models.py module of the contribution skill."""
+
 from unittest import mock
 from unittest.mock import MagicMock
 
@@ -29,7 +30,6 @@ from packages.valory.skills.impact_evaluator_abci.composition import (
     ImpactEvaluatorSkillAbciApp,
 )
 from packages.valory.skills.impact_evaluator_abci.models import SharedState
-
 
 MULTIPLIER = 2
 

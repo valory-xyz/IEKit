@@ -37,7 +37,6 @@ from packages.valory.skills.decision_making_abci.payloads import (
     PostTxDecisionPayload,
 )
 
-
 TWEET_LENGTH = 280
 
 

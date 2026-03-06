@@ -34,7 +34,6 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
     TaskPreparation,
 )
 
-
 # This comes from the time we could have multiple "Centaurs"
 CENTAUR_ID = "2"
 

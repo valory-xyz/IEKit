@@ -37,7 +37,6 @@ from packages.valory.skills.contribute_db_abci.contribute_models import (
     UserTweet,
 )
 
-
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 CONTRIBUTE = "contribute"
 NON_WRITER_WAIT = 3

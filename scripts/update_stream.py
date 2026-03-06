@@ -31,7 +31,6 @@ from ceramic.streams import (  # pylint: disable=unused-import
     CONTRIBUTE_PROD_DB_STREAM_ID,
 )
 
-
 dotenv.load_dotenv(override=True)
 
 ceramic = Ceramic(os.getenv("CERAMIC_API_BASE"))

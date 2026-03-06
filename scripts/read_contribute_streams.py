@@ -31,7 +31,6 @@ from ceramic.streams import (
     CONTRIBUTE_PROD_MANUAL_STREAM_ID,
 )
 
-
 dotenv.load_dotenv(override=True)
 
 def main():

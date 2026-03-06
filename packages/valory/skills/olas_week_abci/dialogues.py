@@ -64,7 +64,6 @@ from packages.valory.skills.abstract_round_abci.dialogues import (
     TendermintDialogues as BaseTendermintDialogues,
 )
 
-
 AbciDialogue = BaseAbciDialogue
 AbciDialogues = BaseAbciDialogues
 

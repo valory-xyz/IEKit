@@ -46,7 +46,6 @@ from packages.valory.skills.ceramic_read_abci.rounds import (
     SynchronizedData,
 )
 
-
 CERAMIC_API_STREAM_URL_READ = (
     "https://ceramic-clay.3boxlabs.com/api/v0/commits/dummy_stream_id"
 )

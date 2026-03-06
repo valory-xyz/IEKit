@@ -47,5 +47,4 @@ It was created with protocol buffer compiler version `libprotoc 24.3` and aea pr
 from packages.valory.protocols.twitter.message import TwitterMessage
 from packages.valory.protocols.twitter.serialization import TwitterSerializer
 
-
 TwitterMessage.serializer = TwitterSerializer

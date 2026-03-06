@@ -22,7 +22,6 @@
 
 import json
 
-
 with open("contribute_db.json", "r", encoding="utf-8") as db_file:
     data = json.load(db_file)
 

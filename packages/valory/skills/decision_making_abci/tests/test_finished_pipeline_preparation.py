@@ -32,7 +32,6 @@ from packages.valory.skills.decision_making_abci.tasks.finished_pipeline_prepara
 )
 from packages.valory.skills.decision_making_abci.tests import centaur_configs
 
-
 DUMMY_CENTAURS_DATA = [
     centaur_configs.ENABLED_CENTAUR,
     centaur_configs.DISABLED_CENTAUR,

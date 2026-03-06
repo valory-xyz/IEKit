@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """Test the handlers.py module of the decision_making_abci."""
+
 import packages.valory.skills.decision_making_abci.handlers  # noqa
 
 

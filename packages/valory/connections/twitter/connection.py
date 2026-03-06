@@ -40,7 +40,6 @@ from packages.valory.protocols.twitter.dialogues import (
 )
 from packages.valory.protocols.twitter.message import TwitterMessage
 
-
 PUBLIC_ID = PublicId.from_str("valory/twitter:0.1.0")
 MEDIA_DIR = "/tmp"   # nosec
 

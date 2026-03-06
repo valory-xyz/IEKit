@@ -28,7 +28,6 @@ from pathlib import Path
 import dotenv
 from ceramic.ceramic import Ceramic
 
-
 dotenv.load_dotenv(override=True)
 
 ceramic = Ceramic(os.getenv("CERAMIC_API_BASE"))

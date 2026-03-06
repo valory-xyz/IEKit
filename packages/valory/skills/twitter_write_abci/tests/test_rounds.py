@@ -47,7 +47,6 @@ from packages.valory.skills.twitter_write_abci.rounds import (
     TwitterWriteRound,
 )
 
-
 MAX_PARTICIPANTS: int = 4
 
 

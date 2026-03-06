@@ -27,7 +27,6 @@ from packages.valory.skills.abstract_round_abci.abci_app_chain import (
     chain,
 )
 
-
 # Here we define how the transition between the FSMs should happen
 # more information here: https://open-autonomy.docs.autonolas.tech/fsm_app_introduction/#composition-of-fsm-apps
 abci_app_transition_mapping: AbciAppTransitionMapping = {

@@ -51,7 +51,6 @@ from packages.valory.skills.dynamic_nft_abci.rounds import (
     TokenTrackRound,
 )
 
-
 DYNAMIC_CONTRIBUTION_CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
 
 DUMMY_ADDRESSES = [

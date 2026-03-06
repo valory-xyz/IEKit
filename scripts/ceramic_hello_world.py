@@ -25,7 +25,6 @@ import os
 
 from ceramic.ceramic import Ceramic  # pylint: disable=import-error
 
-
 DUMMY_DID = {
     "did": "did:key:z6MkszfuezSP8ftgHRhMr8AX8uyTjtKpcia4bP19TBgmhEPs",
     "seed": "9a683e9b21777b5b159974c35c4766bc0c4522855aefc8de30876dbaa252f179"

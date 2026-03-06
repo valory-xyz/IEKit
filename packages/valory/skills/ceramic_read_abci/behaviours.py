@@ -41,7 +41,6 @@ from packages.valory.skills.ceramic_read_abci.rounds import (
     SynchronizedData,
 )
 
-
 DATA_FILE_NAME = "stream.json"
 
 

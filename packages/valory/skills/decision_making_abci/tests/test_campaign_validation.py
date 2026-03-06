@@ -44,7 +44,6 @@ from packages.valory.skills.decision_making_abci.tests.centaur_configs import (
     VOTING_TO_VOID_CAMPAIGN,
 )
 
-
 DUMMY_CENTAURS_DATA = [
     ENABLED_CENTAUR,
     DISABLED_CENTAUR,

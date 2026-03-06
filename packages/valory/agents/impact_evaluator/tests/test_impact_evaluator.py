@@ -76,7 +76,6 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     TwitterSelectKeepersRound,
 )
 
-
 HAPPY_PATH: Tuple[RoundChecks, ...] = (
     # Start, read data and generic scoring
     RoundChecks(RegistrationStartupRound.auto_round_id(), n_periods=1),

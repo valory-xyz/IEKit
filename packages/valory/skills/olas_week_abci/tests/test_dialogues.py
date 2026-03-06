@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """Test the dialogues.py module of the OlasWeek."""
+
 from enum import Enum
 from typing import Type, cast
 from unittest.mock import MagicMock

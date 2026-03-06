@@ -33,7 +33,6 @@ from rich.table import Table
 from web3 import Web3
 from web3.contract import Contract
 
-
 dotenv.load_dotenv(override=True)
 
 

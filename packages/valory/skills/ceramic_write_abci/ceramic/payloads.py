@@ -31,7 +31,6 @@ from authlib.jose import JsonWebSignature
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from multiformats import CID
 
-
 DAG_CBOR_CODEC_CODE = 113
 SHA2_256_CODE = 18
 

@@ -64,7 +64,6 @@ from packages.valory.skills.decision_making_abci.tasks.week_in_olas_preparations
     WeekInOlasCreatePreparation,
 )
 
-
 # Task FSM
 previous_event_to_task_preparation_cls = {
     None: {

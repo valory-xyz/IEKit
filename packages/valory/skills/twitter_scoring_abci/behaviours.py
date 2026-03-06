@@ -76,7 +76,6 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     TwitterSelectKeepersRound,
 )
 
-
 ONE_DAY = 86400.0
 ADDRESS_REGEX = r"0x[a-fA-F0-9]{40}"
 MENTION_OR_HASHTAG_REGEX = r"(?:#\w+|@\w+)"

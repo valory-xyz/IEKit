@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """This package contains the logic for task preparations."""
+
 import uuid
 
 from packages.valory.skills.contribute_db_abci.contribute_models import ServiceTweet

@@ -48,7 +48,6 @@ from packages.valory.skills.twitter_write_abci.handlers import (
     TwitterHandler as BaseTwitterHandler,
 )
 
-
 ABCIRoundHandler = BaseABCIRoundHandler
 HttpHandler = BaseHttpHandler
 SigningHandler = BaseSigningHandler

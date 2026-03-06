@@ -6,22 +6,22 @@ description: This skill publishes casts to farcaster.
 license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
-  __init__.py: bafybeiesk2lgewhrjm2oksend43a3bzne5dphfl2t56d5qzilbsforabn4
+  __init__.py: bafybeic3niafpvhv2fd6bjlarcm4azbsa7wrnkfraznnytxg2ykawuu3gq
   behaviours.py: bafybeiapl3m6e2fwopapxdpnsimhxnj2fwxzacyxxxiug3lq6wklysutza
-  dialogues.py: bafybeih7rpyqjoobhsbypmzs4ipqivh4wac3q64errtidjlxkoh4zphwei
+  dialogues.py: bafybeib2qpzzlvl4uxopjzv5d7djw5ujahq6vne27cqh53gkmfldwji7yu
   fsm_specification.yaml: bafybeig4djko27qmvglfmmf4mmvs26ttvbx2kavea6nprzmxlvwgtfgvme
-  handlers.py: bafybeidqnyie74bkgmo3lgyd4thoqy3ajr3lcxetr6mx4bsjfhwqjvgkj4
+  handlers.py: bafybeieowwrxysnwiltsh4r47t4ww7ph6dph7h77c6gud5vgfehz5hw4zm
   models.py: bafybeifxiefogl6p3zgrknjurp3r3aqkif6m2elojlz76v2ef4a5ukobky
   payloads.py: bafybeiazdhdcfixxjdnuo622tocwazwzxi7aubl5bl3jpu7pg257ogjyze
   rounds.py: bafybeicrwyo3usuxenslfc2hkqtrj36c3wgvx6etiwewiqcjjucvt26lbi
 fingerprint_ignore_patterns: []
 connections:
-- valory/farcaster:0.1.0:bafybeiatpa4tot5locswdiagsnd5ivnpyponggdejb2k3haa55gd4g7b4y
+- valory/farcaster:0.1.0:bafybeieufbeds2el7fiuk6zwjh7pekyowctp2h7w4poodtj5gcfedvg3jm
 contracts: []
 protocols:
 - valory/srr:0.1.0:bafybeiee2dgy6r2z5x6vu2ug5vcxvfgg4v3liq2x7v3hxchtp45mwnchg4
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeihhadgaitdltynzaq4w7jhgwbdnizsobbaa2riqtqwbml3li2tieq
+- valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
 behaviours:
   main:
     args: {}

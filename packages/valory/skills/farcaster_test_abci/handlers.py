@@ -44,7 +44,6 @@ from packages.valory.skills.farcaster_write_abci.handlers import (
     SrrHandler as BaseSrrHandler,
 )
 
-
 ABCIRoundHandler = BaseABCIRoundHandler
 HttpHandler = BaseHttpHandler
 SigningHandler = BaseSigningHandler

@@ -21,5 +21,4 @@
 
 from aea.configurations.base import PublicId
 
-
 PUBLIC_ID = PublicId.from_str("valory/ceramic_write_abci:0.1.0")

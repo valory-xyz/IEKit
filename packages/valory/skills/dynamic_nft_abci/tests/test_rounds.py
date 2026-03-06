@@ -38,7 +38,6 @@ from packages.valory.skills.dynamic_nft_abci.rounds import (
     TokenTrackRound,
 )
 
-
 DUMMY_CERAMIC_DB = {
     "users": {
         "0": {

@@ -8,7 +8,7 @@ aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeibtn3d7h6xkaudftjmqi47rg6c45nvbjbu77rcnhalj7xxujzgbru
   build/wveolas.json: bafybeid4ypbtauutpx4hktinxecxecp2moxzny5cyky3anp6peu33slax4
-  contract.py: bafybeib52j57zi2tsm7g4bnv75nxdbmbmsxmf7coxw3cyzgrdxzctlzgmy
+  contract.py: bafybeifjk5qkbyjsl7kprqef27o7r5olpbohcfjndi5aej7q7f6grf4xse
 fingerprint_ignore_patterns: []
 contracts: []
 class_name: WveOLASContract

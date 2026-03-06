@@ -29,7 +29,6 @@ from typing import Optional
 import jsonschema
 from ceramic.ceramic import Ceramic
 
-
 # Do not use the following keys for production
 # Create your own DID using tools from Ceramic, like the glaze suite:
 # glaze did:create  ->  Created DID did:key:<key> with seed <seed>

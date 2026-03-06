@@ -29,7 +29,6 @@ from ceramic.payloads import (
     build_genesis_payload,
 )
 
-
 # Glaze quick start
 # https://developers.ceramic.network/build/cli/quick-start/#__tabbed_1_1
 

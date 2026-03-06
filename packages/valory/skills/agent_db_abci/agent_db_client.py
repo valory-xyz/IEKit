@@ -36,7 +36,6 @@ from packages.valory.skills.agent_db_abci.agent_db_models import (
     AttributeInstance,
 )
 
-
 # Docs at:
 # https://axatbhardwaj.notion.site/MirrorDB-Agent-and-Attribute-Data-Flow-1eac8d38bc0b80edae04ff1017d80f58
 # https://afmdb.autonolas.tech/docs#/default/read_attribute_definitions_by_type_api_agent_types__type_id__attributes__get

@@ -19,6 +19,7 @@
 # ------------------------------------------------------------------------------
 
 """Test twitter preparation tasks."""
+
 from copy import copy, deepcopy
 
 import pytest
@@ -34,7 +35,6 @@ from packages.valory.skills.decision_making_abci.test_tools.tasks import (
     TaskTestCase,
 )
 from packages.valory.skills.decision_making_abci.tests import centaur_configs
-
 
 DUMMY_CENTAURS_DATA = [deepcopy(centaur_configs.ENABLED_CENTAUR)]
 

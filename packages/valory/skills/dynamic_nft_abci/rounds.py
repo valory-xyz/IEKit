@@ -36,7 +36,6 @@ from packages.valory.skills.abstract_round_abci.base import (
 )
 from packages.valory.skills.dynamic_nft_abci.payloads import TokenTrackPayload
 
-
 MAX_TOKEN_EVENT_RETRIES = 3
 
 

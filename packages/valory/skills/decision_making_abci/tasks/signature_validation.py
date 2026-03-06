@@ -32,7 +32,6 @@ from packages.valory.contracts.compatibility_fallback_handler.contract import (
 )
 from packages.valory.protocols.contract_api import ContractApiMessage
 
-
 HTTP_OK = 200
 
 

@@ -53,7 +53,6 @@ from packages.valory.skills.llm_abci.rounds import (
     SynchronizedData,
 )
 
-
 PACKAGE_DIR = Path(__file__).parent.parent
 
 

@@ -32,7 +32,6 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
 )
 from packages.valory.skills.staking_abci.behaviours import BASE_CHAIN_ID
 
-
 POINTS_PER_ACTIVITY_UPDATE = 200
 
 
@@ -359,7 +358,7 @@ class StakingActivityPreparation(StakingPreparation):
                 k: v.points for k, v in this_epoch_not_counted_tweets.items()
             }
 
-            (updates, selected_tweets) = group_tweets(
+            updates, selected_tweets = group_tweets(
                 not_counted_tweet_id_to_points, points_pending_from_previous_run
             )
 

@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """This module contains the class to connect to the wveolas contract."""
+
 import logging
 from typing import Optional
 
@@ -25,7 +26,6 @@ from aea.common import JSONLike
 from aea.configurations.base import PublicId
 from aea.contracts.base import Contract
 from aea_ledger_ethereum import EthereumApi
-
 
 PUBLIC_ID = PublicId.from_str("valory/wveolas:0.1.0")
 

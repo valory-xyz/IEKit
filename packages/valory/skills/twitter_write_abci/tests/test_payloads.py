@@ -19,7 +19,6 @@
 
 """This package contains payload tests for the CeramicReadAbciApp."""
 
-
 from packages.valory.skills.twitter_write_abci.payloads import (
     RandomnessPayload,
     SelectKeeperPayload,

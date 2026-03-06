@@ -20,5 +20,4 @@
 """Package for valory/impact_evaluator agent."""
 from pathlib import Path
 
-
 PACKAGE_DIR = Path(__file__).parent

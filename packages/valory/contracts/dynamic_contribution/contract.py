@@ -31,7 +31,6 @@ from hexbytes import HexBytes
 from web3._utils.events import get_event_data
 from web3.types import BlockIdentifier, FilterParams
 
-
 # Avoid parsing too many blocks at a time. This might take too long and the connection could time out.
 # The value covers the free QN version: https://www.quicknode.com/docs/ethereum/eth_getLogs
 MAX_BLOCKS = 5

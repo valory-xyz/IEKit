@@ -76,7 +76,6 @@ from packages.valory.skills.twitter_write_abci.dialogues import (
     TwitterDialogues as BaseTwitterDialogues,
 )
 
-
 AbciDialogue = BaseAbciDialogue
 AbciDialogues = BaseAbciDialogues
 

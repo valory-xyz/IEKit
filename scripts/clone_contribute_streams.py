@@ -33,7 +33,6 @@ from ceramic.streams import (
     CONTRIBUTE_PROD_DB_STREAM_ID,
 )
 
-
 MAX_USERS_PER_COMMIT = 80
 MAX_TWEETS_PER_COMMIT = 100
 

@@ -43,7 +43,6 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
     TaskPreparation,
 )
 
-
 NOW_UTC = datetime.now(tz=timezone.utc)
 
 
@@ -196,11 +195,12 @@ class BaseTaskTest(FSMBehaviourBaseCase):
             "centaur_id_to_secrets"
         ]
 
-    def teardown(self):
+    def teardown_method(self):
         """Tear down the class."""
         self.skill.skill_context.params.__dict__.update({"_frozen": False})
         self.skill.skill_context.params.centaur_id_to_secrets = {}
-        self.mock_task_preparation_object.synchronized_data.update(**{})
+        if hasattr(self, "mock_task_preparation_object"):
+            self.mock_task_preparation_object.synchronized_data.update(**{})
 
     def check_extra_conditions_test(self, test_case: TaskTestCase):
         """Test the check_extra_conditions method."""
@@ -216,7 +216,7 @@ class BaseTaskTest(FSMBehaviourBaseCase):
 
         exception_message = test_case.exception_message
         assert str(exception_message) == str(excinfo.value)
-        self.teardown()
+        self.teardown_method()
 
     def _post_task_base_test(self, test_case: TaskTestCase):
         """Test the _post_task method."""

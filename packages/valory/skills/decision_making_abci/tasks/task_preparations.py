@@ -21,7 +21,6 @@
 
 from packages.valory.skills.contribute_db_abci.contribute_models import ModuleConfig
 
-
 SECONDS_IN_DAY = 24 * 3600
 
 DEFAULT_CONFIG = ModuleConfig(

@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """Test the models.py module of the ScoreRead."""
+
 from datetime import datetime
 
 import pytest
@@ -47,7 +48,7 @@ class TestOpenAICalls:
     start_time = datetime.now().timestamp()
     dummy_current_time = start_time + 2.0
 
-    def setup(self) -> None:
+    def setup_method(self) -> None:
         """Set Up test."""
 
         self.open_ai_calls = OpenAICalls(
@@ -57,7 +58,7 @@ class TestOpenAICalls:
 
     def test_initialization(self) -> None:
         """Test initialization."""
-        self.setup()
+        self.setup_method()
         assert self.open_ai_calls._calls_made_in_window == 0
         assert self.open_ai_calls._calls_allowed_in_window == 10
         assert self.open_ai_calls._call_window_size == 1.0

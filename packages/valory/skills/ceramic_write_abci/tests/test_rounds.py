@@ -51,7 +51,6 @@ from packages.valory.skills.ceramic_write_abci.rounds import (
     VerificationRound,
 )
 
-
 MAX_PARTICIPANTS: int = 4
 
 

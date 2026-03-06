@@ -47,7 +47,6 @@ from packages.valory.skills.llm_abci.rounds import (
     SynchronizedData,
 )
 
-
 MAX_PARTICIPANTS: int = 4
 
 

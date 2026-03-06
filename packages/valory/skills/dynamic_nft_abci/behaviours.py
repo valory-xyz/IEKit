@@ -42,7 +42,6 @@ from packages.valory.skills.dynamic_nft_abci.rounds import (
     TokenTrackRound,
 )
 
-
 NULL_ADDRESS = "0x0000000000000000000000000000000000000000"
 DEFAULT_POINTS = 0
 

@@ -66,7 +66,6 @@ from packages.valory.skills.twitter_scoring_abci.rounds import (
     TwitterScoringAbciApp,
 )
 
-
 PACKAGE_DIR = Path(__file__).parent.parent
 ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 

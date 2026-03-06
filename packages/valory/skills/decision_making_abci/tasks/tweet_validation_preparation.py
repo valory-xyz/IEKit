@@ -27,7 +27,6 @@ from packages.valory.skills.decision_making_abci.tasks.task_preparations import 
     TaskPreparation,
 )
 
-
 CENTAUR_ID = "2"
 
 

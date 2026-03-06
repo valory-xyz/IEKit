@@ -51,7 +51,6 @@ from packages.valory.skills.ceramic_write_abci.rounds import (
     VerificationRound,
 )
 
-
 HTTP_OK = 200
 MAX_RETRIES = 3
 

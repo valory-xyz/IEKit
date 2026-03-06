@@ -433,7 +433,7 @@ class BaseRoundTestClass:
     participants: List[str]
 
     @classmethod
-    def setup(
+    def setup_class(
         cls,
     ) -> None:
         """Setup the test class."""

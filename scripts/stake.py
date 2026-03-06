@@ -27,7 +27,6 @@ from pathlib import Path
 import dotenv
 from web3 import Web3
 
-
 # Get the fork
 dotenv.load_dotenv(override=True)
 RPC = os.getenv("BASE_LEDGER_RPC")

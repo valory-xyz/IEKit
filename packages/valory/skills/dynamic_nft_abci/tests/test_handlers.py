@@ -44,7 +44,6 @@ from packages.valory.skills.dynamic_nft_abci.handlers import (
     OK_CODE,
 )
 
-
 PACKAGE_DIR = Path(__file__).parent.parent
 
 HTTP_SERVER_SENDER = str(HTTP_SERVER_PUBLIC_ID.without_hash())
@@ -138,8 +137,9 @@ class TestHttpHandler(BaseSkillTestCase):
             ),
         )
 
-    def setup(self) -> None:
+    def setup_method(self) -> None:
         """Setup"""
+        super().setup_method()
         self.http_handler.setup()
 
     def test_setup(self):

@@ -18,6 +18,7 @@
 # ------------------------------------------------------------------------------
 
 """Test the models.py module of the OlasWeek."""
+
 from datetime import datetime
 
 import pytest
