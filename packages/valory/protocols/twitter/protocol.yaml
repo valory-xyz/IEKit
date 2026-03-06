@@ -8,9 +8,9 @@ license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   README.md: bafybeiecqal4dvv6lqfgweb2woj7xm7zinl762uumvd3jbz7asn4tbpkyi
-  __init__.py: bafybeieemyrkfqny7p2lz62ohk7zjpv35xgos6io6r2uxkc5wzuvsx3i64
+  __init__.py: bafybeiczorbibku5apxh2gv6iss7zj2ed7e2jd4oosej2yjr6a5pblgbli
   dialogues.py: bafybeibxkkxvdzxgw5otuu4seej6rptybs7dzc3zbdmlalx6frxw5lsp2u
-  message.py: bafybeigowtd2tsl4fh6pizesn5wyxgij3ivi2l3mg23a7xnd4fjnycjbfy
+  message.py: bafybeic5rztm3f2i4trd44mfgu4izncodtrrjcpib4bhqh7hexlnm4fnny
   serialization.py: bafybeiahmlp56h6dmkvb7qtmt3f2sofpvnctdp3e6i4zjbitqrwe24dqwi
   tests/test_twitter_dialogues.py: bafybeibu4cmtkmf5iaf54axcny2yaan2dt56dorv5664tg37fnxhsjgpya
   tests/test_twitter_messages.py: bafybeie5eyw2t5n6ck3iu3l6yv543kmk4tpqwb4curjyzyzqdwubghonza

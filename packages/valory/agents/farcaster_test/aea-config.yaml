@@ -5,7 +5,7 @@ license: Apache-2.0
 description: The impact evaluator agent.
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
-  __init__.py: bafybeihp3562g6hyzzgjqzvci4vfx2q7575ivd534simjofodqd63q72mu
+  __init__.py: bafybeian55oxbrkwd66k2wiouzdcadyutk2gy5yrap5o4yhirgnoxcqrsq
 fingerprint_ignore_patterns: []
 connections:
 - valory/ipfs:0.1.0:bafybeihpmn5ur4m6sxbgh4whcp33earzbcn2yd4q4eo6cwdkfkznvdpcqe
@@ -13,7 +13,7 @@ connections:
 - valory/http_client:0.23.0:bafybeihel6sg2yayxu7lqygaswdgciaxpqrgsbl5rwx74c6znu5qz2edd4
 - valory/ledger:0.19.0:bafybeidxzeygks5zcky4u2ztcdufzptssgf6uqytxofnn6yta7qq6jsim4
 - valory/p2p_libp2p_client:0.1.0:bafybeielj3jso3wvrarp5n5rq7llpw4vgxybqiyensgjalb5ubfiawwhhu
-- valory/farcaster:0.1.0:bafybeieufbeds2el7fiuk6zwjh7pekyowctp2h7w4poodtj5gcfedvg3jm
+- valory/farcaster:0.1.0:bafybeiedd5w2duwvilrpyxuqzfcni5ywyjvpjnnttkgskdgxynsgilanbq
 contracts:
 - valory/gnosis_safe:0.1.0:bafybeiamcgebbdbm3kzcvpeio4pjobzduz2cdlxrs7ufe4ere2zuompgwe
 - valory/gnosis_safe_proxy_factory:0.1.0:bafybeiha6fjcg4oyn557yrr5pv3e2rntdbt4rglkmjsjqdtzrqusl2cu4q
@@ -28,14 +28,14 @@ protocols:
 - valory/ipfs:0.1.0:bafybeibz5xqhxdbuvba7nuw2w6ardjermtcoqercopnypdplnaekf3joam
 - valory/ledger_api:1.0.0:bafybeiecq56phjfws36rgrefw6niyo4ezesloodsfis647mpm5ygqo4ysi
 - valory/tendermint:0.1.0:bafybeihzb7e32f7jcrzvubilqaxzmyk7ea6ss3pg3tliatdlrr76qeknyq
-- valory/srr:0.1.0:bafybeiee2dgy6r2z5x6vu2ug5vcxvfgg4v3liq2x7v3hxchtp45mwnchg4
+- valory/srr:0.1.0:bafybeibfs6osw7guctdpollf4iwt4vhd6yk7ai34tqk5djuxtgowjwdjb4
 skills:
 - valory/abstract_abci:0.1.0:bafybeie7omzycvazfg6edexn2k3fteuey3alopfmlwye6e44exfcxv5apa
 - valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
-- valory/farcaster_test_abci:0.1.0:bafybeicyztsog6pzitnvkfsz3x6r7bnvoge42eu35z725bf6p3yzfg5dre
+- valory/farcaster_test_abci:0.1.0:bafybeidghljic67fivr2xpn7b5xbpz7e3h4h247l4fyoxjlyxipw4ngxly
 - valory/registration_abci:0.1.0:bafybeihjgfzqvuymqgku6mwqih7hlvqwr2tmdjrip3m6unt5l4e55bshkm
 - valory/reset_pause_abci:0.1.0:bafybeih6bjalcohxytg6hj3doy5dhkxonrxpqgcnclyf6tnmuyfbom2usy
-- valory/farcaster_write_abci:0.1.0:bafybeie6ww76hgv3ny3pwnd3btl4jsb4obtvj6altdlg4espientfoxszu
+- valory/farcaster_write_abci:0.1.0:bafybeihfdtg6whdnqexvedj2zcdkqoutaekipcg3rjffhopq3dinuvvgmq
 default_ledger: ethereum
 required_ledgers:
 - ethereum

@@ -6,33 +6,33 @@ description: A skill that dynamically updates NFT images according to user score
 license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
-  __init__.py: bafybeiffs7nksonkwpoqteqhattom5gm6mheiutadnhkfvhpm234dgd75y
-  behaviours.py: bafybeiahviwqzxciela7ypw3ijysqrif5stjfijc7aey5j5bp7d5wp7cby
-  dialogues.py: bafybeid6b2kx26p4t6wpgklkwpot2ipwo5n4vd3mhxb6rrb7uiewemz6zy
+  __init__.py: bafybeihdd6imx4ijk6f6sgq35pqhopqndjw6csnybnyolly6t64jnwub4i
+  behaviours.py: bafybeifkeiq2sfb6mezam7gpqwth3of4yqfaku4mlbgzbsjlnqa3n4gasm
+  dialogues.py: bafybeigfbucdg6wydoo7erkolovr27zogdjuxwyfux3tfqa255pcbsjy5e
   fsm_specification.yaml: bafybeibkm4iniyjt7ofqredclpvvudtfjbmuatccnblygvqnfucsuymbxy
   handlers.py: bafybeia2r545ngaftk4vvqyvo7mffrp6rmkecen5upebnmfekcctlhji5u
   models.py: bafybeifk7sk75xlnhgtiputwtynajklizpcz67bvzemwvhodv55qwippeu
   payloads.py: bafybeiggpj2qmh73nlr2rscisscxovf7bfrczlut7k33jujvutzgszjcwi
-  rounds.py: bafybeidlumutol6akobdgmovqs44iwhjyn6cbhtd244dasi6zp2kgttxsa
+  rounds.py: bafybeieczm2wl6fsjlns5x7o5z3xcttyixqd2poh5nv7lvgbuj5nuvg2re
   tests/__init__.py: bafybeidxte5jeugotf25yogfbsoivyokeqffrvzo7lqgspm4kzrgbhvc3u
-  tests/test_behaviours.py: bafybeigpfz6wsvqjfuq74tbzmc2nciucwq25scsyhk72pdjg5mu2ok67li
-  tests/test_dialogues.py: bafybeiawtrvdejq5g4udg7iyak27cw3ftokagr4hdtf26ug43bllnl4c6e
+  tests/test_behaviours.py: bafybeidp72jlnpie7p7spwbrmq2ml43aftlnf7ixbgjy4vrftt7rw7fhle
+  tests/test_dialogues.py: bafybeiburj7galadc5jiyt4prqzwz5bmn4kcsmohc2cm5lrbtckww72jry
   tests/test_handlers.py: bafybeidcnsn5c4akxw4en6yf4hjjmz54ysc6qofx26f2rsr35bz54h3hca
   tests/test_models.py: bafybeietgyqb5rsbnzqgzcsgm2pu2qcadu7rr7akxscfmegtghc5aguz44
   tests/test_payloads.py: bafybeifpwaozt6s56uctvfmkdmcuxqawmvhu5skgyfu3ekegqd3iz7v2nm
-  tests/test_rounds.py: bafybeiaf5im3cgavjwfsnr6didgsq5ts2qmxzypesrw5adqhmavxr5i2py
+  tests/test_rounds.py: bafybeigfxkwoaffzd2otnv6ec4op34tljm3mqekdd4u3j65qtib3mcypfi
 fingerprint_ignore_patterns: []
 connections:
 - valory/http_server:0.22.0:bafybeid4oqsfkqo36lryoecymjnq4whme3tgupqfq6m4l7lbr5r4yxtswu
 contracts:
-- valory/dynamic_contribution:0.1.0:bafybeifkx5a3urevjyrpbsjira2kygjs4ampgcrkfe5m7wxqml5zh6vfda
+- valory/dynamic_contribution:0.1.0:bafybeigivx6dujs2f6el5buur56dslt5x55wgec4nqo4fk7y7f33vobhsy
 protocols:
 - valory/contract_api:1.0.0:bafybeibld2xb5m7kyluiptkamp4nrt6oeomkohz7a3yppbv2oo7qw2e4la
 - valory/http:1.0.0:bafybeidxkp3vga7t6x2pbt2tpkgyaxa5bgpdgryao54py7w3yxyzr7neoy
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
-- valory/decision_making_abci:0.1.0:bafybeicipajrrfmrodfnp6wridexcwzcrvw56mxzkdfjidardu5djm7snu
-- valory/contribute_db_abci:0.1.0:bafybeiat2a5bh7nrzkpcakgtnvdd2nztvytfzhc4ikepf66lwitv4min2a
+- valory/decision_making_abci:0.1.0:bafybeignu7w2ixh6hjq7rd56pw7i5o7sqsg5df7br3izgjaszr6fm457vy
+- valory/contribute_db_abci:0.1.0:bafybeicltoo4cet2uhcqlfj2fw2m3v2otfcn5wgsyt5utgj6thjapra4dy
 behaviours:
   main:
     args: {}

@@ -6,23 +6,23 @@ description: A skill that reads data from a Ceramic stream.
 license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
-  __init__.py: bafybeieejzlo3xnlt7xfnejirzqto32s3bs2c3jc473doxiwtawz55jdx4
-  behaviours.py: bafybeibn6kcoya7zgmx5kugzbrmdiuex3ynaepuoa2tesrrokxxokki5ee
+  __init__.py: bafybeicizzwoy57gaexu2zd2xkdndmfxbd24jmol6ia3bcqrdxal3l35se
+  behaviours.py: bafybeidi2lh5yhx4yrtlnmerfrbnvkflknurxz662cbpujyrpicyh6kw6y
   ceramic/__init__.py: bafybeias4e3s6p5qtx6mmmcwkcd6kvbdnudy7sxai7d2suk75aazzdzdie
-  ceramic/payloads.py: bafybeibgs2vctiurvfjaorvrfu3a3z44uei3pq3zqhnkdny7diiqyrzw3i
-  dialogues.py: bafybeigz2axxyno33tysxt5qivo3b5zqrmho6jaf5ebyb2xa7tbt6gvesy
+  ceramic/payloads.py: bafybeig5xga2u4rjp5xzp47w27n652lcpecgstglbxuyvo4dpocoq76gma
+  dialogues.py: bafybeicbes4qmljkldvd6sufi4ob66hzf6sz72n46ndwnoxfqeajzqoe3i
   fsm_specification.yaml: bafybeih2iro3znsgjtilgvhjru54pmhf5itp6yzgxgvpvp7sewlbo2zgwi
-  handlers.py: bafybeienc6ho3ubp67ucoipwqgxdh4ylwvdv225kejhh6est3ynio7rw3a
+  handlers.py: bafybeihaietsnrlseyr44gbcspok5xiadj6a72j7kfxns3wxbd377st2py
   models.py: bafybeiazxtnowifkgcp5jnsucqbeby5vnwplqkd5fxcp3j6vhf2kij62ce
   payloads.py: bafybeigxhmr2m7ej7caedeqbheabq2tmnhxosyfvgpjfofgke4zkiyj3tm
   rounds.py: bafybeicddraa2qxqvxoiohcquberk3igauhbsaikzwvcmtmpc2xgg5lvpe
   tests/__init__.py: bafybeibkxeuyukyuzek3lk5bqmo7jhl354fyznmqxv3dh4lsnly56xjkzu
-  tests/test_behaviours.py: bafybeibjlzssd563dvp3mh2k4gprpe36g3onv6fwu7oce2vtwwp4zbtqzu
+  tests/test_behaviours.py: bafybeid7jy5lnhx3bqifxjqp6dkq3myem3zzxmeqvga6ztbuftusfkaxcq
   tests/test_dialogues.py: bafybeias37opzowuenzii2dzwgwyaz57t3o4ocec67a274ghokptkdqaq4
   tests/test_handlers.py: bafybeid26pxtjf33fkpmzpgfdg3fqyp6uttrscacwb7odprvjvysjmu36q
   tests/test_models.py: bafybeicuelcbuv2n2n5k3bdm3ek4gorpife5sg3whytnrpvfovyrz4mu7i
   tests/test_payloads.py: bafybeihfgzwmku4mt2wauhq6elvllx3xft3mwrpldlpxvlwlmytndmket4
-  tests/test_rounds.py: bafybeigxnmydgpwydpth4zv3xz3mc7axftlduhdf4zg5slmf5ceqq5fvhq
+  tests/test_rounds.py: bafybeibcx66pcl7oqrzs37ldx2bhihyjfqgxxyf5kdrlwfdp7l6fijesem
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []

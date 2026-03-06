@@ -6,13 +6,13 @@ description: The chained abci for the farcaster_test skill.
 license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
-  __init__.py: bafybeiegwyx37zxnwsnk4duz6dtsuf3c6op7syyfqn7ugwc7g6haxxiiga
+  __init__.py: bafybeidmjwc46xj5ryp7tlceu2z63qaui2tmffvuay22ypfgrukvvxghu4
   behaviours.py: bafybeiencqonbknwiptgpw6ab7hj4ba5if5ztolghcsqkymf3hmubjozxe
-  composition.py: bafybeicux4xesfnhpx4tgg7537yiklemlrl3lbvv4vszg2epc5le7jn4xe
-  dialogues.py: bafybeiewierhigyid43lihhagd26mmgwxxdw3fdjajbd6dwmo5o7djngny
+  composition.py: bafybeihyvxe3wlemxrnjcsa5qsck6pxu7mgj4c7e32azous5qmhdid5ac4
+  dialogues.py: bafybeigciy6rl44chbsxhjm2vilzohfwqlyknsqdvmbxrwwfbdszksxgga
   fsm_specification.yaml: bafybeicj4ajbfschtxknkh6nbg4rjpejqykpo5twbyfd2iidmop5bvmad4
-  handlers.py: bafybeieeaij27a36byslj6bpt7qb7jgpzckfiajuviiy3pebfo5jvteonu
-  models.py: bafybeidjdi542zcewklizl66fgi6q3zs56b3z3jzviufjs3vkmubgjhjrq
+  handlers.py: bafybeighiydqtiwvviiwpu7s4iudv75xbjsds3uxums5umr4qpru2bymz4
+  models.py: bafybeicndrifvlynxbohd64yw2cb5kd6nfpynncpejkv77dwmpenwxwvqe
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
@@ -21,7 +21,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
 - valory/registration_abci:0.1.0:bafybeihjgfzqvuymqgku6mwqih7hlvqwr2tmdjrip3m6unt5l4e55bshkm
 - valory/reset_pause_abci:0.1.0:bafybeih6bjalcohxytg6hj3doy5dhkxonrxpqgcnclyf6tnmuyfbom2usy
-- valory/farcaster_write_abci:0.1.0:bafybeie6ww76hgv3ny3pwnd3btl4jsb4obtvj6altdlg4espientfoxszu
+- valory/farcaster_write_abci:0.1.0:bafybeihfdtg6whdnqexvedj2zcdkqoutaekipcg3rjffhopq3dinuvvgmq
 behaviours:
   main:
     args: {}

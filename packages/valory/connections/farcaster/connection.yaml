@@ -7,12 +7,12 @@ license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeigwa4fd4m4rlk2ulhwbiul4rcrr4p6t4cais6to4ge2qz4ng3yo4i
-  connection.py: bafybeiarkszqfw7e634t3qzjczgvmenmbevxat3ep7tozdwibp7p5zj43u
+  connection.py: bafybeieevcrsufpkebq7opnihrywag6hybt2eyh62vr222tqqk5g7kqfom
   readme.md: bafybeicyxpek46od5mxdshhdrq7leoqp7mucaftanthcnmrtrplwcmtqda
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
-- valory/srr:0.1.0:bafybeiee2dgy6r2z5x6vu2ug5vcxvfgg4v3liq2x7v3hxchtp45mwnchg4
+- valory/srr:0.1.0:bafybeibfs6osw7guctdpollf4iwt4vhd6yk7ai34tqk5djuxtgowjwdjb4
 class_name: FarcasterConnection
 config:
   farcaster_mnemonic: null

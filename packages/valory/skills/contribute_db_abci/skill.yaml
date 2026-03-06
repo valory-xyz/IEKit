@@ -6,13 +6,13 @@ description: A skill that interacts with AgentDB to store Contribute data.
 license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
-  __init__.py: bafybeibs2pgcaokx2nukjzt2ftd3ci4m6jkoertn5377xunhssy6cu7pwe
+  __init__.py: bafybeie5haz5vpqtqianz4glns7zj2czq6fjf7nlqskupzi6pq5szpg7yu
   behaviours.py: bafybeibmftog3pao52zo3xx2574k4amscogrtoyviy4m6tyj65v3m4co4q
-  contribute_db.py: bafybeigk5eze2s6ryf4iiubsza3phukknssryrolzzykivv37rqv5pbxte
+  contribute_db.py: bafybeidemn6qnptjz47sie6rmlppixf64itvgsschxvdv6ulaosw2l6ysa
   contribute_models.py: bafybeihhbwfx2pissirs5jidm2ncnlbw4n4wuoixej4g22dvqy3npyze3m
-  dialogues.py: bafybeiceq3obcxy5d6xdcqbehehl6ts3epeknmrzk7r3lekpez5yikxwo4
+  dialogues.py: bafybeiabky7syn3sxurv3pnv7qhoxpxa7ej6svvrmunipkdmjkpdgftvnm
   fsm_specification.yaml: bafybeiaid6gq4uoqsbsui2s3uza37art6qs5qq4rzj5vercjdptuzpa67a
-  handlers.py: bafybeiboej22dhl3bdawhsyfc4mteu65pxg4yrq52ls3b5fyn5ccop3kiq
+  handlers.py: bafybeigpfn7tczzxajzqbrdl5yh46e43plc7n2ifsqklwbw7vs2hz7jmj4
   models.py: bafybeidhuzii7yi2f5bu3r254y5e6emmwgqiqfhrpdvsiu2kiux5pkcriu
   payloads.py: bafybeifbec4kwez563xce4jtqxrpfemz3sdh42y3liqaevtejtlb57rwwq
   rounds.py: bafybeif3x2wkf2zp4blxwmu7fbz5nlxypcz37hrl76bkavdn4ubybgfbey
@@ -22,7 +22,7 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
-- valory/agent_db_abci:0.1.0:bafybeifucsqycpw4zvpekw3wywfjt3v7mm7i2na5du7oamhyce7pbvnvpi
+- valory/agent_db_abci:0.1.0:bafybeicnho7ua2wxvhzzrcbb46cewgi73iv5y6yxtrdmj5bxgmks4zrg5a
 behaviours:
   main:
     args: {}

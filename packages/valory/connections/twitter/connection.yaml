@@ -7,12 +7,12 @@ license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
   __init__.py: bafybeibxwzkyh7odchnlkeczpguencdjiizm4nezfmi4drybn2zd25xdkq
-  connection.py: bafybeidqew75dmpzly6er7wc22b3kivugsi4mrj6yhix2yo2ls6buqwmiu
+  connection.py: bafybeiexxvcuvpdz42gnvwed3qtuyng6xlhtp4z2igcasv2bkxzxmeajuy
   readme.md: bafybeihg5yfzgqvg5ngy7r2o5tfeqnelx2ffxw4po5hmheqjfhumpmxpoq
 fingerprint_ignore_patterns: []
 connections: []
 protocols:
-- valory/twitter:0.1.0:bafybeid5cxp6ggzk7ma56poyifkn4qzukowkosrifzmuhyg46nrgyskquq
+- valory/twitter:0.1.0:bafybeifmbmfgrooontyletvwlpugx2ewl3nro3pry6a2ix3jxmpy64pvze
 class_name: TwitterConnection
 config:
   access_secret: <access_secret>

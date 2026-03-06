@@ -7,32 +7,32 @@ description: A skill that weekly tweets from a Twitter account and creates a sum
 license: Apache-2.0
 aea_version: '>=2.0.0, <3.0.0'
 fingerprint:
-  __init__.py: bafybeigc6e2wamzrdgz64ipz6dmrf5rd6kiqg2rw6gb3cxzjgedsm6o6eu
+  __init__.py: bafybeig4n376iyf5pm73ojn57pti6kjxzn3jsud5cgt7spsifpv4byo2ki
   behaviours.py: bafybeiagebbhez5rriz6sfamregrvsmq6ywvipstwyqddrzzaexp7hnn6y
-  dialogues.py: bafybeidaazfnpa5vhtnuwrhdmfa7tl7hxwji5sfngcvyjpb367qcp6hayu
+  dialogues.py: bafybeih7x64gfvr4q5s6pofmgrlxm6qxqx7fkpkfymwnh3p2y4qhm4xlvy
   fsm_specification.yaml: bafybeienycmc4m3wurhlsuj7hfumrsx5id3qfdn6eisoze4gdzeeojlrbu
-  handlers.py: bafybeibgro6b4jl3rltnsy4fykvb6f3kyxjbkzmudwvbibrzx3wkiswpk4
+  handlers.py: bafybeiarjb4czs7rdgjumzgbuk4bihs3ydybnfafrne5lth4oijzfn4knu
   models.py: bafybeiepwuppied2gre6k4aiuscsigpl47pnqotl5syzehcbdnjauanacy
   payloads.py: bafybeietg3ceghstjx5bytqv2t377k5pyww3cdq7zg7d7lxhscwmfelai4
   prompts.py: bafybeiaod4e6knvmjl6jjqnlpcushy6iab4sfax2tevskxuirfu36afeta
   rounds.py: bafybeih66k3f232hv5h5ljw7cnj7nggqxvggckyfvupulzuy32znmqik3q
   tests/__init__.py: bafybeidq5udnnehzozdjfpk3kdckymq4jvuwmvsjkhpr3ngggc3dhv4uza
-  tests/test_behaviours.py: bafybeiaxrjdydkinml2zbad4mz6tsfprgnub7m5pfoa73ngr67nu7ewliu
-  tests/test_dialogues.py: bafybeic6li4bslqrabumbwemdqm6jamkkl7rqk6xkzpegutl7rdklgflsm
+  tests/test_behaviours.py: bafybeiedgw25dswfigeo6r2imitr7prpegbsaqhert46wyut25y6kmszwu
+  tests/test_dialogues.py: bafybeigb3gcfzm7pl3hlfymptf3pkxelvt2zzwfkgb7zkuehq4caun4w24
   tests/test_handlers.py: bafybeiggkevxvq52fotuwg265xrqfqmfoe3jjamvxdldxlnonu77ctioua
-  tests/test_models.py: bafybeibht6ivxv2pkcauecwuzo6pc5c665ilxc5ed7ti2aydm3hmkzu34i
+  tests/test_models.py: bafybeigv5ax4y6oqifmu5btyxmp32bagfi5b3p75hl4j644o32ijwad3ou
   tests/test_payloads.py: bafybeif6aj5cjp7uhcvuxa4s2zuqk6s53oxsbx5uxlpudgu7aqhqn7djvy
   tests/test_rounds.py: bafybeiei2srj4ggs3pln7vxxt4walhrtsegveimxdcbckyng2i6wv53vy4
 fingerprint_ignore_patterns: []
 connections:
-- valory/openai:0.1.0:bafybeih7ysimgh4jwcp4bnhvauh2g65cvs3srndwulnuhazdlp7zx6f3hu
+- valory/openai:0.1.0:bafybeihuptdstz3ec3x3e4scu2cx7ppraexyab7a37jiim633wioaniq4e
 contracts: []
 protocols:
-- valory/llm:1.0.0:bafybeiardrklsughnm6tdnc3seqderlnq5nj4xolgnk42crr3kxexjlrfe
+- valory/llm:1.0.0:bafybeia5vtojmw2mbc2uyukv3lciwm5gdyp4drrh4bkazqs3dlbk3u6hoa
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
-- valory/decision_making_abci:0.1.0:bafybeicipajrrfmrodfnp6wridexcwzcrvw56mxzkdfjidardu5djm7snu
-- valory/contribute_db_abci:0.1.0:bafybeiat2a5bh7nrzkpcakgtnvdd2nztvytfzhc4ikepf66lwitv4min2a
+- valory/decision_making_abci:0.1.0:bafybeignu7w2ixh6hjq7rd56pw7i5o7sqsg5df7br3izgjaszr6fm457vy
+- valory/contribute_db_abci:0.1.0:bafybeicltoo4cet2uhcqlfj2fw2m3v2otfcn5wgsyt5utgj6thjapra4dy
 behaviours:
   main:
     args: {}
