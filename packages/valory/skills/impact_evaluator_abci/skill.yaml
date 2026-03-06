@@ -34,10 +34,10 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeigivknq755rbnelrdemaz3vm4x7jkofvaskm34uh36pbbg6uiquo4
 - valory/decision_making_abci:0.1.0:bafybeibnjen5wbddj5uiyukvcuvwu3xhcl3zxx6tbuvmo3prjwvli5v774
 - valory/twitter_write_abci:0.1.0:bafybeidkn56akhxqsxtdqlbqqllhjdmjofqwcqd62nm2htfnqwmefhgei4
-- valory/olas_week_abci:0.1.0:bafybeidbnp3uct5jghiwkgt3hh6otw5txxp77w6y5qrgzgm7bcmaww3vki
+- valory/olas_week_abci:0.1.0:bafybeicogeiwetgycekp6dxa6xumtogjajvhamn3izywq37fiki344xqiu
 - valory/mech_interact_abci:0.1.0:bafybeiae75nslw4o7fgqnctigpxftj2y477hxgnuq5amqadxylsjx5fyse
 - valory/staking_abci:0.1.0:bafybeiczigqxyur5jzoe3fgidopg2qjyksugzbqjfqy3mk4tw7xlehmkvi
-- valory/llm_abci:0.1.0:bafybeiaaackygszu5kohcssx5gfxannlrxuyjqw5ocbuzaxsl6lqjnjnha
+- valory/llm_abci:0.1.0:bafybeiaie5ecpamwu6dz5kse253nf6lk34lmcvscsxmocuyrh5am5l6xtm
 behaviours:
   main:
     args: {}
