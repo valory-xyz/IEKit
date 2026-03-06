@@ -50,8 +50,8 @@ protocols:
 - valory/contract_api:1.0.0:bafybeibld2xb5m7kyluiptkamp4nrt6oeomkohz7a3yppbv2oo7qw2e4la
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
-- valory/staking_abci:0.1.0:bafybeiepafrdywyanfdgadocwpps7vgwkbruu56wuecetramyrkvwbmbqu
-- valory/contribute_db_abci:0.1.0:bafybeicltoo4cet2uhcqlfj2fw2m3v2otfcn5wgsyt5utgj6thjapra4dy
+- valory/staking_abci:0.1.0:bafybeiczigqxyur5jzoe3fgidopg2qjyksugzbqjfqy3mk4tw7xlehmkvi
+- valory/contribute_db_abci:0.1.0:bafybeie4px35xxps7ugmobhclvoekvezxa57ysh42hxorf6pxvkxixb2va
 behaviours:
   main:
     args: {}

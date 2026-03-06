@@ -196,13 +196,12 @@ jobs:
         run: |
           pip install tomte[tox]==0.6.1
 
-          # brew install protobuf
-          # brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/72457f0166d5619a83f508f2345b22d0617b5021/Formula/protobuf.rb
-          wget https://github.com/protocolbuffers/protobuf/releases/download/v24.3/protoc-24.3-osx-x86_64.zip
-          unzip protoc-24.3-osx-x86_64.zip -d protoc
+          # install Protobuf compiler (ARM)
+          wget https://github.com/protocolbuffers/protobuf/releases/download/v24.3/protoc-24.3-osx-aarch_64.zip
+          unzip protoc-24.3-osx-aarch_64.zip -d protoc
 
-          # install protolint
-          curl -L -o protolint.tar.gz https://github.com/yoheimuta/protolint/releases/download/v0.50.2/protolint_0.50.2_darwin_amd64.tar.gz
+          # install protolint (ARM)
+          curl -L -o protolint.tar.gz https://github.com/yoheimuta/protolint/releases/download/v0.50.2/protolint_0.50.2_darwin_arm64.tar.gz
           tar -xzvf protolint.tar.gz
           sudo mv protolint /usr/local/bin/protolint
           sudo chmod +x /usr/local/bin/protolint
@@ -219,7 +218,7 @@ jobs:
       - if: matrix.os == 'macos-15'
         name: Skills unit tests macos-15
         run: |
-          tox -e py${{ matrix.python-version }}-darwin -- -m 'not e2e'
+          tox -e py${{ matrix.python-version }}-darwin -- -m 'not e2e' --no-cov
 
       - if: matrix.os == 'windows-2025'
         name: Install dependencies (windows-2025)
@@ -250,7 +249,7 @@ jobs:
       - if: matrix.os == 'windows-2025'
         name: Skills unit tests windows-2025
         run: |
-          tox -e py${{ matrix.python-version }}-win -- -m 'not e2e'
+          tox -e py${{ matrix.python-version }}-win -- -m 'not e2e' --no-cov
 
       - if: matrix.os == 'ubuntu-24.04'
         name: Upload coverage to Codecov

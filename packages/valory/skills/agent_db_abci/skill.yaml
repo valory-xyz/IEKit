@@ -148,9 +148,9 @@ models:
     class_name: AgentDBClient
 dependencies:
   pydantic:
-    version: ==2.9.2
+    version: ==2.12.5
   eth_account:
     version: ==0.8.0
   pydantic_core:
-    version: ==2.23.4
+    version: ==2.41.5
 is_abstract: true

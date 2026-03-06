@@ -22,7 +22,7 @@ contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeicehi2yqab3lldm7qzoqev3tmqrdk275sbtcabneyorhmzft76z7m
-- valory/agent_db_abci:0.1.0:bafybeicnho7ua2wxvhzzrcbb46cewgi73iv5y6yxtrdmj5bxgmks4zrg5a
+- valory/agent_db_abci:0.1.0:bafybeibx6wy23pxzdymzxm5imghml4qbkfwc5ojd6dbib35ala34plm4xe
 behaviours:
   main:
     args: {}
@@ -164,9 +164,9 @@ models:
     class_name: ContributeDatabase
 dependencies:
   pydantic:
-    version: ==2.9.2
+    version: ==2.12.5
   eth_account:
     version: ==0.8.0
   pydantic_core:
-    version: ==2.23.4
+    version: ==2.41.5
 is_abstract: true
