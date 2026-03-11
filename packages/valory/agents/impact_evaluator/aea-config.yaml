@@ -21,7 +21,7 @@ connections:
 - valory/ledger:0.19.0:bafybeid5uwx4uqxkiibw6kazr7my5mk5kcqg2dx2owtcf7kcpbs2jrns2e
 - valory/p2p_libp2p_client:0.1.0:bafybeielj3jso3wvrarp5n5rq7llpw4vgxybqiyensgjalb5ubfiawwhhu
 - valory/openai:0.1.0:bafybeidmicfjiauivpe6snvcfwjhdvcdsulwfagdbzzriixmffeifv4o4a
-- valory/twitter:0.1.0:bafybeibdgp7ts6smw2z4dnah37oucimkdmsustu7ptxdfxqn6whob63ehy
+- valory/twitter:0.1.0:bafybeibjnc3pbtqn7hyoniylzzbstblznc4nzf3acz35mtesdrkvz6zxmu
 contracts:
 - valory/dynamic_contribution:0.1.0:bafybeifiziimy2jpqxyx6yr4rxpr4aifvehtlu7bbddq7uzasyqndnvie4
 - valory/gnosis_safe:0.1.0:bafybeico3uzjdwumf2jg2e627ut4rwzwmedjavenw6e2hshi2m6yw642bq
@@ -56,7 +56,7 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeia36n7ci7b6pi2bpa4r4ty6dcb3r4vs46vjftolsdxfl4y5iieyyy
 - valory/abstract_round_abci:0.1.0:bafybeiaalla55aprhvoumv4u7qt4v6l53fjmgln6wgyjr5e5tw7u4kscja
-- valory/impact_evaluator_abci:0.1.0:bafybeifwfvbeugbbjzpm6yyihvajsdeajka5pbfk47dvpvn2c5gq6nbxoa
+- valory/impact_evaluator_abci:0.1.0:bafybeienuo7sp5l7zo73pd5v4ihqetleckgeqly2yzymcykz3wvkhhlaim
 - valory/twitter_scoring_abci:0.1.0:bafybeianhcp7x3iwvqf2pm2aglczqe3talxjdkcqwxkqe7wwl7emqettz4
 - valory/agent_db_abci:0.1.0:bafybeidkmlohollc2ty6zu27hhqxq3jzdf3n7qx3hpk5ddcftbxvkog4um
 - valory/contribute_db_abci:0.1.0:bafybeigoxvorgsc4a4focnkoccc2pcq66zpf6vdeqi7xiarhgieoklsqgu
@@ -65,7 +65,7 @@ skills:
 - valory/reset_pause_abci:0.1.0:bafybeibsdhil35py7zjhielonaycxo7gp34jfufe2ynprjv2etwxnzcxqy
 - valory/termination_abci:0.1.0:bafybeic3jppoya7jkmylbl5evcssl5qhppl6hadxebfxcxmi5o7qysce6a
 - valory/transaction_settlement_abci:0.1.0:bafybeigspkourznaiagdkedyxjbjl6svhuhdwbvejr3jv3e3dil2hslose
-- valory/twitter_write_abci:0.1.0:bafybeidcsc5t5wsuahckqbshpv7bzpxw5easvaklc5ziqbpymeujk3jzje
+- valory/twitter_write_abci:0.1.0:bafybeifmcb2v43huzwgxkfxz5tiztdnqiehrxf2x3ogees4uxtx3og6pue
 - valory/decision_making_abci:0.1.0:bafybeifxtagtzsp2ucmbnnjzbmadbg2bnhpdkcfoknuqwspjoi36mwe3di
 - valory/olas_week_abci:0.1.0:bafybeign5s724ft26sut5cxzb23zssl7eqh3jpm25meffby6cpjdo37oo4
 - valory/mech_interact_abci:0.1.0:bafybeiduf3h73xhv4q5vbdn6ek2tyal3haym5of4mq2ucm2zhqbclr35le
