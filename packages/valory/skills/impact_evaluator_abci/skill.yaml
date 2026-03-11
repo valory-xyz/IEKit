@@ -299,5 +299,5 @@ models:
     class_name: ContributeDatabase
 dependencies:
   open-aea-cli-ipfs:
-    version: ==2.1.0rc6
+    version: ==2.1.0
 is_abstract: false
