@@ -47,6 +47,6 @@ Prepare the environment to build your own IEKit-based AI agent.
 
 - Fill in the required env vars in `.sample_env`
 
-- Run a single agent instance AI agent:
+- Run a single agent instance:
 
-      bash run_service_single.sh
+      aea-helpers run-service --name valory/impact_evaluator_local --env-file .env

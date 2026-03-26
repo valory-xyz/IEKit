@@ -17,15 +17,15 @@ fingerprint:
 fingerprint_ignore_patterns: []
 connections: []
 contracts:
-- valory/gnosis_safe:0.1.0:bafybeico3uzjdwumf2jg2e627ut4rwzwmedjavenw6e2hshi2m6yw642bq
+- valory/gnosis_safe:0.1.0:bafybeih3uparznz427cy7djs5eo5lqaww3fcasbkrnckerkad6jslipgge
 - valory/staking:0.1.0:bafybeie722famhp3rtzfmxaypl4piki7f523ptg4sxe4a22qb233264iri
-- valory/multisend:0.1.0:bafybeiaf3hapi3prgpjeugwhq64k7lqelo6kibhol5rkajt7id3knomp5q
+- valory/multisend:0.1.0:bafybeihx7c3xj6c5v4tgvu3ipnj7seyc4dkmovoyzu4isgbwdrhj2oo6uq
 protocols:
 - valory/contract_api:1.0.0:bafybeibld2xb5m7kyluiptkamp4nrt6oeomkohz7a3yppbv2oo7qw2e4la
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiaalla55aprhvoumv4u7qt4v6l53fjmgln6wgyjr5e5tw7u4kscja
-- valory/transaction_settlement_abci:0.1.0:bafybeigspkourznaiagdkedyxjbjl6svhuhdwbvejr3jv3e3dil2hslose
-- valory/contribute_db_abci:0.1.0:bafybeigoxvorgsc4a4focnkoccc2pcq66zpf6vdeqi7xiarhgieoklsqgu
+- valory/abstract_round_abci:0.1.0:bafybeia4gzaxgykfkcerb3cublmei7bmozqn36tzfbnmzkrg2xdrrjfnfa
+- valory/transaction_settlement_abci:0.1.0:bafybeig5qnrsryhean563pxhrfkcfs6qssi5edzm656oieupvcci7ftbvy
+- valory/contribute_db_abci:0.1.0:bafybeiezkjwujnxzpo5etjx3tdwb5pafwhrcbpi4zryc7l7q7qs4bgd6xi
 behaviours:
   main:
     args: {}
