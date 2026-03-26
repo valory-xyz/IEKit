@@ -26,7 +26,7 @@ skills:
 - valory/abstract_round_abci:0.1.0:bafybeia4gzaxgykfkcerb3cublmei7bmozqn36tzfbnmzkrg2xdrrjfnfa
 - valory/agent_db_abci:0.1.0:bafybeib3vwkgsqtumdgvdpcs2x4yglsr5rgjiq2ylfp7ps3fujz4mcjstm
 - valory/contribute_db_abci:0.1.0:bafybeiezkjwujnxzpo5etjx3tdwb5pafwhrcbpi4zryc7l7q7qs4bgd6xi
-- valory/twitter_scoring_abci:0.1.0:bafybeienw2b64l5vnj3tieafm2lxsuom2g5jjd2ri4hggmglwy5obhzf3i
+- valory/twitter_scoring_abci:0.1.0:bafybeib7juioovxhja26xvbrl6r2u3jreku22gtggq5ozsv7x3rcc5keam
 - valory/dynamic_nft_abci:0.1.0:bafybeigee5chn4vkrxt42f2ufx7quzvp26j7djdweteowzyhukjamfjigu
 - valory/registration_abci:0.1.0:bafybeicaxkyzvqokzne42b2ijgvlnjshowdijakrantdhnvfagbgp4lyym
 - valory/reset_pause_abci:0.1.0:bafybeicwt35bzw43ujjrbztjloeg424zbqxsro5vufsnhfmmvxu4h3dpva
@@ -34,10 +34,10 @@ skills:
 - valory/transaction_settlement_abci:0.1.0:bafybeig5qnrsryhean563pxhrfkcfs6qssi5edzm656oieupvcci7ftbvy
 - valory/decision_making_abci:0.1.0:bafybeienuoisncwa4a3rtw3ypctgohjpk3xxgwhdbxxk63ko2suhwv43ly
 - valory/twitter_write_abci:0.1.0:bafybeibn6qlgh4nquutqja25jqeboaxr7fvvvbb2osdfkbha5gku3bprrq
-- valory/olas_week_abci:0.1.0:bafybeiaeysgy6pgixoxxoijn7hr3yecpma7qlxerzmd2k63svdif777iim
-- valory/mech_interact_abci:0.1.0:bafybeidl2wq7flzjgroj3gukewcrdwcbyz5e3gudhrfy5o74brjlxd64fy
+- valory/olas_week_abci:0.1.0:bafybeibmo3m5suxwtwhjb27u5lfig3yx3h2y2ipedvzgo5q7uzdr4vblae
+- valory/mech_interact_abci:0.1.0:bafybeiamoelkjejcj22qqaao5sm3owye2golw6eclriu5ydkgy7ab5jtwy
 - valory/staking_abci:0.1.0:bafybeianjoyqn6oarjxexbwvxtvd2zyhzskifb4bfujxwqqizx3tji3cpy
-- valory/llm_abci:0.1.0:bafybeigwnwx5jvw6toknldglwcde4vpimcdfdjnqjtka7mo3ur7yctuyy4
+- valory/llm_abci:0.1.0:bafybeifuimvs2sz6zdwuh7mq4ubfwtcmnl44622o5ebl7p5hfpdaxpdfkq
 behaviours:
   main:
     args: {}
