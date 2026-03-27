@@ -23,21 +23,21 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeiaalla55aprhvoumv4u7qt4v6l53fjmgln6wgyjr5e5tw7u4kscja
-- valory/agent_db_abci:0.1.0:bafybeidkmlohollc2ty6zu27hhqxq3jzdf3n7qx3hpk5ddcftbxvkog4um
-- valory/contribute_db_abci:0.1.0:bafybeigoxvorgsc4a4focnkoccc2pcq66zpf6vdeqi7xiarhgieoklsqgu
-- valory/twitter_scoring_abci:0.1.0:bafybeianhcp7x3iwvqf2pm2aglczqe3talxjdkcqwxkqe7wwl7emqettz4
-- valory/dynamic_nft_abci:0.1.0:bafybeib7zak45aedkskl3cvwlp36j4jfrktp22dxeoaaeim7ivh5um6264
-- valory/registration_abci:0.1.0:bafybeiayry7tzttlivibbfnwikilbgdl54g3btvc4uhl4x5qqdv6a673o4
-- valory/reset_pause_abci:0.1.0:bafybeibsdhil35py7zjhielonaycxo7gp34jfufe2ynprjv2etwxnzcxqy
-- valory/termination_abci:0.1.0:bafybeic3jppoya7jkmylbl5evcssl5qhppl6hadxebfxcxmi5o7qysce6a
-- valory/transaction_settlement_abci:0.1.0:bafybeigspkourznaiagdkedyxjbjl6svhuhdwbvejr3jv3e3dil2hslose
-- valory/decision_making_abci:0.1.0:bafybeifxtagtzsp2ucmbnnjzbmadbg2bnhpdkcfoknuqwspjoi36mwe3di
-- valory/twitter_write_abci:0.1.0:bafybeifmcb2v43huzwgxkfxz5tiztdnqiehrxf2x3ogees4uxtx3og6pue
-- valory/olas_week_abci:0.1.0:bafybeign5s724ft26sut5cxzb23zssl7eqh3jpm25meffby6cpjdo37oo4
-- valory/mech_interact_abci:0.1.0:bafybeiduf3h73xhv4q5vbdn6ek2tyal3haym5of4mq2ucm2zhqbclr35le
-- valory/staking_abci:0.1.0:bafybeihawtrwy74dinwbqekmkod5il7o3fviii3eceza4g4bg6isp4jypi
-- valory/llm_abci:0.1.0:bafybeicx53iwdwughd3bjd3jvg6sdgigaitymlnm7hnulflzb55gi7urym
+- valory/abstract_round_abci:0.1.0:bafybeihygetmlgnhawrbyswvpvv3wpztr2hlhxkljmohp4r7qcmvglpwdq
+- valory/agent_db_abci:0.1.0:bafybeihuxc3afqlucwmb25t3mlx4qxh5xi63w4jadgcr4n57nchrmoahfu
+- valory/contribute_db_abci:0.1.0:bafybeicbmhizl2yojpeaultq7ma3zi37tszfmtz54ojhd54lcksyjp3qfm
+- valory/twitter_scoring_abci:0.1.0:bafybeifw5jjl56dhova5w7mhvlnthg6zveqrwu2kia2qrrdam7ng4e66da
+- valory/dynamic_nft_abci:0.1.0:bafybeiby64uaonidue33ce5nbad6gqzquahzohiyrey5cizzpk2mqa4yxi
+- valory/registration_abci:0.1.0:bafybeif3gpewppz5wr5mmgyvaowsamjufyons3oif7cb4x5ubvvfb6rtda
+- valory/reset_pause_abci:0.1.0:bafybeidcnf77bc3o7pssa5zesilpbm4ley2k45taii5j5rrvvty7uhu3lq
+- valory/termination_abci:0.1.0:bafybeia33hlouukdpwaxctunauudv5gpfdxndimra7yqiof4a3skcwdqkq
+- valory/transaction_settlement_abci:0.1.0:bafybeiajyrszyyo6z4lxogutv4ougiaeoxak6xkq5gtrbey32gbgnirznq
+- valory/decision_making_abci:0.1.0:bafybeiet6d7ykndbtqpfgumcgvsvrz57r5otxel33htpdsfhqvjzqnm7wy
+- valory/twitter_write_abci:0.1.0:bafybeibg52l2tblhgkbxfedlqf65y5whwdd5gwtch2fzrap32fepx7cm2i
+- valory/olas_week_abci:0.1.0:bafybeibqxllyt6w3zpml7vs4wl3cwqylgegln24wbf4aaiyz5ss44btbda
+- valory/mech_interact_abci:0.1.0:bafybeibrmrdpys5xfivpmlyerbwlu2am2rmqb75bwub3cvcrvfwdbqxv54
+- valory/staking_abci:0.1.0:bafybeia3tlnc6w7c6uvvx6tkl2zegcmtcrouiq3sb5mbem7wp7p7gnr77i
+- valory/llm_abci:0.1.0:bafybeicvbyjcdzr7ruse7nyt44lvg6hl7dpfqye6ajfi425c6tcjf5l3pi
 behaviours:
   main:
     args: {}

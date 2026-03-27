@@ -47,6 +47,14 @@ Prepare the environment to build your own IEKit-based AI agent.
 
 - Fill in the required env vars in `.sample_env`
 
-- Run a single agent instance AI agent:
+- Run as a local agent (development):
 
-      bash run_service_single.sh
+      aea-helpers run-agent --name valory/impact_evaluator --config-replace --config-mapping config-mapping.json --connection-key --skip-tendermint
+
+  > **Note:** IEKit uses `--skip-tendermint` because its ABCI connection is configured as an HTTP server (port 8716) rather than using Tendermint directly.
+
+  To run multiple agents on the same machine, add `--free-ports`.
+
+- Run as a service (Docker deployment):
+
+      aea-helpers run-service --name valory/impact_evaluator --env-file .env
