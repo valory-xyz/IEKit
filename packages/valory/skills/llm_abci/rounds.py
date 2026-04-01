@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2025 Valory AG
+#   Copyright 2023-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -138,7 +138,7 @@ class LLMRound(OnlyKeeperSendsRound):
                 get_name(SynchronizedData.llm_prompt_templates): llm_prompt_templates,
                 get_name(SynchronizedData.llm_values): llm_values,
                 get_name(SynchronizedData.llm_results): llm_results,
-            }
+            },
         )
 
         return (

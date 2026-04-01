@@ -142,12 +142,12 @@ class DecisionMakingRound(CollectSameUntilThresholdRound):
                         **payload["updates"],
                         "previous_decision_event": event.value,
                         "score_data": dict(),
-                    }
+                    },
                 )
             else:
                 synchronized_data = synchronized_data.update(
                     synchronized_data_class=SynchronizedData,
-                    **{**payload["updates"], "previous_decision_event": event.value}
+                    **{**payload["updates"], "previous_decision_event": event.value},
                 )
             return synchronized_data, event
 

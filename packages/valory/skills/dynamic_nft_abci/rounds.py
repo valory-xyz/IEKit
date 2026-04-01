@@ -100,7 +100,7 @@ class TokenTrackRound(CollectSameUntilThresholdRound):
                         get_name(
                             SynchronizedData.token_event_retries
                         ): token_event_retries,
-                    }
+                    },
                 )
 
                 return synchronized_data, Event.CONTRACT_ERROR
@@ -114,7 +114,7 @@ class TokenTrackRound(CollectSameUntilThresholdRound):
                     get_name(SynchronizedData.token_id_to_points): token_id_to_points,
                     get_name(SynchronizedData.last_update_time): last_update_time,
                     get_name(SynchronizedData.token_event_retries): 0,
-                }
+                },
             )
             return (synchronized_data, Event.DONE)
         if not self.is_majority_possible(
