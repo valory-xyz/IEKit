@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 #
-#   Copyright 2023-2025 Valory AG
+#   Copyright 2023-2026 Valory AG
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -164,7 +164,7 @@ class StreamWriteRound(OnlyKeeperSendsRound):
                 synchronized_data_class=SynchronizedData,
                 **{
                     get_name(SynchronizedData.api_retries): api_retries + 1,
-                }
+                },
             )
             return synchronized_data, Event.API_ERROR
 
@@ -174,7 +174,7 @@ class StreamWriteRound(OnlyKeeperSendsRound):
                 get_name(SynchronizedData.stream_id_to_verify): keeper_payload[
                     "stream_id_to_verify"
                 ],
-            }
+            },
         )
 
         return synchronized_data, Event.DONE
@@ -217,7 +217,7 @@ class VerificationRound(CollectSameUntilThresholdRound):
                     **{
                         get_name(SynchronizedData.write_index): next_write_index,
                         get_name(SynchronizedData.write_results): write_results,
-                    }
+                    },
                 )
                 return synchronized_data, Event.DONE_CONTINUE
             else:
@@ -227,7 +227,7 @@ class VerificationRound(CollectSameUntilThresholdRound):
                     **{
                         get_name(SynchronizedData.write_index): 0,  # reset the index
                         get_name(SynchronizedData.write_results): write_results,
-                    }
+                    },
                 )
                 return synchronized_data, Event.DONE_FINISHED
 

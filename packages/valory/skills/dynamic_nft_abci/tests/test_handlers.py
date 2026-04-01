@@ -258,9 +258,12 @@ class TestHttpHandler(BaseSkillTestCase):
         )
 
         # operation
-        with patch.object(self.logger, "log") as mock_logger, patch.object(
-            self.http_handler.context.state, "_round_sequence"
-        ) as mock_round_sequence:
+        with (
+            patch.object(self.logger, "log") as mock_logger,
+            patch.object(
+                self.http_handler.context.state, "_round_sequence"
+            ) as mock_round_sequence,
+        ):
             mock_now_time = datetime.datetime(2022, 1, 1)
             abci_app_db = AbciAppDB(
                 {

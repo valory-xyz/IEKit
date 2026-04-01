@@ -138,7 +138,7 @@ class TwitterWriteRound(OnlyKeeperSendsRound):
                     get_name(SynchronizedData.write_index): (
                         0 if finished_tweeting else write_index
                     ),
-                }
+                },
             ),
             Event.DONE if finished_tweeting else Event.CONTINUE,
         )
