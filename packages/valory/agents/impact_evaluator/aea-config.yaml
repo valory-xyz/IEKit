@@ -298,7 +298,7 @@ models:
       use_acn_for_delivers: ${bool:false}
       staking_rewards_required_points: ${int:200}
       disable_wio_posting: ${bool:false}
-      contribute_db_pkey: ${str:null}
+      contribute_db_pkey: ${CONTRIBUTE_DB_PKEY:str:null}
       irrelevant_tools: ${list:[]}
       ignored_mechs: ${list:[]}
       penalize_mech_time_window: ${int:1800}
