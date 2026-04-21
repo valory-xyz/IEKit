@@ -31,7 +31,7 @@ In order to run a local demo AI agent based on the IEKit:
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeigckk5tezej4lx5cz22d5wdhyggquwaf4ka6kenjo2mt5svc7xd5q --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeibjss7xq3jhkmkn5jmtoyjo53wejdz2m53kevh4bpikytewlz7iea --service
     ```
 
 3. Build the Docker image of the agent blueprint
