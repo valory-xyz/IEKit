@@ -8,7 +8,6 @@ coverage.xml
 .hypothesis
 htmlcov
 *.egg-info
-Pipfile.lock
 abci_build_*/
 keys.json
 leak_report

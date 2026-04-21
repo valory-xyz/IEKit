@@ -10,7 +10,6 @@ clean-build:
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -fr {} +
 	find . -type d -name __pycache__ -exec rm -rv {} +
-	rm -fr Pipfile.lock
 
 .PHONY: clean-docs
 clean-docs:
@@ -154,4 +153,6 @@ run-agent:
 	LOG_FILE="./logs/agent_log_$$TIMESTAMP.log"; \
 	LATEST_LOG_FILE="./logs/agent_log_latest.log"; \
 	echo "Running agent and logging to $$LOG_FILE"; \
-	bash run_agent.sh 2>&1 | tee $$LOG_FILE $$LATEST_LOG_FILE'
+	aea-helpers run-agent \
+	--name valory/impact_evaluator \
+	--connection-key 2>&1 | tee $$LOG_FILE $$LATEST_LOG_FILE'

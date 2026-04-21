@@ -22,9 +22,9 @@ In order to run a local demo AI agent based on the IEKit:
 
     ```bash
     mkdir your_workspace && cd your_workspace
-    touch Pipfile && pipenv --python 3.10 && pipenv shell
-
-    pipenv install open-autonomy[all]==0.21.18
+    uv init --python 3.10
+    uv add "open-autonomy[all]==0.21.18"
+    source .venv/bin/activate
     autonomy init --remote --ipfs --reset --author=your_name
     ```
 
