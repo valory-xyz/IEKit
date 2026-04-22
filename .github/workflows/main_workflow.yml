@@ -314,3 +314,21 @@ jobs:
       - name: e2e tests
         run: |
           tox -e e2e-py${{ matrix.python-version }}-linux
+
+  all_checks_passed:
+    name: All checks passed
+    runs-on: ubuntu-24.04
+    if: always()
+    needs:
+      - lock_check
+      - copyright_and_doc_check
+      - linter_checks
+      - scan
+    steps:
+      - name: Verify all required jobs succeeded
+        run: |
+          if [[ "${{ contains(needs.*.result, 'failure') }}" == "true" || \
+                "${{ contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            echo "One or more required jobs failed or were cancelled."
+            exit 1
+          fi
