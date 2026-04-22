@@ -22,16 +22,16 @@ In order to run a local demo AI agent based on the IEKit:
 
     ```bash
     mkdir your_workspace && cd your_workspace
-    touch Pipfile && pipenv --python 3.10 && pipenv shell
-
-    pipenv install open-autonomy[all]==0.21.16
+    uv init --python 3.10
+    uv add "open-autonomy[all]==0.21.18"
+    source .venv/bin/activate
     autonomy init --remote --ipfs --reset --author=your_name
     ```
 
 2. Fetch the IEKit.
 
     ```bash
-    autonomy fetch valory/impact_evaluator:0.1.0:bafybeifes2cb4jjtyln5a6x33bjurx5lkvy2qqpezsn4z2sogmk5zhyw7a --service
+    autonomy fetch valory/impact_evaluator:0.1.0:bafybeibjss7xq3jhkmkn5jmtoyjo53wejdz2m53kevh4bpikytewlz7iea --service
     ```
 
 3. Build the Docker image of the agent blueprint

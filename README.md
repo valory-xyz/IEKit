@@ -17,10 +17,10 @@ Prepare the environment to build your own IEKit-based AI agent.
 
 - System requirements:
 
-    - Python `>=3.10`
+    - Python `>=3.10, <3.15`
     - [Tendermint](https://docs.tendermint.com/v0.34/introduction/install.html) `==0.34.19`
     - [IPFS node](https://docs.ipfs.io/install/command-line/#official-distributions) `==0.6.0`
-    - [Pipenv](https://pipenv.pypa.io/en/latest/installation.html) `>=2021.x.xx`
+    - [uv](https://docs.astral.sh/uv/)
     - [Docker Engine](https://docs.docker.com/engine/install/) `<25.0`
     - [Docker Compose](https://docs.docker.com/compose/install/)
 
@@ -31,7 +31,7 @@ Prepare the environment to build your own IEKit-based AI agent.
 
 - Create development environment:
 
-      poetry install && poetry shell
+      uv sync --all-groups
 
 - Configure command line:
 
@@ -49,9 +49,7 @@ Prepare the environment to build your own IEKit-based AI agent.
 
 - Run as a local agent (development):
 
-      aea-helpers run-agent --name valory/impact_evaluator --config-replace --config-mapping config-mapping.json --connection-key --skip-tendermint
-
-  > **Note:** IEKit uses `--skip-tendermint` because its ABCI connection is configured as an HTTP server (port 8716) rather than using Tendermint directly.
+      aea-helpers run-agent --name valory/impact_evaluator --connection-key
 
   To run multiple agents on the same machine, add `--free-ports`.
 

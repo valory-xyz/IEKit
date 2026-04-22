@@ -23,21 +23,21 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- valory/abstract_round_abci:0.1.0:bafybeihygetmlgnhawrbyswvpvv3wpztr2hlhxkljmohp4r7qcmvglpwdq
-- valory/agent_db_abci:0.1.0:bafybeihuxc3afqlucwmb25t3mlx4qxh5xi63w4jadgcr4n57nchrmoahfu
-- valory/contribute_db_abci:0.1.0:bafybeicbmhizl2yojpeaultq7ma3zi37tszfmtz54ojhd54lcksyjp3qfm
-- valory/twitter_scoring_abci:0.1.0:bafybeicpj2kplcg7yeliynxfp52gujhhn2qytrvle6vbdzxo4xabvu6s6e
-- valory/dynamic_nft_abci:0.1.0:bafybeieu3yr7x452vjynxaxtjl3xqbtse22opam4yelnr3jep3b633abea
-- valory/registration_abci:0.1.0:bafybeif3gpewppz5wr5mmgyvaowsamjufyons3oif7cb4x5ubvvfb6rtda
-- valory/reset_pause_abci:0.1.0:bafybeidcnf77bc3o7pssa5zesilpbm4ley2k45taii5j5rrvvty7uhu3lq
-- valory/termination_abci:0.1.0:bafybeia33hlouukdpwaxctunauudv5gpfdxndimra7yqiof4a3skcwdqkq
-- valory/transaction_settlement_abci:0.1.0:bafybeiajyrszyyo6z4lxogutv4ougiaeoxak6xkq5gtrbey32gbgnirznq
-- valory/decision_making_abci:0.1.0:bafybeiea33as5zdesw2gbg6cvwtfoawfeqhdg72segjq76hseczcu2ghlu
-- valory/twitter_write_abci:0.1.0:bafybeigok56qdncdjz5vtbkai3u7buzaeanwuiulms7s6xjsf2bihznsba
-- valory/olas_week_abci:0.1.0:bafybeihvl4jxnrurrcz7b2ky2wijkiz6t37vcopvvkjhz7k3achvelrc3i
-- valory/mech_interact_abci:0.1.0:bafybeibrmrdpys5xfivpmlyerbwlu2am2rmqb75bwub3cvcrvfwdbqxv54
-- valory/staking_abci:0.1.0:bafybeia3tlnc6w7c6uvvx6tkl2zegcmtcrouiq3sb5mbem7wp7p7gnr77i
-- valory/llm_abci:0.1.0:bafybeignmvfnpw3qajfjghcdpje2c42bfhobelgqp7aclzhtbrvlfxrjwa
+- valory/abstract_round_abci:0.1.0:bafybeihgbc5geup3ljdfgyontr2p5e4myxjkthaplm5ei727uw2pawstcy
+- valory/agent_db_abci:0.1.0:bafybeignhowxudzgmtdztwwxmpy7oyjibwhpx6ofwd43bpcbrtulpapbha
+- valory/contribute_db_abci:0.1.0:bafybeidbxnplbffrvioamyrgl5wjnrmxkxs4piqygi7xwiy2ves4tqsveu
+- valory/twitter_scoring_abci:0.1.0:bafybeihahavjv4gezbk6j63l2denku4wvtnc3dg7rt626i5chxot3utqge
+- valory/dynamic_nft_abci:0.1.0:bafybeifgkousyfe7umm3wcgz7nsr2s6vcymldoif257r73dba5bqr4kjqu
+- valory/registration_abci:0.1.0:bafybeib7midws7obgz34tqsebowa73z46pm34hhsssa3rjet2npp5ekvwm
+- valory/reset_pause_abci:0.1.0:bafybeiezqq76bdcrlgshyo2e544sm3u57amerpwla3sacosle5zivaij24
+- valory/termination_abci:0.1.0:bafybeigp6mrueymod7a7arxn2p5mvvz2klvhhda3pls32z4fyxibqjisqu
+- valory/transaction_settlement_abci:0.1.0:bafybeic6f4ujckiutqxueagohb5iv7kgzpamhuhiq7shn6fmiwbkt3cqny
+- valory/decision_making_abci:0.1.0:bafybeiavm4kwfqxkgxx53ahsbzy7cdpspayh54qak24fbtjbyccei4r2ly
+- valory/twitter_write_abci:0.1.0:bafybeie7g3qzdbofyf2q5g3okdk25dvzsankqrh5fbj4j5r2dodt3wu6je
+- valory/olas_week_abci:0.1.0:bafybeiewbea2lzuq4b2i5gax47iy6uifciocmaaaeoq2kgogofbkcnigpq
+- valory/mech_interact_abci:0.1.0:bafybeicxqsip4uer3o4dnocumvwctplnurlyzsxyzyg6wr4yqwxgnicmca
+- valory/staking_abci:0.1.0:bafybeiabwukp7hx4a5ozlcmouai2xhd2vgnqgslz4756xw23t2nfwltwia
+- valory/llm_abci:0.1.0:bafybeighjy7ywgo4eocvklllcniiffkkcc2xiz7pqjg3pkr7b3vrqs35ze
 behaviours:
   main:
     args: {}
@@ -299,5 +299,5 @@ models:
     class_name: ContributeDatabase
 dependencies:
   open-aea-cli-ipfs:
-    version: ==2.1.0
+    version: ==2.2.1
 is_abstract: false
